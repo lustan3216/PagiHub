@@ -10,6 +10,8 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "element-ui": "^2.11.1",
+    "list-to-tree-lite": "^0.1.0",
+    "lodash": "^4.17.15",
     "normalize.css": "^8.0.1",
     "vh-check": "^2.0.5",
     "vue": "^2.6.10",

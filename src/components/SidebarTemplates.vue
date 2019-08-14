@@ -2,7 +2,7 @@
   <el-aside width="400px">
     <el-menu>
       <el-submenu
-        v-for="(vNode, index) in vNodes"
+        v-for="(vNode, index) in $observable.templates"
         :index="index.toString()"
         :key="vNode.type">
         <template slot="title">
@@ -14,7 +14,9 @@
           <draggable
             :list="vNode.components"
             :group="{ name: 'people', pull: 'clone', put: false }"
-            :sort="false">
+            :clone="clone"
+            :sort="false"
+          >
             <el-menu-item
               v-for="(component, componentIndex) in vNode.components"
               :key="`${index}-${componentIndex}`"
@@ -30,19 +32,22 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
 import RenderNode from './RenderNode'
-;``
+import importTemplatesMixin from '../mixins/importTemplates'
+
 export default {
   name: 'SidebarTemplates',
   components: {
     RenderNode
   },
-  computed: {
-    ...mapState('templates', ['vNodes'])
-  },
+  mixins: [importTemplatesMixin],
   methods: {
-    ...mapActions('content', ['clone'])
+    clone(node) {
+      return {
+        tag: 'wrapper',
+        children: [node]
+      }
+    }
   }
 }
 </script>
@@ -54,5 +59,8 @@ export default {
 }
 .el-menu {
   @include calc-vh(min-height, '100vh');
+}
+.el-submenu .el-menu-item {
+  height: inherit;
 }
 </style>

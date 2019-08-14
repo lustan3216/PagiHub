@@ -1,14 +1,14 @@
 <template>
   <el-container>
-    <sidebar-templates />
+    <sidebar-settings v-if="showSidebarSetting" />
+    <sidebar-templates v-else />
 
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
         <el-dropdown>
           <i
             class="el-icon-setting"
-            style="margin-right: 15px"
-          />
+            style="margin-right: 15px" />
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>查看</el-dropdown-item>
             <el-dropdown-item>新增</el-dropdown-item>
@@ -17,23 +17,28 @@
         </el-dropdown>
         <span>王小虎</span>
       </el-header>
-  
-      <edit-area/>
+
+      <edit-area />
     </el-container>
   </el-container>
 </template>
 
 <script>
 import EditArea from './components/EditArea'
-import RenderNodes from './components/RenderNodes'
 import SidebarTemplates from './components/SidebarTemplates'
+import SidebarSettings from './components/SidebarSettings'
 
 export default {
   name: 'App',
   components: {
+    SidebarSettings,
     SidebarTemplates,
-    RenderNodes,
     EditArea
+  },
+  computed: {
+    showSidebarSetting() {
+      return Object.keys(this.$observable.nodeForSetting).length
+    }
   }
 }
 </script>

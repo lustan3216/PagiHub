@@ -1,5 +1,6 @@
 <script>
 import Vue from 'vue'
+import toTree from 'list-to-tree-lite'
 import importTemplatesMixin from '../mixins/importTemplates.js'
 
 function parseNode(h, child) {
@@ -19,13 +20,13 @@ export default {
   name: 'RenderNode',
   mixins: [importTemplatesMixin],
   props: {
-    dom: {
-      type: Object,
+    array: {
+      type: Array,
       required: true
     }
   },
   render(h) {
-    return parseNode(h, this.dom)
+    return parseNode(h, toTree(this.array))
   }
 }
 </script>

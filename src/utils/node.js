@@ -9,6 +9,6 @@ export function parseNode(h, child) {
   return h(tag, { ...data }, parseNodeChildren(h, children))
 }
 
-export function parseNodeChildren (h, children = []) {
+export function parseNodeChildren(h, children = []) {
   return children.map(child => parseNode(h, child))
 }

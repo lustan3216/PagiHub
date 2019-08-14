@@ -1,36 +1,27 @@
 <template>
   <el-main>
     <draggable
-      v-model="dom"
+      v-model="$observable.content"
+      class="edit-area"
       group="people">
-      <render-nodes :dom="dom" />
+      <template v-for="node in $observable.content">
+        <render-node :dom="node" />
+      </template>
     </draggable>
   </el-main>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import RenderNodes from './RenderNodes'
+import RenderNode from './RenderNode'
+import importTemplatesMixin from '../mixins/importTemplates'
 
 export default {
   name: 'App',
   components: {
-    RenderNodes
+    RenderNode
   },
-  computed: {
-    ...mapState('content', ['vNodes']),
-    dom: {
-      get() {
-        return this.vNodes
-      },
-      set(value) {
-        this.SET_CONTENT(value)
-      }
-    }
-  },
-  methods: {
-    ...mapMutations('content', ['SET_CONTENT'])
-  }
+  mixins: [importTemplatesMixin],
+  computed: {}
 }
 </script>
 
@@ -38,5 +29,8 @@ export default {
 .el-menu-item:focus,
 .el-menu-item:hover {
   background-color: inherit;
+}
+.edit-area {
+  height: 80vh;
 }
 </style>
