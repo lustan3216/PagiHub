@@ -21,7 +21,9 @@ export default {
     RenderNode
   },
   mixins: [importTemplatesMixin],
-  computed: {}
+  updated() {
+    console.log(123)
+  }
 }
 </script>
 

@@ -8,8 +8,8 @@
       class="functions">
       <span
         class="icon"
-        @click="copy">+{{ test }}</span>
-      
+        @click="copy">+</span>
+
       <span
         class="icon"
         @click="remove">X</span>
@@ -25,7 +25,6 @@
 <script>
 export default {
   name: 'Wrapper',
-  props: ['test'],
   data() {
     return {
       isHover: false
@@ -37,14 +36,6 @@ export default {
     },
     index() {
       return parent.indexOf(this.observableNode)
-    }
-  },
-  watch: {
-    observableNode: {
-      deep: true,
-      handle() {
-        console.log(555)
-      }
     }
   },
   methods: {

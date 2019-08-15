@@ -23,15 +23,15 @@ export default {
   },
   methods: {
     propsValue(name) {
-      console.log(3, this.$observable.nodeForSetting.observableNode.data.props[name])
-      return this.$observable.nodeForSetting.observableNode.data.props[name]
+      console.log(3, this.$observable.nodeForSetting.observableNode._data.props[name])
+      return this.$observable.nodeForSetting.observableNode._data.props[name]
     },
     onChange(name, value) {
       const type = this.$observable.nodeForSetting.$options.props[name].type
+      debugger
+      // this.$observable.nodeForSetting.observableNode._data =
+      this.$set(this.$observable.content[0].data.props, 'items', 1)
 
-      // this.$observable.nodeForSetting.observableNode.data =
-      this.$set(this.$observable.nodeForSetting, 'observableNode', { data: { props: { items: 1 }}})
-      this.$forceUpdate()
       // this.$forceUpdate()
     }
   }

@@ -1,20 +1,6 @@
 <script>
 import Vue from 'vue'
-import toTree from 'list-to-tree-lite'
 import importTemplatesMixin from '../mixins/importTemplates.js'
-
-function parseNode(h, child) {
-  if (typeof child === 'string') {
-    return Vue.prototype._v(child)
-  }
-  const { tag, children = [] } = child
-
-  child.data = child.data || {}
-  child.data.props = child.data.props || {}
-  child.data.props.observableNode = child
-
-  return h(tag, { ...child.data }, children.map(child => parseNode(h, child)))
-}
 
 export default {
   name: 'RenderNode',
@@ -24,6 +10,18 @@ export default {
       type: Array,
       required: true
     }
+  },
+  parseNode(h, child) {
+    if (typeof child === 'string') {
+      return Vue.prototype._v(child)
+    }
+    const { tag, data, children = [] } = child
+    
+    if (!data) this.$set(child, 'data', {})
+    if (!data.props) this.$set(child.data, 'props', {})
+    if (!data.props.observableNode) data.props.observableNode = child
+    // debugger
+    return h(tag, data, children.map(child => this.parseNode(h, child)))
   },
   render(h) {
     return parseNode(h, toTree(this.array))
