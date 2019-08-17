@@ -1,31 +1,25 @@
 <template>
-  <el-carousel height="150px">
-    <el-carousel-item
-      v-for="item in _items"
-      :key="item">
-      <h3 class="small">{{ item }}</h3>
-    </el-carousel-item>
-  </el-carousel>
+  <div class="space">
+    <slot />
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Carousel',
+  name: 'SpaceVue',
   props: {
     items: {
       type: Number,
       default: 3
-    }
-  },
-  computed: {
-    _items() {
-      return this.observableNode._data.props.items || this.items
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.space {
+}
+
 .el-carousel__item h3 {
   color: #475669;
   font-size: 14px;

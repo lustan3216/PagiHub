@@ -2,7 +2,7 @@
   <el-aside width="400px">
     <el-form>
       <el-form-item
-        v-for="(value, name) in $observable.nodeForSetting.$options.props"
+        v-for="(value, name) in currentNode.$options.props"
         v-if="value.type"
         :label="name">
         <el-input
@@ -21,18 +21,18 @@ export default {
   components: {
     RenderNode
   },
+  computed: {
+    currentNode() {
+      return this.$observable.nodeForSetting
+    }
+  },
   methods: {
     propsValue(name) {
-      console.log(3, this.$observable.nodeForSetting.observableNode._data.props[name])
-      return this.$observable.nodeForSetting.observableNode._data.props[name]
+      return this.currentNode.observableNode._data.props[name]
     },
     onChange(name, value) {
-      const type = this.$observable.nodeForSetting.$options.props[name].type
-      debugger
-      // this.$observable.nodeForSetting.observableNode._data =
-      this.$set(this.$observable.content[0].data.props, 'items', 1)
-
-      // this.$forceUpdate()
+      const type = this.currentNode.$options.props[name].type
+      this.$set(this.currentNode.observableNode._data.props, name, type(value))
     }
   }
 }

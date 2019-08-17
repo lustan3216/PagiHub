@@ -20,10 +20,7 @@ export default {
   components: {
     RenderNode
   },
-  mixins: [importTemplatesMixin],
-  updated() {
-    console.log(123)
-  }
+  mixins: [importTemplatesMixin]
 }
 </script>
 

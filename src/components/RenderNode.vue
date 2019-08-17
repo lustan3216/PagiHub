@@ -5,13 +5,17 @@ function parseNode(h, child) {
   if (typeof child === 'string') {
     return Vue.prototype._v(child)
   }
-  const { tag, _data, children = [] } = child
-  console.log(_data)
-  if (!_data) Vue.set(child, '_data', { props: {}})
-  if (!child._data.props) Vue.set(child._data, 'props', {})
-  if (!child._data.props.observableNode) child._data.props.observableNode = child
 
-  return h(tag, {}, children.map(child => parseNode(h, child)))
+  const { tag, children = [] } = child
+
+  if (!child.data) child.data = {}
+  if (!child.data.props) child.data.props = {}
+  child.data.props.observableNode = child
+
+  if (!child._data) Vue.set(child, '_data', { props: {}})
+  if (!child._data.props) Vue.set(child._data, 'props', {})
+
+  return h(tag, { ...child.data }, children.map(child => parseNode(h, child)))
 }
 
 export default {

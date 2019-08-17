@@ -4,8 +4,7 @@ export default [
     icon: 'el-icon-message',
     components: [
       {
-        tag: 'carousel',
-        _data: { asd: '' }
+        tag: 'carousel'
       },
       {
         tag: 'el-radio',
