@@ -1,25 +1,28 @@
 <template>
-  <el-aside width="400px">
+  <sidebar>
     <el-form>
       <el-form-item
         v-for="(value, name) in currentNode.$options.props"
         v-if="value.type"
+        :key="name"
         :label="name">
         <el-input
           :value="propsValue(name)"
           @input="onChange(name, $event)" />
       </el-form-item>
     </el-form>
-  </el-aside>
+  </sidebar>
 </template>
 
 <script>
-import RenderNode from './RenderNode'
+import RenderNode from '../RenderNode'
+import Sidebar from './Sidebar'
 
 export default {
   name: 'SidebarSettings',
   components: {
-    RenderNode
+    RenderNode,
+    Sidebar
   },
   computed: {
     currentNode() {
@@ -28,11 +31,11 @@ export default {
   },
   methods: {
     propsValue(name) {
-      return this.currentNode.observableNode._data.props[name]
+      return this.currentNode.$observableNode._data.props[name]
     },
     onChange(name, value) {
       const type = this.currentNode.$options.props[name].type
-      this.$set(this.currentNode.observableNode._data.props, name, type(value))
+      this.$set(this.currentNode.$observableNode._data.props, name, type(value))
     }
   }
 }
@@ -42,9 +45,6 @@ export default {
 .el-menu-item:focus,
 .el-menu-item:hover {
   background-color: inherit;
-}
-.el-menu {
-  @include calc-vh(min-height, '100vh');
 }
 .el-submenu .el-menu-item {
   height: inherit;

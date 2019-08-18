@@ -1,5 +1,5 @@
 <template>
-  <el-aside width="400px">
+  <sidebar>
     <el-menu>
       <el-submenu
         v-for="(vNode, index) in $observable.templates"
@@ -22,30 +22,32 @@
               :key="`${index}-${componentIndex}`"
               :index="`${index}-${componentIndex}`"
             >
-              <render-node :dom="component" />
+              <render-static-node :dom="component" />
             </el-menu-item>
           </draggable>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
-  </el-aside>
+  </sidebar>
 </template>
 
 <script>
-import RenderNode from './RenderNode'
-import importTemplatesMixin from '../mixins/importTemplates'
+import RenderStaticNode from '../RenderStaticNode'
+import importTemplatesMixin from '../../mixins/importTemplates'
+import Sidebar from './Sidebar'
 
 export default {
   name: 'SidebarTemplates',
   components: {
-    RenderNode
+    RenderStaticNode,
+    Sidebar
   },
   mixins: [importTemplatesMixin],
   methods: {
     clone(node) {
       return {
         tag: 'wrapper',
-        children: [node]
+        children: [JSON.parse(JSON.stringify(node))]
       }
     }
   }
@@ -57,10 +59,7 @@ export default {
 .el-menu-item:hover {
   background-color: inherit;
 }
-.el-menu {
-  @include calc-vh(min-height, '100vh');
-}
-.el-submenu .el-menu-item {
-  height: inherit;
-}
+/*.el-submenu .el-menu-item {*/
+/*height: inherit;*/
+/*}*/
 </style>

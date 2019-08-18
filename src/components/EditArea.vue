@@ -1,35 +1,39 @@
 <template>
-  <el-main>
+  <browser-window>
     <draggable
-      v-model="$observable.content"
+      :value="$observable.content"
       class="edit-area"
-      group="people">
+      group="people"
+      @input="setContent">
       <template v-for="node in $observable.content">
         <render-node :dom="node" />
       </template>
     </draggable>
-  </el-main>
+  </browser-window>
 </template>
 
 <script>
+import { setContent } from '../observable/methods'
+import BrowserWindow from './BrowserWindow'
 import RenderNode from './RenderNode'
 import importTemplatesMixin from '../mixins/importTemplates'
 
 export default {
   name: 'App',
   components: {
-    RenderNode
+    RenderNode,
+    BrowserWindow
   },
-  mixins: [importTemplatesMixin]
+  mixins: [importTemplatesMixin],
+  methods: {
+    setContent
+  }
 }
 </script>
 
 <style scoped lang="scss">
-.el-menu-item:focus,
-.el-menu-item:hover {
-  background-color: inherit;
-}
 .edit-area {
-  height: 80vh;
+  padding-top: 35px;
+  @include calc-vh(min-height, '100vh - 135px');
 }
 </style>

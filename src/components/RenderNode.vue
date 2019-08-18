@@ -1,27 +1,29 @@
 <script>
+import { appendKey } from '../utils/keyId'
 import Vue from 'vue'
-import importTemplatesMixin from '../mixins/importTemplates.js'
-function parseNode(h, child) {
-  if (typeof child === 'string') {
-    return Vue.prototype._v(child)
+
+function parseNode(h, node) {
+  if (typeof node === 'string') {
+    return Vue.prototype._v(node)
   }
 
-  const { tag, children = [] } = child
+  const { tag, children = [] } = node
 
-  if (!child.data) child.data = {}
-  if (!child.data.props) child.data.props = {}
-  child.data.props.observableNode = child
+  if (!node.data) node.data = {}
+  if (!node.data.props) node.data.props = {}
+  node.data.props.$observableNode = node
 
-  if (!child._data) Vue.set(child, '_data', { props: {}})
-  if (!child._data.props) Vue.set(child._data, 'props', {})
+  if (!node._data) Vue.set(node, '_data', { props: {}})
+  if (!node._data.props) Vue.set(node._data, 'props', {})
 
-  return h(tag, { ...child.data }, children.map(child => parseNode(h, child)))
+  appendKey(node)
+
+  return h(tag, { ...node.data }, children.map(child => parseNode(h, child)))
 }
 
 export default {
   name: 'RenderNode',
   functional: true,
-  mixins: [importTemplatesMixin],
   props: {
     dom: {
       type: Object,

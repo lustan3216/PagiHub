@@ -1,25 +1,27 @@
 <template>
-  <div class="space">
-    <slot />
-  </div>
+  <div/>
 </template>
 
 <script>
 export default {
-  name: 'SpaceVue',
+  name: 'Spacer',
   props: {
-    items: {
-      type: Number,
-      default: 3
+    url: {
+      type: String,
+      default() {
+        return `https://placeimg.com/1320/840/any`
+      }
+    }
+  },
+  computed: {
+    _url() {
+      return (this.$observableNode && this.$observableNode._data.props.url) || this.url
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.space {
-}
-
 .el-carousel__item h3 {
   color: #475669;
   font-size: 14px;

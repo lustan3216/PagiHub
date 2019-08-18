@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import templates from './templates'
 
-export default Vue.observable({
+const store = Vue.observable({
   templates,
   content: [],
-  nodeForSetting: {}
+  nodeForSetting: {},
+  currentSidebar: null
 })
+
+export default store

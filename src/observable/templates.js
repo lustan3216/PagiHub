@@ -1,19 +1,47 @@
 export default [
   {
-    type: 'button',
+    type: 'Basic',
     icon: 'el-icon-message',
     components: [
       {
-        tag: 'carousel'
-      },
-      {
-        tag: 'el-radio',
-        children: ['备选项']
+        tag: 'editor'
       }
     ]
   },
   {
-    type: 'article',
+    type: 'Image',
+    icon: 'el-icon-message',
+    components: [
+      {
+        tag: 'lazy-image'
+      }
+    ]
+  },
+  {
+    type: 'Spacer',
+    icon: 'el-icon-message',
+    components: [
+      {
+        tag: 'spacer'
+      }
+    ]
+  },
+  {
+    type: 'Article',
+    icon: 'el-icon-message',
+    components: []
+  },
+  {
+    type: 'Fancy Component',
+    icon: 'el-icon-message',
+    components: [
+      {
+        tag: 'carousel'
+      }
+    ]
+  },
+  {
+    type: 'Form',
     icon: 'el-icon-message',
     components: [
       {

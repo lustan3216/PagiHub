@@ -3,26 +3,37 @@
     class="wrapper"
     @mouseover="isHover = true"
     @mouseleave="isHover = false">
-    <div
-      v-show="isHover"
-      class="functions">
-      <span
-        class="icon"
-        @click="copy">+</span>
+    <transition name="fade">
+      <div
+        v-if="isHover"
+        class="functions">
+        <el-button
+          type="text"
+          @click="copy">
+          <v-icon name="copy" />
+        </el-button>
 
-      <span
-        class="icon"
-        @click="remove">X</span>
+        <el-button
+          type="text"
+          @click="remove">
+          <v-icon name="trash-alt" />
+        </el-button>
 
-      <span
-        class="icon"
-        @click="settings">O</span>
-    </div>
+        <el-button
+          type="text"
+          @click="settings">
+          <v-icon name="cog" />
+        </el-button>
+      </div>
+    </transition>
     <slot />
   </div>
 </template>
 
 <script>
+import clone from 'clone'
+import { snapShot, openSettingsSidebar } from '../observable/methods'
+import { removeDeepKey } from '../utils/keyId'
 export default {
   name: 'Wrapper',
   data() {
@@ -32,37 +43,39 @@ export default {
   },
   computed: {
     parent() {
-      return this.$parent.observableNode || this.$observable.content
+      return this.$parent.$observableNode || this.$observable.content
     },
     index() {
-      return parent.indexOf(this.observableNode)
+      return this.parent.indexOf(this.$observableNode)
     }
   },
   methods: {
     copy() {
-      this.parent.splice(this.index, 0, this.observableNode)
+      const cloned = clone(this.$observableNode)
+      removeDeepKey(cloned)
+      this.parent.splice(this.index, 0, cloned)
+      snapShot()
     },
     remove() {
       this.parent.splice(this.index, 1)
+      snapShot()
     },
     settings() {
       this.$observable.nodeForSetting = this.$children[0]
+      openSettingsSidebar()
     }
   }
 }
 </script>
 
-<style scoped>
-.icon {
-  margin: 5px;
-}
+<style scoped lang="scss">
 .wrapper {
   position: relative;
-  padding: 20px;
+  padding: 35px;
 }
 .functions {
-  top: 0;
-  left: 0;
+  top: -5px;
+  right: 10px;
   position: absolute;
 }
 </style>

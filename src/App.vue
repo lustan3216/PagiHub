@@ -1,64 +1,53 @@
 <template>
   <el-container>
-    <sidebar-settings v-if="showSidebarSetting" />
-    <sidebar-templates v-else />
+    <el-header class="header">
+      <nav-bar />
+    </el-header>
 
-    <el-container>
-      <el-header style="text-align: right; font-size: 12px">
-        <el-dropdown>
-          <i
-            class="el-icon-setting"
-            style="margin-right: 15px" />
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <span>王小虎</span>
-      </el-header>
+    <el-container class="main">
+      <transition
+        name="fade-left"
+        mode="out-in">
+        <component :is="$observable.currentSidebar" />
+      </transition>
 
-      <edit-area />
+      <el-container>
+        <el-main>
+          <edit-area />
+        </el-main>
+      </el-container>
     </el-container>
   </el-container>
 </template>
 
 <script>
+import NavBar from './components/Layout/NavBar'
 import EditArea from './components/EditArea'
-import SidebarTemplates from './components/SidebarTemplates'
-import SidebarSettings from './components/SidebarSettings'
+import SidebarTemplates from './components/Layout/SidebarTemplates'
+import SidebarSettings from './components/Layout/SidebarSettings'
 
 export default {
   name: 'App',
   components: {
-    SidebarSettings,
+    EditArea,
+    NavBar,
     SidebarTemplates,
-    EditArea
-  },
-  computed: {
-    showSidebarSetting() {
-      return Object.keys(this.$observable.nodeForSetting).length
-    }
+    SidebarSettings
   }
 }
 </script>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-.el-header {
-  background-color: #b3c0d1;
-  color: #333;
-  line-height: 60px;
+<style lang="scss" scoped>
+.header {
+  height: 60px;
+  background-color: #fff;
+  border-bottom: 1px solid #eff1f2;
+  box-shadow: 0 2px 5px 0 rgba(32, 48, 60, 0.05);
+  font-size: 14px;
+  position: relative;
 }
 
-.el-aside {
-  color: #333;
+.main {
+  @include calc-vh(min-height, '100vh - 60px');
 }
 </style>
