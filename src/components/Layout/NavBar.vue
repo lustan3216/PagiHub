@@ -36,16 +36,13 @@
     <el-col :span="4">
       <el-select v-model="deviceMode">
         <el-option
-          label="PC 電腦"
-          value="pc">
-          <v-icon name="laptop" />
-          <span>電腦</span>
-        </el-option>
-        <el-option
-          label="Mobile 手機"
-          value="mobile">
-          <v-icon name="mobile-alt" />
-          <span>手機</span>
+          v-for="mode in modes"
+          :label="mode.label"
+          :value="mode.value">
+          <div class="vertical-center">
+            <v-icon :name="mode.icon" />
+            <span class="m-l-5">{{ mode.label }}</span>
+          </div>
         </el-option>
       </el-select>
     </el-col>
@@ -80,7 +77,29 @@ export default {
   name: 'NavBar',
   data() {
     return {
-      deviceMode: 'pc'
+      deviceMode: 'pc',
+      modes: [
+        {
+          label: '電腦',
+          value: 'pc',
+          icon: 'laptop'
+        },
+        {
+          label: '手機',
+          value: 'mobile',
+          icon: 'mobile-alt'
+        },
+        {
+          label: '旋轉盤',
+          value: 'carousel',
+          icon: 'layer-group'
+        },
+        {
+          label: '卡片',
+          value: 'card',
+          icon: 'photo-video'
+        }
+      ]
     }
   },
   methods: {

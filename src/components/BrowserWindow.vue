@@ -23,9 +23,8 @@
           class="url" >
       </el-col>
     </el-row>
-  
+
     <slot />
-    
   </div>
 </template>
 
@@ -51,6 +50,8 @@ export default {
   right: 0;
   left: 0;
   height: 35px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
 
 .circle {
