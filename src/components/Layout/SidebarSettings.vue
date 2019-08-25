@@ -31,11 +31,11 @@ export default {
   },
   methods: {
     propsValue(name) {
-      return this.currentNode.$observableNode._data.props[name]
+      return this.currentNode.$observableVNode._data.props[name]
     },
     onChange(name, value) {
       const type = this.currentNode.$options.props[name].type
-      this.$set(this.currentNode.$observableNode._data.props, name, type(value))
+      this.$set(this.currentNode.$observableVNode._data.props, name, type(value))
     }
   }
 }

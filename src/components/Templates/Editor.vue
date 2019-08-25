@@ -176,7 +176,7 @@ export default {
   },
   computed: {
     _content() {
-      return (this.$observableNode && this.$observableNode._data.props.content) || this.content
+      return (this.$observableVNode && this.$observableVNode._data.props.content) || this.content
     }
   },
   mounted() {
@@ -201,7 +201,7 @@ export default {
         new Underline()
       ],
       onUpdate: state => {
-        this.$set(this.$observableNode._data.props, 'content', state.getHTML())
+        this.$set(this.$observableVNode._data.props, 'content', state.getHTML())
         snapShot()
       }
     })

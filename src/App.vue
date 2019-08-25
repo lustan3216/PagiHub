@@ -13,7 +13,9 @@
 
       <el-container>
         <el-main>
-          <edit-area />
+          <browser-window>
+            <edit-area :node="$observable"/>
+          </browser-window>
         </el-main>
       </el-container>
     </el-container>
@@ -21,10 +23,14 @@
 </template>
 
 <script>
+import { snapShot } from './observable/methods'
 import NavBar from './components/Layout/NavBar'
 import EditArea from './components/EditArea'
+import RenderNode from './components/RenderNode'
 import SidebarTemplates from './components/Layout/SidebarTemplates'
 import SidebarSettings from './components/Layout/SidebarSettings'
+import BrowserWindow from './components/BrowserWindow'
+import importTemplates from './mixins/importTemplates'
 
 export default {
   name: 'App',
@@ -32,7 +38,16 @@ export default {
     EditArea,
     NavBar,
     SidebarTemplates,
-    SidebarSettings
+    SidebarSettings,
+    BrowserWindow,
+    RenderNode
+  },
+  mixins: [importTemplates],
+  methods: {
+    setContent(value) {
+      this.$observable.content = value
+      snapShot()
+    }
   }
 }
 </script>
@@ -49,5 +64,10 @@ export default {
 
 .main {
   @include calc-vh(min-height, '100vh - 60px');
+}
+
+.edit-area {
+  padding-top: 35px;
+  @include calc-vh(min-height, '100vh - 135px');
 }
 </style>

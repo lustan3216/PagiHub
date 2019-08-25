@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     _url() {
-      return (this.$observableNode && this.$observableNode._data.props.url) || this.url
+      return (this.$observableVNode && this.$observableVNode._data.props.url) || this.url
     }
   }
 }

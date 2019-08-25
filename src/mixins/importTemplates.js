@@ -3,6 +3,8 @@ export default {
     Carousel: () => import('../components/Templates/Carousel'),
     Editor: () => import('../components/Templates/Editor'),
     LazyImage: () => import('../components/Templates/LazyImage'),
-    Spacer: () => import('../components/Templates/Spacer')
+    GridGenerator: () => import('../components/Templates/GridGenerator'),
+    RenderNode: () => import('../components/RenderNode'),
+    EditArea: () => import('../components/EditArea')
   }
 }

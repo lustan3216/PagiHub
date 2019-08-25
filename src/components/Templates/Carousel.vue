@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     _items() {
-      return this.$observableNode && this.$observableNode._data.props.items || this.items
+      return this.$observableVNode && this.$observableVNode._data.props.items || this.items
     }
   }
 }

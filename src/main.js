@@ -15,7 +15,7 @@ import Icon from 'vue-awesome/components/Icon'
 import VueShortkey from 'vue-shortkey'
 
 Vue.mixin({
-  props: ['$observableNode']
+  props: ['$observableVNode', '$parentVNode']
 })
 
 Vue.use(VueLazyload)
@@ -27,6 +27,7 @@ Vue.component('v-icon', Icon)
 
 const bus = new Vue()
 
+Vue.prototype.$log = console.log
 Vue.prototype.$bus = bus
 Vue.prototype.$observable = observable
 Vue.config.productionTip = false

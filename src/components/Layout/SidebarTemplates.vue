@@ -1,28 +1,29 @@
 <template>
   <sidebar>
-    <el-menu>
+    <el-menu unique-opened>
       <el-submenu
-        v-for="(vNode, index) in $observable.templates"
+        @click.native="openedMenu = openedMenu === index ? null : index"
+        v-for="(vNode, index) in templates"
         :index="index.toString()"
-        :key="vNode.type">
+      >
         <template slot="title">
           <i :class="vNode.icon" />
           {{ vNode.type }}
         </template>
-
-        <el-menu-item-group>
+        <el-menu-item-group v-if="openedMenu === index">
           <draggable
-            :list="vNode.components"
-            :group="{ name: 'people', pull: 'clone', put: false }"
+            :value="vNode.components"
+            :group="{ name: 'editableArea', pull: 'clone', put: false }"
             :clone="clone"
             :sort="false"
           >
+            
             <el-menu-item
               v-for="(component, componentIndex) in vNode.components"
-              :key="`${index}-${componentIndex}`"
               :index="`${index}-${componentIndex}`"
             >
-              <render-static-node :dom="component" />
+              <!-- here will have multi render deu to el-menu-item-group bug--->
+              <render-node :dom="component" />
             </el-menu-item>
           </draggable>
         </el-menu-item-group>
@@ -32,22 +33,30 @@
 </template>
 
 <script>
-import RenderStaticNode from '../RenderStaticNode'
+import RenderNode from '../RenderNode'
 import importTemplatesMixin from '../../mixins/importTemplates'
 import Sidebar from './Sidebar'
+import clone from 'clone'
+import templates from '../../observable/templates'
 
 export default {
   name: 'SidebarTemplates',
   components: {
-    RenderStaticNode,
+    RenderNode,
     Sidebar
   },
   mixins: [importTemplatesMixin],
+  data(){
+    return {
+      templates,
+      openedMenu: null
+    }
+  },
   methods: {
     clone(node) {
       return {
         tag: 'wrapper',
-        children: [JSON.parse(JSON.stringify(node))]
+        children: [clone(node)]
       }
     }
   }

@@ -2,11 +2,18 @@
   <div
     class="wrapper"
     @mouseover="isHover = true"
-    @mouseleave="isHover = false">
+    @mouseleave="isHover = false"
+  >
     <transition name="fade">
       <div
         v-if="isHover"
         class="functions">
+        <el-button
+          type="text"
+          class="wrapper-handler">
+          <v-icon name="arrows-alt" />
+        </el-button>
+
         <el-button
           type="text"
           @click="copy">
@@ -43,15 +50,15 @@ export default {
   },
   computed: {
     parent() {
-      return this.$parent.$observableNode || this.$observable.content
+      return this.$parent.$observableVNode || this.$observable.content
     },
     index() {
-      return this.parent.indexOf(this.$observableNode)
+      return this.parent.indexOf(this.$observableVNode)
     }
   },
   methods: {
     copy() {
-      const cloned = clone(this.$observableNode)
+      const cloned = clone(this.$observableVNode)
       removeDeepKey(cloned)
       this.parent.splice(this.index, 0, cloned)
       snapShot()
@@ -71,10 +78,10 @@ export default {
 <style scoped lang="scss">
 .wrapper {
   position: relative;
-  padding: 35px;
+  padding: 15px;
 }
 .functions {
-  top: -5px;
+  top: -35px;
   right: 10px;
   position: absolute;
 }
