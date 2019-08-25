@@ -17,7 +17,7 @@
       :h="item.h"
       :i="item.i"
       :key="item.i"
-      drag-ignore-from="a, button, form, input, p, span, h1, h2, h3, h4, h5, h6"
+      drag-ignore-from="a, button, form, input, p, span, h1, h2, h3, h4, h5, h6, svg"
       @mouseover.native="currentHover = item.i"
       @mouseleave.native="currentHover = null"
     >
@@ -38,7 +38,6 @@
           </el-button>
         </div>
       </transition>
-{{ item.i }}
       <edit-area :node="$observableVNode.children[index]"/>
     </grid-item>
   </grid-layout>
@@ -66,20 +65,18 @@ export default {
     }
   },
   computed: {
-    children: {
-      get() {
-        return (
-          (this.$observableVNode.children &&
-            this.$observableVNode.children.map(({ _data: { props: { x, y, w, h }}, data: { key }}) => ({
-              x,
-              y,
-              w,
-              h,
-              i: key
-            }))) ||
-          []
-        )
-      }
+    children(){
+      return (
+        (this.$observableVNode.children &&
+         this.$observableVNode.children.map(({ _data: { props: { x, y, w, h }}, data: { key }}) => ({
+           x,
+           y,
+           w,
+           h,
+           i: key
+         }))) ||
+        []
+      )
     }
   },
   watch: {
@@ -134,5 +131,8 @@ export default {
   top: -5px;
   right: 10px;
   position: absolute;
+}
+::v-deep.edit-area{
+  border: 1px dashed gray;
 }
 </style>

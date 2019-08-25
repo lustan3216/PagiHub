@@ -5,7 +5,6 @@
     class="edit-area"
     group="editableArea"
     @input="setContent">
-    {{ $log('editarea') }}
     <render-node
       v-for="node in children"
       :dom="node" />
@@ -57,6 +56,5 @@ export default {
 <style scoped lang="scss">
 .edit-area {
   height: 100%;
-  border: 1px dashed gray;
 }
 </style>
