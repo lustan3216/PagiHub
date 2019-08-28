@@ -2,20 +2,20 @@ import contentVersion from '../utils/contentVersion'
 import $observable from './index.js'
 import { bus } from '../main'
 
-function asd(o){
-  var cache = [];
+function asd(o) {
+  var cache = []
   const a = JSON.stringify(o, function(key, value) {
     if (typeof value === 'object' && value !== null) {
       if (cache.indexOf(value) !== -1) {
         // Duplicate reference found, discard key
-        return;
+        return
       }
       // Store value in our collection
-      cache.push(value);
+      cache.push(value)
     }
-    return value;
-  });
-  cache = null;
+    return value
+  })
+  cache = null
   localStorage.setItem('json', a)
   return a
 }

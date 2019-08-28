@@ -14,7 +14,10 @@
       <el-container>
         <el-main class="main">
           <browser-window>
-            <wrapper v-for="node in nodes" :tag="node.tag" :children="node.children"/>
+            <wrapper
+              v-for="node in nodes"
+              :tag="node.tag"
+              :children="node.children"/>
           </browser-window>
         </el-main>
       </el-container>
@@ -26,7 +29,6 @@
 import { snapShot } from './observable/methods'
 import NavBar from './components/Layout/NavBar'
 import Wrapper from './components/Wrapper'
-import RenderNode from './components/RenderNode'
 import SidebarTemplates from './components/Layout/SidebarTemplates'
 import SidebarSettings from './components/Layout/SidebarSettings'
 import BrowserWindow from './components/BrowserWindow'
@@ -39,11 +41,10 @@ export default {
     NavBar,
     SidebarTemplates,
     SidebarSettings,
-    BrowserWindow,
-    RenderNode
+    BrowserWindow
   },
   mixins: [importTemplates],
-  data(){
+  data() {
     return {
       nodes: [
         {
@@ -53,7 +54,7 @@ export default {
               children:
                 [
                   { tag: 'editor' },
-                  { tag: 'carousel', children: [{},{},{}] }
+                  { tag: 'carousel', children: [{}, {}, {}] }
                 ]
             },
             {
@@ -67,10 +68,10 @@ export default {
         {
           tag: 'grid-generator',
           children: [
-            {"x":0,"y":0,"w":2,"h":2,"i":"0"},
-            {"x":2,"y":0,"w":2,"h":4,"i":"1"},
-            {"x":4,"y":0,"w":2,"h":5,"i":"2"},
-            {"x":6,"y":0,"w":2,"h":3,"i":"3"},
+            { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': '0' },
+            { 'x': 2, 'y': 0, 'w': 2, 'h': 4, 'i': '1' },
+            { 'x': 4, 'y': 0, 'w': 2, 'h': 5, 'i': '2' },
+            { 'x': 6, 'y': 0, 'w': 2, 'h': 3, 'i': '3' }
           ]
         }
       ]

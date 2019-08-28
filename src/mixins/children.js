@@ -1,8 +1,6 @@
 import clone from 'clone'
-import EditArea from '../components/EditArea'
 
 export default {
-  components: { EditArea },
   props: {
     editable: {
       type: Boolean,
@@ -11,16 +9,13 @@ export default {
     children: {
       type: Array,
       default() {
-        console.log(value)
         return []
       }
     }
   },
   watch: {
     innerChildren(value) {
-      console.log(value)
-      debugger
-      // this.$emit('update:children', value)
+      this.$emit('update:children', value)
     }
   },
   data() {
@@ -28,7 +23,7 @@ export default {
     innerChildren.forEach(x => {
       if (!x.children) x.children = []
     })
-    debugger
+
     return {
       innerChildren,
       currentHover: null

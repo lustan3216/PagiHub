@@ -14,16 +14,16 @@
       :y="child.y"
       :w="child.w"
       :h="child.h"
-      :i="child.key"
-      :key="child.key"
+      :i="child.i"
+      :key="child.i"
       drag-ignore-from="a, button, form, input, p, span, h1, h2, h3, h4, h5, h6, svg"
       @mouseover.native="currentHover = child.i"
       @mouseleave.native="currentHover = null"
     >
       <edit-bar
-        :children.sync="child.children"
         :visible="editable && currentHover === child.i"
-        :index="index"
+        @copy="copy(index)"
+        @remove="remove(index)"
       />
   
       <edit-area :children.sync="child.children" />
@@ -35,13 +35,16 @@
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
 import EditBar from '../Components/EditBar'
+import EditArea from '../Components/EditArea'
+import clone from 'clone'
 
 export default {
   name: 'GridGenerator',
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
-    EditBar
+    EditBar,
+    EditArea
   },
   mixins: [childrenMixin],
   props: {
@@ -55,9 +58,22 @@ export default {
       currentHover: null
     }
   },
+  computed: {
+    maxKey() {
+      return Math.max(...this.innerChildren.map(x => x.i))
+    }
+  },
   methods: {
     layoutUpdatedEvent(value) {
       this.innerChildren = value
+    },
+    copy(index) {
+      const cloned = clone(this.innerChildren[index])
+      cloned.i = this.maxKey + 1
+      this.innerChildren.splice(index, 0, cloned)
+    },
+    remove(index) {
+      this.innerChildren.splice(index, 1)
     }
   }
 }

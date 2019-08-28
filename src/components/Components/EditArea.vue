@@ -10,12 +10,14 @@
       v-for="child in children"
       :tag="child.tag"
       :key="child.key"
-      :children="child.children" />
+      :children="child.children"
+    />
   </draggable>
 </template>
 
 <script>
-import Wrapper from './Wrapper'
+import Wrapper from '../Wrapper'
+
 export default {
   name: 'EditArea',
   components: {

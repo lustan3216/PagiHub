@@ -2,9 +2,9 @@
   <sidebar>
     <el-menu unique-opened>
       <el-submenu
-        @click.native="openedMenu = openedMenu === index ? null : index"
         v-for="(vNode, index) in templates"
         :index="index.toString()"
+        @click.native="openedMenu = openedMenu === index ? null : index"
       >
         <template slot="title">
           <i :class="vNode.icon" />
@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import RenderNode from '../RenderNode'
 import importTemplatesMixin from '../../mixins/importTemplates'
 import Sidebar from './Sidebar'
 import clone from 'clone'
@@ -46,11 +45,10 @@ import templates from '../../observable/templates'
 export default {
   name: 'SidebarTemplates',
   components: {
-    RenderNode,
     Sidebar
   },
   mixins: [importTemplatesMixin],
-  data(){
+  data() {
     return {
       templates,
       openedMenu: null

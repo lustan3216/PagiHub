@@ -8,7 +8,6 @@ try {
   content = []
 }
 
-
 const store = Vue.observable({
   templates,
   content,

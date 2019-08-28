@@ -13,10 +13,6 @@ import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 import VueShortkey from 'vue-shortkey'
 
-Vue.mixin({
-  props: ['$observableVNode', '$parentVNode']
-})
-
 Vue.use(VueLazyload)
 Vue.use(VueShortkey)
 Vue.use(ElementUI)

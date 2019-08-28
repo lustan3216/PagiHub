@@ -4,46 +4,27 @@
     @mouseover="isHover = true"
     @mouseleave="isHover = false"
   >
-    <transition name="fade">
-      <div
-        v-if="isHover"
-        class="functions">
-        <el-button
-          type="text"
-          class="wrapper-handler">
-          <v-icon name="arrows-alt" />
-        </el-button>
-
-        <el-button
-          type="text"
-          @click="copy">
-          <v-icon name="copy" />
-        </el-button>
-
-        <el-button
-          type="text"
-          @click="remove">
-          <v-icon name="trash-alt" />
-        </el-button>
-
-        <el-button
-          type="text"
-          @click="settings">
-          <v-icon name="cog" />
-        </el-button>
-      </div>
-    </transition>
+    <edit-bar
+      :visible="isHover"
+      @copy="copy(index)"
+      @remove="remove(index)"
+    />
     
-    <component :is="tag" :children="innerChildren" @update="update"/>
+    <component
+      :is="tag"
+      :children="innerChildren"
+      @updated="updateTree"/>
   </div>
 </template>
 
 <script>
 import clone from 'clone'
 import importTemplates from '../mixins/importTemplates'
+import EditBar from './Components/EditBar'
 
 export default {
   name: 'Wrapper',
+  components: { EditBar },
   mixins: [importTemplates],
   props: {
     tag: {
@@ -76,20 +57,16 @@ export default {
     }
   },
   methods: {
-    update(){
-      console.log(123)
-    },
+    updateTree() {},
     copy() {
       this.$emit('copy', this)
       // const cloned = clone(this.$observableVNode)
       // removeDeepKey(cloned)
       // this.parent.splice(this.index, 0, cloned)
-      snapShot()
     },
     remove() {
       this.$emit('remove', this)
       // this.parent.splice(this.index, 1)
-      snapShot()
     },
     settings() {
       // this.$observable.nodeForSetting = this.$children[0]
@@ -97,7 +74,6 @@ export default {
     },
     setContent(value) {
       this.innerChildren = value
-      snapShot()
     }
   }
 }

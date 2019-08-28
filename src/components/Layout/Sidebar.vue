@@ -17,13 +17,9 @@
 
 <script>
 import { closeSidebar } from '../../observable/methods'
-import RenderNode from '../RenderNode'
 
 export default {
   name: 'SidebarSettings',
-  components: {
-    RenderNode
-  },
   computed: {
     currentNode() {
       return this.$observable.nodeForSetting

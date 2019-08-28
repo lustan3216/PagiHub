@@ -15,13 +15,11 @@
 </template>
 
 <script>
-import RenderNode from '../RenderNode'
 import Sidebar from './Sidebar'
 
 export default {
   name: 'SidebarSettings',
   components: {
-    RenderNode,
     Sidebar
   },
   computed: {
