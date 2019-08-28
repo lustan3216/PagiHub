@@ -1,14 +1,27 @@
 import contentVersion from '../utils/contentVersion'
 import $observable from './index.js'
 import { bus } from '../main'
-window.asd = contentVersion
 
-export function setContent(content) {
-  contentVersion.shot(content)
-  $observable.content = content
+function asd(o){
+  var cache = [];
+  const a = JSON.stringify(o, function(key, value) {
+    if (typeof value === 'object' && value !== null) {
+      if (cache.indexOf(value) !== -1) {
+        // Duplicate reference found, discard key
+        return;
+      }
+      // Store value in our collection
+      cache.push(value);
+    }
+    return value;
+  });
+  cache = null;
+  localStorage.setItem('json', a)
+  return a
 }
 
 export function snapShot() {
+  console.log(asd($observable.content))
   contentVersion.shot($observable.content)
 }
 

@@ -1,27 +1,20 @@
 <template>
-  <el-carousel height="150px">
+  <el-carousel style="height:100%">
     <el-carousel-item
-      v-for="item in _items"
-      :key="item">
-      <h3 class="small">{{ item }}</h3>
+      v-for="(child, index) in innerChildren"
+      :key="index"
+      class="w-100">
+  
+      <edit-area :children.sync="child.children"/>
     </el-carousel-item>
   </el-carousel>
 </template>
 
 <script>
+import childrenMixin from '../../mixins/children'
 export default {
   name: 'Carousel',
-  props: {
-    items: {
-      type: Number,
-      default: 3
-    }
-  },
-  computed: {
-    _items() {
-      return this.$observableVNode && this.$observableVNode._data.props.items || this.items
-    }
-  }
+  mixins: [childrenMixin]
 }
 </script>
 

@@ -33,43 +33,71 @@
         </el-button>
       </div>
     </transition>
-    <slot />
+    
+    <component :is="tag" :children="innerChildren" @update="update"/>
   </div>
 </template>
 
 <script>
 import clone from 'clone'
-import { snapShot, openSettingsSidebar } from '../observable/methods'
-import { removeDeepKey } from '../utils/keyId'
+import importTemplates from '../mixins/importTemplates'
+
 export default {
   name: 'Wrapper',
-  data() {
-    return {
-      isHover: false
+  mixins: [importTemplates],
+  props: {
+    tag: {
+      type: String,
+      required: true
+    },
+    data: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    children: {
+      type: Array,
+      default() {
+        return []
+      }
     }
   },
-  computed: {
-    parent() {
-      return this.$parent.$observableVNode || this.$observable.content
-    },
-    index() {
-      return this.parent.indexOf(this.$observableVNode)
+  data() {
+    return {
+      isHover: false,
+      innerData: clone(this.data),
+      innerChildren: clone(this.children)
+    }
+  },
+  watch: {
+    innerChildren(value) {
+      console.log(value)
     }
   },
   methods: {
+    update(){
+      console.log(123)
+    },
     copy() {
-      const cloned = clone(this.$observableVNode)
-      removeDeepKey(cloned)
-      this.parent.splice(this.index, 0, cloned)
+      this.$emit('copy', this)
+      // const cloned = clone(this.$observableVNode)
+      // removeDeepKey(cloned)
+      // this.parent.splice(this.index, 0, cloned)
       snapShot()
     },
     remove() {
-      this.parent.splice(this.index, 1)
+      this.$emit('remove', this)
+      // this.parent.splice(this.index, 1)
       snapShot()
     },
     settings() {
-      this.$observable.nodeForSetting = this.$children[0]
-      openSettingsSidebar()
+      // this.$observable.nodeForSetting = this.$children[0]
+      // openSettingsSidebar()
+    },
+    setContent(value) {
+      this.innerChildren = value
+      snapShot()
     }
   }
 }
@@ -84,5 +112,8 @@ export default {
   top: -35px;
   right: 10px;
   position: absolute;
+}
+.edit-area {
+  min-height: 100px;
 }
 </style>

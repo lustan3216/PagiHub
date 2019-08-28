@@ -9,6 +9,8 @@ function parseNode(h, node, parent) {
 
   const { tag } = node
 
+  // if (!tag) return
+  
   if (!node.children) {
     Vue.set(node, 'children', [])
   }
@@ -22,7 +24,6 @@ function parseNode(h, node, parent) {
   if (!node._data.props) Vue.set(node._data, 'props', {})
 
   appendKey(node)
-
   return h(tag, { ...node.data }, node.children.map(child => parseNode(h, child, node)))
 }
 

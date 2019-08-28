@@ -12,9 +12,9 @@
       </transition>
 
       <el-container>
-        <el-main>
+        <el-main class="main">
           <browser-window>
-            <edit-area :node="$observable"/>
+            <wrapper v-for="node in nodes" :tag="node.tag" :children="node.children"/>
           </browser-window>
         </el-main>
       </el-container>
@@ -25,7 +25,7 @@
 <script>
 import { snapShot } from './observable/methods'
 import NavBar from './components/Layout/NavBar'
-import EditArea from './components/EditArea'
+import Wrapper from './components/Wrapper'
 import RenderNode from './components/RenderNode'
 import SidebarTemplates from './components/Layout/SidebarTemplates'
 import SidebarSettings from './components/Layout/SidebarSettings'
@@ -35,7 +35,7 @@ import importTemplates from './mixins/importTemplates'
 export default {
   name: 'App',
   components: {
-    EditArea,
+    Wrapper,
     NavBar,
     SidebarTemplates,
     SidebarSettings,
@@ -43,6 +43,39 @@ export default {
     RenderNode
   },
   mixins: [importTemplates],
+  data(){
+    return {
+      nodes: [
+        {
+          tag: 'carousel',
+          children: [
+            {
+              children:
+                [
+                  { tag: 'editor' },
+                  { tag: 'carousel', children: [{},{},{}] }
+                ]
+            },
+            {
+              children:
+                [
+                  { tag: 'lazy-image' }
+                ]
+            }
+          ]
+        },
+        {
+          tag: 'grid-generator',
+          children: [
+            {"x":0,"y":0,"w":2,"h":2,"i":"0"},
+            {"x":2,"y":0,"w":2,"h":4,"i":"1"},
+            {"x":4,"y":0,"w":2,"h":5,"i":"2"},
+            {"x":6,"y":0,"w":2,"h":3,"i":"3"},
+          ]
+        }
+      ]
+    }
+  },
   methods: {
     setContent(value) {
       this.$observable.content = value
@@ -63,7 +96,8 @@ export default {
 }
 
 .main {
-  @include calc-vh(min-height, '100vh - 60px');
+  @include calc-vh(height, '100vh - 60px');
+  overflow: scroll;
 }
 
 .edit-area {

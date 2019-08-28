@@ -4,50 +4,27 @@
     handle=".wrapper-handler"
     class="edit-area"
     group="editableArea"
-    @input="setContent">
-    <render-node
-      v-for="node in children"
-      :dom="node" />
+    @input="$emit('update:children', $event)"
+  >
+    <wrapper
+      v-for="child in children"
+      :tag="child.tag"
+      :key="child.key"
+      :children="child.children" />
   </draggable>
 </template>
 
 <script>
-import { snapShot } from '../observable/methods'
-import RenderNode from './RenderNode'
-import importTemplatesMixin from '../mixins/importTemplates'
-
+import Wrapper from './Wrapper'
 export default {
   name: 'EditArea',
   components: {
-    RenderNode
+    Wrapper
   },
-  mixins: [importTemplatesMixin],
   props: {
-    node: {
-      type: Object,
+    children: {
+      type: Array,
       required: true
-    }
-  },
-  computed: {
-    children() {
-      if (this.node === this.$observable) {
-        return this.$observable.content
-      } else {
-        return this.node.children
-      }
-    }
-  },
-  methods: {
-    setContent(value) {
-      console.log(1)
-      if (this.node === this.$observable) {
-        console.log(321)
-        this.$observable.content = value
-      } else {
-        console.log(321321)
-        this.node.children = value
-      }
-      snapShot()
     }
   }
 }

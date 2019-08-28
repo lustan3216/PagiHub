@@ -24,7 +24,10 @@
       </el-col>
     </el-row>
 
-    <slot />
+    <div class="body">
+      <slot />
+    </div>
+    
   </div>
 </template>
 
@@ -52,6 +55,10 @@ export default {
   height: 35px;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
+}
+
+.body{
+  padding-top: 35px;
 }
 
 .circle {

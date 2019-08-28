@@ -8,7 +8,6 @@ import App from './App.vue'
 import ElementUI from 'element-ui'
 import VueDraggable from 'vuedraggable'
 import observable from './observable'
-import Wrapper from './components/Wrapper'
 import VueLazyload from 'vue-lazyload'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
@@ -22,7 +21,6 @@ Vue.use(VueLazyload)
 Vue.use(VueShortkey)
 Vue.use(ElementUI)
 Vue.component('draggable', VueDraggable)
-Vue.component('wrapper', Wrapper)
 Vue.component('v-icon', Icon)
 
 const bus = new Vue()

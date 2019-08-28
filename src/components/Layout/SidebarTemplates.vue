@@ -23,7 +23,11 @@
               :index="`${index}-${componentIndex}`"
             >
               <!-- here will have multi render deu to el-menu-item-group bug--->
-              <render-node :dom="component" />
+              <component
+                :is="component.tag"
+                :editable="false"
+                :children="component.children"
+              />
             </el-menu-item>
           </draggable>
         </el-menu-item-group>
@@ -54,10 +58,7 @@ export default {
   },
   methods: {
     clone(node) {
-      return {
-        tag: 'wrapper',
-        children: [clone(node)]
-      }
+      return clone(node)
     }
   }
 }
