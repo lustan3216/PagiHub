@@ -26,7 +26,7 @@
         @remove="remove(index)"
       />
   
-      <edit-area :children.sync="child.children" />
+      <edit-area :children.sync="child.children"/>
     </grid-item>
   </grid-layout>
 </template>
@@ -51,6 +51,12 @@ export default {
     editable: {
       type: Boolean,
       default: true
+    },
+    children: {
+      type: Array,
+      default() {
+        return []
+      }
     }
   },
   data() {

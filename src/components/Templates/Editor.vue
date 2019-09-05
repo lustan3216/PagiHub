@@ -161,9 +161,7 @@ export default {
     },
     editable: {
       type: Boolean,
-      default() {
-        return this.$parent.$vnode.tag.includes('Wrapper')
-      }
+      default: true
     }
   },
   data() {
@@ -171,17 +169,13 @@ export default {
       keepInBounds: true,
       editor: null,
       linkUrl: null,
-      linkMenuIsActive: false
-    }
-  },
-  computed: {
-    _content() {
-      return (this.$observableVNode && this.$observableVNode._data.props.content) || this.content
+      linkMenuIsActive: false,
+      innerContent: this.content
     }
   },
   mounted() {
     this.editor = new Editor({
-      content: this._content,
+      content: this.innerContent,
       editable: this.editable,
       extensions: [
         new Blockquote(),
@@ -201,12 +195,12 @@ export default {
         new Underline()
       ],
       onUpdate: state => {
-        this.$set(this.$observableVNode._data.props, 'content', state.getHTML())
-        snapShot()
+        // this.$set(this.$observableVNode._data.props, 'content', state.getHTML())
+        // snapShot()
       }
     })
 
-    this.$bus.$on('reUndo', this.setContent)
+    // this.$bus.$on('reUndo', this.setContent)
   },
   beforeDestroy() {
     this.editor.destroy()
@@ -229,7 +223,7 @@ export default {
     },
     setContent() {
       try {
-        this.editor.setContent(this._content)
+        this.editor.setContent(this.innerContent)
       } catch (e) {}
     }
   }

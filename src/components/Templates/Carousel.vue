@@ -2,9 +2,17 @@
   <el-carousel style="height:100%">
     <el-carousel-item
       v-for="(child, index) in innerChildren"
-      :key="index"
-      class="w-100">
-  
+      :key="child.i"
+      class="w-100"
+      @mouseover="isHover = true"
+      @mouseleave="isHover = false"
+    >
+      <edit-bar
+        :visible="isHover"
+        @copy="copy(index)"
+        @remove="remove(index)"
+      />
+      
       <edit-area :children.sync="child.children"/>
     </el-carousel-item>
   </el-carousel>
@@ -14,6 +22,7 @@
 import childrenMixin from '../../mixins/children'
 import EditBar from '../Components/EditBar'
 import EditArea from '../Components/EditArea'
+import clone from 'clone'
 
 export default {
   name: 'Carousel',
@@ -21,7 +30,28 @@ export default {
     EditBar,
     EditArea
   },
-  mixins: [childrenMixin]
+  mixins: [childrenMixin],
+  props: {
+    editable: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data() {
+    return {
+      isHover: false
+    }
+  },
+  methods: {
+    copy(index) {
+      debugger
+      const cloned = clone(this.innerChildren[index])
+      this.innerChildren.splice(index, 0, cloned)
+    },
+    remove(index) {
+      this.innerChildren.splice(index, 1)
+    }
+  }
 }
 </script>
 

@@ -1,14 +1,16 @@
-let keyId = 1
+const idSet = new Set([0])
 
-export function removeDeepKey(node) {
-  if (node.data && node.data.key) node.data.key = null
-  if (node.children && node.children.length >= 1) {
-    node.children.forEach(node => removeDeepKey(node))
+export function appendId(node, key = 'i') {
+  if (node[key]) {
+    idSet.add(node[key])
+  } else {
+    node[key] = generateId()
   }
 }
 
-export function appendKey(node) {
-  if (!node.data.key) {
-    node.data.key = ++keyId
-  }
+export function generateId() {
+  const max = Math.max(...[...idSet])
+  const id = max + 1
+  idSet.add(id)
+  return id
 }

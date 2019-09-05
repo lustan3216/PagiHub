@@ -4,12 +4,14 @@
       <el-submenu
         v-for="(vNode, index) in templates"
         :index="index.toString()"
+        :key="index"
         @click.native="openedMenu = openedMenu === index ? null : index"
       >
         <template slot="title">
           <i :class="vNode.icon" />
           {{ vNode.type }}
         </template>
+        
         <el-menu-item-group v-if="openedMenu === index">
           <draggable
             :value="vNode.components"
@@ -21,14 +23,16 @@
             <el-menu-item
               v-for="(component, componentIndex) in vNode.components"
               :index="`${index}-${componentIndex}`"
+              :key="`${index}-${componentIndex}`"
             >
               <!-- here will have multi render deu to el-menu-item-group bug--->
               <component
+                v-bind="component.props"
                 :is="component.tag"
-                :editable="false"
                 :children="component.children"
               />
             </el-menu-item>
+            
           </draggable>
         </el-menu-item-group>
       </el-submenu>
@@ -67,7 +71,4 @@ export default {
 .el-menu-item:hover {
   background-color: inherit;
 }
-/*.el-submenu .el-menu-item {*/
-/*height: inherit;*/
-/*}*/
 </style>

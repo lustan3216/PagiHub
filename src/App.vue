@@ -13,12 +13,7 @@
 
       <el-container>
         <el-main class="main">
-          <browser-window>
-            <wrapper
-              v-for="node in nodes"
-              :tag="node.tag"
-              :children="node.children"/>
-          </browser-window>
+          <root-board :children="$observable.originalNodesArray" />
         </el-main>
       </el-container>
     </el-container>
@@ -26,22 +21,21 @@
 </template>
 
 <script>
-import { snapShot } from './observable/methods'
 import NavBar from './components/Layout/NavBar'
-import Wrapper from './components/Wrapper'
+import EditArea from './components/Components/EditArea'
+import RootBoard from './components/Templates/RootBoard'
 import SidebarTemplates from './components/Layout/SidebarTemplates'
 import SidebarSettings from './components/Layout/SidebarSettings'
-import BrowserWindow from './components/BrowserWindow'
 import importTemplates from './mixins/importTemplates'
 
 export default {
   name: 'App',
   components: {
-    Wrapper,
+    EditArea,
     NavBar,
     SidebarTemplates,
     SidebarSettings,
-    BrowserWindow
+    RootBoard
   },
   mixins: [importTemplates],
   data() {
@@ -49,38 +43,42 @@ export default {
       nodes: [
         {
           tag: 'carousel',
+          i: 1,
           children: [
             {
+              i: 5,
               children:
                 [
-                  { tag: 'editor' },
-                  { tag: 'carousel', children: [{}, {}, {}] }
+                  { i: 3, tag: 'editor' },
+                  { i: 4,
+                    tag: 'carousel',
+                    children: [
+                      {},
+                      {},
+                      {}
+                    ]
+                  }
                 ]
             },
             {
               children:
                 [
-                  { tag: 'lazy-image' }
+                  { i: 5, tag: 'lazy-image' }
                 ]
             }
           ]
         },
         {
+          i: 2,
           tag: 'grid-generator',
           children: [
-            { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': '0' },
-            { 'x': 2, 'y': 0, 'w': 2, 'h': 4, 'i': '1' },
-            { 'x': 4, 'y': 0, 'w': 2, 'h': 5, 'i': '2' },
-            { 'x': 6, 'y': 0, 'w': 2, 'h': 3, 'i': '3' }
+            { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': 0 },
+            { 'x': 2, 'y': 0, 'w': 2, 'h': 4, 'i': 1 },
+            { 'x': 4, 'y': 0, 'w': 2, 'h': 5, 'i': 2 },
+            { 'x': 6, 'y': 0, 'w': 2, 'h': 3, 'i': 3 }
           ]
         }
       ]
-    }
-  },
-  methods: {
-    setContent(value) {
-      this.$observable.content = value
-      snapShot()
     }
   }
 }

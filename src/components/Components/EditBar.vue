@@ -31,11 +31,8 @@
 </template>
 
 <script>
-import childrenMixin from '../../mixins/children'
-
 export default {
   name: 'EditBar',
-  mixins: [childrenMixin],
   props: {
     visible: {
       type: Boolean,
