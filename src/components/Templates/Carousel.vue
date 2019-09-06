@@ -22,7 +22,6 @@
 import childrenMixin from '../../mixins/children'
 import EditBar from '../Components/EditBar'
 import EditArea from '../Components/EditArea'
-import clone from 'clone'
 
 export default {
   name: 'Carousel',
@@ -40,16 +39,6 @@ export default {
   data() {
     return {
       isHover: false
-    }
-  },
-  methods: {
-    copy(index) {
-      debugger
-      const cloned = clone(this.innerChildren[index])
-      this.innerChildren.splice(index, 0, cloned)
-    },
-    remove(index) {
-      this.innerChildren.splice(index, 1)
     }
   }
 }

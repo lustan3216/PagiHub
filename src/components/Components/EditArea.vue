@@ -4,26 +4,23 @@
     handle=".wrapper-handler"
     class="edit-area"
     group="editableArea"
-    @input="updated"
-  >
+    @input="updated">
     <template v-for="(child, index) in children">
       <div
         :key="child.i"
         class="wrapper"
         @mouseover="isHover = true"
-        @mouseleave="isHover = false"
-      >
+        @mouseleave="isHover = false">
         <edit-bar
           :visible="isHover"
           @copy="copy(index)"
-          @remove="remove(index)"
-        />
-    
+          @remove="remove(index)" />
+
         <component
+          :ref="index"
           :is="child.tag"
           :key="child.i"
-          :children="child.children"
-        />
+          :children="child.children" />
       </div>
     </template>
   </draggable>
@@ -31,8 +28,8 @@
 
 <script>
 import clone from 'clone'
-import importTemplates from '../../mixins/importTemplates'
 import EditBar from '../Components/EditBar'
+import importTemplates from '../../mixins/importTemplates'
 import { appendId } from '../../utils/keyId'
 
 export default {
@@ -55,17 +52,20 @@ export default {
   methods: {
     copy(index) {
       const cloned = clone(this.children[index])
+      cloned.children = this.$refs[index][0].innerChildren
+      // 為了阻止遞歸的小孩們更新迴圈(效能上問題)，所以innerChildren每次更新到這層就不更新
+      // 這樣會導致這層child是原始的，而這裡需要copy最新的innerChildren
       cloned.i = null
-      this.children.splice(index, 0, cloned)
+      this.children.splice(index + 1, 0, cloned)
       this.updated(this.children)
     },
     remove(index) {
       this.children.splice(index, 1)
       this.updated(this.children)
     },
-    updated(value) {
-      value.forEach(node => appendId(node))
-      this.$emit('update:children', value)
+    updated(children) {
+      children.forEach(child => appendId(child))
+      this.$emit('update:children', children)
     }
   }
 }

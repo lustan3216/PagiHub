@@ -1,8 +1,6 @@
 <template>
   <browser-window>
-    <div class="edit-area">
-      <edit-area :children.sync="innerChildren"/>
-    </div>
+    <edit-area :children.sync="innerChildren" />
   </browser-window>
 </template>
 
@@ -22,7 +20,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.edit-area{
+.edit-area {
   height: 100%;
 }
 </style>

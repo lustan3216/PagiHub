@@ -4,7 +4,8 @@ export default [
     icon: 'el-icon-message',
     components: [
       {
-        tag: 'editor', props: { editable: false }
+        tag: 'editor',
+        props: { editable: false }
       }
     ]
   },
@@ -25,10 +26,10 @@ export default [
         tag: 'grid-generator',
         props: { editable: false },
         children: [
-          { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': '0' },
-          { 'x': 2, 'y': 0, 'w': 2, 'h': 4, 'i': '1' },
-          { 'x': 4, 'y': 0, 'w': 2, 'h': 5, 'i': '2' },
-          { 'x': 6, 'y': 0, 'w': 2, 'h': 3, 'i': '3' }
+          { x: 0, y: 0, w: 2, h: 2 },
+          { x: 2, y: 0, w: 2, h: 4 },
+          { x: 4, y: 0, w: 2, h: 5 },
+          { x: 6, y: 0, w: 2, h: 3 }
         ]
       }
     ]
@@ -44,11 +45,7 @@ export default [
     components: [
       {
         tag: 'carousel',
-        children: [
-          { tag: 'div' },
-          { tag: 'div' },
-          { tag: 'div' }
-        ]
+        children: [{ tag: 'div' }, { tag: 'div' }, { tag: 'div' }]
       }
     ]
   },

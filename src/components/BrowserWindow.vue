@@ -24,10 +24,9 @@
       </el-col>
     </el-row>
 
-    <div class="body">
+    <div class="body h-100">
       <slot />
     </div>
-    
   </div>
 </template>
 
@@ -40,6 +39,7 @@ export default {
 <style scoped lang="scss">
 .browser {
   position: relative;
+  min-height: 100%;
   @include calc-vh(min-height, '100vh - 100px');
   box-shadow: 0 5px 20px 0 rgba(32, 48, 60, 0.11);
   border-radius: 10px;
@@ -57,7 +57,7 @@ export default {
   border-top-left-radius: 10px;
 }
 
-.body{
+.body {
   padding-top: 35px;
 }
 

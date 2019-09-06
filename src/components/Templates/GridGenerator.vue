@@ -23,10 +23,9 @@
       <edit-bar
         :visible="editable && currentHover === child.i"
         @copy="copy(index)"
-        @remove="remove(index)"
-      />
-  
-      <edit-area :children.sync="child.children"/>
+        @remove="remove(index)" />
+
+      <edit-area :children.sync="child.children" />
     </grid-item>
   </grid-layout>
 </template>
@@ -36,7 +35,6 @@ import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
 import EditBar from '../Components/EditBar'
 import EditArea from '../Components/EditArea'
-import clone from 'clone'
 
 export default {
   name: 'GridGenerator',
@@ -51,12 +49,6 @@ export default {
     editable: {
       type: Boolean,
       default: true
-    },
-    children: {
-      type: Array,
-      default() {
-        return []
-      }
     }
   },
   data() {
@@ -64,22 +56,9 @@ export default {
       currentHover: null
     }
   },
-  computed: {
-    maxKey() {
-      return Math.max(...this.innerChildren.map(x => x.i))
-    }
-  },
   methods: {
     layoutUpdatedEvent(value) {
       this.innerChildren = value
-    },
-    copy(index) {
-      const cloned = clone(this.innerChildren[index])
-      cloned.i = this.maxKey + 1
-      this.innerChildren.splice(index, 0, cloned)
-    },
-    remove(index) {
-      this.innerChildren.splice(index, 1)
     }
   }
 }
@@ -90,7 +69,7 @@ export default {
   position: relative;
   /*border: 1px dashed gray;*/
 }
-::v-deep.edit-area{
+::v-deep.edit-area {
   height: 100%;
   border: 1px dashed gray;
 }
