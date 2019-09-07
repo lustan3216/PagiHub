@@ -1,7 +1,6 @@
-import { mapMutations } from 'vuex'
 import clone from 'clone'
+import { mapMutations } from 'vuex'
 import { appendIds } from '../utils/keyId'
-import diff from '../utils/diff'
 
 export default {
   props: {
@@ -77,7 +76,7 @@ export default {
         throw 'done'
       } else {
         // 數量一樣，代表子結點有被拖移拉近新的component
-        // 但由於 vue-grid-layout 不能識別是哪一個，所以只好迴圈處理
+        // 由於 vue-grid-layout 的item當拖移或變動大小，所有item都會變，所以就全部都update
 
         newChildren.some((newChild, index) => {
           this.APPEND_NODE(newChild)

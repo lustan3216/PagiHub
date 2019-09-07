@@ -1,7 +1,8 @@
 <template>
-  <img
-    v-lazy="_url"
-    class="w-100" >
+  <el-image
+    :src="url"
+    :fit="fit"
+    style="width: 100px; height: 100px"/>
 </template>
 
 <script>

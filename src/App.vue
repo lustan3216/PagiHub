@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import NavBar from './components/Layout/NavBar'
 import EditArea from './components/Components/EditArea'
 import RootBoard from './components/Templates/RootBoard'

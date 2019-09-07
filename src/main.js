@@ -8,12 +8,10 @@ import App from './App.vue'
 import ElementUI from 'element-ui'
 import VueDraggable from 'vuedraggable'
 import store from './store'
-import VueLazyload from 'vue-lazyload'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 import VueShortkey from 'vue-shortkey'
 
-Vue.use(VueLazyload)
 Vue.use(VueShortkey)
 Vue.use(ElementUI)
 Vue.component('draggable', VueDraggable)
@@ -34,5 +32,3 @@ const app = new Vue({
 }).$mount('#app')
 
 window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = app.constructor
-
-export { bus }

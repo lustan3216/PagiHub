@@ -7,10 +7,6 @@ const state = {
 }
 
 const mutations = {
-  UPDATE_NODE(state, _node) {
-    const { children, ...node } = _node
-    state.currentNodesMap[node.id] = node
-  },
   APPEND_NODE(state, _node) {
     const { children, ...node } = _node
     state.currentNodesMap[node.id] = node

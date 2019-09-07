@@ -223,7 +223,9 @@ export default {
     setContent() {
       try {
         this.editor.setContent(this.innerContent)
-      } catch (e) {}
+      } catch (e) {
+        // no need to deal
+      }
     }
   }
 }

@@ -37,6 +37,7 @@
       <el-select v-model="deviceMode">
         <el-option
           v-for="mode in modes"
+          :key="mode.label"
           :label="mode.label"
           :value="mode.value">
           <div class="vertical-center">

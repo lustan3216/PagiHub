@@ -1,6 +1,8 @@
 <template>
   <browser-window>
-    <edit-area :parent-id="id" :children.sync="innerChildren" />
+    <edit-area
+      :parent-id="id"
+      :children.sync="innerChildren" />
   </browser-window>
 </template>
 
