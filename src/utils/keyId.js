@@ -1,6 +1,6 @@
 const idSet = new Set([0])
 
-export function appendId(node, key = 'i') {
+export function appendId(node, key = 'id') {
   if (node[key]) {
     idSet.add(node[key])
   } else {

@@ -8,13 +8,24 @@ export default {
       default() {
         return []
       }
+    },
+    id: {
+      type: Number,
+      required: true
+    },
+    parentId: {
+      type: Number,
+      required: true
     }
   },
   watch: {
-    innerChildren(value) {}
+    innerChildren(value) {
+      console.log(this, this.parentId, value)
+    }
   },
   data() {
-    const innerChildren = clone(this.children)
+    const innerChildren = clone(this.children).sort((a, b) => a.sortIndex - b.sortIndex) // sorting
+
     innerChildren.forEach(child => appendId(child)) // to save current id
 
     return {
@@ -24,7 +35,7 @@ export default {
   methods: {
     copy(index) {
       const cloned = clone(this.innerChildren[index])
-      cloned.i = null
+      cloned.id = null
       appendId(cloned)
       this.innerChildren.splice(index + 1, 0, cloned)
     },

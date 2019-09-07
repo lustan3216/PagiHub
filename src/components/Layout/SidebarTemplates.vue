@@ -11,7 +11,7 @@
           <i :class="vNode.icon" />
           {{ vNode.type }}
         </template>
-        
+
         <el-menu-item-group v-if="openedMenu === index">
           <draggable
             :value="vNode.components"
@@ -19,7 +19,6 @@
             :clone="clone"
             :sort="false"
           >
-            
             <el-menu-item
               v-for="(component, componentIndex) in vNode.components"
               :index="`${index}-${componentIndex}`"
@@ -29,10 +28,12 @@
               <component
                 v-bind="component.props"
                 :is="component.tag"
+                :id="index"
+                :parent-id="index"
+                :key="`${index}-${componentIndex}`"
                 :children="component.children"
               />
             </el-menu-item>
-            
           </draggable>
         </el-menu-item-group>
       </el-submenu>

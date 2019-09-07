@@ -7,7 +7,7 @@
     @input="updated">
     <template v-for="(child, index) in children">
       <div
-        :key="child.i"
+        :key="child.id"
         class="wrapper"
         @mouseover="isHover = true"
         @mouseleave="isHover = false">
@@ -19,8 +19,11 @@
         <component
           :ref="index"
           :is="child.tag"
-          :key="child.i"
-          :children="child.children" />
+          :key="child.id"
+          :id="child.id"
+          :parent-id="parentId"
+          :children="child.children"
+        />
       </div>
     </template>
   </draggable>
@@ -42,6 +45,10 @@ export default {
       default() {
         return []
       }
+    },
+    parentId: {
+      type: Number,
+      required: true
     }
   },
   data() {
@@ -53,9 +60,10 @@ export default {
     copy(index) {
       const cloned = clone(this.children[index])
       cloned.children = this.$refs[index][0].innerChildren
+      // TODO to solve nested children problem
       // 為了阻止遞歸的小孩們更新迴圈(效能上問題)，所以innerChildren每次更新到這層就不更新
       // 這樣會導致這層child是原始的，而這裡需要copy最新的innerChildren
-      cloned.i = null
+      cloned.id = null
       this.children.splice(index + 1, 0, cloned)
       this.updated(this.children)
     },
@@ -64,7 +72,10 @@ export default {
       this.updated(this.children)
     },
     updated(children) {
-      children.forEach(child => appendId(child))
+      children.forEach((child, index) => {
+        appendId(child)
+        child.sortIndex = index
+      })
       this.$emit('update:children', children)
     }
   }

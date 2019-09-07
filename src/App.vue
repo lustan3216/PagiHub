@@ -13,7 +13,10 @@
 
       <el-container>
         <el-main class="main">
-          <root-board :children="$observable.originalNodesArray" />
+          <root-board
+            :id="0"
+            :parent-id="0"
+            :children="$observable.originalNodesArray" />
         </el-main>
       </el-container>
     </el-container>
@@ -47,24 +50,10 @@ export default {
           children: [
             {
               i: 5,
-              children:
-                [
-                  { i: 3, tag: 'editor' },
-                  { i: 4,
-                    tag: 'carousel',
-                    children: [
-                      {},
-                      {},
-                      {}
-                    ]
-                  }
-                ]
+              children: [{ i: 3, tag: 'editor' }, { i: 4, tag: 'carousel', children: [{}, {}, {}] }]
             },
             {
-              children:
-                [
-                  { i: 5, tag: 'lazy-image' }
-                ]
+              children: [{ i: 5, tag: 'lazy-image' }]
             }
           ]
         },
@@ -72,10 +61,10 @@ export default {
           i: 2,
           tag: 'grid-generator',
           children: [
-            { 'x': 0, 'y': 0, 'w': 2, 'h': 2, 'i': 0 },
-            { 'x': 2, 'y': 0, 'w': 2, 'h': 4, 'i': 1 },
-            { 'x': 4, 'y': 0, 'w': 2, 'h': 5, 'i': 2 },
-            { 'x': 6, 'y': 0, 'w': 2, 'h': 3, 'i': 3 }
+            { x: 0, y: 0, w: 2, h: 2, i: 0 },
+            { x: 2, y: 0, w: 2, h: 4, i: 1 },
+            { x: 4, y: 0, w: 2, h: 5, i: 2 },
+            { x: 6, y: 0, w: 2, h: 3, i: 3 }
           ]
         }
       ]

@@ -2,7 +2,7 @@
   <el-carousel style="height:100%">
     <el-carousel-item
       v-for="(child, index) in innerChildren"
-      :key="child.i"
+      :key="child.id"
       class="w-100"
       @mouseover="isHover = true"
       @mouseleave="isHover = false"
@@ -10,10 +10,11 @@
       <edit-bar
         :visible="isHover"
         @copy="copy(index)"
-        @remove="remove(index)"
-      />
-      
-      <edit-area :children.sync="child.children"/>
+        @remove="remove(index)" />
+
+      <edit-area
+        :parent-id="id"
+        :children.sync="child.children" />
     </el-carousel-item>
   </el-carousel>
 </template>

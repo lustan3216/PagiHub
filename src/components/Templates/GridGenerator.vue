@@ -1,6 +1,6 @@
 <template>
   <grid-layout
-    :layout="innerChildren"
+    :layout="innerChildrenWithI"
     :row-height="30"
     :margin="[10, 10]"
     :responsive="false"
@@ -9,23 +9,23 @@
     @layout-updated="layoutUpdatedEvent"
   >
     <grid-item
-      v-for="(child, index) in innerChildren"
+      v-for="(child, index) in innerChildrenWithI"
       :x="child.x"
       :y="child.y"
       :w="child.w"
       :h="child.h"
-      :i="child.i"
-      :key="child.i"
+      :i="child.id"
+      :key="child.id"
       drag-ignore-from="a, button, form, input, p, span, h1, h2, h3, h4, h5, h6, svg"
-      @mouseover.native="currentHover = child.i"
+      @mouseover.native="currentHover = child.id"
       @mouseleave.native="currentHover = null"
     >
       <edit-bar
-        :visible="editable && currentHover === child.i"
+        :visible="editable && currentHover === child.id"
         @copy="copy(index)"
         @remove="remove(index)" />
 
-      <edit-area :children.sync="child.children" />
+      <edit-area :parent-id="id" :children.sync="child.children" />
     </grid-item>
   </grid-layout>
 </template>
@@ -54,6 +54,14 @@ export default {
   data() {
     return {
       currentHover: null
+    }
+  },
+  computed: {
+    innerChildrenWithI() {
+      return this.innerChildren.map(child => {
+        child.i = child.id // if layoutItem doesn't have i, it will crash
+        return child
+      })
     }
   },
   methods: {

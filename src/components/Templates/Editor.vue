@@ -128,7 +128,6 @@
 </template>
 
 <script>
-import { snapShot } from '../../observable/methods'
 import { Editor, EditorContent, EditorMenuBubble } from 'tiptap'
 import {
   Blockquote,
