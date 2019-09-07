@@ -7,7 +7,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import ElementUI from 'element-ui'
 import VueDraggable from 'vuedraggable'
-import observable from './observable'
+import store from './store'
 import VueLazyload from 'vue-lazyload'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
@@ -23,15 +23,14 @@ const bus = new Vue()
 
 Vue.prototype.$log = console.log
 Vue.prototype.$bus = bus
-Vue.prototype.$observable = observable
 Vue.config.productionTip = false
 Vue.config.devtools = process.env.NODE_ENV === 'development'
 
-window.$observable = observable
 window.Vue = Vue
 
 const app = new Vue({
-  render: h => h(App)
+  render: h => h(App),
+  store
 }).$mount('#app')
 
 window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = app.constructor

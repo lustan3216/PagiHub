@@ -32,7 +32,7 @@ export default {
   },
   mixins: [childrenMixin],
   props: {
-    editable: {
+    isEditable: {
       type: Boolean,
       default: true
     }

@@ -158,7 +158,7 @@ export default {
       type: String,
       default: '<p>This is just a boring paragraph</p>'
     },
-    editable: {
+    isEditable: {
       type: Boolean,
       default: true
     }
@@ -175,7 +175,7 @@ export default {
   mounted() {
     this.editor = new Editor({
       content: this.innerContent,
-      editable: this.editable,
+      editable: this.isEditable,
       extensions: [
         new Blockquote(),
         new BulletList(),

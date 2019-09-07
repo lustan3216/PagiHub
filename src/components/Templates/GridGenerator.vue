@@ -4,9 +4,9 @@
     :row-height="30"
     :margin="[10, 10]"
     :responsive="false"
-    :is-draggable="editable"
-    :is-resizable="editable"
-    @layout-updated="layoutUpdatedEvent"
+    :is-draggable="isEditable"
+    :is-resizable="isEditable"
+    @layout-updated="innerChildren = $event"
   >
     <grid-item
       v-for="(child, index) in innerChildrenWithI"
@@ -21,16 +21,22 @@
       @mouseleave.native="currentHover = null"
     >
       <edit-bar
-        :visible="editable && currentHover === child.id"
-        @copy="copy(index)"
-        @remove="remove(index)" />
+        :visible="isEditable && currentHover === child.id"
+        :children.sync="innerChildren"
+        :index="index" />
 
-      <edit-area :parent-id="id" :children.sync="child.children" />
+      <edit-area
+        :parent-id="child.id"
+        :children="child.children"
+        @update:children="updateGrandChildren(index, $event)"
+      />
     </grid-item>
   </grid-layout>
 </template>
 
 <script>
+import clone from 'clone'
+import { mapMutations } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
 import EditBar from '../Components/EditBar'
@@ -46,7 +52,7 @@ export default {
   },
   mixins: [childrenMixin],
   props: {
-    editable: {
+    isEditable: {
       type: Boolean,
       default: true
     }
@@ -65,8 +71,12 @@ export default {
     }
   },
   methods: {
-    layoutUpdatedEvent(value) {
-      this.innerChildren = value
+    ...mapMutations('nodes', ['APPEND_NODE']),
+    updateGrandChildren(index, value) {
+      // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
+      const cloned = clone(this.innerChildren)
+      cloned[index].children = value
+      this.innerChildren = cloned
     }
   }
 }
@@ -75,10 +85,5 @@ export default {
 <style lang="scss" scoped>
 ::v-deep.vue-grid-item {
   position: relative;
-  /*border: 1px dashed gray;*/
-}
-::v-deep.edit-area {
-  height: 100%;
-  border: 1px dashed gray;
 }
 </style>

@@ -7,7 +7,7 @@
     <el-col :span="1">
       <el-button
         type="text"
-        @click="openTemplatesSidebar">
+        @click="OPEN_SIDEBAR('SidebarTemplates')">
         <v-icon name="object-group" />
       </el-button>
     </el-col>
@@ -71,8 +71,9 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import { isMac } from '../../utils/check'
-import { redo, undo, openTemplatesSidebar } from '../../observable/methods'
+
 export default {
   name: 'NavBar',
   data() {
@@ -103,10 +104,10 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('app', ['OPEN_SIDEBAR']),
     isMac,
-    redo,
-    undo,
-    openTemplatesSidebar
+    redo() {},
+    undo() {}
   }
 }
 </script>

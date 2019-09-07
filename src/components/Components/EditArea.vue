@@ -4,7 +4,8 @@
     handle=".wrapper-handler"
     class="edit-area"
     group="editableArea"
-    @input="updated">
+    @input="$emit('update:children', $event)"
+  >
     <template v-for="(child, index) in children">
       <div
         :key="child.id"
@@ -13,10 +14,13 @@
         @mouseleave="isHover = false">
         <edit-bar
           :visible="isHover"
-          @copy="copy(index)"
-          @remove="remove(index)" />
+          :children="children"
+          :index="index"
+          @update:children="$emit('update:children', $event)"
+        />
 
         <component
+          v-bind="child.props"
           :ref="index"
           :is="child.tag"
           :key="child.id"
@@ -30,10 +34,9 @@
 </template>
 
 <script>
-import clone from 'clone'
+// 這個component不儲存處理過的children，只會把有更改過的全部往父層傳，統一由children mixin處理
 import EditBar from '../Components/EditBar'
 import importTemplates from '../../mixins/importTemplates'
-import { appendId } from '../../utils/keyId'
 
 export default {
   name: 'EditArea',
@@ -55,29 +58,6 @@ export default {
     return {
       isHover: false
     }
-  },
-  methods: {
-    copy(index) {
-      const cloned = clone(this.children[index])
-      cloned.children = this.$refs[index][0].innerChildren
-      // TODO to solve nested children problem
-      // 為了阻止遞歸的小孩們更新迴圈(效能上問題)，所以innerChildren每次更新到這層就不更新
-      // 這樣會導致這層child是原始的，而這裡需要copy最新的innerChildren
-      cloned.id = null
-      this.children.splice(index + 1, 0, cloned)
-      this.updated(this.children)
-    },
-    remove(index) {
-      this.children.splice(index, 1)
-      this.updated(this.children)
-    },
-    updated(children) {
-      children.forEach((child, index) => {
-        appendId(child)
-        child.sortIndex = index
-      })
-      this.$emit('update:children', children)
-    }
   }
 }
 </script>
@@ -85,6 +65,8 @@ export default {
 <style scoped lang="scss">
 .edit-area {
   height: 100%;
+  overflow: hidden;
+  border: 1px dashed gray;
 }
 .wrapper {
   position: relative;

@@ -4,8 +4,7 @@ export default [
     icon: 'el-icon-message',
     components: [
       {
-        tag: 'editor',
-        props: { editable: false }
+        tag: 'editor'
       }
     ]
   },
@@ -24,9 +23,8 @@ export default [
     components: [
       {
         tag: 'grid-generator',
-        props: { editable: false },
         children: [
-          { x: 0, y: 0, w: 2, h: 2 },
+          { x: 0, y: 0, w: 2, h: 3 },
           { x: 2, y: 0, w: 2, h: 4 },
           { x: 4, y: 0, w: 2, h: 5 },
           { x: 6, y: 0, w: 2, h: 3 }

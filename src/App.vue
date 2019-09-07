@@ -8,7 +8,7 @@
       <transition
         name="fade-left"
         mode="out-in">
-        <component :is="$observable.currentSidebar" />
+        <component :is="currentSidebar" />
       </transition>
 
       <el-container>
@@ -16,7 +16,7 @@
           <root-board
             :id="0"
             :parent-id="0"
-            :children="$observable.originalNodesArray" />
+            :children="nodesTree" />
         </el-main>
       </el-container>
     </el-container>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 import NavBar from './components/Layout/NavBar'
 import EditArea from './components/Components/EditArea'
 import RootBoard from './components/Templates/RootBoard'
@@ -41,34 +42,12 @@ export default {
     RootBoard
   },
   mixins: [importTemplates],
-  data() {
-    return {
-      nodes: [
-        {
-          tag: 'carousel',
-          i: 1,
-          children: [
-            {
-              i: 5,
-              children: [{ i: 3, tag: 'editor' }, { i: 4, tag: 'carousel', children: [{}, {}, {}] }]
-            },
-            {
-              children: [{ i: 5, tag: 'lazy-image' }]
-            }
-          ]
-        },
-        {
-          i: 2,
-          tag: 'grid-generator',
-          children: [
-            { x: 0, y: 0, w: 2, h: 2, i: 0 },
-            { x: 2, y: 0, w: 2, h: 4, i: 1 },
-            { x: 4, y: 0, w: 2, h: 5, i: 2 },
-            { x: 6, y: 0, w: 2, h: 3, i: 3 }
-          ]
-        }
-      ]
-    }
+  computed: {
+    ...mapState('app', ['currentSidebar']),
+    ...mapState('nodes', ['nodesTree'])
+  },
+  created() {
+    console.log(this.nodesTree)
   }
 }
 </script>

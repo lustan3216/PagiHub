@@ -32,6 +32,7 @@
                 :parent-id="index"
                 :key="`${index}-${componentIndex}`"
                 :children="component.children"
+                :is-editable="false"
               />
             </el-menu-item>
           </draggable>
@@ -45,7 +46,8 @@
 import importTemplatesMixin from '../../mixins/importTemplates'
 import Sidebar from './Sidebar'
 import clone from 'clone'
-import templates from '../../observable/templates'
+import templates from '../../templates'
+import { appendIds } from '../../utils/keyId'
 
 export default {
   name: 'SidebarTemplates',
@@ -60,8 +62,10 @@ export default {
     }
   },
   methods: {
-    clone(node) {
-      return clone(node)
+    clone(children) {
+      const cloned = clone(children)
+      appendIds(cloned)
+      return cloned
     }
   }
 }
