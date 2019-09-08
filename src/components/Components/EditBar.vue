@@ -3,19 +3,19 @@
     v-popover:popover
     :is="isInlineElement ? 'span' : 'div'"
     class="h-100"
-    @mouseover="isHover = true"
-    @mouseleave="isHover = false"
+    @mouseover.stop="isHover = true"
+    @mouseleave.stop="isHover = false"
   >
     <el-popover
       ref="popover"
       :value="isHover || isHover2"
+      :title="`${node.tag}-${node.id}`"
       :placement="isInlineElement ? 'top' : 'right-start'"
       trigger="manual"
     >
       <div
         @mouseover="isHover2 = true"
         @mouseleave="isHover2 = false">
-        <span> {{ node.tag }} - {{ node.id }} </span>
         <el-button
           type="text"
           class="wrapper-handler">
