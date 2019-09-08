@@ -1,16 +1,14 @@
 <template>
   <el-carousel
     trigger="click"
-    style="height:100%">
+    class="wh-100">
     <el-carousel-item
       v-for="(child, index) in innerChildren"
       :key="child.id"
-      class="w-100"
-    >
+      class="w-100">
       <edit-bar
         :children.sync="innerChildren"
-        :index="index"
-      />
+        :index="index" />
 
       <edit-area
         :parent-id="child.id"
@@ -56,7 +54,6 @@ export default {
   color: #475669;
   font-size: 14px;
   opacity: 0.75;
-  line-height: 150px;
   margin: 0;
 }
 

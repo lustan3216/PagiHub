@@ -20,6 +20,7 @@
             :sort="false"
           >
             <el-menu-item
+              style="height: 60%;"
               v-for="(component, componentIndex) in vNode.components"
               :index="`${index}-${componentIndex}`"
               :key="`${index}-${componentIndex}`"
@@ -72,6 +73,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  ::v-deep > .el-carousel__container {
+    height: auto;
+    padding-top: 60%;
+  }
 .el-menu-item:focus,
 .el-menu-item:hover {
   background-color: inherit;

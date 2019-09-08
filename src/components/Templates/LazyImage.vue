@@ -2,8 +2,7 @@
   <el-image
     :src="url"
     :fit="fit"
-    style="width: 100%; min-height: 60%;"
-  />
+    class="wh-100" />
 </template>
 
 <script>
@@ -13,7 +12,7 @@ export default {
     url: {
       type: String,
       default() {
-        return `https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg`
+        return `https://placeimg.com/1320/840/any`
       }
     },
     fit: {

@@ -2,7 +2,7 @@
   <grid-layout
     :layout="innerChildrenWithI"
     :row-height="30"
-    :margin="[10, 10]"
+    :margin="[0, 0]"
     :responsive="false"
     :is-draggable="isEditable"
     :is-resizable="isEditable"
@@ -16,7 +16,7 @@
       :h="child.h"
       :i="child.id"
       :key="child.id"
-      drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span"
+      drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span, img"
     >
       <edit-bar
         :children.sync="innerChildren"
@@ -86,5 +86,8 @@ export default {
   overflow: hidden;
   border: 1px dashed #dedede;
   border-radius: 3px;
+  & > .vue-resizable-handle {
+    z-index: 10000;
+  }
 }
 </style>
