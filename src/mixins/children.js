@@ -24,6 +24,7 @@ export default {
       try {
         this.updateDifferenceToVuex(newChildren, oldChildren, this.id)
       } catch (e) {
+        if (e !== 'done') throw e
         // 一次只會有一個地方刪除、新增或修改，所以當找到該node執行完就跳出遞迴迴圈
       }
     }
@@ -59,10 +60,10 @@ export default {
 
         this.appendNestedNode(newNode, parentId)
 
-        newChildren.slice(createdIndex + 1, newLength).forEach((child, index) => {
+        newChildren.forEach((child, index) => {
           this.UPDATE_NODE_SORT({
             id: child.id,
-            sortIndex: createdIndex + 1 + index
+            sortIndex: index
           })
         })
 

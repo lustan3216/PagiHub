@@ -19,6 +19,7 @@ const mutations = {
   },
   UPDATE_NODE_SORT(state, { id, sortIndex }) {
     state.currentNodesMap[id].sortIndex = sortIndex
+    window.localStorage.setItem('asd', JSON.stringify(state.currentNodesMap))
   }
 }
 

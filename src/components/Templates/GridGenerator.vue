@@ -20,7 +20,8 @@
     >
       <edit-bar
         :children.sync="innerChildren"
-        :index="index">
+        :index="index"
+        class="h-100">
         <edit-area
           :parent-id="child.id"
           :children="child.children"

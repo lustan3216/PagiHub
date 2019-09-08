@@ -2,7 +2,6 @@
   <component
     v-popover:popover
     :is="isInlineElement ? 'span' : 'div'"
-    class="h-100"
     @mouseover.stop="isHover = true"
     @mouseleave="isHover = false"
   >
