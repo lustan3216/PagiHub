@@ -4,18 +4,18 @@
     :is="isInlineElement ? 'span' : 'div'"
     class="h-100"
     @mouseover.stop="isHover = true"
-    @mouseleave.stop="isHover = false"
+    @mouseleave="isHover = false"
   >
     <el-popover
       ref="popover"
       :value="isHover || isHover2"
-      :title="`${node.tag}-${node.id}`"
       :placement="isInlineElement ? 'top' : 'right-start'"
       trigger="manual"
     >
       <div
-        @mouseover="isHover2 = true"
+        @mouseover.stop="isHover2 = true"
         @mouseleave="isHover2 = false">
+        <p>{{ node.tag }} - {{ node.id }}</p>
         <el-button
           type="text"
           class="wrapper-handler">
