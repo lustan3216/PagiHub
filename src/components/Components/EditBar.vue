@@ -8,16 +8,14 @@
   >
     <el-popover
       ref="popover"
-      :value="visible || isHover"
+      :value="isHover || isHover2"
       :placement="isInlineElement ? 'top' : 'right-start'"
       trigger="manual"
     >
       <div
         @mouseover="isHover2 = true"
         @mouseleave="isHover2 = false">
-        <span>
-          {{ children[index].tag }}
-        </span>
+        <span> {{ node.tag }} - {{ node.id }} </span>
         <el-button
           type="text"
           class="wrapper-handler">
@@ -70,8 +68,11 @@ export default {
     }
   },
   computed: {
+    node() {
+      return this.children[this.index]
+    },
     isInlineElement() {
-      return ['flex-button'].includes(this.children[this.index].tag)
+      return ['flex-button'].includes(this.node.tag)
     }
   },
   methods: {

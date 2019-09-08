@@ -27,10 +27,10 @@ export default [
       {
         tag: 'grid-generator',
         children: [
-          { x: 0, y: 0, w: 2, h: 3 },
-          { x: 2, y: 0, w: 2, h: 4 },
-          { x: 4, y: 0, w: 2, h: 5 },
-          { x: 6, y: 0, w: 2, h: 3 }
+          { tag: 'grid-item', x: 0, y: 0, w: 2, h: 3 },
+          { tag: 'grid-item', x: 2, y: 0, w: 2, h: 4 },
+          { tag: 'grid-item', x: 4, y: 0, w: 2, h: 5 },
+          { tag: 'grid-item', x: 6, y: 0, w: 2, h: 3 }
         ]
       }
     ]
