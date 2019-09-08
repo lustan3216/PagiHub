@@ -7,10 +7,12 @@
     @input="$emit('update:children', $event)"
   >
     <template v-for="(child, index) in children">
-      <span
+      <component
+        :is="isInlineElement(child) ? 'span' : 'div'"
         :key="child.id"
         class="wrapper"
-        @click.stop="setCurrentHover(child.id)">
+        @click.stop="setCurrentHover(child.id)"
+      >
         <edit-bar
           :visible="currentHover === child.id"
           :children="children"
@@ -27,7 +29,7 @@
           :parent-id="parentId"
           :children="child.children"
         />
-      </span>
+      </component>
     </template>
   </draggable>
 </template>
@@ -64,6 +66,9 @@ export default {
     })
   },
   methods: {
+    isInlineElement(child) {
+      return ['flex-button'].includes(child.tag)
+    },
     setCurrentHover(id) {
       this.$bus.$emit('closeEditBar')
       this.currentHover = id
@@ -81,5 +86,8 @@ export default {
   width: 12px;
   top: 5px;
   left: 5px;
+}
+.wrapper {
+  position: relative;
 }
 </style>

@@ -6,7 +6,7 @@
       v-for="(child, index) in innerChildren"
       :key="child.id"
       class="w-100"
-      @click.stop.native="setCurrentHover(child.id)"
+      @click.stop="setCurrentHover(child.id)"
     >
       <edit-bar
         :visible="isEditable && currentHover === child.id"

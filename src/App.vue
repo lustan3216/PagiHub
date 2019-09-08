@@ -30,6 +30,7 @@ import EditArea from './components/Components/EditArea'
 import RootBoard from './components/Templates/RootBoard'
 import SidebarTemplates from './components/Layout/SidebarTemplates'
 import SidebarSettings from './components/Layout/SidebarSettings'
+import SidebarNodesTree from './components/Layout/SidebarNodesTree'
 import importTemplates from './mixins/importTemplates'
 
 export default {
@@ -39,15 +40,13 @@ export default {
     NavBar,
     SidebarTemplates,
     SidebarSettings,
+    SidebarNodesTree,
     RootBoard
   },
   mixins: [importTemplates],
   computed: {
     ...mapState('app', ['currentSidebar']),
     ...mapState('nodes', ['nodesTree'])
-  },
-  created() {
-    console.log(this.nodesTree)
   }
 }
 </script>

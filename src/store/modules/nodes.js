@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import JsTreeList from 'js-tree-list'
 
+const nodes = JSON.parse(window.localStorage.getItem('asd') || `{}`)
+
 const state = {
-  nodesTree: nodesTree(),
-  currentNodesMap: JSON.parse(window.localStorage.getItem('asd') || `{}`)
+  nodesTree: nodesTree(nodes),
+  currentNodesMap: nodes
 }
 
 const mutations = {
   APPEND_NODE(state, _node) {
     const { children, ...node } = _node
-    state.currentNodesMap[node.id] = node
+    Vue.set(state.currentNodesMap, node.id, node)
 
     window.localStorage.setItem('asd', JSON.stringify(state.currentNodesMap))
   },
@@ -18,25 +20,34 @@ const mutations = {
     window.localStorage.setItem('asd', JSON.stringify(state.currentNodesMap))
   },
   UPDATE_NODE_SORT(state, { id, sortIndex }) {
-    state.currentNodesMap[id].sortIndex = sortIndex
+    Vue.set(state.currentNodesMap[id], sortIndex, sortIndex)
+
     window.localStorage.setItem('asd', JSON.stringify(state.currentNodesMap))
   }
 }
 
-function nodesTree() {
-  const currentNodesMap = JSON.parse(window.localStorage.getItem('asd') || `{}`)
+const getters = {
+  nodesTree(state) {
+    return nodesTree(state.currentNodesMap)
+  }
+}
+
+function nodesTree(currentNodesMap) {
   const currentNodesArray = Object.values(currentNodesMap)
   const list = new JsTreeList.ListToTree(currentNodesArray, {
     key_parent: 'parentId',
-    key_child: 'children',
-    sort: 'sortIndex'
+    key_child: 'children'
   })
 
+  list.sort((a, b) => {
+    return a.content.sortIndex - b.content.sortIndex
+  })
   return list.GetTree()
 }
-window.asd = nodesTree
+window.asd = nodesTree(nodes)
 export default {
   namespaced: true,
   state,
-  mutations
+  mutations,
+  getters
 }

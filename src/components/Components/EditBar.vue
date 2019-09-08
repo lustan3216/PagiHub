@@ -94,6 +94,7 @@ export default {
   right: 10px;
   z-index: 100;
   position: absolute;
+  width: 220px;
 }
 .outer {
   position: relative;
