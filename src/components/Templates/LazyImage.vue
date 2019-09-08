@@ -2,7 +2,8 @@
   <el-image
     :src="url"
     :fit="fit"
-    style="width: 100px; height: 100px"/>
+    style="width: 100%; min-height: 60%;"
+  />
 </template>
 
 <script>
@@ -12,18 +13,15 @@ export default {
     url: {
       type: String,
       default() {
-        return `https://placeimg.com/1320/840/any`
+        return `https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg`
       }
-    }
-  },
-  computed: {
-    _url() {
-      return this.url
+    },
+    fit: {
+      type: String,
+      default: 'cover'
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

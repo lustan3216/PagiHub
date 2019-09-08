@@ -7,28 +7,27 @@
     @input="$emit('update:children', $event)"
   >
     <template v-for="(child, index) in children">
-      <div
-        :key="child.id"
-        class="wrapper"
-        @mouseover="isHover = true"
-        @mouseleave="isHover = false">
+      <component
+        :is="['flex-button'].includes(child.tag) ? 'span' : 'div'"
+        @mouseover="currentHover = child.id"
+        @mouseleave="currentHover = null"
+      >
         <edit-bar
-          :visible="isHover"
+          :visible="currentHover === child.id"
           :children="children"
           :index="index"
           @update:children="$emit('update:children', $event)"
-        />
-
-        <component
-          v-bind="child.props"
-          :ref="index"
-          :is="child.tag"
-          :key="child.id"
-          :id="child.id"
-          :parent-id="parentId"
-          :children="child.children"
-        />
-      </div>
+        >
+          <component
+            v-bind="child.props"
+            :is="child.tag"
+            :key="child.id"
+            :id="child.id"
+            :parent-id="parentId"
+            :children="child.children"
+          />
+        </edit-bar>
+      </component>
     </template>
   </draggable>
 </template>
@@ -56,7 +55,7 @@ export default {
   },
   data() {
     return {
-      isHover: false
+      currentHover: null
     }
   }
 }
@@ -64,21 +63,7 @@ export default {
 
 <style scoped lang="scss">
 .edit-area {
-  height: 100%;
-  overflow: hidden;
+  height: calc(100% - 2px);
   border: 1px dashed gray;
-}
-.wrapper {
-  position: relative;
-  padding: 15px;
-  box-sizing: border-box;
-}
-.functions {
-  top: -35px;
-  right: 10px;
-  position: absolute;
-}
-.edit-area {
-  min-height: 100px;
 }
 </style>

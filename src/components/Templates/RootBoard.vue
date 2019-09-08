@@ -2,7 +2,8 @@
   <browser-window>
     <edit-area
       :parent-id="id"
-      :children.sync="innerChildren" />
+      :children.sync="innerChildren"
+      class="edit-area" />
   </browser-window>
 </template>
 
@@ -23,6 +24,7 @@ export default {
 
 <style lang="scss" scoped>
 .edit-area {
-  height: 100%;
+  @include calc-vh(min-height, '100vh - 135px');
+  border: none;
 }
 </style>

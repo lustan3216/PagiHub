@@ -24,7 +24,7 @@
       </el-col>
     </el-row>
 
-    <div class="body h-100">
+    <div class="body">
       <slot />
     </div>
   </div>

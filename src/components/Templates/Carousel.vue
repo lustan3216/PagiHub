@@ -1,25 +1,30 @@
 <template>
-  <el-carousel style="height:100%">
+  <el-carousel
+    trigger="click"
+    style="height:100%">
     <el-carousel-item
       v-for="(child, index) in innerChildren"
       :key="child.id"
       class="w-100"
-      @mouseover="isHover = true"
-      @mouseleave="isHover = false"
+      @mouseover.native="currentHover = child.id"
+      @mouseleave.native="currentHover = null"
     >
       <edit-bar
-        :visible="isHover"
-        @copy="copy(index)"
-        @remove="remove(index)" />
+        :visible="isEditable && currentHover === child.id"
+        :children.sync="innerChildren"
+        :index="index" />
 
       <edit-area
-        :parent-id="id"
-        :children.sync="child.children" />
+        :parent-id="child.id"
+        :children="child.children"
+        @update:children="updateGrandChildren(index, $event)"
+      />
     </el-carousel-item>
   </el-carousel>
 </template>
 
 <script>
+import clone from 'clone'
 import childrenMixin from '../../mixins/children'
 import EditBar from '../Components/EditBar'
 import EditArea from '../Components/EditArea'
@@ -39,7 +44,15 @@ export default {
   },
   data() {
     return {
-      isHover: false
+      currentHover: false
+    }
+  },
+  methods: {
+    updateGrandChildren(index, value) {
+      // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
+      const cloned = clone(this.innerChildren)
+      cloned[index].children = value
+      this.innerChildren = cloned
     }
   }
 }

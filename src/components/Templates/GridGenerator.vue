@@ -16,20 +16,20 @@
       :h="child.h"
       :i="child.id"
       :key="child.id"
-      drag-ignore-from="a, button, form, input, p, span, h1, h2, h3, h4, h5, h6, svg"
+      drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg"
       @mouseover.native="currentHover = child.id"
       @mouseleave.native="currentHover = null"
     >
       <edit-bar
         :visible="isEditable && currentHover === child.id"
         :children.sync="innerChildren"
-        :index="index" />
-
-      <edit-area
-        :parent-id="child.id"
-        :children="child.children"
-        @update:children="updateGrandChildren(index, $event)"
-      />
+        :index="index">
+        <edit-area
+          :parent-id="child.id"
+          :children="child.children"
+          @update:children="updateGrandChildren(index, $event)"
+        />
+      </edit-bar>
     </grid-item>
   </grid-layout>
 </template>
@@ -85,5 +85,6 @@ export default {
 <style lang="scss" scoped>
 ::v-deep.vue-grid-item {
   position: relative;
+  overflow: hidden;
 }
 </style>

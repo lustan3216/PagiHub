@@ -1,33 +1,44 @@
 <template>
-  <transition name="fade">
-    <div
-      v-if="visible"
-      class="functions">
-      <el-button
-        type="text"
-        class="wrapper-handler">
-        <v-icon name="arrows-alt" />
-      </el-button>
+  <span v-popover:popover>
+    <el-popover
+      ref="popover"
+      :value="visible || isHover"
+      :placement="['flex-button'].includes(children[index].tag) ? 'top' : 'right-start'"
+      trigger="manual"
+    >
+      <div
+        @mouseover="isHover = true"
+        @mouseleave="isHover = false">
+        <span>
+          {{ children[index].tag }}
+        </span>
+        <el-button
+          type="text"
+          class="wrapper-handler">
+          <v-icon name="arrows-alt" />
+        </el-button>
 
-      <el-button
-        type="text"
-        @click="copy">
-        <v-icon name="copy" />
-      </el-button>
+        <el-button
+          type="text"
+          @click="copy">
+          <v-icon name="copy" />
+        </el-button>
 
-      <el-button
-        type="text"
-        @click="remove">
-        <v-icon name="trash-alt" />
-      </el-button>
+        <el-button
+          type="text"
+          @click="remove">
+          <v-icon name="trash-alt" />
+        </el-button>
 
-      <el-button
-        type="text"
-        @click="$emit('setting')">
-        <v-icon name="cog" />
-      </el-button>
-    </div>
-  </transition>
+        <el-button
+          type="text"
+          @click="$emit('setting')">
+          <v-icon name="cog" />
+        </el-button>
+      </div>
+    </el-popover>
+    <slot />
+  </span>
 </template>
 
 <script>
@@ -50,6 +61,11 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      isHover: false
+    }
+  },
   methods: {
     // 這裡的update也額外會來自於EditArea裡面的變動，因為EditArea會$emit(update:children)上一層的小孩
     // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
@@ -57,7 +73,7 @@ export default {
       const clonedChildren = clone(this.children)
       const cloned = clone(clonedChildren[this.index])
       resetIds(cloned)
-      
+
       clonedChildren.splice(this.index + 1, 0, cloned)
 
       this.$emit('update:children', clonedChildren)
@@ -76,6 +92,9 @@ export default {
       })
 
       this.$emit('update:children', children)
+    },
+    asd() {
+      console.log(123)
     }
   }
 }
@@ -85,7 +104,6 @@ export default {
 .functions {
   top: -5px;
   z-index: 100;
-  right: 10px;
   position: absolute;
 }
 </style>

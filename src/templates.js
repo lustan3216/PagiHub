@@ -5,6 +5,9 @@ export default [
     components: [
       {
         tag: 'editor'
+      },
+      {
+        tag: 'flex-button'
       }
     ]
   },
