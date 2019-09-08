@@ -3,8 +3,8 @@
     v-popover:popover
     :is="isInlineElement ? 'span' : 'div'"
     class="h-100"
-    @mouseover="visible = true"
-    @mouseleave="visible = false"
+    @mouseover="isHover = true"
+    @mouseleave="isHover = false"
   >
     <el-popover
       ref="popover"
@@ -13,8 +13,8 @@
       trigger="manual"
     >
       <div
-        @mouseover="isHover = true"
-        @mouseleave="isHover = false">
+        @mouseover="isHover2 = true"
+        @mouseleave="isHover2 = false">
         <span>
           {{ children[index].tag }}
         </span>
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       isHover: false,
-      visible: false
+      isHover2: false
     }
   },
   computed: {
@@ -100,9 +100,6 @@ export default {
       })
 
       this.$emit('update:children', children)
-    },
-    asd() {
-      console.log(123)
     }
   }
 }
