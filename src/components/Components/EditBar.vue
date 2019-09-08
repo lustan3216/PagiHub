@@ -1,9 +1,15 @@
 <template>
-  <span v-popover:popover>
+  <component
+    v-popover:popover
+    :is="isInlineElement ? 'span' : 'div'"
+    class="h-100"
+    @mouseover="visible = true"
+    @mouseleave="visible = false"
+  >
     <el-popover
       ref="popover"
       :value="visible || isHover"
-      :placement="['flex-button'].includes(children[index].tag) ? 'top' : 'right-start'"
+      :placement="isInlineElement ? 'top' : 'right-start'"
       trigger="manual"
     >
       <div
@@ -38,7 +44,7 @@
       </div>
     </el-popover>
     <slot />
-  </span>
+  </component>
 </template>
 
 <script>
@@ -48,10 +54,6 @@ import { appendIds, resetIds } from '../../utils/keyId'
 export default {
   name: 'EditBar',
   props: {
-    visible: {
-      type: Boolean,
-      default: false
-    },
     children: {
       type: Array,
       required: true
@@ -63,7 +65,13 @@ export default {
   },
   data() {
     return {
-      isHover: false
+      isHover: false,
+      visible: false
+    }
+  },
+  computed: {
+    isInlineElement() {
+      return ['flex-button'].includes(this.children[this.index].tag)
     }
   },
   methods: {

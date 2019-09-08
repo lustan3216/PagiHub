@@ -17,11 +17,8 @@
       :i="child.id"
       :key="child.id"
       drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg"
-      @mouseover.native="currentHover = child.id"
-      @mouseleave.native="currentHover = null"
     >
       <edit-bar
-        :visible="isEditable && currentHover === child.id"
         :children.sync="innerChildren"
         :index="index">
         <edit-area
@@ -55,11 +52,6 @@ export default {
     isEditable: {
       type: Boolean,
       default: true
-    }
-  },
-  data() {
-    return {
-      currentHover: null
     }
   },
   computed: {

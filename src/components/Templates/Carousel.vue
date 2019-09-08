@@ -6,13 +6,11 @@
       v-for="(child, index) in innerChildren"
       :key="child.id"
       class="w-100"
-      @mouseover.native="currentHover = child.id"
-      @mouseleave.native="currentHover = null"
     >
       <edit-bar
-        :visible="isEditable && currentHover === child.id"
         :children.sync="innerChildren"
-        :index="index" />
+        :index="index"
+      />
 
       <edit-area
         :parent-id="child.id"
@@ -40,11 +38,6 @@ export default {
     isEditable: {
       type: Boolean,
       default: true
-    }
-  },
-  data() {
-    return {
-      currentHover: false
     }
   },
   methods: {

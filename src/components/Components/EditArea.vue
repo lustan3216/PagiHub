@@ -7,27 +7,19 @@
     @input="$emit('update:children', $event)"
   >
     <template v-for="(child, index) in children">
-      <component
-        :is="['flex-button'].includes(child.tag) ? 'span' : 'div'"
-        @mouseover="currentHover = child.id"
-        @mouseleave="currentHover = null"
-      >
-        <edit-bar
-          :visible="currentHover === child.id"
-          :children="children"
-          :index="index"
-          @update:children="$emit('update:children', $event)"
-        >
-          <component
-            v-bind="child.props"
-            :is="child.tag"
-            :key="child.id"
-            :id="child.id"
-            :parent-id="parentId"
-            :children="child.children"
-          />
-        </edit-bar>
-      </component>
+      <edit-bar
+        :children="children"
+        :index="index"
+        @update:children="$emit('update:children', $event)">
+        <component
+          v-bind="child.props"
+          :is="child.tag"
+          :key="child.id"
+          :id="child.id"
+          :parent-id="parentId"
+          :children="child.children"
+        />
+      </edit-bar>
     </template>
   </draggable>
 </template>
@@ -51,11 +43,6 @@ export default {
     parentId: {
       type: Number,
       required: true
-    }
-  },
-  data() {
-    return {
-      currentHover: null
     }
   }
 }
