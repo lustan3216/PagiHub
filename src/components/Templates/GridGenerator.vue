@@ -16,7 +16,7 @@
       :h="child.h"
       :i="child.id"
       :key="child.id"
-      drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg"
+      drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span"
     >
       <edit-bar
         :children.sync="innerChildren"
@@ -76,8 +76,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.vue-grid-layout {
+  border: 1px dashed #dedede;
+  border-radius: 3px;
+}
+
 ::v-deep.vue-grid-item {
   position: relative;
   overflow: hidden;
+  border: 1px dashed #dedede;
+  border-radius: 3px;
 }
 </style>

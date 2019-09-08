@@ -1,7 +1,7 @@
 <template>
   <draggable
     :value="children"
-    handle=".wrapper-handler"
+    handle=".drag-handler"
     class="edit-area"
     group="editableArea"
     @input="$emit('update:children', $event)"
@@ -44,6 +44,11 @@ export default {
       type: Number,
       required: true
     }
+  },
+  data() {
+    return {
+      currentHover: null
+    }
   }
 }
 </script>
@@ -51,6 +56,11 @@ export default {
 <style scoped lang="scss">
 .edit-area {
   height: calc(100% - 2px);
-  border: 1px dashed gray;
+}
+.drag-handler-icon {
+  position: absolute;
+  width: 12px;
+  top: 5px;
+  left: 5px;
 }
 </style>

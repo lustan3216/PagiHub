@@ -2,6 +2,8 @@
   <component
     v-popover:popover
     :is="isInlineElement ? 'span' : 'div'"
+    :class="{ 'd-inline-block': isInlineElement, 'drag-handler': isInlineElement }"
+    class="outer"
     @mouseover.stop="isHover = true"
     @mouseleave="isHover = false"
   >
@@ -15,12 +17,7 @@
         @mouseover.stop="isHover2 = true"
         @mouseleave="isHover2 = false">
         <p>{{ node.tag }} - {{ node.id }}</p>
-        <el-button
-          type="text"
-          class="wrapper-handler">
-          <v-icon name="arrows-alt" />
-        </el-button>
-
+        
         <el-button
           type="text"
           @click="copy">
@@ -40,6 +37,7 @@
         </el-button>
       </div>
     </el-popover>
+
     <slot />
   </component>
 </template>
@@ -110,5 +108,8 @@ export default {
   top: -5px;
   z-index: 100;
   position: absolute;
+}
+.outer {
+  position: relative;
 }
 </style>
