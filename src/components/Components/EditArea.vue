@@ -7,19 +7,27 @@
     @input="$emit('update:children', $event)"
   >
     <template v-for="(child, index) in children">
-      <edit-bar
-        :children="children"
-        :index="index"
-        @update:children="$emit('update:children', $event)">
+      <span
+        :key="child.id"
+        class="wrapper"
+        @click.stop="setCurrentHover(child.id)">
+        <edit-bar
+          :visible="currentHover === child.id"
+          :children="children"
+          :index="index"
+          @update:children="$emit('update:children', $event)"
+        />
+
         <component
           v-bind="child.props"
+          :ref="index"
           :is="child.tag"
           :key="child.id"
           :id="child.id"
           :parent-id="parentId"
           :children="child.children"
         />
-      </edit-bar>
+      </span>
     </template>
   </draggable>
 </template>
@@ -48,6 +56,17 @@ export default {
   data() {
     return {
       currentHover: null
+    }
+  },
+  created() {
+    this.$bus.$on('closeEditBar', () => {
+      this.currentHover = null
+    })
+  },
+  methods: {
+    setCurrentHover(id) {
+      this.$bus.$emit('closeEditBar')
+      this.currentHover = id
     }
   }
 }

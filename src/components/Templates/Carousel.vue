@@ -5,8 +5,11 @@
     <el-carousel-item
       v-for="(child, index) in innerChildren"
       :key="child.id"
-      class="w-100">
+      class="w-100"
+      @click.stop.native="setCurrentHover(child.id)"
+    >
       <edit-bar
+        :visible="isEditable && currentHover === child.id"
         :children.sync="innerChildren"
         :index="index" />
 
@@ -38,7 +41,21 @@ export default {
       default: true
     }
   },
+  data() {
+    return {
+      currentHover: null
+    }
+  },
+  created() {
+    this.$bus.$on('closeEditBar', () => {
+      this.currentHover = null
+    })
+  },
   methods: {
+    setCurrentHover(id) {
+      this.$bus.$emit('closeEditBar')
+      this.currentHover = id
+    },
     updateGrandChildren(index, value) {
       // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
       const cloned = clone(this.innerChildren)

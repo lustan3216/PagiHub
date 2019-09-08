@@ -17,17 +17,18 @@
       :i="child.id"
       :key="child.id"
       drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span, img"
+      @click.stop.native="setCurrentHover(child.id)"
     >
       <edit-bar
+        :visible="isEditable && currentHover === child.id"
         :children.sync="innerChildren"
-        :index="index"
-        class="h-100">
-        <edit-area
-          :parent-id="child.id"
-          :children="child.children"
-          @update:children="updateGrandChildren(index, $event)"
-        />
-      </edit-bar>
+        :index="index" />
+
+      <edit-area
+        :parent-id="child.id"
+        :children="child.children"
+        @update:children="updateGrandChildren(index, $event)"
+      />
     </grid-item>
   </grid-layout>
 </template>
@@ -55,6 +56,11 @@ export default {
       default: true
     }
   },
+  data() {
+    return {
+      currentHover: null
+    }
+  },
   computed: {
     innerChildrenWithI() {
       return this.innerChildren.map(child => {
@@ -63,8 +69,17 @@ export default {
       })
     }
   },
+  created() {
+    this.$bus.$on('closeEditBar', () => {
+      this.currentHover = null
+    })
+  },
   methods: {
     ...mapMutations('nodes', ['APPEND_NODE']),
+    setCurrentHover(id) {
+      this.$bus.$emit('closeEditBar')
+      this.currentHover = id
+    },
     updateGrandChildren(index, value) {
       // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
       const cloned = clone(this.innerChildren)
@@ -83,7 +98,6 @@ export default {
 
 ::v-deep.vue-grid-item {
   position: relative;
-  overflow: hidden;
   border: 1px dashed #dedede;
   border-radius: 3px;
   & > .vue-resizable-handle {

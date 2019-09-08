@@ -1,45 +1,35 @@
 <template>
-  <component
-    v-popover:popover
-    :is="isInlineElement ? 'span' : 'div'"
-    :class="{ 'd-inline-block': isInlineElement, 'drag-handler': isInlineElement }"
-    class="outer"
-    @mouseover.stop="isHover = true"
-    @mouseleave="isHover = false"
-  >
-    <el-popover
-      ref="popover"
-      :value="isHover || isHover2"
-      :placement="isInlineElement ? 'top' : 'right-start'"
-      trigger="manual"
-    >
-      <div
-        @mouseover.stop="isHover2 = true"
-        @mouseleave="isHover2 = false">
-        <p>{{ node.tag }} - {{ node.id }}</p>
-        
-        <el-button
-          type="text"
-          @click="copy">
-          <v-icon name="copy" />
-        </el-button>
+  <transition name="fade">
+    <div
+      v-if="visible"
+      class="functions">
+      <span>{{ node.tag }} - {{ node.id }}</span>
 
-        <el-button
-          type="text"
-          @click="remove">
-          <v-icon name="trash-alt" />
-        </el-button>
+      <el-button
+        type="text"
+        class="drag-handler">
+        <v-icon name="arrows-alt" />
+      </el-button>
 
-        <el-button
-          type="text"
-          @click="$emit('setting')">
-          <v-icon name="cog" />
-        </el-button>
-      </div>
-    </el-popover>
+      <el-button
+        type="text"
+        @click="copy">
+        <v-icon name="copy" />
+      </el-button>
 
-    <slot />
-  </component>
+      <el-button
+        type="text"
+        @click="remove">
+        <v-icon name="trash-alt" />
+      </el-button>
+
+      <el-button
+        type="text"
+        @click="$emit('setting')">
+        <v-icon name="cog" />
+      </el-button>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -56,20 +46,15 @@ export default {
     index: {
       type: Number,
       required: true
-    }
-  },
-  data() {
-    return {
-      isHover: false,
-      isHover2: false
+    },
+    visible: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     node() {
       return this.children[this.index]
-    },
-    isInlineElement() {
-      return ['flex-button'].includes(this.node.tag)
     }
   },
   methods: {
@@ -105,7 +90,8 @@ export default {
 
 <style scoped lang="scss">
 .functions {
-  top: -5px;
+  top: -35px;
+  right: 10px;
   z-index: 100;
   position: absolute;
 }
