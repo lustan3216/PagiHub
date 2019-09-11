@@ -123,11 +123,12 @@
       </el-button-group>
     </editor-menu-bubble>
 
-    <editor-content :editor="editor" />
+    <editor-content :style="innerStyles" :editor="editor" />
   </div>
 </template>
 
 <script>
+import commonMixin from '../../mixins/common'
 import { Editor, EditorContent, EditorMenuBubble } from 'tiptap'
 import {
   Blockquote,
@@ -153,6 +154,7 @@ export default {
     EditorContent,
     EditorMenuBubble
   },
+  mixins: [commonMixin],
   props: {
     content: {
       type: String,
@@ -198,8 +200,6 @@ export default {
         // snapShot()
       }
     })
-
-    // this.$bus.$on('reUndo', this.setContent)
   },
   beforeDestroy() {
     this.editor.destroy()

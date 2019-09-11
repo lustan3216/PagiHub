@@ -2,12 +2,16 @@
   <el-image
     :src="url"
     :fit="fit"
+    :style="innerStyles"
     class="wh-100" />
 </template>
 
 <script>
+import commonMixin from '../../mixins/common'
+
 export default {
   name: 'LazyImage',
+  mixins: [commonMixin],
   props: {
     url: {
       type: String,

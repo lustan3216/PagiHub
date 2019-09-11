@@ -1,17 +1,20 @@
 <template>
   <el-carousel
+    :style="innerStyles"
     trigger="click"
     class="wh-100">
     <el-carousel-item
       v-for="(child, index) in innerChildren"
       :key="child.id"
       class="w-100"
-      @click.stop="setCurrentHover(child.id)"
+      @click.native.stop="setCurrentHover(child.id)"
     >
       <edit-bar
         :visible="isEditable && currentHover === child.id"
         :children.sync="innerChildren"
-        :index="index" />
+        :index="index"
+        new-function
+      />
 
       <edit-area
         :parent-id="child.id"
@@ -24,7 +27,9 @@
 
 <script>
 import clone from 'clone'
+import { emitCloseEditBar, onCloseEditBar } from '../../buses/editBar'
 import childrenMixin from '../../mixins/children'
+import commonMixin from '../../mixins/common'
 import EditBar from '../Components/EditBar'
 import EditArea from '../Components/EditArea'
 
@@ -34,7 +39,7 @@ export default {
     EditBar,
     EditArea
   },
-  mixins: [childrenMixin],
+  mixins: [childrenMixin, commonMixin],
   props: {
     isEditable: {
       type: Boolean,
@@ -47,13 +52,14 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('closeEditBar', () => {
+    onCloseEditBar(() => {
       this.currentHover = null
     })
   },
   methods: {
     setCurrentHover(id) {
-      this.$bus.$emit('closeEditBar')
+      console.log(id)
+      emitCloseEditBar()
       this.currentHover = id
     },
     updateGrandChildren(index, value) {

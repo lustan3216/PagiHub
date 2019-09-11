@@ -19,11 +19,11 @@
             :clone="clone"
             :sort="false"
           >
-            <el-menu-item
-              style="height: 60%;"
+            <el-menu-ite
               v-for="(component, componentIndex) in vNode.components"
               :index="`${index}-${componentIndex}`"
               :key="`${index}-${componentIndex}`"
+              style="height: 60%;"
             >
               <!-- here will have multi render deu to el-menu-item-group bug--->
               <component
@@ -35,7 +35,7 @@
                 :children="component.children"
                 :is-editable="false"
               />
-            </el-menu-item>
+            </el-menu-ite>
           </draggable>
         </el-menu-item-group>
       </el-submenu>

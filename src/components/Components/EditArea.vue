@@ -26,6 +26,7 @@
           :is="child.tag"
           :key="child.id"
           :id="child.id"
+          :style="child.styles"
           :parent-id="parentId"
           :children="child.children"
         />
@@ -35,8 +36,9 @@
 </template>
 
 <script>
-// 這個component不儲存處理過的children，只會把有更改過的全部往父層傳，統一由children mixin處理
+// Line:20 這個component不儲存處理過的children，只會把有更改過的全部往父層傳，統一由children mixin處理
 import EditBar from '../Components/EditBar'
+import { emitCloseEditBar, onCloseEditBar } from '../../buses/editBar'
 import importTemplates from '../../mixins/importTemplates'
 
 export default {
@@ -60,8 +62,13 @@ export default {
       currentHover: null
     }
   },
+  watch: {
+    currentHover(value) {
+      this.$emit('editing', Boolean(value))
+    }
+  },
   created() {
-    this.$bus.$on('closeEditBar', () => {
+    onCloseEditBar(() => {
       this.currentHover = null
     })
   },
@@ -70,7 +77,7 @@ export default {
       return ['flex-button'].includes(child.tag)
     },
     setCurrentHover(id) {
-      this.$bus.$emit('closeEditBar')
+      emitCloseEditBar()
       this.currentHover = id
     }
   }

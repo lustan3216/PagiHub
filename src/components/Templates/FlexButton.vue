@@ -1,11 +1,11 @@
 <template>
-  <el-button>
-    {{ text }}
-    <slot/>
+  <el-button :style="innerStyles">
+    <slot>{{ text }}</slot>
   </el-button>
 </template>
 
 <script>
+import commonMixin from '../../mixins/common'
 import EditBar from '../Components/EditBar'
 
 export default {
@@ -13,6 +13,7 @@ export default {
   components: {
     EditBar
   },
+  mixins: [commonMixin],
   props: {
     text: {
       type: String,

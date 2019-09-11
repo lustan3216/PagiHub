@@ -9,3 +9,4 @@ export default {
     FlexButton: () => import('../components/Templates/FlexButton')
   }
 }
+

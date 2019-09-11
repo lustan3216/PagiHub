@@ -12,6 +12,13 @@
       </el-button>
 
       <el-button
+        v-if="newFunction"
+        type="text"
+        @click="addNew">
+        <v-icon name="plus" />
+      </el-button>
+
+      <el-button
         type="text"
         @click="copy">
         <v-icon name="copy" />
@@ -25,7 +32,7 @@
 
       <el-button
         type="text"
-        @click="$emit('setting')">
+        @click="setting">
         <v-icon name="cog" />
       </el-button>
     </div>
@@ -34,6 +41,7 @@
 
 <script>
 import clone from 'clone'
+import { openSidebar } from '../../buses/sidebar'
 import { appendIds, resetIds } from '../../utils/keyId'
 
 export default {
@@ -50,6 +58,10 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    newFunction: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -58,6 +70,16 @@ export default {
     }
   },
   methods: {
+    addNew() {
+      const clonedChildren = clone(this.children)
+      const { children, style, data, id, ...baseNode } = clonedChildren[this.index]
+      const cloned = clone(baseNode)
+      resetIds(cloned)
+
+      clonedChildren.splice(this.index + 1, 0, cloned)
+
+      this.$emit('update:children', clonedChildren)
+    },
     // 這裡的update也額外會來自於EditArea裡面的變動，因為EditArea會$emit(update:children)上一層的小孩
     // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
     copy() {
@@ -83,6 +105,13 @@ export default {
       })
 
       this.$emit('update:children', children)
+    },
+    setting() {
+      const node = this.children[this.index]
+      openSidebar('SidebarSettings', {
+        id: node.id,
+        styles: node.styles || {}
+      })
     }
   }
 }

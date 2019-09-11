@@ -1,16 +1,6 @@
-const state = {
-  nodeForSetting: {},
-  currentSidebar: null
-}
+const state = {}
 
-const mutations = {
-  OPEN_SIDEBAR(state, sidebar) {
-    state.currentSidebar = sidebar
-  },
-  CLOSE_SIDEBAR(state) {
-    state.currentSidebar = null
-  }
-}
+const mutations = {}
 
 export default {
   namespaced: true,

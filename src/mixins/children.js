@@ -9,14 +9,6 @@ export default {
       default() {
         return []
       }
-    },
-    id: {
-      type: Number,
-      required: true
-    },
-    parentId: {
-      type: Number,
-      required: true
     }
   },
   watch: {

@@ -20,11 +20,37 @@ Vue.component('v-icon', Icon)
 const bus = new Vue()
 
 Vue.prototype.$log = console.log
-Vue.prototype.$bus = bus
 Vue.config.productionTip = false
 Vue.config.devtools = process.env.NODE_ENV === 'development'
 
 window.Vue = Vue
+
+Vue.mixin({
+  data() {
+    const vals = this.$options.rules
+    if (vals) {
+      this.rules = vals
+    }
+    return {}
+  },
+  beforeCreate() {
+    // console.log(this.rules)
+    // const options = this.$options
+    // const vals = options.rules
+    // if (!vals) return
+    // if (!options.computed) options.computed = {}
+    // if (options.computed.$v) return
+    // options.computed.$v = function() {
+    //   return this._vuelidate ? this._vuelidate.refs.$v.proxy : null
+    // }
+  },
+  beforeDestroy() {
+    // if (this._vuelidate) {
+    //   this._vuelidate.$destroy()
+    //   this._vuelidate = null
+    // }
+  }
+})
 
 const app = new Vue({
   render: h => h(App),
@@ -32,3 +58,5 @@ const app = new Vue({
 }).$mount('#app')
 
 window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = app.constructor
+
+export { bus }

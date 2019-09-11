@@ -10,6 +10,7 @@
 <script>
 import EditArea from '../Components/EditArea'
 import childrenMixin from '../../mixins/children'
+import commonMixin from '../../mixins/common'
 import BrowserWindow from '../BrowserWindow'
 
 export default {
@@ -18,7 +19,7 @@ export default {
     EditArea,
     BrowserWindow
   },
-  mixins: [childrenMixin]
+  mixins: [childrenMixin, commonMixin]
 }
 </script>
 

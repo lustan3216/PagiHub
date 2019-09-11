@@ -8,7 +8,10 @@
       <transition
         name="fade-left"
         mode="out-in">
-        <component :is="currentSidebar" />
+        <component
+          :is="currentSidebar"
+          v-bind="sidebarPayload"
+        />
       </transition>
 
       <el-container>
@@ -25,6 +28,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { onSidebar } from './buses/sidebar'
 import NavBar from './components/Layout/NavBar'
 import EditArea from './components/Components/EditArea'
 import RootBoard from './components/Templates/RootBoard'
@@ -44,9 +48,20 @@ export default {
     RootBoard
   },
   mixins: [importTemplates],
+  data() {
+    return {
+      currentSidebar: null,
+      sidebarPayload: {}
+    }
+  },
   computed: {
-    ...mapState('app', ['currentSidebar']),
     ...mapState('nodes', ['nodesTree'])
+  },
+  created() {
+    onSidebar(({ is, ...payload }) => {
+      this.currentSidebar = is
+      this.sidebarPayload = payload
+    })
   }
 }
 </script>

@@ -6,7 +6,7 @@
         :offset="18">
         <el-button
           type="text"
-          @click="CLOSE_SIDEBAR">
+          @click="closeSidebar">
           <v-icon name="times" />
         </el-button>
       </el-col>
@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { closeSidebar } from '../../buses/sidebar'
 
 export default {
   name: 'SidebarSettings',
   methods: {
-    ...mapMutations('app', ['CLOSE_SIDEBAR'])
+    closeSidebar
   }
 }
 </script>

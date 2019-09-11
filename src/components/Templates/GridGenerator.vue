@@ -1,8 +1,9 @@
 <template>
   <grid-layout
+    :style="innerStyles"
     :layout="innerChildrenWithI"
     :row-height="30"
-    :margin="[0, 0]"
+    :margin="[5, 5]"
     :responsive="false"
     :is-draggable="isEditable"
     :is-resizable="isEditable"
@@ -22,7 +23,9 @@
       <edit-bar
         :visible="isEditable && currentHover === child.id"
         :children.sync="innerChildren"
-        :index="index" />
+        :index="index"
+        new-function
+      />
 
       <edit-area
         :parent-id="child.id"
@@ -36,8 +39,10 @@
 <script>
 import clone from 'clone'
 import { mapMutations } from 'vuex'
+import { emitCloseEditBar, onCloseEditBar } from '../../buses/editBar'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
+import commonMixin from '../../mixins/common'
 import EditBar from '../Components/EditBar'
 import EditArea from '../Components/EditArea'
 
@@ -49,12 +54,15 @@ export default {
     EditBar,
     EditArea
   },
-  mixins: [childrenMixin],
+  mixins: [childrenMixin, commonMixin],
   props: {
     isEditable: {
       type: Boolean,
       default: true
     }
+  },
+  rules: {
+    asd: 1
   },
   data() {
     return {
@@ -70,14 +78,14 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('closeEditBar', () => {
+    onCloseEditBar(() => {
       this.currentHover = null
     })
   },
   methods: {
     ...mapMutations('nodes', ['APPEND_NODE']),
     setCurrentHover(id) {
-      this.$bus.$emit('closeEditBar')
+      emitCloseEditBar()
       this.currentHover = id
     },
     updateGrandChildren(index, value) {
@@ -103,5 +111,8 @@ export default {
   & > .vue-resizable-handle {
     z-index: 10000;
   }
+}
+.rise {
+  z-index: 100;
 }
 </style>

@@ -7,14 +7,14 @@
     <el-col :span="1">
       <el-button
         type="text"
-        @click="OPEN_SIDEBAR('SidebarTemplates')">
+        @click="openSidebar('SidebarTemplates')">
         <v-icon name="object-group" />
       </el-button>
     </el-col>
     <el-col :span="1">
       <el-button
         type="text"
-        @click="OPEN_SIDEBAR('SidebarNodesTree')">
+        @click="openSidebar('SidebarNodesTree')">
         <v-icon name="layer-group" />
       </el-button>
     </el-col>
@@ -79,8 +79,8 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import { isMac } from '../../utils/check'
+import { openSidebar } from '../../buses/sidebar'
 
 export default {
   name: 'NavBar',
@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['OPEN_SIDEBAR']),
+    openSidebar,
     isMac,
     redo() {},
     undo() {}
