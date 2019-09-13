@@ -34,7 +34,6 @@ Vue.mixin({
     return {}
   },
   beforeCreate() {
-    // console.log(this.rules)
     // const options = this.$options
     // const vals = options.rules
     // if (!vals) return

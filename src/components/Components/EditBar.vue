@@ -72,7 +72,9 @@ export default {
     }
   },
   created() {
-    onOpenEditBar(this)
+    onOpenEditBar(this, () => {
+      this.$emit('onOpen')
+    })
   },
   methods: {
     addNew() {

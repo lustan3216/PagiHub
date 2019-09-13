@@ -21,7 +21,6 @@ function asd(o) {
 }
 
 export function snapShot() {
-  console.log(asd($observable.content))
   contentVersion.shot($observable.content)
 }
 

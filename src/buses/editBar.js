@@ -15,7 +15,7 @@ export function emitOpenEditBar(id) {
   lastOpenId = id
 }
 
-export function onOpenEditBar(_this) {
+export function onOpenEditBar(_this, callback) {
   const id = _this.children[_this.index].id
 
   bus.$on(`${KEY_CLOSE}:${id}`, () => {
@@ -23,5 +23,6 @@ export function onOpenEditBar(_this) {
   })
   bus.$on(`${KEY_OPEN}:${id}`, () => {
     _this.visible = true
+    callback()
   })
 }

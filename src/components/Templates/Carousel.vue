@@ -1,11 +1,13 @@
 <template>
   <el-carousel
+    ref="carousel"
     :style="innerStyles"
     trigger="click"
     class="wh-100">
     <el-carousel-item
       v-for="(child, index) in innerChildren"
       :key="child.id"
+      :name="child.id.toString()"
       class="w-100"
       @click.native.stop="emitOpenEditBar(child.id)"
     >
@@ -13,6 +15,7 @@
         :children.sync="innerChildren"
         :index="index"
         new-function
+        @onOpen="$refs.carousel.setActiveItem(child.id.toString())"
       />
 
       <edit-area
@@ -52,6 +55,9 @@ export default {
       const cloned = clone(this.innerChildren)
       cloned[index].children = value
       this.innerChildren = cloned
+    },
+    setActiveItem(child) {
+      // this.
     }
   }
 }
