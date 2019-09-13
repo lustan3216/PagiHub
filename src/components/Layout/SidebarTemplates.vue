@@ -19,7 +19,7 @@
             :clone="clone"
             :sort="false"
           >
-            <el-menu-ite
+            <el-menu-item
               v-for="(component, componentIndex) in vNode.components"
               :index="`${index}-${componentIndex}`"
               :key="`${index}-${componentIndex}`"
@@ -35,7 +35,7 @@
                 :children="component.children"
                 :is-editable="false"
               />
-            </el-menu-ite>
+            </el-menu-item>
           </draggable>
         </el-menu-item-group>
       </el-submenu>
@@ -49,6 +49,7 @@ import Sidebar from './Sidebar'
 import clone from 'clone'
 import templates from '../../templates'
 import { appendIds } from '../../utils/keyId'
+import { emitOpenEditBar } from '../../buses/editBar'
 
 export default {
   name: 'SidebarTemplates',
@@ -73,10 +74,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  ::v-deep > .el-carousel__container {
-    height: auto;
-    padding-top: 60%;
-  }
+::v-deep > .el-carousel__container {
+  height: auto;
+  padding-top: 60%;
+}
 .el-menu-item:focus,
 .el-menu-item:hover {
   background-color: inherit;

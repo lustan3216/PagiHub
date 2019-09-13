@@ -1,9 +1,10 @@
 <template>
   <component
-    :is="node.children && node.children.length ? 'el-submenu' : 'el-menu-item'"
+    :is="hasChildren(node) ? 'el-submenu' : 'el-menu-item'"
     :index="node.id.toString()"
     :key="node.id"
-    @click.native="openedMenu = openedMenu === node.id ? null : node.id"
+    :class="{ 'is-activated': node.id === activeId }"
+    @click.native.stop="$emit('onClick', node.id)"
   >
     <template slot="title">
       <i :class="node.icon" />
@@ -13,24 +14,12 @@
       </template>
     </template>
 
-    <component
+    <nested-menu
       v-for="child in node.children"
-      :is="child.children && child.children.length ? 'el-submenu' : 'el-menu-item'"
-      :index="child.id.toString()"
-      :key="child.id"
-    >
-      <template slot="title">
-        <i :class="node.icon" />
-        {{ child.tag }} - {{ child.id }}
-        <template v-if="child.tag === 'grid-item'">
-          / {{ child.x }} - {{ child.y }} - {{ child.w }} - {{ child.h }}
-        </template>
-      </template>
-
-      <nested-menu
-        v-for="node in child.children"
-        :node="node" />
-    </component>
+      :node="child"
+      :active-id="activeId"
+      @onClick="$emit('onClick', $event)"
+    />
   </component>
 </template>
 
@@ -41,11 +30,14 @@ export default {
     node: {
       type: Object,
       required: true
+    },
+    activeId: {
+      type: Number
     }
   },
-  data() {
-    return {
-      openedMenu: null
+  methods: {
+    hasChildren(node) {
+      return node.children && node.children.length
     }
   }
 }
@@ -61,5 +53,9 @@ export default {
 }
 .outer {
   position: relative;
+}
+::v-deep.el-menu-item.is-activated,
+::v-deep.el-submenu.is-activated > .el-submenu__title {
+  color: #409eff;
 }
 </style>

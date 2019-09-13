@@ -44,7 +44,7 @@ function nodesTree(currentNodesMap) {
   })
   return list.GetTree()
 }
-window.asd = nodesTree(nodes)
+
 export default {
   namespaced: true,
   state,

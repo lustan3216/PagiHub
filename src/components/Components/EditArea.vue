@@ -11,10 +11,9 @@
         :is="isInlineElement(child) ? 'span' : 'div'"
         :key="child.id"
         class="wrapper"
-        @click.stop="setCurrentHover(child.id)"
+        @click.stop="emitOpenEditBar(child.id)"
       >
         <edit-bar
-          :visible="currentHover === child.id"
           :children="children"
           :index="index"
           @update:children="$emit('update:children', $event)"
@@ -38,7 +37,7 @@
 <script>
 // Line:20 這個component不儲存處理過的children，只會把有更改過的全部往父層傳，統一由children mixin處理
 import EditBar from '../Components/EditBar'
-import { emitCloseEditBar, onCloseEditBar } from '../../buses/editBar'
+import { emitOpenEditBar } from '../../buses/editBar'
 import importTemplates from '../../mixins/importTemplates'
 
 export default {
@@ -57,28 +56,10 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      currentHover: null
-    }
-  },
-  watch: {
-    currentHover(value) {
-      this.$emit('editing', Boolean(value))
-    }
-  },
-  created() {
-    onCloseEditBar(() => {
-      this.currentHover = null
-    })
-  },
   methods: {
+    emitOpenEditBar,
     isInlineElement(child) {
       return ['flex-button'].includes(child.tag)
-    },
-    setCurrentHover(id) {
-      emitCloseEditBar()
-      this.currentHover = id
     }
   }
 }

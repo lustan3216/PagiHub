@@ -107,6 +107,11 @@ export default {
           label: '卡片',
           value: 'card',
           icon: 'photo-video'
+        },
+        {
+          label: '組建',
+          value: 'component',
+          icon: 'photo-video'
         }
       ]
     }

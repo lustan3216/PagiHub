@@ -41,6 +41,7 @@
 
 <script>
 import clone from 'clone'
+import { onOpenEditBar } from '../../buses/editBar'
 import { openSidebar } from '../../buses/sidebar'
 import { appendIds, resetIds } from '../../utils/keyId'
 
@@ -55,19 +56,23 @@ export default {
       type: Number,
       required: true
     },
-    visible: {
-      type: Boolean,
-      default: false
-    },
     newFunction: {
       type: Boolean,
       default: false
+    }
+  },
+  data() {
+    return {
+      visible: false
     }
   },
   computed: {
     node() {
       return this.children[this.index]
     }
+  },
+  created() {
+    onOpenEditBar(this)
   },
   methods: {
     addNew() {

@@ -3,6 +3,7 @@
     :style="innerStyles"
     :layout="innerChildrenWithI"
     :row-height="30"
+    :col-num="36"
     :margin="[5, 5]"
     :responsive="false"
     :is-draggable="isEditable"
@@ -18,14 +19,12 @@
       :i="child.id"
       :key="child.id"
       drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span, img"
-      @click.stop.native="setCurrentHover(child.id)"
+      @click.stop.native="emitOpenEditBar(child.id)"
     >
       <edit-bar
-        :visible="isEditable && currentHover === child.id"
         :children.sync="innerChildren"
         :index="index"
-        new-function
-      />
+        new-function />
 
       <edit-area
         :parent-id="child.id"
@@ -39,7 +38,7 @@
 <script>
 import clone from 'clone'
 import { mapMutations } from 'vuex'
-import { emitCloseEditBar, onCloseEditBar } from '../../buses/editBar'
+import { emitOpenEditBar } from '../../buses/editBar'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
@@ -64,11 +63,6 @@ export default {
   rules: {
     asd: 1
   },
-  data() {
-    return {
-      currentHover: null
-    }
-  },
   computed: {
     innerChildrenWithI() {
       return this.innerChildren.map(child => {
@@ -77,17 +71,9 @@ export default {
       })
     }
   },
-  created() {
-    onCloseEditBar(() => {
-      this.currentHover = null
-    })
-  },
   methods: {
     ...mapMutations('nodes', ['APPEND_NODE']),
-    setCurrentHover(id) {
-      emitCloseEditBar()
-      this.currentHover = id
-    },
+    emitOpenEditBar,
     updateGrandChildren(index, value) {
       // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
       const cloned = clone(this.innerChildren)
