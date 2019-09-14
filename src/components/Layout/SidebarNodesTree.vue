@@ -4,6 +4,7 @@
       <nested-menu
         v-for="node in nodesTree"
         :node="node"
+        :key="node.id"
         :active-id="currentId"
         @onClick="onClick" />
     </el-menu>

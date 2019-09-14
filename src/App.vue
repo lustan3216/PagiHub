@@ -10,16 +10,12 @@
         mode="out-in">
         <component
           :is="currentSidebar"
-          v-bind="sidebarPayload"
-        />
+          v-bind="sidebarPayload" />
       </transition>
 
       <el-container>
         <el-main class="main">
-          <root-board
-            :id="0"
-            :parent-id="0"
-            :children="nodesTree" />
+          <board-root />
         </el-main>
       </el-container>
     </el-container>
@@ -27,11 +23,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { onSidebar } from './buses/sidebar'
 import NavBar from './components/Layout/NavBar'
 import EditArea from './components/Components/EditArea'
-import RootBoard from './components/Templates/RootBoard'
+import BoardRoot from './components/Templates/BoardRoot'
 import SidebarTemplates from './components/Layout/SidebarTemplates'
 import SidebarSettings from './components/Layout/SidebarSettings'
 import SidebarNodesTree from './components/Layout/SidebarNodesTree'
@@ -45,7 +40,7 @@ export default {
     SidebarTemplates,
     SidebarSettings,
     SidebarNodesTree,
-    RootBoard
+    BoardRoot
   },
   mixins: [importTemplates],
   data() {
@@ -53,9 +48,6 @@ export default {
       currentSidebar: null,
       sidebarPayload: {}
     }
-  },
-  computed: {
-    ...mapState('nodes', ['nodesTree'])
   },
   created() {
     onSidebar(({ is, ...payload }) => {

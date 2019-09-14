@@ -41,15 +41,15 @@
     </el-col>
 
     <el-col :span="4">
-      <el-select v-model="deviceMode">
+      <el-select v-model="innerMode">
         <el-option
-          v-for="mode in modes"
-          :key="mode.label"
-          :label="mode.label"
-          :value="mode.value">
+          v-for="option in options"
+          :key="option.label"
+          :label="option.label"
+          :value="option.value">
           <div class="vertical-center">
-            <v-icon :name="mode.icon" />
-            <span class="m-l-5">{{ mode.label }}</span>
+            <v-icon :name="option.icon" />
+            <span class="m-l-5">{{ option.label }}</span>
           </div>
         </el-option>
       </el-select>
@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 import { isMac } from '../../utils/check'
 import { openSidebar } from '../../buses/sidebar'
 
@@ -86,17 +87,11 @@ export default {
   name: 'NavBar',
   data() {
     return {
-      deviceMode: 'pc',
-      modes: [
+      options: [
         {
-          label: '電腦',
-          value: 'pc',
+          label: '網頁',
+          value: 'website',
           icon: 'laptop'
-        },
-        {
-          label: '手機',
-          value: 'mobile',
-          icon: 'mobile-alt'
         },
         {
           label: '旋轉盤',
@@ -104,19 +99,26 @@ export default {
           icon: 'layer-group'
         },
         {
-          label: '卡片',
-          value: 'card',
-          icon: 'photo-video'
-        },
-        {
-          label: '組建',
+          label: '卡片 / 組建',
           value: 'component',
           icon: 'photo-video'
         }
       ]
     }
   },
+  computed: {
+    ...mapState('app', ['mode']),
+    innerMode: {
+      get() {
+        return this.mode
+      },
+      set(mode) {
+        this.SET({ mode })
+      }
+    }
+  },
   methods: {
+    ...mapMutations('app', ['SET']),
     openSidebar,
     isMac,
     redo() {},

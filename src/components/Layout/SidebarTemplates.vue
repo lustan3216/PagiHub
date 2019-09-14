@@ -48,8 +48,7 @@ import importTemplatesMixin from '../../mixins/importTemplates'
 import Sidebar from './Sidebar'
 import clone from 'clone'
 import templates from '../../templates'
-import { appendIds } from '../../utils/keyId'
-import { emitOpenEditBar } from '../../buses/editBar'
+import { appendNestedIds } from '../../utils/keyId'
 
 export default {
   name: 'SidebarTemplates',
@@ -66,7 +65,7 @@ export default {
   methods: {
     clone(children) {
       const cloned = clone(children)
-      appendIds(cloned)
+      appendNestedIds(cloned)
       return cloned
     }
   }

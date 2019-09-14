@@ -43,7 +43,7 @@
 import clone from 'clone'
 import { onOpenEditBar } from '../../buses/editBar'
 import { openSidebar } from '../../buses/sidebar'
-import { appendIds, resetIds } from '../../utils/keyId'
+import { appendNestedIds, resetNestedIds } from '../../utils/keyId'
 
 export default {
   name: 'EditBar',
@@ -81,7 +81,7 @@ export default {
       const clonedChildren = clone(this.children)
       const { children, style, data, id, ...baseNode } = clonedChildren[this.index]
       const cloned = clone(baseNode)
-      resetIds(cloned)
+      resetNestedIds(cloned)
 
       clonedChildren.splice(this.index + 1, 0, cloned)
 
@@ -92,7 +92,7 @@ export default {
     copy() {
       const clonedChildren = clone(this.children)
       const cloned = clone(clonedChildren[this.index])
-      resetIds(cloned)
+      resetNestedIds(cloned)
 
       clonedChildren.splice(this.index + 1, 0, cloned)
 
@@ -107,7 +107,7 @@ export default {
     update(children) {
       children.forEach((child, index) => {
         // layout could add new Component or re-sort
-        appendIds(child)
+        appendNestedIds(child)
         child.sortIndex = index
       })
 

@@ -1,6 +1,6 @@
 import clone from 'clone'
 import { mapMutations } from 'vuex'
-import { appendIds } from '../utils/keyId'
+import { appendNestedIds } from '../utils/keyId'
 
 export default {
   props: {
@@ -25,7 +25,7 @@ export default {
     const innerChildren = clone(this.children).sort((a, b) => a.sortIndex - b.sortIndex) // sorting
 
     innerChildren.forEach(child => {
-      appendIds(child)
+      appendNestedIds(child)
     })
 
     return {
@@ -33,7 +33,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('nodes', ['APPEND_NODE', 'REMOVE_NODE', 'UPDATE_NODE_SORT']),
+    ...mapMutations('nodes', ['APPEND_NESTED_NODES', 'REMOVE_NESTED_NODES', 'UPDATE_NODES_SORT']),
     difference(arr1, arr2) {
       return arr1.filter(x => !arr2.includes(x))
     },
@@ -46,25 +46,17 @@ export default {
       const oldIds = oldChildren.map(x => x.id)
 
       if (newLength > oldLength) {
-        const createdId = this.difference(newIds, oldIds)[0]
-        const createdIndex = newIds.indexOf(createdId)
-        const newNode = newChildren[createdIndex]
-
-        this.appendNestedNode(newNode, parentId)
-
-        newChildren.forEach((child, index) => {
-          this.UPDATE_NODE_SORT({
-            id: child.id,
-            sortIndex: index
-          })
+        const createdNodes = this.difference(newIds, oldIds).map(id => newChildren[newIds.indexOf(id)])
+        this.APPEND_NESTED_NODES({
+          nodes: createdNodes,
+          parentId
         })
+        this.UPDATE_NODES_SORT(newChildren)
 
         throw 'done'
       } else if (newLength < oldLength) {
-        const deletedId = this.difference(oldIds, newIds)[0]
-        const deletedIndex = oldIds.indexOf(deletedId)
-        const oldNode = oldChildren[deletedIndex]
-        this.removeNestedNode(oldNode)
+        const deletedNodes = this.difference(oldIds, newIds).map(id => oldChildren[oldIds.indexOf(id)])
+        this.REMOVE_NESTED_NODES(deletedNodes)
 
         throw 'done'
       } else {
@@ -72,27 +64,10 @@ export default {
         // 由於 vue-grid-layout 的item當拖移或變動大小，所有item都會變，所以就全部都update
 
         newChildren.some((newChild, index) => {
-          this.APPEND_NODE(newChild)
+          this.APPEND_NODE(newChild) // 不用特地處理parentId，因為沒有增加節點
           this.updateDifferenceToVuex(newChild.children, oldChildren[index].children, newChild.id)
         })
       }
-    },
-    appendNestedNode(node, parentId) {
-      node.parentId = parentId
-      this.APPEND_NODE(node)
-
-      node.children &&
-        node.children.forEach(child => {
-          this.appendNestedNode(child, node.id)
-        })
-    },
-    removeNestedNode(node) {
-      node.children &&
-        node.children.forEach(child => {
-          this.removeNestedNode(child)
-        })
-
-      this.REMOVE_NODE(node.id)
     }
   }
 }

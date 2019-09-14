@@ -1,3 +1,4 @@
+import './utils/polyfill'
 import vhCheck from 'vh-check'
 vhCheck()
 

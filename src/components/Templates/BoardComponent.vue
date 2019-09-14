@@ -1,10 +1,9 @@
 <template>
-  <browser-window>
-    <edit-area
-      :parent-id="id"
-      :children.sync="innerChildren"
-      class="edit-area" />
-  </browser-window>
+  <edit-area
+    :parent-id="id"
+    :children.sync="innerChildren"
+    class="edit-area"
+  />
 </template>
 
 <script>
@@ -14,7 +13,7 @@ import commonMixin from '../../mixins/common'
 import BrowserWindow from '../BrowserWindow'
 
 export default {
-  name: 'RootBoard',
+  name: 'BoardComponent',
   components: {
     EditArea,
     BrowserWindow

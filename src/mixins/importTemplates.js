@@ -6,7 +6,7 @@ export default {
     GridGenerator: () => import('../components/Templates/GridGenerator'),
     EditArea: () => import('../components/Components/EditArea'),
     Blank: () => import('../components/Templates/Blank'),
-    FlexButton: () => import('../components/Templates/FlexButton')
+    FlexButton: () => import('../components/Templates/FlexButton'),
+    Divider: () => import('../components/Templates/Divider')
   }
 }
-
