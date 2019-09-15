@@ -18,6 +18,8 @@ export default {
       } catch (e) {
         if (e !== 'done') throw e
         // 一次只會有一個地方刪除、新增或修改，所以當找到該node執行完就跳出遞迴迴圈
+      } finally {
+        this.SNAPSHOT()
       }
     }
   },
@@ -33,7 +35,13 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('nodes', ['APPEND_NESTED_NODES', 'REMOVE_NESTED_NODES', 'UPDATE_NODES_SORT']),
+    ...mapMutations('nodes', [
+      'APPEND_NESTED_NODES',
+      'REMOVE_NESTED_NODES',
+      'UPDATE_NODES_SORT',
+      'APPEND_NODE',
+      'SNAPSHOT'
+    ]),
     difference(arr1, arr2) {
       return arr1.filter(x => !arr2.includes(x))
     },
@@ -42,6 +50,9 @@ export default {
       // 每個節點的數據更新都各自在component直接對vuex處理，節省效能
       const newLength = newChildren.length
       const oldLength = oldChildren.length
+
+      if (!newLength && !oldLength) return
+
       const newIds = newChildren.map(x => x.id)
       const oldIds = oldChildren.map(x => x.id)
 
@@ -64,7 +75,7 @@ export default {
         // 由於 vue-grid-layout 的item當拖移或變動大小，所有item都會變，所以就全部都update
 
         newChildren.some((newChild, index) => {
-          this.APPEND_NODE(newChild) // 不用特地處理parentId，因為沒有增加節點
+          this.APPEND_NODE({ node: newChild, parentId }) // 不用特地處理parentId，因為沒有增加節點
           this.updateDifferenceToVuex(newChild.children, oldChildren[index].children, newChild.id)
         })
       }

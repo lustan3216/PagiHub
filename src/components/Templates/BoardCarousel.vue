@@ -1,32 +1,37 @@
 <template>
-  <browser-window>
-    <edit-area
-      :parent-id="id"
-      :children.sync="innerChildren"
-      class="edit-area"
-    />
-  </browser-window>
+  <carousel
+    :id="id"
+    :parent-id="parentId"
+    :children="innerChildren" />
 </template>
 
 <script>
-import EditArea from '../Components/EditArea'
+import clone from 'clone'
+import Carousel from '../Templates/Carousel'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
-import BrowserWindow from '../BrowserWindow'
+import { appendNestedIds } from '../../utils/keyId'
+import { carousel as templateCarousel } from '../../templates'
 
 export default {
-  name: 'BoardCarousel',
+  name: 'BoardWebsite',
   components: {
-    EditArea,
-    BrowserWindow
+    Carousel
   },
-  mixins: [childrenMixin, commonMixin]
+  mixins: [childrenMixin, commonMixin],
+  created() {
+    if (!this.children.length) {
+      const cloned = clone(templateCarousel().children)
+      appendNestedIds(cloned)
+      this.innerChildren = cloned
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.edit-area {
-  @include calc-vh(min-height, '100vh - 135px');
+::v-deep .el-carousel__container {
+  @include calc-vh(height, '100vh - 135px');
   border: none;
 }
 </style>

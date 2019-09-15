@@ -18,8 +18,9 @@
         @onOpen="$refs.carousel.setActiveItem(child.id.toString())"
       />
 
-      <edit-area
-        :parent-id="child.id"
+      <grid-generator
+        :id="child.id"
+        :parent-id="id"
         :children="child.children"
         @update:children="updateGrandChildren(index, $event)"
       />
@@ -33,13 +34,13 @@ import { emitOpenEditBar } from '../../buses/editBar'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import EditBar from '../Components/EditBar'
-import EditArea from '../Components/EditArea'
+import GridGenerator from './GridGenerator'
 
 export default {
   name: 'Carousel',
   components: {
-    EditBar,
-    EditArea
+    GridGenerator,
+    EditBar
   },
   mixins: [childrenMixin, commonMixin],
   props: {
