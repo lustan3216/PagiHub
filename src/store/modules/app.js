@@ -1,5 +1,5 @@
 const state = {
-  mode: 'carousel'
+  mode: 'website'
 }
 
 const mutations = {

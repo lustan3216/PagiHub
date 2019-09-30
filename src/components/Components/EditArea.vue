@@ -16,8 +16,7 @@
         <edit-bar
           :children="children"
           :index="index"
-          @update:children="$emit('update:children', $event)"
-        />
+          @update:children="$emit('update:children', $event)" />
 
         <component
           v-bind="child.props"
@@ -77,5 +76,8 @@ export default {
 }
 .wrapper {
   position: relative;
+}
+.wrapper {
+  height: 100%;
 }
 </style>

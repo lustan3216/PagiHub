@@ -35,6 +35,9 @@ export default [
       carousel(),
       {
         tag: 'divider'
+      },
+      {
+        tag: 'player-youtube'
       }
     ]
   }
