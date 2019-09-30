@@ -8,8 +8,6 @@ export function emitVisibleChange(id, { visible }) {
   })
 }
 
-export function onVisibleChange(id, element) {
-  bus.$on(`${KEY}:${id}`, ({ visible }) => {
-    element.style.visibility = visible ? 'visible' : 'hidden'
-  })
+export function onVisibleChange(id, fn) {
+  bus.$on(`${KEY}:${id}`, fn)
 }

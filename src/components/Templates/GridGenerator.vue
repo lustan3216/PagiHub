@@ -39,11 +39,10 @@
 
 <script>
 import clone from 'clone'
-import { mapMutations } from 'vuex'
 import { emitOpenEditBar } from '../../buses/editBar'
+import { onVisibleChange } from '../../buses/visibility'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
-import visibilityMixin from '../../mixins/visibility'
 import commonMixin from '../../mixins/common'
 import EditBar from '../Components/EditBar'
 import EditArea from '../Components/EditArea'
@@ -56,7 +55,7 @@ export default {
     EditBar,
     EditArea
   },
-  mixins: [childrenMixin, commonMixin, visibilityMixin],
+  mixins: [childrenMixin, commonMixin],
   props: {
     isEditable: {
       type: Boolean,
@@ -71,9 +70,24 @@ export default {
       })
     }
   },
+  watch: {
+    innerChildren() {
+      this.onVisibleChange()
+    }
+  },
+  mounted() {
+    this.onVisibleChange()
+  },
   methods: {
-    ...mapMutations('nodes', ['APPEND_NODE']),
     emitOpenEditBar,
+    onVisibleChange() {
+      this.innerChildren.forEach(child => {
+        const node = this.$refs[child.id] && this.$refs[child.id][0]
+        node && onVisibleChange(child.id, ({ visible }) => {
+          node.$el.style.visibility = visible ? 'visible' : 'hidden'
+        })
+      })
+    },
     updateGrandChildren(index, value) {
       // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
       const cloned = clone(this.innerChildren)

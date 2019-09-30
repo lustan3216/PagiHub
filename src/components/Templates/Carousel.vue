@@ -6,6 +6,7 @@
     class="wh-100">
     <el-carousel-item
       v-for="(child, index) in innerChildren"
+      v-if="child.visible !== false"
       :ref="child.id"
       :key="child.id"
       :name="child.id.toString()"
@@ -34,8 +35,8 @@
 <script>
 import clone from 'clone'
 import { emitOpenEditBar } from '../../buses/editBar'
+import { onVisibleChange } from '../../buses/visibility'
 import childrenMixin from '../../mixins/children'
-import visibilityMixin from '../../mixins/visibility'
 import commonMixin from '../../mixins/common'
 import EditBar from '../Components/EditBar'
 import GridGenerator from './GridGenerator'
@@ -46,15 +47,31 @@ export default {
     GridGenerator,
     EditBar
   },
-  mixins: [childrenMixin, commonMixin, visibilityMixin],
+  mixins: [childrenMixin, commonMixin],
   props: {
     isEditable: {
       type: Boolean,
       default: true
     }
   },
+  watch: {
+    innerChildren() {
+      this.onVisibleChange()
+    }
+  },
+  mounted() {
+    this.onVisibleChange()
+  },
   methods: {
     emitOpenEditBar,
+    onVisibleChange() {
+      this.innerChildren.forEach(child => {
+        onVisibleChange(child.id, ({ visible }) => {
+          // 沒有註冊在data裡面，所以直接set
+          this.$set(child, 'visible', visible)
+        })
+      })
+    },
     updateGrandChildren(index, value) {
       // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
       const cloned = clone(this.innerChildren)
