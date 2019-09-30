@@ -6,8 +6,10 @@
     class="wh-100">
     <el-carousel-item
       v-for="(child, index) in innerChildren"
+      :ref="child.id"
       :key="child.id"
       :name="child.id.toString()"
+      :style="child.styles"
       class="w-100"
       @click.native.stop="emitOpenEditBar(child.id)"
     >
@@ -33,6 +35,7 @@
 import clone from 'clone'
 import { emitOpenEditBar } from '../../buses/editBar'
 import childrenMixin from '../../mixins/children'
+import visibilityMixin from '../../mixins/visibility'
 import commonMixin from '../../mixins/common'
 import EditBar from '../Components/EditBar'
 import GridGenerator from './GridGenerator'
@@ -43,7 +46,7 @@ export default {
     GridGenerator,
     EditBar
   },
-  mixins: [childrenMixin, commonMixin],
+  mixins: [childrenMixin, commonMixin, visibilityMixin],
   props: {
     isEditable: {
       type: Boolean,
@@ -57,9 +60,6 @@ export default {
       const cloned = clone(this.innerChildren)
       cloned[index].children = value
       this.innerChildren = cloned
-    },
-    setActiveItem(child) {
-      // this.
     }
   }
 }

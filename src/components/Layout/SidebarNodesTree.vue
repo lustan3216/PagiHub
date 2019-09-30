@@ -14,7 +14,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Sidebar from './Sidebar'
-import NestedMenu from '../Components/NestedMenu'
+import NestedMenu from './Components/NestedMenu'
 import { store, emitOpenEditBar } from '../../buses/editBar'
 
 export default {

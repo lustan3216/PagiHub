@@ -17,6 +17,7 @@
       :w="child.w"
       :h="child.h"
       :i="child.id"
+      :ref="child.id"
       :key="child.id"
       drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span, img"
       @click.stop.native="emitOpenEditBar(child.id)"
@@ -42,6 +43,7 @@ import { mapMutations } from 'vuex'
 import { emitOpenEditBar } from '../../buses/editBar'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
+import visibilityMixin from '../../mixins/visibility'
 import commonMixin from '../../mixins/common'
 import EditBar from '../Components/EditBar'
 import EditArea from '../Components/EditArea'
@@ -54,15 +56,12 @@ export default {
     EditBar,
     EditArea
   },
-  mixins: [childrenMixin, commonMixin],
+  mixins: [childrenMixin, commonMixin, visibilityMixin],
   props: {
     isEditable: {
       type: Boolean,
       default: true
     }
-  },
-  rules: {
-    asd: 1
   },
   computed: {
     innerChildrenWithI() {

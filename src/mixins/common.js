@@ -1,5 +1,6 @@
 import clone from 'clone'
 import { onSettingChange } from '../buses/settings'
+import { onVisibleChange } from '../buses/visibility'
 
 export default {
   props: {
@@ -33,5 +34,8 @@ export default {
         this.innerStyles = styles
       })
     }
+  },
+  mounted() {
+    onVisibleChange(this.id, this.$el)
   }
 }

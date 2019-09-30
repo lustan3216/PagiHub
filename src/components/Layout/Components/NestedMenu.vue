@@ -7,11 +7,13 @@
     @click.native.stop="$emit('onClick', node.id)"
   >
     <template slot="title">
-      <i :class="node.icon" />
-      {{ node.tag }} - {{ node.id }}
-      <template v-if="node.tag === 'grid-item'">
-        {{ node.x }} - {{ node.y }} - {{ node.w }} - {{ node.h }}
-      </template>
+      <visibility :id="node.id" />
+      <el-tooltip
+        :content="content(node)"
+        effect="light"
+        placement="right">
+        <el-button type="text">{{ node.tag }} - {{ node.id }}</el-button>
+      </el-tooltip>
     </template>
 
     <nested-menu
@@ -24,8 +26,12 @@
 </template>
 
 <script>
+import Visibility from './Visibility'
 export default {
   name: 'NestedMenu',
+  components: {
+    Visibility
+  },
   props: {
     node: {
       type: Object,
@@ -35,7 +41,19 @@ export default {
       type: Number
     }
   },
+  data() {
+    return {
+      visible: true
+    }
+  },
   methods: {
+    content(node) {
+      if (node.tag === 'grid-item') {
+        return `${node.x}-${node.y}-${node.w}-${node.h}`
+      } else {
+        return 'none'
+      }
+    },
     hasChildren(node) {
       return node.children && node.children.length
     }
