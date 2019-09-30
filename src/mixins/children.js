@@ -67,7 +67,7 @@ export default {
         throw 'done'
       } else if (newLength < oldLength) {
         const deletedNodes = this.difference(oldIds, newIds).map(id => oldChildren[oldIds.indexOf(id)])
-        this.REMOVE_NESTED_NODES(deletedNodes)
+        this.REMOVE_NESTED_NODES(deletedNodes.map(node => node.id))
 
         throw 'done'
       } else {
