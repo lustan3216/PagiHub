@@ -27,6 +27,7 @@
         new-function />
 
       <edit-area
+        v-if="isEditable"
         :parent-id="child.id"
         :children="child.children"
         @update:children="updateGrandChildren(index, $event)"

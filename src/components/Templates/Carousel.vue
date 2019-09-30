@@ -19,6 +19,7 @@
       />
 
       <grid-generator
+        v-if="isEditable"
         :id="child.id"
         :parent-id="id"
         :children="child.children"
