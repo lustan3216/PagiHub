@@ -15,7 +15,11 @@
 
       <el-container>
         <el-main class="main">
-          <board-root />
+          <board-root
+            v-if="rootNodes.length"
+            :id="0"
+            :parent-id="0"
+            :children="rootNodes" />
         </el-main>
       </el-container>
     </el-container>
@@ -23,6 +27,7 @@
 </template>
 
 <script>
+import { mapMutations, mapActions } from 'vuex'
 import { onSidebar } from './buses/sidebar'
 import NavBar from './components/Layout/NavBar'
 import EditArea from './components/Components/EditArea'
@@ -46,14 +51,26 @@ export default {
   data() {
     return {
       currentSidebar: null,
-      sidebarPayload: {}
+      sidebarPayload: {},
+      rootNodes: []
     }
   },
-  created() {
+  async created() {
+    const nodes = await this.getRootNodes()
+    if (nodes.length) {
+      this.rootNodes = nodes
+    } else {
+      this.rootNodes = await this.initRootNodes()
+    }
+
     onSidebar(({ is, ...payload }) => {
       this.currentSidebar = is
       this.sidebarPayload = payload
     })
+  },
+  methods: {
+    ...mapActions('nodes', ['getRootNodes', 'initRootNodes']),
+    ...mapMutations('nodes', ['APPEND_NODE'])
   }
 }
 </script>

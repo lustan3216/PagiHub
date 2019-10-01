@@ -67,7 +67,7 @@ export default {
         throw 'done'
       } else if (newLength < oldLength) {
         const deletedNodes = this.difference(oldIds, newIds).map(id => oldChildren[oldIds.indexOf(id)])
-        this.REMOVE_NESTED_NODES(deletedNodes.map(node => node.id))
+        this.REMOVE_NESTED_NODES(deletedNodes) // 要傳nodes下去，因為帶有children
 
         throw 'done'
       } else {

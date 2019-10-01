@@ -1,63 +1,34 @@
 <template>
   <component :is="outer">
-    <component
-      v-for="node in innerNodeTree"
-      :is="`board-${mode}`"
-      :id="node.id"
-      :parent-id="node.parentId"
-      :children="node.children"
-    />
+    <edit-area
+      :parent-id="id"
+      :children="innerChildren"
+      @update:children="updateGrandChildren($event)" />
   </component>
 </template>
 
 <script>
-import store from '../../store'
-import { mapState, mapMutations } from 'vuex'
-import { appendNestedIds } from '../../utils/keyId'
-import BoardCarousel from './BoardCarousel'
-import BoardComponent from './BoardComponent'
-import BoardWebsite from './BoardWebsite'
+import clone from 'clone'
+import { mapState } from 'vuex'
+import { emitOpenEditBar } from '../../buses/editBar'
+import childrenMixin from '../../mixins/children'
+import commonMixin from '../../mixins/common'
 import BrowserWindow from '../BrowserWindow'
+import EditBar from '../Components/EditBar'
+import EditArea from '../Components/EditArea'
+import GridGenerator from '../Templates/GridGenerator'
+import Carousel from '../Templates/Carousel'
 
 export default {
   name: 'BoardRoot',
   components: {
-    BoardCarousel,
-    BoardComponent,
-    BoardWebsite,
-    BrowserWindow
+    BrowserWindow,
+    EditBar,
+    EditArea,
+    GridGenerator,
+    Carousel
   },
-  data() {
-    const layout = {
-      carousel: 'carousel',
-      website: 'grid-generator',
-      component: 'edit-area'
-    }
-
-    const { mode } = store.state.app
-    const { nodesTree } = store.state.nodes
-    let innerNodeTree = nodesTree
-
-    if (!nodesTree.length || layout[mode] !== nodesTree[0].tag) {
-      innerNodeTree = {}
-      innerNodeTree.tag = layout[mode]
-      innerNodeTree.parentId = 0
-      innerNodeTree.children = []
-
-      appendNestedIds(innerNodeTree)
-
-      this.APPEND_NODE({
-        node: innerNodeTree,
-        parentId: 0
-      })
-      innerNodeTree = [innerNodeTree]
-    }
-
-    return {
-      innerNodeTree,
-      layout
-    }
-  },
+  mixins: [childrenMixin, commonMixin],
   computed: {
     ...mapState('app', ['mode']),
     outer() {
@@ -65,7 +36,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('nodes', ['APPEND_NODE'])
+    emitOpenEditBar,
+    updateGrandChildren(value) {
+      // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
+      this.innerChildren = clone(value)
+    }
   }
 }
 </script>

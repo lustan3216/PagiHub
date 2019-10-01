@@ -38,7 +38,7 @@ export default {
   mounted() {
     if (this.isEditable) {
       onVisibleChange(this.id, ({ visible }) => {
-        this.$el.style.visibility = visible ? 'visible' : 'hidden'
+        this.$el.style.visibility = visible ? '' : 'hidden'
       })
     }
   }

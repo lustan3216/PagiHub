@@ -6,30 +6,30 @@
     group="editableArea"
     @input="$emit('update:children', $event)"
   >
-    <template v-for="(child, index) in children">
+    <component
+      v-for="(child, index) in children"
+      :is="isInlineElement(child) ? 'span' : 'div'"
+      :key="child.id"
+      class="wrapper"
+      @click.stop="emitOpenEditBar(child.id)"
+    >
+      <edit-bar
+        :children="children"
+        :index="index"
+        @update:children="$emit('update:children', $event)"
+      />
+    
       <component
-        :is="isInlineElement(child) ? 'span' : 'div'"
+        v-bind="child.props"
+        :ref="index"
+        :is="child.tag"
         :key="child.id"
-        class="wrapper"
-        @click.stop="emitOpenEditBar(child.id)"
-      >
-        <edit-bar
-          :children="children"
-          :index="index"
-          @update:children="$emit('update:children', $event)" />
-
-        <component
-          v-bind="child.props"
-          :ref="index"
-          :is="child.tag"
-          :key="child.id"
-          :id="child.id"
-          :style="child.styles"
-          :parent-id="parentId"
-          :children="child.children"
-        />
-      </component>
-    </template>
+        :id="child.id"
+        :style="child.styles"
+        :parent-id="parentId"
+        :children="child.children"
+      />
+    </component>
   </draggable>
 </template>
 

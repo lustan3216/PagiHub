@@ -1,14 +1,22 @@
 import Vue from 'vue'
 import JsTreeList from 'js-tree-list'
+import { SET } from '../index'
+import { appendNestedIds } from '../../utils/keyId'
+import { carousel as templateCarousel } from '../../templates'
+import { gridGenerator as templateGridGenerator } from '../../templates'
 
-const nodesFromStorage = JSON.parse(window.localStorage.getItem('asd') || `{}`)
+const rootTemplate = {
+  website: templateGridGenerator,
+  carousel: templateCarousel,
+  component: templateGridGenerator
+}
 
 const state = {
-  nodesTree: nodesTree(nodesFromStorage),
-  currentNodesMap: nodesFromStorage
+  currentNodesMap: []
 }
 
 const mutations = {
+  SET,
   APPEND_NESTED_NODES(state, { nodes, parentId }) {
     nodes.forEach(node => mutations.APPEND_NODE(state, { node, parentId }))
   },
@@ -28,13 +36,13 @@ const mutations = {
         })
       )
   },
-  REMOVE_NESTED_NODES(state, ids) {
-    ids.forEach(id => mutations.REMOVE_NODE(state, id))
+  REMOVE_NESTED_NODES(state, nodes) {
+    nodes.forEach(node => mutations.REMOVE_NODE(state, node))
     mutations.SNAPSHOT(state)
   },
-  REMOVE_NODE(state, id) {
-    const { children, ...node } = state.currentNodesMap[id]
-    children && children.forEach(child => mutations.REMOVE_NODE(state, child.id))
+  REMOVE_NODE(state, _node) {
+    const { children, ...node } = _node
+    children && children.forEach(child => mutations.REMOVE_NODE(state, child))
     Vue.delete(state.currentNodesMap, node.id)
   },
   UPDATE_NODES_SORT(state, nodes) {
@@ -47,16 +55,45 @@ const mutations = {
   }
 }
 
-const getters = {
-  nodesTree(state) {
-    return nodesTree(state.currentNodesMap)
+const actions = {
+  async getRootNodes({ dispatch, commit }) {
+    const nodesMap = await dispatch('getRemoteMap')
+    commit('SET', nodesMap)
+    return mapToTree(nodesMap)
   },
-  hasRootNode(state, getters) {
-    return getters.nodesTree.id && getters.nodesTree.children && getters.nodesTree.children.length
+  async initRootNodes({ rootState, commit }) {
+    const { mode } = rootState.app
+    const template = rootTemplate[mode]()
+
+    const innerNodeTree = {
+      tag: template.tag,
+      children: template.children
+    }
+
+    appendNestedIds(innerNodeTree)
+
+    commit('APPEND_NODE', {
+      node: innerNodeTree,
+      parentId: 0
+    })
+    return [innerNodeTree]
+  },
+  getRemoteMap({ commit }) {
+    const nodesMap = JSON.parse(window.localStorage.getItem('asd') || `{}`)
+    commit('SET', {
+      currentNodesMap: nodesMap
+    })
+    return nodesMap
   }
 }
 
-function nodesTree(currentNodesMap) {
+const getters = {
+  nodesTree(state) {
+    return mapToTree(state.currentNodesMap)
+  }
+}
+
+function mapToTree(currentNodesMap) {
   const currentNodesArray = Object.values(currentNodesMap)
   const list = new JsTreeList.ListToTree(currentNodesArray, {
     key_parent: 'parentId',
@@ -74,5 +111,6 @@ export default {
   namespaced: true,
   state,
   mutations,
-  getters
+  getters,
+  actions
 }

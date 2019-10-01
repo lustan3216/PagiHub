@@ -5,6 +5,16 @@ import nodes from './modules/nodes'
 
 Vue.use(Vuex)
 
+export function SET(state, data) {
+  const keys = Object.keys(data)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    if (state[key] !== undefined) {
+      state[key] = data[key]
+    }
+  }
+}
+
 export default new Vuex.Store({
   strict: true,
   modules: {
