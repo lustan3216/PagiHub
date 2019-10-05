@@ -1,16 +1,9 @@
+import store from '../store'
 import clone from 'clone'
 import { mapMutations } from 'vuex'
 import { appendNestedIds } from '../utils/keyId'
 
 export default {
-  props: {
-    children: {
-      type: Array,
-      default() {
-        return []
-      }
-    }
-  },
   watch: {
     innerChildren(newChildren, oldChildren) {
       try {
@@ -24,7 +17,9 @@ export default {
     }
   },
   data() {
-    const innerChildren = clone(this.children).sort((a, b) => a.sortIndex - b.sortIndex) // sorting
+    const children = clone(store.getters['nodes/childrenFrom'](this.id))
+
+    const innerChildren = children.sort((a, b) => a.sortIndex - b.sortIndex) // sorting
 
     innerChildren.forEach(child => {
       appendNestedIds(child)

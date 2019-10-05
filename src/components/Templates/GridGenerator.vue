@@ -11,7 +11,7 @@
     @layout-updated="innerChildren = $event"
   >
     <grid-item
-      v-for="(child, index) in innerChildrenWithI"
+      v-for="child in innerChildrenWithI"
       :x="child.x"
       :y="child.y"
       :w="child.w"
@@ -22,23 +22,16 @@
       drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span, img"
       @click.stop.native="emitOpenEditBar(child.id)"
     >
-      <edit-bar
-        :children.sync="innerChildren"
-        :index="index"
-        new-function />
-
       <edit-area
         v-if="isEditable"
         :parent-id="child.id"
         :children="child.children"
-        @update:children="updateGrandChildren(index, $event)"
       />
     </grid-item>
   </grid-layout>
 </template>
 
 <script>
-import clone from 'clone'
 import { emitOpenEditBar } from '../../buses/editBar'
 import { onVisibleChange } from '../../buses/visibility'
 import VueGridLayout from 'vue-grid-layout'
@@ -83,16 +76,11 @@ export default {
     onVisibleChange() {
       this.innerChildren.forEach(child => {
         const node = this.$refs[child.id] && this.$refs[child.id][0]
-        node && onVisibleChange(child.id, ({ visible }) => {
-          node.$el.style.visibility = visible ? 'visible' : 'hidden'
-        })
+        node &&
+          onVisibleChange(child.id, ({ visible }) => {
+            node.$el.style.visibility = visible ? 'visible' : 'hidden'
+          })
       })
-    },
-    updateGrandChildren(index, value) {
-      // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
-      const cloned = clone(this.innerChildren)
-      cloned[index].children = value
-      this.innerChildren = cloned
     }
   }
 }

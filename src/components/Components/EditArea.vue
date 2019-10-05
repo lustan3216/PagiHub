@@ -20,14 +20,10 @@
       />
     
       <component
-        v-bind="child.props"
         :ref="index"
         :is="child.tag"
         :key="child.id"
         :id="child.id"
-        :style="child.styles"
-        :parent-id="parentId"
-        :children="child.children"
       />
     </component>
   </draggable>

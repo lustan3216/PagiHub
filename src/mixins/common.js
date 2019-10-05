@@ -1,4 +1,6 @@
+import store from '../store'
 import clone from 'clone'
+import { mapGetters, mapState, mapMutations } from 'vuex'
 import { onSettingChange } from '../buses/settings'
 import { onVisibleChange } from '../buses/visibility'
 
@@ -8,24 +10,26 @@ export default {
       type: Number,
       required: true
     },
-    parentId: {
-      type: Number,
-      required: true
-    },
     isEditable: {
       type: Boolean,
       default: true
-    },
-    styles: {
-      type: Object,
-      default() {
-        return {}
-      }
     }
   },
   data() {
+    const node = store.state.nodes.currentNodesMap[this.id]
+
     return {
-      innerStyles: clone(this.styles)
+      innerStyles: clone(node.styles)
+    }
+  },
+  computed: {
+    ...mapState('nodes', ['currentNodesMap']),
+    ...mapGetters('nodes', ['childrenFrom']),
+    node() {
+      return this.currentNodesMap[this.id]
+    },
+    parentId() {
+      return this.node.parentId
     }
   },
   created() {
@@ -41,5 +45,8 @@ export default {
         this.$el.style.visibility = visible ? '' : 'hidden'
       })
     }
+  },
+  methods: {
+    ...mapMutations('nodes', ['APPEND_NESTED_NODES'])
   }
 }

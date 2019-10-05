@@ -1,5 +1,6 @@
+import clone from 'clone'
 import Vue from 'vue'
-import JsTreeList from 'js-tree-list'
+import listTiTree from '../../utils/listToTree'
 import { SET } from '../index'
 import { appendNestedIds } from '../../utils/keyId'
 import { carousel as templateCarousel } from '../../templates'
@@ -56,18 +57,20 @@ const mutations = {
 }
 
 const actions = {
-  async getRootNodes({ dispatch, commit }) {
+  async getRootNode({ dispatch, commit }) {
     const nodesMap = await dispatch('getRemoteMap')
     commit('SET', nodesMap)
-    return mapToTree(nodesMap)
+    if (!Object.keys(nodesMap).length) {
+      dispatch('initRootNode')
+    }
   },
-  async initRootNodes({ rootState, commit }) {
+  async initRootNode({ rootState, commit }) {
     const { mode } = rootState.app
     const template = rootTemplate[mode]()
 
     const innerNodeTree = {
-      tag: template.tag,
-      children: template.children
+      tag: 'layers',
+      children: [template]
     }
 
     appendNestedIds(innerNodeTree)
@@ -76,7 +79,6 @@ const actions = {
       node: innerNodeTree,
       parentId: 0
     })
-    return [innerNodeTree]
   },
   getRemoteMap({ commit }) {
     const nodesMap = JSON.parse(window.localStorage.getItem('asd') || `{}`)
@@ -88,23 +90,29 @@ const actions = {
 }
 
 const getters = {
-  nodesTree(state) {
+  listToTree(state) {
     return mapToTree(state.currentNodesMap)
+  },
+  rootNode(state) {
+    return state.currentNodesMap[1]
+  },
+  tree(state, getters) {
+    return getters.listToTree.tree[0]
+  },
+  childrenOf(state, getters) {
+    return getters.listToTree.childrenOf
+  },
+  childrenFrom: (state, getters) => (id) => {
+    return getters.childrenOf[id].map(_node => {
+      const { children, ...node } = _node
+      return node
+    })
   }
 }
 
 function mapToTree(currentNodesMap) {
-  const currentNodesArray = Object.values(currentNodesMap)
-  const list = new JsTreeList.ListToTree(currentNodesArray, {
-    key_parent: 'parentId',
-    key_child: 'children'
-  })
-
-  list.sort((a, b) => {
-    return a.content.sortIndex - b.content.sortIndex
-  })
-
-  return list.GetTree() || []
+  const currentNodesArray = Object.values(clone(currentNodesMap))
+  return listTiTree(currentNodesArray)
 }
 
 export default {

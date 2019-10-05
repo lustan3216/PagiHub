@@ -24,16 +24,12 @@
       <grid-generator
         v-if="isEditable"
         :id="child.id"
-        :parent-id="id"
-        :children="child.children"
-        @update:children="updateGrandChildren(index, $event)"
       />
     </el-carousel-item>
   </el-carousel>
 </template>
 
 <script>
-import clone from 'clone'
 import { emitOpenEditBar } from '../../buses/editBar'
 import { onVisibleChange } from '../../buses/visibility'
 import childrenMixin from '../../mixins/children'
@@ -71,12 +67,6 @@ export default {
           this.$set(child, 'visible', visible)
         })
       })
-    },
-    updateGrandChildren(index, value) {
-      // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
-      const cloned = clone(this.innerChildren)
-      cloned[index].children = value
-      this.innerChildren = cloned
     }
   }
 }

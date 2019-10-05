@@ -2,7 +2,7 @@
   <sidebar>
     <el-menu ref="menu">
       <nested-menu
-        v-for="node in nodesTree"
+        v-for="node in [tree]"
         :node="node"
         :key="node.id"
         :active-id="currentId"
@@ -24,7 +24,7 @@ export default {
     Sidebar
   },
   computed: {
-    ...mapGetters('nodes', ['nodesTree']),
+    ...mapGetters('nodes', ['tree']),
     currentId() {
       return +store.currentId
     }
