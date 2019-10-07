@@ -1,10 +1,12 @@
 import store from '../store'
 import clone from 'clone'
-import { mapGetters, mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { onSettingChange } from '../buses/settings'
 import { onVisibleChange } from '../buses/visibility'
+import editBarMixin from '../mixins/editBar'
 
 export default {
+  mixins: [editBarMixin],
   props: {
     id: {
       type: Number,
@@ -16,15 +18,19 @@ export default {
     }
   },
   data() {
-    const node = store.state.nodes.currentNodesMap[this.id]
+    let innerStyles = {}
+
+    if (this.isEditable) {
+      const node = store.state.nodes.currentNodesMap[this.id]
+      innerStyles = clone(node.styles)
+    }
 
     return {
-      innerStyles: clone(node.styles)
+      innerStyles
     }
   },
   computed: {
     ...mapState('nodes', ['currentNodesMap']),
-    ...mapGetters('nodes', ['childrenFrom']),
     node() {
       return this.currentNodesMap[this.id]
     },

@@ -17,13 +17,16 @@ export default {
     }
   },
   data() {
-    const children = clone(store.getters['nodes/childrenFrom'](this.id))
+    let innerChildren = []
 
-    const innerChildren = children.sort((a, b) => a.sortIndex - b.sortIndex) // sorting
+    if (this.isEditable) {
+      innerChildren = clone(store.getters['nodes/childrenFrom'](this.id)).sort((a, b) => a.sortIndex - b.sortIndex)
+    } else {
+      // anti-pattern SidebarTemplates will pass children
+      innerChildren = this.$attrs.children || []
+    }
 
-    innerChildren.forEach(child => {
-      appendNestedIds(child)
-    })
+    appendNestedIds(innerChildren)
 
     return {
       innerChildren

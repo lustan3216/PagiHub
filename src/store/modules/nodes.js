@@ -97,12 +97,12 @@ const getters = {
     return state.currentNodesMap[1]
   },
   tree(state, getters) {
-    return getters.listToTree.tree[0]
+    return getters.listToTree.tree
   },
   childrenOf(state, getters) {
-    return getters.listToTree.childrenOf
+    return getters.listToTree.childrenOf || []
   },
-  childrenFrom: (state, getters) => (id) => {
+  childrenFrom: (state, getters) => id => {
     return getters.childrenOf[id].map(_node => {
       const { children, ...node } = _node
       return node

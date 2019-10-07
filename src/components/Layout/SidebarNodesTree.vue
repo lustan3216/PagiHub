@@ -2,7 +2,7 @@
   <sidebar>
     <el-menu ref="menu">
       <nested-menu
-        v-for="node in [tree]"
+        v-for="node in tree"
         :node="node"
         :key="node.id"
         :active-id="currentId"

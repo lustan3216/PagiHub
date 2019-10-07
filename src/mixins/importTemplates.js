@@ -8,6 +8,7 @@ export default {
     Blank: () => import('../components/Templates/Blank'),
     FlexButton: () => import('../components/Templates/FlexButton'),
     Divider: () => import('../components/Templates/Divider'),
-    PlayerYoutube: () => import('../components/Templates/PlayerYoutube')
+    PlayerYoutube: () => import('../components/Templates/PlayerYoutube'),
+    Layers: () => import('../components/Templates/Layers')
   }
 }

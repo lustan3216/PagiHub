@@ -1,34 +1,45 @@
 <template>
-  <grid-layout
-    :style="innerStyles"
-    :layout="innerChildrenWithI"
-    :row-height="30"
-    :col-num="36"
-    :margin="[5, 5]"
-    :responsive="false"
-    :is-draggable="isEditable"
-    :is-resizable="isEditable"
-    @layout-updated="innerChildren = $event"
-  >
-    <grid-item
-      v-for="child in innerChildrenWithI"
-      :x="child.x"
-      :y="child.y"
-      :w="child.w"
-      :h="child.h"
-      :i="child.id"
-      :ref="child.id"
-      :key="child.id"
-      drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span, img"
-      @click.stop.native="emitOpenEditBar(child.id)"
+  <edit-bar :id="id">
+    <grid-layout
+      ref="asd"
+      :style="innerStyles"
+      :layout="innerChildrenWithI"
+      :row-height="30"
+      :col-num="36"
+      :margin="[5, 5]"
+      :responsive="false"
+      :is-draggable="isEditable"
+      :is-resizable="isEditable"
+      :use-css-transforms="true"
+      @layout-updated="innerChildren = $event"
     >
-      <edit-area
-        v-if="isEditable"
-        :parent-id="child.id"
-        :children="child.children"
-      />
-    </grid-item>
-  </grid-layout>
+      <template v-for="child in innerChildrenWithI">
+        <el-popover
+          :key="`popover${child.id}`"
+          :ref="child.id"
+          trigger="hover"
+          placement="right">
+          <edit-bar :id="child.id" />
+        </el-popover>
+
+        <grid-item
+          v-popover:[child.id]
+          :x="child.x"
+          :y="child.y"
+          :w="child.w"
+          :h="child.h"
+          :i="child.id"
+          :ref="child.id"
+          :key="child.id"
+          drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span, img, iframe"
+        >
+          <edit-area
+            v-if="isEditable"
+            :id="child.id" />
+        </grid-item>
+      </template>
+    </grid-layout>
+  </edit-bar>
 </template>
 
 <script>
@@ -58,7 +69,11 @@ export default {
   computed: {
     innerChildrenWithI() {
       return this.innerChildren.map(child => {
-        child.i = child.id // if layoutItem doesn't have i, it will crash
+        // if layoutItem doesn't have i, it will crash
+        // the i assigning here will affect data innerChild which is correct here
+        // otherwise somehow it will bring a bug that makes layout immutable
+        // anyway, just don't modify here
+        child.i = child.id
         return child
       })
     }
@@ -96,6 +111,7 @@ export default {
   position: relative;
   border: 1px dashed #dedede;
   border-radius: 3px;
+  overflow: hidden;
   & > .vue-resizable-handle {
     z-index: 10000;
   }

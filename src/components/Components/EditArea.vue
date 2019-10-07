@@ -1,56 +1,35 @@
 <template>
   <draggable
-    :value="children"
+    :value="innerChildren"
     handle=".drag-handler"
     class="edit-area"
     group="editableArea"
-    @input="$emit('update:children', $event)"
+    @input="innerChildren = $event"
   >
     <component
-      v-for="(child, index) in children"
+      v-for="child in innerChildren"
       :is="isInlineElement(child) ? 'span' : 'div'"
       :key="child.id"
       class="wrapper"
       @click.stop="emitOpenEditBar(child.id)"
     >
-      <edit-bar
-        :children="children"
-        :index="index"
-        @update:children="$emit('update:children', $event)"
-      />
-    
       <component
-        :ref="index"
         :is="child.tag"
         :key="child.id"
-        :id="child.id"
-      />
+        :id="child.id" />
     </component>
   </draggable>
 </template>
 
 <script>
-// Line:20 這個component不儲存處理過的children，只會把有更改過的全部往父層傳，統一由children mixin處理
-import EditBar from '../Components/EditBar'
 import { emitOpenEditBar } from '../../buses/editBar'
 import importTemplates from '../../mixins/importTemplates'
+import childrenMixin from '../../mixins/children'
+import commonMixin from '../../mixins/common'
 
 export default {
   name: 'EditArea',
-  components: { EditBar },
-  mixins: [importTemplates],
-  props: {
-    children: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    parentId: {
-      type: Number,
-      required: true
-    }
-  },
+  mixins: [importTemplates, childrenMixin, commonMixin],
   methods: {
     emitOpenEditBar,
     isInlineElement(child) {
@@ -74,6 +53,6 @@ export default {
   position: relative;
 }
 .wrapper {
-  height: 100%;
+  /*height: 100%;*/
 }
 </style>

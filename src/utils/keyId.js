@@ -25,6 +25,7 @@ function removeNestedId(node, key = 'id') {
 }
 
 export function resetNestedIds(node, key = 'id') {
+  delete node.i
   node[key] = generateId()
 
   if (node.children && node.children.length) {

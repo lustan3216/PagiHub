@@ -1,28 +1,34 @@
 import Vue from 'vue'
 import { bus } from '../main'
 
-const KEY_OPEN = 'editOpenBar'
-const KEY_CLOSE = 'editCloseBar'
-
-let lastOpenId
+const KEY = 'editBar'
 
 export const store = Vue.observable({ currentId: null })
 
-export function emitOpenEditBar(id) {
-  store.currentId = id
-  bus.$emit(`${KEY_CLOSE}:${lastOpenId}`)
-  bus.$emit(`${KEY_OPEN}:${id}`)
-  lastOpenId = id
+export function emitOpenEditBar(id, { types = ['new', 'remove', 'copy', 'setting'] } = {}) {
+  bus.$emit(KEY, { id, types })
 }
 
-export function onOpenEditBar(_this, callback) {
-  const id = _this.children[_this.index].id
+export function onOpenEditBar(fn) {
+  bus.$on(KEY, fn)
+}
 
-  bus.$on(`${KEY_CLOSE}:${id}`, () => {
-    _this.visible = false
-  })
-  bus.$on(`${KEY_OPEN}:${id}`, () => {
-    _this.visible = true
-    callback()
-  })
+const KEY_CLOSE = 'editBarClose'
+
+export function emitCloseEditBar() {
+  bus.$emit(KEY_CLOSE)
+}
+
+export function onCloseEditBar(fn) {
+  bus.$on(KEY_CLOSE, fn)
+}
+
+const KEY_EDIT_BAR_FUNCTION = 'editBarFunction'
+
+export function emitEditBarFn(id, { type, childId }) {
+  bus.$emit(`${KEY_EDIT_BAR_FUNCTION}:${id}`, { type, childId })
+}
+
+export function onEditBarFn(id, fn) {
+  bus.$on(`${KEY_EDIT_BAR_FUNCTION}:${id}`, fn)
 }

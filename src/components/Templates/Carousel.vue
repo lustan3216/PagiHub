@@ -5,7 +5,7 @@
     trigger="click"
     class="wh-100">
     <el-carousel-item
-      v-for="(child, index) in innerChildren"
+      v-for="child in innerChildren"
       v-if="child.visible !== false"
       :ref="child.id"
       :key="child.id"
@@ -14,13 +14,6 @@
       class="w-100"
       @click.native.stop="emitOpenEditBar(child.id)"
     >
-      <edit-bar
-        :children.sync="innerChildren"
-        :index="index"
-        new-function
-        @onOpen="$refs.carousel.setActiveItem(child.id.toString())"
-      />
-
       <grid-generator
         v-if="isEditable"
         :id="child.id"

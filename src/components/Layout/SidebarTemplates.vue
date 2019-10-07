@@ -25,12 +25,12 @@
               :key="`${index}-${componentIndex}`"
               style="height: 60%;"
             >
-              <!-- here will have multi render deu to el-menu-item-group bug--->
+              <!-- here will have multi render deu to el-menu-item-group bug --->
+              <!-- Would try to debug in the future --->
               <component
                 v-bind="component.props"
                 :is="component.tag"
                 :id="index"
-                :parent-id="index"
                 :key="`${index}-${componentIndex}`"
                 :children="component.children"
                 :is-editable="false"
