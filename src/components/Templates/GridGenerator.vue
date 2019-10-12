@@ -1,49 +1,50 @@
 <template>
-  <edit-bar :id="id">
-    <grid-layout
-      ref="asd"
-      :style="innerStyles"
-      :layout="innerChildrenWithI"
-      :row-height="30"
-      :col-num="36"
-      :margin="[5, 5]"
-      :responsive="false"
-      :is-draggable="isEditable"
-      :is-resizable="isEditable"
-      :use-css-transforms="true"
-      @layout-updated="innerChildren = $event"
-    >
-      <template v-for="child in innerChildrenWithI">
-        <el-popover
-          :key="`popover${child.id}`"
-          :ref="child.id"
-          trigger="hover"
-          placement="right">
-          <edit-bar :id="child.id" />
-        </el-popover>
-
-        <grid-item
-          v-popover:[child.id]
-          :x="child.x"
-          :y="child.y"
-          :w="child.w"
-          :h="child.h"
-          :i="child.id"
-          :ref="child.id"
-          :key="child.id"
-          drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span, img, iframe"
-        >
-          <edit-area
-            v-if="isEditable"
-            :id="child.id" />
-        </grid-item>
-      </template>
-    </grid-layout>
-  </edit-bar>
+  <grid-layout
+    :style="innerStyles"
+    :layout="innerChildrenWithI"
+    :row-height="30"
+    :col-num="36"
+    :margin="[5, 5]"
+    :responsive="false"
+    :is-draggable="isEditable"
+    :is-resizable="isEditable"
+    :use-css-transforms="true"
+    @layout-updated="layoutUpdated"
+  >
+    <template v-for="child in innerChildrenWithI">
+      <el-popover
+        :value="isEditBarVisible(child.id)"
+        :open-delay="100"
+        :close-delay="0"
+        :key="`popover${child.id}`"
+        :ref="child.id"
+        trigger="manual"
+        placement="right"
+      >
+        <edit-bar :id="child.id" />
+      </el-popover>
+      
+      <grid-item
+        v-popover:[child.id]
+        :x="child.x"
+        :y="child.y"
+        :w="child.w"
+        :h="child.h"
+        :i="child.id"
+        :ref="child.id"
+        :key="child.id"
+        drag-ignore-from="a, button, form, input, p, h1, h2, h3, h4, h5, h6, svg, span, img, iframe"
+        @click.stop.native="openEditBarById(child.id)"
+      >
+        <edit-area
+          v-if="isEditable"
+          :id="child.id" />
+      </grid-item>
+    </template>
+  </grid-layout>
 </template>
 
 <script>
-import { emitOpenEditBar } from '../../buses/editBar'
 import { onVisibleChange } from '../../buses/visibility'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
@@ -64,6 +65,11 @@ export default {
     isEditable: {
       type: Boolean,
       default: true
+    }
+  },
+  data() {
+    return {
+      visibleId: false
     }
   },
   computed: {
@@ -87,7 +93,6 @@ export default {
     this.onVisibleChange()
   },
   methods: {
-    emitOpenEditBar,
     onVisibleChange() {
       this.innerChildren.forEach(child => {
         const node = this.$refs[child.id] && this.$refs[child.id][0]
@@ -96,6 +101,9 @@ export default {
             node.$el.style.visibility = visible ? 'visible' : 'hidden'
           })
       })
+    },
+    layoutUpdated(layout) {
+      this.innerChildren = layout
     }
   }
 }

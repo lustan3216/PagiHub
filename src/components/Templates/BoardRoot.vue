@@ -9,7 +9,6 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { emitOpenEditBar } from '../../buses/editBar'
 import BrowserWindow from '../BrowserWindow'
 import Layers from './Layers'
 
@@ -30,8 +29,7 @@ export default {
     this.getRootNode()
   },
   methods: {
-    ...mapActions('nodes', ['getRootNode']),
-    emitOpenEditBar
+    ...mapActions('nodes', ['getRootNode'])
   }
 }
 </script>

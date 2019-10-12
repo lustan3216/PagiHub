@@ -1,9 +1,7 @@
 <template>
-  <edit-bar :id="id" >
-    <el-button :style="innerStyles">
-      <slot>{{ text }}</slot>
-    </el-button>
-  </edit-bar>
+  <el-button :style="innerStyles">
+    <slot>{{ text }}</slot>
+  </el-button>
 </template>
 
 <script>

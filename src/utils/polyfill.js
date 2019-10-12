@@ -7,3 +7,11 @@ Array.toArray = function(e) {
     return [e]
   }
 }
+
+Array.last = function(e) {
+  return e[e.length - 1]
+}
+
+Array.first = function(e) {
+  return e[0]
+}

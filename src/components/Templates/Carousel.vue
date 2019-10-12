@@ -4,26 +4,38 @@
     :style="innerStyles"
     trigger="click"
     class="wh-100">
-    <el-carousel-item
-      v-for="child in innerChildren"
-      v-if="child.visible !== false"
-      :ref="child.id"
-      :key="child.id"
-      :name="child.id.toString()"
-      :style="child.styles"
-      class="w-100"
-      @click.native.stop="emitOpenEditBar(child.id)"
-    >
-      <grid-generator
-        v-if="isEditable"
-        :id="child.id"
-      />
-    </el-carousel-item>
+    <template v-for="child in innerChildren">
+      <el-popover
+        :value="isEditBarVisible(child.id)"
+        :open-delay="100"
+        :close-delay="0"
+        :key="`popover${child.id}`"
+        :ref="child.id"
+        trigger="manual"
+        placement="right"
+      >
+        <edit-bar :id="child.id" />
+      </el-popover>
+      
+      <el-carousel-item
+        v-popover:[child.id]
+        v-if="child.visible !== false"
+        :ref="child.id"
+        :key="child.id"
+        :name="child.id.toString()"
+        :style="child.styles"
+        class="w-100"
+        @click.stop.native="openEditBarById(child.id)"
+      >
+        <grid-generator
+          v-if="isEditable"
+          :id="child.id" />
+      </el-carousel-item>
+    </template>
   </el-carousel>
 </template>
 
 <script>
-import { emitOpenEditBar } from '../../buses/editBar'
 import { onVisibleChange } from '../../buses/visibility'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
@@ -52,7 +64,6 @@ export default {
     this.onVisibleChange()
   },
   methods: {
-    emitOpenEditBar,
     onVisibleChange() {
       this.innerChildren.forEach(child => {
         onVisibleChange(child.id, ({ visible }) => {

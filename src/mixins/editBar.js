@@ -3,12 +3,16 @@ import { mapGetters, mapMutations } from 'vuex'
 import { onEditBarFn, emitCloseEditBar } from '../buses/editBar'
 import { openSidebar } from '../buses/sidebar'
 import { resetNestedIds } from '../utils/keyId'
+import { isEditBarVisible, openEditBarById } from '../buses/editBar'
 
 export default {
   computed: {
     ...mapGetters('nodes', ['childrenOf']),
     childrenIds() {
       return this.innerChildren.map(x => x.id)
+    },
+    isEditBarVisible() {
+      return id => isEditBarVisible(id)
     }
   },
   created() {
@@ -19,6 +23,7 @@ export default {
     }
   },
   methods: {
+    openEditBarById,
     ...mapMutations('nodes', ['APPEND_NODE']),
     // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
     new(childId) {

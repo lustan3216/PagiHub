@@ -15,7 +15,7 @@
 import { mapGetters } from 'vuex'
 import Sidebar from './Sidebar'
 import NestedMenu from './Components/NestedMenu'
-import { store, emitOpenEditBar } from '../../buses/editBar'
+import { openEditBarById, store } from '../../buses/editBar'
 
 export default {
   name: 'SidebarNodesTree',
@@ -26,7 +26,7 @@ export default {
   computed: {
     ...mapGetters('nodes', ['tree']),
     currentId() {
-      return +store.currentId
+      return Array.last(store.currentIds)
     }
   },
   watch: {
@@ -43,10 +43,9 @@ export default {
     }
   },
   methods: {
-    emitOpenEditBar,
     onClick(id) {
       this.$refs.menu.activeIndex = id.toString()
-      emitOpenEditBar(id)
+      openEditBarById(id)
     }
   }
 }

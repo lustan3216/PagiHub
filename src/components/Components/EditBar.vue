@@ -1,16 +1,6 @@
 <template>
-  <component
-    :is="hasSlot ? 'el-popover' : 'div'"
-    :ref="id"
-    trigger="hover"
-    placement="top">
+  <div>
     <span>{{ tag }} - {{ id }}</span>
-
-    <!--<el-button-->
-    <!--type="text"-->
-    <!--class="drag-handler">-->
-    <!--<v-icon name="arrows-alt" />-->
-    <!--</el-button>-->
 
     <el-button
       v-if="functions.includes('new')"
@@ -39,13 +29,7 @@
       @click="emit('setting')">
       <v-icon name="cog" />
     </el-button>
-
-    <span
-      v-if="hasSlot"
-      slot="reference">
-      <slot />
-    </span>
-  </component>
+  </div>
 </template>
 
 <script>
@@ -76,9 +60,6 @@ export default {
     },
     parentId() {
       return this.node.parentId
-    },
-    hasSlot() {
-      return this.$slots.default && this.$slots.default.length
     }
   },
   methods: {

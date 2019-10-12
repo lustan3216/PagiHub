@@ -6,36 +6,43 @@
     group="editableArea"
     @input="innerChildren = $event"
   >
-    <component
-      v-for="child in innerChildren"
-      :is="isInlineElement(child) ? 'span' : 'div'"
-      :key="child.id"
-      class="wrapper"
-      @click.stop="emitOpenEditBar(child.id)"
-    >
+    <template v-for="child in innerChildren">
+      <el-popover
+        :value="isEditBarVisible(child.id)"
+        :open-delay="100"
+        :close-delay="0"
+        :key="`popover${child.id}`"
+        :ref="child.id"
+        trigger="manual"
+        placement="right"
+      >
+        <edit-bar :id="child.id" />
+      </el-popover>
+
       <component
+        v-popover:[child.id]
         :is="child.tag"
         :key="child.id"
-        :id="child.id" />
-    </component>
+        :id="child.id"
+        class="drag-handler"
+        @click.stop.native="openEditBarById(child.id)"
+      />
+    </template>
   </draggable>
 </template>
 
 <script>
-import { emitOpenEditBar } from '../../buses/editBar'
 import importTemplates from '../../mixins/importTemplates'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
+import EditBar from '../Components/EditBar'
 
 export default {
   name: 'EditArea',
-  mixins: [importTemplates, childrenMixin, commonMixin],
-  methods: {
-    emitOpenEditBar,
-    isInlineElement(child) {
-      return ['flex-button'].includes(child.tag)
-    }
-  }
+  components: {
+    EditBar
+  },
+  mixins: [importTemplates, childrenMixin, commonMixin]
 }
 </script>
 
