@@ -44,6 +44,7 @@ export default {
   box-shadow: 0 5px 20px 0 rgba(32, 48, 60, 0.11);
   border-radius: 10px;
   background-color: #fff;
+  overflow: hidden;
 }
 .header {
   box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.18);

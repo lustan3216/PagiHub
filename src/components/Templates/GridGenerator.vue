@@ -23,7 +23,7 @@
       >
         <edit-bar :id="child.id" />
       </el-popover>
-      
+
       <grid-item
         v-popover:[child.id]
         :x="child.x"

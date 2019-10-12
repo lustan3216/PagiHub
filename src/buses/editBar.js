@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import { bus } from '../main'
+const KEY_CLOSE = 'editBarClose'
+const KEY_EDIT_BAR_FUNCTION = 'editBarFunction'
 
 export const store = Vue.observable({ currentIds: [] })
 
@@ -20,13 +22,9 @@ function closeEditBar() {
   store.currentIds = []
 }
 
-const KEY_CLOSE = 'editBarClose'
-
 export function emitCloseEditBar() {
   bus.$emit(KEY_CLOSE)
 }
-
-const KEY_EDIT_BAR_FUNCTION = 'editBarFunction'
 
 export function emitEditBarFn(id, { type, childId }) {
   closeEditBar()

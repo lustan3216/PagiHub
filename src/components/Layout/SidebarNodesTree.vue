@@ -31,6 +31,7 @@ export default {
   },
   watch: {
     currentId(id) {
+      if (!id) return
       const { menu } = this.$refs
       id = id.toString()
       menu.activeIndex = id

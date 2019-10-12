@@ -4,6 +4,9 @@ import { onEditBarFn, emitCloseEditBar } from '../buses/editBar'
 import { openSidebar } from '../buses/sidebar'
 import { resetNestedIds } from '../utils/keyId'
 import { isEditBarVisible, openEditBarById } from '../buses/editBar'
+import { camelCase } from '../lodash'
+
+const templates = require('../templates')
 
 export default {
   computed: {
@@ -29,7 +32,8 @@ export default {
     new(childId) {
       const index = this.childrenIds.indexOf(childId)
       const clonedChildren = clone(this.innerChildren)
-      const { children, style, data, id, ...node } = clonedChildren[index]
+      const tag = camelCase(this.innerChildren[index].tag)
+      const node = templates[tag]()
 
       resetNestedIds(node)
 

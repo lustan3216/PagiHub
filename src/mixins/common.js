@@ -1,9 +1,9 @@
 import store from '../store'
 import clone from 'clone'
+import editBarMixin from '../mixins/editBar'
 import { mapState, mapMutations } from 'vuex'
 import { onSettingChange } from '../buses/settings'
 import { onVisibleChange } from '../buses/visibility'
-import editBarMixin from '../mixins/editBar'
 
 export default {
   mixins: [editBarMixin],

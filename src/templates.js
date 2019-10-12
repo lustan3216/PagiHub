@@ -17,28 +17,48 @@ export const carousel = function() {
   }
 }
 
+export const editor = function() {
+  return {
+    tag: 'editor'
+  }
+}
+
+export const flexButton = function() {
+  return {
+    tag: 'flex-button'
+  }
+}
+
+export const lazyImage = function() {
+  return {
+    tag: 'lazy-image'
+  }
+}
+
+export const divider = function() {
+  return {
+    tag: 'divider'
+  }
+}
+
+export const playerYoutube = function() {
+  return {
+    tag: 'player-youtube'
+  }
+}
+
 export default [
   {
     type: 'Basic',
     icon: 'el-icon-message',
     components: [
-      {
-        tag: 'editor'
-      },
-      {
-        tag: 'flex-button'
-      },
-      {
-        tag: 'lazy-image'
-      },
+      editor(),
+      flexButton(),
+      lazyImage(),
       gridGenerator(),
       carousel(),
-      {
-        tag: 'divider'
-      },
-      {
-        tag: 'player-youtube'
-      }
+      divider(),
+      playerYoutube()
     ]
   }
 ]
