@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import SelectPx from '../Components/SelectPx'
+import SelectPx from './Components/SelectPx'
 export default {
   name: 'Shadow',
   components: {

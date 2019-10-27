@@ -1,34 +1,37 @@
 <template>
-  <draggable
-    :value="innerChildren"
-    handle=".drag-handler"
+  <div
+    :style="innerStyles"
     class="edit-area"
-    group="editableArea"
-    @input="innerChildren = $event"
   >
-    <template v-for="child in innerChildren">
-      <el-popover
-        :value="isEditBarVisible(child.id)"
-        :open-delay="100"
-        :close-delay="0"
-        :key="`popover${child.id}`"
-        :ref="child.id"
-        trigger="manual"
-        placement="right"
-      >
-        <edit-bar :id="child.id" />
-      </el-popover>
+    <draggable
+      :value="innerChildren"
+      handle=".drag-handler"
+      group="editableArea"
+      @input="innerChildren = $event">
+      <template v-for="child in innerChildren">
+        <el-popover
+          :value="isEditBarVisible(child.id)"
+          :open-delay="100"
+          :close-delay="0"
+          :key="`popover${child.id}`"
+          :ref="child.id"
+          trigger="manual"
+          placement="right"
+        >
+          <edit-bar :id="child.id" />
+        </el-popover>
 
-      <component
-        v-popover:[child.id]
-        :is="child.tag"
-        :key="child.id"
-        :id="child.id"
-        class="drag-handler"
-        @click.stop.native="openEditBarById(child.id)"
-      />
-    </template>
-  </draggable>
+        <component
+          v-popover:[child.id]
+          :is="child.tag"
+          :key="child.id"
+          :id="child.id"
+          class="drag-handler"
+          @click.stop.native="openEditBarById(child.id)"
+        />
+      </template>
+    </draggable>
+  </div>
 </template>
 
 <script>
@@ -58,8 +61,5 @@ export default {
 }
 .wrapper {
   position: relative;
-}
-.wrapper {
-  /*height: 100%;*/
 }
 </style>

@@ -1,5 +1,7 @@
 <template>
-  <el-aside class="sidebar">
+  <el-aside
+    v-if="currentSidebar"
+    class="sidebar">
     <el-row>
       <el-col
         :span="6"
@@ -11,15 +13,38 @@
         </el-button>
       </el-col>
     </el-row>
-    <slot />
+
+    <component
+      :is="currentSidebar"
+      :id="id" />
   </el-aside>
 </template>
 
 <script>
-import { closeSidebar } from '../../buses/sidebar'
+import { onSidebar, closeSidebar } from '../../buses/sidebar'
+import SidebarTemplates from '../../components/Layout/SidebarTemplates'
+import SidebarSettings from '../../components/Layout/SidebarSettings'
+import SidebarNodesTree from '../../components/Layout/SidebarNodesTree'
 
 export default {
-  name: 'SidebarSettings',
+  name: 'Sidebar',
+  components: {
+    SidebarTemplates,
+    SidebarSettings,
+    SidebarNodesTree
+  },
+  data() {
+    return {
+      currentSidebar: null,
+      sidebarPayload: {}
+    }
+  },
+  async created() {
+    onSidebar(({ is, id }) => {
+      this.currentSidebar = is
+      this.id = id
+    })
+  },
   methods: {
     closeSidebar
   }
@@ -43,5 +68,6 @@ export default {
 .sidebar {
   background-color: #fff;
   box-shadow: 2px 0px 5px 0 rgba(32, 48, 60, 0.05);
+  width: 350px !important;
 }
 </style>

@@ -1,85 +1,79 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :span="24">
-      <div>
-        <p><label for="Border">Border</label></p>
-        <select-px />
-        <el-select v-model="style">
-          <el-option value="Dashed">Dashed</el-option>
-          <el-option value="Dotted">Dotted</el-option>
-          <el-option value="Solid">Solid</el-option>
-        </el-select>
-        <el-color-picker v-model="color" />
+  <div>
+    <div>
+      <label>Border</label>
+      <div class="vertical-center">
+        <select-px :value.sync="borderWidth" />
+        <select-border-style :value.sync="borderStyle" />
+        <el-color-picker v-model="borderColor" />
       </div>
-    </el-col>
+    </div>
 
-    <el-col :span="24">
-      <div>
-        <p><label for="Border">Border-Top</label></p>
-        <select-px />
-        <el-select v-model="style">
-          <el-option value="Dashed">Dashed</el-option>
-          <el-option value="Dotted">Dotted</el-option>
-          <el-option value="Solid">Solid</el-option>
-        </el-select>
-        <el-color-picker v-model="color" />
+    <div>
+      <label>BorderTop</label>
+      <div class="vertical-center">
+        <select-px :value.sync="borderWidthTop" />
+        <select-border-style :value.sync="borderStyleTop" />
+        <el-color-picker v-model="borderColorTop" />
       </div>
-    </el-col>
+    </div>
 
-    <el-col :span="24">
-      <div>
-        <p><label for="Border">Border Right</label></p>
-        <select-px />
-        <el-select v-model="style">
-          <el-option value="Dashed">Dashed</el-option>
-          <el-option value="Dotted">Dotted</el-option>
-          <el-option value="Solid">Solid</el-option>
-        </el-select>
-        <el-color-picker v-model="color" />
+    <div>
+      <label>BorderRight</label>
+      <div class="vertical-center">
+        <select-px :value.sync="borderWidthRight" />
+        <select-border-style :value.sync="borderStyleRight" />
+        <el-color-picker v-model="borderColorRight" />
       </div>
-    </el-col>
+    </div>
 
-    <el-col :span="24">
-      <div>
-        <p><label for="Border">Border Bottom</label></p>
-        <select-px />
-        <el-select v-model="style">
-          <el-option value="Dashed">Dashed</el-option>
-          <el-option value="Dotted">Dotted</el-option>
-          <el-option value="Solid">Solid</el-option>
-        </el-select>
-        <el-color-picker v-model="color" />
+    <div>
+      <label>BorderBottom</label>
+      <div class="vertical-center">
+        <select-px :value.sync="borderWidthBottom" />
+        <select-border-style :value.sync="borderStyleBottom" />
+        <el-color-picker v-model="borderColorBottom" />
       </div>
-    </el-col>
+    </div>
 
-    <el-col :span="24">
-      <div>
-        <p><label for="Border">Border Left</label></p>
-        <select-px />
-        <el-select v-model="style">
-          <el-option value="Dashed">Dashed</el-option>
-          <el-option value="Dotted">Dotted</el-option>
-          <el-option value="Solid">Solid</el-option>
-        </el-select>
-        <el-color-picker v-model="color" />
+    <div>
+      <label>BorderLeft</label>
+      <div class="vertical-center">
+        <select-px :value.sync="borderWidthLeft" />
+        <select-border-style :value.sync="borderStyleLeft" />
+        <el-color-picker v-model="borderColorLeft" />
       </div>
-    </el-col>
-  </el-row>
+    </div>
+  </div>
 </template>
 
 <script>
-import SelectPx from '../Components/SelectPx'
+import SelectPx from './Components/SelectPx'
+import SelectBorderStyle from './Components/SelectBorderStyle'
+import styleMixin from '../../mixins/style'
+import styleFourAttrsMixin from '../../mixins/styleFourAttrs'
+
+const borderWidth = 'borderWidth'
+const borderWidths = ['borderWidthTop', 'borderWidthRight', 'borderWidthBottom', 'borderWidthLeft']
+
+const borderStyle = 'borderStyle'
+const borderStyles = ['borderStyleTop', 'borderStyleRight', 'borderStyleBottom', 'borderStyleLeft']
+
+const borderColor = 'borderColor'
+const borderColors = ['borderColorTop', 'borderColorRight', 'borderColorBottom', 'borderColorLeft']
+
 export default {
   name: 'Border',
   components: {
-    SelectPx
+    SelectPx,
+    SelectBorderStyle
   },
-  data() {
-    return {
-      style: null,
-      color: null
-    }
-  }
+  mixins: [
+    styleMixin,
+    styleFourAttrsMixin(borderWidth, borderWidths),
+    styleFourAttrsMixin(borderStyle, borderStyles),
+    styleFourAttrsMixin(borderColor, borderColors)
+  ]
 }
 </script>
 

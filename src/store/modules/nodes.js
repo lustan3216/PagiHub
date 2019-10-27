@@ -13,11 +13,15 @@ const rootTemplate = {
 }
 
 const state = {
-  currentNodesMap: []
+  currentNodesMap: {}
 }
 
 const mutations = {
   SET,
+  ASSIGN_STYLE(state, { id, styles }) {
+    state.currentNodesMap[id].styles = clone(styles)
+    mutations.SNAPSHOT(state)
+  },
   APPEND_NESTED_NODES(state, { nodes, parentId }) {
     nodes.forEach(node => mutations.APPEND_NODE(state, { node, parentId }))
   },
@@ -30,12 +34,12 @@ const mutations = {
     const { children, ..._node } = node
     Vue.set(state.currentNodesMap, _node.id, _node)
     children &&
-      children.forEach(child =>
+      children.forEach(child => {
         mutations.APPEND_NODE(state, {
           node: child,
           parentId: node.id
         })
-      )
+      })
   },
   REMOVE_NESTED_NODES(state, nodes) {
     nodes.forEach(node => mutations.REMOVE_NODE(state, node))

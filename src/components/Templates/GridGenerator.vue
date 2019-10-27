@@ -8,7 +8,6 @@
     :responsive="false"
     :is-draggable="isEditable"
     :is-resizable="isEditable"
-    :use-css-transforms="true"
     @layout-updated="layoutUpdated"
   >
     <template v-for="child in innerChildrenWithI">

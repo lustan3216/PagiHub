@@ -1,7 +1,8 @@
 import clone from 'clone'
+import store from '../store'
 import { mapGetters, mapMutations } from 'vuex'
 import { onEditBarFn, emitCloseEditBar } from '../buses/editBar'
-import { openSidebar } from '../buses/sidebar'
+import { openSidebar, closeSidebar } from '../buses/sidebar'
 import { resetNestedIds } from '../utils/keyId'
 import { isEditBarVisible, openEditBarById } from '../buses/editBar'
 import { camelCase } from '../lodash'
@@ -18,6 +19,18 @@ export default {
       return id => isEditBarVisible(id)
     }
   },
+  data() {
+    let innerStyles = {}
+
+    if (this.isEditable) {
+      const node = store.state.nodes.currentNodesMap[this.id]
+      innerStyles = clone(node.styles || {})
+    }
+
+    return {
+      innerStyles
+    }
+  },
   created() {
     if (this.isEditable) {
       onEditBarFn(this.id, ({ type, childId }) => {
@@ -27,13 +40,14 @@ export default {
   },
   methods: {
     openEditBarById,
-    ...mapMutations('nodes', ['APPEND_NODE']),
+    ...mapMutations('nodes', ['APPEND_NODE', 'ASSIGN_STYLE']),
     // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
     new(childId) {
       const index = this.childrenIds.indexOf(childId)
       const clonedChildren = clone(this.innerChildren)
       const tag = camelCase(this.innerChildren[index].tag)
-      const node = templates[tag]()
+      const _node = templates[tag] ? templates[tag]() : clone(clonedChildren[index])
+      const { children, styles, ...node } = _node
 
       resetNestedIds(node)
 
@@ -70,9 +84,23 @@ export default {
       emitCloseEditBar()
     },
     setting() {
-      openSidebar('SidebarSettings', {
+      closeSidebar()
+      this.$nextTick(() => {
+        openSidebar('SidebarSettings', { id: this.id })
+      })
+    },
+    assignStyles(styles) {
+      for (const type in styles) {
+        if (this.innerStyles[type]) {
+          this.innerStyles[type] = styles[type]
+        } else {
+          this.$set(this.innerStyles, type, styles[type])
+        }
+      }
+
+      this.ASSIGN_STYLE({
         id: this.id,
-        styles: this.innerStyles || {}
+        styles: this.innerStyles
       })
     }
   }

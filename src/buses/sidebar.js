@@ -2,8 +2,8 @@ import { bus } from '../main'
 
 const KEY = 'currentSidebar'
 
-export function openSidebar(is, { id, styles } = {}) {
-  bus.$emit(KEY, { is, id, styles })
+export function openSidebar(is, { id } = {}) {
+  bus.$emit(KEY, { is, id })
 }
 
 export function closeSidebar() {

@@ -8,7 +8,6 @@
 
 <script>
 import VueYoutube from 'vue-youtube'
-import { onResize } from '../../buses/gridItem'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import EditBar from '../Components/EditBar'
@@ -39,10 +38,6 @@ export default {
     }
   },
   created() {
-    // onResize(this.parentId, ({ newHPx, newWPx }) => {
-    //   console.log(newHPx)
-    //   this.height = newHPx
-    // })
   },
   methods: {}
 }

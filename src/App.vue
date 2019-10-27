@@ -8,9 +8,7 @@
       <transition
         name="fade-left"
         mode="out-in">
-        <component
-          :is="currentSidebar"
-          v-bind="sidebarPayload" />
+        <sidebar />
       </transition>
 
       <el-container>
@@ -23,37 +21,18 @@
 </template>
 
 <script>
-import { onSidebar } from './buses/sidebar'
 import NavBar from './components/Layout/NavBar'
+import Sidebar from './components/Layout/Sidebar'
 import EditArea from './components/Components/EditArea'
 import BoardRoot from './components/Templates/BoardRoot'
-import SidebarTemplates from './components/Layout/SidebarTemplates'
-import SidebarSettings from './components/Layout/SidebarSettings'
-import SidebarNodesTree from './components/Layout/SidebarNodesTree'
-import importTemplates from './mixins/importTemplates'
 
 export default {
   name: 'App',
   components: {
     EditArea,
     NavBar,
-    SidebarTemplates,
-    SidebarSettings,
-    SidebarNodesTree,
+    Sidebar,
     BoardRoot
-  },
-  mixins: [importTemplates],
-  data() {
-    return {
-      currentSidebar: null,
-      sidebarPayload: {}
-    }
-  },
-  async created() {
-    onSidebar(({ is, ...payload }) => {
-      this.currentSidebar = is
-      this.sidebarPayload = payload
-    })
   }
 }
 </script>

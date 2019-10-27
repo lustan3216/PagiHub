@@ -1,27 +1,23 @@
 <template>
-  <sidebar>
-    <el-menu ref="menu">
-      <nested-menu
-        v-for="node in tree"
-        :node="node"
-        :key="node.id"
-        :active-id="currentId"
-        @onClick="onClick" />
-    </el-menu>
-  </sidebar>
+  <el-menu ref="menu">
+    <nested-menu
+      v-for="node in tree"
+      :node="node"
+      :key="node.id"
+      :active-id="currentId"
+      @onClick="onClick" />
+  </el-menu>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import Sidebar from './Sidebar'
 import NestedMenu from './Components/NestedMenu'
 import { openEditBarById, store } from '../../buses/editBar'
 
 export default {
   name: 'SidebarNodesTree',
   components: {
-    NestedMenu,
-    Sidebar
+    NestedMenu
   },
   computed: {
     ...mapGetters('nodes', ['tree']),

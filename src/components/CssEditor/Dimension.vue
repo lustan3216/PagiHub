@@ -1,38 +1,50 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="24">
-      <select-px label="Height" />
+      <p>Height</p>
+      <select-px :value.sync="height" />
     </el-col>
 
     <el-col :span="12">
-      <select-px label="Max-Height" />
+      <p>min-Height</p>
+      <select-px :value.sync="minHeight" />
     </el-col>
 
     <el-col :span="12">
-      <select-px label="Min-Height" />
+      <p>max-Height</p>
+      <select-px :value.sync="maxHeight" />
     </el-col>
 
     <el-col :span="24">
-      <select-px label="Weight" />
+      <p>Width</p>
+      <select-px :value.sync="width" />
     </el-col>
 
     <el-col :span="12">
-      <select-px label="Max-Weight" />
+      <p>min-Width</p>
+      <select-px :value.sync="minWidth" />
     </el-col>
 
     <el-col :span="12">
-      <select-px label="min-Weight" />
+      <p>max-Width</p>
+      <select-px :value.sync="maxWidth" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import SelectPx from '../Components/SelectPx'
+import SelectPx from './Components/SelectPx'
+import styleOneAttr from '../../mixins/styleOneAttr'
+import styleMixin from '../../mixins/style'
+
+const dimensions = ['height', 'minHeight', 'maxHeight', 'width', 'minWidth', 'maxWidth']
+
 export default {
   name: 'Dimension',
   components: {
     SelectPx
-  }
+  },
+  mixins: [styleMixin, styleOneAttr(dimensions)]
 }
 </script>
 

@@ -1,38 +1,40 @@
 <template>
-  <el-carousel
-    ref="carousel"
-    :style="innerStyles"
-    trigger="click"
-    class="wh-100">
-    <template v-for="child in innerChildren">
-      <el-popover
-        :value="isEditBarVisible(child.id)"
-        :open-delay="100"
-        :close-delay="0"
-        :key="`popover${child.id}`"
-        :ref="child.id"
-        trigger="manual"
-        placement="right"
-      >
-        <edit-bar :id="child.id" />
-      </el-popover>
-      
-      <el-carousel-item
-        v-popover:[child.id]
-        v-if="child.visible !== false"
-        :ref="child.id"
-        :key="child.id"
-        :name="child.id.toString()"
-        :style="child.styles"
-        class="w-100"
-        @click.stop.native="openEditBarById(child.id)"
-      >
-        <grid-generator
-          v-if="isEditable"
-          :id="child.id" />
-      </el-carousel-item>
-    </template>
-  </el-carousel>
+  <div>
+    <el-carousel
+      ref="carousel"
+      :style="innerStyles"
+      trigger="click"
+      class="wh-100">
+      <template v-for="child in innerChildren">
+        <el-popover
+          :value="isEditBarVisible(child.id)"
+          :open-delay="100"
+          :close-delay="0"
+          :key="`popover${child.id}`"
+          :ref="child.id"
+          trigger="manual"
+          placement="right"
+        >
+          <edit-bar :id="child.id" />
+        </el-popover>
+
+        <el-carousel-item
+          v-popover:[child.id]
+          v-if="child.visible !== false"
+          :ref="child.id"
+          :key="child.id"
+          :name="child.id.toString()"
+          :style="child.styles"
+          class="w-100"
+          @click.stop.native="openEditBarById(child.id)"
+        >
+          <grid-generator
+            v-if="isEditable"
+            :id="child.id" />
+        </el-carousel-item>
+      </template>
+    </el-carousel>
+  </div>
 </template>
 
 <script>

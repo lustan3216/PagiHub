@@ -1,39 +1,36 @@
 <template>
-  <sidebar>
-    <el-menu>
-      <el-submenu
-        v-for="(vNode, index) in templates"
-        :index="index.toString()"
-        :key="index"
-        @click.native="openedMenu = openedMenu === index ? null : index"
-      >
-        <template slot="title">
-          <i :class="vNode.icon" />
-          {{ vNode.type }}
-        </template>
+  <el-menu @open="openedMenu = +$event">
+    <el-submenu
+      v-for="(vNode, index) in templates"
+      :index="index.toString()"
+      :key="index">
+      <template slot="title">
+        <i :class="vNode.icon" />
+        {{ vNode.type }}
+      </template>
 
-        <el-menu-item
-          v-for="(component, componentIndex) in vNode.components"
-          :index="`${index}-${componentIndex}`"
+      <el-menu-item
+        v-for="(component, componentIndex) in vNode.components"
+        :index="`${index}-${componentIndex}`"
+        :key="`${index}-${componentIndex}`"
+        class="menu-item"
+      >
+        <!-- here will have multi render deu to el-menu-item-group bug--->
+        <component
+          v-if="openedMenu === index"
+          v-bind="component.props"
+          :id="id"
+          :is="component.tag"
           :key="`${index}-${componentIndex}`"
-          style="height: 60%;"
-        >
-          <!-- here will have multi render deu to el-menu-item-group bug--->
-          <component
-            v-bind="component.props"
-            :is="component.tag"
-            :key="`${index}-${componentIndex}`"
-            :children="component.children"
-          />
-        </el-menu-item>
-      </el-submenu>
-    </el-menu>
-  </sidebar>
+          :children="component.children"
+        />
+      </el-menu-item>
+    </el-submenu>
+  </el-menu>
 </template>
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
-import Sidebar from './Sidebar'
 import Border from '../CssEditor/Border'
 import Background from '../CssEditor/Background'
 import Corner from '../CssEditor/Corner'
@@ -47,7 +44,6 @@ import Dimension from '../CssEditor/Dimension'
 export default {
   name: 'SidebarSettings',
   components: {
-    Sidebar,
     Border,
     Background,
     Spacing,
@@ -61,10 +57,6 @@ export default {
   props: {
     id: {
       type: Number,
-      required: true
-    },
-    styles: {
-      type: Object,
       required: true
     }
   },
@@ -159,8 +151,7 @@ export default {
         }
       ]
     }
-  },
-  methods: {}
+  }
 }
 </script>
 
@@ -169,7 +160,11 @@ export default {
 .el-menu-item:hover {
   background-color: inherit;
 }
-.el-submenu .el-menu-item {
-  height: inherit;
+.menu-item {
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+::v-deep .el-select * {
+  vertical-align: initial;
 }
 </style>

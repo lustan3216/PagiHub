@@ -3,7 +3,8 @@
     <component
       v-if="rootNode"
       :id="rootNode.id"
-      :is="rootNode.tag" />
+      :is="rootNode.tag"
+    />
   </component>
 </template>
 

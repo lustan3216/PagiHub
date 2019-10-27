@@ -75,12 +75,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/*.functions {*/
-/*right: 10px;*/
-/*z-index: 100;*/
-/*position: absolute;*/
-/*width: 220px;*/
-/*}*/
 .outer {
   position: relative;
 }
