@@ -3,7 +3,7 @@
     <div>
       <label>Border</label>
       <div class="vertical-center">
-        <select-px :value.sync="borderWidth" />
+        <input-style-unit :value.sync="borderWidth" />
         <select-border-style :value.sync="borderStyle" />
         <el-color-picker v-model="borderColor" />
       </div>
@@ -12,7 +12,7 @@
     <div>
       <label>BorderTop</label>
       <div class="vertical-center">
-        <select-px :value.sync="borderWidthTop" />
+        <input-style-unit :value.sync="borderWidthTop" />
         <select-border-style :value.sync="borderStyleTop" />
         <el-color-picker v-model="borderColorTop" />
       </div>
@@ -21,7 +21,7 @@
     <div>
       <label>BorderRight</label>
       <div class="vertical-center">
-        <select-px :value.sync="borderWidthRight" />
+        <input-style-unit :value.sync="borderWidthRight" />
         <select-border-style :value.sync="borderStyleRight" />
         <el-color-picker v-model="borderColorRight" />
       </div>
@@ -30,7 +30,7 @@
     <div>
       <label>BorderBottom</label>
       <div class="vertical-center">
-        <select-px :value.sync="borderWidthBottom" />
+        <input-style-unit :value.sync="borderWidthBottom" />
         <select-border-style :value.sync="borderStyleBottom" />
         <el-color-picker v-model="borderColorBottom" />
       </div>
@@ -39,7 +39,7 @@
     <div>
       <label>BorderLeft</label>
       <div class="vertical-center">
-        <select-px :value.sync="borderWidthLeft" />
+        <input-style-unit :value.sync="borderWidthLeft" />
         <select-border-style :value.sync="borderStyleLeft" />
         <el-color-picker v-model="borderColorLeft" />
       </div>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import SelectPx from './Components/SelectPx'
+import InputStyleUnit from './Components/SelectUnit'
 import SelectBorderStyle from './Components/SelectBorderStyle'
 import styleMixin from '../../mixins/style'
 import styleFourAttrsMixin from '../../mixins/styleFourAttrs'
@@ -65,7 +65,7 @@ const borderColors = ['borderColorTop', 'borderColorRight', 'borderColorBottom',
 export default {
   name: 'Border',
   components: {
-    SelectPx,
+    InputStyleUnit,
     SelectBorderStyle
   },
   mixins: [

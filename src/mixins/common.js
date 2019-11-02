@@ -1,3 +1,5 @@
+import clone from 'clone'
+import store from '../store'
 import editMixin from './edit'
 import { mapState, mapMutations } from 'vuex'
 import { appendVm } from '../utils/vmMap'
@@ -14,6 +16,18 @@ export default {
     isEditable: {
       type: Boolean,
       default: true
+    }
+  },
+  data() {
+    let innerStyles = {}
+
+    if (this.isEditable) {
+      const node = store.state.nodes.currentNodesMap[this.id]
+      innerStyles = clone(node.styles || {})
+    }
+
+    return {
+      innerStyles
     }
   },
   computed: {
@@ -40,6 +54,21 @@ export default {
   },
   methods: {
     ...mapMutations('nodes', ['APPEND_NESTED_NODES']),
-    ...mapMutations('vmMap', ['APPEND_VM'])
+    ...mapMutations('vmMap', ['APPEND_VM']),
+    assignStyles(styles) {
+      const allStyles = Object.assign({}, this.innerStyles, styles)
+
+      const validStyles = Object.keys(allStyles).reduce((all, key) => {
+        if (allStyles[key]) all[key] = allStyles[key]
+        return all
+      }, {})
+
+      this.innerStyles = validStyles
+
+      this.ASSIGN_STYLE({
+        id: this.id,
+        styles: validStyles
+      })
+    }
   }
 }

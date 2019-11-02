@@ -15,16 +15,13 @@ module.exports = {
   // it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
     'max-len': ['error', { code: 120 }],
-    'vue/max-attributes-per-line': [
-      2,
-      {
-        singleline: 1,
-        multiline: {
-          max: 1,
-          allowFirstLine: false
-        }
+    "vue/max-attributes-per-line": [2, {
+      "singleline": 3,
+      "multiline": {
+        "max": 1,
+        "allowFirstLine": false
       }
-    ],
+    }],
     'vue/name-property-casing': ['error', 'PascalCase'],
     'accessor-pairs': 2,
     'arrow-spacing': [

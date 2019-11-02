@@ -2,32 +2,32 @@
   <el-row :gutter="20">
     <el-col :span="24">
       <p>borderRadius</p>
-      <select-px :value.sync="borderRadius" />
+      <input-style-unit :value.sync="borderRadius" />
     </el-col>
     <el-col :span="12">
       <p>borderTopLeftRadius</p>
-      <select-px :value.sync="borderTopLeftRadius" />
+      <input-style-unit :value.sync="borderTopLeftRadius" />
     </el-col>
 
     <el-col :span="12">
       <p>borderTopRightRadius</p>
-      <select-px :value.sync="borderTopRightRadius" />
+      <input-style-unit :value.sync="borderTopRightRadius" />
     </el-col>
 
     <el-col :span="12">
       <p>borderBottomRightRadius</p>
-      <select-px :value.sync="borderBottomRightRadius" />
+      <input-style-unit :value.sync="borderBottomRightRadius" />
     </el-col>
 
     <el-col :span="12">
       <p>borderBottomLeftRadius</p>
-      <select-px :value.sync="borderBottomLeftRadius" />
+      <input-style-unit :value.sync="borderBottomLeftRadius" />
     </el-col>
   </el-row>
 </template>
 
 <script>
-import SelectPx from './Components/SelectPx'
+import InputStyleUnit from './Components/SelectUnit'
 import fourUnitMixin from '../../mixins/styleFourAttrs'
 import styleMixin from '../../mixins/style'
 
@@ -38,7 +38,7 @@ const radiuses = ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRi
 export default {
   name: 'Corner',
   components: {
-    SelectPx
+    InputStyleUnit
   },
   mixins: [styleMixin, fourUnitMixin(radius, radiuses)]
 }

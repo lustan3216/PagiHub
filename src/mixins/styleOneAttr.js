@@ -1,4 +1,5 @@
 export default function(array) {
+  array = Array.toArray(array)
   return {
     data() {
       const styles = this.getStyles()

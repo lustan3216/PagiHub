@@ -40,6 +40,7 @@ import Position from '../CssEditor/Position'
 import Shadow from '../CssEditor/Shadow'
 import Spacing from '../CssEditor/Spacing'
 import Dimension from '../CssEditor/Dimension'
+import Style from '../CssEditor/Style'
 
 export default {
   name: 'SidebarSettings',
@@ -52,7 +53,8 @@ export default {
     Css,
     Effect,
     Position,
-    Shadow
+    Shadow,
+    Style
   },
   props: {
     id: {
@@ -119,6 +121,15 @@ export default {
           components: [
             {
               tag: 'Css'
+            }
+          ]
+        },
+        {
+          type: 'Style',
+          icon: 'el-icon-message',
+          components: [
+            {
+              tag: 'Style'
             }
           ]
         },

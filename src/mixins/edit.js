@@ -1,5 +1,4 @@
 import clone from 'clone'
-import store from '../store'
 import { mapGetters, mapMutations } from 'vuex'
 import { onEditBarFn, emitCloseEditBar } from '../buses/editBar'
 import { openSidebar, closeSidebar } from '../buses/sidebar'
@@ -17,18 +16,6 @@ export default {
     },
     isEditBarVisible() {
       return id => isEditBarVisible(id)
-    }
-  },
-  data() {
-    let innerStyles = {}
-
-    if (this.isEditable) {
-      const node = store.state.nodes.currentNodesMap[this.id]
-      innerStyles = clone(node.styles || {})
-    }
-
-    return {
-      innerStyles
     }
   },
   created() {
@@ -87,20 +74,6 @@ export default {
       closeSidebar()
       this.$nextTick(() => {
         openSidebar('SidebarSettings', { id: this.id })
-      })
-    },
-    assignStyles(styles) {
-      for (const type in styles) {
-        if (this.innerStyles[type]) {
-          this.innerStyles[type] = styles[type]
-        } else {
-          this.$set(this.innerStyles, type, styles[type])
-        }
-      }
-
-      this.ASSIGN_STYLE({
-        id: this.id,
-        styles: this.innerStyles
       })
     }
   }
