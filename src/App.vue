@@ -5,10 +5,8 @@
     </el-header>
 
     <el-container class="main">
-      <transition
-        name="fade-left"
-        mode="out-in">
-        <sidebar />
+      <transition name="fade-left" mode="out-in">
+        <component :is="currentSidebar.type" />
       </transition>
 
       <el-container>
@@ -21,9 +19,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import NavBar from './components/Layout/NavBar'
-import Sidebar from './components/Layout/Sidebar'
-import EditArea from './components/Components/EditArea'
+import SidebarNodesTree from './components/Layout/SidebarNodesTree'
+import SidebarSettings from './components/Layout/SidebarSettings'
+import SidebarTemplates from './components/Layout/SidebarTemplates'
+import EditArea from './components/Templates/AreaDraggable'
 import BoardRoot from './components/Templates/BoardRoot'
 
 export default {
@@ -31,8 +32,13 @@ export default {
   components: {
     EditArea,
     NavBar,
-    Sidebar,
+    SidebarNodesTree,
+    SidebarSettings,
+    SidebarTemplates,
     BoardRoot
+  },
+  computed: {
+    ...mapState('layout', ['currentSidebar'])
   }
 }
 </script>

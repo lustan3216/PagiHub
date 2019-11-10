@@ -23,6 +23,24 @@
       <p>borderBottomLeftRadius</p>
       <input-style-unit :value.sync="borderBottomLeftRadius" />
     </el-col>
+
+    <login>
+      <div>
+        <form action="" scope="{ validate, submit }"/>
+      </div>
+    </login>
+
+    <submit>
+      <div>
+        <div class2/>
+        <div/>
+        <div/>
+        <div/>
+        <div/>
+        <div/>
+        <div/>
+      </div>
+    </submit>
   </el-row>
 </template>
 
@@ -33,7 +51,12 @@ import styleMixin from '../../mixins/style'
 
 const radius = 'borderRadius'
 
-const radiuses = ['borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius']
+const radiuses = [
+  'borderTopLeftRadius',
+  'borderTopRightRadius',
+  'borderBottomRightRadius',
+  'borderBottomLeftRadius'
+]
 
 export default {
   name: 'Corner',

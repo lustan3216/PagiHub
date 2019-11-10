@@ -4,12 +4,25 @@
     v-model="number"
     type="number"
     clearable>
-    <el-select slot="append" v-model="unit">
-      <el-option label="px" value="px" />
-      <el-option v-if="auto" label="auto" value="auto" />
-      <el-option label="%" value="%" />
-      <el-option label="vh" value="vh" />
-      <el-option label="vw" value="vw" />
+    <el-select
+      slot="append"
+      v-model="unit">
+      <el-option
+        label="px"
+        value="px" />
+      <el-option
+        v-if="auto"
+        label="auto"
+        value="auto" />
+      <el-option
+        label="%"
+        value="%" />
+      <el-option
+        label="vh"
+        value="vh" />
+      <el-option
+        label="vw"
+        value="vw" />
     </el-select>
   </el-input>
 </template>

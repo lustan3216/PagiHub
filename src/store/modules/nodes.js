@@ -43,7 +43,6 @@ const mutations = {
   },
   REMOVE_NESTED_NODES(state, nodes) {
     nodes.forEach(node => mutations.REMOVE_NODE(state, node))
-    mutations.SNAPSHOT(state)
   },
   REMOVE_NODE(state, _node) {
     const { children, ...node } = _node
@@ -92,7 +91,6 @@ const actions = {
     return nodesMap
   }
 }
-
 const getters = {
   listToTree(state) {
     return mapToTree(state.currentNodesMap)
@@ -107,6 +105,10 @@ const getters = {
     return getters.listToTree.childrenOf || []
   },
   childrenFrom: (state, getters) => id => {
+
+    // 父層在render子層時，這裡會把children拿掉，強制component不能抓到孫子
+    // 如果想要處理孫子，應該是再做一個component做父子管理
+    // 這樣可以解決效能上問題，以及統一父子關係，讓每個component的innerChildren的數據不會因為子孫資料過期
     return getters.childrenOf[id].map(_node => {
       const { children, ...node } = _node
       return node

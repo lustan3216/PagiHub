@@ -17,7 +17,8 @@
           class="circle"
           style="background-color: greenyellow;" />
       </el-col>
-      <el-col :span="20">
+
+      <el-col :span="18">
         <input
           type="text"
           class="url" >
@@ -31,8 +32,13 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
-  name: 'Browser'
+  name: 'Browser',
+  methods: {
+    ...mapMutations('app', ['SET'])
+  }
 }
 </script>
 

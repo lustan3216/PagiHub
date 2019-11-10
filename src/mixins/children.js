@@ -20,7 +20,9 @@ export default {
     let innerChildren = []
 
     if (this.isEditable) {
-      innerChildren = clone(store.getters['nodes/childrenFrom'](this.id)).sort((a, b) => a.sortIndex - b.sortIndex)
+      innerChildren = clone(store.getters['nodes/childrenFrom'](this.id)).sort(
+        (a, b) => a.sortIndex - b.sortIndex
+      )
     } else {
       // anti-pattern SidebarTemplates will pass children
       innerChildren = this.$attrs.children || []
@@ -55,7 +57,9 @@ export default {
       const oldIds = oldChildren.map(x => x.id)
 
       if (newLength > oldLength) {
-        const createdNodes = this.difference(newIds, oldIds).map(id => newChildren[newIds.indexOf(id)])
+        const createdNodes = this.difference(newIds, oldIds).map(
+          id => newChildren[newIds.indexOf(id)]
+        )
         this.APPEND_NESTED_NODES({
           nodes: createdNodes,
           parentId
@@ -64,17 +68,21 @@ export default {
 
         throw 'done'
       } else if (newLength < oldLength) {
-        const deletedNodes = this.difference(oldIds, newIds).map(id => oldChildren[oldIds.indexOf(id)])
+        const deletedNodes = this.difference(oldIds, newIds).map(
+          id => oldChildren[oldIds.indexOf(id)]
+        )
         this.REMOVE_NESTED_NODES(deletedNodes) // 要傳nodes下去，因為帶有children
-
         throw 'done'
       } else {
         // 數量一樣，代表子結點有被拖移拉近新的component
         // 由於 vue-grid-layout 的item當拖移或變動大小，所有item都會變，所以就全部都update
-
         newChildren.some((newChild, index) => {
           this.APPEND_NODE({ node: newChild, parentId }) // 不用特地處理parentId，因為沒有增加節點
-          this.updateDifferenceToVuex(newChild.children, oldChildren[index].children, newChild.id)
+          this.updateDifferenceToVuex(
+            newChild.children,
+            oldChildren[index].children,
+            newChild.id
+          )
         })
       }
     }

@@ -5,7 +5,7 @@ export const gridGenerator = function() {
       { tag: 'grid-item', x: 0, y: 0, w: 12, h: 4 },
       { tag: 'grid-item', x: 12, y: 0, w: 12, h: 4 },
       { tag: 'grid-item', x: 24, y: 0, w: 12, h: 2 },
-      { tag: 'grid-item', x: 24, y: 12, w: 12, h: 2 }
+      { tag: 'grid-item', x: 24, y: 2, w: 12, h: 2 }
     ]
   }
 }
@@ -49,16 +49,31 @@ export const playerYoutube = function() {
 
 export default [
   {
-    type: 'Basic',
+    name: 'Basic',
     icon: 'el-icon-message',
     components: [
-      editor(),
       flexButton(),
       lazyImage(),
       gridGenerator(),
       carousel(),
       divider(),
-      playerYoutube()
+      playerYoutube(),
+      editor()
     ]
+  },
+  {
+    name: 'Button',
+    icon: 'el-icon-message',
+    components: []
+  },
+  {
+    name: 'Layout',
+    icon: 'el-icon-message',
+    components: []
+  },
+  {
+    name: 'Card',
+    icon: 'el-icon-message',
+    components: []
   }
 ]

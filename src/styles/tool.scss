@@ -30,6 +30,14 @@
   margin-right: 5px;
 }
 
+.m-b-15{
+  margin-bottom: 15px !important;
+}
+
+.p-0{
+  padding: 0;
+}
+
 .w-100 {
   width: 100% !important;
 }
@@ -53,4 +61,12 @@
 
 .circle {
   border-radius: 50%;
+}
+
+.no-click {
+  pointer-events: none;
+}
+
+.pointer {
+  cursor: pointer;
 }

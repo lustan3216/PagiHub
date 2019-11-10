@@ -6,13 +6,11 @@
 
 <script>
 import childrenMixin from '../../mixins/children'
-import EditBar from '../Components/EditBar'
-import EditArea from '../Components/EditArea'
+import EditArea from './AreaDraggable'
 
 export default {
   name: 'Blank',
   components: {
-    EditBar,
     EditArea
   },
   mixins: [childrenMixin],

@@ -6,13 +6,9 @@
 
 <script>
 import commonMixin from '../../mixins/common'
-import EditBar from '../Components/EditBar'
 
 export default {
   name: 'FlexButton',
-  components: {
-    EditBar
-  },
   mixins: [commonMixin],
   props: {
     text: {

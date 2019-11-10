@@ -5,9 +5,9 @@
       class="flex">
       <el-input v-model="style[0]" />
       <el-input
-        @input="change(style[0], $event)"
         :disabled="isInvalid(style[0])"
-        v-model="style[1]" />
+        v-model="style[1]"
+        @input="change(style[0], $event)" />
       <el-button @click="remove(index)">-</el-button>
     </div>
     <el-button @click="add">+</el-button>

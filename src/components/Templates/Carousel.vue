@@ -1,40 +1,38 @@
 <template>
-  <div>
-    <el-carousel
-      ref="carousel"
-      :style="innerStyles"
-      trigger="click"
-      class="wh-100">
-      <template v-for="child in innerChildren">
-        <el-popover
-          :value="isEditBarVisible(child.id)"
-          :open-delay="100"
-          :close-delay="0"
-          :key="`popover${child.id}`"
-          :ref="child.id"
-          trigger="manual"
-          placement="right"
-        >
-          <edit-bar :id="child.id" />
-        </el-popover>
+  <el-carousel
+    ref="carousel"
+    :style="innerStyles"
+    :autoplay="false"
+    trigger="click"
+    class="wh-100">
+    <el-carousel-item
+      v-for="child in innerChildren"
+      v-if="child.visible !== false"
+      :ref="child.id"
+      :key="child.id"
+      :name="child.id.toString()"
+      :style="child.styles"
+      @click.stop.native="click(child.id)"
+      @mouseleave="mouseLeave"
+    >
+      <el-popover
+        :value="isEditBarVisible(child.id)"
+        :open-delay="100"
+        :close-delay="0"
+        :key="`popover${child.id}`"
+        :ref="child.id"
+        trigger="manual"
+        placement="right"
+      >
+        <edit-bar :id="child.id" />
+      </el-popover>
 
-        <el-carousel-item
-          v-popover:[child.id]
-          v-if="child.visible !== false"
-          :ref="child.id"
-          :key="child.id"
-          :name="child.id.toString()"
-          :style="child.styles"
-          class="w-100"
-          @click.stop.native="openEditBarById(child.id)"
-        >
-          <grid-generator
-            v-if="isEditable"
-            :id="child.id" />
-        </el-carousel-item>
-      </template>
-    </el-carousel>
-  </div>
+      <grid-generator
+        v-if="isEditable"
+        :id="child.id"
+        class="h-100" />
+    </el-carousel-item>
+  </el-carousel>
 </template>
 
 <script>
@@ -57,6 +55,11 @@ export default {
       default: true
     }
   },
+  data() {
+    return {
+      isEditableId: null
+    }
+  },
   watch: {
     innerChildren() {
       this.onVisibleChange()
@@ -73,6 +76,13 @@ export default {
           this.$set(child, 'visible', visible)
         })
       })
+    },
+    mouseLeave() {
+      this.isEditableId = null
+    },
+    click(id) {
+      this.openEditBarById(id)
+      this.isEditableId = id
     }
   }
 }

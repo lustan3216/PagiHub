@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @mouseleave="">
     <editor-menu-bubble
       v-slot="{ commands, isActive, menu, getMarkAttrs }"
       :editor="editor"
@@ -123,7 +123,9 @@
       </el-button-group>
     </editor-menu-bubble>
 
-    <editor-content :style="innerStyles" :editor="editor" />
+    <editor-content
+      :style="innerStyles"
+      :editor="editor" />
   </div>
 </template>
 

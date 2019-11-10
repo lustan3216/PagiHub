@@ -2,39 +2,63 @@
   <div>
     <div>
       <p>opacity</p>
-      <input-unit :value.sync="opacity" min="0" />
+      <input-unit
+        :value.sync="opacity"
+        min="0" />
     </div>
     <div>
       <p>blur</p>
-      <input-unit :value.sync="blur" unit="px" min="0" />
+      <input-unit
+        :value.sync="blur"
+        unit="px"
+        min="0" />
     </div>
     <div>
       <p>brightness</p>
-      <input-unit :value.sync="brightness" min="0" />
+      <input-unit
+        :value.sync="brightness"
+        min="0" />
     </div>
     <div>
       <p>contrast</p>
-      <input-unit :value.sync="contrast" unit="%" min="0" />
+      <input-unit
+        :value.sync="contrast"
+        unit="%"
+        min="0" />
     </div>
     <div>
       <p>grayscale</p>
-      <input-unit :value.sync="grayscale" unit="%" min="0" />
+      <input-unit
+        :value.sync="grayscale"
+        unit="%"
+        min="0" />
     </div>
     <div>
       <p>hue-rotate</p>
-      <input-unit :value.sync="hueRotate" unit="deg" min="0" />
+      <input-unit
+        :value.sync="hueRotate"
+        unit="deg"
+        min="0" />
     </div>
     <div>
       <p>invert</p>
-      <input-unit :value.sync="invert" unit="%" min="0" />
+      <input-unit
+        :value.sync="invert"
+        unit="%"
+        min="0" />
     </div>
     <div>
       <p>saturate</p>
-      <input-unit :value.sync="saturate" min="0" />
+      <input-unit
+        :value.sync="saturate"
+        min="0" />
     </div>
     <div>
       <p>sepia</p>
-      <input-unit :value.sync="sepia" unit="%" min="0" />
+      <input-unit
+        :value.sync="sepia"
+        unit="%"
+        min="0" />
     </div>
   </div>
 </template>

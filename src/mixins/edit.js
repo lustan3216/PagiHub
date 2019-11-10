@@ -1,7 +1,6 @@
 import clone from 'clone'
 import { mapGetters, mapMutations } from 'vuex'
 import { onEditBarFn, emitCloseEditBar } from '../buses/editBar'
-import { openSidebar, closeSidebar } from '../buses/sidebar'
 import { resetNestedIds } from '../utils/keyId'
 import { isEditBarVisible, openEditBarById } from '../buses/editBar'
 import { camelCase } from '../lodash'
@@ -28,6 +27,7 @@ export default {
   methods: {
     openEditBarById,
     ...mapMutations('nodes', ['APPEND_NODE', 'ASSIGN_STYLE']),
+    ...mapMutations('layout', ['CLOSE_SIDEBAR', 'OPEN_SIDEBAR']),
     // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
     new(childId) {
       const index = this.childrenIds.indexOf(childId)
@@ -71,9 +71,9 @@ export default {
       emitCloseEditBar()
     },
     setting() {
-      closeSidebar()
+      this.CLOSE_SIDEBAR()
       this.$nextTick(() => {
-        openSidebar('SidebarSettings', { id: this.id })
+        this.OPEN_SIDEBAR('SidebarSettings', { id: this.id })
       })
     }
   }

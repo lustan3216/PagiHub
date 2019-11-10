@@ -2,32 +2,46 @@
   <el-row :gutter="20">
     <el-col :span="24">
       <p>Horizontal Length</p>
-      <input-unit :value.sync="horizontal" unit="px" />
+      <input-unit
+        :value.sync="horizontal"
+        unit="px" />
     </el-col>
 
     <el-col :span="24">
       <p>Vertical Length</p>
-      <input-unit :value.sync="vertical" unit="px" />
+      <input-unit
+        :value.sync="vertical"
+        unit="px" />
     </el-col>
 
     <el-col :span="24">
       <p>Blur Radius</p>
-      <input-unit :value.sync="blur" unit="px" />
+      <input-unit
+        :value.sync="blur"
+        unit="px" />
     </el-col>
 
     <el-col :span="24">
       <p>Spread Radius</p>
-      <input-unit :value.sync="spread" unit="px" />
+      <input-unit
+        :value.sync="spread"
+        unit="px" />
     </el-col>
 
     <el-col :span="24">
       <p>Shadow Color</p>
-      <el-color-picker v-model="color" show-alpha />
+      <el-color-picker
+        v-model="color"
+        show-alpha />
     </el-col>
 
     <el-col :span="24">
-      <el-radio v-model="radio" label="Outline">Outline</el-radio>
-      <el-radio v-model="radio" label="Inset">Inset</el-radio>
+      <el-radio
+        v-model="radio"
+        label="Outline">Outline</el-radio>
+      <el-radio
+        v-model="radio"
+        label="Inset">Inset</el-radio>
     </el-col>
   </el-row>
 </template>

@@ -54,7 +54,6 @@ export default {
   },
   methods: {
     ...mapMutations('nodes', ['APPEND_NESTED_NODES']),
-    ...mapMutations('vmMap', ['APPEND_VM']),
     assignStyles(styles) {
       const allStyles = Object.assign({}, this.innerStyles, styles)
 
