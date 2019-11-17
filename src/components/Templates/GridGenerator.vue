@@ -13,6 +13,7 @@
   >
     <template v-for="child in innerChildrenWithI">
       <el-popover
+        v-if="isEditable"
         :value="isEditBarVisible(child.id)"
         :open-delay="100"
         :close-delay="0"

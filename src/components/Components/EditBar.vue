@@ -71,7 +71,7 @@ export default {
       return this.node.parentId
     },
     innerComponent() {
-      return this.childrenOf[this.id][0]
+      return this.childrenOf[this.id] && this.childrenOf[this.id][0]
     }
   },
   methods: {
