@@ -9,6 +9,17 @@ module.exports = {
     }
   },
   configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.svg$/,
+          loader: 'vue-svg-loader'
+        }
+      ]
+    },
     plugins: [new HardSourceWebpackPlugin()]
+  },
+  chainWebpack: config => {
+    config.module.rules.delete('svg')
   }
 }

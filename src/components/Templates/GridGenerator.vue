@@ -33,6 +33,8 @@
         :i="child.id"
         :ref="child.id"
         :key="child.id"
+        drag-ignore-from=".no-drag"
+        drag-allow-from="div"
         @click.stop.native="openEditBarById(child.id)"
       >
         <template v-if="isEditable">
@@ -123,7 +125,6 @@ export default {
   position: relative;
   border: 1px dashed #dedede;
   border-radius: 3px;
-  overflow: hidden;
   & > .vue-resizable-handle {
     z-index: 10000;
   }

@@ -23,7 +23,6 @@ import { mapState } from 'vuex'
 import NavBar from './components/Layout/NavBar'
 import SidebarNodesTree from './components/Layout/SidebarNodesTree'
 import SidebarSettings from './components/Layout/SidebarSettings'
-import SidebarTemplates from './components/Layout/SidebarTemplates'
 import EditArea from './components/Templates/AreaDraggable'
 import BoardRoot from './components/Templates/BoardRoot'
 
@@ -34,7 +33,6 @@ export default {
     NavBar,
     SidebarNodesTree,
     SidebarSettings,
-    SidebarTemplates,
     BoardRoot
   },
   computed: {

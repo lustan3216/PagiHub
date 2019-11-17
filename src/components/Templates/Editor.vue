@@ -1,167 +1,96 @@
 <template>
-  <div @mouseleave="">
-    <editor-menu-bubble
-      v-slot="{ commands, isActive, menu, getMarkAttrs }"
-      :editor="editor"
-      :keep-in-bounds="keepInBounds"
-    >
-      <el-button-group
-        :class="{ 'is-active': menu.isActive }"
-        :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
-        class="menu-bubble"
-      >
-        <form
-          v-if="linkMenuIsActive"
-          @submit.prevent="setLinkUrl(commands.link, linkUrl)">
-          <el-input
-            ref="linkInput"
-            v-model="linkUrl"
-            type="text"
-            clearable
-            placeholder="https://"
-            debugger
-            @keydown.prevent.native.enter="setLinkUrl(commands.link, linkUrl)"
-            @clear="setLinkUrl(commands.link, null)"
-          />
-        </form>
+  <div
+    class="h-100"
+    @click="noClick = false"
+    @mouseleave="noClick = true"
+    @mouseenter="mouseenter"
+  >
+    <div id="toolbar">
+      <span v-show="toggledBar" class="ql-formats m-l-12">
+        <select class="ql-header" style="width: 110px;">
+          <option value="1">Heading 1</option>
+          <option value="2">Heading 2</option>
+          <option value="3">Heading 3</option>
+          <option value="4">Heading 4</option>
+          <option value="5">Heading 5</option>
+          <option value="6">Heading 6</option>
+          <option selected>Normal</option>
+        </select>
+        <button class="ql-link" />
+        <button class="ql-bold" />
+        <button class="ql-italic" />
+        <color-picker v-model="fontColor">
+          <font-icon />
+        </color-picker>
+        <color-picker v-model="backgroundColor">
+          <background-icon />
+        </color-picker>
+        <button class="ql-list" value="ordered" />
+        <button class="ql-list" value="bullet" />
+        <select class="ql-align">
+          <option selected />
+          <option value="center" />
+          <option value="right" />
+          <option value="justify" />
+        </select>
+      </span>
+      <span v-show="!toggledBar" class="ql-formats m-l-12">
+        <select class="ql-font" style="width: 110px;">
+          <option selected>Sans Serif</option>
+          <option value="serif">Serif</option>
+          <option value="monospace">Monospace</option>
+        </select>
+        <button class="ql-underline" />
+        <button class="ql-strike" />
+        <button class="ql-script" value="sub" />
+        <button class="ql-script" value="super" />
+        <button class="ql-indent" value="-1" />
+        <button class="ql-indent" value="+1" />
+        <button class="ql-blockquote" />
+        <button class="ql-code-block" />
+      </span>
 
-        <template v-else>
-          <el-button
-            :class="{ 'is-active': isActive.link() }"
-            type="text"
-            @click="showLinkMenu(getMarkAttrs('link'))">
-            <v-icon name="link" />
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.bold() }"
-            type="text"
-            @click="commands.bold">
-            <v-icon name="bold" />
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.italic() }"
-            type="text"
-            @click="commands.italic">
-            <v-icon name="italic" />
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.strike() }"
-            type="text"
-            @click="commands.strike">
-            <v-icon name="strikethrough" />
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.underline() }"
-            type="text"
-            @click="commands.underline">
-            <v-icon name="underline" />
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-            type="text"
-            @click="commands.heading({ level: 1 })"
-          >
-            H1
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-            type="text"
-            @click="commands.heading({ level: 2 })"
-          >
-            H2
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-            type="text"
-            @click="commands.heading({ level: 3 })"
-          >
-            H3
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.bullet_list() }"
-            type="text"
-            @click="commands.bullet_list">
-            <v-icon name="list-ul" />
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.ordered_list() }"
-            type="text"
-            @click="commands.ordered_list">
-            <v-icon name="list-ol" />
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.blockquote() }"
-            type="text"
-            @click="commands.blockquote">
-            <v-icon name="quote-right" />
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.code() }"
-            type="text"
-            @click="commands.code">
-            <v-icon name="code" />
-          </el-button>
-
-          <el-button
-            :class="{ 'is-active': isActive.code_block() }"
-            type="text"
-            @click="commands.code_block">
-            <v-icon name="square" />
-          </el-button>
-        </template>
-      </el-button-group>
-    </editor-menu-bubble>
-
-    <editor-content
+      <span class="ql-formats">
+        <button class="ql-clean" />
+        <button
+          :class="{
+            'el-icon-caret-right': toggledBar,
+            'el-icon-caret-left': !toggledBar
+          }"
+          @click="toggledBar = !toggledBar"
+        />
+      </span>
+    </div>
+    <vue-editor
+      ref="editor"
+      :class="{ 'no-click': noClick }"
       :style="innerStyles"
-      :editor="editor" />
+      v-model="content"
+      :editor-options="editorOption"
+      class="h-100 no-drag"
+    />
   </div>
 </template>
 
 <script>
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.bubble.css'
 import commonMixin from '../../mixins/common'
-import { Editor, EditorContent, EditorMenuBubble } from 'tiptap'
-import {
-  Blockquote,
-  CodeBlock,
-  HardBreak,
-  Heading,
-  HorizontalRule,
-  OrderedList,
-  BulletList,
-  ListItem,
-  TodoItem,
-  Bold,
-  Code,
-  Italic,
-  Link,
-  Strike,
-  Underline
-} from 'tiptap-extensions'
+import { VueEditor } from 'vue2-editor'
+import ColorPicker from './Components/ColorPicker'
+import FontIcon from 'quill/assets/icons/color.svg'
+import BackgroundIcon from 'quill/assets/icons/background.svg'
 
 export default {
   name: 'Editor',
   components: {
-    EditorContent,
-    EditorMenuBubble
+    ColorPicker,
+    VueEditor,
+    FontIcon,
+    BackgroundIcon
   },
   mixins: [commonMixin],
   props: {
-    content: {
-      type: String,
-      default: '<p>This is just a boring paragraph</p>'
-    },
     isEditable: {
       type: Boolean,
       default: true
@@ -169,92 +98,71 @@ export default {
   },
   data() {
     return {
-      keepInBounds: true,
-      editor: null,
-      linkUrl: null,
-      linkMenuIsActive: false,
-      innerContent: this.content
+      fontColor: 'transparent',
+      backgroundColor: 'transparent',
+      toggledBar: true,
+      noClick: true,
+      content: '<h2>I am Example</h2>',
+      editorOption: {
+        theme: 'bubble',
+        modules: {
+          toolbar: '#toolbar'
+        }
+        // some quill options
+      }
+    }
+  },
+  computed: {
+    quill() {
+      return this.$refs.editor.quill
+    }
+  },
+  watch: {
+    fontColor(value) {
+      this.quill.format('color', value)
+    },
+    backgroundColor(value) {
+      this.quill.format('background', value)
     }
   },
   mounted() {
-    this.editor = new Editor({
-      content: this.innerContent,
-      editable: this.isEditable,
-      extensions: [
-        new Blockquote(),
-        new BulletList(),
-        new CodeBlock(),
-        new HardBreak(),
-        new Heading({ levels: [1, 2, 3] }),
-        new HorizontalRule(),
-        new ListItem(),
-        new OrderedList(),
-        new TodoItem(),
-        new Link(),
-        new Bold(),
-        new Code(),
-        new Italic(),
-        new Strike(),
-        new Underline()
-      ],
-      onUpdate: state => {
-        // this.$set(this.$observableVNode._data.props, 'content', state.getHTML())
-        // snapShot()
+    this.quill.on('selection-change', (eventName, range) => {
+      if (eventName === 'selection-change') {
+        if (range) {
+          const style = this.quill.getFormat(range.index, range.length)
+          this.fontColor = style.color
+          this.backgroundColor = style.background
+          this.quill.off('selection-change')
+        }
       }
     })
   },
-  beforeDestroy() {
-    this.editor.destroy()
-  },
   methods: {
-    showLinkMenu(attrs) {
-      this.linkUrl = attrs.href
-      this.linkMenuIsActive = true
-      this.$nextTick(() => {
-        this.$refs.linkInput.focus()
-      })
-    },
-    hideLinkMenu() {
-      this.linkUrl = null
-      this.linkMenuIsActive = false
-    },
-    setLinkUrl(command, href) {
-      command({ href })
-      this.hideLinkMenu()
-    },
-    setContent() {
-      try {
-        this.editor.setContent(this.innerContent)
-      } catch (e) {
-        // no need to deal
-      }
+    mouseenter() {
+      this.noClick = this.$el
+        .querySelector('.ql-tooltip')
+        .classList.contains('ql-hidden')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-button {
-  padding-left: 8px;
-  padding-right: 8px;
-}
-.menu-bubble {
-  position: absolute;
-  display: flex;
-  z-index: 2000;
-  background: white;
-  border-radius: 5px;
-  padding: 0.3rem;
-  margin-bottom: 0.5rem;
-  transform: translateX(-50%);
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s, visibility 0.2s;
-  box-shadow: 0px 0px 5px 0 rgba(32, 48, 60, 0.1);
-
-  &.is-active {
-    opacity: 1;
-    visibility: visible;
+::v-deep {
+  .ql-editor {
+    overflow: visible;
   }
+  .ql-bubble .ql-tooltip {
+    border-radius: 5px;
+  }
+  .ql-container.ql-bubble:not(.ql-disabled) a::before {
+    border-radius: 5px;
+  }
+}
+[class^='el-icon'] {
+  color: #cccccc;
+}
+.m-l-12 {
+  margin-left: 12px !important;
 }
 </style>

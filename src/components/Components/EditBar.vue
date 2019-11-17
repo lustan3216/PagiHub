@@ -5,28 +5,32 @@
     <el-button
       v-if="functions.includes('new')"
       type="text"
-      @click="emit('new')">
+      @click="emit('new')"
+    >
       <v-icon name="plus" />
     </el-button>
 
     <el-button
       v-if="functions.includes('copy')"
       type="text"
-      @click="emit('copy')">
+      @click="emit('copy')"
+    >
       <v-icon name="copy" />
     </el-button>
 
     <el-button
       v-if="functions.includes('remove')"
       type="text"
-      @click="emit('remove')">
+      @click="emit('remove')"
+    >
       <v-icon name="trash-alt" />
     </el-button>
 
     <el-button
       v-if="functions.includes('setting')"
       type="text"
-      @click="emit('setting')">
+      @click="emit('setting')"
+    >
       <v-icon name="cog" />
     </el-button>
   </div>

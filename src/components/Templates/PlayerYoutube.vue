@@ -1,7 +1,7 @@
 <template>
-  <div @click="noClick = false" @mouseleave="mouseleave">
+  <div class="h-100" @click="noClick = false" @mouseleave="mouseleave">
     <!-- iframe 創建後不能修改，所以多一層中介層 -->
-    <div :class="{ 'no-click': noClick }" :style="innerStyles">
+    <div :class="{ 'no-click': noClick }" :style="innerStyles" class="h-100">
       <youtube
         ref="youtube"
         :video-id="videoId"

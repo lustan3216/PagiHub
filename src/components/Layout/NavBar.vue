@@ -7,13 +7,6 @@
     <el-col :span="1">
       <el-button
         type="text"
-        @click="OPEN_SIDEBAR('SidebarTemplates')">
-        <v-icon name="object-group" />
-      </el-button>
-    </el-col>
-    <el-col :span="1">
-      <el-button
-        type="text"
         @click="OPEN_SIDEBAR('SidebarNodesTree')">
         <v-icon name="layer-group" />
       </el-button>

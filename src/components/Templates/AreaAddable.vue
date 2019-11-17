@@ -1,10 +1,7 @@
 <template>
-  <div v-if="firstChild">
+  <div v-if="firstChild" class="h-100">
     <el-popover
       :value="isEditBarVisible(firstChild.id)"
-      :open-delay="100"
-      :close-delay="0"
-      :key="`popover${firstChild.id}`"
       :ref="firstChild.id"
       trigger="manual"
       placement="right"

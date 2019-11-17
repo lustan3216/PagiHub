@@ -4,7 +4,8 @@
     :style="innerStyles"
     :autoplay="false"
     trigger="click"
-    class="wh-100">
+    class="wh-100"
+  >
     <el-carousel-item
       v-for="child in innerChildren"
       v-if="child.visible !== false"
@@ -27,10 +28,7 @@
         <edit-bar :id="child.id" />
       </el-popover>
 
-      <grid-generator
-        v-if="isEditable"
-        :id="child.id"
-        class="h-100" />
+      <grid-generator v-if="isEditable" :id="child.id" class="h-100" />
     </el-carousel-item>
   </el-carousel>
 </template>
@@ -89,6 +87,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .el-carousel__container {
+  height: 100%;
+}
 .el-carousel__item h3 {
   color: #475669;
   font-size: 14px;
