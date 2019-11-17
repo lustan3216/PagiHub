@@ -18,13 +18,21 @@ const state = {
 
 const mutations = {
   SET,
-  ASSIGN_STYLE(state, { id, styles }) {
+
+  ASSIGN_STYLES(state, { id, styles }) {
     state.currentNodesMap[id].styles = clone(styles)
     mutations.SNAPSHOT(state)
   },
+
+  ASSIGN_SETTING(state, { id, setting }) {
+    state.currentNodesMap[id].setting = clone(setting)
+    mutations.SNAPSHOT(state)
+  },
+
   APPEND_NESTED_NODES(state, { nodes, parentId }) {
     nodes.forEach(node => mutations.APPEND_NODE(state, { node, parentId }))
   },
+
   APPEND_NODE(state, { node, parentId }) {
     if (parentId === undefined) {
       throw 'noParentId'
@@ -41,19 +49,23 @@ const mutations = {
         })
       })
   },
+
   REMOVE_NESTED_NODES(state, nodes) {
     nodes.forEach(node => mutations.REMOVE_NODE(state, node))
   },
+
   REMOVE_NODE(state, _node) {
     const { children, ...node } = _node
     children && children.forEach(child => mutations.REMOVE_NODE(state, child))
     Vue.delete(state.currentNodesMap, node.id)
   },
+
   UPDATE_NODES_SORT(state, nodes) {
     nodes.forEach((node, index) => {
       Vue.set(state.currentNodesMap[node.id], 'sortIndex', index)
     })
   },
+
   SNAPSHOT(state) {
     window.localStorage.setItem('asd', JSON.stringify(state.currentNodesMap))
   }
@@ -102,10 +114,9 @@ const getters = {
     return getters.listToTree.tree
   },
   childrenOf(state, getters) {
-    return getters.listToTree.childrenOf || []
+    return getters.listToTree.childrenOf || {}
   },
   childrenFrom: (state, getters) => id => {
-
     // 父層在render子層時，這裡會把children拿掉，強制component不能抓到孫子
     // 如果想要處理孫子，應該是再做一個component做父子管理
     // 這樣可以解決效能上問題，以及統一父子關係，讓每個component的innerChildren的數據不會因為子孫資料過期

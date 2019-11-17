@@ -64,7 +64,7 @@ export default {
 
       this.innerStyles = validStyles
 
-      this.ASSIGN_STYLE({
+      this.ASSIGN_STYLES({
         id: this.id,
         styles: validStyles
       })

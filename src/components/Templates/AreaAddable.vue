@@ -1,19 +1,6 @@
 <template>
   <div v-if="firstChild" class="h-100">
-    <el-popover
-      :value="isEditBarVisible(firstChild.id)"
-      :ref="firstChild.id"
-      trigger="manual"
-      placement="right"
-    >
-      <edit-bar :id="firstChild.id" />
-    </el-popover>
-    <component
-      v-popover:[firstChild.id]
-      :is="firstChild.tag"
-      :id="firstChild.id"
-      @click.stop.native="openEditBarById(firstChild.id)"
-    />
+    <component :is="firstChild.tag" :id="firstChild.id" />
   </div>
   <div v-else class="flex-center h-100 pointer">
     <dialog-components @add="addTemplate($event)" />

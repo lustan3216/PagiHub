@@ -5,7 +5,7 @@
     @mouseleave="noClick = true"
     @mouseenter="mouseenter"
   >
-    <div id="toolbar">
+    <div :id="`toolbar${_uid}`" style="width: 426px;">
       <span v-show="toggledBar" class="ql-formats m-l-12">
         <select class="ql-header" style="width: 110px;">
           <option value="1">Heading 1</option>
@@ -63,11 +63,10 @@
     </div>
     <vue-editor
       ref="editor"
-      :class="{ 'no-click': noClick }"
-      :style="innerStyles"
       v-model="content"
+      :class="['no-drag', 'h-100', noClick ? 'no-click' : '']"
+      :style="innerStyles"
       :editor-options="editorOption"
-      class="h-100 no-drag"
     />
   </div>
 </template>
@@ -75,7 +74,9 @@
 <script>
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.bubble.css'
+import 'quill/dist/quill.snow.css'
 import commonMixin from '../../mixins/common'
+import { mapState, mapMutations } from 'vuex'
 import { VueEditor } from 'vue2-editor'
 import ColorPicker from './Components/ColorPicker'
 import FontIcon from 'quill/assets/icons/color.svg'
@@ -90,31 +91,42 @@ export default {
     BackgroundIcon
   },
   mixins: [commonMixin],
-  props: {
-    isEditable: {
-      type: Boolean,
-      default: true
-    }
-  },
   data() {
     return {
       fontColor: 'transparent',
       backgroundColor: 'transparent',
       toggledBar: true,
       noClick: true,
-      content: '<h2>I am Example</h2>',
       editorOption: {
-        theme: 'bubble',
+        theme: this.isEditable ? 'bubble' : 'snow',
         modules: {
-          toolbar: '#toolbar'
+          toolbar: `#toolbar${this._uid}`
         }
-        // some quill options
       }
     }
   },
   computed: {
+    ...mapState('nodes', ['currentNodesMap']),
     quill() {
       return this.$refs.editor.quill
+    },
+    content: {
+      get() {
+        const vm = this.currentNodesMap[this.id] && this.isEditable
+
+        if (vm && vm.setting && vm.setting.content) {
+          return vm.setting.content
+        } else {
+          return '<h2>I am Editor</h2>'
+        }
+      },
+      set(content) {
+        this.isEditable &&
+          this.ASSIGN_SETTING({
+            id: this.id,
+            setting: { content }
+          })
+      }
     }
   },
   watch: {
@@ -138,6 +150,7 @@ export default {
     })
   },
   methods: {
+    ...mapMutations('nodes', ['ASSIGN_SETTING']),
     mouseenter() {
       this.noClick = this.$el
         .querySelector('.ql-tooltip')
@@ -154,6 +167,7 @@ export default {
   }
   .ql-bubble .ql-tooltip {
     border-radius: 5px;
+    transition: top 0.6s, left 0.6s;
   }
   .ql-container.ql-bubble:not(.ql-disabled) a::before {
     border-radius: 5px;

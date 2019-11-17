@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { emitEditBarFn } from '../../buses/editBar'
 
 export default {
@@ -56,18 +56,35 @@ export default {
   },
   computed: {
     ...mapState('nodes', ['currentNodesMap']),
+    ...mapGetters('nodes', ['childrenOf']),
     tag() {
-      return this.node && this.node.tag
+      if (this.innerComponent) {
+        return this.innerComponent.tag
+      } else {
+        return this.node && this.node.tag
+      }
     },
     node() {
       return this.currentNodesMap[this.id]
     },
     parentId() {
       return this.node.parentId
+    },
+    innerComponent() {
+      return this.childrenOf[this.id][0]
     }
   },
   methods: {
     emit(type) {
+      if (this.innerComponent) {
+        if (type === 'remove') {
+          emitEditBarFn(this.id, { childId: this.innerComponent.id, type })
+        } else {
+          emitEditBarFn(this.innerComponent.id, { type })
+        }
+        return
+      }
+
       if (['copy', 'remove', 'new'].includes(type)) {
         emitEditBarFn(this.parentId, { childId: this.id, type })
       } else {
