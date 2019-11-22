@@ -1,12 +1,14 @@
-export const gridGenerator = function() {
+const gridItems = [
+  { tag: 'grid-item', x: 0, y: 0, w: 22, h: 71, moved: false },
+  { tag: 'grid-item', x: 38, y: 19, w: 34, h: 52, moved: false },
+  { tag: 'grid-item', x: 22, y: 19, w: 16, h: 52, moved: false },
+  { tag: 'grid-item', x: 22, y: 0, w: 50, h: 19, moved: false }
+]
+
+export const gridGenerator = function(children = gridItems) {
   return {
     tag: 'grid-generator',
-    children: [
-      { tag: 'grid-item', x: 0, y: 0, w: 12, h: 4 },
-      { tag: 'grid-item', x: 12, y: 0, w: 12, h: 4 },
-      { tag: 'grid-item', x: 24, y: 0, w: 12, h: 2 },
-      { tag: 'grid-item', x: 24, y: 2, w: 12, h: 2 }
-    ]
+    children
   }
 }
 
@@ -14,6 +16,13 @@ export const carousel = function() {
   return {
     tag: 'carousel',
     children: [gridGenerator(), gridGenerator(), gridGenerator()]
+  }
+}
+
+export const card = function() {
+  return {
+    tag: 'card',
+    children: [gridGenerator()]
   }
 }
 
@@ -47,6 +56,17 @@ export const playerYoutube = function() {
   }
 }
 
+export const drawer = function() {
+  return {
+    tag: 'drawer',
+    children: [
+      gridGenerator([
+        { tag: 'grid-item', x: 0, y: 0, w: 72, h: 10, moved: false }
+      ])
+    ]
+  }
+}
+
 export default [
   {
     name: 'Basic',
@@ -58,22 +78,9 @@ export default [
       carousel(),
       divider(),
       playerYoutube(),
-      editor()
+      editor(),
+      card(),
+      drawer()
     ]
-  },
-  {
-    name: 'Button',
-    icon: 'el-icon-message',
-    components: []
-  },
-  {
-    name: 'Layout',
-    icon: 'el-icon-message',
-    components: []
-  },
-  {
-    name: 'Card',
-    icon: 'el-icon-message',
-    components: []
   }
 ]

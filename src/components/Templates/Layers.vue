@@ -1,5 +1,6 @@
 <template>
-  <div class="layers">
+  <div :class="['layers', isRoot && isEditable && 'fake-transform']">
+    <portal-target name="Root" />
     <template v-for="(child, index) in innerChildren">
       <el-popover
         :value="isEditBarVisible(child.id)"
@@ -38,7 +39,12 @@ export default {
     GridGenerator,
     EditBar
   },
-  mixins: [commonMixin, childrenMixin]
+  mixins: [commonMixin, childrenMixin],
+  computed: {
+    isRoot() {
+      return this.id === 1
+    }
+  }
 }
 </script>
 

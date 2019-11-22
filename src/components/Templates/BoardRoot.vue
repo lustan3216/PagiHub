@@ -1,10 +1,6 @@
 <template>
   <component :is="outer">
-    <component
-      v-if="rootNode"
-      :id="rootNode.id"
-      :is="rootNode.tag"
-    />
+    <component v-if="rootNode" :id="rootNode.id" :is="rootNode.tag" />
   </component>
 </template>
 

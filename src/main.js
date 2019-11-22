@@ -12,7 +12,9 @@ import store from './store'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 import VueShortkey from 'vue-shortkey'
+import PortalVue from 'portal-vue'
 
+Vue.use(PortalVue)
 Vue.use(VueShortkey)
 Vue.use(ElementUI)
 Vue.component('draggable', VueDraggable)

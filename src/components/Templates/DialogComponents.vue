@@ -1,10 +1,11 @@
 <template>
-  <i class="el-icon-lollipop" @click="visible = true">
+  <i class="el-icon-lollipop" @click="open">
     <el-dialog
       ref="dialog"
       :visible="visible"
       append-to-body
       width="80vw"
+      @open="$emit('open')"
       @close="visible = false"
     >
       <el-tabs tab-position="left">
@@ -20,11 +21,7 @@
               class="m-b-15"
               style="min-height: 200px;"
             >
-              <el-card
-                :body-style="{ padding: '0px' }"
-                shadow="hover"
-                @dblclick.native="emit(component)"
-              >
+              <el-card shadow="hover" @dblclick.native="emit(component)">
                 <component
                   v-bind="component.props"
                   :is="component.tag"
@@ -72,6 +69,10 @@ export default {
   methods: {
     emit(component) {
       this.$emit('add', clone(component))
+      emitCloseEditBar()
+    },
+    open() {
+      this.visible = true
       emitCloseEditBar()
     }
   }

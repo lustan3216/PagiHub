@@ -3,7 +3,7 @@
     <component :is="firstChild.tag" :id="firstChild.id" />
   </div>
   <div v-else class="flex-center h-100 pointer">
-    <dialog-components @add="addTemplate($event)" />
+    <dialog-components @add="addTemplate($event)" @open="" />
   </div>
 </template>
 

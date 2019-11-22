@@ -5,10 +5,11 @@ export default {
     LazyImage: () => import('../components/Templates/LazyImage'),
     GridGenerator: () => import('../components/Templates/GridGenerator'),
     EditArea: () => import('../components/Templates/AreaDraggable'),
-    Blank: () => import('../components/Templates/Blank'),
     FlexButton: () => import('../components/Templates/FlexButton'),
     Divider: () => import('../components/Templates/Divider'),
     PlayerYoutube: () => import('../components/Templates/PlayerYoutube'),
-    Layers: () => import('../components/Templates/Layers')
+    Layers: () => import('../components/Templates/Layers'),
+    Card: () => import('../components/Templates/Card'),
+    Drawer: () => import('../components/Templates/Drawer')
   }
 }

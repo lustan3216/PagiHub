@@ -2,8 +2,8 @@
   <grid-layout
     :style="innerStyles"
     :layout="innerChildrenWithI"
-    :row-height="30"
-    :col-num="36"
+    :row-height="1"
+    :col-num="72"
     :margin="[5, 5]"
     :responsive="false"
     :vertical-compact="false"
