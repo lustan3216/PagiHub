@@ -64,8 +64,7 @@ export default {
   },
   watch: {
     value(val) {
-      if (!val) {
-      } else if (val && val !== this.color.value) {
+      if (val && val !== this.color.value) {
         this.color.fromString(val)
       }
     },
@@ -79,7 +78,7 @@ export default {
       },
       deep: true
     },
-    displayedColor(val) {
+    displayedColor() {
       if (!this.showPicker) return
       const currentValueColor = new Color({
         enableAlpha: this.showAlpha,

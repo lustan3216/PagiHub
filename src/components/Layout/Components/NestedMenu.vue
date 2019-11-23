@@ -8,10 +8,7 @@
   >
     <template slot="title">
       <visibility :id="node.id" />
-      <el-tooltip
-        :content="content(node)"
-        effect="light"
-        placement="right">
+      <el-tooltip :content="content(node)" effect="light" placement="right">
         <el-button type="text">{{ node.tag }} - {{ node.id }}</el-button>
       </el-tooltip>
     </template>
@@ -19,6 +16,7 @@
     <nested-menu
       v-for="child in node.children"
       :node="child"
+      :key="child.id"
       :active-id="activeId"
       @onClick="$emit('onClick', $event)"
     />

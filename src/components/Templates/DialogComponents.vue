@@ -18,6 +18,7 @@
           <el-row :gutter="15" type="flex" style="flex-wrap: wrap">
             <el-col
               v-for="(component, index) in template.components"
+              :key="index"
               :span="8"
               class="m-b-15"
               style="min-height: 200px;"
