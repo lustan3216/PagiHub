@@ -3,6 +3,7 @@
     <el-dialog
       ref="dialog"
       :visible="visible"
+      :modal="false"
       append-to-body
       width="80vw"
       @open="$emit('open')"

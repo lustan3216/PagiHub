@@ -24,7 +24,7 @@ import NavBar from './components/Layout/NavBar'
 import SidebarNodesTree from './components/Layout/SidebarNodesTree'
 import SidebarSettings from './components/Layout/SidebarSettings'
 import EditArea from './components/Templates/AreaDraggable'
-import BoardRoot from './components/Templates/BoardRoot'
+import BoardRoot from './components/Layout/BoardRoot'
 
 export default {
   name: 'App',

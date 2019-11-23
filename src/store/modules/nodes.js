@@ -3,14 +3,7 @@ import Vue from 'vue'
 import listTiTree from '../../utils/listToTree'
 import { SET } from '../index'
 import { appendNestedIds } from '../../utils/keyId'
-import { carousel as templateCarousel } from '../../templates'
 import { gridGenerator as templateGridGenerator } from '../../templates'
-
-const rootTemplate = {
-  website: templateGridGenerator,
-  carousel: templateCarousel,
-  component: templateGridGenerator
-}
 
 const state = {
   currentNodesMap: {}
@@ -80,12 +73,9 @@ const actions = {
     }
   },
   async initRootNode({ rootState, commit }) {
-    const { mode } = rootState.app
-    const template = rootTemplate[mode]()
-
     const innerNodeTree = {
       tag: 'layers',
-      children: [template]
+      children: [templateGridGenerator()]
     }
 
     appendNestedIds(innerNodeTree)

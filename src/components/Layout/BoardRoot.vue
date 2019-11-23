@@ -1,13 +1,13 @@
 <template>
-  <component :is="outer">
+  <browser-window>
     <component v-if="rootNode" :id="rootNode.id" :is="rootNode.tag" />
-  </component>
+  </browser-window>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import BrowserWindow from '../BrowserWindow'
-import Layers from './Layers'
+import Layers from '../Templates/Layers'
 
 export default {
   name: 'BoardRoot',
@@ -16,11 +16,7 @@ export default {
     Layers
   },
   computed: {
-    ...mapState('app', ['mode']),
-    ...mapGetters('nodes', ['rootNode']),
-    outer() {
-      return this.mode === 'carousel' ? 'div' : 'browser-window'
-    }
+    ...mapGetters('nodes', ['rootNode'])
   },
   created() {
     this.getRootNode()
