@@ -14,7 +14,7 @@
           @shortkey.native="undo"
           @click="undo"
         >
-          <v-icon name="undo" />
+          <unicon fill="#909399" name="redo" class="mirror" />
         </el-button>
 
         <el-button
@@ -24,7 +24,7 @@
           @shortkey.native="redo"
           @click="redo"
         >
-          <v-icon class="m-l-15" name="redo" />
+          <unicon fill="#909399" name="redo" />
         </el-button>
 
         <el-button
@@ -34,7 +34,7 @@
           @shortkey.native="redo"
           @click="redo"
         >
-          <v-icon class="m-l-15" name="search-plus" />
+          <unicon fill="#909399" name="search-plus" />
         </el-button>
       </el-col>
     </el-row>

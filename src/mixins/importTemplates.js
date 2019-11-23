@@ -7,9 +7,10 @@ export default {
     EditArea: () => import('../components/Templates/AreaDraggable'),
     FlexButton: () => import('../components/Templates/FlexButton'),
     Divider: () => import('../components/Templates/Divider'),
-    PlayerYoutube: () => import('../components/Templates/PlayerYoutube'),
+    VideoPlayer: () => import('../components/Templates/VideoPlayer'),
     Layers: () => import('../components/Templates/Layers'),
     Card: () => import('../components/Templates/Card'),
-    Drawer: () => import('../components/Templates/Drawer')
+    Drawer: () => import('../components/Templates/Drawer'),
+    FormGenerator: () => import('../components/Templates/FormGenerator')
   }
 }

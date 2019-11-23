@@ -1,13 +1,13 @@
 <template>
   <div class="nav-bar flex-column">
     <el-button type="text" @click="CLOSE_SIDEBAR">
-      <v-icon name="arrow-alt-circle-left" />
+      <unicon fill="#909399" name="left-arrow-to-left" />
     </el-button>
     <el-button type="text" @click="OPEN_SIDEBAR('SidebarNodesTree')">
-      <v-icon name="layer-group" />
+      <unicon fill="#909399" name="layer-group" />
     </el-button>
     <el-button type="text" @click="OPEN_SIDEBAR('SidebarNodesTree')">
-      <v-icon name="object-group" />
+      <unicon fill="#909399" name="object-group" />
     </el-button>
   </div>
 </template>

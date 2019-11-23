@@ -7,7 +7,7 @@
       type="text"
       @click="emit('new')"
     >
-      <v-icon name="plus" />
+      <unicon fill="#909399"  name="plus" />
     </el-button>
 
     <el-button
@@ -15,7 +15,7 @@
       type="text"
       @click="emit('copy')"
     >
-      <v-icon name="copy" />
+      <unicon fill="#909399"  name="plus" />
     </el-button>
 
     <el-button
@@ -23,7 +23,7 @@
       type="text"
       @click="emit('remove')"
     >
-      <v-icon name="trash-alt" />
+      <unicon fill="#909399"  name="plus" />
     </el-button>
 
     <el-button
@@ -31,7 +31,7 @@
       type="text"
       @click="emit('setting')"
     >
-      <v-icon name="cog" />
+      <unicon fill="#909399"  name="cog" />
     </el-button>
   </div>
 </template>

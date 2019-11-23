@@ -50,9 +50,15 @@ export const divider = function() {
   }
 }
 
-export const playerYoutube = function() {
+export const videoPlayer = function() {
   return {
-    tag: 'player-youtube'
+    tag: 'video-player'
+  }
+}
+
+export const formGenerator = function() {
+  return {
+    tag: 'form-generator'
   }
 }
 
@@ -75,9 +81,10 @@ export default [
       flexButton(),
       lazyImage(),
       gridGenerator(),
+      formGenerator(),
       carousel(),
       divider(),
-      playerYoutube(),
+      videoPlayer(),
       editor(),
       card(),
       drawer()

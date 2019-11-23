@@ -4,22 +4,44 @@ vhCheck()
 
 import './styles/vender.scss'
 import './styles/index.scss'
-
 import Vue from 'vue'
 import App from './App.vue'
 import ElementUI from 'element-ui'
 import VueDraggable from 'vuedraggable'
 import store from './store'
-import 'vue-awesome/icons'
-import Icon from 'vue-awesome/components/Icon'
 import VueShortkey from 'vue-shortkey'
 import PortalVue from 'portal-vue'
+import Unicon from 'vue-unicons'
+import {
+  uniPlus,
+  uniRedo,
+  uniSearchPlus,
+  uniSearchMinus,
+  uniLayerGroup,
+  uniBookMedical,
+  uniObjectGroup,
+  uniPrevious,
+  uniLeftArrowToLeft,
+  uniCog
+} from 'vue-unicons/src/icons'
+Unicon.add([
+  uniPlus,
+  uniRedo,
+  uniSearchPlus,
+  uniSearchMinus,
+  uniLayerGroup,
+  uniBookMedical,
+  uniObjectGroup,
+  uniPrevious,
+  uniLeftArrowToLeft,
+  uniCog
+])
 
+Vue.use(Unicon)
 Vue.use(PortalVue)
 Vue.use(VueShortkey)
 Vue.use(ElementUI)
 Vue.component('draggable', VueDraggable)
-Vue.component('v-icon', Icon)
 
 const bus = new Vue()
 
