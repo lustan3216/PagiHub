@@ -6,6 +6,11 @@
   display: flex !important;
 }
 
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .flex-center {
   display: flex;
   align-items: center;
@@ -30,11 +35,11 @@
   margin-right: 5px;
 }
 
-.m-b-15{
+.m-b-15 {
   margin-bottom: 15px !important;
 }
 
-.p-0{
+.p-0 {
   padding: 0;
 }
 

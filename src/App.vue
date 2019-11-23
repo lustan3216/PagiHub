@@ -1,8 +1,8 @@
 <template>
   <el-container>
-    <el-header class="header">
+    <el-aside width="40px" class="vertical-header">
       <nav-bar />
-    </el-header>
+    </el-aside>
 
     <el-container class="main">
       <transition name="fade-left" mode="out-in">
@@ -42,8 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header {
-  height: 60px;
+.vertical-header {
   background-color: #fff;
   border-bottom: 1px solid #eff1f2;
   box-shadow: 0 2px 5px 0 rgba(32, 48, 60, 0.05);
@@ -52,12 +51,12 @@ export default {
 }
 
 .main {
-  @include calc-vh(height, '100vh - 60px');
+  @include calc-vh(height, '100vh');
   overflow: scroll;
 }
 
 .edit-area {
   padding-top: 35px;
-  @include calc-vh(min-height, '100vh - 135px');
+  @include calc-vh(min-height, '100vh - 75px');
 }
 </style>

@@ -6,7 +6,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import BrowserWindow from '../BrowserWindow'
+import BrowserWindow from './BrowserWindow'
 import Layers from '../Templates/Layers'
 
 export default {

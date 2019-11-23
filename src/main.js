@@ -2,6 +2,7 @@ import './utils/polyfill'
 import vhCheck from 'vh-check'
 vhCheck()
 
+import './styles/vender.scss'
 import './styles/index.scss'
 
 import Vue from 'vue'

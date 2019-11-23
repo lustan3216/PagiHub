@@ -1,17 +1,5 @@
 <template>
   <el-aside class="sidebar">
-    <el-row>
-      <el-col
-        :span="6"
-        :offset="18">
-        <el-button
-          type="text"
-          @click="CLOSE_SIDEBAR">
-          <v-icon name="times" />
-        </el-button>
-      </el-col>
-    </el-row>
-
     <slot />
   </el-aside>
 </template>
@@ -20,9 +8,7 @@
 import { mapMutations } from 'vuex'
 export default {
   name: 'CustomizedSidebar',
-  methods: {
-    ...mapMutations('layout', ['CLOSE_SIDEBAR'])
-  }
+  methods: {}
 }
 </script>
 
