@@ -39,6 +39,10 @@
   margin-bottom: 15px !important;
 }
 
+.m-0 {
+  margin: 0 !important;
+}
+
 .p-0 {
   padding: 0;
 }
@@ -81,5 +85,9 @@
 }
 
 .mirror {
-  transform: scale(-1,1);
+  transform: scale(-1, 1);
+}
+
+.over-scroll{
+  overflow: scroll;
 }

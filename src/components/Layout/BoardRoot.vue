@@ -1,6 +1,11 @@
 <template>
   <browser-window>
-    <component v-if="rootNode" :id="rootNode.id" :is="rootNode.tag" />
+    <component
+      v-if="rootNode"
+      :id="rootNode.id"
+      :is="rootNode.tag"
+      class="fake-transform root-node"
+    />
   </browser-window>
 </template>
 
@@ -26,3 +31,9 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.root-node {
+  @include calc-vh(min-height, '100vh - 70px');
+}
+</style>

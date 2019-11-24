@@ -37,7 +37,7 @@ export default {
         sources: [
           {
             type: 'video/youtube',
-            src: 'https://www.youtube.com/watch?v=nmcdLOjGVzw'
+            src: '//www.youtube.com/watch?v=nmcdLOjGVzw'
           },
           {
             type: 'video/mp4',
@@ -51,7 +51,6 @@ export default {
   },
   computed: {
     player() {
-      console.log(this.$refs.videoPlayer)
       return this.$refs.videoPlayer
     }
   },

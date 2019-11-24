@@ -1,5 +1,5 @@
 <template>
-  <div :class="['layers', isRoot && isEditable && 'fake-transform']">
+  <div class="layer">
     <portal-target name="Root" />
     <template v-for="(child, index) in innerChildren">
       <el-popover
@@ -31,7 +31,7 @@
 import GridGenerator from './GridGenerator'
 import commonMixin from '../../mixins/common'
 import childrenMixin from '../../mixins/children'
-import EditBar from '../Components/EditBar'
+import EditBar from './Components/EditBar'
 
 export default {
   name: 'Layers',
@@ -39,12 +39,7 @@ export default {
     GridGenerator,
     EditBar
   },
-  mixins: [commonMixin, childrenMixin],
-  computed: {
-    isRoot() {
-      return this.id === 1
-    }
-  }
+  mixins: [commonMixin, childrenMixin]
 }
 </script>
 

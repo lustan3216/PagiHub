@@ -44,7 +44,7 @@ import { mapState } from 'vuex'
 import importTemplates from '../../mixins/importTemplates'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
-import EditBar from '../Components/EditBar'
+import EditBar from './Components/EditBar'
 
 export default {
   name: 'AreaDraggable',

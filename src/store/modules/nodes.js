@@ -3,7 +3,7 @@ import Vue from 'vue'
 import listTiTree from '../../utils/listToTree'
 import { SET } from '../index'
 import { appendNestedIds } from '../../utils/keyId'
-import { gridGenerator as templateGridGenerator } from '../../templates'
+import { gridGenerator as templateGridGenerator } from '../../template/basic'
 
 const state = {
   currentNodesMap: {}
@@ -28,7 +28,7 @@ const mutations = {
 
   APPEND_NODE(state, { node, parentId }) {
     if (parentId === undefined) {
-      throw 'noParentId'
+      throw new Error('noParentId')
     } else {
       node.parentId = parentId
     }
@@ -93,19 +93,24 @@ const actions = {
     return nodesMap
   }
 }
+
 const getters = {
   listToTree(state) {
     return mapToTree(state.currentNodesMap)
   },
+
   rootNode(state) {
     return state.currentNodesMap[1]
   },
+
   tree(state, getters) {
     return getters.listToTree.tree
   },
+
   childrenOf(state, getters) {
     return getters.listToTree.childrenOf || {}
   },
+
   childrenFrom: (state, getters) => id => {
     // 父層在render子層時，這裡會把children拿掉，強制component不能抓到孫子
     // 如果想要處理孫子，應該是再做一個component做父子管理
@@ -114,6 +119,24 @@ const getters = {
       const { children, ...node } = _node
       return node
     })
+  },
+
+  parentHasTag: state => (_id, tag) => {
+    const map = state.currentNodesMap
+
+    function checkParent(id) {
+      const parentId = map[id].parentId
+
+      if (!map[parentId]) {
+        return false
+      } else if (map[parentId].tag === tag) {
+        return true
+      } else {
+        return checkParent(parentId)
+      }
+    }
+
+    return checkParent(_id)
   }
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <el-button :style="innerStyles">
+  <el-button :style="innerStyles" class="wh-100 m-0">
     <slot>{{ text }}</slot>
   </el-button>
 </template>

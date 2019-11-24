@@ -37,7 +37,7 @@
 import { onVisibleChange } from '../../buses/visibility'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
-import EditBar from '../Components/EditBar'
+import EditBar from './Components/EditBar'
 import GridGenerator from './GridGenerator'
 
 export default {

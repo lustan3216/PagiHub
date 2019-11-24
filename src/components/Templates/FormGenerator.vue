@@ -1,56 +1,23 @@
 <template>
-  <form-create v-model="fApi" :rule="rule" :option="option" />
+  <grid-generator :id="id" :is-editable="isEditable">
+    <template v-slot="props">
+      <component-add :id="props.id" />
+    </template>
+  </grid-generator>
 </template>
 
 <script>
-import formCreate from '@form-create/element-ui'
+import GridGenerator from './GridGenerator'
+import childrenMixin from '../../mixins/children'
+import commonMixin from '../../mixins/common'
+import ComponentAdd from './ComponentAdd'
+
 export default {
   name: 'FormGenerator',
   components: {
-    formCreate: formCreate.$form()
+    ComponentAdd,
+    GridGenerator
   },
-  data() {
-    return {
-      fApi: {},
-      rule: [
-        {
-          type: 'input',
-          field: 'test-1',
-          title: 'col-12',
-          value: '',
-          col: {
-            span: 12
-          }
-        },
-        {
-          type: 'input',
-          field: 'test-2',
-          title: 'col-12',
-          value: '',
-          col: {
-            span: 12
-          }
-        },
-        {
-          type: 'input',
-          field: 'test',
-          title: 'test',
-          value: '',
-          props: {
-            disabled: false
-          },
-          emit: ['on-change']
-        }
-      ],
-      option: {
-        // 表单提交事件
-        onSubmit: function(formData) {
-          alert(JSON.stringify(formData))
-        }
-      }
-    }
-  }
+  mixins: [childrenMixin, commonMixin]
 }
 </script>
-
-<style scoped lang="scss"></style>

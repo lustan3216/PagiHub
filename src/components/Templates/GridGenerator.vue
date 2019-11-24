@@ -39,7 +39,9 @@
         @click.stop.native="openEditBarById(child.id)"
       >
         <template v-if="isEditable">
-          <area-addable :id="child.id" />
+          <slot :id="child.id">
+            <area-addable :id="child.id" />
+          </slot>
         </template>
       </grid-item>
     </template>
@@ -47,14 +49,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { onVisibleChange } from '../../buses/visibility'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import importTemplatesMixin from '../../mixins/importTemplates'
-import EditBar from '../Components/EditBar'
-import AreaAddable from './AreaAddable'
+import EditBar from './Components/EditBar'
+import AreaAddable from './ComponentAdd'
 import EditArea from './AreaDraggable'
 
 export default {
@@ -67,19 +68,12 @@ export default {
     AreaAddable
   },
   mixins: [childrenMixin, commonMixin, importTemplatesMixin],
-  props: {
-    isEditable: {
-      type: Boolean,
-      default: true
-    }
-  },
   data() {
     return {
       visibleId: false
     }
   },
   computed: {
-    ...mapState('app', ['layoutEditable']),
     innerChildrenWithI() {
       return this.innerChildren.map(child => {
         // if layoutItem doesn't have i, it will crash
@@ -129,12 +123,5 @@ export default {
   & > .vue-resizable-handle {
     z-index: 10000;
   }
-}
-.rise {
-  z-index: 100;
-}
-.fade-out {
-  transition: opacity 0.6s ease;
-  opacity: 0.1;
 }
 </style>

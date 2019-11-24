@@ -7,7 +7,7 @@
       type="text"
       @click="emit('new')"
     >
-      <unicon fill="#909399"  name="plus" />
+      <unicon fill="#909399" name="plus" />
     </el-button>
 
     <el-button
@@ -15,7 +15,7 @@
       type="text"
       @click="emit('copy')"
     >
-      <unicon fill="#909399"  name="plus" />
+      <unicon fill="#909399" name="plus" />
     </el-button>
 
     <el-button
@@ -23,7 +23,7 @@
       type="text"
       @click="emit('remove')"
     >
-      <unicon fill="#909399"  name="plus" />
+      <unicon fill="#909399" name="plus" />
     </el-button>
 
     <el-button
@@ -31,14 +31,14 @@
       type="text"
       @click="emit('setting')"
     >
-      <unicon fill="#909399"  name="cog" />
+      <unicon fill="#909399" name="cog" />
     </el-button>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { emitEditBarFn } from '../../buses/editBar'
+import { emitEditBarFn } from '../../../buses/editBar'
 
 export default {
   name: 'EditBar',
@@ -58,8 +58,8 @@ export default {
     ...mapState('nodes', ['currentNodesMap']),
     ...mapGetters('nodes', ['childrenOf']),
     tag() {
-      if (this.innerComponent) {
-        return this.innerComponent.tag
+      if (this.innerChild) {
+        return this.innerChild.tag
       } else {
         return this.node && this.node.tag
       }
@@ -70,25 +70,16 @@ export default {
     parentId() {
       return this.node.parentId
     },
-    innerComponent() {
+    innerChild() {
       return this.childrenOf[this.id] && this.childrenOf[this.id][0]
     }
   },
   methods: {
     emit(type) {
-      if (this.innerComponent) {
-        if (type === 'remove') {
-          emitEditBarFn(this.id, { childId: this.innerComponent.id, type })
-        } else {
-          emitEditBarFn(this.innerComponent.id, { type })
-        }
-        return
-      }
-
-      if (['copy', 'remove', 'new'].includes(type)) {
-        emitEditBarFn(this.parentId, { childId: this.id, type })
+      if (this.innerChild && type === 'remove') {
+        emitEditBarFn(this.id, { childId: this.innerChild.id, type })
       } else {
-        emitEditBarFn(this.id, { type })
+        emitEditBarFn(this.parentId, { childId: this.id, type })
       }
     }
   }

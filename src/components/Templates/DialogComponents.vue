@@ -1,11 +1,14 @@
 <template>
   <i class="el-icon-lollipop" @click="open">
     <el-dialog
+      v-if="visible"
       ref="dialog"
       :visible="visible"
       :modal="false"
+      class="dialog"
       append-to-body
-      width="80vw"
+      top="5vh"
+      width="90vw"
       @open="$emit('open')"
       @close="visible = false"
     >
@@ -23,21 +26,34 @@
               class="m-b-15"
               style="min-height: 200px;"
             >
-              <el-card shadow="hover" @dblclick.native="emit(component)">
-                <component
-                  v-bind="component.props"
-                  :is="component.tag"
-                  :id="index"
-                  :key="index"
-                  :children="component.children"
-                  :is-editable="false"
-                  class="no-click"
-                />
+              <el-card shadow="hover">
+                <template v-if="template.name === 'Form'">
+                  <form-item
+                    :rule="[component]"
+                    :option="{ submitBtn: { show: false } }"
+                  />
+                </template>
+                <template v-else>
+                  <component
+                    v-bind="component.props"
+                    :is="component.tag"
+                    :id="index"
+                    :key="index"
+                    :is-editable="false"
+                    :children="component.children"
+                  />
+                </template>
+
                 <div style="padding: 14px;">
-                  <span>好吃的汉堡</span>
+                  <span>{{ component.tag }}</span>
                   <div class="bottom clearfix">
                     <time class="time">20.1933</time>
-                    <el-button type="text" class="button">操作按钮</el-button>
+                    <el-button
+                      type="text"
+                      class="button"
+                      @click="emit(component)"
+                    >操作按钮</el-button
+                    >
                   </div>
                 </div>
               </el-card>
@@ -51,22 +67,36 @@
 
 <script>
 import clone from 'clone'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { emitCloseEditBar } from '../../buses/editBar'
-import templates from '../../templates'
+import formTemplate from '../../template/form'
+import basicTemplate from '../../template/basic'
 import importTemplatesMixin from '../../mixins/importTemplates'
 
 export default {
   name: 'DialogComponents',
   mixins: [importTemplatesMixin],
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
     return {
-      visible: false,
-      templates
+      visible: false
     }
   },
   computed: {
-    ...mapState('layout', ['currentDialog'])
+    ...mapState('layout', ['currentDialog']),
+    ...mapGetters('nodes', ['parentHasTag']),
+    templates() {
+      if (this.parentHasTag(this.id, 'form-generator')) {
+        return Object.freeze(formTemplate)
+      } else {
+        return Object.freeze(basicTemplate)
+      }
+    }
   },
   methods: {
     emit(component) {
@@ -84,5 +114,8 @@ export default {
 <style scoped lang="scss">
 .m-b-20 {
   margin-bottom: 20px;
+}
+::v-deep.dialog .el-dialog {
+  box-shadow: 1px 4px 20px rgba(0, 0, 0, 0.2);
 }
 </style>

@@ -1,3 +1,5 @@
+import formCreate from '@form-create/element-ui'
+
 export default {
   components: {
     Carousel: () => import('../components/Templates/Carousel'),
@@ -11,6 +13,7 @@ export default {
     Layers: () => import('../components/Templates/Layers'),
     Card: () => import('../components/Templates/Card'),
     Drawer: () => import('../components/Templates/Drawer'),
-    FormGenerator: () => import('../components/Templates/FormGenerator')
+    FormGenerator: () => import('../components/Templates/FormGenerator'),
+    FormItem: formCreate.$form()
   }
 }
