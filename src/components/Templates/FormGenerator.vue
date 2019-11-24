@@ -8,8 +8,8 @@
 
 <script>
 import GridGenerator from './GridGenerator'
-import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
+import childrenMixin from '../../mixins/children'
 import ComponentAdd from './ComponentAdd'
 
 export default {
@@ -18,6 +18,38 @@ export default {
     ComponentAdd,
     GridGenerator
   },
-  mixins: [childrenMixin, commonMixin]
+  mixins: [commonMixin, childrenMixin],
+  provide() {
+    const parentPath = this.$store.getters['nodes/parentPath']
+    const isRootForm = parentPath(this.id).every(
+      x => x.tag !== 'form-generator'
+    )
+    if (isRootForm) {
+      return { rootForm: this }
+    }
+  },
+  data() {
+    return {
+      form: {},
+      isValidObject: {}
+    }
+  },
+  computed: {
+    isValid() {
+      return Object.values(this.isValidObject).every(value => value)
+    }
+  },
+  methods: {
+    submit() {
+      console.log(this.form)
+    },
+    reset() {
+      this.form = {}
+    },
+    updateData(title, { isValid, value }) {
+      this.form[title] = value
+      this.isValidObject[title] = isValid
+    }
+  }
 }
 </script>

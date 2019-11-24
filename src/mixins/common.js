@@ -10,8 +10,7 @@ export default {
   mixins: [editMixin],
   props: {
     id: {
-      type: Number,
-      required: true
+      type: Number
     },
     isEditable: {
       type: Boolean,
@@ -64,7 +63,7 @@ export default {
 
       this.innerStyles = validStyles
 
-      this.ASSIGN_STYLES({
+      this.ASSIGN({
         id: this.id,
         styles: validStyles
       })

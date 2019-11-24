@@ -15,6 +15,7 @@
       <el-tabs tab-position="left">
         <el-tab-pane
           v-for="template in templates"
+          :lazy="true"
           :key="template.name"
           :label="template.name"
         >
@@ -27,22 +28,13 @@
               style="min-height: 200px;"
             >
               <el-card shadow="hover">
-                <template v-if="template.name === 'Form'">
-                  <form-item
-                    :rule="[component]"
-                    :option="{ submitBtn: { show: false } }"
-                  />
-                </template>
-                <template v-else>
-                  <component
-                    v-bind="component.props"
-                    :is="component.tag"
-                    :id="index"
-                    :key="index"
-                    :is-editable="false"
-                    :children="component.children"
-                  />
-                </template>
+                <component
+                  v-if="component.tag"
+                  :rule="component"
+                  :is="component.tag"
+                  :key="index"
+                  :is-editable="false"
+                />
 
                 <div style="padding: 14px;">
                   <span>{{ component.tag }}</span>
@@ -67,10 +59,9 @@
 
 <script>
 import clone from 'clone'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { emitCloseEditBar } from '../../buses/editBar'
-import formTemplate from '../../template/form'
-import basicTemplate from '../../template/basic'
+import template from '../../template'
 import importTemplatesMixin from '../../mixins/importTemplates'
 
 export default {
@@ -89,13 +80,8 @@ export default {
   },
   computed: {
     ...mapState('layout', ['currentDialog']),
-    ...mapGetters('nodes', ['parentHasTag']),
     templates() {
-      if (this.parentHasTag(this.id, 'form-generator')) {
-        return Object.freeze(formTemplate)
-      } else {
-        return Object.freeze(basicTemplate)
-      }
+      return Object.freeze(template)
     }
   },
   methods: {
@@ -114,6 +100,10 @@ export default {
 <style scoped lang="scss">
 .m-b-20 {
   margin-bottom: 20px;
+}
+
+.dialog {
+  z-index: 2500 !important;
 }
 ::v-deep.dialog .el-dialog {
   box-shadow: 1px 4px 20px rgba(0, 0, 0, 0.2);

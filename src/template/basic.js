@@ -38,9 +38,9 @@ export const flexButton = function() {
   }
 }
 
-export const lazyImage = function() {
+export const flexImage = function() {
   return {
-    tag: 'lazy-image'
+    tag: 'flex-image'
   }
 }
 
@@ -68,6 +68,7 @@ export const formGenerator = function() {
         h: 15,
         children: [
           {
+            tag: 'form-item',
             type: 'input',
             field: 'test',
             title: 'test',
@@ -83,6 +84,7 @@ export const formGenerator = function() {
         h: 15,
         children: [
           {
+            tag: 'form-item',
             type: 'radio',
             title: '是否包邮',
             field: '是否包邮',
@@ -102,6 +104,7 @@ export const formGenerator = function() {
         h: 15,
         children: [
           {
+            tag: 'form-item',
             type: 'input',
             title: '商品名称',
             field: '商品名称',
@@ -130,21 +133,18 @@ export const drawer = function() {
   }
 }
 
-export default [
-  {
-    name: 'Basic',
-    icon: 'el-icon-message',
-    components: [
-      flexButton(),
-      lazyImage(),
-      gridGenerator(),
-      formGenerator(),
-      carousel(),
-      divider(),
-      videoPlayer(),
-      editor(),
-      card(),
-      drawer()
-    ]
-  }
-]
+export default {
+  name: 'Basic',
+  icon: 'el-icon-message',
+  components: [
+    flexButton(),
+    flexImage(),
+    gridGenerator(),
+    carousel(),
+    divider(),
+    videoPlayer(),
+    editor(),
+    card(),
+    drawer()
+  ]
+}

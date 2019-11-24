@@ -10,7 +10,7 @@
 import commonMixin from '../../mixins/common'
 
 export default {
-  name: 'LazyImage',
+  name: 'FlexImage',
   mixins: [commonMixin],
   props: {
     url: {

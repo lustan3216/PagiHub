@@ -122,7 +122,7 @@ export default {
       },
       set(content) {
         this.isEditable &&
-          this.ASSIGN_SETTING({
+          this.ASSIGN({
             id: this.id,
             setting: { content }
           })
@@ -150,7 +150,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('nodes', ['ASSIGN_SETTING']),
+    ...mapMutations('nodes', ['ASSIGN']),
     mouseenter() {
       this.noClick = this.$el
         .querySelector('.ql-tooltip')

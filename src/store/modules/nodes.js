@@ -12,13 +12,12 @@ const state = {
 const mutations = {
   SET,
 
-  ASSIGN_STYLES(state, { id, styles }) {
-    state.currentNodesMap[id].styles = clone(styles)
-    mutations.SNAPSHOT(state)
-  },
+  ASSIGN(state, payload) {
+    const node = state.currentNodesMap[payload.id]
+    for (const key in payload) {
+      node[key] = payload[key]
+    }
 
-  ASSIGN_SETTING(state, { id, setting }) {
-    state.currentNodesMap[id].setting = clone(setting)
     mutations.SNAPSHOT(state)
   },
 
@@ -121,22 +120,18 @@ const getters = {
     })
   },
 
-  parentHasTag: state => (_id, tag) => {
+  parentPath: state => _id => {
     const map = state.currentNodesMap
+    const path = []
 
-    function checkParent(id) {
+    function findPath(id) {
       const parentId = map[id].parentId
-
-      if (!map[parentId]) {
-        return false
-      } else if (map[parentId].tag === tag) {
-        return true
-      } else {
-        return checkParent(parentId)
-      }
+      if (!parentId) return
+      path.unshift(map[parentId])
+      findPath(parentId)
     }
-
-    return checkParent(_id)
+    findPath(_id)
+    return path
   }
 }
 

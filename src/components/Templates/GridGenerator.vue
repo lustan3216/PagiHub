@@ -6,7 +6,7 @@
     :col-num="72"
     :margin="[5, 5]"
     :responsive="false"
-    :vertical-compact="false"
+    :vertical-compact="true"
     :is-draggable="isEditable"
     :is-resizable="isEditable"
     @layout-updated="layoutUpdated"
@@ -40,7 +40,7 @@
       >
         <template v-if="isEditable">
           <slot :id="child.id">
-            <area-addable :id="child.id" />
+            <component-add :id="child.id" />
           </slot>
         </template>
       </grid-item>
@@ -55,8 +55,7 @@ import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import importTemplatesMixin from '../../mixins/importTemplates'
 import EditBar from './Components/EditBar'
-import AreaAddable from './ComponentAdd'
-import EditArea from './AreaDraggable'
+import ComponentAdd from './ComponentAdd'
 
 export default {
   name: 'GridGenerator',
@@ -64,8 +63,7 @@ export default {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
     EditBar,
-    EditArea,
-    AreaAddable
+    ComponentAdd
   },
   mixins: [childrenMixin, commonMixin, importTemplatesMixin],
   data() {
@@ -112,7 +110,6 @@ export default {
 
 <style lang="scss" scoped>
 .vue-grid-layout {
-  border: 1px dashed #dedede;
   border-radius: 3px;
 }
 
@@ -122,6 +119,9 @@ export default {
   border-radius: 3px;
   & > .vue-resizable-handle {
     z-index: 10000;
+  }
+  & > div > .vue-grid-layout {
+    border: none;
   }
 }
 </style>

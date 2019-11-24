@@ -1,27 +1,37 @@
-const basic = require('./basic')
-
 export const flexSubmit = () => ({
-  tag: 'flexSubmit'
+  tag: 'flex-submit'
+})
+
+export const flexReset = () => ({
+  tag: 'flex-reset'
 })
 
 export const flexInput = () => ({
+  tag: 'form-item',
   type: 'input',
   title: '商品名称',
-  field: 'goods_name',
   value: 'iphone 7',
-  col: {
-    span: 12,
-    labelWidth: 150
-  },
   props: {
     type: 'text'
   },
   validate: [{ required: true, message: '请输入goods_name', trigger: 'blur' }]
 })
 
+export const flexTextarea = () => ({
+  tag: 'form-item',
+  type: 'input',
+  title: '商品名称',
+  value: 'iphone 7',
+  props: {
+    rows: 3,
+    type: 'textarea'
+  },
+  validate: [{ required: true, message: '请输入商品名称', trigger: 'blur' }]
+})
+
 export const flexInputNumber = () => ({
+  tag: 'form-item',
   type: 'InputNumber',
-  field: 'price',
   title: '价格',
   value: 1,
   props: {
@@ -30,9 +40,9 @@ export const flexInputNumber = () => ({
 })
 
 export const flexRadio = () => ({
+  tag: 'form-item',
   type: 'radio',
   title: '是否包邮',
-  field: 'is_postage',
   value: '0',
   options: [
     { value: '0', label: '不包邮', disabled: false },
@@ -41,9 +51,9 @@ export const flexRadio = () => ({
 })
 
 export const flexCheckBox = () => ({
+  tag: 'form-item',
   type: 'checkbox',
   title: '标签',
-  field: 'label',
   value: ['1', '2', '3'],
   options: [
     { value: '1', label: '好用', disabled: true },
@@ -54,8 +64,8 @@ export const flexCheckBox = () => ({
 })
 
 export const flexSelect = () => ({
+  tag: 'form-item',
   type: 'select',
-  field: 'cate_id',
   title: '产品分类',
   value: ['104', '105'],
   options: [
@@ -68,9 +78,9 @@ export const flexSelect = () => ({
 })
 
 export const flexSwitch = () => ({
+  tag: 'form-item',
   type: 'switch',
   title: '是否上架',
-  field: 'is_show',
   value: '1',
   props: {
     activeValue: '1',
@@ -79,9 +89,9 @@ export const flexSwitch = () => ({
 })
 
 export const flexCascader = () => ({
+  tag: 'form-item',
   type: 'cascader',
   title: '所在区域',
-  field: 'address',
   value: ['陕西省', '西安市'],
   props: {
     options: ['陕西省', '西安市', '新城区']
@@ -89,11 +99,12 @@ export const flexCascader = () => ({
 })
 
 export const flexDatePicker = () => ({
+  tag: 'form-item',
   type: 'DatePicker',
-  field: 'section_day',
   title: '活动日期',
   value: ['2018-02-20', new Date()],
   props: {
+    tag: 'form-item',
     type: 'datetimerange',
     format: 'yyyy-MM-dd HH:mm:ss',
     placeholder: '请选择活动日期'
@@ -101,8 +112,8 @@ export const flexDatePicker = () => ({
 })
 
 export const flexTimePicker = () => ({
+  tag: 'form-item',
   type: 'TimePicker',
-  field: 'section_time',
   title: '活动时间',
   value: [],
   props: {
@@ -111,15 +122,15 @@ export const flexTimePicker = () => ({
 })
 
 export const flexColorPicker = () => ({
+  tag: 'form-item',
   type: 'ColorPicker',
-  field: 'color',
   title: '颜色',
   value: '#ff7271'
 })
 
 export const flexRate = () => ({
+  tag: 'form-item',
   type: 'rate',
-  field: 'rate',
   title: '推荐级别',
   value: 3.5,
   props: {
@@ -128,6 +139,7 @@ export const flexRate = () => ({
   validate: [
     {
       required: true,
+      tag: 'form-item',
       type: 'number',
       min: 3,
       message: '请大于3颗星',
@@ -137,8 +149,8 @@ export const flexRate = () => ({
 })
 
 export const flexSlider = () => ({
+  tag: 'form-item',
   type: 'slider',
-  field: 'slider',
   title: '滑块',
   value: [0, 52],
   props: {
@@ -148,52 +160,24 @@ export const flexSlider = () => ({
   }
 })
 
-export const flexTree = () => ({
-  type: 'tree',
-  title: '权限',
-  field: 'rule',
-  value: [],
-  props: {
-    data: [],
-    props: {
-      label: 'title'
-    }
-  }
-})
-
-export default [
-  {
-    name: 'Form',
-    icon: 'el-icon-message',
-    components: [
-      // flexSubmit(),
-      flexInput(),
-      flexInputNumber(),
-      flexRadio(),
-      flexCheckBox(),
-      flexSelect(),
-      flexSwitch(),
-      flexCascader(),
-      flexDatePicker(),
-      flexTimePicker(),
-      flexColorPicker(),
-      flexRate(),
-      flexSlider(),
-      flexTree()
-    ]
-  },
-  {
-    name: 'Basic',
-    icon: 'el-icon-message',
-    components: [
-      basic.flexButton(),
-      basic.lazyImage(),
-      basic.gridGenerator(),
-      basic.carousel(),
-      basic.divider(),
-      basic.videoPlayer(),
-      basic.editor(),
-      basic.card()
-    ]
-  }
-]
+export default {
+  name: 'Form',
+  icon: 'el-icon-message',
+  components: [
+    flexSubmit(),
+    flexReset(),
+    flexTextarea(),
+    flexInput(),
+    flexInputNumber(),
+    flexRadio(),
+    flexCheckBox(),
+    flexSelect(),
+    flexSwitch(),
+    flexCascader(),
+    flexDatePicker(),
+    flexTimePicker(),
+    flexColorPicker(),
+    flexRate(),
+    flexSlider()
+  ]
+}

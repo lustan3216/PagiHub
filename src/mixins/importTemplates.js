@@ -1,19 +1,19 @@
-import formCreate from '@form-create/element-ui'
-
 export default {
   components: {
+    FlexImage: () => import('../components/Templates/FlexImage'),
+    FlexButton: () => import('../components/Templates/FlexButton'),
+    FlexSubmit: () => import('../components/Templates/FlexSubmit'),
+    FlexReset: () => import('../components/Templates/FlexReset'),
     Carousel: () => import('../components/Templates/Carousel'),
     Editor: () => import('../components/Templates/Editor'),
-    LazyImage: () => import('../components/Templates/LazyImage'),
     GridGenerator: () => import('../components/Templates/GridGenerator'),
     EditArea: () => import('../components/Templates/AreaDraggable'),
-    FlexButton: () => import('../components/Templates/FlexButton'),
     Divider: () => import('../components/Templates/Divider'),
     VideoPlayer: () => import('../components/Templates/VideoPlayer'),
     Layers: () => import('../components/Templates/Layers'),
     Card: () => import('../components/Templates/Card'),
     Drawer: () => import('../components/Templates/Drawer'),
-    FormGenerator: () => import('../components/Templates/FormGenerator'),
-    FormItem: formCreate.$form()
+    FormItem: () => import('../components/Templates/FormItem'),
+    FormGenerator: () => import('../components/Templates/FormGenerator')
   }
 }
