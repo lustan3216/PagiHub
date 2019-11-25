@@ -1,5 +1,5 @@
 <template>
-  <grid-generator :id="id" :is-editable="isEditable">
+  <grid-generator :id="id" :children="children">
     <template v-slot="props">
       <component-add :id="props.id" />
     </template>
@@ -20,6 +20,7 @@ export default {
   },
   mixins: [commonMixin, childrenMixin],
   provide() {
+    if (!this.isEditable) return
     const parentPath = this.$store.getters['nodes/parentPath']
     const isRootForm = parentPath(this.id).every(
       x => x.tag !== 'form-generator'

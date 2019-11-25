@@ -98,7 +98,7 @@ export default {
       toggledBar: true,
       noClick: true,
       editorOption: {
-        theme: this.isEditable ? 'bubble' : 'snow',
+        theme: 'bubble',
         modules: {
           toolbar: `#toolbar${this._uid}`
         }

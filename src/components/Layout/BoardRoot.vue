@@ -20,6 +20,11 @@ export default {
     BrowserWindow,
     Layers
   },
+  provide() {
+    return {
+      isEditable: true
+    }
+  },
   computed: {
     ...mapGetters('nodes', ['rootNode'])
   },

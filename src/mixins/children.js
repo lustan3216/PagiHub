@@ -6,6 +6,7 @@ import { appendNestedIds } from '../utils/keyId'
 export default {
   watch: {
     innerChildren(newChildren, oldChildren) {
+      if (!this.isEditable) return
       try {
         this.updateDifferenceToVuex(newChildren, oldChildren, this.id)
       } catch (e) {
@@ -16,6 +17,13 @@ export default {
       }
     }
   },
+  // 有些情景component是沒有ID的，像是展示時，但編輯時應該是要透過Id直接去vuex裡面抓資料
+  props: {
+    children: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     let innerChildren = []
 
@@ -24,8 +32,7 @@ export default {
         (a, b) => a.sortIndex - b.sortIndex
       )
     } else {
-      // anti-pattern SidebarTemplates will pass children
-      innerChildren = this.$attrs.children || []
+      innerChildren = this.children
     }
 
     appendNestedIds(innerChildren)

@@ -6,8 +6,8 @@ export const formGenerator = function() {
         tag: 'grid-item',
         x: 0,
         y: 0,
-        w: 22,
-        h: 15,
+        w: 33,
+        h: 30,
         children: [
           {
             tag: 'form-item',
@@ -59,14 +59,24 @@ export const formGenerator = function() {
             ]
           }
         ]
+      },
+      {
+        tag: 'grid-item',
+        x: 0,
+        y: 30,
+        w: 15,
+        h: 17,
+        children: [
+          {
+            tag: 'flex-submit'
+          }
+        ]
       }
     ]
   }
 }
 export default {
-    name: 'FormGroup',
-    icon: 'el-icon-message',
-    components: [
-      formGenerator()
-    ]
-  }
+  name: 'FormGroup',
+  icon: 'el-icon-message',
+  components: [formGenerator()]
+}

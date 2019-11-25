@@ -3,12 +3,10 @@
     :style="innerStyles"
     :layout="innerChildrenWithI"
     :row-height="1"
-    :col-num="72"
-    :margin="[5, 5]"
+    :col-num="100"
+    :margin="[0, 0]"
     :responsive="false"
     :vertical-compact="true"
-    :is-draggable="isEditable"
-    :is-resizable="isEditable"
     @layout-updated="layoutUpdated"
   >
     <template v-for="child in innerChildrenWithI">
@@ -27,6 +25,7 @@
 
       <grid-item
         v-popover:[child.id]
+        :asd="$log(child.id, child.x)"
         :x="child.x"
         :y="child.y"
         :w="child.w"
@@ -38,11 +37,9 @@
         drag-allow-from="div"
         @click.stop.native="openEditBarById(child.id)"
       >
-        <template v-if="isEditable">
-          <slot :id="child.id">
-            <component-add :id="child.id" />
-          </slot>
-        </template>
+        <slot v-bind="child">
+          <component-add v-bind="child" />
+        </slot>
       </grid-item>
     </template>
   </grid-layout>
@@ -117,6 +114,8 @@ export default {
   position: relative;
   border: 1px dashed #dedede;
   border-radius: 3px;
+  /*padding: 5px;*/
+  /*box-sizing: border-box;*/
   & > .vue-resizable-handle {
     z-index: 10000;
   }

@@ -30,10 +30,10 @@
               <el-card shadow="hover">
                 <component
                   v-if="component.tag"
-                  :rule="component"
+                  :rule="component.tag === 'form-item' ? component : undefined"
                   :is="component.tag"
                   :key="index"
-                  :is-editable="false"
+                  :children="component.children"
                 />
 
                 <div style="padding: 14px;">
@@ -73,6 +73,11 @@ export default {
       required: true
     }
   },
+  provide() {
+    return {
+      isEditable: false
+    }
+  },
   data() {
     return {
       visible: false
@@ -105,7 +110,15 @@ export default {
 .dialog {
   z-index: 2500 !important;
 }
-::v-deep.dialog .el-dialog {
-  box-shadow: 1px 4px 20px rgba(0, 0, 0, 0.2);
+::v-deep {
+  &.dialog .el-dialog {
+    box-shadow: 1px 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  & .el-carousel__container {
+    min-height: 200px;
+  }
+  & .el-card__body > .el-card {
+    min-height: 300px;
+  }
 }
 </style>

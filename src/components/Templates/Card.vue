@@ -1,6 +1,6 @@
 <template>
   <el-card :style="innerStyles">
-    <grid-generator v-if="isEditable" :id="innerChildren[0].id" class="h-100" />
+    <grid-generator v-bind="innerChildren[0]" class="h-100" />
   </el-card>
 </template>
 

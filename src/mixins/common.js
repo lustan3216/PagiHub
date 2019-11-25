@@ -11,17 +11,14 @@ export default {
   props: {
     id: {
       type: Number
-    },
-    isEditable: {
-      type: Boolean,
-      default: true
     }
   },
+  inject: ['isEditable'],
   data() {
     let innerStyles = {}
 
-    if (this.isEditable) {
-      const node = store.state.nodes.currentNodesMap[this.id]
+    const node = store.state.nodes.currentNodesMap[this.id]
+    if (node) {
       innerStyles = clone(node.styles || {})
     }
 
@@ -33,9 +30,6 @@ export default {
     ...mapState('nodes', ['currentNodesMap']),
     node() {
       return this.currentNodesMap[this.id]
-    },
-    parentId() {
-      return this.node.parentId
     }
   },
   created() {

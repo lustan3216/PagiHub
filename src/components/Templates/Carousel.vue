@@ -28,7 +28,7 @@
         <edit-bar :id="child.id" />
       </el-popover>
 
-      <grid-generator v-if="isEditable" :id="child.id" class="h-100" />
+      <grid-generator v-bind="child" class="h-100" />
     </el-carousel-item>
   </el-carousel>
 </template>
@@ -47,12 +47,6 @@ export default {
     EditBar
   },
   mixins: [childrenMixin, commonMixin],
-  props: {
-    isEditable: {
-      type: Boolean,
-      default: true
-    }
-  },
   data() {
     return {
       isEditableId: null
