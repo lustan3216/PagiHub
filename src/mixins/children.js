@@ -6,7 +6,6 @@ import { appendNestedIds } from '../utils/keyId'
 export default {
   watch: {
     innerChildren(newChildren, oldChildren) {
-      if (!this.isEditable) return
       try {
         this.updateDifferenceToVuex(newChildren, oldChildren, this.id)
       } catch (e) {
@@ -17,7 +16,7 @@ export default {
       }
     }
   },
-  // 有些情景component是沒有ID的，像是展示時，但編輯時應該是要透過Id直接去vuex裡面抓資料
+  // 有些情景component是沒有ID的，像是展示時
   props: {
     children: {
       type: Array,
@@ -32,7 +31,9 @@ export default {
         (a, b) => a.sortIndex - b.sortIndex
       )
     } else {
-      innerChildren = this.children
+      // TODO
+      // 要找方法把props children拿掉
+      innerChildren = this.children || []
     }
 
     appendNestedIds(innerChildren)

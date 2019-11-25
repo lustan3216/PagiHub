@@ -1,5 +1,5 @@
 <template>
-  <el-button :style="innerStyles" class="wh-100 m-0" @click="rootForm.reset">
+  <el-button :style="innerStyles" class="wh-100 m-0" @click="reset">
     <slot>{{ text }}</slot>
   </el-button>
 </template>
@@ -16,6 +16,11 @@ export default {
       default: 'Reset'
     }
   },
-  inject: ['rootForm']
+  inject: ['rootForm'],
+  methods: {
+    reset() {
+      this.rootForm.reset()
+    }
+  }
 }
 </script>

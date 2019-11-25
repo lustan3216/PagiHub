@@ -1,5 +1,11 @@
 <template>
-  <component v-if="firstChild" :is="firstChild.tag" v-bind="firstChild" />
+  <component
+    v-if="firstChild"
+    :is="firstChild.tag"
+    :id="firstChild.id"
+    :rule="firstChild"
+    :children="firstChild.children"
+  />
   <div v-else-if="isEditable" class="flex-center h-100 pointer">
     <dialog-components :id="id" @add="addTemplate($event)" />
   </div>

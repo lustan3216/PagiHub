@@ -25,7 +25,6 @@
 
       <grid-item
         v-popover:[child.id]
-        :asd="$log(child.id, child.x)"
         :x="child.x"
         :y="child.y"
         :w="child.w"
@@ -37,8 +36,8 @@
         drag-allow-from="div"
         @click.stop.native="openEditBarById(child.id)"
       >
-        <slot v-bind="child">
-          <component-add v-bind="child" />
+        <slot v-bind="{ child }">
+          <component-add :id="child.id" :children="child.children" />
         </slot>
       </grid-item>
     </template>

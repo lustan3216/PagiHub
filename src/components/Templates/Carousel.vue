@@ -28,7 +28,7 @@
         <edit-bar :id="child.id" />
       </el-popover>
 
-      <grid-generator v-bind="child" class="h-100" />
+      <grid-generator :id="child.id" :children="child.children" class="h-100" />
     </el-carousel-item>
   </el-carousel>
 </template>

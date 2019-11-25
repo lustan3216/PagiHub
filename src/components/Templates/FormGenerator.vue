@@ -1,7 +1,7 @@
 <template>
   <grid-generator :id="id" :children="children">
     <template v-slot="props">
-      <component-add :id="props.id" />
+      <component-add :id="props.child.id" :children="props.child.children" />
     </template>
   </grid-generator>
 </template>
