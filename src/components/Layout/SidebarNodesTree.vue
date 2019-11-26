@@ -1,5 +1,5 @@
 <template>
-  <customized-sidebar>
+  <flex-sidebar>
     <el-menu ref="menu">
       <nested-menu
         v-for="node in tree"
@@ -8,12 +8,12 @@
         :active-id="currentId"
         @onClick="onClick" />
     </el-menu>
-  </customized-sidebar>
+  </flex-sidebar>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import CustomizedSidebar from './Components/CustomizedSidebar'
+import FlexSidebar from '../Templates/FlexSidebar'
 import NestedMenu from './Components/NestedMenu'
 import { openEditBarById, store as editBarStore } from '../../buses/editBar'
 
@@ -21,7 +21,7 @@ export default {
   name: 'SidebarNodesTree',
   components: {
     NestedMenu,
-    CustomizedSidebar
+    FlexSidebar
   },
   computed: {
     ...mapGetters('nodes', ['tree']),

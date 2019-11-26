@@ -17,7 +17,7 @@
 import { mapMutations } from 'vuex'
 
 export default {
-  name: 'Dialog',
+  name: 'FlexDialog',
   data() {
     return {
       dialogVisible: true

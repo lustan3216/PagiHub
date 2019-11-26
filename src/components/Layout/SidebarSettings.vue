@@ -1,15 +1,16 @@
 <template>
-  <sidebar>
+  <flex-sidebar>
     <el-menu @open="openedMenu = +$event">
       <el-submenu
         v-for="(vNode, index) in templates"
         :index="index.toString()"
-        :key="index">
+        :key="index"
+      >
         <template slot="title">
           <i :class="vNode.icon" />
           {{ vNode.type }}
         </template>
-      
+
         <el-menu-item
           v-for="(component, componentIndex) in vNode.components"
           :index="`${index}-${componentIndex}`"
@@ -28,12 +29,12 @@
         </el-menu-item>
       </el-submenu>
     </el-menu>
-  </sidebar>
+  </flex-sidebar>
 </template>
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
-import Sidebar from './Components/CustomizedSidebar'
+import FlexSidebar from '../Templates/FlexSidebar'
 import Border from '../CssEditor/Border'
 import Background from '../CssEditor/Background'
 import Corner from '../CssEditor/Corner'
@@ -48,7 +49,7 @@ import Style from '../CssEditor/Style'
 export default {
   name: 'SidebarSettings',
   components: {
-    Sidebar,
+    FlexSidebar,
     Border,
     Background,
     Spacing,

@@ -5,10 +5,8 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 export default {
-  name: 'CustomizedSidebar',
-  methods: {}
+  name: 'FlexSidebar'
 }
 </script>
 
