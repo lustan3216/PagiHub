@@ -52,12 +52,6 @@ const mutations = {
     Vue.delete(state.currentNodesMap, node.id)
   },
 
-  UPDATE_NODES_SORT(state, nodes) {
-    nodes.forEach((node, index) => {
-      Vue.set(state.currentNodesMap[node.id], 'sortIndex', index)
-    })
-  },
-
   SNAPSHOT(state) {
     window.localStorage.setItem('asd', JSON.stringify(state.currentNodesMap))
   }
@@ -125,7 +119,7 @@ const getters = {
     const path = []
 
     function findPath(id) {
-      const parentId = map[id].parentId
+      const { parentId } = map[id]
       if (!parentId) return
       path.unshift(map[parentId])
       findPath(parentId)

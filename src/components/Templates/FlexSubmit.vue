@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import commonMixin from '../../mixins/common'
 
 export default {
@@ -24,9 +23,18 @@ export default {
   },
   inject: ['rootForm'],
   computed: {
-    ...mapGetters('nodes', ['childrenOf', 'parentPath']),
     disabled() {
       return !this.rootForm.isValid
+    }
+  },
+  created() {
+    if (this.isEditable) {
+      this.rootForm.updateSubmit(this.id)
+    }
+  },
+  beforeDestroy() {
+    if (this.isEditable) {
+      this.rootForm.updateSubmit(null)
     }
   },
   methods: {

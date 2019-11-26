@@ -34,8 +34,6 @@ export default {
   },
   created() {
     if (this.isEditable) {
-      appendVm(this)
-
       onSettingChange(this.id, ({ styles }) => {
         this.innerStyles = styles
       })
@@ -44,6 +42,10 @@ export default {
         this.$el.style.visibility = visible ? '' : 'hidden'
       })
     }
+  },
+  mounted() {
+    // Don't put in created to prevent some component fail before mount
+    if (this.isEditable) appendVm(this)
   },
   methods: {
     ...mapMutations('nodes', ['APPEND_NESTED_NODES']),

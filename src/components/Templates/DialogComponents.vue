@@ -61,7 +61,7 @@
 import clone from 'clone'
 import { mapState } from 'vuex'
 import { emitCloseEditBar } from '../../buses/editBar'
-import template from '../../template'
+import templates from '../../template'
 import importTemplatesMixin from '../../mixins/importTemplates'
 
 export default {
@@ -87,12 +87,12 @@ export default {
   computed: {
     ...mapState('layout', ['currentDialog']),
     templates() {
-      return Object.freeze(template)
+      return clone(templates)
     }
   },
   methods: {
     emit(component) {
-      this.$emit('add', clone(component))
+      this.$emit('add', component)
       emitCloseEditBar()
     },
     open() {

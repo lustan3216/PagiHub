@@ -1,8 +1,8 @@
 const gridItems = [
-  { tag: 'grid-item', x: 0, y: 0, w: 22, h: 71, moved: false },
-  { tag: 'grid-item', x: 38, y: 19, w: 34, h: 52, moved: false },
-  { tag: 'grid-item', x: 22, y: 19, w: 16, h: 52, moved: false },
-  { tag: 'grid-item', x: 22, y: 0, w: 50, h: 19, moved: false }
+  { tag: 'grid-item', x: 0, y: 0, w: 22, h: 71 },
+  { tag: 'grid-item', x: 38, y: 19, w: 34, h: 52 },
+  { tag: 'grid-item', x: 22, y: 19, w: 16, h: 52 },
+  { tag: 'grid-item', x: 22, y: 0, w: 50, h: 19 }
 ]
 
 export const gridGenerator = function(children = gridItems) {
@@ -56,69 +56,9 @@ export const videoPlayer = function() {
   }
 }
 
-export const formGenerator = function() {
+export const layer = function() {
   return {
-    tag: 'form-generator',
-    children: [
-      {
-        tag: 'grid-item',
-        x: 0,
-        y: 0,
-        w: 22,
-        h: 15,
-        children: [
-          {
-            tag: 'form-item',
-            type: 'input',
-            field: 'test',
-            title: 'test',
-            value: ''
-          }
-        ]
-      },
-      {
-        tag: 'grid-item',
-        x: 0,
-        y: 15,
-        w: 22,
-        h: 15,
-        children: [
-          {
-            tag: 'form-item',
-            type: 'radio',
-            title: '是否包邮',
-            field: '是否包邮',
-            value: '0',
-            options: [
-              { value: '0', label: '不包邮', disabled: false },
-              { value: '1', label: '包邮', disabled: true }
-            ]
-          }
-        ]
-      },
-      {
-        tag: 'grid-item',
-        x: 22,
-        y: 0,
-        w: 22,
-        h: 15,
-        children: [
-          {
-            tag: 'form-item',
-            type: 'input',
-            title: '商品名称',
-            field: '商品名称',
-            value: 'iphone 7',
-            props: {
-              type: 'text'
-            },
-            validate: [
-              { required: true, message: '请输入goods_name', trigger: 'blur' }
-            ]
-          }
-        ]
-      }
-    ]
+    tag: 'layer'
   }
 }
 
@@ -137,6 +77,7 @@ export default {
   name: 'Basic',
   icon: 'el-icon-message',
   components: [
+    layer(),
     flexButton(),
     flexImage(),
     gridGenerator(),

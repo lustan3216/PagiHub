@@ -32,7 +32,8 @@ export default {
   data() {
     return {
       form: {},
-      isValidObject: {}
+      isValidObject: {},
+      button: {}
     }
   },
   computed: {
@@ -47,8 +48,16 @@ export default {
     reset() {
       this.form = {}
     },
-    updateData(title, { isValid, value }) {
+    updateForm(title, value) {
       this.form[title] = value
+    },
+    updateSubmit(submit) {
+      this.button.submit = submit
+    },
+    updateReset(reset) {
+      this.button.reset = reset
+    },
+    updateValid(title, isValid) {
       this.isValidObject[title] = isValid
     }
   }

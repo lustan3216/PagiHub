@@ -31,8 +31,6 @@ export default {
         (a, b) => a.sortIndex - b.sortIndex
       )
     } else {
-      // TODO
-      // 要找方法把props children拿掉
       innerChildren = this.children || []
     }
 
@@ -46,7 +44,6 @@ export default {
     ...mapMutations('nodes', [
       'APPEND_NESTED_NODES',
       'REMOVE_NESTED_NODES',
-      'UPDATE_NODES_SORT',
       'APPEND_NODE',
       'SNAPSHOT'
     ]),
@@ -72,7 +69,6 @@ export default {
           nodes: createdNodes,
           parentId
         })
-        this.UPDATE_NODES_SORT(newChildren)
 
         throw 'done'
       } else if (newLength < oldLength) {
