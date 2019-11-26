@@ -1,14 +1,14 @@
-const gridItems = [
-  { tag: 'grid-item', x: 0, y: 0, w: 22, h: 71 },
-  { tag: 'grid-item', x: 38, y: 19, w: 34, h: 52 },
-  { tag: 'grid-item', x: 22, y: 19, w: 16, h: 52 },
-  { tag: 'grid-item', x: 22, y: 0, w: 50, h: 19 }
-]
+export const gridGenerator = function(children) {
+  const gridItems = [
+    { tag: 'grid-item', x: 0, y: 0, w: 22, h: 71 },
+    { tag: 'grid-item', x: 38, y: 19, w: 34, h: 52 },
+    { tag: 'grid-item', x: 22, y: 19, w: 16, h: 52 },
+    { tag: 'grid-item', x: 22, y: 0, w: 50, h: 19 }
+  ]
 
-export const gridGenerator = function(children = gridItems) {
   return {
     tag: 'grid-generator',
-    children
+    children: children || gridItems
   }
 }
 
