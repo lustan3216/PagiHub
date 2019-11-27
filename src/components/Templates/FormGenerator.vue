@@ -1,5 +1,5 @@
 <template>
-  <grid-generator :id="id" :children="children">
+  <grid-generator ref="grid" :id="id" :children="innerChildren">
     <template v-slot="props">
       <component-add :id="props.child.id" :children="props.child.children" />
     </template>
@@ -39,6 +39,11 @@ export default {
   computed: {
     isValid() {
       return Object.values(this.isValidObject).every(value => value)
+    }
+  },
+  watch: {
+    innerChildren(value) {
+      this.$refs.grid.innerChildren = value
     }
   },
   methods: {

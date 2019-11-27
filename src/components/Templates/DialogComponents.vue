@@ -60,7 +60,6 @@
 <script>
 import clone from 'clone'
 import { mapState } from 'vuex'
-import { emitCloseEditBar } from '../../buses/editBar'
 import templates from '../../template'
 import importTemplatesMixin from '../../mixins/importTemplates'
 
@@ -93,11 +92,9 @@ export default {
   methods: {
     emit(component) {
       this.$emit('add', component)
-      emitCloseEditBar()
     },
     open() {
       this.visible = true
-      emitCloseEditBar()
     }
   }
 }

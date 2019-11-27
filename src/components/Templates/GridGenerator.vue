@@ -10,21 +10,7 @@
     @layout-updated="layoutUpdated"
   >
     <template v-for="child in innerChildrenWithI">
-      <el-popover
-        v-if="isEditable"
-        :value="isEditBarVisible(child.id)"
-        :open-delay="100"
-        :close-delay="0"
-        :key="`popover${child.id}`"
-        :ref="child.id"
-        trigger="manual"
-        placement="right"
-      >
-        <edit-bar :id="child.id" />
-      </el-popover>
-
       <grid-item
-        v-popover:[child.id]
         :x="child.x"
         :y="child.y"
         :w="child.w"
@@ -34,7 +20,6 @@
         :key="child.id"
         drag-ignore-from=".no-drag"
         drag-allow-from="div"
-        @click.stop.native="openEditBarById(child.id)"
       >
         <slot v-bind="{ child }">
           <component-add :id="child.id" :children="child.children" />
@@ -45,12 +30,12 @@
 </template>
 
 <script>
-import { onVisibleChange } from '../../buses/visibility'
+import { vmMap } from '../../utils/vmMap'
+import { mapState } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import importTemplatesMixin from '../../mixins/importTemplates'
-import EditBar from './Components/EditBar'
 import ComponentAdd from './ComponentAdd'
 
 export default {
@@ -58,16 +43,11 @@ export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
-    EditBar,
     ComponentAdd
   },
   mixins: [childrenMixin, commonMixin, importTemplatesMixin],
-  data() {
-    return {
-      visibleId: false
-    }
-  },
   computed: {
+    ...mapState('nodes', ['currentNodesMap']),
     innerChildrenWithI() {
       return this.innerChildren.map(child => {
         // if layoutItem doesn't have i, it will crash
@@ -80,23 +60,15 @@ export default {
     }
   },
   watch: {
-    innerChildren() {
-      this.onVisibleChange()
+    innerChildren(value) {
+      if (!value.length) {
+        const { parentId } = this.currentNodesMap[this.id]
+        const vm = vmMap[parentId]
+        vm.remove(this.id)
+      }
     }
   },
-  mounted() {
-    this.onVisibleChange()
-  },
   methods: {
-    onVisibleChange() {
-      this.innerChildren.forEach(child => {
-        const node = this.$refs[child.id] && this.$refs[child.id][0]
-        node &&
-          onVisibleChange(child.id, ({ visible }) => {
-            node.$el.style.visibility = visible ? 'visible' : 'hidden'
-          })
-      })
-    },
     layoutUpdated(layout) {
       this.innerChildren = layout
     }
@@ -110,6 +82,7 @@ export default {
 }
 
 ::v-deep.vue-grid-item {
+  transition: box-shadow 1s, border-color 1s;
   position: relative;
   border: 1px dashed #dedede;
   border-radius: 3px;

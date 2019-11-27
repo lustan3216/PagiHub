@@ -1,52 +1,96 @@
 <template>
   <flex-sidebar>
-    <el-menu ref="menu">
-      <nested-menu
-        v-for="node in tree"
-        :node="node"
-        :key="node.id"
-        :active-id="currentId"
-        @onClick="onClick" />
-    </el-menu>
+    <el-input v-model="filterText" placeholder="输入关键字进行过滤" />
+    <el-tree
+      ref="tree"
+      :filter-node-method="filterNode"
+      :data="tree"
+      :indent="12"
+      node-key="id"
+      default-expand-all
+      @node-click="asd"
+    >
+      <template v-slot="{ node, data }">
+        <span class="justify-between w-100">
+          <span class="el-tree-node__label align-center">
+            {{ data.type || data.tag }} - {{ data.id }}
+          </span>
+          <span>
+            <visibility v-if="data.tag !== 'grid-item'" :id="data.id" />
+            <el-button size="mini" @click.stop="() => copy(data)">
+              +
+            </el-button>
+            <el-button size="mini" @click.stop="() => remove(data)">
+              -
+            </el-button>
+          </span>
+        </span>
+      </template>
+    </el-tree>
   </flex-sidebar>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import FlexSidebar from '../Templates/FlexSidebar'
-import NestedMenu from './Components/NestedMenu'
-import { openEditBarById, store as editBarStore } from '../../buses/editBar'
+import { vmMap } from '../../utils/vmMap'
+import Visibility from './Components/Visibility'
 
 export default {
   name: 'SidebarNodesTree',
   components: {
-    NestedMenu,
-    FlexSidebar
+    FlexSidebar,
+    Visibility
   },
-  computed: {
-    ...mapGetters('nodes', ['tree']),
-    currentId() {
-      return Array.last(editBarStore.currentIds)
+  data() {
+    return {
+      filterText: '',
+      selected: null
     }
   },
+  computed: {
+    ...mapState('nodes', ['currentNodesMap']),
+    ...mapGetters('nodes', ['tree'])
+  },
   watch: {
-    currentId(id) {
-      if (!id) return
-      const { menu } = this.$refs
-      id = id.toString()
-      menu.activeIndex = id
-      if (menu.items[id]) {
-        const { indexPath } = menu.items[id]
-        menu.open(indexPath[indexPath.length - 2]) // 取到該節點的爸爸，也就是最後面往前推一個index
-      } else {
-        menu.open(id)
+    filterText(val) {
+      this.$refs.tree.filter(val)
+    },
+    selected(newValue, oldValue) {
+      if (vmMap[oldValue]) {
+        vmMap[oldValue].$el
+          .closest('.vue-grid-item')
+          .classList.remove('elevate')
+      }
+      if (vmMap[newValue]) {
+        vmMap[newValue].$el.closest('.vue-grid-item').classList.add('elevate')
       }
     }
   },
+  beforeDestroy() {
+    vmMap[this.selected].$el
+      .closest('.vue-grid-item')
+      .classList.remove('elevate')
+  },
   methods: {
-    onClick(id) {
-      this.$refs.menu.activeIndex = id.toString()
-      openEditBarById(id)
+    filterNode(value, data) {
+      if (!value) return true
+      const key = data.type ? 'type' : 'tag'
+      return data[key].indexOf(value) !== -1
+    },
+    copy(data) {
+      if (data.tag === 'grid-item') {
+        vmMap[data.parentId].new(data.id)
+      } else {
+        const parentNode = this.currentNodesMap[data.parentId]
+        vmMap[parentNode.parentId].copy(data.parentId)
+      }
+    },
+    remove(data) {
+      vmMap[data.parentId].remove(data.id)
+    },
+    asd() {
+      this.selected = this.$refs.tree.getCurrentKey()
     }
   }
 }
@@ -60,5 +104,11 @@ export default {
 .el-menu-item:focus,
 .el-menu-item:hover {
   background-color: inherit;
+}
+
+.sidebar {
+  background-color: #fff;
+  box-shadow: 2px 0px 5px 0 rgba(32, 48, 60, 0.05);
+  width: 350px !important;
 }
 </style>

@@ -14,20 +14,7 @@
       @click.stop="click(child.id)"
       @mouseleave="mouseLeave"
     >
-      <el-popover
-        :value="isEditBarVisible(child.id)"
-        :open-delay="100"
-        :close-delay="0"
-        :key="`popover${child.id}`"
-        :ref="child.id"
-        trigger="manual"
-        placement="right"
-      >
-        <edit-bar :id="child.id" />
-      </el-popover>
-      
       <component
-        v-popover:[child.id]
         :class="{
           'no-click': isEditableId !== child.id && child.tag !== 'grid-generator' && child.tag !== 'carousel',
           'fade-out': layoutEditable && child.tag !== 'grid-generator'
@@ -44,13 +31,9 @@ import { mapState } from 'vuex'
 import importTemplates from '../../mixins/importTemplates'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
-import EditBar from './Components/EditBar'
 
 export default {
   name: 'AreaDraggable',
-  components: {
-    EditBar
-  },
   mixins: [importTemplates, childrenMixin, commonMixin],
   data() {
     return {
@@ -65,7 +48,6 @@ export default {
       this.isEditableId = null
     },
     click(id) {
-      this.openEditBarById(id)
       this.isEditableId = id
     }
   }

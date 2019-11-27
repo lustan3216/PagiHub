@@ -14,7 +14,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { appendNestedIds } from '../../utils/keyId'
-import { getVm } from '../../utils/vmMap'
+import { vmMap } from '../../utils/vmMap'
 import importTemplates from '../../mixins/importTemplates'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
@@ -45,7 +45,7 @@ export default {
       const formNode = this.parentPath(this.id).find(x => x.tag === form)
 
       if (!formNode) return template
-      const vm = getVm(formNode.id)
+      const vm = vmMap[formNode.id]
       if (vm.button.submit) {
         template.children = template.children.filter(
           x => x.children[0].tag !== 'flex-submit'

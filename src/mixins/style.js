@@ -1,4 +1,4 @@
-import { getVm } from '../utils/vmMap'
+import { vmMap } from '../utils/vmMap'
 
 export default {
   props: {
@@ -9,7 +9,7 @@ export default {
   },
   methods: {
     vm() {
-      return getVm(this.id)
+      return vmMap[this.id]
     },
     getStyles() {
       return window.getComputedStyle(this.vm().$el)

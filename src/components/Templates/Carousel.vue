@@ -16,35 +16,20 @@
       @click.stop.native="click(child.id)"
       @mouseleave="mouseLeave"
     >
-      <el-popover
-        :value="isEditBarVisible(child.id)"
-        :open-delay="100"
-        :close-delay="0"
-        :key="`popover${child.id}`"
-        :ref="child.id"
-        trigger="manual"
-        placement="right"
-      >
-        <edit-bar :id="child.id" />
-      </el-popover>
-
       <grid-generator :id="child.id" :children="child.children" class="h-100" />
     </el-carousel-item>
   </el-carousel>
 </template>
 
 <script>
-import { onVisibleChange } from '../../buses/visibility'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
-import EditBar from './Components/EditBar'
 import GridGenerator from './GridGenerator'
 
 export default {
   name: 'Carousel',
   components: {
-    GridGenerator,
-    EditBar
+    GridGenerator
   },
   mixins: [childrenMixin, commonMixin],
   data() {
@@ -52,28 +37,11 @@ export default {
       isEditableId: null
     }
   },
-  watch: {
-    innerChildren() {
-      this.onVisibleChange()
-    }
-  },
-  mounted() {
-    this.onVisibleChange()
-  },
   methods: {
-    onVisibleChange() {
-      this.innerChildren.forEach(child => {
-        onVisibleChange(child.id, ({ visible }) => {
-          // 沒有註冊在data裡面，所以直接set
-          this.$set(child, 'visible', visible)
-        })
-      })
-    },
     mouseLeave() {
       this.isEditableId = null
     },
     click(id) {
-      this.openEditBarById(id)
       this.isEditableId = id
     }
   }

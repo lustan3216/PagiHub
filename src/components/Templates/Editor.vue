@@ -78,7 +78,7 @@ import 'quill/dist/quill.snow.css'
 import commonMixin from '../../mixins/common'
 import { mapState, mapMutations } from 'vuex'
 import { VueEditor } from 'vue2-editor'
-import ColorPicker from './Components/ColorPicker'
+import ColorPicker from '../Components/ColorPicker'
 import FontIcon from 'quill/assets/icons/color.svg'
 import BackgroundIcon from 'quill/assets/icons/background.svg'
 

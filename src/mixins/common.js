@@ -2,9 +2,8 @@ import clone from 'clone'
 import store from '../store'
 import editMixin from './edit'
 import { mapState, mapMutations } from 'vuex'
-import { appendVm } from '../utils/vmMap'
+import { appendVm, removeVm } from '../utils/vmMap'
 import { onSettingChange } from '../buses/settings'
-import { onVisibleChange } from '../buses/visibility'
 
 export default {
   mixins: [editMixin],
@@ -37,15 +36,14 @@ export default {
       onSettingChange(this.id, ({ styles }) => {
         this.innerStyles = styles
       })
-
-      onVisibleChange(this.id, ({ visible }) => {
-        this.$el.style.visibility = visible ? '' : 'hidden'
-      })
     }
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount
     if (this.isEditable) appendVm(this)
+  },
+  beforeDestroy() {
+    if (this.isEditable) removeVm(this.id)
   },
   methods: {
     ...mapMutations('nodes', ['APPEND_NESTED_NODES']),
