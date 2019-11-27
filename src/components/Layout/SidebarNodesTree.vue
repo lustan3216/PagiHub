@@ -34,7 +34,7 @@
 import { mapState, mapGetters } from 'vuex'
 import FlexSidebar from '../Templates/FlexSidebar'
 import { vmMap } from '../../utils/vmMap'
-import Visibility from './Components/Visibility'
+import Visibility from './Visibility'
 
 export default {
   name: 'SidebarNodesTree',

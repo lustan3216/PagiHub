@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { vmMap } from '../../../utils/vmMap'
+import { vmMap } from '../../utils/vmMap'
 
 export default {
   name: 'Visibility',

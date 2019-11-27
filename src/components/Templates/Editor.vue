@@ -114,8 +114,8 @@ export default {
       get() {
         const vm = this.currentNodesMap[this.id] && this.isEditable
 
-        if (vm && vm.setting && vm.setting.content) {
-          return vm.setting.content
+        if (vm && vm.value) {
+          return vm.value
         } else {
           return '<h2>I am Editor</h2>'
         }
@@ -124,7 +124,7 @@ export default {
         this.isEditable &&
           this.ASSIGN({
             id: this.id,
-            setting: { content }
+            value: content
           })
       }
     }
