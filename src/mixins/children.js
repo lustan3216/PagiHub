@@ -6,6 +6,7 @@ import { appendNestedIds } from '../utils/keyId'
 export default {
   watch: {
     innerChildren(newChildren, oldChildren) {
+      if (!this.isEditable) return
       try {
         this.updateDifferenceToVuex(newChildren, oldChildren, this.id)
       } catch (e) {
@@ -65,6 +66,7 @@ export default {
         const createdNodes = this.difference(newIds, oldIds).map(
           id => newChildren[newIds.indexOf(id)]
         )
+        console.log(createdNodes)
         this.APPEND_NESTED_NODES({
           nodes: createdNodes,
           parentId
@@ -75,9 +77,11 @@ export default {
         const deletedNodes = this.difference(oldIds, newIds).map(
           id => oldChildren[oldIds.indexOf(id)]
         )
+        console.log(2)
         this.REMOVE_NESTED_NODES(deletedNodes) // 要傳nodes下去，因為帶有children
         throw 'done'
       } else {
+        console.log(1)
         // 數量一樣，代表子結點有被拖移拉近新的component
         // 由於 vue-grid-layout 的item當拖移或變動大小，所有item都會變，所以就全部都update
         newChildren.some((newChild, index) => {

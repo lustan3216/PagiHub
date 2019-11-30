@@ -35,8 +35,6 @@ export default {
       innerRule = clone(this.rule)
     }
 
-    innerRule.field = innerRule.title
-
     return {
       api: {},
       isValid: false,
@@ -45,7 +43,7 @@ export default {
   },
   created() {
     if (this.isEditable) {
-      this.updateRootData({ isValid: false, value: this.innerRule.rule })
+      this.updateRootData({ isValid: false, value: this.innerRule.value })
     }
   },
   methods: {
@@ -58,8 +56,14 @@ export default {
     },
     updateRootData({ isValid, value }) {
       this.ASSIGN({ id: this.id, value })
-      this.rootForm.updateForm(this.innerRule.title, value)
-      this.rootForm.updateValid(this.innerRule.title, isValid)
+      this.rootForm.updateForm(this.innerRule.title, {
+        isValid,
+        value
+      })
+      this.rootForm.updateForm(this.innerRule.title, {
+        isValid,
+        value
+      })
     }
   }
 }

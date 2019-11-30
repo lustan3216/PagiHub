@@ -1,3 +1,36 @@
+import {
+  flexLabel,
+  flexSlider,
+  flexCheckBox,
+  flexSubmit,
+  flexTextarea
+} from './form'
+
+export const formGroup = function(fn) {
+  const input = fn()
+  return {
+    tag: 'form-group',
+    children: [
+      {
+        tag: 'grid-item',
+        x: 0,
+        y: 0,
+        w: 33,
+        h: 30,
+        children: [flexLabel(input)]
+      },
+      {
+        tag: 'grid-item',
+        x: 0,
+        y: 15,
+        w: 22,
+        h: 15,
+        children: [input]
+      }
+    ]
+  }
+}
+
 export const formGenerator = function() {
   return {
     tag: 'form-generator',
@@ -8,15 +41,7 @@ export const formGenerator = function() {
         y: 0,
         w: 33,
         h: 30,
-        children: [
-          {
-            tag: 'form-item',
-            type: 'input',
-            field: 'test',
-            title: 'test',
-            value: ''
-          }
-        ]
+        children: [flexTextarea()]
       },
       {
         tag: 'grid-item',
@@ -24,19 +49,7 @@ export const formGenerator = function() {
         y: 15,
         w: 22,
         h: 15,
-        children: [
-          {
-            tag: 'form-item',
-            type: 'radio',
-            title: '是否包邮',
-            field: '是否包邮',
-            value: '0',
-            options: [
-              { value: '0', label: '不包邮', disabled: false },
-              { value: '1', label: '包邮', disabled: true }
-            ]
-          }
-        ]
+        children: [flexCheckBox()]
       },
       {
         tag: 'grid-item',
@@ -44,21 +57,7 @@ export const formGenerator = function() {
         y: 0,
         w: 22,
         h: 15,
-        children: [
-          {
-            tag: 'form-item',
-            type: 'input',
-            title: '商品名称',
-            field: '商品名称',
-            value: 'iphone 7',
-            props: {
-              type: 'text'
-            },
-            validate: [
-              { required: true, message: '请输入goods_name', trigger: 'blur' }
-            ]
-          }
-        ]
+        children: [flexSlider()]
       },
       {
         tag: 'grid-item',
@@ -66,11 +65,7 @@ export const formGenerator = function() {
         y: 30,
         w: 15,
         h: 17,
-        children: [
-          {
-            tag: 'flex-submit'
-          }
-        ]
+        children: [flexSubmit()]
       }
     ]
   }

@@ -1,5 +1,6 @@
 export default {
   components: {
+    FlexLabel: () => import('../components/Templates/FlexLabel'),
     FlexImage: () => import('../components/Templates/FlexImage'),
     FlexButton: () => import('../components/Templates/FlexButton'),
     FlexSubmit: () => import('../components/Templates/FlexSubmit'),
@@ -14,6 +15,7 @@ export default {
     Card: () => import('../components/Templates/Card'),
     Drawer: () => import('../components/Templates/Drawer'),
     FormItem: () => import('../components/Templates/FormItem'),
+    FormGroup: () => import('../components/Templates/FormGroup'),
     FormGenerator: () => import('../components/Templates/FormGenerator')
   }
 }

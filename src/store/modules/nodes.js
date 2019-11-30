@@ -32,6 +32,7 @@ const mutations = {
       node.parentId = parentId
     }
     const { children, ..._node } = node
+
     Vue.set(state.currentNodesMap, _node.id, _node)
     children &&
       children.forEach(child => {
@@ -40,6 +41,7 @@ const mutations = {
           parentId: node.id
         })
       })
+    console.log(state.currentNodesMap)
   },
 
   REMOVE_NESTED_NODES(state, nodes) {

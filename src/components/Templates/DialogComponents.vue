@@ -30,7 +30,6 @@
               <el-card shadow="hover">
                 <component
                   v-if="component.tag"
-                  :rule="component.tag === 'form-item' ? component : undefined"
                   :is="component.tag"
                   :key="index"
                   :children="component.children"
