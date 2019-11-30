@@ -1,11 +1,12 @@
 <template>
-  <component
-    v-if="firstChild"
-    :is="firstChild.tag"
-    :id="firstChild.id"
-    :rule="firstChild"
-    :children="firstChild.children"
-  />
+  <middle-layer v-if="firstChild" :id="firstChild.id">
+    <component
+      :is="firstChild.tag"
+      :id="firstChild.id"
+      :rule="firstChild"
+      :children="firstChild.children"
+    />
+  </middle-layer>
   <div v-else-if="isEditable" class="flex-center h-100 pointer">
     <dialog-components :id="id" @add="addTemplate($event)" />
   </div>
@@ -19,11 +20,13 @@ import importTemplates from '../../mixins/importTemplates'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import DialogComponents from './DialogComponents'
+import MiddleLayer from './MiddleLayer'
 
 export default {
   name: 'ComponentAdd',
   components: {
-    DialogComponents
+    DialogComponents,
+    MiddleLayer
   },
   mixins: [importTemplates, childrenMixin, commonMixin],
   computed: {

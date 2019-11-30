@@ -82,12 +82,10 @@ export default {
 }
 
 ::v-deep.vue-grid-item {
-  transition: box-shadow 1s, border-color 1s;
   position: relative;
   border: 1px dashed #dedede;
   border-radius: 3px;
-  /*padding: 5px;*/
-  /*box-sizing: border-box;*/
+  
   & > .vue-resizable-handle {
     z-index: 10000;
   }

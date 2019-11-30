@@ -4,11 +4,11 @@
     <el-tree
       ref="tree"
       :filter-node-method="filterNode"
-      :data="tree"
+      :data="neatTree"
       :indent="12"
       node-key="id"
       default-expand-all
-      @node-click="asd"
+      @node-click="nodeClick"
     >
       <template v-slot="{ node, data }">
         <span class="justify-between w-100">
@@ -31,10 +31,13 @@
 </template>
 
 <script>
+import clone from 'clone'
 import { mapState, mapGetters } from 'vuex'
 import FlexSidebar from '../Templates/FlexSidebar'
+import { traversal } from '../../utils/util'
 import { vmMap } from '../../utils/vmMap'
 import Visibility from './Visibility'
+import globalStatus from '../../observable/globalStatus'
 
 export default {
   name: 'SidebarNodesTree',
@@ -50,27 +53,31 @@ export default {
   },
   computed: {
     ...mapState('nodes', ['currentNodesMap']),
-    ...mapGetters('nodes', ['tree'])
+    ...mapGetters('nodes', ['tree']),
+    neatTree() {
+      const cloned = clone(this.tree)
+      traversal(cloned, function(node) {
+        if (node.tag === 'grid-item') {
+          Object.assign(node, node.children[0])
+        }
+      })
+      return cloned
+    }
   },
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val)
-    },
-    selected(newValue, oldValue) {
-      if (vmMap[oldValue]) {
-        vmMap[oldValue].$el
-          .closest('.vue-grid-item')
-          .classList.remove('elevate')
-      }
-      if (vmMap[newValue]) {
-        vmMap[newValue].$el.closest('.vue-grid-item').classList.add('elevate')
-      }
     }
   },
+  mounted() {
+    this.$refs.tree.setCurrentKey(globalStatus.elevateId)
+  },
   beforeDestroy() {
-    vmMap[this.selected].$el
-      .closest('.vue-grid-item')
-      .classList.remove('elevate')
+    if (this.selected) {
+      vmMap[this.selected].$el
+        .closest('.vue-grid-item')
+        .classList.remove('elevate')
+    }
   },
   methods: {
     filterNode(value, data) {
@@ -89,8 +96,8 @@ export default {
     remove(data) {
       vmMap[data.parentId].remove(data.id)
     },
-    asd() {
-      this.selected = this.$refs.tree.getCurrentKey()
+    nodeClick() {
+      globalStatus.elevateId = this.$refs.tree.getCurrentKey()
     }
   }
 }
