@@ -32,6 +32,7 @@
                   v-if="component.tag"
                   :is="component.tag"
                   :key="index"
+                  :rule="component.tag === 'form-item' ? component : undefined"
                   :children="component.children"
                 />
 
@@ -85,12 +86,12 @@ export default {
   computed: {
     ...mapState('layout', ['currentDialog']),
     templates() {
-      return clone(templates)
+      return templates
     }
   },
   methods: {
     emit(component) {
-      this.$emit('add', component)
+      this.$emit('add', clone(component))
     },
     open() {
       this.visible = true

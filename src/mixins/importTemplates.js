@@ -15,7 +15,6 @@ export default {
     Card: () => import('../components/Templates/Card'),
     Drawer: () => import('../components/Templates/Drawer'),
     FormItem: () => import('../components/Templates/FormItem'),
-    FormGroup: () => import('../components/Templates/FormGroup'),
     FormGenerator: () => import('../components/Templates/FormGenerator')
   }
 }

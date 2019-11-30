@@ -56,11 +56,11 @@ export default {
     },
     updateRootData({ isValid, value }) {
       this.ASSIGN({ id: this.id, value })
-      this.rootForm.updateForm(this.innerRule.title, {
+      this.rootForm.updateForm(this.innerRule.field, {
         isValid,
         value
       })
-      this.rootForm.updateForm(this.innerRule.title, {
+      this.rootForm.updateForm(this.innerRule.field, {
         isValid,
         value
       })

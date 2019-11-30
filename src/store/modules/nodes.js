@@ -41,7 +41,6 @@ const mutations = {
           parentId: node.id
         })
       })
-    console.log(state.currentNodesMap)
   },
 
   REMOVE_NESTED_NODES(state, nodes) {
