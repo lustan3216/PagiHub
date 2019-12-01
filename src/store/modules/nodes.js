@@ -2,6 +2,7 @@ import clone from 'clone'
 import Vue from 'vue'
 import listTiTree from '../../utils/listToTree'
 import { SET } from '../index'
+import { set, merge } from '../../lodash'
 import { appendNestedIds } from '../../utils/keyId'
 import { gridGenerator as templateGridGenerator } from '../../template/basic'
 
@@ -14,10 +15,7 @@ const mutations = {
 
   ASSIGN(state, payload) {
     const node = state.currentNodesMap[payload.id]
-    for (const key in payload) {
-      node[key] = payload[key]
-    }
-
+    merge(node, payload)
     mutations.SNAPSHOT(state)
   },
 
@@ -32,7 +30,6 @@ const mutations = {
       node.parentId = parentId
     }
     const { children, ..._node } = node
-
     Vue.set(state.currentNodesMap, _node.id, _node)
     children &&
       children.forEach(child => {

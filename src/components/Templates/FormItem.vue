@@ -26,19 +26,29 @@ export default {
     }
   },
   data() {
-    let innerRule
-    if (this.isEditable) {
-      const node = clone(this.$store.state.nodes.currentNodesMap[this.id])
-      node.on = { change: this.change }
-      innerRule = node
-    } else {
-      innerRule = clone(this.rule)
-    }
-
     return {
       api: {},
-      isValid: false,
-      innerRule
+      isValid: false
+    }
+  },
+  computed: {
+    innerRule() {
+      let innerRule
+      if (this.isEditable) {
+        const node = clone(this.$store.state.nodes.currentNodesMap[this.id])
+        node.on = { change: this.change }
+        innerRule = node
+      } else {
+        innerRule = clone(this.rule)
+      }
+      if (innerRule.props && innerRule.props.basic) {
+        innerRule.props = innerRule.props.basic
+      }
+      // if (this.rootForm.innerProps['display-label']) {
+      innerRule.title = innerRule.field
+      // }
+      // console.log(innerRule)
+      return innerRule
     }
   },
   created() {
@@ -55,15 +65,10 @@ export default {
       })
     },
     updateRootData({ isValid, value }) {
+      const field = this.innerRule.field
       this.ASSIGN({ id: this.id, value })
-      this.rootForm.updateForm(this.innerRule.field, {
-        isValid,
-        value
-      })
-      this.rootForm.updateForm(this.innerRule.field, {
-        isValid,
-        value
-      })
+      this.rootForm.updateForm(field, value)
+      this.rootForm.updateValid(field, isValid)
     }
   }
 }

@@ -1,32 +1,41 @@
 <template>
-  <el-card :style="innerStyles">
-    <grid-generator v-bind="innerChildren[0]" class="h-100" />
-  </el-card>
+  <div class="h-100 flex-center">
+    <el-card v-bind="innerSettings('basic')" :style="innerStyles">
+      <inner-grid-generator ref="grid" :id="id" :children="children" />
+    </el-card>
+  </div>
 </template>
 
 <script>
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
-import GridGenerator from './GridGenerator'
+import InnerGridGenerator from './Common/InnerGridGenerator'
+import settings from '../../settings/card'
 
 export default {
+  settingsTemplate: settings(),
   name: 'Card',
   components: {
-    GridGenerator
+    InnerGridGenerator
   },
-  mixins: [childrenMixin, commonMixin]
+  mixins: [childrenMixin, commonMixin],
+  computed: {
+    firstChild() {
+      return this.innerChildren[0]
+    }
+  },
+  watch: {
+    innerChildren(value) {
+      this.$refs.grid.updateChildren(value)
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.edit-area {
-  height: 100%;
-}
 ::v-deep.el-card {
-  height: 94%;
-  width: 94%;
-  margin-left: calc(3% - 2px);
-  margin-top: calc(3% - 2px);
+  height: calc(100% - 20px);
+  width: calc(100% - 20px);
   & > .el-card__body {
     padding: 0;
     height: 100%;

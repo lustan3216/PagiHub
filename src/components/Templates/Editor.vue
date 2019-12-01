@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="h-100"
-    @click="noClick = false"
-    @mouseleave="noClick = true"
-    @mouseenter="mouseenter"
-  >
+  <div class="h-100">
     <div :id="`toolbar${_uid}`" style="width: 426px;">
       <span v-show="toggledBar" class="ql-formats m-l-12">
         <select class="ql-header" style="width: 110px;">
@@ -64,9 +59,9 @@
     <vue-editor
       ref="editor"
       v-model="content"
-      :class="['no-drag', 'h-100', noClick ? 'no-click' : '']"
       :style="innerStyles"
       :editor-options="editorOption"
+      class="h-100"
     />
   </div>
 </template>
@@ -96,7 +91,6 @@ export default {
       fontColor: 'transparent',
       backgroundColor: 'transparent',
       toggledBar: true,
-      noClick: true,
       editorOption: {
         theme: 'bubble',
         modules: {
@@ -150,12 +144,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('nodes', ['ASSIGN']),
-    mouseenter() {
-      this.noClick = this.$el
-        .querySelector('.ql-tooltip')
-        .classList.contains('ql-hidden')
-    }
+    ...mapMutations('nodes', ['ASSIGN'])
   }
 }
 </script>

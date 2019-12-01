@@ -1,9 +1,11 @@
 <template>
-  <el-divider />
+  <div>
+    <el-divider />
+  </div>
 </template>
 
 <script>
-import childrenMixin from '../../mixins/children'
+import commonMixin from '../../mixins/common'
 import EditArea from './AreaDraggable'
 
 export default {
@@ -11,7 +13,7 @@ export default {
   components: {
     EditArea
   },
-  mixins: [childrenMixin],
+  mixins: [commonMixin],
   data() {
     return {
       isHover: false

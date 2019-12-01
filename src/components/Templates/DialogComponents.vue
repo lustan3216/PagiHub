@@ -1,7 +1,6 @@
 <template>
   <i class="el-icon-lollipop" @click="open">
     <el-dialog
-      v-if="visible"
       ref="dialog"
       :visible="visible"
       :modal="false"
@@ -29,7 +28,6 @@
             >
               <el-card shadow="hover">
                 <component
-                  v-if="component.tag"
                   :is="component.tag"
                   :key="index"
                   :rule="component.tag === 'form-item' ? component : undefined"
@@ -58,9 +56,8 @@
 </template>
 
 <script>
-import clone from 'clone'
-import { mapState } from 'vuex'
-import templates from '../../template'
+import { mapState, mapGetters } from 'vuex'
+import { basic, form, formGroup } from '../../template'
 import importTemplatesMixin from '../../mixins/importTemplates'
 
 export default {
@@ -85,13 +82,21 @@ export default {
   },
   computed: {
     ...mapState('layout', ['currentDialog']),
+    ...mapGetters('nodes', ['parentPath']),
+    rootForm() {
+      return this.parentPath(this.id).find(x => x.tag === 'form-generator')
+    },
     templates() {
-      return templates
+      if (this.rootForm) {
+        return [basic(), form(), formGroup()]
+      } else {
+        return [basic(), formGroup()]
+      }
     }
   },
   methods: {
     emit(component) {
-      this.$emit('add', clone(component))
+      this.$emit('add', component)
     },
     open() {
       this.visible = true

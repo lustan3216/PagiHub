@@ -1,12 +1,13 @@
 import clone from 'clone'
 import store from '../store'
 import editMixin from './edit'
+import settingMixin from './setting'
 import { mapState, mapMutations } from 'vuex'
 import { appendVm, removeVm } from '../utils/vmMap'
 import { onSettingChange } from '../buses/settings'
 
 export default {
-  mixins: [editMixin],
+  mixins: [editMixin, settingMixin],
   props: {
     id: {
       type: Number
@@ -14,12 +15,8 @@ export default {
   },
   inject: ['isEditable'],
   data() {
-    let innerStyles = {}
-
     const node = store.state.nodes.currentNodesMap[this.id]
-    if (node) {
-      innerStyles = clone(node.styles || {})
-    }
+    const innerStyles = node ? clone(node.styles || {}) : {}
 
     return {
       innerStyles
@@ -38,6 +35,7 @@ export default {
       })
     }
   },
+
   mounted() {
     // Don't put in created to prevent some component fail before mount
     if (this.isEditable) appendVm(this)

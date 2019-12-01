@@ -1,5 +1,6 @@
 import clone from 'clone'
 import { mapGetters, mapMutations } from 'vuex'
+import globalStatus from '../observable/globalStatus'
 import { resetNestedIds } from '../utils/keyId'
 import { camelCase } from '../lodash'
 
@@ -53,6 +54,7 @@ export default {
       this.innerChildren = clonedChildren
     },
     remove(childId) {
+      if (globalStatus.settingId === this.id) globalStatus.settingId = null
       const index = this.childrenIds.indexOf(childId)
       const cloneChildren = clone(this.innerChildren)
       cloneChildren.splice(index, 1)

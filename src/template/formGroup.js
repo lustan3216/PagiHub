@@ -1,35 +1,9 @@
 import {
-  flexLabel,
   flexSlider,
   flexCheckBox,
   flexSubmit,
   flexTextarea
 } from './form'
-
-export const formGroup = function(fn) {
-  const input = fn()
-  return {
-    tag: 'form-group',
-    children: [
-      {
-        tag: 'grid-item',
-        x: 0,
-        y: 0,
-        w: 33,
-        h: 30,
-        children: [flexLabel(input)]
-      },
-      {
-        tag: 'grid-item',
-        x: 0,
-        y: 15,
-        w: 22,
-        h: 15,
-        children: [input]
-      }
-    ]
-  }
-}
 
 export const formGenerator = function() {
   return {
@@ -70,8 +44,11 @@ export const formGenerator = function() {
     ]
   }
 }
-export default {
-  name: 'FormGroup',
-  icon: 'el-icon-message',
-  components: [formGenerator()]
+
+export default function() {
+  return {
+    name: 'FormGroup',
+    icon: 'el-icon-message',
+    components: [formGenerator()]
+  }
 }

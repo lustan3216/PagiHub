@@ -14,6 +14,8 @@
           <board-root />
         </el-main>
       </el-container>
+
+      <sidebar-settings />
     </el-container>
   </el-container>
 </template>

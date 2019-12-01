@@ -51,32 +51,6 @@ Vue.config.devtools = process.env.NODE_ENV === 'development'
 
 window.Vue = Vue
 
-Vue.mixin({
-  data() {
-    const vals = this.$options.rules
-    if (vals) {
-      this.rules = vals
-    }
-    return {}
-  },
-  beforeCreate() {
-    // const options = this.$options
-    // const vals = options.rules
-    // if (!vals) return
-    // if (!options.computed) options.computed = {}
-    // if (options.computed.$v) return
-    // options.computed.$v = function() {
-    //   return this._vuelidate ? this._vuelidate.refs.$v.proxy : null
-    // }
-  },
-  beforeDestroy() {
-    // if (this._vuelidate) {
-    //   this._vuelidate.$destroy()
-    //   this._vuelidate = null
-    // }
-  }
-})
-
 const app = new Vue({
   render: h => h(App),
   store

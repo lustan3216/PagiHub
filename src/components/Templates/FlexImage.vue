@@ -1,29 +1,18 @@
 <template>
   <el-image
-    :src="url"
-    :fit="fit"
+    v-bind="innerSettings('basic')"
     :style="innerStyles"
     class="wh-100" />
 </template>
 
 <script>
 import commonMixin from '../../mixins/common'
+import settings from '../../settings/image'
 
 export default {
+  settingsTemplate: settings(),
   name: 'FlexImage',
-  mixins: [commonMixin],
-  props: {
-    url: {
-      type: String,
-      default() {
-        return `https://placeimg.com/1320/840/any`
-      }
-    },
-    fit: {
-      type: String,
-      default: 'cover'
-    }
-  }
+  mixins: [commonMixin]
 }
 </script>
 

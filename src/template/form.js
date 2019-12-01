@@ -16,7 +16,7 @@ export const flexInput = () => ({
   field: '商品名称',
   value: 'iphone 7',
   props: {
-    type: 'text'
+    basic: { type: 'text' }
   },
   validate: [{ required: true, message: '请输入goods_name', trigger: 'blur' }]
 })
@@ -27,8 +27,10 @@ export const flexTextarea = () => ({
   field: '商品名称',
   value: 'iphone 7',
   props: {
-    rows: 3,
-    type: 'textarea'
+    basic: {
+      autosize: true,
+      type: 'textarea'
+    }
   },
   validate: [{ required: true, message: '请输入商品名称', trigger: 'blur' }]
 })
@@ -39,7 +41,9 @@ export const flexInputNumber = () => ({
   field: '价格',
   value: 1,
   props: {
-    precision: 2
+    basic: {
+      precision: 2
+    }
   }
 })
 
@@ -77,7 +81,9 @@ export const flexSelect = () => ({
     { value: '105', label: '新鲜水果', disabled: false }
   ],
   props: {
-    multiple: true
+    basic: {
+      multiple: true
+    }
   }
 })
 
@@ -87,8 +93,10 @@ export const flexSwitch = () => ({
   field: '是否上架',
   value: '1',
   props: {
-    activeValue: '1',
-    inactiveValue: '0'
+    basic: {
+      activeValue: '1',
+      inactiveValue: '0'
+    }
   }
 })
 
@@ -98,7 +106,9 @@ export const flexCascader = () => ({
   field: '所在区域',
   value: ['陕西省', '西安市'],
   props: {
-    options: ['陕西省', '西安市', '新城区']
+    basic: {
+      options: ['陕西省', '西安市', '新城区']
+    }
   }
 })
 
@@ -108,10 +118,11 @@ export const flexDatePicker = () => ({
   field: '活动日期',
   value: ['2018-02-20', new Date()],
   props: {
-    tag: 'form-item',
-    type: 'datetimerange',
-    format: 'yyyy-MM-dd HH:mm:ss',
-    placeholder: '请选择活动日期'
+    basic: {
+      type: 'datetimerange',
+      format: 'yyyy-MM-dd HH:mm:ss',
+      placeholder: '请选择活动日期'
+    }
   }
 })
 
@@ -121,7 +132,9 @@ export const flexTimePicker = () => ({
   field: '活动时间',
   value: [],
   props: {
-    isRange: true
+    basic: {
+      isRange: true
+    }
   }
 })
 
@@ -138,7 +151,9 @@ export const flexRate = () => ({
   field: '推荐级别',
   value: 3.5,
   props: {
-    max: 10
+    basic: {
+      max: 10
+    }
   },
   validate: [
     {
@@ -158,31 +173,35 @@ export const flexSlider = () => ({
   field: '滑块',
   value: [0, 52],
   props: {
-    min: 0,
-    max: 100,
-    range: true
+    basic: {
+      min: 0,
+      max: 100,
+      range: true
+    }
   }
 })
 
-export default {
-  name: 'Form',
-  icon: 'el-icon-message',
-  components: [
-    flexLabel(),
-    flexSubmit(),
-    flexReset(),
-    flexTextarea(),
-    flexInput(),
-    flexInputNumber(),
-    flexRadio(),
-    flexCheckBox(),
-    flexSelect(),
-    flexSwitch(),
-    flexCascader(),
-    flexDatePicker(),
-    flexTimePicker(),
-    flexColorPicker(),
-    flexRate(),
-    flexSlider()
-  ]
+export default function() {
+  return {
+    name: 'Form',
+    icon: 'el-icon-message',
+    components: [
+      flexLabel(),
+      flexSubmit(),
+      flexReset(),
+      flexTextarea(),
+      flexInput(),
+      flexInputNumber(),
+      flexRadio(),
+      flexCheckBox(),
+      flexSelect(),
+      flexSwitch(),
+      flexCascader(),
+      flexDatePicker(),
+      flexTimePicker(),
+      flexColorPicker(),
+      flexRate(),
+      flexSlider()
+    ]
+  }
 }

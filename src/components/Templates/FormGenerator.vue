@@ -1,22 +1,18 @@
 <template>
-  <grid-generator ref="grid" :id="id" :children="children">
-    <template v-slot="props">
-      <component-add :id="props.child.id" :children="props.child.children" />
-    </template>
-  </grid-generator>
+  <inner-grid-generator ref="grid" :id="id" :children="children"/>
 </template>
 
 <script>
-import GridGenerator from './GridGenerator'
+import InnerGridGenerator from './Common/InnerGridGenerator'
 import commonMixin from '../../mixins/common'
 import childrenMixin from '../../mixins/children'
-import ComponentAdd from './ComponentAdd'
+import settings from '../../settings/formGenerator'
 
 export default {
+  settingsTemplate: settings(),
   name: 'FormGenerator',
   components: {
-    ComponentAdd,
-    GridGenerator
+    InnerGridGenerator
   },
   mixins: [commonMixin, childrenMixin],
   provide() {
@@ -43,7 +39,7 @@ export default {
   },
   watch: {
     innerChildren(value) {
-      this.$refs.grid.innerChildren = value
+      this.$refs.grid.updateChildren(value)
     }
   },
   methods: {
@@ -54,7 +50,7 @@ export default {
       this.form = {}
     },
     updateForm(title, value) {
-      this.form[title] = value
+      this.$set(this.form, title, value)
     },
     updateSubmit(submit) {
       this.button.submit = submit
@@ -63,7 +59,7 @@ export default {
       this.button.reset = reset
     },
     updateValid(title, isValid) {
-      this.isValidObject[title] = isValid
+      this.$set(this.isValidObject, title, isValid)
     }
   }
 }

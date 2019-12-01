@@ -20,7 +20,9 @@ import importTemplates from '../../mixins/importTemplates'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import DialogComponents from './DialogComponents'
-import MiddleLayer from './MiddleLayer'
+import MiddleLayer from './Common/MiddleLayer'
+import { gridGenerator } from '../../template/basic'
+import { formGenerator } from '../../template/formGroup'
 
 export default {
   name: 'ComponentAdd',
@@ -33,35 +35,40 @@ export default {
     ...mapGetters('nodes', ['parentPath', 'childrenOf']),
     firstChild() {
       return this.innerChildren[0]
+    },
+    rootForm() {
+      return this.parentPath(this.id).find(x => x.tag === 'form-generator')
     }
   },
   methods: {
     addTemplate(template) {
+      this.cleanFormButtons(template)
       appendNestedIds(template)
-      template = this.cleanFormButtons(template)
       this.innerChildren = [template]
     },
-    cleanFormButtons(template) {
-      const form = 'form-generator'
-      if (template.tag !== form) return template
-
-      const formNode = this.parentPath(this.id).find(x => x.tag === form)
-
-      if (!formNode) return template
-      const vm = vmMap[formNode.id]
-      if (vm.button.submit) {
-        template.children = template.children.filter(
-          x => x.children[0].tag !== 'flex-submit'
-        )
+    dealFormNode(template) {
+      if (template.tag === 'form-generator') {
+        if (this.rootForm) return gridGenerator(template.children)
+      } else if (template.tag === 'form-item') {
+        if (!this.rootForm) return formGenerator([template])
       }
-
-      if (vm.button.reset) {
-        template.children = template.children.filter(
-          x => x.children[0] !== 'flex-reset'
-        )
-      }
-
       return template
+    },
+    cleanFormButtons(template) {
+      if (this.rootForm && template.tag === 'form-generator') {
+        const vm = vmMap[this.rootForm.id]
+
+        template.children = template.children.filter(x => {
+          const tag = x.children[0].tag
+          if (tag === 'flex-submit') {
+            return !vm.button.submit
+          } else if (tag === 'flex-reset') {
+            return !vm.button.reset
+          } else {
+            return true
+          }
+        })
+      }
     }
   }
 }

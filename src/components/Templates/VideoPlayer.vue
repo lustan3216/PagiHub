@@ -1,9 +1,7 @@
 <template>
-  <div class="h-100" @click="noClick = false" @mouseleave="mouseleave">
-    <!-- iframe 創建後不能修改，所以多一層中介層 -->
+  <div class="h-100" @mouseleave="mouseleave">
     <video-player
       ref="videoPlayer"
-      :class="{ 'no-click': noClick }"
       :style="innerStyles"
       :options="playerOptions"
       class="h-100 player flex-center vjs-big-play-centered"
@@ -27,10 +25,8 @@ export default {
   mixins: [commonMixin, childrenMixin],
   data() {
     return {
-      noClick: true,
       playerOptions: {
         start: 0,
-        fluid: true,
         playsinline: false,
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         techOrder: ['html5', 'youtube'],
@@ -51,13 +47,12 @@ export default {
   },
   computed: {
     player() {
-      return this.$refs.videoPlayer
+      return this.$refs.videoPlayer.player
     }
   },
   methods: {
     mouseleave() {
-      this.noClick = true
-      // this.player.stopVideo()
+      this.player.pause()
     }
   }
 }
@@ -68,5 +63,6 @@ export default {
 }
 ::v-deep.player .video-js {
   height: 100%;
+  width: 100%;
 }
 </style>

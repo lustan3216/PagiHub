@@ -1,12 +1,10 @@
 <template>
   <grid-layout
+    v-bind="innerProps"
     :style="innerStyles"
     :layout="innerChildrenWithI"
-    :row-height="3"
-    :col-num="68"
     :margin="[0, 0]"
     :responsive="false"
-    :vertical-compact="true"
     @layout-updated="layoutUpdated"
   >
     <template v-for="child in innerChildrenWithI">
@@ -37,8 +35,10 @@ import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import importTemplatesMixin from '../../mixins/importTemplates'
 import ComponentAdd from './ComponentAdd'
+import settings from '../../settings/gridGenerator'
 
 export default {
+  settingsTemplate: settings(),
   name: 'GridGenerator',
   components: {
     GridLayout: VueGridLayout.GridLayout,
@@ -57,6 +57,9 @@ export default {
         child.i = child.id
         return child
       })
+    },
+    innerProps() {
+      return Object.assign({}, this.innerSettings(), this.$attrs)
     }
   },
   watch: {
@@ -85,7 +88,7 @@ export default {
   position: relative;
   border: 1px dashed #dedede;
   border-radius: 3px;
-  
+
   & > .vue-resizable-handle {
     z-index: 10000;
   }

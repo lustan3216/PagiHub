@@ -10,10 +10,7 @@
         :direction="direction"
         size="inhert"
       >
-        <grid-generator
-          v-if="isEditable && innerChildren[0]"
-          :id="innerChildren[0].id"
-        />
+        <inner-grid-generator ref="grid" :id="id" :children="children" />
       </el-drawer>
     </portal>
   </el-button>
@@ -22,12 +19,14 @@
 <script>
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
-import GridGenerator from './GridGenerator'
+import InnerGridGenerator from './Common/InnerGridGenerator'
+import settings from '../../settings/drawer'
 
 export default {
+  settingsTemplate: settings(),
   name: 'Drawer',
   components: {
-    GridGenerator
+    InnerGridGenerator
   },
   mixins: [childrenMixin, commonMixin],
   data() {
@@ -40,7 +39,12 @@ export default {
     hideHeader() {
       return true
     }
-  }
+  },
+  watch: {
+    innerChildren(value) {
+      this.$refs.grid.updateChildren(value)
+    }
+  },
 }
 </script>
 

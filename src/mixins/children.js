@@ -4,19 +4,6 @@ import { mapMutations } from 'vuex'
 import { appendNestedIds } from '../utils/keyId'
 
 export default {
-  watch: {
-    innerChildren(newChildren, oldChildren) {
-      if (!this.isEditable) return
-      try {
-        this.updateDifferenceToVuex(newChildren, oldChildren, this.id)
-      } catch (e) {
-        if (e !== 'done') throw e
-        // 一次只會有一個地方刪除、新增或修改，所以當找到該node執行完就跳出遞迴迴圈
-      } finally {
-        this.SNAPSHOT()
-      }
-    }
-  },
   // 有些情景component是沒有ID的，像是展示時
   props: {
     children: {
@@ -39,6 +26,19 @@ export default {
 
     return {
       innerChildren
+    }
+  },
+  watch: {
+    innerChildren(newChildren, oldChildren) {
+      if (!this.isEditable) return
+      try {
+        this.updateDifferenceToVuex(newChildren, oldChildren, this.id)
+      } catch (e) {
+        if (e !== 'done') throw e
+        // 一次只會有一個地方刪除、新增或修改，所以當找到該node執行完就跳出遞迴迴圈
+      } finally {
+        this.SNAPSHOT()
+      }
     }
   },
   methods: {

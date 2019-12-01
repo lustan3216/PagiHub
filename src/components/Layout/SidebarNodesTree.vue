@@ -60,6 +60,10 @@ export default {
         if (node.tag === 'grid-item') {
           Object.assign(node, node.children[0])
         }
+
+        if (node.tag === 'card') {
+          Object.assign(node.children, node.children[0].children)
+        }
       })
       return cloned
     }
