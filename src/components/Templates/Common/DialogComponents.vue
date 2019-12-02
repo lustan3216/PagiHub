@@ -57,8 +57,8 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { basic, form, formGroup } from '../../template'
-import importTemplatesMixin from '../../mixins/importTemplates'
+import { basic, form, formGroup } from '../../../template'
+import importTemplatesMixin from '../../../mixins/importTemplates'
 
 export default {
   name: 'DialogComponents',

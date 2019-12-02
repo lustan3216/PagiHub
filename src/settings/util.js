@@ -6,15 +6,15 @@ export const number = (field, { value } = {}) => ({
   info: '123123123'
 })
 
-export const select = (field, { options }) => ({
+export const select = (field, { options, value }) => ({
   field,
   title: field,
   type: 'select',
-  value: options[0],
+  value,
   options: options.map(label => ({ value: label, label }))
 })
 
-export const string = (field, { value, validate }) => ({
+export const string = (field, { value, validate = [] }) => ({
   type: 'input',
   field,
   title: field,
@@ -22,9 +22,21 @@ export const string = (field, { value, validate }) => ({
   validate
 })
 
-export const slider = {}
+export const slider = (field, { value, step = 0.1, min = 0, max = 1 }) => {
+  return {
+    type: 'slider',
+    title: field,
+    field,
+    value,
+    props: {
+      step,
+      min,
+      max
+    }
+  }
+}
 
-export const boolean = (field, { value = true } = {}) => ({
+export const boolean = (field, { value } = {}) => ({
   field,
   title: field,
   type: 'switch',

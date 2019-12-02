@@ -2,7 +2,7 @@ import clone from 'clone'
 import Vue from 'vue'
 import listTiTree from '../../utils/listToTree'
 import { SET } from '../index'
-import { set, merge } from '../../lodash'
+import { merge } from '../../lodash'
 import { appendNestedIds } from '../../utils/keyId'
 import { gridGenerator as templateGridGenerator } from '../../template/basic'
 

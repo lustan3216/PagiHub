@@ -1,33 +1,73 @@
 import { pxPercent } from './validation'
 import { number, boolean, select, string } from './util'
-import gridGenerator from './gridGenerator'
-export default function() {
-  return {
-    grid: gridGenerator().basic,
-    form: {
-      displayLabel: boolean('displayLabel', { value: true }),
-      inline: boolean('inline', { value: false }),
-      labelPosition: select('labelPosition', { options: ['left', 'right'] }),
-      size: select('size', { options: ['mini', 'small', 'medium'] }),
-      hideRequiredAsterisk: boolean('hideRequiredAsterisk', { value: false }),
-      showMessage: boolean('showMessage', { value: true }),
-      inlineMessage: boolean('inlineMessage', { value: true }),
-      statusIcon: boolean('statusIcon', { value: true }),
-      labelWidth: string('labelWidth', {
-        value: '125px',
-        validate: [pxPercent]
-      })
-    },
-    row: {
-      gutter: number('gutter', { value: 0 }),
-      align: select('align', { options: ['middle', 'top', 'bottom'] }),
-      justify: select('justify', {
-        options: ['start', 'end', 'center', 'space-around', 'space-between']
-      })
-    },
-    info: {
-      type: select('type', { options: ['poptip', 'tooltip'] })
-    }
+
+const displayLabel = 'displayLabel'
+const inline = 'inline'
+const labelPosition = 'labelPosition'
+const size = 'size'
+const hideRequiredAsterisk = 'hideRequiredAsterisk'
+const showMessage = 'showMessage'
+const inlineMessage = 'inlineMessage'
+const statusIcon = 'statusIcon'
+const labelWidth = 'labelWidth'
+const gutter = 'gutter'
+const align = 'align'
+const justify = 'justify'
+const type = 'type'
+
+const defaultFormSetting = {
+  [displayLabel]: true,
+  [inline]: false,
+  [labelPosition]: 'left',
+  [size]: 'small',
+  [hideRequiredAsterisk]: true,
+  [showMessage]: true,
+  [inlineMessage]: true,
+  [statusIcon]: true,
+  [labelWidth]: '125px'
+}
+
+const defaultRowSetting = {
+  [gutter]: 0,
+  [align]: 'middle',
+  [justify]: 'start'
+}
+
+const defaultInfoSetting = {
+  [type]: 0
+}
+
+export const defaultSetting = {
+  form: defaultFormSetting,
+  row: defaultRowSetting,
+  info: defaultInfoSetting
+}
+
+export default {
+  form: {
+    [displayLabel]: boolean(displayLabel, { value: defaultFormSetting[displayLabel] }),
+    [inline]: boolean(inline, { value: defaultFormSetting[inline] }),
+    [labelPosition]: select(labelPosition, { value: defaultFormSetting[labelPosition], options: ['left', 'right'] }),
+    [size]: select(size, { value: defaultFormSetting[size], options: ['mini', 'small', 'medium'] }),
+    [hideRequiredAsterisk]: boolean(hideRequiredAsterisk, { value: defaultFormSetting[hideRequiredAsterisk] }),
+    [showMessage]: boolean(showMessage, { value: defaultFormSetting[showMessage] }),
+    [inlineMessage]: boolean(inlineMessage, { value: defaultFormSetting[inlineMessage] }),
+    [statusIcon]: boolean(statusIcon, { value: defaultFormSetting[statusIcon] }),
+    [labelWidth]: string(labelWidth, {
+      value: defaultFormSetting[labelWidth],
+      validate: [pxPercent]
+    })
+  },
+  row: {
+    [gutter]: number(gutter, { value: defaultRowSetting[gutter] }),
+    [align]: select(align, { value: defaultRowSetting[align], options: ['middle', 'top', 'bottom'] }),
+    [justify]: select(justify, {
+      value: defaultRowSetting[justify],
+      options: ['start', 'end', 'center', 'space-around', 'space-between']
+    })
+  },
+  info: {
+    [type]: select(type, { value: defaultInfoSetting[type], options: ['poptip', 'tooltip'] })
   }
 }
 

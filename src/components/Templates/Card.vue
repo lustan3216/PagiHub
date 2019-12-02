@@ -1,7 +1,7 @@
 <template>
   <div class="h-100 flex-center">
-    <el-card v-bind="innerSettings('basic')" :style="innerStyles">
-      <inner-grid-generator ref="grid" :id="id" :children="children" />
+    <el-card v-bind="innerProps" :style="innerStyles">
+      <grid-generator :id="firstChild.id" :children="firstChild.children" />
     </el-card>
   </div>
 </template>
@@ -9,26 +9,16 @@
 <script>
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
-import InnerGridGenerator from './Common/InnerGridGenerator'
-import settings from '../../settings/card'
+import GridGenerator from './GridGenerator'
+import { defaultSetting } from '../../settings/card'
 
 export default {
-  settingsTemplate: settings(),
+  defaultSetting,
   name: 'Card',
   components: {
-    InnerGridGenerator
+    GridGenerator
   },
-  mixins: [childrenMixin, commonMixin],
-  computed: {
-    firstChild() {
-      return this.innerChildren[0]
-    }
-  },
-  watch: {
-    innerChildren(value) {
-      this.$refs.grid.updateChildren(value)
-    }
-  }
+  mixins: [childrenMixin, commonMixin]
 }
 </script>
 

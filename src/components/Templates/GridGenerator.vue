@@ -1,6 +1,8 @@
 <template>
   <grid-layout
     v-bind="innerProps"
+    :col-num="72"
+    :row-height="5"
     :style="innerStyles"
     :layout="innerChildrenWithI"
     :margin="[0, 0]"
@@ -34,11 +36,11 @@ import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import importTemplatesMixin from '../../mixins/importTemplates'
-import ComponentAdd from './ComponentAdd'
-import settings from '../../settings/gridGenerator'
+import ComponentAdd from './Common/ComponentAdd'
+import { defaultSetting } from '../../settings/drawer'
 
 export default {
-  settingsTemplate: settings(),
+  defaultSetting,
   name: 'GridGenerator',
   components: {
     GridLayout: VueGridLayout.GridLayout,
@@ -49,17 +51,14 @@ export default {
   computed: {
     ...mapState('nodes', ['currentNodesMap']),
     innerChildrenWithI() {
-      return this.innerChildren.map(child => {
+      return this.innerChildren.map((child, index) => {
         // if layoutItem doesn't have i, it will crash
         // the i assigning here will affect data innerChild which is correct here
         // otherwise somehow it will bring a bug that makes layout immutable
         // anyway, just don't modify here
-        child.i = child.id
+        child.i = child.id || index
         return child
       })
-    },
-    innerProps() {
-      return Object.assign({}, this.innerSettings(), this.$attrs)
     }
   },
   watch: {

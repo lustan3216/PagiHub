@@ -1,16 +1,13 @@
 <template>
-  <el-image
-    v-bind="innerSettings('basic')"
-    :style="innerStyles"
-    class="wh-100" />
+  <el-image v-bind="innerProps" :style="innerStyles" class="wh-100" />
 </template>
 
 <script>
 import commonMixin from '../../mixins/common'
-import settings from '../../settings/image'
+import { defaultSetting } from '../../settings/flexImage'
 
 export default {
-  settingsTemplate: settings(),
+  defaultSetting,
   name: 'FlexImage',
   mixins: [commonMixin]
 }

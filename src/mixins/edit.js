@@ -59,12 +59,6 @@ export default {
       const cloneChildren = clone(this.innerChildren)
       cloneChildren.splice(index, 1)
       this.innerChildren = cloneChildren
-    },
-    setting() {
-      this.CLOSE_SIDEBAR()
-      this.$nextTick(() => {
-        this.OPEN_SIDEBAR('SidebarSettings', { id: this.id })
-      })
     }
   }
 }

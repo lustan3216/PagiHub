@@ -18,14 +18,18 @@ export default {
       innerChildren = clone(store.getters['nodes/childrenFrom'](this.id)).sort(
         (a, b) => a.sortIndex - b.sortIndex
       )
+      appendNestedIds(innerChildren)
     } else {
       innerChildren = this.children || []
     }
 
-    appendNestedIds(innerChildren)
-
     return {
       innerChildren
+    }
+  },
+  computed: {
+    firstChild() {
+      return this.innerChildren[0]
     }
   },
   watch: {

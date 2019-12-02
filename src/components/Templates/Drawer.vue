@@ -3,14 +3,11 @@
     Drawer
     <portal :disabled="!isEditable" to="Root">
       <el-drawer
+        v-bind="innerProps"
         :class="{ 'hide-header': hideHeader }"
-        :append-to-body="false"
-        :modal-append-to-body="false"
         :visible.sync="drawer"
-        :direction="direction"
-        size="inhert"
       >
-        <inner-grid-generator ref="grid" :id="id" :children="children" />
+        <grid-generator :id="firstChild.id" :children="firstChild.children" />
       </el-drawer>
     </portal>
   </el-button>
@@ -19,14 +16,14 @@
 <script>
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
-import InnerGridGenerator from './Common/InnerGridGenerator'
-import settings from '../../settings/drawer'
+import GridGenerator from './GridGenerator'
+import { defaultSetting } from '../../settings/drawer'
 
 export default {
-  settingsTemplate: settings(),
+  defaultSetting,
   name: 'Drawer',
   components: {
-    InnerGridGenerator
+    GridGenerator
   },
   mixins: [childrenMixin, commonMixin],
   data() {
@@ -39,12 +36,7 @@ export default {
     hideHeader() {
       return true
     }
-  },
-  watch: {
-    innerChildren(value) {
-      this.$refs.grid.updateChildren(value)
-    }
-  },
+  }
 }
 </script>
 

@@ -25,8 +25,7 @@ export default {
   inject: ['isEditable'],
   props: {
     id: {
-      type: Number,
-      required: true
+      type: Number
     },
     isEditable: {
       type: Boolean,

@@ -14,15 +14,15 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { appendNestedIds } from '../../utils/keyId'
-import { vmMap } from '../../utils/vmMap'
-import importTemplates from '../../mixins/importTemplates'
-import childrenMixin from '../../mixins/children'
-import commonMixin from '../../mixins/common'
+import { appendNestedIds } from '../../../utils/keyId'
+import { vmMap } from '../../../utils/vmMap'
+import importTemplates from '../../../mixins/importTemplates'
+import childrenMixin from '../../../mixins/children'
+import commonMixin from '../../../mixins/common'
 import DialogComponents from './DialogComponents'
-import MiddleLayer from './Common/MiddleLayer'
-import { gridGenerator } from '../../template/basic'
-import { formGenerator } from '../../template/formGroup'
+import MiddleLayer from './MiddleLayer'
+import { gridGenerator } from '../../../template/basic'
+import { formGenerator } from '../../../template/formGroup'
 
 export default {
   name: 'ComponentAdd',

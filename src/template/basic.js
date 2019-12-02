@@ -1,16 +1,14 @@
-function gridItems() {
-  return [
+export const gridGenerator = function(children) {
+  const gridItems = [
     { tag: 'grid-item', x: 0, y: 0, w: 22, h: 71 },
     { tag: 'grid-item', x: 38, y: 19, w: 34, h: 52 },
     { tag: 'grid-item', x: 22, y: 19, w: 16, h: 52 },
     { tag: 'grid-item', x: 22, y: 0, w: 50, h: 19 }
   ]
-}
 
-export const gridGenerator = function(children) {
   return {
     tag: 'grid-generator',
-    children: children || gridItems()
+    children: children || gridItems
   }
 }
 
@@ -24,7 +22,7 @@ export const carousel = function() {
 export const card = function() {
   return {
     tag: 'card',
-    children: gridItems()
+    children: [gridGenerator()]
   }
 }
 
@@ -67,7 +65,11 @@ export const layer = function() {
 export const drawer = function() {
   return {
     tag: 'drawer',
-    children: [{ tag: 'grid-item', x: 0, y: 0, w: 72, h: 10 }]
+    children: [
+      gridGenerator([
+        { tag: 'grid-item', x: 0, y: 0, w: 72, h: 10 }
+      ])
+    ]
   }
 }
 
@@ -88,4 +90,5 @@ export default function() {
       drawer()
     ]
   }
+
 }

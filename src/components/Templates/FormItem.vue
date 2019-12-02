@@ -41,9 +41,9 @@ export default {
       } else {
         innerRule = clone(this.rule)
       }
-      if (innerRule.props && innerRule.props.basic) {
-        innerRule.props = innerRule.props.basic
-      }
+      // if (innerRule.props && innerRule.props.basic) {
+      //   innerRule.props = innerRule.props.basic
+      // }
       // if (this.rootForm.innerProps['display-label']) {
       innerRule.title = innerRule.field
       // }

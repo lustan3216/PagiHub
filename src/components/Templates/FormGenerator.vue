@@ -1,18 +1,18 @@
 <template>
-  <inner-grid-generator ref="grid" :id="id" :children="children"/>
+  <grid-generator :id="firstChild.id" :children="firstChild.children" />
 </template>
 
 <script>
-import InnerGridGenerator from './Common/InnerGridGenerator'
+import GridGenerator from './GridGenerator'
 import commonMixin from '../../mixins/common'
 import childrenMixin from '../../mixins/children'
-import settings from '../../settings/formGenerator'
+import { defaultSetting } from '../../settings/formGenerator'
 
 export default {
-  settingsTemplate: settings(),
+  defaultSetting,
   name: 'FormGenerator',
   components: {
-    InnerGridGenerator
+    GridGenerator
   },
   mixins: [commonMixin, childrenMixin],
   provide() {
@@ -35,11 +35,6 @@ export default {
   computed: {
     isValid() {
       return Object.values(this.isValidObject).every(value => value)
-    }
-  },
-  watch: {
-    innerChildren(value) {
-      this.$refs.grid.updateChildren(value)
     }
   },
   methods: {

@@ -1,9 +1,11 @@
 import { select } from './util'
 
-export default function() {
-  return {
-    basic: {
-      shadow: select('shadow', { options: ['always', 'hover', 'never'] })
-    }
-  }
+const shadow = 'shadow'
+
+export const defaultSetting = {
+  [shadow]: 'always'
+}
+
+export default {
+  [shadow]: select(shadow, { value: defaultSetting[shadow], options: ['always', 'hover', 'never'] })
 }

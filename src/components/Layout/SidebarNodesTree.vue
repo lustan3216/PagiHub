@@ -61,7 +61,7 @@ export default {
           Object.assign(node, node.children[0])
         }
 
-        if (node.tag === 'card') {
+        if (['card', 'drawer', 'form-generator'].includes(node.tag)) {
           Object.assign(node.children, node.children[0].children)
         }
       })

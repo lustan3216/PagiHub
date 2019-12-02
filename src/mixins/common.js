@@ -4,7 +4,6 @@ import editMixin from './edit'
 import settingMixin from './setting'
 import { mapState, mapMutations } from 'vuex'
 import { appendVm, removeVm } from '../utils/vmMap'
-import { onSettingChange } from '../buses/settings'
 
 export default {
   mixins: [editMixin, settingMixin],
@@ -28,14 +27,6 @@ export default {
       return this.currentNodesMap[this.id]
     }
   },
-  created() {
-    if (this.isEditable) {
-      onSettingChange(this.id, ({ styles }) => {
-        this.innerStyles = styles
-      })
-    }
-  },
-
   mounted() {
     // Don't put in created to prevent some component fail before mount
     if (this.isEditable) appendVm(this)

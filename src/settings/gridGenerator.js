@@ -1,10 +1,19 @@
 import { number, boolean } from './util'
-export default function() {
-  return {
-    basic: {
-      'col-num': number('col-num', { value: 68 }),
-      'row-height': number('row-height', { value: 3 }),
-      'vertical-compact': boolean('vertical-compact', { value: true })
-    }
-  }
+
+const colNum = 'col-num'
+const rowHeight = 'row-height'
+const verticalCompact = 'vertical-compact'
+
+export const defaultSetting = {
+  [colNum]: 68,
+  [rowHeight]: 3,
+  [verticalCompact]: true
+}
+
+export default {
+  [colNum]: number(colNum, { value: defaultSetting[colNum] }),
+  [rowHeight]: number(rowHeight, { value: defaultSetting[rowHeight] }),
+  [verticalCompact]: boolean(verticalCompact, {
+    value: defaultSetting[verticalCompact]
+  })
 }
