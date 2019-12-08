@@ -1,5 +1,5 @@
 import { gridGenerator } from './basic'
-import { flexSlider, flexCheckBox, flexSubmit, flexTextarea } from './form'
+import { formSlider, formCheckBox, formSubmit, formTextarea } from './form'
 
 export const formGenerator = function() {
   return {
@@ -12,7 +12,7 @@ export const formGenerator = function() {
           y: 0,
           w: 33,
           h: 30,
-          children: [flexTextarea()]
+          children: [formTextarea()]
         },
         {
           tag: 'grid-item',
@@ -20,7 +20,7 @@ export const formGenerator = function() {
           y: 15,
           w: 22,
           h: 15,
-          children: [flexCheckBox()]
+          children: [formCheckBox()]
         },
         {
           tag: 'grid-item',
@@ -28,7 +28,7 @@ export const formGenerator = function() {
           y: 0,
           w: 22,
           h: 15,
-          children: [flexSlider()]
+          children: [formSlider()]
         },
         {
           tag: 'grid-item',
@@ -36,7 +36,7 @@ export const formGenerator = function() {
           y: 30,
           w: 15,
           h: 17,
-          children: [flexSubmit()]
+          children: [formSubmit()]
         }
       ])
     ]

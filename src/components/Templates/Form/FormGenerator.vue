@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import GridGenerator from './GridGenerator'
-import commonMixin from '../../mixins/common'
-import childrenMixin from '../../mixins/children'
-import { defaultSetting } from '../../settings/formGenerator'
+import GridGenerator from '../GridGenerator'
+import commonMixin from '../../../mixins/common'
+import childrenMixin from '../../../mixins/children'
+import { defaultSetting } from '../../../settings/formGenerator'
 
 export default {
   defaultSetting,

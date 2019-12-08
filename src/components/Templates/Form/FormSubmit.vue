@@ -10,9 +10,11 @@
 </template>
 
 <script>
-import commonMixin from '../../mixins/common'
+import commonMixin from '../../../mixins/common'
+import { defaultSetting } from '../../../settings/formItem/formInput'
 
 export default {
+  defaultSetting,
   name: 'FlexSubmit',
   mixins: [commonMixin],
   props: {

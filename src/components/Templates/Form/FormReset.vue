@@ -1,21 +1,17 @@
 <template>
   <el-button :style="innerStyles" class="wh-100 m-0" @click="reset">
-    <slot>{{ text }}</slot>
+    <slot>123</slot>
   </el-button>
 </template>
 
 <script>
-import commonMixin from '../../mixins/common'
+import commonMixin from '../../../mixins/common'
+import { defaultSetting } from '../../../settings/formItem/formInput'
 
 export default {
-  name: 'FlexReset',
+  defaultSetting,
+  name: 'FormReset',
   mixins: [commonMixin],
-  props: {
-    text: {
-      type: String,
-      default: 'Reset'
-    }
-  },
   inject: ['rootForm'],
   created() {
     if (this.isEditable) {

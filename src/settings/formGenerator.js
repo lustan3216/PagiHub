@@ -45,14 +45,30 @@ export const defaultSetting = {
 
 export default {
   form: {
-    [displayLabel]: boolean(displayLabel, { value: defaultFormSetting[displayLabel] }),
+    [displayLabel]: boolean(displayLabel, {
+      value: defaultFormSetting[displayLabel]
+    }),
     [inline]: boolean(inline, { value: defaultFormSetting[inline] }),
-    [labelPosition]: select(labelPosition, { value: defaultFormSetting[labelPosition], options: ['left', 'right'] }),
-    [size]: select(size, { value: defaultFormSetting[size], options: ['mini', 'small', 'medium'] }),
-    [hideRequiredAsterisk]: boolean(hideRequiredAsterisk, { value: defaultFormSetting[hideRequiredAsterisk] }),
-    [showMessage]: boolean(showMessage, { value: defaultFormSetting[showMessage] }),
-    [inlineMessage]: boolean(inlineMessage, { value: defaultFormSetting[inlineMessage] }),
-    [statusIcon]: boolean(statusIcon, { value: defaultFormSetting[statusIcon] }),
+    [labelPosition]: select(labelPosition, {
+      value: defaultFormSetting[labelPosition],
+      options: ['left', 'right']
+    }),
+    [size]: select(size, {
+      value: defaultFormSetting[size],
+      options: ['mini', 'small', 'medium']
+    }),
+    [hideRequiredAsterisk]: boolean(hideRequiredAsterisk, {
+      value: defaultFormSetting[hideRequiredAsterisk]
+    }),
+    [showMessage]: boolean(showMessage, {
+      value: defaultFormSetting[showMessage]
+    }),
+    [inlineMessage]: boolean(inlineMessage, {
+      value: defaultFormSetting[inlineMessage]
+    }),
+    [statusIcon]: boolean(statusIcon, {
+      value: defaultFormSetting[statusIcon]
+    }),
     [labelWidth]: string(labelWidth, {
       value: defaultFormSetting[labelWidth],
       validate: [pxPercent]
@@ -60,14 +76,20 @@ export default {
   },
   row: {
     [gutter]: number(gutter, { value: defaultRowSetting[gutter] }),
-    [align]: select(align, { value: defaultRowSetting[align], options: ['middle', 'top', 'bottom'] }),
+    [align]: select(align, {
+      value: defaultRowSetting[align],
+      options: ['middle', 'top', 'bottom']
+    }),
     [justify]: select(justify, {
       value: defaultRowSetting[justify],
       options: ['start', 'end', 'center', 'space-around', 'space-between']
     })
   },
   info: {
-    [type]: select(type, { value: defaultInfoSetting[type], options: ['poptip', 'tooltip'] })
+    [type]: select(type, {
+      value: defaultInfoSetting[type],
+      options: ['poptip', 'tooltip']
+    })
   }
 }
 

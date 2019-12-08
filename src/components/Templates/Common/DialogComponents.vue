@@ -1,5 +1,5 @@
 <template>
-  <i class="el-icon-lollipop" @click="open">
+  <i class="el-icon-lollipop" @click.stop="open">
     <el-dialog
       ref="dialog"
       :visible="visible"
@@ -30,7 +30,6 @@
                 <component
                   :is="component.tag"
                   :key="index"
-                  :rule="component.tag === 'form-item' ? component : undefined"
                   :children="component.children"
                 />
 
@@ -110,9 +109,6 @@ export default {
   margin-bottom: 20px;
 }
 
-.dialog {
-  z-index: 2500 !important;
-}
 ::v-deep {
   &.dialog .el-dialog {
     box-shadow: 1px 4px 20px rgba(0, 0, 0, 0.2);

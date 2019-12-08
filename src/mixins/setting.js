@@ -2,26 +2,25 @@ import clone from 'clone'
 import store from '../store'
 import { mapMutations } from 'vuex'
 import { merge } from '../lodash'
+import { assignSet } from '../utils/util'
 
 export default {
   data() {
     const node = store.state.nodes.currentNodesMap[this.id]
+    const setting = clone(this.$options.defaultSetting)
+    const propsFromNode = (node && clone(node.props)) || {}
     return {
-      innerSettings: (node && clone(node.props)) || {}
-    }
-  },
-  computed: {
-    innerProps() {
-      return merge(this.$options.defaultSetting, this.innerSettings)
+      innerProps: merge(setting, propsFromNode)
     }
   },
   methods: {
     ...mapMutations('nodes', ['ASSIGN']),
     setSetting(value) {
-      merge(this.innerSettings, value)
+
+      assignSet(this.innerProps, value)
       this.ASSIGN({
         id: this.id,
-        props: this.innerSettings
+        props: this.innerProps
       })
     }
   }

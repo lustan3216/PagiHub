@@ -13,7 +13,7 @@
       <template v-slot="{ node, data }">
         <span class="justify-between w-100">
           <span class="el-tree-node__label align-center">
-            {{ data.type || data.tag }} - {{ data.id }}
+            {{ data.tag }} - {{ data.id }}
           </span>
           <span>
             <visibility v-if="data.tag !== 'grid-item'" :id="data.id" />
@@ -86,8 +86,7 @@ export default {
   methods: {
     filterNode(value, data) {
       if (!value) return true
-      const key = data.type ? 'type' : 'tag'
-      return data[key].indexOf(value) !== -1
+      return data.tag.indexOf(value) !== -1
     },
     copy(data) {
       if (data.tag === 'grid-item') {

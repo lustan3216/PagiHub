@@ -11,7 +11,8 @@ const loop = 'loop'
 
 export const defaultSetting = {
   [src1]: '//www.youtube.com/watch?v=SlPhMPnQ58k',
-  [src2]: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm',
+  [src2]:
+    'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm',
   [poster]: 'https://placeimg.com/1320/840/any',
   [volume]: 1,
   [autoplay]: false,

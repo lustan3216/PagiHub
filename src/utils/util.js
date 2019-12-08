@@ -1,3 +1,6 @@
+import Vue from 'vue'
+import { isPlainObject } from '../lodash'
+
 export function traversal(nodes, fn) {
   nodes.forEach(node => {
     fn(node)
@@ -21,4 +24,22 @@ export function findNestedLast(obj, key, value) {
       }
     }
   }
+}
+
+export function assignSet(target, ...sources) {
+  if (!sources.length) return target
+  const source = sources.shift()
+
+  if (isPlainObject(target) && isPlainObject(source)) {
+    for (const key in source) {
+      if (isPlainObject(source[key])) {
+        if (!target[key]) Vue.set(target, key, {})
+        assignSet(target[key], source[key])
+      } else {
+        Vue.set(target, key, source[key])
+      }
+    }
+  }
+
+  return assignSet(target, ...sources)
 }

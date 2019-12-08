@@ -3,6 +3,7 @@
     :class="{ elevate }"
     class="layer h-100"
     @click.stop="click"
+    @dblclick.stop="dblclick"
     @mouseleave="noClick = true"
     @mouseover.stop="setCurrentKey"
   >
@@ -46,7 +47,7 @@ export default {
       return globalStatus.elevateId === this.id
     },
     isDraggableItem() {
-      return ['video-player', 'form-item', 'editor'].includes(this.node.tag)
+      return ['video-player', 'form-slider', 'form-textarea', 'editor'].includes(this.node.tag)
     }
   },
   methods: {
@@ -54,8 +55,10 @@ export default {
       globalStatus.elevateId = this.id
     },
     click() {
-      this.noClick = false
       globalStatus.settingId = this.id
+    },
+    dblclick() {
+      this.noClick = false
     }
   }
 }

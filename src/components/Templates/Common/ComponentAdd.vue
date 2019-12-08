@@ -3,7 +3,6 @@
     <component
       :is="firstChild.tag"
       :id="firstChild.id"
-      :rule="firstChild"
       :children="firstChild.children"
     />
   </middle-layer>
@@ -21,8 +20,6 @@ import childrenMixin from '../../../mixins/children'
 import commonMixin from '../../../mixins/common'
 import DialogComponents from './DialogComponents'
 import MiddleLayer from './MiddleLayer'
-import { gridGenerator } from '../../../template/basic'
-import { formGenerator } from '../../../template/formGroup'
 
 export default {
   name: 'ComponentAdd',
@@ -46,23 +43,15 @@ export default {
       appendNestedIds(template)
       this.innerChildren = [template]
     },
-    dealFormNode(template) {
-      if (template.tag === 'form-generator') {
-        if (this.rootForm) return gridGenerator(template.children)
-      } else if (template.tag === 'form-item') {
-        if (!this.rootForm) return formGenerator([template])
-      }
-      return template
-    },
     cleanFormButtons(template) {
       if (this.rootForm && template.tag === 'form-generator') {
         const vm = vmMap[this.rootForm.id]
 
         template.children = template.children.filter(x => {
           const tag = x.children[0].tag
-          if (tag === 'flex-submit') {
+          if (tag === 'form-submit') {
             return !vm.button.submit
-          } else if (tag === 'flex-reset') {
+          } else if (tag === 'form-reset') {
             return !vm.button.reset
           } else {
             return true

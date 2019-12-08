@@ -7,5 +7,8 @@ export const defaultSetting = {
 }
 
 export default {
-  [shadow]: select(shadow, { value: defaultSetting[shadow], options: ['always', 'hover', 'never'] })
+  [shadow]: select(shadow, {
+    value: defaultSetting[shadow],
+    options: ['always', 'hover', 'never']
+  })
 }
