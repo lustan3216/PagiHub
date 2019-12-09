@@ -16,11 +16,10 @@ export default {
   methods: {
     ...mapMutations('nodes', ['ASSIGN']),
     setSetting(value) {
-
       assignSet(this.innerProps, value)
       this.ASSIGN({
         id: this.id,
-        props: this.innerProps
+        props: value
       })
     }
   }

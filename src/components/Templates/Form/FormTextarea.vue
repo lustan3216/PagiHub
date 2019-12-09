@@ -18,3 +18,10 @@ export default {
   mixins: [commonMixin, formItemMixin]
 }
 </script>
+
+<style scoped lang="scss">
+::v-deep .el-input__count {
+  background: transparent;
+}
+
+</style>

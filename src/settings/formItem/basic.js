@@ -66,7 +66,7 @@ export default {
   },
 
   [maxlength]: {
-    value: { [maxlength]: 0 },
+    value: { [maxlength]: 100 },
     spec: { [maxlength]: number(maxlength) }
   },
 

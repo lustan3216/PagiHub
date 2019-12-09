@@ -1,16 +1,28 @@
 <template>
-  <form-item v-model="api" :rule="innerRule"  :option="option" />
+  <form-item v-model="api" :rule="innerRule2" :option="option" />
 </template>
 
 <script>
-  import commonMixin from '../../../mixins/common'
-  import formItemMixin from '../../../mixins/formItem'
-  import { defaultSetting } from '../../../settings/formItem/formRate'
-  
-  export default {
-    defaultSetting,
-    type: 'rate',
-    name: 'FormRate',
-    mixins: [commonMixin, formItemMixin]
+import clone from 'clone'
+import commonMixin from '../../../mixins/common'
+import formItemMixin from '../../../mixins/formItem'
+import { defaultSetting } from '../../../settings/formItem/formRate'
+
+export default {
+  defaultSetting,
+  type: 'rate',
+  name: 'FormRate',
+  mixins: [commonMixin, formItemMixin],
+  computed: {
+    innerRule2() {
+      const rule = clone(this.innerRule[0])
+      rule.props.colors = [
+        rule.props.lowColor,
+        rule.props.midColor,
+        rule.props.highColor
+      ]
+      return [rule]
+    }
   }
+}
 </script>

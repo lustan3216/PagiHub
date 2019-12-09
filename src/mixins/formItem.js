@@ -11,20 +11,25 @@ export default {
     return {
       api: {},
       isValid: false,
-      option: { submitBtn: { show: false }}
+      option: { ...this.rootForm.innerProps, submitBtn: { show: false }}
+      // option 在form-create不是響應式的，需要透過方法更新
     }
   },
   computed: {
     ...mapState('nodes', ['currentNodesMap']),
+    rootProps() {
+      return this.rootForm.innerProps
+    },
     innerRule() {
       const node = clone(this.currentNodesMap[this.id]) || {}
-      const setting = clone(this.$options.defaultSetting)
       const innerRule = node
-      const propsFromNode = clone(node.props) || {}
-      const { value, field, showLabel, options = [], ...props } = Object.assign(
-        setting,
-        propsFromNode
-      )
+      const {
+        value,
+        field,
+        showLabel,
+        options = [],
+        ...props
+      } = this.innerProps
 
       if (this.isEditable) {
         node.on = { change: this.change }
@@ -38,7 +43,7 @@ export default {
         value: label
       }))
 
-      if (node.value || value) {
+      if (node.value !== undefined || value) {
         innerRule.value = node.value || value
       }
 
@@ -47,6 +52,14 @@ export default {
       }
 
       return [innerRule]
+    }
+  },
+  watch: {
+    rootProps: {
+      handler(value) {
+        this.api.updateOptions(value)
+      },
+      deep: true
     }
   },
   created() {

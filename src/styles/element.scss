@@ -21,3 +21,20 @@
 .el-slider {
   padding: 0 15px;
 }
+
+.vue-grid-item {
+  .el-form-item {
+    margin-bottom: 0 !important;
+  }
+  .el-form,
+  .el-slider,
+  .el-form-item__content,
+  .el-form-item,
+  .el-col,
+  .el-row,
+  .el-form,
+  .el-textarea,
+  textarea {
+    height: 100%;
+  }
+}

@@ -37,7 +37,8 @@ export const defaultSetting = {
   [showText]: true,
   [textColor]: '#1F2D3D',
   [showScore]: false,
-  [texts]: ['极差', '失望', '一般', '满意', '惊喜']
+  [texts]: ['极差', '失望', '一般', '满意', '惊喜'],
+  value: 0
 }
 
 export default {

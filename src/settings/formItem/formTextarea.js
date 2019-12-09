@@ -1,13 +1,11 @@
 import basic from './basic'
-import { number, boolean } from '../util'
+import { boolean } from '../util'
 
-const rows = 'rows'
 const showWorLimit = 'show-word-limit'
 
 export const defaultSetting = {
-  field: 'formCheckbox',
+  field: 'formTextarea',
   ...basic.placeholder.value,
-  ...basic.clearable.value,
   ...basic.disabled.value,
   ...basic.readonly.value,
   ...basic.showLabel.value,
@@ -15,20 +13,17 @@ export const defaultSetting = {
   ...basic.maxlength.value,
   ...basic.minlength.value,
   type: 'textarea',
-  [showWorLimit]: true,
-  [rows]: 3
+  [showWorLimit]: true
 }
 
 export default {
   ...basic.field.spec,
   ...basic.placeholder.spec,
-  ...basic.clearable.spec,
   ...basic.disabled.spec,
   ...basic.readonly.spec,
   ...basic.showLabel.spec,
 
   ...basic.maxlength.spec,
   ...basic.minlength.spec,
-  [rows]: number(rows, { value: defaultSetting[rows] }),
   [showWorLimit]: boolean(showWorLimit, { value: defaultSetting[showWorLimit] })
 }

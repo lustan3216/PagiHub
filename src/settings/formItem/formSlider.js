@@ -17,7 +17,7 @@ export const defaultSetting = {
   ...basic.disabled.value,
   ...basic.size.value,
   ...basic.min.value,
-  ...basic.min.value,
+  ...basic.max.value,
   [step]: 1,
   [precision]: 1,
   [showInput]: true,

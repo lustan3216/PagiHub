@@ -1,6 +1,6 @@
 <template>
   <div v-if="isFlat">
-    <h3>{{ name }}</h3>
+    <h3>{{ name || 'Basic' }}</h3>
     <form-create
       ref="form"
       v-model="api"
@@ -12,7 +12,7 @@
     <div v-for="(object, key) in specs">
       <nested-settings
         :id="id"
-        :settings="object"
+        :specs="object"
         :name="key"
         :key="key" />
     </div>
@@ -42,20 +42,27 @@ export default {
     },
     name: {
       type: String,
-      default: 'Basic'
+      default: ''
     }
   },
   data() {
     const vmProps = vmMap[this.id].innerProps
-
     const innerSpecs = clone(this.specs)
-    const update = key => {
-      innerSpecs[key].value = vmProps[key]
+    const firstValue = Object.firstValue(this.specs)
+    // 因為field對setting來說是必填，用來測試是不是有疊層或是只有一層
+    const isFlat = isString(firstValue.field)
+
+    if (isFlat) {
+      const update = key => {
+        innerSpecs[key].value = this.name
+          ? vmProps[this.name][key]
+          : vmProps[key]
+      }
+      Object.keys(innerSpecs).forEach(key => update(key))
     }
 
-    Object.keys(innerSpecs).forEach(key => update(key))
-
     return {
+      isFlat,
       api: {},
       option: {
         form: { size: 'mini' },
@@ -67,15 +74,10 @@ export default {
   },
   computed: {
     isRoot() {
-      return this.name === 'Basic'
+      return this.name === ''
     },
     vm() {
       return vmMap[this.id]
-    },
-    isFlat() {
-      // 因為field對setting來說是必填，用來測試是不是有疊層或是只有一層
-      const firstValue = Object.firstValue(this.innerSpecs)
-      return isString(firstValue.field)
     },
     ruleAppendProps() {
       const rule = this.innerSpecs
