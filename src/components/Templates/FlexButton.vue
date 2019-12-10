@@ -1,20 +1,49 @@
 <template>
-  <el-button :style="innerStyles" class="wh-100 m-0">
-    <slot>{{ text }}</slot>
+  <el-button class="wh-100 m-0 button">
+    <editor
+      v-if="isEditable"
+      :id="id"
+      :only="['bold', 'italic', 'fontColor', 'font', 'underline', 'strike']"
+      v-model="innerValue"
+    />
+    <div v-else v-html="innerValue" />
   </el-button>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import commonMixin from '../../mixins/common'
+import Editor from './Editor'
+import store from '../../store'
 
 export default {
   name: 'FlexButton',
+  components: {
+    Editor
+  },
   mixins: [commonMixin],
   props: {
-    text: {
+    defaultText: {
       type: String,
-      default: '按鈕'
+      default: 'Edit me'
     }
+  },
+  data() {
+    const node = store.state.nodes.currentNodesMap[this.id]
+    return {
+      innerValue: (this.isEditable && node && node.value) || this.defaultText
+    }
+  },
+  watch: {
+    innerValue(value) {
+      this.ASSIGN({
+        id: this.id,
+        value
+      })
+    }
+  },
+  methods: {
+    ...mapMutations('nodes', ['ASSIGN'])
   }
 }
 </script>
@@ -22,5 +51,18 @@ export default {
 <style lang="scss" scoped>
 .edit-area {
   height: 100%;
+}
+::v-deep.button {
+  & .ql-editor,
+  & .ql-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ql-editor {
+    padding: 0;
+    min-height: inherit;
+  }
 }
 </style>

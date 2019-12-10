@@ -1,8 +1,12 @@
 <template>
-  <div class="h-100">
-    <div :id="`toolbar${_uid}`" style="width: 426px;">
+  <div v-if="lazyLoaded" class="h-100">
+    <div :id="`toolbar${_uid}`">
       <span v-show="toggledBar" class="ql-formats m-l-12">
-        <select class="ql-header" style="width: 110px;">
+        <select
+          v-if="only.includes('header')"
+          class="ql-header"
+          style="width: 110px;"
+        >
           <option value="1">Heading 1</option>
           <option value="2">Heading 2</option>
           <option value="3">Heading 3</option>
@@ -11,38 +15,70 @@
           <option value="6">Heading 6</option>
           <option selected>Normal</option>
         </select>
-        <button class="ql-link" />
-        <button class="ql-bold" />
-        <button class="ql-italic" />
-        <color-picker v-model="fontColor">
+
+        <button v-if="only.includes('link')" class="ql-link" />
+
+        <button v-if="only.includes('bold')" class="ql-bold" />
+
+        <button v-if="only.includes('italic')" class="ql-italic" />
+
+        <color-picker v-if="only.includes('fontColor')" v-model="fontColor">
           <font-icon />
         </color-picker>
-        <color-picker v-model="backgroundColor">
+
+        <color-picker
+          v-if="only.includes('backgroundColor')"
+          v-model="backgroundColor"
+        >
           <background-icon />
         </color-picker>
-        <button class="ql-list" value="ordered" />
-        <button class="ql-list" value="bullet" />
-        <select class="ql-align">
+
+        <button
+          v-if="only.includes('ordered')"
+          class="ql-list"
+          value="ordered"
+        />
+
+        <button v-if="only.includes('bullet')" class="ql-list" value="bullet" />
+
+        <select v-if="only.includes('align')" class="ql-align">
           <option selected />
           <option value="center" />
           <option value="right" />
           <option value="justify" />
         </select>
       </span>
+
       <span v-show="!toggledBar" class="ql-formats m-l-12">
-        <select class="ql-font" style="width: 110px;">
+        <select
+          v-if="only.includes('font')"
+          class="ql-font"
+          style="width: 110px;"
+        >
           <option selected>Sans Serif</option>
           <option value="serif">Serif</option>
           <option value="monospace">Monospace</option>
         </select>
-        <button class="ql-underline" />
-        <button class="ql-strike" />
-        <button class="ql-script" value="sub" />
-        <button class="ql-script" value="super" />
-        <button class="ql-indent" value="-1" />
-        <button class="ql-indent" value="+1" />
-        <button class="ql-blockquote" />
-        <button class="ql-code-block" />
+
+        <button v-if="only.includes('underline')" class="ql-underline" />
+
+        <button v-if="only.includes('strike')" class="ql-strike" />
+
+        <button v-if="only.includes('script')" class="ql-script" value="sub" />
+
+        <button
+          v-if="only.includes('script')"
+          class="ql-script"
+          value="super"
+        />
+
+        <button v-if="only.includes('indent')" class="ql-indent" value="-1" />
+
+        <button v-if="only.includes('indent')" class="ql-indent" value="+1" />
+
+        <button v-if="only.includes('blockquote')" class="ql-blockquote" />
+
+        <button v-if="only.includes('codeBlock')" class="ql-code-block" />
       </span>
 
       <span class="ql-formats">
@@ -58,20 +94,24 @@
     </div>
     <vue-editor
       ref="editor"
-      v-model="content"
+      v-model="innerContent"
       :style="innerStyles"
       :editor-options="editorOption"
       class="h-100"
     />
+  </div>
+  <div v-else class="h-100 quillWrapper" @mouseover="lazyLoaded = true">
+    <div class="ql-container">
+      <div class="ql-editor" v-html="innerContent" />
+    </div>
   </div>
 </template>
 
 <script>
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.bubble.css'
-import 'quill/dist/quill.snow.css'
 import commonMixin from '../../mixins/common'
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import { VueEditor } from 'vue2-editor'
 import ColorPicker from '../Components/ColorPicker'
 import FontIcon from 'quill/assets/icons/color.svg'
@@ -86,8 +126,41 @@ export default {
     BackgroundIcon
   },
   mixins: [commonMixin],
+  props: {
+    value: {
+      type: String,
+      default: 'I am Editor'
+    },
+    only: {
+      type: Array,
+      default() {
+        return [
+          'header',
+          'link',
+          'bold',
+          'italic',
+          'fontColor',
+          'backgroundColor',
+          'ordered',
+          'bullet',
+          'align',
+          'font',
+          'underline',
+          'strike',
+          'script',
+          'script',
+          'indent',
+          'indent',
+          'blockquote',
+          'codeBlock'
+        ]
+      }
+    }
+  },
   data() {
     return {
+      quill: null,
+      lazyLoaded: false,
       fontColor: 'transparent',
       backgroundColor: 'transparent',
       toggledBar: true,
@@ -100,26 +173,27 @@ export default {
     }
   },
   computed: {
-    ...mapState('nodes', ['currentNodesMap']),
-    quill() {
-      return this.$refs.editor.quill
-    },
-    content: {
+    innerContent: {
       get() {
-        const vm = this.currentNodesMap[this.id] && this.isEditable
+        const vm = this.isEditable && this.node
 
         if (vm && vm.value) {
           return vm.value
         } else {
-          return '<h2>I am Editor</h2>'
+          return this.value
         }
       },
-      set(content) {
-        this.isEditable &&
+      set(value) {
+        if (!this.isEditable) return
+        if (this.id) {
+          // 當在別的組建被使用時，不會有ID，所以不用update vuex
           this.ASSIGN({
             id: this.id,
-            value: content
+            value
           })
+        } else {
+          this.$emit('input', value)
+        }
       }
     }
   },
@@ -129,19 +203,22 @@ export default {
     },
     backgroundColor(value) {
       this.quill.format('background', value)
+    },
+    lazyLoaded() {
+      this.$nextTick(() => {
+        this.quill = this.$refs.editor.quill
+        this.quill.on('selection-change', (eventName, range) => {
+          if (eventName === 'selection-change') {
+            if (range) {
+              const style = this.quill.getFormat(range.index, range.length)
+              this.fontColor = style.color
+              this.backgroundColor = style.background
+              this.quill.off('selection-change')
+            }
+          }
+        })
+      })
     }
-  },
-  mounted() {
-    this.quill.on('selection-change', (eventName, range) => {
-      if (eventName === 'selection-change') {
-        if (range) {
-          const style = this.quill.getFormat(range.index, range.length)
-          this.fontColor = style.color
-          this.backgroundColor = style.background
-          this.quill.off('selection-change')
-        }
-      }
-    })
   },
   methods: {
     ...mapMutations('nodes', ['ASSIGN'])
@@ -167,5 +244,19 @@ export default {
 }
 .m-l-12 {
   margin-left: 12px !important;
+}
+
+.ql-editor {
+  min-height: 200px;
+  font-size: 16px;
+}
+
+.quillWrapper .ql-editor ul[data-checked='false'] > li::before,
+.quillWrapper .ql-editor ul[data-checked='true'] > li::before {
+  font-size: 1.35em;
+  vertical-align: baseline;
+  bottom: -0.065em;
+  font-weight: 900;
+  color: #222;
 }
 </style>

@@ -1,16 +1,18 @@
 <template>
-  <el-button :style="innerStyles" class="wh-100 m-0" @click="reset">
-    <slot>123</slot>
-  </el-button>
+  <flex-button :id="id" default-text="Reset" @click="reset" />
 </template>
 
 <script>
 import commonMixin from '../../../mixins/common'
+import FlexButton from '../FlexButton'
 import { defaultSetting } from '../../../settings/formItem/formInput'
 
 export default {
   defaultSetting,
   name: 'FormReset',
+  components: {
+    FlexButton
+  },
   mixins: [commonMixin],
   inject: ['rootForm'],
   created() {

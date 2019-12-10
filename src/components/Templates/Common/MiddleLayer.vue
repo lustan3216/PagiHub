@@ -47,7 +47,15 @@ export default {
       return globalStatus.elevateId === this.id
     },
     isDraggableItem() {
-      return ['video-player', 'form-slider', 'form-textarea', 'editor'].includes(this.node.tag)
+      return [
+        'video-player',
+        'form-slider',
+        'form-textarea',
+        'editor',
+        'flex-button',
+        'form-submit',
+        'form-reset'
+      ].includes(this.node.tag)
     }
   },
   methods: {
