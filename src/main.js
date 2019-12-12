@@ -1,3 +1,5 @@
+import 'normalize.css'
+import 'element-ui/packages/theme-chalk/src/index.scss'
 import './utils/polyfill'
 import vhCheck from 'vh-check'
 vhCheck()
