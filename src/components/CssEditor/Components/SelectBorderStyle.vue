@@ -1,6 +1,7 @@
 <template >
   <el-select
     :value="value"
+    size="mini"
     @input="$emit('update:value', $event)"
   >
     <el-option

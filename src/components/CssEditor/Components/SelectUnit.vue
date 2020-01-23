@@ -3,26 +3,15 @@
     :disabled="isAuto"
     v-model="number"
     type="number"
-    clearable>
-    <el-select
-      slot="append"
-      v-model="unit">
-      <el-option
-        label="px"
-        value="px" />
-      <el-option
-        v-if="auto"
-        label="auto"
-        value="auto" />
-      <el-option
-        label="%"
-        value="%" />
-      <el-option
-        label="vh"
-        value="vh" />
-      <el-option
-        label="vw"
-        value="vw" />
+    size="mini"
+    clearable
+  >
+    <el-select slot="append" v-model="unit">
+      <el-option label="px" value="px" />
+      <el-option v-if="auto" label="auto" value="auto" />
+      <el-option label="%" value="%" />
+      <el-option label="vh" value="vh" />
+      <el-option label="vw" value="vw" />
     </el-select>
   </el-input>
 </template>
@@ -50,7 +39,9 @@ export default {
       } else if (parseInt(this.value) === 0) {
         return ['0', 'px']
       } else {
-        const [_, number = '0', unit = 'px'] = this.value.match(/^(\d+)?([a-z|%]+)?/)
+        const [_, number = '0', unit = 'px'] = this.value.match(
+          /^(\d+)?([a-z|%]+)?/
+        )
         return [number, unit]
       }
     },

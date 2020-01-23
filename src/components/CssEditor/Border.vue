@@ -1,80 +1,81 @@
 <template>
-  <div>
-    <div>
-      <label>Border</label>
-      <div class="vertical-center">
-        <input-style-unit :value.sync="borderWidth" />
-        <select-border-style :value.sync="borderStyle" />
-        <el-color-picker v-model="borderColor" />
-      </div>
-    </div>
+  <el-row :gutter="20">
+    <el-col :span="24">
+      <el-switch v-model="isAll" active-text="All" inactive-text="Separate" />
+    </el-col>
 
-    <div>
-      <label>BorderTop</label>
-      <div class="vertical-center">
-        <input-style-unit :value.sync="borderWidthTop" />
-        <select-border-style :value.sync="borderStyleTop" />
-        <el-color-picker v-model="borderColorTop" />
-      </div>
-    </div>
+    <template v-if="isAll">
+      <el-col :span="24">
+        <label>Border</label>
+        <div class="vertical-center">
+          <input-style
+            :value="computedStyle.border"
+            :type="['unit', 'border-style', 'color']"
+            class="vertical-center"
+          />
+        </div>
+      </el-col>
+    </template>
 
-    <div>
-      <label>BorderRight</label>
-      <div class="vertical-center">
-        <input-style-unit :value.sync="borderWidthRight" />
-        <select-border-style :value.sync="borderStyleRight" />
-        <el-color-picker v-model="borderColorRight" />
-      </div>
-    </div>
+    <template v-else>
+      <el-col :span="24">
+        <label>BorderTop</label>
+        <div class="vertical-center">
+          <input-style
+            :value="computedStyle.borderTop"
+            :type="['unit', 'border-style', 'color']"
+            class="vertical-center"
+          />
+        </div>
+      </el-col>
 
-    <div>
-      <label>BorderBottom</label>
-      <div class="vertical-center">
-        <input-style-unit :value.sync="borderWidthBottom" />
-        <select-border-style :value.sync="borderStyleBottom" />
-        <el-color-picker v-model="borderColorBottom" />
-      </div>
-    </div>
+      <el-col :span="24">
+        <label>BorderRight</label>
+        <div class="vertical-center">
+          <input-style
+            :value="computedStyle.borderRight"
+            :type="['unit', 'border-style', 'color']"
+            class="vertical-center"
+          />
+        </div>
+      </el-col>
 
-    <div>
-      <label>BorderLeft</label>
-      <div class="vertical-center">
-        <input-style-unit :value.sync="borderWidthLeft" />
-        <select-border-style :value.sync="borderStyleLeft" />
-        <el-color-picker v-model="borderColorLeft" />
-      </div>
-    </div>
-  </div>
+      <el-col :span="24">
+        <label>BorderBottom</label>
+        <div class="vertical-center">
+          <input-style
+            :value="computedStyle.borderBottom"
+            :type="['unit', 'border-style', 'color']"
+            class="vertical-center"
+          />
+        </div>
+      </el-col>
+
+      <el-col :span="24">
+        <label>BorderLeft</label>
+        <input-style
+          :value="computedStyle.borderLeft"
+          :type="['unit', 'border-style', 'color']"
+          class="vertical-center"
+        />
+      </el-col>
+    </template>
+  </el-row>
 </template>
 
 <script>
-import InputStyleUnit from './Components/SelectUnit'
-import SelectBorderStyle from './Components/SelectBorderStyle'
-import styleMixin from '../../mixins/style'
-import styleFourAttrsMixin from '../../mixins/styleFourAttrs'
-
-const borderWidth = 'borderWidth'
-const borderWidths = ['borderWidthTop', 'borderWidthRight', 'borderWidthBottom', 'borderWidthLeft']
-
-const borderStyle = 'borderStyle'
-const borderStyles = ['borderStyleTop', 'borderStyleRight', 'borderStyleBottom', 'borderStyleLeft']
-
-const borderColor = 'borderColor'
-const borderColors = ['borderColorTop', 'borderColorRight', 'borderColorBottom', 'borderColorLeft']
+import InputStyle from './Components/InputStyle'
 
 export default {
   name: 'Border',
   components: {
-    InputStyleUnit,
-    SelectBorderStyle
+    InputStyle
   },
-  mixins: [
-    styleMixin,
-    styleFourAttrsMixin(borderWidth, borderWidths),
-    styleFourAttrsMixin(borderStyle, borderStyles),
-    styleFourAttrsMixin(borderColor, borderColors)
-  ]
+  props: ['computedStyle'],
+  data() {
+    return {
+      isAll: true
+    }
+  }
 }
 </script>
-
-<style scoped lang="scss"></style>

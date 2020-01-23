@@ -1,31 +1,32 @@
 <template>
   <el-row :gutter="20">
-    <el-col :span="24">
+    <el-col :span="12">
       <p>Horizontal Length</p>
       <input-unit :value.sync="horizontal" unit="px" />
     </el-col>
 
-    <el-col :span="24">
+    <el-col :span="12">
       <p>Vertical Length</p>
       <input-unit :value.sync="vertical" unit="px" />
     </el-col>
 
-    <el-col :span="24">
+    <el-col :span="12">
       <p>Blur Radius</p>
       <input-unit :value.sync="blur" unit="px" />
     </el-col>
 
-    <el-col :span="24">
+    <el-col :span="12">
       <p>Spread Radius</p>
       <input-unit :value.sync="spread" unit="px" />
     </el-col>
 
-    <el-col :span="24">
+    <el-col :span="8">
       <p>Shadow Color</p>
       <el-color-picker v-model="color" show-alpha />
     </el-col>
 
-    <el-col :span="24">
+    <el-col :span="16">
+      <p>Shadow Color</p>
       <el-radio v-model="radio" label="Outline">Outline</el-radio>
       <el-radio v-model="radio" label="Inset">Inset</el-radio>
     </el-col>
@@ -33,19 +34,17 @@
 </template>
 
 <script>
-import styleMixin from '../../mixins/style'
 import InputUnit from './Components/InputUnit'
 
 export default {
-  name: 'Shadow',
+  name: 'BoxShadow',
   components: {
     InputUnit
   },
-  mixins: [styleMixin],
+  props: ['computedStyle'],
   data() {
-    const styles = this.getStyles()
     return {
-      boxShadow: styles.boxShadow,
+      boxShadow: this.computedStyle.boxShadow,
       radio: null,
       horizontal: null,
       vertical: null,

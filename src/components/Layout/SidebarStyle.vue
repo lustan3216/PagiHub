@@ -1,64 +1,69 @@
 <template>
-  <flex-sidebar>
-    <el-menu @open="openedMenu = +$event">
-      <el-submenu
-        v-for="(vNode, index) in templates"
-        :index="index.toString()"
-        :key="index"
-      >
+  <div>
+    <el-collapse v-model="activeNames">
+      <el-collapse-item title="Border" name="1">
+        <border :computed-style="computedStyle" />
+      </el-collapse-item>
+
+      <el-collapse-item title="Corner" name="2">
+        <corner :computed-style="computedStyle" />
+      </el-collapse-item>
+
+      <el-collapse-item title="Space" name="3">
+        <margin :computed-style="computedStyle" />
+        <padding :computed-style="computedStyle" />
+      </el-collapse-item>
+
+      <el-collapse-item title="Dimension" name="5">
+        <dimension :computed-style="computedStyle" />
+      </el-collapse-item>
+
+      <el-collapse-item title="Effect" name="6">
+        <effect :computed-style="computedStyle" />
+      </el-collapse-item>
+
+      <el-collapse-item title="Shadow" name="7">
         <template slot="title">
-          <i :class="vNode.icon" />
-          {{ vNode.type }}
+          Shadow
+          <el-button-group @click.stop>
+            <el-button icon="el-icon-plus" size="mini" />
+            <el-button icon="el-icon-delete" size="mini" />
+          </el-button-group>
         </template>
 
-        <el-menu-item
-          v-for="(component, componentIndex) in vNode.components"
-          :index="`${index}-${componentIndex}`"
-          :key="`${index}-${componentIndex}`"
-          class="menu-item"
-        >
-          <!-- here will have multi render deu to el-menu-item-group bug--->
-          <component
-            v-if="openedMenu === index"
-            v-bind="component.props"
-            :id="id"
-            :is="component.tag"
-            :key="`${index}-${componentIndex}`"
-            :children="component.children"
-          />
-        </el-menu-item>
-      </el-submenu>
-    </el-menu>
-  </flex-sidebar>
+        <box-shadows :computed-style="computedStyle" />
+      </el-collapse-item>
+    </el-collapse>
+  </div>
 </template>
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
-import FlexSidebar from '../Templates/FlexSidebar'
 import Border from '../CssEditor/Border'
-import Background from '../CssEditor/Background'
 import Corner from '../CssEditor/Corner'
-import Css from '../CssEditor/Css'
-import Effect from '../CssEditor/Effect'
-import Position from '../CssEditor/Position'
-import Shadow from '../CssEditor/Shadow'
-import Spacing from '../CssEditor/Spacing'
+import Margin from '../CssEditor/Margin'
+import Padding from '../CssEditor/Padding'
 import Dimension from '../CssEditor/Dimension'
+import Effect from '../CssEditor/Effect'
+
+import Background from '../CssEditor/Background'
+import BoxShadows from '../CssEditor/BoxShadows'
+import Css from '../CssEditor/Css'
 import Style from '../CssEditor/Style'
+import { vmMap } from '../../utils/vmMap'
 
 export default {
   name: 'SidebarSettings',
   components: {
-    FlexSidebar,
     Border,
     Background,
-    Spacing,
+    Margin,
+    Padding,
     Dimension,
     Corner,
     Css,
     Effect,
-    Position,
-    Shadow,
+    BoxShadows,
     Style
   },
   props: {
@@ -68,8 +73,11 @@ export default {
     }
   },
   data() {
+    const vm = vmMap[this.id]
     return {
-      openedMenu: null
+      computedStyle: window.getComputedStyle(vm.$el),
+      openedMenu: null,
+      activeNames: null
     }
   },
   computed: {
@@ -166,6 +174,11 @@ export default {
           ]
         }
       ]
+    }
+  },
+  methods: {
+    assignStyles(styles) {
+      this.vm().assignStyles(styles)
     }
   }
 }

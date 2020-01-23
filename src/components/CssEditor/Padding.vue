@@ -6,30 +6,30 @@
 
     <template v-if="isAll">
       <el-col :span="24">
-        <p>borderRadius</p>
-        <input-style-unit :value.sync="computedStyle.borderRadius" />
+        <p>Padding</p>
+        <input-style-unit :value.sync="computedStyle.padding" />
       </el-col>
     </template>
 
     <template v-else>
       <el-col :span="12">
-        <p>borderTopLeftRadius</p>
-        <input-style-unit :value.sync="computedStyle.borderTopLeftRadius" />
+        <p>Padding Top</p>
+        <input-style-unit :value.sync="computedStyle.paddingTop" />
       </el-col>
 
       <el-col :span="12">
-        <p>borderTopRightRadius</p>
-        <input-style-unit :value.sync="computedStyle.borderTopRightRadius" />
+        <p>Padding Right</p>
+        <input-style-unit :value.sync="computedStyle.paddingRight" />
       </el-col>
 
       <el-col :span="12">
-        <p>borderBottomRightRadius</p>
-        <input-style-unit :value.sync="computedStyle.borderBottomRightRadius" />
+        <p>Padding Bottom</p>
+        <input-style-unit :value.sync="computedStyle.paddingBottom" />
       </el-col>
 
       <el-col :span="12">
-        <p>borderBottomLeftRadius</p>
-        <input-style-unit :value.sync="computedStyle.borderBottomLeftRadius" />
+        <p>Padding Left</p>
+        <input-style-unit :value.sync="computedStyle.paddingLeft" />
       </el-col>
     </template>
   </el-row>
@@ -39,7 +39,7 @@
 import InputStyleUnit from './Components/SelectUnit'
 
 export default {
-  name: 'Corner',
+  name: 'Spacing',
   components: {
     InputStyleUnit
   },
@@ -51,3 +51,5 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss"></style>

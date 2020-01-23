@@ -3,33 +3,33 @@
     <el-col :span="24">
       <el-switch v-model="isAll" active-text="All" inactive-text="Separate" />
     </el-col>
-
+    
     <template v-if="isAll">
       <el-col :span="24">
-        <p>borderRadius</p>
-        <input-style-unit :value.sync="computedStyle.borderRadius" />
+        <p>Margin</p>
+        <input-style-unit :value.sync="computedStyle.margin" />
       </el-col>
     </template>
 
     <template v-else>
       <el-col :span="12">
-        <p>borderTopLeftRadius</p>
-        <input-style-unit :value.sync="computedStyle.borderTopLeftRadius" />
+        <p>Margin Top</p>
+        <input-style-unit :value.sync="computedStyle.marginTop" />
       </el-col>
 
       <el-col :span="12">
-        <p>borderTopRightRadius</p>
-        <input-style-unit :value.sync="computedStyle.borderTopRightRadius" />
+        <p>Margin Right</p>
+        <input-style-unit :value.sync="computedStyle.marginRight" />
       </el-col>
 
       <el-col :span="12">
-        <p>borderBottomRightRadius</p>
-        <input-style-unit :value.sync="computedStyle.borderBottomRightRadius" />
+        <p>Margin Bottom</p>
+        <input-style-unit :value.sync="computedStyle.marginBottom" />
       </el-col>
 
       <el-col :span="12">
-        <p>borderBottomLeftRadius</p>
-        <input-style-unit :value.sync="computedStyle.borderBottomLeftRadius" />
+        <p>Margin Left</p>
+        <input-style-unit :value.sync="computedStyle.marginLeft" />
       </el-col>
     </template>
   </el-row>
@@ -39,7 +39,7 @@
 import InputStyleUnit from './Components/SelectUnit'
 
 export default {
-  name: 'Corner',
+  name: 'Spacing',
   components: {
     InputStyleUnit
   },
@@ -51,3 +51,5 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss"></style>
