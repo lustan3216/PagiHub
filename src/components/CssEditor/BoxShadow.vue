@@ -41,16 +41,15 @@ export default {
   components: {
     InputUnit
   },
-  props: ['computedStyle'],
+  props: ['inset'],
   data() {
     return {
-      boxShadow: this.computedStyle.boxShadow,
-      radio: null,
-      horizontal: null,
-      vertical: null,
-      blur: null,
-      spread: null,
-      color: null
+      inset: false,
+      offsetX: undefined,
+      offsetY: undefined,
+      blurRadius: undefined,
+      spreadRadius: undefined,
+      color: 'none'
     }
   },
   computed: {
