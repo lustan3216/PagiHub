@@ -39,7 +39,7 @@
 import InputStyleUnit from './Components/SelectUnit'
 
 export default {
-  name: 'Spacing',
+  name: 'PaddingPart',
   components: {
     InputStyleUnit
   },

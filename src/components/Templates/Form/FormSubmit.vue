@@ -1,5 +1,5 @@
 <template>
-  <flex-button :id="id" default-text="Submit" @click.native="submit" />
+  <flex-button :style="innerStyles" :id="id" default-text="Submit" @click.native="submit" />
 </template>
 
 <script>

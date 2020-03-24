@@ -1,68 +1,93 @@
 <template>
-  <div>
+  <el-form size="mini" label-width="125px">
     <el-collapse v-model="activeNames">
       <el-collapse-item title="Border" name="1">
-        <border :computed-style="computedStyle" />
+        <border :computed-style="computedStyle" @change="assignStyles"/>
       </el-collapse-item>
 
-      <el-collapse-item title="Corner" name="2">
-        <corner :computed-style="computedStyle" />
+      <el-collapse-item name="2">
+        <template slot="title">
+          <span class="m-r-10">Corner</span>
+          <el-checkbox v-model="isCornerSeparate">Separate</el-checkbox>
+        </template>
+        
+        <corner-part v-if="isCornerSeparate" :computed-style="computedStyle" @change="assignStyles" />
+        <corner-all v-else :computed-style="computedStyle" @change="assignStyles" />
       </el-collapse-item>
 
-      <el-collapse-item title="Space" name="3">
-        <margin :computed-style="computedStyle" />
-        <padding :computed-style="computedStyle" />
+      <el-collapse-item name="3">
+        <template slot="title">
+          <span class="m-r-10">Margin</span>
+          <el-checkbox v-model="isMarginSeparate">Separate</el-checkbox>
+        </template>
+  
+        <margin-part v-if="isMarginSeparate" :computed-style="computedStyle" @change="assignStyles" />
+        <margin-all v-else :computed-style="computedStyle" @change="assignStyles" />
+      </el-collapse-item>
+
+      <el-collapse-item name="4">
+        <template slot="title">
+          <span class="m-r-10">Padding</span>
+          <el-checkbox v-model="isPaddingSeparate">Separate</el-checkbox>
+        </template>
+  
+        <padding-part v-if="isPaddingSeparate" :computed-style="computedStyle" @change="assignStyles" />
+        <padding-all v-else :computed-style="computedStyle" @change="assignStyles" />
       </el-collapse-item>
 
       <el-collapse-item title="Dimension" name="5">
-        <dimension :computed-style="computedStyle" />
+        <dimension :computed-style="computedStyle" @change="assignStyles" />
       </el-collapse-item>
 
       <el-collapse-item title="Effect" name="6">
-        <effect :computed-style="computedStyle" />
+        <effect :computed-style="computedStyle" @change="assignStyles" />
       </el-collapse-item>
 
-      <el-collapse-item title="Shadow" name="7">
-        <template slot="title">
-          Shadow
-          <el-button-group @click.stop>
-            <el-button icon="el-icon-plus" size="mini" />
-            <el-button icon="el-icon-delete" size="mini" />
-          </el-button-group>
-        </template>
+      <el-collapse-item title="Transform" name="7">
+        <transform :computed-style="computedStyle" @change="assignStyles" />
+      </el-collapse-item>
 
-        <box-shadows :computed-style="computedStyle" />
+      <el-collapse-item title="Shadow" name="8">
+        <box-shadows :computed-style="computedStyle" @change="assignStyles" />
       </el-collapse-item>
     </el-collapse>
-  </div>
+  </el-form>
 </template>
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
 import Border from '../CssEditor/Border'
-import Corner from '../CssEditor/Corner'
-import Margin from '../CssEditor/Margin'
-import Padding from '../CssEditor/Padding'
+import CornerAll from '../CssEditor/CornerAll'
+import CornerPart from '../CssEditor/CornerPart'
+import MarginAll from '../CssEditor/MarginAll'
+import MarginPart from '../CssEditor/MarginPart'
+import PaddingAll from '../CssEditor/PaddingAll'
+import PaddingPart from '../CssEditor/PaddingPart'
 import Dimension from '../CssEditor/Dimension'
 import Effect from '../CssEditor/Effect'
-
+import Transform from '../CssEditor/Transform'
 import Background from '../CssEditor/Background'
 import BoxShadows from '../CssEditor/BoxShadows'
 import Css from '../CssEditor/Css'
 import Style from '../CssEditor/Style'
-import { vmMap } from '../../utils/vmMap'
+
+import { getComputedStyle, assignStyles } from '../../utils/vmMap'
 
 export default {
   name: 'SidebarSettings',
   components: {
     Border,
     Background,
-    Margin,
-    Padding,
+    MarginAll,
+    MarginPart,
+    PaddingAll,
+    PaddingPart,
     Dimension,
-    Corner,
+    CornerAll,
+    CornerPart,
     Css,
     Effect,
+    Transform,
     BoxShadows,
     Style
   },
@@ -73,112 +98,22 @@ export default {
     }
   },
   data() {
-    const vm = vmMap[this.id]
     return {
-      computedStyle: window.getComputedStyle(vm.$el),
+      isCornerSeparate: true,
+      isMarginSeparate: true,
+      isPaddingSeparate: true,
       openedMenu: null,
       activeNames: null
     }
   },
   computed: {
-    templates() {
-      return [
-        {
-          type: 'Border',
-          icon: 'el-icon-message',
-          components: [
-            {
-              tag: 'Border'
-            }
-          ]
-        },
-        {
-          type: 'Spacing',
-          icon: 'el-icon-message',
-          components: [
-            {
-              tag: 'Spacing'
-            }
-          ]
-        },
-        {
-          type: 'Dimension',
-          icon: 'el-icon-message',
-          components: [
-            {
-              tag: 'Dimension'
-            }
-          ]
-        },
-        {
-          type: 'Background',
-          icon: 'el-icon-message',
-          components: [
-            {
-              tag: 'Background'
-            }
-          ]
-        },
-        {
-          type: 'Corner',
-          icon: 'el-icon-message',
-          components: [
-            {
-              tag: 'Corner'
-            }
-          ]
-        },
-        {
-          type: 'Css',
-          icon: 'el-icon-message',
-          components: [
-            {
-              tag: 'Css'
-            }
-          ]
-        },
-        {
-          type: 'Style',
-          icon: 'el-icon-message',
-          components: [
-            {
-              tag: 'Style'
-            }
-          ]
-        },
-        {
-          type: 'Effect',
-          icon: 'el-icon-message',
-          components: [
-            {
-              tag: 'Effect'
-            }
-          ]
-        },
-        {
-          type: 'Position',
-          icon: 'el-icon-message',
-          components: [
-            {
-              tag: 'Position'
-            }
-          ]
-        },
-        {
-          type: 'Shadow',
-          icon: 'el-icon-message',
-          components: [
-            {
-              tag: 'Shadow'
-            }
-          ]
-        }
-      ]
+    computedStyle() {
+      return getComputedStyle(this.id)
     }
   },
   methods: {
     assignStyles(styles) {
-      this.vm().assignStyles(styles)
+      assignStyles(this.id, styles)
     }
   }
 }

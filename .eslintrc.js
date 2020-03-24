@@ -7,23 +7,23 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
+    es6: true
   },
   extends: ['plugin:vue/recommended', 'eslint:recommended'],
 
   // add your custom rules here
-  //it is base on https://github.com/vuejs/eslint-config-vue
+  // it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
-    "vue/max-attributes-per-line": [2, {
-      "singleline": 3,
-      "multiline": {
-        "max": 1,
-        "allowFirstLine": false
+    'vue/max-attributes-per-line': [2, {
+      'singleline': 3,
+      'multiline': {
+        'max': 1,
+        'allowFirstLine': false
       }
     }],
-    "vue/no-parsing-error": 0,
-    "vue/order-in-components": 2,
-    "vue/name-property-casing": ["error", "PascalCase"],
+    'vue/no-parsing-error': 0,
+    'vue/order-in-components': 2,
+    'vue/name-property-casing': ['error', 'PascalCase'],
     'accessor-pairs': 2,
     'arrow-spacing': [2, {
       'before': true,
@@ -131,7 +131,7 @@ module.exports = {
     'no-sparse-arrays': 2,
     'no-this-before-super': 2,
     'no-throw-literal': 2,
-    'no-trailing-spaces': [2, { "skipBlankLines": true }],
+    'no-trailing-spaces': [2, { 'skipBlankLines': true }],
     'no-undef': 2,
     'no-undef-init': 2,
     'no-unexpected-multiline': 2,

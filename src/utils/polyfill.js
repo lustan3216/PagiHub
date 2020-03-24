@@ -1,4 +1,6 @@
+import { kebabCase, capitalize } from 'element-ui/src/utils/util'
 import { isPlainObject } from '../lodash'
+
 Array.toArray = function(e) {
   if (Array.isArray(e)) {
     return e
@@ -21,6 +23,10 @@ Array.first = function(e) {
   return e[0]
 }
 
+Array.prototype.subtract = function(e) {
+  return this.filter(n => !Array.toArray(e).includes(n))
+}
+
 Object.firstKey = function(e) {
   return Object.keys(e)[0]
 }
@@ -31,4 +37,12 @@ Object.firstValue = function(e) {
   } else {
     return e
   }
+}
+
+String.prototype.capitalize = function() {
+  return capitalize(this)
+}
+
+String.prototype.kebabCase = function() {
+  return kebabCase(this)
 }

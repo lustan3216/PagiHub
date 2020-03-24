@@ -1,5 +1,9 @@
 <template>
-  <form-item v-model="api" :rule="innerRule" :option="option" />
+  <form-item
+    :style="innerStyles"
+    v-model="api"
+    :rule="innerRule"
+    :option="option" />
 </template>
 
 <script>

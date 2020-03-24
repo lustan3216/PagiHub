@@ -1,26 +1,28 @@
 <template>
+  <el-select v-if="isAuto" v-model="unit">
+    <el-option v-for="unit in units" :label="unit" :value="unit" />
+  </el-select>
+  
   <el-input
-    :disabled="isAuto"
+    v-else
     v-model="number"
     type="number"
     size="mini"
     clearable
+    class="number"
   >
-    <el-select slot="append" v-model="unit">
-      <el-option label="px" value="px" />
-      <el-option v-if="auto" label="auto" value="auto" />
-      <el-option label="%" value="%" />
-      <el-option label="vh" value="vh" />
-      <el-option label="vw" value="vw" />
+    <el-select slot="append" v-model="unit" placeholder="-">
+      <el-option v-for="unit in units" :label="unit" :value="unit" />
     </el-select>
   </el-input>
+  
 </template>
 
 <script>
 export default {
   name: 'SelectUnit',
   props: {
-    auto: {
+    hasAuto: {
       type: Boolean,
       default: false
     },
@@ -30,16 +32,28 @@ export default {
     },
     value: {
       default: null
+    },
+    exclude: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
+    units() {
+      let units = ['px', '%', 'vh', 'vw']
+      if (this.hasAuto) units.push('auto')
+      if (this.exclude.length) {
+        units = units.subtract(this.exclude)
+      }
+      return units
+    },
     match() {
       if (this.isInvalid(this.value)) {
         return ['', '']
       } else if (parseInt(this.value) === 0) {
         return ['0', 'px']
       } else {
-        const [_, number = '0', unit = 'px'] = this.value.match(
+        const [_, number = '0', unit = 'px'] = this.value.toString().match(
           /^(\d+)?([a-z|%]+)?/
         )
         return [number, unit]
@@ -49,26 +63,27 @@ export default {
       get() {
         return this.match[0]
       },
-      set(value) {
-        if (this.isInvalid(value)) {
-          this.$emit('update:value', null)
+      set(number) {
+        let result
+        
+        if (this.isInvalid(number)) {
+          result = null
         } else if (!this.unit) {
-          this.$emit('update:value', value + 'px')
+          result = number + 'px'
         } else {
-          this.$emit('update:value', value + this.unit)
+          result = number + this.unit
         }
+        
+        this.$emit('update:value', result)
       }
     },
     unit: {
       get() {
         return this.match[1]
       },
-      set(value) {
-        if (!this.number) {
-          this.$emit('update:value', '0' + value)
-        } else {
-          this.$emit('update:value', this.number + value)
-        }
+      set(unit) {
+        const number = unit === 'auto' ? '' : this.number || '0'
+        this.$emit('update:value', number + unit)
       }
     },
     isAuto() {
@@ -84,10 +99,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-::v-deep {
+  ::v-deep {
+  .el-input__inner[type="number"] {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  
   .el-input-group__append,
   .el-input-group__prepend {
-    width: 35px;
+    width: 25px;
   }
   .el-input.is-disabled .el-input-group__append .el-input__inner {
     cursor: inherit;

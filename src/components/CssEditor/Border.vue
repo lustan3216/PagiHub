@@ -1,80 +1,119 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :span="24">
-      <el-switch v-model="isAll" active-text="All" inactive-text="Separate" />
-    </el-col>
-
-    <template v-if="isAll">
-      <el-col :span="24">
-        <label>Border</label>
-        <div class="vertical-center">
-          <input-style
-            :value="computedStyle.border"
-            :type="['unit', 'border-style', 'color']"
-            class="vertical-center"
+  <el-tabs
+    v-model="currentId"
+    closable
+    type="border-card"
+    @tab-remove="clean"
+  >
+    <el-tab-pane
+      v-for="(border, index) in borders"
+      :key="index"
+      :label="label[index]"
+      :name="border.id"
+    >
+      <el-form-item label="Width">
+        <select-unit :value.sync="border.width" />
+      </el-form-item>
+      
+      <el-form-item label="Style">
+        <el-select v-model="border.style" >
+          <el-option
+            v-for="style in borderStyles"
+            :key="style"
+            :value="style"
+            :label="style.capitalize()"
           />
-        </div>
-      </el-col>
-    </template>
-
-    <template v-else>
-      <el-col :span="24">
-        <label>BorderTop</label>
-        <div class="vertical-center">
-          <input-style
-            :value="computedStyle.borderTop"
-            :type="['unit', 'border-style', 'color']"
-            class="vertical-center"
-          />
-        </div>
-      </el-col>
-
-      <el-col :span="24">
-        <label>BorderRight</label>
-        <div class="vertical-center">
-          <input-style
-            :value="computedStyle.borderRight"
-            :type="['unit', 'border-style', 'color']"
-            class="vertical-center"
-          />
-        </div>
-      </el-col>
-
-      <el-col :span="24">
-        <label>BorderBottom</label>
-        <div class="vertical-center">
-          <input-style
-            :value="computedStyle.borderBottom"
-            :type="['unit', 'border-style', 'color']"
-            class="vertical-center"
-          />
-        </div>
-      </el-col>
-
-      <el-col :span="24">
-        <label>BorderLeft</label>
-        <input-style
-          :value="computedStyle.borderLeft"
-          :type="['unit', 'border-style', 'color']"
-          class="vertical-center"
-        />
-      </el-col>
-    </template>
-  </el-row>
+        </el-select>
+      </el-form-item>
+      
+      <el-form-item label="Color">
+        <el-color-picker v-model="border.color" show-alpha />
+      </el-form-item>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
-import InputStyle from './Components/InputStyle'
+import SelectUnit from './Components/SelectUnit'
 
 export default {
   name: 'Border',
   components: {
-    InputStyle
+    SelectUnit
   },
   props: ['computedStyle'],
   data() {
+    const tabs = ['border', 'borderTop', 'borderRight', 'borderBottom', 'borderLeft']
+    
+    const borders = tabs.map(name => {
+      const attrs = ['width', 'style', 'color']
+      const result = { id: name }
+  
+      attrs.forEach(x => {
+        const isNone = this.computedStyle[`${name}Style`] === 'none'
+        result[x] = isNone ? undefined : this.computedStyle[name + x.capitalize()]
+      })
+      return result
+    })
+    
     return {
-      isAll: true
+      currentId: tabs[0],
+      tabs,
+      borders,
+      borderStyles: ['none', 'dashed', 'dotted', 'solid']
+    }
+  },
+  computed: {
+    label() {
+      const labels = this.tabs.map(x => x.replace('border', ''))
+      labels[0] = 'All'
+      return labels
+    },
+    isAllChange() {
+      return this.currentId === this.tabs[0]
+    },
+    isCurrentBorderValid() {
+      const border = this.borders.find(x => x.id === this.currentId)
+      return this.isValidBorder(border)
+    }
+  },
+  watch: {
+    borders: {
+      handler(borders) {
+        const styles = {}
+  
+        borders.forEach((border, index) => {
+          let value
+          const isAll = !index
+          const borderString = this.borderString(border)
+          const validString = this.isCurrentBorderValid ? undefined : borderString
+          
+          if (this.isAllChange) {
+            value = isAll ? borderString : validString
+          } else {
+            value = isAll ? validString : borderString
+          }
+          
+          styles[border.id.kebabCase()] = value
+        })
+        
+        this.$emit('change', styles)
+      },
+      deep: true
+    }
+  },
+  methods: {
+    borderString(border) {
+      if (this.isValidBorder(border)) {
+        return `${border.width} ${border.style} ${border.color}`
+      }
+    },
+    isValidBorder(border) {
+      return Object.values(border).every(x => x)
+    },
+    clean(name) {
+      const border = this.borders.find(x => x.id === name)
+      border.width = border.color = border.style = undefined
     }
   }
 }

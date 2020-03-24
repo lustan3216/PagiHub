@@ -1,5 +1,5 @@
 import basic from './basic'
-import { number, boolean, select } from '../util'
+import { number, boolean } from '../util'
 
 const step = 'step'
 const precision = 'precision'
@@ -9,7 +9,6 @@ const showStops = 'showStops'
 const showTooltip = 'showTooltip'
 const range = 'range'
 const vertical = 'vertical'
-const height = 'height'
 
 export const defaultSetting = {
   field: 'formSlider',

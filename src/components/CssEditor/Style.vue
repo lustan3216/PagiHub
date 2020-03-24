@@ -15,11 +15,9 @@
 </template>
 
 <script>
-import style from '../../mixins/style'
 
 export default {
   name: 'Style',
-  mixins: [style],
   data() {
     return {
       styles: Object.entries(this.vm().innerStyles)

@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import styleMixin from '../../mixins/style'
 import styleOneAttrMixin from '../../mixins/styleOneAttr'
 import UploaderImage from '../Components/UploaderImage'
 
@@ -63,7 +62,7 @@ export default {
   components: {
     UploaderImage
   },
-  mixins: [styleMixin, styleOneAttrMixin('backgroundColor')]
+  mixins: [styleOneAttrMixin('backgroundColor')]
 }
 </script>
 

@@ -40,7 +40,10 @@ export default {
       const allStyles = Object.assign({}, this.innerStyles, styles)
 
       const validStyles = Object.keys(allStyles).reduce((all, key) => {
-        if (allStyles[key]) all[key] = allStyles[key]
+        if (allStyles[key] || allStyles[key] === 0) {
+          // allStyles[key] === 0 => margin: 0;
+          all[key] = allStyles[key]
+        }
         return all
       }, {})
 

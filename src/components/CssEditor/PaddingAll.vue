@@ -3,33 +3,33 @@
     <el-col :span="24">
       <el-switch v-model="isAll" active-text="All" inactive-text="Separate" />
     </el-col>
-    
+
     <template v-if="isAll">
       <el-col :span="24">
-        <p>Margin</p>
-        <input-style-unit :value.sync="computedStyle.margin" />
+        <p>Padding</p>
+        <input-style-unit :value.sync="computedStyle.padding" />
       </el-col>
     </template>
 
     <template v-else>
       <el-col :span="12">
-        <p>Margin Top</p>
-        <input-style-unit :value.sync="computedStyle.marginTop" />
+        <p>Padding Top</p>
+        <input-style-unit :value.sync="computedStyle.paddingTop" />
       </el-col>
 
       <el-col :span="12">
-        <p>Margin Right</p>
-        <input-style-unit :value.sync="computedStyle.marginRight" />
+        <p>Padding Right</p>
+        <input-style-unit :value.sync="computedStyle.paddingRight" />
       </el-col>
 
       <el-col :span="12">
-        <p>Margin Bottom</p>
-        <input-style-unit :value.sync="computedStyle.marginBottom" />
+        <p>Padding Bottom</p>
+        <input-style-unit :value.sync="computedStyle.paddingBottom" />
       </el-col>
 
       <el-col :span="12">
-        <p>Margin Left</p>
-        <input-style-unit :value.sync="computedStyle.marginLeft" />
+        <p>Padding Left</p>
+        <input-style-unit :value.sync="computedStyle.paddingLeft" />
       </el-col>
     </template>
   </el-row>
@@ -39,7 +39,7 @@
 import InputStyleUnit from './Components/SelectUnit'
 
 export default {
-  name: 'Spacing',
+  name: 'PaddingAll',
   components: {
     InputStyleUnit
   },

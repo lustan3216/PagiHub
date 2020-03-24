@@ -14,6 +14,7 @@ import store from './store'
 import VueShortkey from 'vue-shortkey'
 import PortalVue from 'portal-vue'
 import Unicon from 'vue-unicons'
+
 import {
   uniPlus,
   uniRedo,
