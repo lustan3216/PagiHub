@@ -1,6 +1,8 @@
 <template>
-  <i
-    :class="visible ? 'el-icon-view' : 'el-icon-star-off'"
+  <el-button
+    type="text"
+    :icon="visible ? 'el-icon-view' : 'el-icon-star-off'"
+    size="mini"
     @click.stop="click"
   />
 </template>

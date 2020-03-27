@@ -1,5 +1,9 @@
 <template>
-  <flex-button :style="innerStyles" :id="id" default-text="Reset" @click="reset" />
+  <flex-button
+    :style="innerStyles"
+    :id="id"
+    default-text="Reset"
+    @click="reset" />
 </template>
 
 <script>

@@ -1815,6 +1815,11 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+bezier-easing@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/bezier-easing/-/bezier-easing-2.1.0.tgz#c04dfe8b926d6ecaca1813d69ff179b7c2025d86"
+  integrity sha1-wE3+i5JtbsrKGBPWn/F5t8ICXYY=
+
 bfj@^6.1.1:
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/bfj/-/bfj-6.1.2.tgz#325c861a822bcb358a41c78a33b8e6e2086dde7f"
@@ -3212,6 +3217,11 @@ detect-node@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
   integrity sha512-ZIzRpLJrOj7jjP2miAtgqIfmzbxa4ZOr5jJc601zklsfEx9oTzmmj2nVpIPRpNlRTIh8lc1kyViIY7BWSGNmKw==
+
+detect-zoom@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/detect-zoom/-/detect-zoom-1.0.2.tgz#6230118c9b1bcce8381a4ba7829576b2b44e8bb6"
+  integrity sha1-YjARjJsbzOg4GkungpV2srROi7Y=
 
 diffie-hellman@^5.0.0:
   version "5.0.3"
@@ -8814,6 +8824,11 @@ split-string@^3.0.1, split-string@^3.0.2:
   integrity sha512-NzNVhJDYpwceVVii8/Hu6DKfD2G+NrQHlS/V/qgv763EYudVwEcMQNxd2lh+0VrUByXN/oJkl5grOhYWvQUYiw==
   dependencies:
     extend-shallow "^3.0.0"
+
+splitpanes@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/splitpanes/-/splitpanes-2.2.1.tgz#95c5824eb4033cd109a1a5d1a498765e2bde8c92"
+  integrity sha512-r7ypbW7IkH6yKUWpCbBqHdZcxI1PwEAMC3Yfeds+lJ0MpBGOl1mbTazXUK7gchUyVGmtq7paLin1YslLY5UhAQ==
 
 sprintf-js@~1.0.2:
   version "1.0.3"

@@ -13,34 +13,7 @@ import VueDraggable from 'vuedraggable'
 import store from './store'
 import VueShortkey from 'vue-shortkey'
 import PortalVue from 'portal-vue'
-import Unicon from 'vue-unicons'
 
-import {
-  uniPlus,
-  uniRedo,
-  uniSearchPlus,
-  uniSearchMinus,
-  uniLayerGroup,
-  uniBookMedical,
-  uniObjectGroup,
-  uniPrevious,
-  uniLeftArrowToLeft,
-  uniCog
-} from 'vue-unicons/src/icons'
-Unicon.add([
-  uniPlus,
-  uniRedo,
-  uniSearchPlus,
-  uniSearchMinus,
-  uniLayerGroup,
-  uniBookMedical,
-  uniObjectGroup,
-  uniPrevious,
-  uniLeftArrowToLeft,
-  uniCog
-])
-
-Vue.use(Unicon)
 Vue.use(PortalVue)
 Vue.use(VueShortkey)
 Vue.use(ElementUI)

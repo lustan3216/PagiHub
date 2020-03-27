@@ -1,5 +1,5 @@
 <template>
-  <i class="el-icon-lollipop" @click.stop="open">
+  <i class="el-icon-plus" @click.stop="open">
     <el-dialog
       ref="dialog"
       :visible="visible"
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { basic, form, formGroup } from '../../../template'
 import importTemplatesMixin from '../../../mixins/importTemplates'
 
@@ -80,7 +80,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('layout', ['currentDialog']),
     ...mapGetters('nodes', ['parentPath']),
     rootForm() {
       return this.parentPath(this.id).find(x => x.tag === 'form-generator')

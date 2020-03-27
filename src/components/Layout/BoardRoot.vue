@@ -39,6 +39,6 @@ export default {
 
 <style scoped lang="scss">
 .root-node {
-  @include calc-vh(min-height, '100vh - 70px');
+  @include calc-vh(min-height, '100vh - 40px');
 }
 </style>

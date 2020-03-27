@@ -67,6 +67,7 @@ export default {
   .el-input-group__append,
   .el-input-group__prepend {
     width: 35px;
+    padding: 0;
   }
   .el-input.is-disabled .el-input-group__append .el-input__inner {
     cursor: inherit;

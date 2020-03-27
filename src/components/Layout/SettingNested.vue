@@ -1,6 +1,6 @@
 <template>
   <div v-if="isFlat">
-    <h3>{{ name || 'Basic' }}</h3>
+    <span class="el-dropdown m-b-5 bold">{{ (name || 'Basic').toLocaleUpperCase() }}</span>
     <form-create
       ref="form"
       v-model="api"
@@ -9,25 +9,25 @@
     />
   </div>
   <div v-else>
-    <div v-for="(object, key) in specs">
+    <div v-for="(object, key) in specs" :key="key">
       <nested-settings
         :id="id"
         :specs="object"
         :name="key"
-        :key="key" />
+        :key="key"
+      />
     </div>
   </div>
 </template>
 
 <script>
-// import clone from 'clone'
+import clone from 'clone'
 import formCreate from '@form-create/element-ui'
 import { vmMap } from '../../utils/vmMap'
 import { isString } from '../../lodash'
-import clone from 'clone'
 
 export default {
-  name: 'NestedSettings',
+  name: 'SettingsNested',
   components: {
     FormCreate: formCreate.$form()
   },

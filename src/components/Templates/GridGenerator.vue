@@ -6,7 +6,7 @@
     :style="innerStyles"
     :layout="innerChildrenWithI"
     :margin="[0, 0]"
-    :responsive="false"
+    :responsive="true"
     @layout-updated="layoutUpdated"
   >
     <template v-for="child in innerChildrenWithI">

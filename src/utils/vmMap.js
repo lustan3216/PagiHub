@@ -14,6 +14,10 @@ export function getComputedStyle(id) {
   return window.getComputedStyle(vmMap[id].$el)
 }
 
+export function getPlanStyle(id) {
+  return vmMap[id].$el.getAttribute('style')
+}
+
 export function assignStyles(id, styles) {
   vmMap[id].assignStyles(styles)
 }

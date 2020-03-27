@@ -5,6 +5,7 @@
   
   <el-input
     v-else
+    :prefix-icon="icon"
     v-model="number"
     type="number"
     size="mini"
@@ -22,6 +23,10 @@
 export default {
   name: 'SelectUnit',
   props: {
+    icon: {
+      type: String,
+      default: ''
+    },
     hasAuto: {
       type: Boolean,
       default: false
@@ -100,17 +105,30 @@ export default {
 
 <style scoped lang="scss">
   ::v-deep {
-  .el-input__inner[type="number"] {
-    padding-right: 10px;
-    padding-left: 10px;
+    &:not(.el-input--prefix) > .el-input__inner[type="number"] {
+    padding-right: 8px;
+    padding-left: 8px;
   }
   
   .el-input-group__append,
   .el-input-group__prepend {
-    width: 25px;
+    width: 30px;
   }
   .el-input.is-disabled .el-input-group__append .el-input__inner {
     cursor: inherit;
   }
+  
+    .el-input-group__append {
+      padding: 0 10px;
+    
+      .el-input__inner {
+        padding-right: 0;
+        padding-left: 12px;
+      }
+    }
+    
+    .el-select {
+      width: 56px;
+    }
 }
 </style>

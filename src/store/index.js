@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import nodes from './modules/nodes'
-import layout from './modules/layout'
+import app from './modules/app'
 
 Vue.use(Vuex)
 
@@ -19,6 +19,6 @@ export default new Vuex.Store({
   strict: true,
   modules: {
     nodes,
-    layout
+    app
   }
 })

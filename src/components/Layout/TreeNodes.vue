@@ -1,48 +1,73 @@
 <template>
-  <flex-sidebar>
-    <el-input v-model="filterText" placeholder="输入关键字进行过滤" />
+  <div class="p-5">
+    <div class="text-center">
+      <span class="el-dropdown m-b-5 bold">NODES</span>
+    </div>
+    
+    <el-input
+      v-model="filterText"
+      placeholder="输入关键字进行过滤"
+      size="small"
+      class="m-b-10 transparent"
+    />
     <el-tree
+      class="transparent"
+      node-key="id"
+      highlight-current
+      show-checkbox
       ref="tree"
       :filter-node-method="filterNode"
       :data="neatTree"
       :indent="12"
-      node-key="id"
-      default-expand-all
       @node-click="nodeClick"
     >
       <template v-slot="{ node, data }">
         <span class="justify-between w-100">
+          
           <span class="el-tree-node__label align-center">
             {{ data.tag }} - {{ data.id }}
           </span>
+          
           <span>
             <visibility v-if="data.tag !== 'grid-item'" :id="data.id" />
-            <el-button size="mini" @click.stop="() => copy(data)">
-              +
-            </el-button>
-            <el-button size="mini" @click.stop="() => remove(data)">
-              -
-            </el-button>
+            
+            <el-button
+              type="text"
+              size="mini"
+              icon="el-icon-attract"
+            />
+            
+            <el-button
+              type="text"
+              size="mini"
+              icon="el-icon-copy-document"
+              @click.stop="() => copy(data)"
+            />
+            
+            <el-button
+              type="text"
+              icon="el-icon-delete"
+              size="mini"
+              @click.stop="() => remove(data)"
+            />
           </span>
         </span>
       </template>
     </el-tree>
-  </flex-sidebar>
+  </div>
 </template>
 
 <script>
 import clone from 'clone'
 import { mapState, mapGetters } from 'vuex'
-import FlexSidebar from '../Templates/FlexSidebar'
 import { traversal } from '../../utils/util'
 import { vmMap } from '../../utils/vmMap'
 import Visibility from './Visibility'
 import globalStatus from '../../observable/globalStatus'
 
 export default {
-  name: 'SidebarNodesTree',
+  name: 'NodesTree',
   components: {
-    FlexSidebar,
     Visibility
   },
   data() {
@@ -105,20 +130,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-::v-deep > .el-carousel__container {
-  height: auto;
-  padding-top: 60%;
-}
-.el-menu-item:focus,
-.el-menu-item:hover {
-  background-color: inherit;
-}
-
-.sidebar {
-  background-color: #fff;
-  box-shadow: 2px 0px 5px 0 rgba(32, 48, 60, 0.05);
-  width: 350px !important;
-}
-</style>

@@ -1,94 +1,96 @@
 <template>
-  <el-row :gutter="20">
-    <el-col :span="24">
-      <p>opacity</p>
-      <el-slider
-        :value="parseInt(computedStyle.opacity)"
-        :min="0"
-        :max="1"
-        :step="0.01"
-      />
-    </el-col>
-
-    <el-col :span="24">
-      <p>blur</p>
-      <el-slider
-        :value="parseInt(computedStyle.blur)"
-        :min="0"
-        :max="30"
-        :step="0.1"
-      />
-    </el-col>
-
-    <el-col :span="24">
-      <p>brightness</p>
-      <el-slider
-        :value="parseInt(computedStyle.brightness)"
-        :min="0"
-        :max="200"
-      />
-    </el-col>
-
-    <el-col :span="24">
-      <p>contrast</p>
-      <el-slider
-        :value="parseInt(computedStyle.contrast)"
-        :min="0"
-        :max="200"
-      />
-    </el-col>
-
-    <el-col :span="24">
-      <p>grayscale</p>
-      <el-slider
-        :value="parseInt(computedStyle.grayscale)"
-        :min="0"
-        :max="100"
-      />
-    </el-col>
-
-    <el-col :span="24">
-      <p>hue-rotate</p>
-      <el-slider
-        :value="parseInt(computedStyle.hueRotate)"
-        :min="0"
-        :max="360"
-      />
-    </el-col>
-
-    <el-col :span="24">
-      <p>invert</p>
-      <el-slider
-        :value="parseInt(computedStyle.brightness)"
-        :min="0"
-        :max="100"
-      />
-    </el-col>
-
-    <el-col :span="24">
-      <p>saturate</p>
-      <el-slider
-        :value="parseInt(computedStyle.saturate)"
-        :min="0"
-        :max="1"
-        :step="0.01"
-      />
-    </el-col>
-
-    <el-col :span="24">
-      <p>sepia</p>
-      <el-slider
-        :value="parseInt(computedStyle.sepia)"
-        :min="0"
-        :max="1"
-        :step="0.01"
-      />
-    </el-col>
-  </el-row>
+  <div>
+    <el-row :gutter="5" class="m-t-10">
+      <el-col :span="8">
+        <el-form-item label="Opacity">
+          <input-unit
+            :value="parseInt(computedStyle.opacity)"
+            :min="0"
+            :max="1"/>
+        </el-form-item>
+      </el-col>
+    
+      <el-col :span="8">
+        <el-form-item label="Blur">
+          <input-unit
+            :value="parseInt(computedStyle.blur)"
+            :min="0"
+            :max="30"/>
+        </el-form-item>
+      </el-col>
+    
+      <el-col :span="8">
+        <el-form-item label="Brightness">
+          <input-unit
+            :value="parseInt(computedStyle.brightness)"
+            :min="0"
+            :max="200"/>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    
+    <el-row :gutter="5" class="m-t-10">
+      <el-col :span="8">
+        <el-form-item label="Contrast">
+          <input-unit
+            :value="parseInt(computedStyle.contrast)"
+            :min="0"
+            :max="200"/>
+        </el-form-item>
+      </el-col>
+    
+      <el-col :span="8">
+        <el-form-item label="Grayscale">
+          <input-unit
+            :value="parseInt(computedStyle.grayscale)"
+            :min="0"
+            :max="100"/>
+        </el-form-item>
+      </el-col>
+    
+      <el-col :span="8">
+        <el-form-item label="Hue">
+          <input-unit
+            :value="parseInt(computedStyle.hueRotate)"
+            :min="0"
+            :max="360"/>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    
+    <el-row :gutter="5" class="m-t-10">
+      <el-col :span="8">
+        <el-form-item label="Brightness">
+          <input-unit
+            :value="parseInt(computedStyle.brightness)"
+            :min="0"
+            :max="100"/>
+        </el-form-item>
+      </el-col>
+    
+      <el-col :span="8">
+        <el-form-item label="Saturate">
+          <input-unit
+            :value="parseInt(computedStyle.saturate)"
+            :min="0"
+            :max="1"/>
+        </el-form-item>
+      </el-col>
+    
+      <el-col :span="8">
+        <el-form-item label="Sepia">
+          <input-unit
+            :value="parseInt(computedStyle.sepia)"
+            :min="0"
+            :max="1"/>
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
-import InputUnit from './Components/InputUnit'
+import InputUnit from '../Components/InputUnit'
 
 export default {
   name: 'Effect',

@@ -1,9 +1,10 @@
 <template>
   <el-tabs
     v-model="currentId"
-    :closable="Boolean(boxShadows.length - 1)"
+    closable
     addable
     type="border-card"
+    class="no-shadow"
     @edit="handleTabsEdit"
   >
     <el-tab-pane
@@ -12,43 +13,58 @@
       :label="`${index + 1}`"
       :name="boxShadow.id"
     >
-      <el-form-item label="">
-        <el-switch
-          v-model="boxShadow.inset"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="Outline"
-          inactive-text="Inset"/>
-      </el-form-item>
+      <el-row :gutter="5">
+        <el-col :span="8">
+          <el-form-item>
+            <el-select v-model="boxShadow.inset" placeholder="Outline">
+              <el-option value="Outline"/>
+              <el-option value="Inset"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        
+        <el-col :span="8">
+          <el-form-item label="X">
+            <select-unit :value.sync="boxShadow.offsetX" :exclude="['%']"/>
+          </el-form-item>
+        </el-col>
+  
+        <el-col :span="8">
+          <el-form-item label="Y">
+            <select-unit :value.sync="boxShadow.offsetY" :exclude="['%']"/>
+          </el-form-item>
+        </el-col>
+      </el-row>
       
-      <el-form-item label="Horizontal">
-        <select-unit :value.sync="boxShadow.offsetX" :exclude="['%']"/>
-      </el-form-item>
+      <el-row :gutter="5">
+        <el-col :span="8">
+          <el-form-item label="Blur">
+            <select-unit :value.sync="boxShadow.blurRadius" :exclude="['%']"/>
+          </el-form-item>
+        </el-col>
+        
+        <el-col :span="8">
+          <el-form-item label="Spread">
+            <select-unit :value.sync="boxShadow.spreadRadius" :exclude="['%']"/>
+          </el-form-item>
+        </el-col>
+        
+        <el-col :span="3">
+          <el-form-item label="Color">
+            <el-color-picker v-model="boxShadow.color" show-alpha />
+          </el-form-item>
+        </el-col>
+      </el-row>
       
-      <el-form-item label="Vertical">
-        <select-unit :value.sync="boxShadow.offsetY" :exclude="['%']"/>
-      </el-form-item>
-      
-      <el-form-item label="Blur">
-        <select-unit :value.sync="boxShadow.blurRadius" :exclude="['%']"/>
-      </el-form-item>
-      
-      <el-form-item label="Spread">
-        <select-unit :value.sync="boxShadow.spreadRadius" :exclude="['%']"/>
-      </el-form-item>
-      
-      <el-form-item label="Color">
-        <el-color-picker v-model="boxShadow.color" show-alpha />
-      </el-form-item>
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
-import { parse, stringify } from '../../utils/boxShadow'
 import csso from 'csso'
-import SelectUnit from './Components/SelectUnit'
-window.parse = parse
+import SelectUnit from '../Components/SelectUnit'
+import { parse, stringify } from '../../utils/boxShadow'
+
 export default {
   name: 'BoxShadows',
   components: {
@@ -60,6 +76,7 @@ export default {
     
     boxShadows.forEach((boxShadow, index) => {
       boxShadow.id = (+new Date() + index).toString()
+      boxShadow.inset = boxShadow.inset ? 'Inset' : 'Outline'
     })
     
     return {
@@ -103,3 +120,15 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  ::v-deep {
+    .el-tabs__content {
+      overflow: initial;
+      padding: 10px 10px 0;
+    }
+    .el-collapse-item__wrap{
+      border-bottom: none;
+    }
+  }
+</style>

@@ -1,30 +1,39 @@
 <template>
   <el-container>
-    <el-aside width="40px" class="vertical-header">
-      <nav-bar />
-    </el-aside>
-
-    <el-container class="main">
-      <transition name="fade-left" mode="out-in">
-        <component :is="currentSidebar.type" />
-      </transition>
-
-      <el-container>
+    <splitpanes class="default-theme">
+      <pane size="20">
+        <splitpanes class="default-theme" horizontal style="height: 100vh">
+          <pane>
+            <tree-nodes />
+          </pane>
+    
+          <pane>
+            <tree-components />
+          </pane>
+        </splitpanes>
+      </pane>
+      
+      <pane>
+        <nav-bar/>
+        
         <el-main class="main">
-          <board-root />
+          <board-root class="edit-area" />
         </el-main>
-      </el-container>
-
-      <sidebar-settings />
-    </el-container>
+        
+      </pane>
+    </splitpanes>
+    
+    <sidebar-right />
   </el-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import 'splitpanes/dist/splitpanes.css'
+import { Splitpanes, Pane } from 'splitpanes'
 import NavBar from './components/Layout/NavBar'
-import SidebarNodesTree from './components/Layout/SidebarNodesTree'
-import SidebarSettings from './components/Layout/SidebarSettings'
+import TreeNodes from './components/Layout/TreeNodes'
+import TreeComponents from './components/Layout/TreeComponents'
+import SidebarRight from './components/Layout/SidebarRight'
 import EditArea from './components/Templates/AreaDraggable'
 import BoardRoot from './components/Layout/BoardRoot'
 
@@ -33,12 +42,12 @@ export default {
   components: {
     EditArea,
     NavBar,
-    SidebarNodesTree,
-    SidebarSettings,
-    BoardRoot
-  },
-  computed: {
-    ...mapState('layout', ['currentSidebar'])
+    TreeNodes,
+    SidebarRight,
+    TreeComponents,
+    BoardRoot,
+    Splitpanes,
+    Pane
   }
 }
 </script>
@@ -53,12 +62,8 @@ export default {
 }
 
 .main {
-  @include calc-vh(height, '100vh');
+  width: 100%;
+  @include calc-vh(height, '100vh - 40px');
   overflow: scroll;
-}
-
-.edit-area {
-  padding-top: 35px;
-  @include calc-vh(min-height, '100vh - 75px');
 }
 </style>

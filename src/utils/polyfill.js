@@ -46,3 +46,18 @@ String.prototype.capitalize = function() {
 String.prototype.kebabCase = function() {
   return kebabCase(this)
 }
+
+String.prototype.camelCase = function() {
+  if (!this) return ''
+
+  return this.replace(
+    /([-_][a-z])/g,
+    group => group
+      .toUpperCase()
+      .replace(/[-_]/g, '')
+  )
+}
+
+Number.prototype.isFloat = function() {
+  return Number(this) === this && this % 1 !== 0
+}

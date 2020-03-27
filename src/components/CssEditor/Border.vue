@@ -1,40 +1,60 @@
 <template>
-  <el-tabs
-    v-model="currentId"
-    closable
-    type="border-card"
-    @tab-remove="clean"
-  >
-    <el-tab-pane
-      v-for="(border, index) in borders"
-      :key="index"
-      :label="label[index]"
-      :name="border.id"
-    >
-      <el-form-item label="Width">
-        <select-unit :value.sync="border.width" />
-      </el-form-item>
+  <div>
+    <el-dropdown class="m-b-10" @command="currentId = $event">
+      <span class="el-dropdown-link">
+        {{ currentId.capitalize() }}
+        <i class="el-icon-arrow-down el-icon--right"/>
+      </span>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item
+          v-for="attr in attrs"
+          :key="attr"
+          :command="attr"
+        >
+          {{ attr.capitalize() }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+  
+    <el-row :gutter="5" type="flex">
+      <el-col :span="3">
+        <el-button
+          circle
+          size="mini"
+          icon="el-icon-delete"
+          @click.stop="clean"/>
+      </el-col>
       
-      <el-form-item label="Style">
-        <el-select v-model="border.style" >
-          <el-option
-            v-for="style in borderStyles"
-            :key="style"
-            :value="style"
-            :label="style.capitalize()"
-          />
-        </el-select>
-      </el-form-item>
-      
-      <el-form-item label="Color">
-        <el-color-picker v-model="border.color" show-alpha />
-      </el-form-item>
-    </el-tab-pane>
-  </el-tabs>
+      <el-col :span="8">
+        <el-form-item label="Width">
+          <select-unit :value.sync="currentBorder.width" />
+        </el-form-item>
+      </el-col>
+    
+      <el-col :span="3">
+        <el-form-item label="Color">
+          <el-color-picker v-model="currentBorder.color" show-alpha />
+        </el-form-item>
+      </el-col>
+    
+      <el-col :span="7">
+        <el-form-item label="Style">
+          <el-select v-model="currentBorder.style" placeholder="-">
+            <el-option
+              v-for="style in borderStyles"
+              :key="style"
+              :value="style"
+              :label="style.capitalize()"
+            />
+          </el-select>
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
-import SelectUnit from './Components/SelectUnit'
+import SelectUnit from '../Components/SelectUnit'
 
 export default {
   name: 'Border',
@@ -43,9 +63,9 @@ export default {
   },
   props: ['computedStyle'],
   data() {
-    const tabs = ['border', 'borderTop', 'borderRight', 'borderBottom', 'borderLeft']
+    const attrs = ['border', 'borderTop', 'borderRight', 'borderBottom', 'borderLeft']
     
-    const borders = tabs.map(name => {
+    const borders = attrs.map(name => {
       const attrs = ['width', 'style', 'color']
       const result = { id: name }
   
@@ -57,17 +77,15 @@ export default {
     })
     
     return {
-      currentId: tabs[0],
-      tabs,
+      currentId: attrs[0],
+      attrs,
       borders,
       borderStyles: ['none', 'dashed', 'dotted', 'solid']
     }
   },
   computed: {
-    label() {
-      const labels = this.tabs.map(x => x.replace('border', ''))
-      labels[0] = 'All'
-      return labels
+    currentBorder() {
+      return this.borders.find(x => x.id === this.currentId)
     },
     isAllChange() {
       return this.currentId === this.tabs[0]

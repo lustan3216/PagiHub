@@ -2,7 +2,6 @@ import clone from 'clone'
 import { mapGetters, mapMutations } from 'vuex'
 import globalStatus from '../observable/globalStatus'
 import { resetNestedIds } from '../utils/keyId'
-import { camelCase } from '../lodash'
 
 const templates = require('../template/basic')
 
@@ -20,7 +19,7 @@ export default {
     new(childId) {
       const index = this.childrenIds.indexOf(childId)
       const clonedChildren = clone(this.innerChildren)
-      const tag = camelCase(this.innerChildren[index].tag)
+      const tag = this.innerChildren[index].tag.camelCase()
       const _node = templates[tag]
         ? templates[tag]()
         : clone(clonedChildren[index])
