@@ -1,3 +1,4 @@
+/* eslint-disabled */
 import { kebabCase, capitalize } from 'element-ui/src/utils/util'
 import { isPlainObject } from '../lodash'
 

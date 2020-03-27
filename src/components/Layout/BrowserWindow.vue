@@ -9,6 +9,7 @@
 <script>
 import zoom from '../../directives/zoom'
 import { mapMutations } from 'vuex'
+import interactjs from 'interactjs'
 import { isMac } from '../../utils/check'
 export default {
   name: 'Browser',
@@ -17,15 +18,37 @@ export default {
   },
   data() {
     return {
-      callback: (scale) => {
-        this.$el.style.transform = `scale(${scale})`
-        this.appSET({ scale })
+      callback: scaleRatio => {
+        this.$el.style.transform = `scale(${scaleRatio})`
+        
+        this.appSET({ scaleRatio: scaleRatio })
       }
     }
   },
+  mounted() {
+    interactjs(this.$el).resizable({
+      edges: {
+        bottom: true,
+        right: true
+      }
+    }).on('resizemove', event => {
+      let { x, y } = event.target.dataset
+  
+      x = parseFloat(x) || 0
+      y = parseFloat(y) || 0
+  
+      Object.assign(event.target.style, {
+        width: `${event.rect.width}px`,
+        height: `${event.rect.height}px`,
+        transform: `translate(${event.deltaRect.left}px, ${event.deltaRect.top}px)`
+      })
+  
+      Object.assign(event.target.dataset, { x, y })
+    })
+  },
   methods: {
     ...mapMutations('app', {
-      'SET': 'appSET'
+      appSET: 'SET'
     }),
     isMac
   }

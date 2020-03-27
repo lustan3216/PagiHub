@@ -2,7 +2,7 @@ import { SET } from '../index'
 
 const state = {
   selectedComponentIds: [],
-  scaleRatio: 100
+  scaleRatio: 1
 }
 
 const mutations = {

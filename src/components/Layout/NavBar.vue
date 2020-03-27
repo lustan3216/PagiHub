@@ -33,9 +33,10 @@
     />
   
     <el-dropdown>
-        <span class="el-dropdown-link">
-          下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
+      <span class="el-dropdown-link">
+        下拉菜单
+        <i class="el-icon-arrow-down el-icon--right"/>
+      </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>Custom</el-dropdown-item>
         <el-dropdown-item>Computer 1920px</el-dropdown-item>
@@ -45,26 +46,26 @@
         <el-dropdown-item>Mobile 320px</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
+  
+    <span>{{ scalePrecent }}</span>
   </el-header>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import { isMac } from '../../utils/check'
 export default {
   name: 'NavBar',
+  computed: {
+    scalePrecent() {
+      return Math.ceil(this.scaleRatio * 100)
+    },
+    ...mapState('app', ['scaleRatio'])
+  },
   methods: {
     isMac,
     redo() {},
     undo() {}
-  },
-  mounted() {
-    // window.addEventListener('wheel', function (e) {
-    //   console.log(zoom, device, e)
-    //   var zoom = detectZoom.zoom();
-    //   var device = detectZoom.device();
-    //
-    // })
   }
 }
 </script>

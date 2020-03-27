@@ -1,7 +1,7 @@
 <template>
   <el-button
-    type="text"
     :icon="visible ? 'el-icon-view' : 'el-icon-star-off'"
+    type="text"
     size="mini"
     @click.stop="click"
   />

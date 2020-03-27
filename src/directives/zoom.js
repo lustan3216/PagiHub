@@ -10,7 +10,6 @@ export default {
     mousewheel.bind(el, {
       value: function(event, { pixelX, pixelY }) {
         if (event.ctrlKey) {
-
           event.preventDefault()
 
           scale += pixelY * -0.005

@@ -1,11 +1,9 @@
-<template>
-
-</template>
+<template/>
 
 <script>
-  export default {
-    name: 'Gradient'
-  }
+export default {
+  name: 'Gradient'
+}
 </script>
 
 <style scoped>

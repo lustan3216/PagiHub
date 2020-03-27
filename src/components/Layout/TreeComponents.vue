@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  export default {
-    name: 'SettingComponents'
-  }
+export default {
+  name: 'SettingComponents'
+}
 </script>

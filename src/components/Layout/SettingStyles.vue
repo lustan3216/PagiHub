@@ -13,8 +13,8 @@
     />
     
     <!--<margin-->
-      <!--:computed-style="computedStyle"-->
-      <!--@change="assignStyles"-->
+    <!--:computed-style="computedStyle"-->
+    <!--@change="assignStyles"-->
     <!--/>-->
   
     <padding

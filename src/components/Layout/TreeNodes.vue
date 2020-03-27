@@ -11,14 +11,14 @@
       class="m-b-10 transparent"
     />
     <el-tree
-      class="transparent"
-      node-key="id"
-      highlight-current
-      show-checkbox
       ref="tree"
       :filter-node-method="filterNode"
       :data="neatTree"
       :indent="12"
+      class="transparent"
+      node-key="id"
+      highlight-current
+      show-checkbox
       @node-click="nodeClick"
     >
       <template v-slot="{ node, data }">
