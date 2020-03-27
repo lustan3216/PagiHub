@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { Drawer } from 'element-ui'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import GridGenerator from './GridGenerator'
@@ -23,6 +24,7 @@ export default {
   defaultSetting,
   name: 'Drawer',
   components: {
+    ElDrawer: Drawer,
     GridGenerator
   },
   mixins: [childrenMixin, commonMixin],

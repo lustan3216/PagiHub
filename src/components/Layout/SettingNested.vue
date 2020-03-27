@@ -1,6 +1,8 @@
 <template>
   <div v-if="isFlat">
-    <span class="el-dropdown m-b-5 bold">{{ (name || 'Basic').toLocaleUpperCase() }}</span>
+    <span class="el-dropdown m-b-5 bold">{{
+      (name || 'Basic').toLocaleUpperCase()
+    }}</span>
     <form-create
       ref="form"
       v-model="api"
@@ -14,8 +16,7 @@
         :id="id"
         :specs="object"
         :name="key"
-        :key="key"
-      />
+        :key="key" />
     </div>
   </div>
 </template>
@@ -23,8 +24,13 @@
 <script>
 import clone from 'clone'
 import formCreate from '@form-create/element-ui'
+import { Switch, Tooltip, InputNumber } from 'element-ui'
 import { vmMap } from '../../utils/vmMap'
 import { isString } from '../../lodash'
+
+formCreate.component('ElSwitch', Switch)
+formCreate.component('ElTooltip', Tooltip)
+formCreate.component('ElInputNumber', InputNumber)
 
 export default {
   name: 'SettingsNested',

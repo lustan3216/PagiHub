@@ -52,8 +52,7 @@ import {
   Main,
   Divider,
   Image,
-  Loading,
-  Slider
+  Loading
 } from 'element-ui'
 
 Vue.use(Dialog)
@@ -91,7 +90,6 @@ Vue.use(Aside)
 Vue.use(Main)
 Vue.use(Divider)
 Vue.use(Image)
-Vue.use(Slider)
 
 Vue.use(Loading.directive)
 

@@ -1,6 +1,25 @@
 import clone from 'clone'
 import { mapMutations, mapState } from 'vuex'
 import formCreate from '@form-create/element-ui'
+import {
+  Slider,
+  Switch,
+  Tooltip,
+  InputNumber,
+  RadioGroup,
+  DatePicker,
+  TimePicker,
+  Rate
+} from 'element-ui'
+
+formCreate.component('ElSwitch', Switch)
+formCreate.component('ElSlider', Slider)
+formCreate.component('ElTooltip', Tooltip)
+formCreate.component('ElInputNumber', InputNumber)
+formCreate.component('ElRadioGroup', RadioGroup)
+formCreate.component('ElDatePicker', DatePicker)
+formCreate.component('ElTimePicker', TimePicker)
+formCreate.component('ElRate', Rate)
 
 export default {
   components: {
