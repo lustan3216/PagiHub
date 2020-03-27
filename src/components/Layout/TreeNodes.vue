@@ -1,9 +1,9 @@
 <template>
-  <div class="p-5">
+  <div class="p-5 h-100">
     <div class="text-center">
       <span class="el-dropdown m-b-5 bold">NODES</span>
     </div>
-    
+
     <el-input
       v-model="filterText"
       placeholder="输入关键字进行过滤"
@@ -15,7 +15,7 @@
       :filter-node-method="filterNode"
       :data="neatTree"
       :indent="12"
-      class="transparent"
+      class="tree"
       node-key="id"
       highlight-current
       show-checkbox
@@ -23,27 +23,22 @@
     >
       <template v-slot="{ node, data }">
         <span class="justify-between w-100">
-          
-          <span class="el-tree-node__label align-center">
+          <span class="el-tree-node__label align-center m-r-10">
             {{ data.tag }} - {{ data.id }}
           </span>
-          
+
           <span>
             <visibility v-if="data.tag !== 'grid-item'" :id="data.id" />
-            
-            <el-button
-              type="text"
-              size="mini"
-              icon="el-icon-attract"
-            />
-            
+
+            <el-button type="text" size="mini" icon="el-icon-attract" />
+
             <el-button
               type="text"
               size="mini"
               icon="el-icon-copy-document"
               @click.stop="() => copy(data)"
             />
-            
+
             <el-button
               type="text"
               icon="el-icon-delete"
@@ -58,6 +53,7 @@
 </template>
 
 <script>
+import { Tree } from 'element-ui'
 import clone from 'clone'
 import { mapState, mapGetters } from 'vuex'
 import { traversal } from '../../utils/util'
@@ -68,6 +64,7 @@ import globalStatus from '../../observable/globalStatus'
 export default {
   name: 'NodesTree',
   components: {
+    ElTree: Tree,
     Visibility
   },
   data() {
@@ -130,3 +127,11 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.tree {
+  background: transparent;
+  height: calc(100% - 70px);
+  overflow: scroll;
+}
+</style>

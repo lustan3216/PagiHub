@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { Carousel, CarouselItem } from 'element-ui'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import GridGenerator from './GridGenerator'
@@ -28,6 +29,8 @@ import GridGenerator from './GridGenerator'
 export default {
   name: 'Carousel',
   components: {
+    ElCarousel: Carousel,
+    ElCarouselItem: CarouselItem,
     GridGenerator
   },
   mixins: [childrenMixin, commonMixin],

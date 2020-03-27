@@ -28,12 +28,16 @@
 
 <script>
 import { mapState } from 'vuex'
+import VueDraggable from 'vuedraggable'
 import importTemplates from '../../mixins/importTemplates'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 
 export default {
   name: 'AreaDraggable',
+  components: {
+    draggable: VueDraggable
+  },
   mixins: [importTemplates, childrenMixin, commonMixin],
   data() {
     return {

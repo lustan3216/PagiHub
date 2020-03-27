@@ -6,13 +6,9 @@
 
 <script>
 import commonMixin from '../../mixins/common'
-import EditArea from './AreaDraggable'
 
 export default {
   name: 'Divider',
-  components: {
-    EditArea
-  },
   mixins: [commonMixin],
   data() {
     return {

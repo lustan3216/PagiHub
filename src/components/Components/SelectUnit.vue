@@ -1,8 +1,8 @@
 <template>
   <el-select v-if="isAuto" v-model="unit">
-    <el-option v-for="unit in units" :label="unit" :value="unit" />
+    <el-option v-for="unit in units" :key="unit" :value="unit" />
   </el-select>
-  
+
   <el-input
     v-else
     :prefix-icon="icon"
@@ -13,10 +13,9 @@
     class="number"
   >
     <el-select slot="append" v-model="unit" placeholder="-">
-      <el-option v-for="unit in units" :label="unit" :value="unit" />
+      <el-option v-for="unit in units" :key="unit" :value="unit" />
     </el-select>
   </el-input>
-  
 </template>
 
 <script>
@@ -58,9 +57,9 @@ export default {
       } else if (parseInt(this.value) === 0) {
         return ['0', 'px']
       } else {
-        const [_, number = '0', unit = 'px'] = this.value.toString().match(
-          /^(\d+)?([a-z|%]+)?/
-        )
+        const [_, number = '0', unit = 'px'] = this.value
+          .toString()
+          .match(/^(\d+)?([a-z|%]+)?/)
         return [number, unit]
       }
     },
@@ -70,7 +69,7 @@ export default {
       },
       set(number) {
         let result
-        
+
         if (this.isInvalid(number)) {
           result = null
         } else if (!this.unit) {
@@ -78,7 +77,7 @@ export default {
         } else {
           result = number + this.unit
         }
-        
+
         this.$emit('update:value', result)
       }
     },
@@ -104,12 +103,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  ::v-deep {
-    &:not(.el-input--prefix) > .el-input__inner[type="number"] {
+::v-deep {
+  &:not(.el-input--prefix) > .el-input__inner[type='number'] {
     padding-right: 8px;
     padding-left: 8px;
   }
-  
+
   .el-input-group__append,
   .el-input-group__prepend {
     width: 30px;
@@ -117,18 +116,18 @@ export default {
   .el-input.is-disabled .el-input-group__append .el-input__inner {
     cursor: inherit;
   }
-  
-    .el-input-group__append {
-      padding: 0 10px;
-    
-      .el-input__inner {
-        padding-right: 0;
-        padding-left: 12px;
-      }
+
+  .el-input-group__append {
+    padding: 0 10px;
+
+    .el-input__inner {
+      padding-right: 0;
+      padding-left: 12px;
     }
-    
-    .el-select {
-      width: 56px;
-    }
+  }
+
+  .el-select {
+    width: 56px;
+  }
 }
 </style>

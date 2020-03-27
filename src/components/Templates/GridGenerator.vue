@@ -1,12 +1,13 @@
 <template>
   <grid-layout
     v-bind="innerProps"
-    :col-num="72"
+    :col-num="24"
     :row-height="5"
     :style="innerStyles"
     :layout="innerChildrenWithI"
     :margin="[0, 0]"
     :responsive="true"
+    :use-css-transforms="false"
     @layout-updated="layoutUpdated"
   >
     <template v-for="child in innerChildrenWithI">

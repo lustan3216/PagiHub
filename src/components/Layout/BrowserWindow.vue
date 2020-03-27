@@ -1,5 +1,5 @@
 <template>
-  <div v-zoom="callback" class="browser" >
+  <div v-zoom="callback" class="browser">
     <div class="body">
       <slot />
     </div>
@@ -20,31 +20,10 @@ export default {
     return {
       callback: scaleRatio => {
         this.$el.style.transform = `scale(${scaleRatio})`
-        
+
         this.appSET({ scaleRatio: scaleRatio })
       }
     }
-  },
-  mounted() {
-    interactjs(this.$el).resizable({
-      edges: {
-        bottom: true,
-        right: true
-      }
-    }).on('resizemove', event => {
-      let { x, y } = event.target.dataset
-  
-      x = parseFloat(x) || 0
-      y = parseFloat(y) || 0
-  
-      Object.assign(event.target.style, {
-        width: `${event.rect.width}px`,
-        height: `${event.rect.height}px`,
-        transform: `translate(${event.deltaRect.left}px, ${event.deltaRect.top}px)`
-      })
-  
-      Object.assign(event.target.dataset, { x, y })
-    })
   },
   methods: {
     ...mapMutations('app', {

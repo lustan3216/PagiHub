@@ -1,17 +1,15 @@
 <template>
   <flex-sidebar v-if="canShowSetting" class="sidebar">
-    <el-tabs v-model="activeName" >
-      
+    <el-tabs v-model="activeName">
       <el-tab-pane label="Setting" name="setting" lazy>
-        <settings-nested :id="settingId" :specs="specs" :key="settingId" />
+        <setting-nested :id="settingId" :specs="specs" />
       </el-tab-pane>
-      
+
       <el-tab-pane label="Style" name="style" lazy>
-        <settings-style :id="settingId" />
+        <setting-styles :id="settingId" />
       </el-tab-pane>
-      
-      <el-tab-pane label="Color" name="Color" lazy/>
-      
+
+      <el-tab-pane label="Color" name="Color" lazy />
     </el-tabs>
   </flex-sidebar>
 </template>
@@ -22,18 +20,16 @@ import formCreate from '@form-create/element-ui'
 import { mapState } from 'vuex'
 import globalStatus from '../../observable/globalStatus'
 import FlexSidebar from '../Templates/FlexSidebar'
-import SettingsStyle from './SettingStyles'
-import SettingsNested from './SettingNested'
+import SettingStyles from './SettingStyles'
+import SettingNested from './SettingNested'
 import allSettingSpecs from '../../settings'
-import NodesTree from './TreeNodes.vue'
 
 export default {
   name: 'SidebarRight',
   components: {
-    SettingsStyle,
+    SettingStyles,
     FlexSidebar,
-    SettingsNested,
-    NodesTree,
+    SettingNested,
     FormCreate: formCreate.$form()
   },
   data() {

@@ -4,8 +4,8 @@
 @import './space.scss';
 
 body {
-  font-family: 'Microsoft JhengHei', '微軟正黑體', 'Microsoft JhengHei UI', “微軟雅黑”, 'Microsoft YaHei',
-    'Microsoft YaHei UI', sans-serif;
+  font-family: 'Microsoft JhengHei', '微軟正黑體', 'Microsoft JhengHei UI',
+    “微軟雅黑”, 'Microsoft YaHei', 'Microsoft YaHei UI', sans-serif;
   font-weight: lighter;
   color: #909399;
   background-color: #e8edf8;
@@ -22,6 +22,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }

@@ -18,8 +18,12 @@
 </template>
 
 <script>
+import { Upload } from 'element-ui'
 export default {
   name: 'UploaderImage',
+  components: {
+    ElUpload: Upload
+  },
   data() {
     return {
       dialogImageUrl: '',
