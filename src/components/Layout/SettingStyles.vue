@@ -61,8 +61,18 @@ import Background from '../CssEditor/Background'
 import BoxShadows from '../CssEditor/BoxShadows'
 import StyleBlock from '../CssEditor/StyleBlock'
 import Transition from '../CssEditor/Transition'
-
+import { mapGetters } from 'vuex'
 import { getComputedStyle, assignStyles, getPlanStyle } from '../../utils/vmMap'
+
+const attributes = [
+  'width', 'minWidth', 'maxWidth',
+  'height', 'minHeight', 'maxHeight',
+  'boxShadow', 'filter',
+  'borderRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius', 'borderTopLeftRadius',
+  'borderTop', 'borderBottom', 'borderRight', 'borderLeft',
+  'margin', 'marginTop', 'marginBottom', 'marginRight', 'marginLeft',
+  'padding', 'paddingTop', 'paddingBottom', 'paddingRight', 'paddingLeft'
+]
 
 export default {
   name: 'SettingsStyle',
@@ -79,35 +89,24 @@ export default {
     StyleBlock,
     Transition
   },
-  props: {
-    id: {
-      type: Number,
-      required: true
-    }
-  },
   data() {
-    const attrs = [
-      'width', 'minWidth', 'maxWidth',
-      'height', 'minHeight', 'maxHeight',
-      'boxShadow', 'filter',
-      'borderRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius', 'borderTopLeftRadius',
-      'borderTop', 'borderBottom', 'borderRight', 'borderLeft',
-      'margin', 'marginTop', 'marginBottom', 'marginRight', 'marginLeft',
-      'padding', 'paddingTop', 'paddingBottom', 'paddingRight', 'paddingLeft'
-    ]
-  
-    const styles = getComputedStyle(this.id)
-  
-    const computedStyle = attrs.reduce((all, attr) => {
-      all[attr] = styles[attr]
-      return all
-    }, {})
-    
     return {
       klass: '',
-      computedStyle,
-      activeNames: '',
-      planStyle: getPlanStyle(this.id) || ''
+      activeNames: ''
+    }
+  },
+  computed: {
+    ...mapGetters('app', ['selectedComponentId']),
+    computedStyle() {
+      const styles = getComputedStyle(this.selectedComponentId)
+  
+      return attributes.reduce((all, attr) => {
+        all[attr] = styles[attr]
+        return all
+      }, {})
+    },
+    planStyle() {
+      return getPlanStyle(this.selectedComponentId) || ''
     }
   },
   methods: {

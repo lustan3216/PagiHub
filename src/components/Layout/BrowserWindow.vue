@@ -19,9 +19,9 @@ export default {
   data() {
     return {
       callback: scaleRatio => {
-        this.$el.style.transform = `scale(${scaleRatio})`
+        this.$el.style.transform = `scale(${scaleRatio.toFixed(2)})`
 
-        this.appSET({ scaleRatio: scaleRatio })
+        this.appSET({ scaleRatio: scaleRatio.toFixed(2) })
       }
     }
   },

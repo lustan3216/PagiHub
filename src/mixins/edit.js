@@ -1,18 +1,19 @@
 import clone from 'clone'
-import { mapGetters, mapMutations } from 'vuex'
-import globalStatus from '../observable/globalStatus'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import { resetNestedIds } from '../utils/keyId'
 
 const templates = require('../template/basic')
 
 export default {
   computed: {
+    ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('nodes', ['childrenOf']),
     childrenIds() {
       return this.innerChildren.map(x => x.id)
     }
   },
   methods: {
+    ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_IDS']),
     ...mapMutations('nodes', ['APPEND_NODE', 'ASSIGN']),
     ...mapMutations('layout', ['CLOSE_SIDEBAR', 'OPEN_SIDEBAR']),
     // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
@@ -53,7 +54,9 @@ export default {
       this.innerChildren = clonedChildren
     },
     remove(childId) {
-      if (globalStatus.settingId === this.id) globalStatus.settingId = null
+      if (this.selectedComponentIds.includes(this.id)) {
+        this.CLEAN_SELECTED_COMPONENT_IDS()
+      }
       const index = this.childrenIds.indexOf(childId)
       const cloneChildren = clone(this.innerChildren)
       cloneChildren.splice(index, 1)

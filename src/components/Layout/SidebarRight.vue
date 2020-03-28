@@ -1,60 +1,77 @@
 <template>
-  <flex-sidebar v-if="canShowSetting" class="sidebar">
+  <component :is="isFloat ? 'DialogInteracted' : 'div'" class="sidebar">
+    <el-checkbox v-model="isFloat">Float</el-checkbox>
+
     <el-tabs v-model="activeName">
-      <el-tab-pane label="Setting" name="setting" lazy>
-        <setting-nested :id="settingId" :specs="specs" />
+      <el-tab-pane label="Components" name="Components" lazy>
+        <tree-components />
       </el-tab-pane>
 
-      <el-tab-pane label="Style" name="style" lazy>
-        <setting-styles :id="settingId" />
+      <el-tab-pane label="Nodes " name="Nodes" lazy>
+        <tree-nodes />
       </el-tab-pane>
+
+      <template v-if="canShowSetting">
+        <el-tab-pane label="Setting" name="setting" lazy>
+          <setting-nested :id="selectedComponentId" :specs="specs" />
+        </el-tab-pane>
+
+        <el-tab-pane label="Style" name="style" lazy>
+          <setting-styles />
+        </el-tab-pane>
+      </template>
 
       <el-tab-pane label="Color" name="Color" lazy />
     </el-tabs>
-  </flex-sidebar>
+  </component>
 </template>
 
 <script>
 import clone from 'clone'
 import formCreate from '@form-create/element-ui'
-import { mapState } from 'vuex'
-import globalStatus from '../../observable/globalStatus'
-import FlexSidebar from '../Templates/FlexSidebar'
+import { mapState, mapGetters } from 'vuex'
 import SettingStyles from './SettingStyles'
 import SettingNested from './SettingNested'
 import allSettingSpecs from '../../settings'
+import FlexSidebar from '../Templates/FlexSidebar'
+import DialogInteracted from '../Components/DialogInteracted'
 
 export default {
   name: 'SidebarRight',
   components: {
-    SettingStyles,
     FlexSidebar,
+    SettingStyles,
     SettingNested,
-    FormCreate: formCreate.$form()
+    DialogInteracted,
+    FormCreate: formCreate.$form(),
+    TreeNodes: () => import('./TreeNodes'),
+    TreeComponents: () => import('./TreeComponents')
   },
   data() {
     return {
-      activeName: 'setting'
+      isFloat: false,
+      activeName: 'Components'
     }
   },
   computed: {
     ...mapState('nodes', ['currentNodesMap']),
+    ...mapGetters('app', ['selectedComponentId', 'selectedComponentNode']),
     canShowSetting() {
       return (
-        this.settingId &&
-        this.node &&
+        this.selectedComponentNode &&
         this.specs &&
         Object.keys(this.specs).length
       )
     },
     specs() {
-      return clone(allSettingSpecs[this.node.tag.camelCase()])
-    },
-    node() {
-      return this.currentNodesMap[this.settingId]
-    },
-    settingId() {
-      return globalStatus.settingId
+      return clone(allSettingSpecs[this.selectedComponentNode.tag.camelCase()])
+    }
+  },
+  watch: {
+    isFloat(value) {
+      if (!value) {
+        this.$el.style.webkitTransform = null
+      }
     }
   }
 }
@@ -63,6 +80,7 @@ export default {
 <style>
 .sidebar {
   padding: 0 10px;
-  width: 300px;
+  width: 350px;
+  overflow: hidden;
 }
 </style>

@@ -1,9 +1,5 @@
 <template>
-  <div class="p-5 h-100">
-    <div class="text-center">
-      <span class="el-dropdown m-b-5 bold">NODES</span>
-    </div>
-
+  <div>
     <el-input
       v-model="filterText"
       placeholder="输入关键字进行过滤"
@@ -55,11 +51,10 @@
 <script>
 import { Tree } from 'element-ui'
 import clone from 'clone'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import { traversal } from '../../utils/util'
 import { vmMap } from '../../utils/vmMap'
 import Visibility from './Visibility'
-import globalStatus from '../../observable/globalStatus'
 
 export default {
   name: 'NodesTree',
@@ -76,6 +71,7 @@ export default {
   computed: {
     ...mapState('nodes', ['currentNodesMap']),
     ...mapGetters('nodes', ['tree']),
+    ...mapGetters('app', ['selectedComponentId']),
     neatTree() {
       const cloned = clone(this.tree)
       traversal(cloned, function(node) {
@@ -96,7 +92,9 @@ export default {
     }
   },
   mounted() {
-    this.$refs.tree.setCurrentKey(globalStatus.elevateId)
+    if (this.selectedComponentId) {
+      this.$refs.tree.setCurrentKey(this.selectedComponentId)
+    }
   },
   beforeDestroy() {
     if (this.selected) {
@@ -106,6 +104,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('app', ['SET_SELECTED_COMPONENT_IDS']),
     filterNode(value, data) {
       if (!value) return true
       return data.tag.indexOf(value) !== -1
@@ -122,7 +121,8 @@ export default {
       vmMap[data.parentId].remove(data.id)
     },
     nodeClick() {
-      globalStatus.elevateId = this.$refs.tree.getCurrentKey()
+      const componentId = this.$refs.tree.getCurrentKey()
+      this.SET_SELECTED_COMPONENT_IDS(+componentId)
     }
   }
 }

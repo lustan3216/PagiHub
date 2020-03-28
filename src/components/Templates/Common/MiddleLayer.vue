@@ -2,10 +2,9 @@
   <div
     :class="{ elevate }"
     class="layer h-100"
-    @click.stop="click"
+    @click.stop="setComponentId"
     @dblclick.stop="dblclick"
     @mouseleave="noClick = true"
-    @mouseover.stop="setCurrentKey"
   >
     <div
       v-if="isEditable && isDraggableItem"
@@ -19,8 +18,7 @@
 </template>
 
 <script>
-import globalStatus from '../../../observable/globalStatus'
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'MiddleLayer',
   inject: ['isEditable'],
@@ -40,11 +38,12 @@ export default {
   },
   computed: {
     ...mapState('nodes', ['currentNodesMap']),
+    ...mapGetters('app', ['selectedComponentId']),
     node() {
       return this.currentNodesMap[this.id]
     },
     elevate() {
-      return globalStatus.elevateId === this.id
+      return this.selectedComponentId === this.id
     },
     isDraggableItem() {
       return [
@@ -59,11 +58,9 @@ export default {
     }
   },
   methods: {
-    setCurrentKey() {
-      globalStatus.elevateId = this.id
-    },
-    click() {
-      globalStatus.settingId = this.id
+    ...mapMutations('app', ['SET_SELECTED_COMPONENT_IDS']),
+    setComponentId() {
+      this.SET_SELECTED_COMPONENT_IDS(+this.id)
     },
     dblclick() {
       this.noClick = false

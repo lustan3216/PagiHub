@@ -1,21 +1,15 @@
 <template>
-  <el-container>
-    <splitpanes class="default-theme">
-      <pane size="20">
-        <sidebar-left />
-      </pane>
+  <div class="flex">
+    <main class="w-100">
+      <nav-bar />
 
-      <pane>
-        <nav-bar />
-
-        <el-main class="main">
-          <board-root class="edit-area" />
-        </el-main>
-      </pane>
-    </splitpanes>
+      <div class="main z-index1">
+        <board-root />
+      </div>
+    </main>
 
     <sidebar-right />
-  </el-container>
+  </div>
 </template>
 
 <script>
@@ -29,7 +23,6 @@ export default {
   components: {
     NavBar,
     SidebarRight: () => import('./components/Layout/SidebarRight'),
-    SidebarLeft: () => import('./components/Layout/SidebarLeft'),
     BoardRoot,
     Splitpanes,
     Pane
@@ -39,8 +32,8 @@ export default {
 
 <style lang="scss" scoped>
 .main {
-  width: 100%;
-  @include calc-vh(height, '100vh - 40px');
+  padding: 0 15px;
+  @include calc-vh(height, '100vh - 60px');
   overflow: scroll;
 }
 </style>

@@ -90,6 +90,10 @@
   overflow: scroll;
 }
 
+.over-hidden {
+  overflow: hidden;
+}
+
 .invisible {
   visibility: hidden !important;
 }
@@ -109,4 +113,9 @@
 
 .transparent{
   background: transparent !important;
+}
+
+.z-index1{
+  position: relative;
+  z-index: 1;
 }
