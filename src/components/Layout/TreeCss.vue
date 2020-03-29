@@ -57,7 +57,7 @@ import { vmMap } from '../../utils/vmMap'
 import Visibility from './Visibility'
 
 export default {
-  name: 'TreeNodes',
+  name: 'TreeCss',
   components: {
     ElTree: Tree,
     Visibility

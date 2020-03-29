@@ -26,9 +26,9 @@ export const card = function() {
   }
 }
 
-export const editor = function() {
+export const editorText = function() {
   return {
-    tag: 'editor'
+    tag: 'editor-text'
   }
 }
 
@@ -85,7 +85,7 @@ export default function() {
       carousel(),
       divider(),
       videoPlayer(),
-      editor(),
+      editorText(),
       card(),
       drawer()
     ]

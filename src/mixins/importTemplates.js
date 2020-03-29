@@ -4,9 +4,9 @@ export default {
     FlexButton: () => import('../components/Templates/FlexButton'),
 
     Carousel: () => import('../components/Templates/Carousel'),
-    Editor: () => import('../components/Templates/Editor'),
+    EditorText: () => import('../components/Templates/EditorText'),
     GridGenerator: () => import('../components/Templates/GridGenerator'),
-    EditArea: () => import('../components/Templates/AreaDraggable'),
+
     Divider: () => import('../components/Templates/Divider'),
     VideoPlayer: () => import('../components/Templates/VideoPlayer'),
     Layers: () => import('../components/Templates/Layers'),

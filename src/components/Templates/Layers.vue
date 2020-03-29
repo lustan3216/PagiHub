@@ -1,12 +1,11 @@
 <template>
   <div class="layer">
-    <portal-target name="Root" />
     <template v-for="(child, index) in innerChildren">
       <component
         :is="child.tag"
         :key="child.id"
         :id="child.id"
-        :style="{ 'z-index': index }"
+        :style="{ 'z-index': index, ...innerStyles }"
         :class="{ absolute: index }"
       />
     </template>
@@ -31,6 +30,7 @@ export default {
 .layers {
   position: relative;
   z-index: 0;
+  height: 100%;
 }
 .absolute {
   position: absolute;

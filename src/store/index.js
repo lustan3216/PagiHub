@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import nodes from './modules/nodes'
 import app from './modules/app'
+import css from './modules/css'
+import mode from './modules/mode'
 
 Vue.use(Vuex)
 
@@ -19,6 +21,8 @@ export default new Vuex.Store({
   strict: true,
   modules: {
     nodes,
-    app
+    app,
+    css,
+    mode
   }
 })

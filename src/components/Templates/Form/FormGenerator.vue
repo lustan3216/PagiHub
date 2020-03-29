@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     submit() {
-      console.log(this.form)
+      // console.log(this.form)
     },
     reset() {
       this.form = {}

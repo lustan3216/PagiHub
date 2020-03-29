@@ -1,20 +1,20 @@
 <template>
   <div>
     <span class="el-dropdown">Background</span>
-    
+
     <el-row :gutter="5" class="m-t-10">
       <el-col :span="8">
         <el-form-item label="color">
           <el-color-picker v-model="backgroundColor" />
         </el-form-item>
       </el-col>
-  
+
       <el-col :span="8">
         <el-form-item label="repeat">
           <uploader-image />
         </el-form-item>
       </el-col>
-      
+
       <el-col :span="8">
         <el-form-item label="repeat">
           <el-select>
@@ -26,7 +26,7 @@
         </el-form-item>
       </el-col>
     </el-row>
-    
+
     <el-row :gutter="5">
       <el-col :span="8">
         <el-form-item label="position">
@@ -41,10 +41,10 @@
             <el-option value="center center" />
             <el-option value="center bottom" />
           </el-select>
-  
+
         </el-form-item>
       </el-col>
-      
+
       <el-col :span="8">
         <el-form-item label="attachment">
           <el-select>
@@ -54,7 +54,7 @@
           </el-select>
         </el-form-item>
       </el-col>
-      
+
       <el-col :span="8">
         <el-form-item label="size">
           <el-select>
@@ -65,20 +65,18 @@
         </el-form-item>
       </el-col>
     </el-row>
-    
+
   </div>
 </template>
 
 <script>
-import styleOneAttrMixin from '../../mixins/styleOneAttr'
 import UploaderImage from '../Components/UploaderImage'
 
 export default {
   name: 'Background',
   components: {
     UploaderImage
-  },
-  mixins: [styleOneAttrMixin('backgroundColor')]
+  }
 }
 </script>
 

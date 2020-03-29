@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog">
+  <div :style="{ 'z-index': zIndex }">
     <slot />
   </div>
 </template>
@@ -10,46 +10,74 @@ import interactjs from 'interactjs'
 export default {
   name: 'DialogInteracted',
   props: {
+    zIndex: {
+      type: Number,
+      default: 100
+    },
     visible: {
       type: Boolean,
       default: true
+    },
+    draggable: {
+      type: Boolean,
+      default: true
+    },
+    draggableHandler: {
+      type: String,
+      default: '*'
+    },
+    resizable: {
+      type: Boolean,
+      default: true
+    },
+    resizeEdges: {
+      type: Object,
+      default() {
+        return { left: true, right: true, bottom: true, top: true }
+      }
+    },
+    scaleRatio: {
+      type: Number,
+      default: 1
     }
   },
   mounted() {
-    interactjs(this.$el)
-      .resizable({
+    const interact = interactjs(this.$el)
+    const edges = this.resizeEdges
+    if (this.resizable) {
+      interact.resizable({
         // resize from all edges and corners
-        edges: { left: true, right: true, bottom: true, top: true },
-        cursorChecker: ({ edges }) => {
-          const _ = '-resize'
-          if (edges.left || edges.right) {
-            return 'ew' + _
-          } else {
-            return 'ns' + _
-          }
-        },
+        edges: this.resizeEdges,
         listeners: {
           move: event => {
             var target = event.target
+            if (edges.left && edges.right) {
+              target.style.width = event.rect.width / this.scaleRatio + 'px'
+            }
 
-            target.style.width = event.rect.width + 'px'
-            target.style.height = event.rect.height + 'px'
+            if (edges.top && edges.bottom) {
+              target.style.height = event.rect.height / this.scaleRatio + 'px'
+            }
 
-            let x = parseFloat(target.getAttribute('data-x')) || 0
-            let y = parseFloat(target.getAttribute('data-y')) || 0
-            x += event.deltaRect.right
-            y += event.deltaRect.top
+            let { x, y } = event.target.dataset
+
+            x = parseFloat(x) || 0
+            y = parseFloat(y) || 0
+            x += event.deltaRect.left / this.scaleRatio
+            y += event.deltaRect.top / this.scaleRatio
 
             target.style.webkitTransform = target.style.transform = `translate(${x}px, ${y}px)`
 
             target.setAttribute('data-x', x)
             target.setAttribute('data-y', y)
+
+            this.$emit('resize', event)
           }
         },
         modifiers: [
           // keep the edges inside the parent
           interactjs.modifiers.restrictEdges({
-            outer: 'parent'
+            // outer: 'parent'
           }),
 
           // minimum size
@@ -60,20 +88,25 @@ export default {
 
         inertia: true
       })
-      .draggable({
+    }
+
+    if (this.draggable) {
+      interact.draggable({
+        allowFrom: this.draggableHandler,
         listeners: {
           move: event => {
             const target = event.target
-            const x =
-              (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-            const y =
-              (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+            let { x, y } = event.target.dataset
+            x = (parseFloat(x) || 0) + event.dx
+            y = (parseFloat(y) || 0) + event.dy
 
             const translate = `translate(${x}px, ${y}px)`
             target.style.webkitTransform = target.style.transform = translate
 
             target.setAttribute('data-x', x)
             target.setAttribute('data-y', y)
+
+            this.$emit('drag', event)
           }
         },
         inertia: true,
@@ -84,18 +117,14 @@ export default {
           })
         ]
       })
+    }
+  },
+  methods: {
+    reset() {
+      this.$el.style.transform = null
+      this.$el.setAttribute('data-x', 0)
+      this.$el.setAttribute('data-y', 0)
+    }
   }
 }
 </script>
-
-<style scoped lang="scss">
-.dialog {
-  z-index: 100;
-  position: fixed;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.87);
-  box-shadow: 1px 1px 19px 6px rgba(0, 0, 0, 0.1);
-}
-</style>

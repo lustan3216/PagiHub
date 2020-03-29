@@ -1,6 +1,6 @@
 <template>
   <el-collapse v-model="activeNames">
-    
+
     <el-collapse-item name="6">
       <template slot="title">
         <span class="el-dropdown">Style</span>
@@ -10,7 +10,7 @@
           type="text"
           icon="el-icon-warning"/>
       </template>
-      
+
       <el-input
         :rows="10"
         v-model="styles"
@@ -23,6 +23,7 @@
 <script>
 import csso from 'csso'
 
+// TODO 這裏應該要改成從object node裡面，且存在object node
 export default {
   name: 'StyleBlock',
   props: ['planStyle'],

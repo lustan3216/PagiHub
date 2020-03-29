@@ -1,21 +1,8 @@
 <template>
-  <div class="h-100" @mouseleave="mouseleave">
-    <video-player
-      ref="videoPlayer"
-      :key="recreate"
-      :style="innerStyles"
-      :options="options"
-      :playsinline="true"
-      class="h-100 player flex-center vjs-theme-forest"
-    />
-  </div>
+  <div class="h-100" @mouseleave="mouseleave" />
 </template>
 
 <script>
-import 'video.js/dist/video-js.css'
-import '@videojs/themes/dist/forest/index.css'
-require('videojs-youtube')
-import { videoPlayer } from 'vue-video-player'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import { defaultSetting } from '../../settings/videoPlayer'
@@ -24,9 +11,6 @@ import { defaultSetting } from '../../settings/videoPlayer'
 export default {
   defaultSetting,
   name: 'PlayerYoutube',
-  components: {
-    videoPlayer
-  },
   mixins: [commonMixin, childrenMixin],
   data() {
     return {
@@ -51,7 +35,7 @@ export default {
       return Object.assign(this.playerOptions, source, this.innerProps)
     },
     player() {
-      return this.$refs.videoPlayer.player
+      // return this.$refs.videoPlayer.player
     }
   },
   watch: {
@@ -64,7 +48,7 @@ export default {
   },
   methods: {
     mouseleave() {
-      this.player.pause()
+      // this.player.pause()
     }
   }
 }

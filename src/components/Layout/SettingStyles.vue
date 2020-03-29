@@ -1,49 +1,35 @@
 <template>
   <el-form size="mini" label-position="top">
-    <class-state/>
-    
-    <dimension
-      :computed-style="computedStyle"
-      @change="assignStyles"
-    />
-    
-    <corner
-      :computed-style="computedStyle"
-      @change="assignStyles"
-    />
-    
+    <class-state />
+
+    <dimension :computed-style="computedStyle" @change="assignStyles" />
+
+    <corner :computed-style="computedStyle" @change="assignStyles" />
+
     <!--<margin-->
     <!--:computed-style="computedStyle"-->
     <!--@change="assignStyles"-->
     <!--/>-->
-  
-    <padding
-      :computed-style="computedStyle"
-      @change="assignStyles"
-    />
-  
-    <border
-      :computed-style="computedStyle"
-      @change="assignStyles"
-    />
-  
-    <background
-      :computed-style="computedStyle"
-      @change="assignStyles"
-    />
-    
-    <el-collapse v-model="activeNames">
 
+    <padding :computed-style="computedStyle" @change="assignStyles" />
+
+    <border :computed-style="computedStyle" @change="assignStyles" />
+
+    <!--    <background-->
+    <!--      :computed-style="computedStyle"-->
+    <!--      @change="assignStyles"-->
+    <!--    />-->
+
+    <el-collapse v-model="activeNames">
       <el-collapse-item title="Shadow" name="6">
         <box-shadows :computed-style="computedStyle" @change="assignStyles" />
       </el-collapse-item>
-      
+
       <el-collapse-item title="Effect" name="7">
         <effect :computed-style="computedStyle" @change="assignStyles" />
       </el-collapse-item>
-      
     </el-collapse>
-  
+
     <style-block :plan-style="planStyle" @change="assignStyles" />
   </el-form>
 </template>
@@ -65,13 +51,33 @@ import { mapGetters } from 'vuex'
 import { getComputedStyle, assignStyles, getPlanStyle } from '../../utils/vmMap'
 
 const attributes = [
-  'width', 'minWidth', 'maxWidth',
-  'height', 'minHeight', 'maxHeight',
-  'boxShadow', 'filter',
-  'borderRadius', 'borderTopRightRadius', 'borderBottomRightRadius', 'borderBottomLeftRadius', 'borderTopLeftRadius',
-  'borderTop', 'borderBottom', 'borderRight', 'borderLeft',
-  'margin', 'marginTop', 'marginBottom', 'marginRight', 'marginLeft',
-  'padding', 'paddingTop', 'paddingBottom', 'paddingRight', 'paddingLeft'
+  'width',
+  'minWidth',
+  'maxWidth',
+  'height',
+  'minHeight',
+  'maxHeight',
+  'boxShadow',
+  'filter',
+  'borderRadius',
+  'borderTopRightRadius',
+  'borderBottomRightRadius',
+  'borderBottomLeftRadius',
+  'borderTopLeftRadius',
+  'borderTop',
+  'borderBottom',
+  'borderRight',
+  'borderLeft',
+  'margin',
+  'marginTop',
+  'marginBottom',
+  'marginRight',
+  'marginLeft',
+  'padding',
+  'paddingTop',
+  'paddingBottom',
+  'paddingRight',
+  'paddingLeft'
 ]
 
 export default {
@@ -99,7 +105,7 @@ export default {
     ...mapGetters('app', ['selectedComponentId']),
     computedStyle() {
       const styles = getComputedStyle(this.selectedComponentId)
-  
+
       return attributes.reduce((all, attr) => {
         all[attr] = styles[attr]
         return all
@@ -130,13 +136,13 @@ export default {
   vertical-align: initial;
 }
 ::v-deep {
-  .el-col{
+  .el-col {
     text-align: center;
   }
   .el-form-item {
     text-align: center;
   }
-  .el-form-item__label{
+  .el-form-item__label {
     padding: 0;
     top: 32px;
     font-size: 12px;

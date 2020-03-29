@@ -51,11 +51,8 @@ String.prototype.kebabCase = function() {
 String.prototype.camelCase = function() {
   if (!this) return ''
 
-  return this.replace(
-    /([-_][a-z])/g,
-    group => group
-      .toUpperCase()
-      .replace(/[-_]/g, '')
+  return this.replace(/([-_][a-z])/g, group =>
+    group.toUpperCase().replace(/[-_]/g, '')
   )
 }
 

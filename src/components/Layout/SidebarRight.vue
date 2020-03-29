@@ -1,6 +1,16 @@
 <template>
-  <component :is="isFloat ? 'DialogInteracted' : 'div'" class="sidebar">
-    <el-checkbox v-model="isFloat">Float</el-checkbox>
+  <component
+    :is="isFloat ? 'DialogInteracted' : 'div'"
+    :class="{ float: isFloat }"
+    class="sidebar"
+  >
+    <el-button
+      :icon="`el-icon${isFloat ? '-map' : ''}-location`"
+      class="transparent"
+      circle
+      type="mini"
+      @click="isFloat = !isFloat"
+    />
 
     <el-tabs v-model="activeName">
       <el-tab-pane label="Components" name="Components" lazy>
@@ -9,6 +19,10 @@
 
       <el-tab-pane label="Nodes " name="Nodes" lazy>
         <tree-nodes />
+      </el-tab-pane>
+
+      <el-tab-pane label="CSS " name="css" lazy>
+        <tree-css />
       </el-tab-pane>
 
       <template v-if="canShowSetting">
@@ -45,7 +59,8 @@ export default {
     DialogInteracted,
     FormCreate: formCreate.$form(),
     TreeNodes: () => import('./TreeNodes'),
-    TreeComponents: () => import('./TreeComponents')
+    TreeComponents: () => import('./TreeComponents'),
+    TreeCss: () => import('./TreeCss')
   },
   data() {
     return {
@@ -79,8 +94,18 @@ export default {
 
 <style>
 .sidebar {
-  padding: 0 10px;
+  padding-right: 10px;
   width: 350px;
   overflow: hidden;
+}
+
+.float {
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.87);
+  box-shadow: 1px 1px 19px 6px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  left: calc(100vw - 350px);
+  bottom: 0;
+  top: 0;
 }
 </style>

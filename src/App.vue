@@ -3,37 +3,34 @@
     <main class="w-100">
       <nav-bar />
 
-      <div class="main z-index1">
-        <board-root />
-      </div>
+      <panel-production v-if="isProductionMode" />
+      <panel-editable v-else />
+
     </main>
 
-    <sidebar-right />
+    <sidebar-right v-if="isEditableMode" />
   </div>
 </template>
 
 <script>
-import 'splitpanes/dist/splitpanes.css'
-import { Splitpanes, Pane } from 'splitpanes'
 import NavBar from './components/Layout/NavBar'
-import BoardRoot from './components/Layout/BoardRoot'
+import PanelProduction from './components/Layout/PanelProduction'
+import PanelEditable from './components/Layout/PanelEditable'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
   components: {
     NavBar,
     SidebarRight: () => import('./components/Layout/SidebarRight'),
-    BoardRoot,
-    Splitpanes,
-    Pane
+    PanelProduction,
+    PanelEditable
+  },
+  created() {
+    this.getRootNode()
+  },
+  methods: {
+    ...mapActions('nodes', ['getRootNode'])
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.main {
-  padding: 0 15px;
-  @include calc-vh(height, '100vh - 60px');
-  overflow: scroll;
-}
-</style>

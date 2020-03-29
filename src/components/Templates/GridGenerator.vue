@@ -1,7 +1,8 @@
 <template>
   <grid-layout
     v-bind="innerProps"
-    :col-num="24"
+    :class="{ editable: isEditableMode }"
+    :col-num="36"
     :row-height="5"
     :style="innerStyles"
     :layout="innerChildrenWithI"
@@ -23,7 +24,11 @@
         drag-allow-from="div"
       >
         <slot v-bind="{ child }">
-          <component-add :id="child.id" :children="child.children" />
+          <component-add
+            v-if="isEditableMode"
+            :id="child.id"
+            :children="child.children"
+          />
         </slot>
       </grid-item>
     </template>
@@ -80,20 +85,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.vue-grid-layout {
-  border-radius: 3px;
-}
-
-::v-deep.vue-grid-item {
-  position: relative;
-  border: 1px dashed #dedede;
+.editable {
   border-radius: 3px;
 
-  & > .vue-resizable-handle {
-    z-index: 10000;
-  }
-  & > div > .vue-grid-layout {
-    border: none;
+  & > .vue-grid-item {
+    position: relative;
+    border: 1px dashed #dedede;
+    border-radius: 3px;
+
+    & > .vue-resizable-handle {
+      z-index: 10000;
+    }
+    & > div > .vue-grid-layout {
+      border: none;
+    }
   }
 }
 </style>

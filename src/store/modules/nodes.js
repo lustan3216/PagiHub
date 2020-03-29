@@ -67,6 +67,7 @@ const actions = {
   async initRootNode({ rootState, commit }) {
     const innerNodeTree = {
       tag: 'layers',
+      styles: { background: '#fff' },
       children: [templateGridGenerator()]
     }
 

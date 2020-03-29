@@ -1,5 +1,5 @@
 import 'normalize.css'
-// import 'element-ui/packages/theme-chalk/src/index.scss'
+
 import './utils/polyfill'
 import vhCheck from 'vh-check'
 vhCheck()
@@ -52,7 +52,8 @@ import {
   Main,
   Divider,
   Image,
-  Loading
+  Loading,
+  Tooltip
 } from 'element-ui'
 
 Vue.use(Dialog)
@@ -90,10 +91,19 @@ Vue.use(Aside)
 Vue.use(Main)
 Vue.use(Divider)
 Vue.use(Image)
+Vue.use(Tooltip)
 
 Vue.use(Loading.directive)
 
 Vue.prototype.$loading = Loading.service
+
+Vue.mixin({
+  computed: {
+    isProductionMode: () => store.getters['mode/isProductionMode'],
+    isPreviewMode: () => store.getters['mode/isPreviewMode'],
+    isEditableMode: () => store.getters['mode/isEditableMode']
+  }
+})
 
 const bus = new Vue()
 

@@ -12,7 +12,9 @@ export default {
       type: Number
     }
   },
-  inject: ['isEditable'],
+  inject: {
+    isEditable: { default: false }
+  },
   data() {
     const node = store.state.nodes.currentNodesMap[this.id]
     const innerStyles = node ? clone(node.styles || {}) : {}

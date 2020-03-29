@@ -92,11 +92,11 @@
         />
       </span>
     </div>
-    <vue-editor
+    <quill-editor
       ref="editor"
       v-model="innerContent"
       :style="innerStyles"
-      :editor-options="editorOption"
+      :options="editorOption"
       class="h-100"
     />
   </div>
@@ -110,18 +110,19 @@
 <script>
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.bubble.css'
+
+import { quillEditor } from 'vue-quill-editor'
 import commonMixin from '../../mixins/common'
 import { mapMutations } from 'vuex'
-import { VueEditor } from 'vue2-editor'
 import ColorPicker from '../Components/ColorPicker'
 import FontIcon from 'quill/assets/icons/color.svg'
 import BackgroundIcon from 'quill/assets/icons/background.svg'
 
 export default {
-  name: 'Editor',
+  name: 'EditorText',
   components: {
     ColorPicker,
-    VueEditor,
+    QuillEditor: quillEditor,
     FontIcon,
     BackgroundIcon
   },

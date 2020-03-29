@@ -98,24 +98,27 @@
   visibility: hidden !important;
 }
 
-.elevate {
-  border-color: #589ff8ad !important;
-  box-shadow: 0 3px 20px -9px rgba(0, 0, 0, 0.25) !important;
-}
-
 .no-shadow {
   box-shadow: none;
 }
 
-.white-back{
+.white-back {
   background-color: #fff !important;
 }
 
-.transparent{
+.transparent {
   background: transparent !important;
 }
 
-.z-index1{
+.z-index1 {
   position: relative;
   z-index: 1;
+}
+
+.no-touch {
+  touch-action: none !important;
+}
+
+.box-shadow {
+  box-shadow: 0 5px 20px 0 rgba(32, 48, 60, 0.11);
 }

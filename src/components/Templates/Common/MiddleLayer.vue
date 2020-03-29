@@ -73,4 +73,8 @@ export default {
 .layer {
   transition: box-shadow 0.6s, border-color 0.6s;
 }
+.elevate {
+  border-color: #589ff8ad !important;
+  box-shadow: 0 3px 20px -9px rgba(0, 0, 0, 0.25) !important;
+}
 </style>

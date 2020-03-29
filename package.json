@@ -5,32 +5,27 @@
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint --fix"
+    "lint": "vue-cli-service lint --fix",
+    "purge": "rm -rf ./node_modules/.cache/hard-source"
   },
   "dependencies": {
     "@form-create/element-ui": "^1.0.4",
     "@videojs/themes": "^1.0.0",
     "bezier-easing": "^2.1.0",
-    "css-box-shadow": "^1.0.0-3",
     "csso": "^4.0.2",
-    "detect-zoom": "^1.0.2",
     "element-ui": "^2.11.1",
     "lodash": "^4.17.15",
-    "mux.js": "^5.5.1",
     "normalize.css": "^8.0.1",
+    "plyr": "^3.5.10",
     "portal-vue": "^2.1.6",
     "postcss-preset-env": "^6.7.0",
-    "splitpanes": "^2.2.1",
     "vh-check": "^2.0.5",
     "videojs-youtube": "^2.6.0",
     "vue": "^2.6.10",
     "vue-grid-layout": "^2.3.4",
     "vue-quill-editor": "^3.0.6",
     "vue-shortkey": "^3.1.7",
-    "vue-unicons": "^1.4.1",
     "vue-video-player": "^5.0.2",
-    "vue2-editor": "^2.10.2",
-    "vuedraggable": "^2.23.0",
     "vuex": "^3.1.1"
   },
   "devDependencies": {

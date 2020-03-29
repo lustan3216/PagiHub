@@ -1,6 +1,6 @@
 <template>
   <el-button class="wh-100 m-0 button">
-    <editor
+    <editor-text
       v-if="isEditable"
       :id="id"
       :only="['bold', 'italic', 'fontColor', 'font', 'underline', 'strike']"
@@ -13,13 +13,13 @@
 <script>
 import { mapMutations } from 'vuex'
 import commonMixin from '../../mixins/common'
-import Editor from './Editor'
+import EditorText from './EditorText'
 import store from '../../store'
 
 export default {
   name: 'FlexButton',
   components: {
-    Editor
+    EditorText
   },
   mixins: [commonMixin],
   props: {

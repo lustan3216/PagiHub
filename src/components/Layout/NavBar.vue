@@ -1,85 +1,77 @@
 <template>
-  <nav>
-    <!--publish-->
-    <el-button type="text" icon="el-icon-upload" />
-
-    <!--css code-->
+  <el-tooltip
+    v-if="isPreviewMode"
+    effect="light"
+    content="Close Preview"
+    placement="bottom"
+  >
     <el-button
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
-      type="text"
-      icon="el-icon-tickets"
+      v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
+      icon="el-icon-close"
+      circle
+      class="close box-shadow"
+      @click="SET_EDITABLE_MODE"
+      @shortkey.native="SET_EDITABLE_MODE"
     />
+  </el-tooltip>
 
-    <!--preview-->
-    <el-button
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
-      type="text"
-      icon="el-icon-data-analysis"
-    />
+  <nav v-else-if="isEditableMode" class="flex-center">
+    <el-tooltip effect="light" content="Preview" placement="bottom">
+      <el-button
+        v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
+        icon="el-icon-data-analysis"
+        size="mini"
+        type="text"
+        @click="SET_PREVIEW_MODE"
+        @shortkey.native="SET_PREVIEW_MODE"
+      />
+    </el-tooltip>
 
-    <el-button
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
-      type="text"
-      icon="el-icon-refresh-left"
-      @shortkey.native="undo"
-      @click="undo"
-    />
+    <el-tooltip effect="light" content="Publish" placement="bottom">
+      <el-button size="mini" type="text" icon="el-icon-upload" />
+    </el-tooltip>
 
-    <el-button
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
-      type="text"
-      icon="el-icon-refresh-right"
-      @shortkey.native="redo"
-      @click="redo"
-    />
+    <el-tooltip effect="light" content="Undo" placement="bottom">
+      <el-button
+        v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
+        size="mini"
+        type="text"
+        icon="el-icon-refresh-left"
+        @shortkey.native="undo"
+        @click="undo"
+      />
+    </el-tooltip>
 
-    <el-button
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
-      type="text"
-      icon="el-icon-zoom-in"
-      @shortkey.native="redo"
-      @click="redo"
-    />
+    <el-tooltip effect="light" content="Redo" placement="bottom">
+      <el-button
+        v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
+        size="mini"
+        type="text"
+        icon="el-icon-refresh-right"
+        @shortkey.native="redo"
+        @click="redo"
+      />
+    </el-tooltip>
 
-    <el-button
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
-      type="text"
-      icon="el-icon-zoom-out"
-      @shortkey.native="redo"
-      @click="redo"
-    />
-
-    <el-dropdown>
-      <span class="el-dropdown-link">
-        下拉菜单
-        <i class="el-icon-arrow-down el-icon--right" />
-      </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>Custom</el-dropdown-item>
-        <el-dropdown-item>Computer 1920px</el-dropdown-item>
-        <el-dropdown-item>Computer 1200px</el-dropdown-item>
-        <el-dropdown-item>Computer 996px</el-dropdown-item>
-        <el-dropdown-item>Tablet 768px</el-dropdown-item>
-        <el-dropdown-item>Mobile 320px</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
-
-    <span>{{ scalePrecent }}</span>
+    <portal-target name="view-port-controller" class="d-inline-block m-l-15" />
   </nav>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { isMac } from '../../utils/check'
+import { isMac } from '../../utils/device'
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
   name: 'NavBar',
   computed: {
-    scalePrecent() {
-      return Math.ceil(+this.scaleRatio * 100)
-    },
-    ...mapState('app', ['scaleRatio'])
+    ...mapGetters('mode', [
+      'isProductionMode',
+      'isPreviewMode',
+      'isEditableMode'
+    ])
   },
   methods: {
+    ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_EDITABLE_MODE']),
     isMac,
     redo() {},
     undo() {}
@@ -92,5 +84,15 @@ nav {
   text-align: center;
   height: 35px;
   padding: 5px 20px;
+}
+.el-button {
+  font-size: 16px;
+  padding: 7px;
+}
+.close {
+  position: fixed;
+  left: 15px;
+  top: 15px;
+  z-index: 300;
 }
 </style>
