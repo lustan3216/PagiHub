@@ -14,11 +14,6 @@ export default {
   components: {
     Layers
   },
-  provide() {
-    return {
-      isEditable: false
-    }
-  },
   computed: {
     ...mapGetters('nodes', ['rootNode'])
   }

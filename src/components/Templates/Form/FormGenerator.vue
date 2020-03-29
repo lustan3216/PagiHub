@@ -16,7 +16,8 @@ export default {
   },
   mixins: [commonMixin, childrenMixin],
   provide() {
-    if (!this.isEditable) return
+    if (this.isDemonstrated) return
+
     const parentPath = this.$store.getters['nodes/parentPath']
     const isRootForm = parentPath(this.id).every(
       x => x.tag !== 'form-generator'

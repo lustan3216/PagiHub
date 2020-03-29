@@ -1,7 +1,7 @@
 <template>
   <el-button class="wh-100 m-0 button">
     <editor-text
-      v-if="isEditable"
+      v-if="isEditableMode"
       :id="id"
       :only="['bold', 'italic', 'fontColor', 'font', 'underline', 'strike']"
       v-model="innerValue"
@@ -31,7 +31,7 @@ export default {
   data() {
     const node = store.state.nodes.currentNodesMap[this.id]
     return {
-      innerValue: (this.isEditable && node && node.value) || this.defaultText
+      innerValue: (!this.isDemonstrated && node && node.value) || this.defaultText
     }
   },
   watch: {

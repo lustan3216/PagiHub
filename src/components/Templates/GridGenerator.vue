@@ -23,13 +23,7 @@
         drag-ignore-from=".no-drag"
         drag-allow-from="div"
       >
-        <slot v-bind="{ child }">
-          <component-add
-            v-if="isEditableMode"
-            :id="child.id"
-            :children="child.children"
-          />
-        </slot>
+        <grid-item-child :id="child.id" :children="child.children" />
       </grid-item>
     </template>
   </grid-layout>
@@ -43,6 +37,7 @@ import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import importTemplatesMixin from '../../mixins/importTemplates'
 import ComponentAdd from './Common/ComponentAdd'
+import GridItemChild from './GridItemChild'
 import { defaultSetting } from '../../settings/drawer'
 
 export default {
@@ -51,7 +46,8 @@ export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
-    ComponentAdd
+    ComponentAdd,
+    GridItemChild
   },
   mixins: [childrenMixin, commonMixin, importTemplatesMixin],
   computed: {

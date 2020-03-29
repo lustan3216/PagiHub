@@ -4,7 +4,7 @@ import { mapMutations } from 'vuex'
 import { appendNestedIds } from '../utils/keyId'
 
 export default {
-  // 有些情景component是沒有ID的，像是展示時
+  // 展示時component是沒有children的，會需要從父層傳下來
   props: {
     children: {
       type: Array,
@@ -14,13 +14,13 @@ export default {
   data() {
     let innerChildren = []
 
-    if (this.isEditable) {
+    if (this.isDemonstrated) {
+      innerChildren = this.children || []
+    } else {
       innerChildren = clone(store.getters['nodes/childrenFrom'](this.id)).sort(
         (a, b) => a.sortIndex - b.sortIndex
       )
       appendNestedIds(innerChildren)
-    } else {
-      innerChildren = this.children || []
     }
 
     return {
@@ -34,7 +34,7 @@ export default {
   },
   watch: {
     innerChildren(newChildren, oldChildren) {
-      if (!this.isEditable) return
+      if (this.isDemonstrated) return
       try {
         this.updateDifferenceToVuex(newChildren, oldChildren, this.id)
       } catch (e) {

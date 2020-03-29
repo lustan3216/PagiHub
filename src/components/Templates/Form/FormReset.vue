@@ -20,18 +20,18 @@ export default {
   mixins: [commonMixin],
   inject: ['rootForm'],
   created() {
-    if (this.isEditable) {
+    if (!this.isDemonstrated) {
       this.rootForm.updateReset(this.id)
     }
   },
   beforeDestroy() {
-    if (this.isEditable) {
+    if (!this.isDemonstrated) {
       this.rootForm.updateReset(null)
     }
   },
   methods: {
     reset() {
-      this.rootForm.reset()
+      this.rootForm && this.rootForm.reset()
     }
   }
 }

@@ -21,11 +21,6 @@ export default {
     ViewPort,
     Layers
   },
-  provide() {
-    return {
-      isEditable: true
-    }
-  },
   computed: {
     ...mapGetters('nodes', ['rootNode'])
   }

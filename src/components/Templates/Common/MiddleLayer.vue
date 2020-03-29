@@ -7,7 +7,7 @@
     @mouseleave="noClick = true"
   >
     <div
-      v-if="isEditable && isDraggableItem"
+      v-if="isEditableMode && !isDemonstrated && isDraggableItem"
       :class="{ 'no-click': noClick, 'no-drag': !noClick }"
       class="h-100"
     >
@@ -21,14 +21,10 @@
 import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'MiddleLayer',
-  inject: ['isEditable'],
+  inject: { isDemonstrated: { default: false }},
   props: {
     id: {
       type: Number
-    },
-    isEditable: {
-      type: Boolean,
-      default: false
     }
   },
   data() {

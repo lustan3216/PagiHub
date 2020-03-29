@@ -50,7 +50,7 @@ export default {
         ...props
       } = this.innerProps
 
-      if (this.isEditable) {
+      if (!this.isDemonstrated) {
         node.on = { change: this.change }
       }
 
@@ -82,7 +82,7 @@ export default {
     }
   },
   created() {
-    if (this.isEditable) {
+    if (!this.isDemonstrated) {
       this.updateRootData({ isValid: false, value: this.innerRule[0].value })
     }
   },

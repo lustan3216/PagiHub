@@ -71,7 +71,7 @@ export default {
   provide() {
     return {
       rootForm: {},
-      isEditable: false
+      isDemonstrated: true
     }
   },
   data() {

@@ -3,7 +3,8 @@
     :style="innerStyles"
     :id="id"
     default-text="Submit"
-    @click.native="submit" />
+    @click.native="submit"
+  />
 </template>
 
 <script>
@@ -31,12 +32,12 @@ export default {
     }
   },
   created() {
-    if (this.isEditable) {
+    if (!this.isDemonstrated) {
       this.rootForm.updateSubmit(this.id)
     }
   },
   beforeDestroy() {
-    if (this.isEditable) {
+    if (!this.isDemonstrated) {
       this.rootForm.updateSubmit(null)
     }
   },
