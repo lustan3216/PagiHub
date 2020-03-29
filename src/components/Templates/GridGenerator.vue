@@ -36,8 +36,7 @@ import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import importTemplatesMixin from '../../mixins/importTemplates'
-import ComponentAdd from './Common/ComponentAdd'
-import GridItemChild from './GridItemChild'
+import GridItemChild from './Abstract/GridItemChild'
 import { defaultSetting } from '../../settings/drawer'
 
 export default {
@@ -46,7 +45,6 @@ export default {
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
-    ComponentAdd,
     GridItemChild
   },
   mixins: [childrenMixin, commonMixin, importTemplatesMixin],

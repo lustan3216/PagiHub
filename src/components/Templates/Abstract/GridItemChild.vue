@@ -6,7 +6,10 @@
       :children="firstChild.children"
     />
   </middle-layer>
-  <div v-else-if="isEditable" class="flex-center h-100 pointer">
+  <div
+    v-else-if="isEditableMode && !isDemonstrated"
+    class="flex-center h-100 pointer"
+  >
     <dialog-components :id="id" @add="addTemplate($event)" />
   </div>
 </template>
@@ -22,7 +25,7 @@ import DialogComponents from './DialogComponents'
 import MiddleLayer from './MiddleLayer'
 
 export default {
-  name: 'ComponentAdd',
+  name: 'GridItemChild',
   components: {
     DialogComponents,
     MiddleLayer
