@@ -27,10 +27,6 @@
       />
     </el-tooltip>
 
-    <el-tooltip effect="light" content="Publish" placement="bottom">
-      <el-button size="mini" type="text" icon="el-icon-upload" />
-    </el-tooltip>
-
     <el-tooltip effect="light" content="Undo" placement="bottom">
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
@@ -54,6 +50,24 @@
     </el-tooltip>
 
     <portal-target name="view-port-controller" class="d-inline-block m-l-15" />
+
+    <el-popover effect="light" trigger="hover" placement="bottom">
+      <span>Are u sure to Publish？</span>
+      <el-button
+        type="info"
+        size="mini"
+        icon="el-icon-circle-check"
+        circle
+        @click="publish"
+      />
+
+      <el-button
+        slot="reference"
+        size="mini"
+        type="text"
+        icon="el-icon-upload"
+      />
+    </el-popover>
   </nav>
 </template>
 
@@ -74,7 +88,8 @@ export default {
     ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_EDITABLE_MODE']),
     isMac,
     redo() {},
-    undo() {}
+    undo() {},
+    publish() {}
   }
 }
 </script>

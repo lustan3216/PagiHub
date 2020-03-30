@@ -53,7 +53,8 @@ import {
   Divider,
   Image,
   Loading,
-  Tooltip
+  Tooltip,
+  Popover
 } from 'element-ui'
 
 Vue.use(Dialog)
@@ -92,6 +93,7 @@ Vue.use(Main)
 Vue.use(Divider)
 Vue.use(Image)
 Vue.use(Tooltip)
+Vue.use(Popover)
 
 Vue.use(Loading.directive)
 

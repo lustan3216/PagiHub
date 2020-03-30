@@ -6,63 +6,23 @@
       :children="firstChild.children"
     />
   </middle-layer>
-  <div
-    v-else-if="isEditableMode && !isDemonstrated"
-    class="flex-center h-100 pointer"
-  >
-    <dialog-components :id="id" @add="addTemplate($event)" />
-  </div>
+  <add-component v-else-if="isEditableMode && !isDemonstrated" :id="id" />
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { appendNestedIds } from '../../../utils/keyId'
-import { vmMap } from '../../../utils/vmMap'
 import importTemplates from '../../../mixins/importTemplates'
 import childrenMixin from '../../../mixins/children'
 import commonMixin from '../../../mixins/common'
-import DialogComponents from './DialogComponents'
 import MiddleLayer from './MiddleLayer'
+import AddComponent from './AddComponent'
 
 export default {
   name: 'GridItemChild',
   components: {
-    DialogComponents,
-    MiddleLayer
+    MiddleLayer,
+    AddComponent
   },
-  mixins: [importTemplates, childrenMixin, commonMixin],
-  computed: {
-    ...mapGetters('nodes', ['parentPath', 'childrenOf']),
-    firstChild() {
-      return this.innerChildren[0]
-    },
-    rootForm() {
-      return this.parentPath(this.id).find(x => x.tag === 'form-generator')
-    }
-  },
-  methods: {
-    addTemplate(template) {
-      this.cleanFormButtons(template)
-      appendNestedIds(template)
-      this.innerChildren = [template]
-    },
-    cleanFormButtons(template) {
-      if (this.rootForm && template.tag === 'form-generator') {
-        const vm = vmMap[this.rootForm.id]
-
-        template.children = template.children.filter(x => {
-          const tag = x.children[0].tag
-          if (tag === 'form-submit') {
-            return !vm.button.submit
-          } else if (tag === 'form-reset') {
-            return !vm.button.reset
-          } else {
-            return true
-          }
-        })
-      }
-    }
-  }
+  mixins: [importTemplates, childrenMixin, commonMixin]
 }
 </script>
 

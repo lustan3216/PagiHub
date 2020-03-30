@@ -15,7 +15,6 @@ export default {
   methods: {
     ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_IDS']),
     ...mapMutations('nodes', ['APPEND_NODE', 'ASSIGN']),
-    ...mapMutations('layout', ['CLOSE_SIDEBAR', 'OPEN_SIDEBAR']),
     // https://vuejs.org/v2/api/#vm-watch ，這裡一定都要clone不然watch裡面新舊值會一樣
     new(childId) {
       const index = this.childrenIds.indexOf(childId)
