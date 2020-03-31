@@ -12,7 +12,20 @@ import App from './App.vue'
 import store from './store'
 import VueShortkey from 'vue-shortkey'
 import PortalVue from 'portal-vue'
-
+import JsonHistory from './utils/jsonHistory'
+window.asd = new JsonHistory({
+  tree: {
+    1: {
+      style: {}
+    },
+    2: {
+      style: {}
+    },
+    3: {
+      class: []
+    }
+  }
+})
 Vue.use(PortalVue)
 Vue.use(VueShortkey)
 

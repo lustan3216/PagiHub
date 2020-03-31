@@ -1,0 +1,1325 @@
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+
+
+
+
+
+
+
+
+
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+
+
+
+
+
+
+
+
+var inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+
+
+
+
+
+
+
+
+
+
+var possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
+var Processor = function () {
+  function Processor(options) {
+    classCallCheck(this, Processor);
+
+    this.selfOptions = options || {};
+    this.pipes = {};
+  }
+
+  createClass(Processor, [{
+    key: 'options',
+    value: function options(_options) {
+      if (_options) {
+        this.selfOptions = _options;
+      }
+      return this.selfOptions;
+    }
+  }, {
+    key: 'pipe',
+    value: function pipe(name, pipeArg) {
+      var pipe = pipeArg;
+      if (typeof name === 'string') {
+        if (typeof pipe === 'undefined') {
+          return this.pipes[name];
+        } else {
+          this.pipes[name] = pipe;
+        }
+      }
+      if (name && name.name) {
+        pipe = name;
+        if (pipe.processor === this) {
+          return pipe;
+        }
+        this.pipes[pipe.name] = pipe;
+      }
+      pipe.processor = this;
+      return pipe;
+    }
+  }, {
+    key: 'process',
+    value: function process(input, pipe) {
+      var context = input;
+      context.options = this.options();
+      var nextPipe = pipe || input.pipe || 'default';
+      var lastPipe = void 0;
+      var lastContext = void 0;
+      while (nextPipe) {
+        if (typeof context.nextAfterChildren !== 'undefined') {
+          // children processed and coming back to parent
+          context.next = context.nextAfterChildren;
+          context.nextAfterChildren = null;
+        }
+
+        if (typeof nextPipe === 'string') {
+          nextPipe = this.pipe(nextPipe);
+        }
+        nextPipe.process(context);
+        lastContext = context;
+        lastPipe = nextPipe;
+        nextPipe = null;
+        if (context) {
+          if (context.next) {
+            context = context.next;
+            nextPipe = lastContext.nextPipe || context.pipe || lastPipe;
+          }
+        }
+      }
+      return context.hasResult ? context.result : undefined;
+    }
+  }]);
+  return Processor;
+}();
+
+var Pipe = function () {
+  function Pipe(name) {
+    classCallCheck(this, Pipe);
+
+    this.name = name;
+    this.filters = [];
+  }
+
+  createClass(Pipe, [{
+    key: 'process',
+    value: function process(input) {
+      if (!this.processor) {
+        throw new Error('add this pipe to a processor before using it');
+      }
+      var debug = this.debug;
+      var length = this.filters.length;
+      var context = input;
+      for (var index = 0; index < length; index++) {
+        var filter = this.filters[index];
+        if (debug) {
+          this.log('filter: ' + filter.filterName);
+        }
+        filter(context);
+        if ((typeof context === 'undefined' ? 'undefined' : _typeof(context)) === 'object' && context.exiting) {
+          context.exiting = false;
+          break;
+        }
+      }
+      if (!context.next && this.resultCheck) {
+        this.resultCheck(context);
+      }
+    }
+  }, {
+    key: 'log',
+    value: function log(msg) {
+      console.log('[jsondiffpatch] ' + this.name + ' pipe, ' + msg);
+    }
+  }, {
+    key: 'append',
+    value: function append() {
+      var _filters;
+
+      (_filters = this.filters).push.apply(_filters, arguments);
+      return this;
+    }
+  }, {
+    key: 'prepend',
+    value: function prepend() {
+      var _filters2;
+
+      (_filters2 = this.filters).unshift.apply(_filters2, arguments);
+      return this;
+    }
+  }, {
+    key: 'indexOf',
+    value: function indexOf(filterName) {
+      if (!filterName) {
+        throw new Error('a filter name is required');
+      }
+      for (var index = 0; index < this.filters.length; index++) {
+        var filter = this.filters[index];
+        if (filter.filterName === filterName) {
+          return index;
+        }
+      }
+      throw new Error('filter not found: ' + filterName);
+    }
+  }, {
+    key: 'list',
+    value: function list() {
+      return this.filters.map(function (f) {
+        return f.filterName;
+      });
+    }
+  }, {
+    key: 'after',
+    value: function after(filterName) {
+      var index = this.indexOf(filterName);
+      var params = Array.prototype.slice.call(arguments, 1);
+      if (!params.length) {
+        throw new Error('a filter is required');
+      }
+      params.unshift(index + 1, 0);
+      Array.prototype.splice.apply(this.filters, params);
+      return this;
+    }
+  }, {
+    key: 'before',
+    value: function before(filterName) {
+      var index = this.indexOf(filterName);
+      var params = Array.prototype.slice.call(arguments, 1);
+      if (!params.length) {
+        throw new Error('a filter is required');
+      }
+      params.unshift(index, 0);
+      Array.prototype.splice.apply(this.filters, params);
+      return this;
+    }
+  }, {
+    key: 'replace',
+    value: function replace(filterName) {
+      var index = this.indexOf(filterName);
+      var params = Array.prototype.slice.call(arguments, 1);
+      if (!params.length) {
+        throw new Error('a filter is required');
+      }
+      params.unshift(index, 1);
+      Array.prototype.splice.apply(this.filters, params);
+      return this;
+    }
+  }, {
+    key: 'remove',
+    value: function remove(filterName) {
+      var index = this.indexOf(filterName);
+      this.filters.splice(index, 1);
+      return this;
+    }
+  }, {
+    key: 'clear',
+    value: function clear() {
+      this.filters.length = 0;
+      return this;
+    }
+  }, {
+    key: 'shouldHaveResult',
+    value: function shouldHaveResult(should) {
+      if (should === false) {
+        this.resultCheck = null;
+        return;
+      }
+      if (this.resultCheck) {
+        return;
+      }
+      var pipe = this;
+      this.resultCheck = function (context) {
+        if (!context.hasResult) {
+          console.log(context);
+          var error = new Error(pipe.name + ' failed');
+          error.noResult = true;
+          throw error;
+        }
+      };
+      return this;
+    }
+  }]);
+  return Pipe;
+}();
+
+var Context = function () {
+  function Context() {
+    classCallCheck(this, Context);
+  }
+
+  createClass(Context, [{
+    key: 'setResult',
+    value: function setResult(result) {
+      this.result = result;
+      this.hasResult = true;
+      return this;
+    }
+  }, {
+    key: 'exit',
+    value: function exit() {
+      this.exiting = true;
+      return this;
+    }
+  }, {
+    key: 'switchTo',
+    value: function switchTo(next, pipe) {
+      if (typeof next === 'string' || next instanceof Pipe) {
+        this.nextPipe = next;
+      } else {
+        this.next = next;
+        if (pipe) {
+          this.nextPipe = pipe;
+        }
+      }
+      return this;
+    }
+  }, {
+    key: 'push',
+    value: function push(child, name) {
+      child.parent = this;
+      if (typeof name !== 'undefined') {
+        child.childName = name;
+      }
+      child.root = this.root || this;
+      child.options = child.options || this.options;
+      if (!this.children) {
+        this.children = [child];
+        this.nextAfterChildren = this.next || null;
+        this.next = child;
+      } else {
+        this.children[this.children.length - 1].next = child;
+        this.children.push(child);
+      }
+      child.next = this;
+      return this;
+    }
+  }]);
+  return Context;
+}();
+
+var isArray = typeof Array.isArray === 'function' ? Array.isArray : function (a) {
+  return a instanceof Array;
+};
+
+function cloneRegExp(re) {
+  var regexMatch = /^\/(.*)\/([gimyu]*)$/.exec(re.toString());
+  return new RegExp(regexMatch[1], regexMatch[2]);
+}
+
+function clone(arg) {
+  if ((typeof arg === 'undefined' ? 'undefined' : _typeof(arg)) !== 'object') {
+    return arg;
+  }
+  if (arg === null) {
+    return null;
+  }
+  if (isArray(arg)) {
+    return arg.map(clone);
+  }
+  if (arg instanceof Date) {
+    return new Date(arg.getTime());
+  }
+  if (arg instanceof RegExp) {
+    return cloneRegExp(arg);
+  }
+  var cloned = {};
+  for (var name in arg) {
+    if (Object.prototype.hasOwnProperty.call(arg, name)) {
+      cloned[name] = clone(arg[name]);
+    }
+  }
+  return cloned;
+}
+
+var DiffContext = function (_Context) {
+  inherits(DiffContext, _Context);
+
+  function DiffContext(left, right) {
+    classCallCheck(this, DiffContext);
+
+    var _this = possibleConstructorReturn(this, (DiffContext.__proto__ || Object.getPrototypeOf(DiffContext)).call(this));
+
+    _this.left = left;
+    _this.right = right;
+    _this.pipe = 'diff';
+    return _this;
+  }
+
+  createClass(DiffContext, [{
+    key: 'setResult',
+    value: function setResult(result) {
+      if (this.options.cloneDiffValues && (typeof result === 'undefined' ? 'undefined' : _typeof(result)) === 'object') {
+        var clone$$1 = typeof this.options.cloneDiffValues === 'function' ? this.options.cloneDiffValues : clone;
+        if (_typeof(result[0]) === 'object') {
+          result[0] = clone$$1(result[0]);
+        }
+        if (_typeof(result[1]) === 'object') {
+          result[1] = clone$$1(result[1]);
+        }
+      }
+      return Context.prototype.setResult.apply(this, arguments);
+    }
+  }]);
+  return DiffContext;
+}(Context);
+
+var PatchContext = function (_Context) {
+  inherits(PatchContext, _Context);
+
+  function PatchContext(left, delta) {
+    classCallCheck(this, PatchContext);
+
+    var _this = possibleConstructorReturn(this, (PatchContext.__proto__ || Object.getPrototypeOf(PatchContext)).call(this));
+
+    _this.left = left;
+    _this.delta = delta;
+    _this.pipe = 'patch';
+    return _this;
+  }
+
+  return PatchContext;
+}(Context);
+
+var ReverseContext = function (_Context) {
+  inherits(ReverseContext, _Context);
+
+  function ReverseContext(delta) {
+    classCallCheck(this, ReverseContext);
+
+    var _this = possibleConstructorReturn(this, (ReverseContext.__proto__ || Object.getPrototypeOf(ReverseContext)).call(this));
+
+    _this.delta = delta;
+    _this.pipe = 'reverse';
+    return _this;
+  }
+
+  return ReverseContext;
+}(Context);
+
+var isArray$1 = typeof Array.isArray === 'function' ? Array.isArray : function (a) {
+  return a instanceof Array;
+};
+
+var diffFilter = function trivialMatchesDiffFilter(context) {
+  if (context.left === context.right) {
+    context.setResult(undefined).exit();
+    return;
+  }
+  if (typeof context.left === 'undefined') {
+    if (typeof context.right === 'function') {
+      throw new Error('functions are not supported');
+    }
+    context.setResult([context.right]).exit();
+    return;
+  }
+  if (typeof context.right === 'undefined') {
+    context.setResult([context.left, 0, 0]).exit();
+    return;
+  }
+  if (typeof context.left === 'function' || typeof context.right === 'function') {
+    throw new Error('functions are not supported');
+  }
+  context.leftType = context.left === null ? 'null' : _typeof(context.left);
+  context.rightType = context.right === null ? 'null' : _typeof(context.right);
+  if (context.leftType !== context.rightType) {
+    context.setResult([context.left, context.right]).exit();
+    return;
+  }
+  if (context.leftType === 'boolean' || context.leftType === 'number') {
+    context.setResult([context.left, context.right]).exit();
+    return;
+  }
+  if (context.leftType === 'object') {
+    context.leftIsArray = isArray$1(context.left);
+  }
+  if (context.rightType === 'object') {
+    context.rightIsArray = isArray$1(context.right);
+  }
+  if (context.leftIsArray !== context.rightIsArray) {
+    context.setResult([context.left, context.right]).exit();
+    return;
+  }
+
+  if (context.left instanceof RegExp) {
+    if (context.right instanceof RegExp) {
+      context.setResult([context.left.toString(), context.right.toString()]).exit();
+    } else {
+      context.setResult([context.left, context.right]).exit();
+    }
+  }
+};
+diffFilter.filterName = 'trivial';
+
+var patchFilter = function trivialMatchesPatchFilter(context) {
+  if (typeof context.delta === 'undefined') {
+    context.setResult(context.left).exit();
+    return;
+  }
+  context.nested = !isArray$1(context.delta);
+  if (context.nested) {
+    return;
+  }
+  if (context.delta.length === 1) {
+    context.setResult(context.delta[0]).exit();
+    return;
+  }
+  if (context.delta.length === 2) {
+    if (context.left instanceof RegExp) {
+      var regexArgs = /^\/(.*)\/([gimyu]+)$/.exec(context.delta[1]);
+      if (regexArgs) {
+        context.setResult(new RegExp(regexArgs[1], regexArgs[2])).exit();
+        return;
+      }
+    }
+    context.setResult(context.delta[1]).exit();
+    return;
+  }
+  if (context.delta.length === 3 && context.delta[2] === 0) {
+    context.setResult(undefined).exit();
+  }
+};
+patchFilter.filterName = 'trivial';
+
+var reverseFilter = function trivialReferseFilter(context) {
+  if (typeof context.delta === 'undefined') {
+    context.setResult(context.delta).exit();
+    return;
+  }
+  context.nested = !isArray$1(context.delta);
+  if (context.nested) {
+    return;
+  }
+  if (context.delta.length === 1) {
+    context.setResult([context.delta[0], 0, 0]).exit();
+    return;
+  }
+  if (context.delta.length === 2) {
+    context.setResult([context.delta[1], context.delta[0]]).exit();
+    return;
+  }
+  if (context.delta.length === 3 && context.delta[2] === 0) {
+    context.setResult([context.delta[0]]).exit();
+  }
+};
+reverseFilter.filterName = 'trivial';
+
+function collectChildrenDiffFilter(context) {
+  if (!context || !context.children) {
+    return;
+  }
+  var length = context.children.length;
+  var child = void 0;
+  var result = context.result;
+  for (var index = 0; index < length; index++) {
+    child = context.children[index];
+    if (typeof child.result === 'undefined') {
+      continue;
+    }
+    result = result || {};
+    result[child.childName] = child.result;
+  }
+  if (result && context.leftIsArray) {
+    result._t = 'a';
+  }
+  context.setResult(result).exit();
+}
+collectChildrenDiffFilter.filterName = 'collectChildren';
+
+function objectsDiffFilter(context) {
+  if (context.leftIsArray || context.leftType !== 'object') {
+    return;
+  }
+
+  var name = void 0;
+  var child = void 0;
+  var propertyFilter = context.options.propertyFilter;
+  for (name in context.left) {
+    if (!Object.prototype.hasOwnProperty.call(context.left, name)) {
+      continue;
+    }
+    if (propertyFilter && !propertyFilter(name, context)) {
+      continue;
+    }
+    child = new DiffContext(context.left[name], context.right[name]);
+    context.push(child, name);
+  }
+  for (name in context.right) {
+    if (!Object.prototype.hasOwnProperty.call(context.right, name)) {
+      continue;
+    }
+    if (propertyFilter && !propertyFilter(name, context)) {
+      continue;
+    }
+    if (typeof context.left[name] === 'undefined') {
+      child = new DiffContext(undefined, context.right[name]);
+      context.push(child, name);
+    }
+  }
+
+  if (!context.children || context.children.length === 0) {
+    context.setResult(undefined).exit();
+    return;
+  }
+  context.exit();
+}
+objectsDiffFilter.filterName = 'objects';
+
+var patchFilter$1 = function nestedPatchFilter(context) {
+  if (!context.nested) {
+    return;
+  }
+  if (context.delta._t) {
+    return;
+  }
+  var name = void 0;
+  var child = void 0;
+  for (name in context.delta) {
+    child = new PatchContext(context.left[name], context.delta[name]);
+    context.push(child, name);
+  }
+  context.exit();
+};
+patchFilter$1.filterName = 'objects';
+
+var collectChildrenPatchFilter = function collectChildrenPatchFilter(context) {
+  if (!context || !context.children) {
+    return;
+  }
+  if (context.delta._t) {
+    return;
+  }
+  var length = context.children.length;
+  var child = void 0;
+  for (var index = 0; index < length; index++) {
+    child = context.children[index];
+    if (Object.prototype.hasOwnProperty.call(context.left, child.childName) && child.result === undefined) {
+      delete context.left[child.childName];
+    } else if (context.left[child.childName] !== child.result) {
+      context.left[child.childName] = child.result;
+    }
+  }
+  context.setResult(context.left).exit();
+};
+collectChildrenPatchFilter.filterName = 'collectChildren';
+
+var reverseFilter$1 = function nestedReverseFilter(context) {
+  if (!context.nested) {
+    return;
+  }
+  if (context.delta._t) {
+    return;
+  }
+  var name = void 0;
+  var child = void 0;
+  for (name in context.delta) {
+    child = new ReverseContext(context.delta[name]);
+    context.push(child, name);
+  }
+  context.exit();
+};
+reverseFilter$1.filterName = 'objects';
+
+function collectChildrenReverseFilter(context) {
+  if (!context || !context.children) {
+    return;
+  }
+  if (context.delta._t) {
+    return;
+  }
+  var length = context.children.length;
+  var child = void 0;
+  var delta = {};
+  for (var index = 0; index < length; index++) {
+    child = context.children[index];
+    if (delta[child.childName] !== child.result) {
+      delta[child.childName] = child.result;
+    }
+  }
+  context.setResult(delta).exit();
+}
+collectChildrenReverseFilter.filterName = 'collectChildren';
+
+/*
+
+ LCS implementation that supports arrays or strings
+
+ reference: http://en.wikipedia.org/wiki/Longest_common_subsequence_problem
+
+ */
+
+var defaultMatch = function defaultMatch(array1, array2, index1, index2) {
+  return array1[index1] === array2[index2];
+};
+
+var lengthMatrix = function lengthMatrix(array1, array2, match, context) {
+  var len1 = array1.length;
+  var len2 = array2.length;
+  var x = void 0,
+      y = void 0;
+
+  // initialize empty matrix of len1+1 x len2+1
+  var matrix = [len1 + 1];
+  for (x = 0; x < len1 + 1; x++) {
+    matrix[x] = [len2 + 1];
+    for (y = 0; y < len2 + 1; y++) {
+      matrix[x][y] = 0;
+    }
+  }
+  matrix.match = match;
+  // save sequence lengths for each coordinate
+  for (x = 1; x < len1 + 1; x++) {
+    for (y = 1; y < len2 + 1; y++) {
+      if (match(array1, array2, x - 1, y - 1, context)) {
+        matrix[x][y] = matrix[x - 1][y - 1] + 1;
+      } else {
+        matrix[x][y] = Math.max(matrix[x - 1][y], matrix[x][y - 1]);
+      }
+    }
+  }
+  return matrix;
+};
+
+var backtrack = function backtrack(matrix, array1, array2, context) {
+  var index1 = array1.length;
+  var index2 = array2.length;
+  var subsequence = {
+    sequence: [],
+    indices1: [],
+    indices2: []
+  };
+
+  while (index1 !== 0 && index2 !== 0) {
+    var sameLetter = matrix.match(array1, array2, index1 - 1, index2 - 1, context);
+    if (sameLetter) {
+      subsequence.sequence.unshift(array1[index1 - 1]);
+      subsequence.indices1.unshift(index1 - 1);
+      subsequence.indices2.unshift(index2 - 1);
+      --index1;
+      --index2;
+    } else {
+      var valueAtMatrixAbove = matrix[index1][index2 - 1];
+      var valueAtMatrixLeft = matrix[index1 - 1][index2];
+      if (valueAtMatrixAbove > valueAtMatrixLeft) {
+        --index2;
+      } else {
+        --index1;
+      }
+    }
+  }
+  return subsequence;
+};
+
+var get$1 = function get(array1, array2, match, context) {
+  var innerContext = context || {};
+  var matrix = lengthMatrix(array1, array2, match || defaultMatch, innerContext);
+  var result = backtrack(matrix, array1, array2, innerContext);
+  if (typeof array1 === 'string' && typeof array2 === 'string') {
+    result.sequence = result.sequence.join('');
+  }
+  return result;
+};
+
+var lcs = {
+  get: get$1
+};
+
+var ARRAY_MOVE = 3;
+
+var isArray$2 = typeof Array.isArray === 'function' ? Array.isArray : function (a) {
+  return a instanceof Array;
+};
+
+var arrayIndexOf = typeof Array.prototype.indexOf === 'function' ? function (array, item) {
+  return array.indexOf(item);
+} : function (array, item) {
+  var length = array.length;
+  for (var i = 0; i < length; i++) {
+    if (array[i] === item) {
+      return i;
+    }
+  }
+  return -1;
+};
+
+function arraysHaveMatchByRef(array1, array2, len1, len2) {
+  for (var index1 = 0; index1 < len1; index1++) {
+    var val1 = array1[index1];
+    for (var index2 = 0; index2 < len2; index2++) {
+      var val2 = array2[index2];
+      if (index1 !== index2 && val1 === val2) {
+        return true;
+      }
+    }
+  }
+}
+
+function matchItems(array1, array2, index1, index2, context) {
+  var value1 = array1[index1];
+  var value2 = array2[index2];
+  if (value1 === value2) {
+    return true;
+  }
+  if ((typeof value1 === 'undefined' ? 'undefined' : _typeof(value1)) !== 'object' || (typeof value2 === 'undefined' ? 'undefined' : _typeof(value2)) !== 'object') {
+    return false;
+  }
+  var objectHash = context.objectHash;
+  if (!objectHash) {
+    // no way to match objects was provided, try match by position
+    return context.matchByPosition && index1 === index2;
+  }
+  var hash1 = void 0;
+  var hash2 = void 0;
+  if (typeof index1 === 'number') {
+    context.hashCache1 = context.hashCache1 || [];
+    hash1 = context.hashCache1[index1];
+    if (typeof hash1 === 'undefined') {
+      context.hashCache1[index1] = hash1 = objectHash(value1, index1);
+    }
+  } else {
+    hash1 = objectHash(value1);
+  }
+  if (typeof hash1 === 'undefined') {
+    return false;
+  }
+  if (typeof index2 === 'number') {
+    context.hashCache2 = context.hashCache2 || [];
+    hash2 = context.hashCache2[index2];
+    if (typeof hash2 === 'undefined') {
+      context.hashCache2[index2] = hash2 = objectHash(value2, index2);
+    }
+  } else {
+    hash2 = objectHash(value2);
+  }
+  if (typeof hash2 === 'undefined') {
+    return false;
+  }
+  return hash1 === hash2;
+}
+
+var diffFilter$1 = function arraysDiffFilter(context) {
+  if (!context.leftIsArray) {
+    return;
+  }
+
+  var matchContext = {
+    objectHash: context.options && context.options.objectHash,
+    matchByPosition: context.options && context.options.matchByPosition
+  };
+  var commonHead = 0;
+  var commonTail = 0;
+  var index = void 0;
+  var index1 = void 0;
+  var index2 = void 0;
+  var array1 = context.left;
+  var array2 = context.right;
+  var len1 = array1.length;
+  var len2 = array2.length;
+
+  var child = void 0;
+
+  if (len1 > 0 && len2 > 0 && !matchContext.objectHash && typeof matchContext.matchByPosition !== 'boolean') {
+    matchContext.matchByPosition = !arraysHaveMatchByRef(array1, array2, len1, len2);
+  }
+
+  // separate common head
+  while (commonHead < len1 && commonHead < len2 && matchItems(array1, array2, commonHead, commonHead, matchContext)) {
+    index = commonHead;
+    child = new DiffContext(context.left[index], context.right[index]);
+    context.push(child, index);
+    commonHead++;
+  }
+  // separate common tail
+  while (commonTail + commonHead < len1 && commonTail + commonHead < len2 && matchItems(array1, array2, len1 - 1 - commonTail, len2 - 1 - commonTail, matchContext)) {
+    index1 = len1 - 1 - commonTail;
+    index2 = len2 - 1 - commonTail;
+    child = new DiffContext(context.left[index1], context.right[index2]);
+    context.push(child, index2);
+    commonTail++;
+  }
+  var result = void 0;
+  if (commonHead + commonTail === len1) {
+    if (len1 === len2) {
+      // arrays are identical
+      context.setResult(undefined).exit();
+      return;
+    }
+    // trivial case, a block (1 or more consecutive items) was added
+    result = result || {
+      _t: 'a'
+    };
+    for (index = commonHead; index < len2 - commonTail; index++) {
+      result[index] = [array2[index]];
+    }
+    context.setResult(result).exit();
+    return;
+  }
+  if (commonHead + commonTail === len2) {
+    // trivial case, a block (1 or more consecutive items) was removed
+    result = result || {
+      _t: 'a'
+    };
+    for (index = commonHead; index < len1 - commonTail; index++) {
+      result['_' + index] = [array1[index], 0, 0];
+    }
+    context.setResult(result).exit();
+    return;
+  }
+  // reset hash cache
+  delete matchContext.hashCache1;
+  delete matchContext.hashCache2;
+
+  // diff is not trivial, find the LCS (Longest Common Subsequence)
+  var trimmed1 = array1.slice(commonHead, len1 - commonTail);
+  var trimmed2 = array2.slice(commonHead, len2 - commonTail);
+  var seq = lcs.get(trimmed1, trimmed2, matchItems, matchContext);
+  var removedItems = [];
+  result = result || {
+    _t: 'a'
+  };
+  for (index = commonHead; index < len1 - commonTail; index++) {
+    if (arrayIndexOf(seq.indices1, index - commonHead) < 0) {
+      // removed
+      result['_' + index] = [array1[index], 0, 0];
+      removedItems.push(index);
+    }
+  }
+
+  var detectMove = true;
+  if (context.options && context.options.arrays && context.options.arrays.detectMove === false) {
+    detectMove = false;
+  }
+  var includeValueOnMove = false;
+  if (context.options && context.options.arrays && context.options.arrays.includeValueOnMove) {
+    includeValueOnMove = true;
+  }
+
+  var removedItemsLength = removedItems.length;
+  for (index = commonHead; index < len2 - commonTail; index++) {
+    var indexOnArray2 = arrayIndexOf(seq.indices2, index - commonHead);
+    if (indexOnArray2 < 0) {
+      // added, try to match with a removed item and register as position move
+      var isMove = false;
+      if (detectMove && removedItemsLength > 0) {
+        for (var removeItemIndex1 = 0; removeItemIndex1 < removedItemsLength; removeItemIndex1++) {
+          index1 = removedItems[removeItemIndex1];
+          if (matchItems(trimmed1, trimmed2, index1 - commonHead, index - commonHead, matchContext)) {
+            // store position move as: [originalValue, newPosition, ARRAY_MOVE]
+            result['_' + index1].splice(1, 2, index, ARRAY_MOVE);
+            if (!includeValueOnMove) {
+              // don't include moved value on diff, to save bytes
+              result['_' + index1][0] = '';
+            }
+
+            index2 = index;
+            child = new DiffContext(context.left[index1], context.right[index2]);
+            context.push(child, index2);
+            removedItems.splice(removeItemIndex1, 1);
+            isMove = true;
+            break;
+          }
+        }
+      }
+      if (!isMove) {
+        // added
+        result[index] = [array2[index]];
+      }
+    } else {
+      // match, do inner diff
+      index1 = seq.indices1[indexOnArray2] + commonHead;
+      index2 = seq.indices2[indexOnArray2] + commonHead;
+      child = new DiffContext(context.left[index1], context.right[index2]);
+      context.push(child, index2);
+    }
+  }
+
+  context.setResult(result).exit();
+};
+diffFilter$1.filterName = 'arrays';
+
+var compare = {
+  numerically: function numerically(a, b) {
+    return a - b;
+  },
+  numericallyBy: function numericallyBy(name) {
+    return function (a, b) {
+      return a[name] - b[name];
+    };
+  }
+};
+
+var patchFilter$2 = function nestedPatchFilter(context) {
+  if (!context.nested) {
+    return;
+  }
+  if (context.delta._t !== 'a') {
+    return;
+  }
+  var index = void 0;
+  var index1 = void 0;
+
+  var delta = context.delta;
+  var array = context.left;
+
+  // first, separate removals, insertions and modifications
+  var toRemove = [];
+  var toInsert = [];
+  var toModify = [];
+  for (index in delta) {
+    if (index !== '_t') {
+      if (index[0] === '_') {
+        // removed item from original array
+        if (delta[index][2] === 0 || delta[index][2] === ARRAY_MOVE) {
+          toRemove.push(parseInt(index.slice(1), 10));
+        } else {
+          throw new Error('only removal or move can be applied at original array indices,' + (' invalid diff type: ' + delta[index][2]));
+        }
+      } else {
+        if (delta[index].length === 1) {
+          // added item at new array
+          toInsert.push({
+            index: parseInt(index, 10),
+            value: delta[index][0]
+          });
+        } else {
+          // modified item at new array
+          toModify.push({
+            index: parseInt(index, 10),
+            delta: delta[index]
+          });
+        }
+      }
+    }
+  }
+
+  // remove items, in reverse order to avoid sawing our own floor
+  toRemove = toRemove.sort(compare.numerically);
+  for (index = toRemove.length - 1; index >= 0; index--) {
+    index1 = toRemove[index];
+    var indexDiff = delta['_' + index1];
+    var removedValue = array.splice(index1, 1)[0];
+    if (indexDiff[2] === ARRAY_MOVE) {
+      // reinsert later
+      toInsert.push({
+        index: indexDiff[1],
+        value: removedValue
+      });
+    }
+  }
+
+  // insert items, in reverse order to avoid moving our own floor
+  toInsert = toInsert.sort(compare.numericallyBy('index'));
+  var toInsertLength = toInsert.length;
+  for (index = 0; index < toInsertLength; index++) {
+    var insertion = toInsert[index];
+    array.splice(insertion.index, 0, insertion.value);
+  }
+
+  // apply modifications
+  var toModifyLength = toModify.length;
+  var child = void 0;
+  if (toModifyLength > 0) {
+    for (index = 0; index < toModifyLength; index++) {
+      var modification = toModify[index];
+      child = new PatchContext(context.left[modification.index], modification.delta);
+      context.push(child, modification.index);
+    }
+  }
+
+  if (!context.children) {
+    context.setResult(context.left).exit();
+    return;
+  }
+  context.exit();
+};
+patchFilter$2.filterName = 'arrays';
+
+var collectChildrenPatchFilter$1 = function collectChildrenPatchFilter(context) {
+  if (!context || !context.children) {
+    return;
+  }
+  if (context.delta._t !== 'a') {
+    return;
+  }
+  var length = context.children.length;
+  var child = void 0;
+  for (var index = 0; index < length; index++) {
+    child = context.children[index];
+    context.left[child.childName] = child.result;
+  }
+  context.setResult(context.left).exit();
+};
+collectChildrenPatchFilter$1.filterName = 'arraysCollectChildren';
+
+var reverseFilter$2 = function arraysReverseFilter(context) {
+  if (!context.nested) {
+    if (context.delta[2] === ARRAY_MOVE) {
+      context.newName = '_' + context.delta[1];
+      context.setResult([context.delta[0], parseInt(context.childName.substr(1), 10), ARRAY_MOVE]).exit();
+    }
+    return;
+  }
+  if (context.delta._t !== 'a') {
+    return;
+  }
+  var name = void 0;
+  var child = void 0;
+  for (name in context.delta) {
+    if (name === '_t') {
+      continue;
+    }
+    child = new ReverseContext(context.delta[name]);
+    context.push(child, name);
+  }
+  context.exit();
+};
+reverseFilter$2.filterName = 'arrays';
+
+var reverseArrayDeltaIndex = function reverseArrayDeltaIndex(delta, index, itemDelta) {
+  if (typeof index === 'string' && index[0] === '_') {
+    return parseInt(index.substr(1), 10);
+  } else if (isArray$2(itemDelta) && itemDelta[2] === 0) {
+    return '_' + index;
+  }
+
+  var reverseIndex = +index;
+  for (var deltaIndex in delta) {
+    var deltaItem = delta[deltaIndex];
+    if (isArray$2(deltaItem)) {
+      if (deltaItem[2] === ARRAY_MOVE) {
+        var moveFromIndex = parseInt(deltaIndex.substr(1), 10);
+        var moveToIndex = deltaItem[1];
+        if (moveToIndex === +index) {
+          return moveFromIndex;
+        }
+        if (moveFromIndex <= reverseIndex && moveToIndex > reverseIndex) {
+          reverseIndex++;
+        } else if (moveFromIndex >= reverseIndex && moveToIndex < reverseIndex) {
+          reverseIndex--;
+        }
+      } else if (deltaItem[2] === 0) {
+        var deleteIndex = parseInt(deltaIndex.substr(1), 10);
+        if (deleteIndex <= reverseIndex) {
+          reverseIndex++;
+        }
+      } else if (deltaItem.length === 1 && deltaIndex <= reverseIndex) {
+        reverseIndex--;
+      }
+    }
+  }
+
+  return reverseIndex;
+};
+
+function collectChildrenReverseFilter$1(context) {
+  if (!context || !context.children) {
+    return;
+  }
+  if (context.delta._t !== 'a') {
+    return;
+  }
+  var length = context.children.length;
+  var child = void 0;
+  var delta = {
+    _t: 'a'
+  };
+
+  for (var index = 0; index < length; index++) {
+    child = context.children[index];
+    var name = child.newName;
+    if (typeof name === 'undefined') {
+      name = reverseArrayDeltaIndex(context.delta, child.childName, child.result);
+    }
+    if (delta[name] !== child.result) {
+      delta[name] = child.result;
+    }
+  }
+  context.setResult(delta).exit();
+}
+collectChildrenReverseFilter$1.filterName = 'arraysCollectChildren';
+
+var diffFilter$2 = function datesDiffFilter(context) {
+  if (context.left instanceof Date) {
+    if (context.right instanceof Date) {
+      if (context.left.getTime() !== context.right.getTime()) {
+        context.setResult([context.left, context.right]);
+      } else {
+        context.setResult(undefined);
+      }
+    } else {
+      context.setResult([context.left, context.right]);
+    }
+    context.exit();
+  } else if (context.right instanceof Date) {
+    context.setResult([context.left, context.right]).exit();
+  }
+};
+diffFilter$2.filterName = 'dates';
+
+var DiffPatcher = function () {
+  function DiffPatcher(options) {
+    classCallCheck(this, DiffPatcher);
+
+    this.processor = new Processor(options);
+    this.processor.pipe(new Pipe('diff').append(collectChildrenDiffFilter, diffFilter, diffFilter$2, objectsDiffFilter, diffFilter$1).shouldHaveResult());
+    this.processor.pipe(new Pipe('patch').append(collectChildrenPatchFilter, collectChildrenPatchFilter$1, patchFilter, patchFilter$1, patchFilter$2).shouldHaveResult());
+    this.processor.pipe(new Pipe('reverse').append(collectChildrenReverseFilter, collectChildrenReverseFilter$1, reverseFilter, reverseFilter$1, reverseFilter$2).shouldHaveResult());
+  }
+
+  createClass(DiffPatcher, [{
+    key: 'options',
+    value: function options() {
+      var _processor;
+
+      return (_processor = this.processor).options.apply(_processor, arguments);
+    }
+  }, {
+    key: 'diff',
+    value: function diff(left, right) {
+      return this.processor.process(new DiffContext(left, right));
+    }
+  }, {
+    key: 'patch',
+    value: function patch(left, delta) {
+      return this.processor.process(new PatchContext(left, delta));
+    }
+  }, {
+    key: 'reverse',
+    value: function reverse(delta) {
+      return this.processor.process(new ReverseContext(delta));
+    }
+  }, {
+    key: 'unpatch',
+    value: function unpatch(right, delta) {
+      return this.patch(right, this.reverse(delta));
+    }
+  }, {
+    key: 'clone',
+    value: function clone$$1(value) {
+      return clone(value);
+    }
+  }]);
+  return DiffPatcher;
+}();
+
+// use as 2nd parameter for JSON.parse to revive Date instances
+function dateReviver(key, value) {
+  var parts = void 0;
+  if (typeof value === 'string') {
+    // eslint-disable-next-line max-len
+    parts = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d*))?(Z|([+-])(\d{2}):(\d{2}))$/.exec(value);
+    if (parts) {
+      return new Date(Date.UTC(+parts[1], +parts[2] - 1, +parts[3], +parts[4], +parts[5], +parts[6], +(parts[7] || 0)));
+    }
+  }
+  return value;
+}
+
+function create(options) {
+  return new DiffPatcher(options);
+}
+
+var defaultInstance = void 0;
+
+function diff() {
+  if (!defaultInstance) {
+    defaultInstance = new DiffPatcher();
+  }
+  return defaultInstance.diff.apply(defaultInstance, arguments);
+}
+
+function patch() {
+  if (!defaultInstance) {
+    defaultInstance = new DiffPatcher();
+  }
+  return defaultInstance.patch.apply(defaultInstance, arguments);
+}
+
+function unpatch() {
+  if (!defaultInstance) {
+    defaultInstance = new DiffPatcher();
+  }
+  return defaultInstance.unpatch.apply(defaultInstance, arguments);
+}
+
+function reverse() {
+  if (!defaultInstance) {
+    defaultInstance = new DiffPatcher();
+  }
+  return defaultInstance.reverse.apply(defaultInstance, arguments);
+}
+
+function clone$1() {
+  if (!defaultInstance) {
+    defaultInstance = new DiffPatcher();
+  }
+  return defaultInstance.clone.apply(defaultInstance, arguments);
+}
+
+export default {
+  DiffPatcher,
+  create,
+  dateReviver,
+  diff,
+  patch,
+  unpatch,
+  reverse,
+  clone: clone$1
+}

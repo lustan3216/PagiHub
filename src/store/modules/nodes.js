@@ -1,6 +1,6 @@
 import clone from 'clone'
 import Vue from 'vue'
-import listTiTree from '../../utils/listToTree'
+import listTiTree from '../../vendor/listToTree'
 import { SET } from '../index'
 // import { merge } from '../../lodash'
 import { assignSet } from '../../utils/util'

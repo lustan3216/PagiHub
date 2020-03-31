@@ -22,40 +22,40 @@
             </el-select>
           </el-form-item>
         </el-col>
-        
+
         <el-col :span="8">
           <el-form-item label="X">
             <select-unit :value.sync="boxShadow.offsetX" :exclude="['%']"/>
           </el-form-item>
         </el-col>
-  
+
         <el-col :span="8">
           <el-form-item label="Y">
             <select-unit :value.sync="boxShadow.offsetY" :exclude="['%']"/>
           </el-form-item>
         </el-col>
       </el-row>
-      
+
       <el-row :gutter="5">
         <el-col :span="8">
           <el-form-item label="Blur">
             <select-unit :value.sync="boxShadow.blurRadius" :exclude="['%']"/>
           </el-form-item>
         </el-col>
-        
+
         <el-col :span="8">
           <el-form-item label="Spread">
             <select-unit :value.sync="boxShadow.spreadRadius" :exclude="['%']"/>
           </el-form-item>
         </el-col>
-        
+
         <el-col :span="3">
           <el-form-item label="Color">
             <el-color-picker v-model="boxShadow.color" show-alpha />
           </el-form-item>
         </el-col>
       </el-row>
-      
+
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -63,7 +63,7 @@
 <script>
 import csso from 'csso'
 import SelectUnit from '../Components/SelectUnit'
-import { parse, stringify } from '../../utils/boxShadow'
+import { parse, stringify } from '../../vendor/boxShadow'
 
 export default {
   name: 'BoxShadows',
@@ -73,12 +73,12 @@ export default {
   props: ['computedStyle'],
   data() {
     const boxShadows = parse(this.computedStyle.boxShadow)
-    
+
     boxShadows.forEach((boxShadow, index) => {
       boxShadow.id = (+new Date() + index).toString()
       boxShadow.inset = boxShadow.inset ? 'Inset' : 'Outline'
     })
-    
+
     return {
       currentId: boxShadows[0].id,
       boxShadows
@@ -106,12 +106,12 @@ export default {
           spreadRadius: null,
           color: 'none'
         })
-  
+
         this.currentId = Array.last(this.boxShadows).id
       } else {
         const index = this.boxShadows.findIndex(x => x.id === targetName)
         this.boxShadows.splice(index, 1)
-  
+
         if (this.currentId === targetName) {
           this.currentId = Array.first(this.boxShadows).id
         }

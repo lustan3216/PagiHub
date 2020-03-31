@@ -1,8 +1,15 @@
 /* eslint-disabled */
 import { kebabCase, capitalize } from 'element-ui/src/utils/util'
+import { isObject, isUndefined } from 'element-ui/src/utils/types'
 import { isPlainObject } from '../lodash'
 
-Array.toArray = function(e) {
+window.Type = {
+  isObject,
+  isUndefined,
+  isArray: Array.isArray
+}
+
+export function toArray(e) {
   if (Array.isArray(e)) {
     return e
   } else if (e === undefined) {
@@ -11,6 +18,8 @@ Array.toArray = function(e) {
     return [e]
   }
 }
+
+Array.toArray = toArray
 
 Array.uniq = function(e) {
   return [...new Set(e)]
@@ -59,3 +68,4 @@ String.prototype.camelCase = function() {
 Number.prototype.isFloat = function() {
   return Number(this) === this && this % 1 !== 0
 }
+
