@@ -1,5 +1,5 @@
 // timeline, 整個
-//   stack 是指每個
+// stack 是指每個
 // tree 個別樹更新完之後，去diff把diff tree結果記錄下來
 
 // 每個要更新的地方 先算好要刪除新增修改的地方，變成object
@@ -9,14 +9,12 @@
 import jsonDiffPatch from '../vendor/jsonDiffPatch.js'
 import { toArray, isUndefined, isPlainObject } from '../utils/polyfill.js'
 const isArray = Array.isArray
-let _id = 0
 
-class JsonHistory {
+export default class JsonHistory {
   // deltas = [newPatches...oldPatches]
   // currentIndex 往右的要馬上存進資料庫，往左的不用, 這個邏輯包出去別的class寫
-  constructor({ id = _id, tree = {}, backUpDeltas = [], callback = {}}) {
+  constructor({ tree = {}, backUpDeltas = [], callback = {}}) {
     this.currentIndex = 0
-    this.id = id
     this.tree = tree
     this.deltas = backUpDeltas
     this.callback = {
@@ -25,7 +23,6 @@ class JsonHistory {
       onRedo() {},
       ...callback
     }
-    _id++
   }
 
   get currentDeltaGroup() {
@@ -47,7 +44,11 @@ class JsonHistory {
     }
 
     ensureIsArray.forEach(row => {
-      const delta = this._createDelta(row.path, row.value)
+      const delta = this._createDelta(
+        row.path,
+        cloneJson(row.value),
+        row.insert
+      )
       if (delta) {
         group.unshift(delta)
         jsonDiffPatch.patch(this.tree, delta)
@@ -60,53 +61,54 @@ class JsonHistory {
       return this.tree
     }
   }
-  // path key 不允許有 length
-  _createDelta(path, newValue) {
-    newValue = clone(newValue)
-    const arrayPath = pathToArray(path)
-    const pathBooleanArray = pathToBooleanArray(path)
 
-    if (arrayPath.find(key => key === 'length')) {
+  // path key 不允許有 length
+  _createDelta(path, newValue, insert = false) {
+    const pathSplit = pathStringSplit(path)
+    const isArrayKeyArray = isArrayKeyToBooleanArray(pathSplit)
+    const normalizedPathArray = toNormalizedPath(pathSplit)
+
+    if (normalizedPathArray.find(key => key === 'length')) {
       throw new Error('the path should not include length')
     }
 
     let runtimeTree = this.tree
     let delta = {}
+
     try {
-      arrayPath.reduce((final, key, index) => {
-        const isArrayIndex = pathBooleanArray[index]
-        const isEnd = index === arrayPath.length - 1
+      normalizedPathArray.reduce((final, key, index) => {
+        const isArrayKey = isArrayKeyArray[index]
+        const isLastIndex = index === normalizedPathArray.length - 1
+        const oldValue = cloneJson(runtimeTree[key])
+        const isArrayKeyNext = isArrayKeyArray[index + 1]
 
-        const oldValue = clone(runtimeTree[key])
-
-        const isNextRunCannotMerge = () => {
-          const isArrayIndexNext = pathBooleanArray[index + 1]
-          const isObjectKeyNext = !isArrayIndexNext
-          return (
-            (Array.isArray(oldValue) && isObjectKeyNext) ||
-            (isPlainObject(oldValue) && isArrayIndexNext) ||
-            (!isPlainObject(oldValue) && !isArray(oldValue))
-          )
+        const theRestOfObject = () => {
+          const theRestOfPathArray = Array.from(pathSplit).splice(index + 1)
+          return createDeltaByPathArray(theRestOfPathArray, newValue)
         }
 
-        const assignTheRestObject = () => {
-          const theRestOfPathArray = Array.from(arrayPath).splice(index + 1)
-          final[key] = [
-            oldValue,
-            createNewValueByPathArray(theRestOfPathArray, newValue)
-          ]
+        const oldArrayAddRestOfObject = () => {
+          const oldValueClone = cloneJson(runtimeTree)
+          oldValueClone[key] = theRestOfObject()
+          return arrayEmptyToNull(oldValueClone)
         }
 
-        if (isArrayIndex) {
-          if (isEnd) {
+        if (isArrayKey) {
+          if (isLastIndex) {
             if (isUndefined(oldValue)) {
-              // 不可能會發生
               if (isUndefined(newValue)) {
-                // 不可能會發生
                 throw new Error('should not happen')
               } else {
-                // 不可能會發生
-                throw new Error('should not happen')
+                if (isArray(runtimeTree)) {
+                  // 判斷是 arrayIndex 且當下是 runtimeTree是array就不用算了，直接手動操作，用diff算比較快
+                  const delta = jsonDiffPatch.diff(
+                    runtimeTree,
+                    oldArrayAddRestOfObject()
+                  )
+                  Object.assign(final, delta)
+                } else {
+                  throw new Error('should not happen')
+                }
               }
             } else {
               if (isUndefined(newValue)) {
@@ -114,36 +116,51 @@ class JsonHistory {
                 final[key] = [oldValue, 0, 0]
                 final['_t'] = 'a'
               } else {
-                // Array要新增或插入但單個值，不知道是要做哪個，所以跳error，要求直接更新整個array
-                throw new Error('not allow to update single value in array')
+                if (insert) {
+                  final[key] = [newValue]
+                } else {
+                  final[key] = [oldValue, newValue]
+                }
+                final['_t'] = 'a'
               }
             }
           } else {
             if (isUndefined(oldValue)) {
               if (isUndefined(newValue)) {
-                // 不可能會發生
                 throw new Error('should not happen')
               } else {
-                // Array要新增或插入但單個值，不知道是要做哪個，所以跳error，要求直接更新整個array
-                throw new Error('not allow to update single value in array')
+                if (isArray(runtimeTree)) {
+                  // 判斷是 arrayIndex 且當下是 runtimeTree是array就不用算了，直接手動操作，用diff算比較快
+                  const delta = jsonDiffPatch.diff(
+                    runtimeTree,
+                    oldArrayAddRestOfObject()
+                  )
+                  Object.assign(final, delta)
+                }
+
+                throw new Error('finish')
               }
             } else {
               if (isUndefined(newValue)) {
                 // 要刪除，跑路徑中
-                if (isNextRunCannotMerge()) {
-                  // 下一層已經找不到東西可以刪除，就不用處理
-                  throw new Error('break')
-                } else {
+                if (isValueAndKeyMatch(isArrayKeyNext, oldValue)) {
                   final[key] = {}
                   final['_t'] = 'a'
+                } else {
+                  // 下一層已經找不到東西可以刪除，就不用處理
+                  throw new Error('break')
                 }
               } else {
                 // 測試有沒有可能merge，才繼續走，不行就直接換掉
-                if (oldValue[key]) {
+                if (isValueAndKeyMatch(isArrayKeyNext, oldValue)) {
                   final[key] = {}
-                  final['_t'] = 'a'
                 } else {
-                  assignTheRestObject()
+                  if (isArray(runtimeTree)) {
+                    final[key] = [oldValue, theRestOfObject()]
+                    final['_t'] = 'a'
+                  } else {
+                    throw new Error('should not happen')
+                  }
                   throw new Error('finish')
                 }
               }
@@ -151,12 +168,11 @@ class JsonHistory {
           }
         } else {
           // isObjectKey
-          if (isEnd) {
+          if (isLastIndex) {
             if (isUndefined(oldValue)) {
               if (isUndefined(newValue)) {
                 throw new Error('break')
               } else {
-                // 'a.b.c.d = 2'  新增
                 final[key] = [newValue]
               }
             } else {
@@ -167,7 +183,7 @@ class JsonHistory {
               } else {
                 // 'a.b = 2'  更新
                 // 'a.b.c = 2'  更新
-                if (Array.isArray(oldValue) && Array.isArray(newValue)) {
+                if (isArray(oldValue) && isArray(newValue)) {
                   // 'a = oldValue newArray [1,2,3] 直接用diff生delta
                   final[key] = jsonDiffPatch.diff(oldValue, newValue)
                 } else {
@@ -181,22 +197,21 @@ class JsonHistory {
                 // 要刪除東西，但就值也是空的所以break
                 throw new Error('break')
               } else {
-                // 要新增但跑路徑中
-                assignTheRestObject()
+                final[key] = [oldValue, theRestOfObject()]
                 throw new Error('finish')
               }
             } else {
-              if (isNextRunCannotMerge()) {
+              if (isValueAndKeyMatch(isArrayKeyNext, oldValue)) {
+                final[key] = {}
+              } else {
                 // 這裡已知之後都會跑步成功，因為array 跟object不能合併，也因為下一層無法更新上層的資料結構，
                 // 所以這裡直接算完結束
                 if (isUndefined(newValue)) {
                   throw new Error('break')
                 } else {
-                  assignTheRestObject()
+                  final[key] = [oldValue, theRestOfObject()]
                   throw new Error('finish')
                 }
-              } else {
-                final[key] = {}
               }
             }
           }
@@ -247,25 +262,21 @@ class JsonHistory {
   }
 }
 
-function toArrayIndex(key) {
-  // '[0]'.match(/\[(\d+)\]/)
-  // ["[0]", "0", index: 0, input: "[0]", groups: undefined]
-  const result = key.match(/\[(\d+)\]/)
-  return result !== null && result[1]
-}
-
-function createNewValueByPathArray(pathArray, value) {
-  if (!pathArray.length) return value
-  const isArrayIndex = toArrayIndex(pathArray[0])
-  const init = isArrayIndex ? [] : {}
+function createDeltaByPathArray(pathArray, newValue) {
+  if (!pathArray.length) return newValue
+  const isArrayKey = toArrayKey(pathArray[0])
+  const init = isArrayKey ? [] : {}
 
   pathArray.reduce((final, key, index) => {
-    const isArrayIndex = toArrayIndex(key)
-    if (isArrayIndex) key = isArrayIndex
-    const isLastOne = pathArray.length - 1 === index
+    const isArrayKey = toArrayKey(key)
+    const isLastIndex = pathArray.length - 1 === index
 
-    if (isLastOne) {
-      final[key] = value
+    if (isArrayKey) {
+      key = isArrayKey
+    }
+
+    if (isLastIndex) {
+      final[key] = newValue
     } else {
       const isNextOneArray = pathArray[index + 1].match(/\[\d+\]/)
       final[key] = isNextOneArray ? [] : {}
@@ -274,30 +285,43 @@ function createNewValueByPathArray(pathArray, value) {
     return final[key]
   }, init)
 
-  return init
+  return arrayEmptyToNull(init) // normalize [empty * 2, newValue, empty] to [null, null, newValue, null]
 }
 
-function pathToBooleanArray(path) {
-  // '1.a.b.c[321].d.e[0][1]'.match(/\w+(?=\.|\[)|\d+(?=\])/g)
+function isValueAndKeyMatch(isArrayKey, oldValue) {
+  const isObjectKey = !isArrayKey
+  return (
+    (isArray(oldValue) && isArrayKey) ||
+    (isPlainObject(oldValue) && isObjectKey)
+  )
+}
+
+function toArrayKey(key) {
+  // '[0]'.match(/\[(\d+)\]/)
+  // ["[0]", "0", index: 0, input: "[0]", groups: undefined]
+  const result = key.match(/\[(\d+)\]/)
+  return result !== null && result[1]
+}
+
+function pathStringSplit(path) {
   // ["1", "a", "[321]", "d", "[0]"]
-  // [false, false, true, false, true]
   return path
     .toString()
     .replace(/\s/g)
     .match(/[\w|\d]+(?=\.|\[)?|\[\d+\]/g)
-    .map(key => Boolean(key.match(/\[(\d+)\]/)))
 }
 
-function pathToArray(path) {
-  // '1.a.b.c[321].d.e[0][1]'.match(/\w+(?=\.|\[)|\d+(?=\])/g)
-  // ["1", "a", "b", "c", "321", "d", "e", "0", "1"]
-  return path
-    .toString()
-    .replace(/\s/g)
-    .match(/[\w|\d]+(?=\.|\[)?|\d+(?=\])/g)
+function isArrayKeyToBooleanArray(path) {
+  // [false, false, true, false, true]
+  return path.map(key => Boolean(key.match(/\[(\d+)\]/)))
 }
 
-function clone(e) {
+function toNormalizedPath(path) {
+  // ["1", "a", "321", "d", "0"]
+  return path.map(key => toArrayKey(key) || key)
+}
+
+function cloneJson(e) {
   if (isPlainObject(e) || isArray(e)) {
     return JSON.parse(JSON.stringify(e))
   } else {
@@ -305,4 +329,6 @@ function clone(e) {
   }
 }
 
-export default JsonHistory
+function arrayEmptyToNull(e) {
+  return cloneJson(e)
+}

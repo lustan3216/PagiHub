@@ -79,28 +79,6 @@ describe('.record 0 delta', () => {
       expect(e).toEqual(new Error('the path should not include length'))
     }
   })
-
-  test('a[1] = { f: 5 }', () => {
-    try {
-      history.record({
-        path: 'a[1]',
-        value: { f: 5 }
-      })
-    } catch (e) {
-      expect(e).toEqual(new Error('not allow to update single value in array'))
-    }
-  })
-
-  test('a[2].3 = [3, 4, 5]', () => {
-    try {
-      history.record({
-        path: 'a[2].3',
-        value: [3, 4, 5]
-      })
-    } catch (e) {
-      expect(e).toEqual(new Error('not allow to update single value in array'))
-    }
-  })
 })
 
 describe('.record 1 delta', () => {
@@ -119,6 +97,92 @@ describe('.record 1 delta', () => {
     expect(history.tree).toEqual(tree)
     history.redo()
     expect(history.tree).toEqual(saveState)
+  })
+
+  test('1 = {}', () => {
+    history.record({
+      path: '1',
+      value: {}
+    })
+
+    expect(history.tree).toEqual({
+      1: {},
+      a: [{}, { 1: 3 }],
+      b: { c: 5, d: { e: 6 }}
+    })
+  })
+
+  test('a[1] = { f: 5 }', () => {
+    history.record({
+      path: 'a[1]',
+      value: { f: 5 }
+    })
+    expect(history.tree).toEqual({
+      1: [1, 3],
+      a: [{}, { f: 5 }],
+      b: { c: 5, d: { e: 6 }}
+    })
+  })
+
+  test('a[1][3] = 5', () => {
+    history.record({
+      path: 'a[1][3]',
+      value: 5
+    })
+    expect(history.tree).toEqual({
+      1: [1, 3],
+      a: [{}, [null, null, null, 5]],
+      b: { c: 5, d: { e: 6 }}
+    })
+  })
+
+  test('a[4][1] = 5', () => {
+    history.record({
+      path: 'a[4][1]',
+      value: 5
+    })
+    expect(history.tree).toEqual({
+      1: [1, 3],
+      a: [{}, { 1: 3 }, null, null, [null, 5]],
+      b: { c: 5, d: { e: 6 }}
+    })
+  })
+
+  test('a[2].3 = [3, 4, 5]', () => {
+    history.record({
+      path: 'a[2].3',
+      value: [3, 4, 5]
+    })
+
+    expect(history.tree).toEqual({
+      1: [1, 3],
+      a: [{}, { 1: 3 }, { 3: [3, 4, 5] }],
+      b: { c: 5, d: { e: 6 }}
+    })
+  })
+
+  test('a[1][1] = { f: 5 }', () => {
+    history.record({
+      path: 'a[1][1]',
+      value: { f: 5 }
+    })
+    expect(history.tree).toEqual({
+      1: [1, 3],
+      a: [{}, [null, { f: 5 }]],
+      b: { c: 5, d: { e: 6 }}
+    })
+  })
+
+  test('a[1][1]a = { f: 5 }', () => {
+    history.record({
+      path: 'a[1][1]a',
+      value: { f: 5 }
+    })
+    expect(history.tree).toEqual({
+      1: [1, 3],
+      a: [{}, [null, { a: { f: 5 }}]],
+      b: { c: 5, d: { e: 6 }}
+    })
   })
 
   test('1 = 2', () => {
@@ -428,6 +492,14 @@ describe('.delete', () => {
 })
 
 describe('.record with value', () => {
+  let history
+
+  beforeEach(() => {
+    history = new JsonHistory({
+      tree: JSON.parse(JSON.stringify(tree))
+    })
+  })
+
   test('with undefined equal to delete', () => {
     const history = new JsonHistory({
       tree: JSON.parse(JSON.stringify(tree))
@@ -447,6 +519,29 @@ describe('.record with value', () => {
     })
 
     expect(history.tree).toEqual(history1.tree)
+  })
+
+  test('all same value', () => {
+    history.record(
+      [
+        {
+          path: '1[1]'
+        },
+        {
+          path: 'a[1]'
+        },
+        {
+          path: 'b[1]'
+        }
+      ],
+      [100]
+    )
+
+    expect(history.tree).toEqual({
+      1: [1, [100]],
+      a: [{}, [100]],
+      b: [null, [100]]
+    })
   })
 })
 
@@ -527,6 +622,8 @@ describe('.redo .undo', () => {
     })
 
     history.undo()
+    history.undo()
+    history.undo()
     expect(history.tree).toEqual(tree)
 
     history.redo()
@@ -539,5 +636,83 @@ describe('.redo .undo', () => {
       a: { c: { t: [1, 3, 5, {}] }, g: {}},
       b: { c: [1, 2, 3, { a: 3 }], d: {}}
     })
+  })
+})
+
+describe('.record array inset', () => {
+  let history
+
+  beforeEach(() => {
+    history = new JsonHistory({
+      tree: JSON.parse(JSON.stringify(tree))
+    })
+  })
+
+  test('1[1] = {}', () => {
+    history.record({
+      path: '1[1]',
+      value: {},
+      insert: true
+    })
+
+    expect(history.deltas.length).toEqual(1)
+    expect(history.tree).toEqual({
+      1: [1, {}, 3],
+      a: [{}, { 1: 3 }],
+      b: { c: 5, d: { e: 6 }}
+    })
+  })
+
+  test('a[5] = []', () => {
+    history.record({
+      path: 'a[5]',
+      value: [],
+      insert: true
+    })
+
+    expect(history.deltas.length).toEqual(1)
+    expect(history.tree).toEqual({
+      1: [1, 3],
+      a: [{}, { 1: 3 }, null, null, null, []],
+      b: { c: 5, d: { e: 6 }}
+    })
+  })
+
+  test('complicated inset', () => {
+    history.record({
+      path: '1[4]',
+      value: {},
+      insert: true
+    })
+
+    expect(history.tree).toEqual({
+      1: [1, 3, null, null, {}],
+      a: [{}, { 1: 3 }],
+      b: { c: 5, d: { e: 6 }}
+    })
+
+    history.record([
+      {
+        path: '1[4]',
+        value: [],
+        insert: true
+      },
+      {
+        path: '1[5]',
+        value: [1, 2, 3]
+      }
+    ])
+
+    expect(history.tree).toEqual({
+      1: [1, 3, null, null, [], [1, 2, 3]],
+      a: [{}, { 1: 3 }],
+      b: { c: 5, d: { e: 6 }}
+    })
+
+    expect(history.deltas.length).toEqual(2)
+
+    history.undo()
+    history.undo()
+    expect(history.tree).toEqual(tree)
   })
 })
