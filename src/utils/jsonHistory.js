@@ -190,7 +190,7 @@ class JsonHistory {
       if (e.message === 'break') {
         delta = undefined
       } else if (e.message === 'finish') {
-        // 不用處理
+        // 提前結束迴圈，不用處理
       } else {
         throw e
       }
