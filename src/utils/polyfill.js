@@ -1,9 +1,8 @@
 /* eslint-disabled */
 import { kebabCase, capitalize } from 'element-ui/src/utils/util'
-import { isUndefined } from 'element-ui/src/utils/types'
-import { isPlainObject } from '../lodash'
+import isPlainObject from 'is-plain-object'
 
-export { isPlainObject, isUndefined }
+export { isPlainObject }
 
 export function toArray(e) {
   if (Array.isArray(e)) {
@@ -32,8 +31,6 @@ Array.first = function(e) {
 Array.prototype.subtract = function(e) {
   return this.filter(n => !Array.toArray(e).includes(n))
 }
-
-Object.isPlainObject = isPlainObject
 
 Object.firstKey = function(e) {
   return Object.keys(e)[0]
