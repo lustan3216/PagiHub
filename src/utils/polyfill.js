@@ -1,13 +1,9 @@
 /* eslint-disabled */
 import { kebabCase, capitalize } from 'element-ui/src/utils/util'
-import { isObject, isUndefined } from 'element-ui/src/utils/types'
+import { isUndefined } from 'element-ui/src/utils/types'
 import { isPlainObject } from '../lodash'
 
-window.Type = {
-  isObject,
-  isUndefined,
-  isArray: Array.isArray
-}
+export { isPlainObject, isUndefined }
 
 export function toArray(e) {
   if (Array.isArray(e)) {
@@ -36,6 +32,8 @@ Array.first = function(e) {
 Array.prototype.subtract = function(e) {
   return this.filter(n => !Array.toArray(e).includes(n))
 }
+
+Object.isPlainObject = isPlainObject
 
 Object.firstKey = function(e) {
   return Object.keys(e)[0]
@@ -68,4 +66,3 @@ String.prototype.camelCase = function() {
 Number.prototype.isFloat = function() {
   return Number(this) === this && this % 1 !== 0
 }
-

@@ -5,14 +5,12 @@
 // 每個要更新的地方 先算好要刪除新增修改的地方，變成object
 // 再用字串表示是修改 '' {12: { style: { asd: 123 }}, 24: { style: { asd: 123 }}}
 // 刪除的話用undefined表示
-//
-// 新增component的地方 id 要重
-// 'sda.sda.e[0][432]'
+
 import jsonDiffPatch from '../vendor/jsonDiffPatch.js'
-import { toArray } from '../utils/polyfill.js'
-import { isObject } from './device'
-window.jsonDiffPatch = jsonDiffPatch
+import { toArray, isUndefined, isPlainObject } from '../utils/polyfill.js'
+const isArray = Array.isArray
 let _id = 0
+
 class JsonHistory {
   // deltas = [newPatches...oldPatches]
   // currentIndex 往右的要馬上存進資料庫，往左的不用, 這個邏輯包出去別的class寫
@@ -34,12 +32,22 @@ class JsonHistory {
     return this.deltas[this.currentIndex]
   }
 
-  record(rows = []) {
-    const group = []
-    const ensureRows = toArray(rows)
+  delete(rows) {
+    const ensureIsArray = toArray(rows)
+    ensureIsArray.forEach(row => (row.value = undefined))
+    return this.record(rows)
+  }
 
-    ensureRows.forEach(row => {
-      const delta = this.createDelta(row.path, row.value)
+  record(rows, newValue) {
+    const group = []
+    const ensureIsArray = toArray(rows)
+
+    if (!isUndefined(newValue)) {
+      ensureIsArray.forEach(row => (row.value = newValue))
+    }
+
+    ensureIsArray.forEach(row => {
+      const delta = this._createDelta(row.path, row.value)
       if (delta) {
         group.unshift(delta)
         jsonDiffPatch.patch(this.tree, delta)
@@ -53,25 +61,33 @@ class JsonHistory {
     }
   }
   // path key 不允許有 length
-  createDelta(path, newValue) {
+  _createDelta(path, newValue) {
+    newValue = clone(newValue)
     const arrayPath = pathToArray(path)
+    const pathBooleanArray = pathToBooleanArray(path)
 
     if (arrayPath.find(key => key === 'length')) {
       throw new Error('the path should not include length')
     }
 
-    const isArrayIndexCollection = pathToArray1(path).map(key =>
-      Boolean(key.match(/\[(\d+)\]/))
-    )
-
     let runtimeTree = this.tree
     let delta = {}
     try {
       arrayPath.reduce((final, key, index) => {
-        const isArrayIndex = isArrayIndexCollection[index]
-        const isNextArrayIndex = isArrayIndexCollection[index + 1]
+        const isArrayIndex = pathBooleanArray[index]
         const isEnd = index === arrayPath.length - 1
-        const oldValue = runtimeTree[key]
+
+        const oldValue = clone(runtimeTree[key])
+
+        const isNextRunCannotMerge = () => {
+          const isArrayIndexNext = pathBooleanArray[index + 1]
+          const isObjectKeyNext = !isArrayIndexNext
+          return (
+            (Array.isArray(oldValue) && isObjectKeyNext) ||
+            (isPlainObject(oldValue) && isArrayIndexNext) ||
+            (!isPlainObject(oldValue) && !isArray(oldValue))
+          )
+        }
 
         const assignTheRestObject = () => {
           const theRestOfPathArray = Array.from(arrayPath).splice(index + 1)
@@ -83,16 +99,17 @@ class JsonHistory {
 
         if (isArrayIndex) {
           if (isEnd) {
-            if (oldValue === undefined) {
-              if (newValue === undefined) {
-                // 要刪除東西，但就值也是空的所以break
-                throw new Error('break')
+            if (isUndefined(oldValue)) {
+              // 不可能會發生
+              if (isUndefined(newValue)) {
+                // 不可能會發生
+                throw new Error('should not happen')
               } else {
-                // Array要新增或插入但單個值，不知道是要做哪個，所以跳error，要求直接更新整個array
-                throw new Error('not allow to update single value in array')
+                // 不可能會發生
+                throw new Error('should not happen')
               }
             } else {
-              if (newValue === undefined) {
+              if (isUndefined(newValue)) {
                 key = `_${key}`
                 final[key] = [oldValue, 0, 0]
                 final['_t'] = 'a'
@@ -102,20 +119,24 @@ class JsonHistory {
               }
             }
           } else {
-            if (oldValue === undefined) {
-              if (newValue === undefined) {
-                // 要刪除東西，但就值也是空的所以break
-                throw new Error('break')
+            if (isUndefined(oldValue)) {
+              if (isUndefined(newValue)) {
+                // 不可能會發生
+                throw new Error('should not happen')
               } else {
                 // Array要新增或插入但單個值，不知道是要做哪個，所以跳error，要求直接更新整個array
                 throw new Error('not allow to update single value in array')
               }
             } else {
-              if (newValue === undefined) {
+              if (isUndefined(newValue)) {
                 // 要刪除，跑路徑中
-                key = `_${key}`
-                final[key] = {}
-                final['_t'] = 'a'
+                if (isNextRunCannotMerge()) {
+                  // 下一層已經找不到東西可以刪除，就不用處理
+                  throw new Error('break')
+                } else {
+                  final[key] = {}
+                  final['_t'] = 'a'
+                }
               } else {
                 // 測試有沒有可能merge，才繼續走，不行就直接換掉
                 if (oldValue[key]) {
@@ -131,15 +152,15 @@ class JsonHistory {
         } else {
           // isObjectKey
           if (isEnd) {
-            if (oldValue === undefined) {
-              if (newValue === undefined) {
+            if (isUndefined(oldValue)) {
+              if (isUndefined(newValue)) {
                 throw new Error('break')
               } else {
                 // 'a.b.c.d = 2'  新增
                 final[key] = [newValue]
               }
             } else {
-              if (newValue === undefined) {
+              if (isUndefined(newValue)) {
                 // 'a.b = undefined'  刪除
                 // 'a.b.c = undefined'  刪除
                 final[key] = [oldValue, 0, 0]
@@ -155,8 +176,8 @@ class JsonHistory {
               }
             }
           } else {
-            if (oldValue === undefined) {
-              if (newValue === undefined) {
+            if (isUndefined(oldValue)) {
+              if (isUndefined(newValue)) {
                 // 要刪除東西，但就值也是空的所以break
                 throw new Error('break')
               } else {
@@ -165,12 +186,10 @@ class JsonHistory {
                 throw new Error('finish')
               }
             } else {
-              if (
-                (Array.isArray(oldValue) && !isNextArrayIndex) ||
-                (isObject(oldValue) && isNextArrayIndex) ||
-                (!isObject(oldValue) && !Array.isArray(oldValue))
-              ) {
-                if (newValue === undefined) {
+              if (isNextRunCannotMerge()) {
+                // 這裡已知之後都會跑步成功，因為array 跟object不能合併，也因為下一層無法更新上層的資料結構，
+                // 所以這裡直接算完結束
+                if (isUndefined(newValue)) {
                   throw new Error('break')
                 } else {
                   assignTheRestObject()
@@ -183,8 +202,11 @@ class JsonHistory {
           }
         }
 
-        runtimeTree = runtimeTree[key]
+        runtimeTree = runtimeTree[key.replace(/^_/, '')]
+        // 這裡的 key 有可能是要被刪除的，所以有可能被改成有底線的_1，但在runtimeTree從樹裡面拿值
+        // 是不會有底線的，所以要拿掉
         return final[key]
+        // 這裡值是製作delta用的，所以會用有底線的去拿值
       }, delta)
     } catch (e) {
       if (e.message === 'break') {
@@ -202,9 +224,10 @@ class JsonHistory {
   redo() {
     if (this.currentIndex < 1) return
     this.currentIndex--
-    const group = this.currentDeltaGroup
 
-    group.forEach(delta => jsonDiffPatch.patch(this.tree, delta))
+    this.currentDeltaGroup.reverse().forEach(delta => {
+      jsonDiffPatch.patch(this.tree, delta)
+    })
 
     this.callback.onRedo()
     return this.tree
@@ -213,9 +236,10 @@ class JsonHistory {
   undo() {
     const maxIndex = this.deltas.length - 1
     if (this.currentIndex > maxIndex) return
-    const group = this.currentDeltaGroup
 
-    group.forEach(delta => jsonDiffPatch.unpatch(this.tree, delta))
+    this.currentDeltaGroup.forEach(delta => {
+      jsonDiffPatch.unpatch(this.tree, delta)
+    })
 
     this.currentIndex++
     this.callback.onUndo()
@@ -253,13 +277,15 @@ function createNewValueByPathArray(pathArray, value) {
   return init
 }
 
-function pathToArray1(path) {
+function pathToBooleanArray(path) {
   // '1.a.b.c[321].d.e[0][1]'.match(/\w+(?=\.|\[)|\d+(?=\])/g)
-  // ["1", "a", "b", "c", "[321]", "d", "e", "[0]", "[1]"]
+  // ["1", "a", "[321]", "d", "[0]"]
+  // [false, false, true, false, true]
   return path
     .toString()
     .replace(/\s/g)
     .match(/[\w|\d]+(?=\.|\[)?|\[\d+\]/g)
+    .map(key => Boolean(key.match(/\[(\d+)\]/)))
 }
 
 function pathToArray(path) {
@@ -269,6 +295,14 @@ function pathToArray(path) {
     .toString()
     .replace(/\s/g)
     .match(/[\w|\d]+(?=\.|\[)?|\d+(?=\])/g)
+}
+
+function clone(e) {
+  if (isPlainObject(e) || isArray(e)) {
+    return JSON.parse(JSON.stringify(e))
+  } else {
+    return e
+  }
 }
 
 export default JsonHistory
