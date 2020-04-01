@@ -1,5 +1,5 @@
 module.exports = {
-  collectCoverage: true,
+  // collectCoverage: true,
   moduleFileExtensions: ['js', 'jsx', 'json', 'vue'],
   transform: {
     '^.+\\.vue$': 'vue-jest',

@@ -11,32 +11,27 @@
 import jsonDiffPatch from '../vendor/jsonDiffPatch.js'
 import { toArray } from '../utils/polyfill.js'
 import { isObject } from './device'
-
-let _currentIndex = 0
-let _tree = {}
-let _deltas = []
-let _onDeltaUpdate = null
-
+window.jsonDiffPatch = jsonDiffPatch
+let _id = 0
 class JsonHistory {
   // deltas = [newPatches...oldPatches]
   // currentIndex 往右的要馬上存進資料庫，往左的不用, 這個邏輯包出去別的class寫
-
-  constructor({ tree = {}, backUpDeltas = [], onDeltaUpdate = null }) {
-    _tree = tree
-    _deltas = backUpDeltas
-    _onDeltaUpdate = onDeltaUpdate
+  constructor({ id = _id, tree = {}, backUpDeltas = [], callback = {}}) {
+    this.currentIndex = 0
+    this.id = id
+    this.tree = tree
+    this.deltas = backUpDeltas
+    this.callback = {
+      onRecord() {},
+      onUndo() {},
+      onRedo() {},
+      ...callback
+    }
+    _id++
   }
 
   get currentDeltaGroup() {
-    return _deltas[_currentIndex]
-  }
-
-  get deltas() {
-    return _deltas
-  }
-
-  get tree() {
-    return _tree
+    return this.deltas[this.currentIndex]
   }
 
   record(rows = []) {
@@ -47,13 +42,14 @@ class JsonHistory {
       const delta = this.createDelta(row.path, row.value)
       if (delta) {
         group.unshift(delta)
-        jsonDiffPatch.patch(_tree, delta)
+        jsonDiffPatch.patch(this.tree, delta)
       }
     })
 
     if (group.length) {
-      _deltas.unshift(group)
-      return _tree
+      this.deltas.unshift(group)
+      this.callback.onRecord(this)
+      return this.tree
     }
   }
   // path key 不允許有 length
@@ -68,7 +64,7 @@ class JsonHistory {
       Boolean(key.match(/\[(\d+)\]/))
     )
 
-    let runtimeTree = _tree
+    let runtimeTree = this.tree
     let delta = {}
     try {
       arrayPath.reduce((final, key, index) => {
@@ -204,84 +200,28 @@ class JsonHistory {
   }
 
   redo() {
-    if (_currentIndex < 1) return
-    _currentIndex--
+    if (this.currentIndex < 1) return
+    this.currentIndex--
     const group = this.currentDeltaGroup
 
-    group.forEach(delta => {
-      jsonDiffPatch.patch(_tree, delta)
-    })
+    group.forEach(delta => jsonDiffPatch.patch(this.tree, delta))
 
-    onDeltaUpdate()
-    return _tree
+    this.callback.onRedo()
+    return this.tree
   }
 
   undo() {
-    const maxIndex = _deltas.length - 1
-    if (_currentIndex > maxIndex) return
+    const maxIndex = this.deltas.length - 1
+    if (this.currentIndex > maxIndex) return
     const group = this.currentDeltaGroup
 
-    group.forEach(delta => {
-      const reverseDelta = jsonDiffPatch.reverse(delta)
-      jsonDiffPatch.patch(_tree, reverseDelta)
-    })
+    group.forEach(delta => jsonDiffPatch.unpatch(this.tree, delta))
 
-    _currentIndex++
-    onDeltaUpdate()
-    return _tree
+    this.currentIndex++
+    this.callback.onUndo()
+    return this.tree
   }
 }
-
-// -------  private methods --------------
-
-// function createDelta(path, newValue) {
-//   path = path.toString()
-//   const [newPath, oldValue] = getNewPathAndValueByPath(path)
-//   let diff
-//
-//   // these expressions are coming from jsonDiffPatch
-//   if (newPath === path && oldValue === newValue) {
-//     return // 兩值相同代表不用處理
-//   } else if (newValue === undefined) {
-//     // delete
-//     diff = [oldValue, 0, 0]
-//   } else if (newPath === path && oldValue === undefined) {
-//     // new
-//     diff = [newValue]
-//   } else if (newPath !== path && oldValue === undefined) {
-//     // new
-//     //
-//     const diffPath = path.replace(new RegExp(`${newPath}\.?`), '')
-//     // newPath = 'a.2'
-//     // 'a.2.3.4.1'.replace(new RegExp(`${newPath}\.?`), '')
-//     // '3.4.1'
-//     diff = [oldValue, createObjectByPath(diffPath, newValue)]
-//   } else {
-//     diff = [oldValue, newValue]
-//   }
-//
-//   return createObjectByPath(newPath, diff)
-// }
-
-// function getNewPathAndValueByPath(path) {
-//   let newPath = ''
-//   let result = _tree
-//   for (let [index, key] of pathToArray1(path).entries()) {
-//     const isArrayIndex = toArrayIndex(key)
-//
-//     if (isArrayIndex) key = isArrayIndex
-//
-//     newPath += isArrayIndex ? `[${key}]` : index ? `.${key}` : key
-//     if (result[key] === undefined) {
-//       result = undefined
-//       break
-//     }
-//     result = result[key]
-//   }
-//   // new 的時候會因爲tree沒有key，而有undefined的error, error時就保持回傳undefined，因為本來就拿不到值
-//
-//   return [newPath, result]
-// }
 
 function toArrayIndex(key) {
   // '[0]'.match(/\[(\d+)\]/)
@@ -329,12 +269,6 @@ function pathToArray(path) {
     .toString()
     .replace(/\s/g)
     .match(/[\w|\d]+(?=\.|\[)?|\d+(?=\])/g)
-}
-
-function onDeltaUpdate() {
-  if (typeof _onDeltaUpdate === 'function') {
-    _onDeltaUpdate()
-  }
 }
 
 export default JsonHistory

@@ -1,15 +1,34 @@
 import JsonHistory from '@/utils/jsonHistory'
 
-let history
+const tree = {
+  1: [1, 3],
+  a: [{}, { 1: 3 }],
+  b: { c: 5, d: { e: 6 }}
+}
 
-describe('.record', () => {
+describe('zero record', () => {
+  let history
+
   beforeEach(() => {
     history = new JsonHistory({
-      tree: {
-        1: [1, 3],
-        a: [{}, { 1: 3 }],
-        b: { c: 5, d: { e: 6 }}
-      }
+      tree: JSON.parse(JSON.stringify(tree))
+    })
+  })
+
+  afterEach(() => {
+    expect(history.deltas.length).toEqual(0)
+  })
+
+  test('b.c.g = undefined', () => {
+    history.record({
+      path: 'b.c.g',
+      value: undefined
+    })
+
+    expect(history.tree).toEqual({
+      1: [1, 3],
+      a: [{}, { 1: 3 }],
+      b: { c: 5, d: { e: 6 }}
     })
   })
 
@@ -22,6 +41,44 @@ describe('.record', () => {
     } catch (e) {
       expect(e).toEqual(new Error('the path should not include length'))
     }
+  })
+
+  test('a[1] = { f: 5 }', () => {
+    try {
+      history.record({
+        path: 'a[1]',
+        value: { f: 5 }
+      })
+    } catch (e) {
+      expect(e).toEqual(new Error('not allow to update single value in array'))
+    }
+  })
+
+  test('a[2].3 = [3, 4, 5]', () => {
+    try {
+      history.record({
+        path: 'a[2].3',
+        value: [3, 4, 5]
+      })
+    } catch (e) {
+      expect(e).toEqual(new Error('not allow to update single value in array'))
+    }
+  })
+})
+
+describe('one record', () => {
+  let history
+
+  beforeEach(() => {
+    history = new JsonHistory({
+      tree: JSON.parse(JSON.stringify(tree))
+    })
+  })
+
+  afterEach(() => {
+    expect(history.deltas.length).toEqual(1)
+    history.undo()
+    expect(history.tree).toEqual(tree)
   })
 
   test('1 = 2', () => {
@@ -89,19 +146,6 @@ describe('.record', () => {
     })
   })
 
-  test('b.c.g = undefined', () => {
-    history.record({
-      path: 'b.c.g',
-      value: undefined
-    })
-
-    expect(history.tree).toEqual({
-      1: [1, 3],
-      a: [{}, { 1: 3 }],
-      b: { c: 5, d: { e: 6 }}
-    })
-  })
-
   test('b.d = { f: 5 }', () => {
     history.record({
       path: 'b.d',
@@ -113,17 +157,6 @@ describe('.record', () => {
       a: [{}, { 1: 3 }],
       b: { c: 5, d: { f: 5 }}
     })
-  })
-
-  test('a[1] = { f: 5 }', () => {
-    try {
-      history.record({
-        path: 'a[1]',
-        value: { f: 5 }
-      })
-    } catch (e) {
-      expect(e).toEqual(new Error('not allow to update single value in array'))
-    }
   })
 
   test('b.d.c.g = 3', () => {
@@ -158,6 +191,21 @@ describe('.record', () => {
     })
   })
 
+  test('a = [1, 2, 3]', () => {
+    history.record([
+      {
+        path: 'a',
+        value: [1, 2, 3]
+      }
+    ])
+
+    expect(history.tree).toEqual({
+      1: [1, 3],
+      a: [1, 2, 3],
+      b: { c: 5, d: { e: 6 }}
+    })
+  })
+
   test('a[1].3 = [3, 4, 5]', () => {
     history.record({
       path: 'a[1].3',
@@ -169,17 +217,6 @@ describe('.record', () => {
       a: [{}, { 1: 3, 3: [3, 4, 5] }],
       b: { c: 5, d: { e: 6 }}
     })
-  })
-
-  test('a[2].3 = [3, 4, 5]', () => {
-    try {
-      history.record({
-        path: 'a[2].3',
-        value: [3, 4, 5]
-      })
-    } catch (e) {
-      expect(e).toEqual(new Error('not allow to update single value in array'))
-    }
   })
 
   test('1.b.c / a.b.c / b.b.c = [3, 4, 5]', () => {
@@ -205,20 +242,20 @@ describe('.record', () => {
     })
   })
 
-  test('d', () => {
-    history.record([
-      {
-        path: '[0]',
-        value: [3, 4, 5]
-      }
-    ])
-
-    expect(history.tree).toEqual({
-      1: { b: { c: [3, 4, 5] }},
-      a: { b: { c: [3, 4, 5] }},
-      b: { c: 5, d: { e: 6 }, b: { c: [3, 4, 5] }}
-    })
-  })
+  // test('d', () => {
+  //   history.record([
+  //     {
+  //       path: '[0]',
+  //       value: [3, 4, 5]
+  //     }
+  //   ])
+  //
+  //   expect(history.tree).toEqual({
+  //     1: { b: { c: [3, 4, 5] }},
+  //     a: { b: { c: [3, 4, 5] }},
+  //     b: { c: 5, d: { e: 6 }, b: { c: [3, 4, 5] }}
+  //   })
+  // })
 })
 
 describe('.redo', () => {})
