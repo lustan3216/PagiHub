@@ -1,4 +1,4 @@
-import { ICON, ID, PARENT_ID, NAME, CATEGORY } from '../const'
+import { ICON, ID, NAME, CATEGORY } from '../const'
 import { exampleIds } from '../utils/keyId'
 import basic from './basic'
 import formItem from './formItem'
@@ -33,11 +33,7 @@ export default function() {
 
   const allComponents = [...basic, ...formItem, ...formGroup]
 
-  exampleIds.appendIdNested(allComponents, (node, parentNode) => {
-    if (parentNode) {
-      node[PARENT_ID] = parentNode[ID]
-    }
-  })
+  exampleIds.appendIdNested(allComponents)
 
   return allComponents
 }

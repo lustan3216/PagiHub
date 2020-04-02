@@ -100,7 +100,8 @@ export default {
   },
   methods: {
     emit(component) {
-      this.$emit('add', component)
+      this.$emit('onSelect', component)
+      this.visible = false
     },
     open() {
       this.visible = true

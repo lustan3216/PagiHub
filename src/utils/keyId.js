@@ -1,5 +1,5 @@
 export const ROOT_ID = 0
-import { ID } from '../const'
+import { ID, PARENT_ID } from '../const'
 import { traversal } from './util'
 
 class KeyManagement {
@@ -12,15 +12,22 @@ class KeyManagement {
       } else {
         node[ID] = this.generateId()
       }
-      fn && fn(node, parentNode)
+
+      if (parentNode) {
+        node[PARENT_ID] = parentNode[ID]
+      }
     })
   }
 
   resetNestedIds(nodes) {
-    traversal(nodes, node => {
+    traversal(nodes, (node, parentNode) => {
       delete node.i
       // grid-item has this key
       node[ID] = this.generateId()
+
+      if (parentNode) {
+        node[PARENT_ID] = parentNode[ID]
+      }
     })
   }
 
@@ -34,6 +41,4 @@ class KeyManagement {
 const draftIds = new KeyManagement()
 const exampleIds = new KeyManagement()
 
-export {
-  draftIds, exampleIds
-}
+export { draftIds, exampleIds }

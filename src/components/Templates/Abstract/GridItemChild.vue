@@ -1,11 +1,12 @@
 <template>
   <middle-layer v-if="firstChild" :id="firstChild.id">
-    <component
-      :is="firstChild.tag"
-      :id="firstChild.id"
-    />
+    <component :is="firstChild.tag" :id="firstChild.id" />
   </middle-layer>
-  <add-component v-else-if="isDraftMode && !isExample" :id="id" />
+  <add-component
+    v-else-if="isDraftMode && !isExample"
+    :id="id"
+    @onAdd="innerChildren = $event"
+  />
 </template>
 
 <script>

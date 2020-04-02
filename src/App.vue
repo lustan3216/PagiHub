@@ -5,7 +5,6 @@
 
       <panel-production v-if="isProductionMode" />
       <panel-draft v-else />
-
     </main>
 
     <sidebar-right v-if="isDraftMode" />

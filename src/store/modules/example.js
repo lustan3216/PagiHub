@@ -6,19 +6,23 @@ const state = {
   examples: allExampleComponents()
 }
 
+const mutations = {
+  SET_EXAMPLES(state, examples) {
+    state.examples = examples
+  }
+}
+
+const actions = {
+  initExamples({ commit }) {
+    commit('SET_EXAMPLES')
+  }
+}
+
 const getters = {
   flattenExamples: state => deepFlatten(state.examples),
 
   listToTree(state, getters) {
     return listToTree(getters.flattenExamples)
-  },
-
-  rootNode(state, getters) {
-    return getters.flattenExamples[1]
-  },
-
-  tree(state, getters) {
-    return getters.listToTree.tree
   },
 
   childrenFrom: (state, getters) => id => {
@@ -35,6 +39,7 @@ const getters = {
 export default {
   namespaced: true,
   state,
-  getters
-  // actions
+  getters,
+  actions,
+  mutations
 }

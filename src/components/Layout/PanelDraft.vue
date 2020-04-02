@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .class {
-    @include calc-vh(height, '100vh - 60px');
-  }
+.class {
+  @include calc-vh(height, '100vh - 60px');
+}
 </style>

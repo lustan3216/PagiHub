@@ -10,7 +10,7 @@ export default {
     // appendNestedIds(innerChildren)
 
     return {
-      innerChildren: cloneJson(childrenFrom(this.id))
+      innerChildren: cloneJson(childrenFrom(this.id) || [])
     }
   },
   computed: {

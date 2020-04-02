@@ -26,5 +26,6 @@ module.exports = {
     config.module.rules.delete('svg')
 
     config.plugin('analyzer').use(BundleAnalyzerPlugin)
+    // config.plugin('circular').use(CircularDependencyPlugin)
   }
 }

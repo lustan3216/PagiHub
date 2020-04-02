@@ -123,11 +123,11 @@ const getters = {
     return path
   },
 
-  theParentForm: (state, getters) => id => {
+  theRootForm: (state, getters) => id => {
     return getters.parentPath(id).find(x => x.tag === 'form-generator')
   },
 
-  isRootForm: (state, getters) => id => !getters.theParentForm(id)
+  isRootForm: (state, getters) => id => !getters.theRootForm(id)
 }
 
 function mapToTree(currentNodesMap) {

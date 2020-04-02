@@ -1,5 +1,5 @@
 <template>
-  <grid-generator :id="firstChild.id"/>
+  <grid-generator :id="firstChild.id" />
 </template>
 
 <script>
@@ -18,7 +18,7 @@ export default {
   provide() {
     if (this.isExample) return
 
-    const isRootForm = this.$store['nodes/isRootForm'](this.id)
+    const isRootForm = this.$store.getters['nodes/isRootForm'](this.id)
     if (isRootForm) {
       return { rootForm: this }
     }

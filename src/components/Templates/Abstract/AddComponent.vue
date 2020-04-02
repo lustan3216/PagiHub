@@ -1,6 +1,6 @@
 <template>
   <div class="flex-center h-100 pointer">
-    <dialog-examples :id="id" @add="addTemplate($event)" />
+    <dialog-examples :id="id" @onSelect="addTemplate($event)" />
   </div>
 </template>
 
@@ -10,6 +10,7 @@ import { draftIds } from '../../../utils/keyId'
 import { vmMap } from '../../../utils/vmMap'
 import commonMixin from '../../../mixins/common'
 import DialogExamples from './DialogExamples'
+import { cloneJson } from '../../../utils/util'
 
 export default {
   name: 'AddComponent',
@@ -22,9 +23,11 @@ export default {
   },
   methods: {
     addTemplate(template) {
+      // 因為resetNestedIds 會assign key，vuex會噴錯 strict
+      template = cloneJson(template)
       this.cleanFormButtons(template)
-      draftIds.appendIdNested(template)
-      this.innerChildren = [template]
+      draftIds.resetNestedIds(template)
+      this.$emit('onAdd', [template])
     },
     cleanFormButtons(template) {
       const rootForm = this.theRootForm(this.id)
