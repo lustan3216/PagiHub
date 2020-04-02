@@ -31,7 +31,7 @@ export default {
   data() {
     const node = store.state.nodes.currentNodesMap[this.id]
     return {
-      innerValue: (!this.isDemonstrated && node && node.value) || this.defaultText
+      innerValue: (!this.isExample && node && node.value) || this.defaultText
     }
   },
   watch: {

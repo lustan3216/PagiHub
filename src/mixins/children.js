@@ -14,7 +14,7 @@ export default {
   data() {
     let innerChildren = []
 
-    if (this.isDemonstrated) {
+    if (this.isExample) {
       innerChildren = this.children || []
     } else {
       innerChildren = clone(store.getters['nodes/childrenFrom'](this.id)).sort(
@@ -34,7 +34,7 @@ export default {
   },
   watch: {
     innerChildren(newChildren, oldChildren) {
-      if (this.isDemonstrated) return
+      if (this.isExample) return
       try {
         this.updateDifferenceToVuex(newChildren, oldChildren, this.id)
       } catch (e) {

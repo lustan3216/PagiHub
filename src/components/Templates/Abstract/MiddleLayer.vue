@@ -7,7 +7,7 @@
     @mouseleave="noClick = true"
   >
     <div
-      v-if="isDraftMode && !isDemonstrated && isDraggableItem"
+      v-if="isDraftMode && !isExample && isDraggableItem"
       :class="{ 'no-click': noClick, 'no-drag': !noClick }"
       class="h-100"
     >
@@ -21,7 +21,7 @@
 import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'MiddleLayer',
-  inject: { isDemonstrated: { default: false }},
+  inject: { isExample: { default: false }},
   props: {
     id: {
       type: Number

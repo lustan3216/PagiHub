@@ -32,12 +32,12 @@ export default {
     }
   },
   created() {
-    if (!this.isDemonstrated) {
+    if (!this.isExample) {
       this.rootForm.updateSubmit(this.id)
     }
   },
   beforeDestroy() {
-    if (!this.isDemonstrated) {
+    if (!this.isExample) {
       this.rootForm.updateSubmit(null)
     }
   },

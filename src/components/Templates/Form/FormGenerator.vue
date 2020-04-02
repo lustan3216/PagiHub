@@ -16,7 +16,7 @@ export default {
   },
   mixins: [commonMixin, childrenMixin],
   provide() {
-    if (this.isDemonstrated) return
+    if (this.isExample) return
 
     const parentPath = this.$store.getters['nodes/parentPath']
     const isRootForm = parentPath(this.id).every(

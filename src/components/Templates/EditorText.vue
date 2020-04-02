@@ -176,7 +176,7 @@ export default {
   computed: {
     innerContent: {
       get() {
-        const vm = !this.isDemonstrated && this.node
+        const vm = !this.isExample && this.node
 
         if (vm && vm.value) {
           return vm.value
@@ -185,7 +185,7 @@ export default {
         }
       },
       set(value) {
-        if (this.isDemonstrated) return
+        if (this.isExample) return
         if (this.id) {
           // 當在別的組建被使用時，不會有ID，所以不用update vuex
           this.ASSIGN({

@@ -15,7 +15,7 @@ export default {
     }
   },
   inject: {
-    isDemonstrated: { default: false }
+    isExample: { default: false }
   },
   data() {
     const node = store.state.nodes.currentNodesMap[this.id]

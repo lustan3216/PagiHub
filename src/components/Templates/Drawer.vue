@@ -1,7 +1,7 @@
 <template>
   <el-button type="primary" style="margin-left: 16px;" @click="drawer = true">
     Drawer
-    <portal :disabled="isDemonstrated" to="Root">
+    <portal :disabled="isExample" to="Root">
       <el-drawer
         v-bind="innerProps"
         :class="{ 'hide-header': hideHeader }"

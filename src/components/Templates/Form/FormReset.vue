@@ -20,12 +20,12 @@ export default {
   mixins: [commonMixin],
   inject: ['rootForm'],
   created() {
-    if (!this.isDemonstrated) {
+    if (!this.isExample) {
       this.rootForm.updateReset(this.id)
     }
   },
   beforeDestroy() {
-    if (!this.isDemonstrated) {
+    if (!this.isExample) {
       this.rootForm.updateReset(null)
     }
   },

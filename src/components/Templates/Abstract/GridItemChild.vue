@@ -6,7 +6,7 @@
       :children="firstChild.children"
     />
   </middle-layer>
-  <add-component v-else-if="isDraftMode && !isDemonstrated" :id="id" />
+  <add-component v-else-if="isDraftMode && !isExample" :id="id" />
 </template>
 
 <script>
