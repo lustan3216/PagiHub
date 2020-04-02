@@ -2,7 +2,7 @@
   <middle-layer v-if="firstChild" :id="firstChild.id">
     <component :is="firstChild.tag" :id="firstChild.id" />
   </middle-layer>
-  <add-component
+  <example-add
     v-else-if="isDraftMode && !isExample"
     :id="id"
     @onAdd="innerChildren = $event"
@@ -14,13 +14,13 @@ import importTemplates from '../../../mixins/importTemplates'
 import childrenMixin from '../../../mixins/children'
 import commonMixin from '../../../mixins/common'
 import MiddleLayer from './MiddleLayer'
-import AddComponent from './AddComponent'
+import ExampleAdd from './ExampleAdd'
 
 export default {
   name: 'GridItemChild',
   components: {
     MiddleLayer,
-    AddComponent
+    ExampleAdd
   },
   mixins: [importTemplates, childrenMixin, commonMixin]
 }

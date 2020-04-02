@@ -1,6 +1,6 @@
 <template>
   <div class="flex-center h-100 pointer">
-    <dialog-examples :id="id" @onSelect="addTemplate($event)" />
+    <examples-dialog :id="id" @onSelect="addTemplate($event)" />
   </div>
 </template>
 
@@ -9,13 +9,13 @@ import { mapGetters } from 'vuex'
 import { draftIds } from '../../../utils/keyId'
 import { vmMap } from '../../../utils/vmMap'
 import commonMixin from '../../../mixins/common'
-import DialogExamples from './DialogExamples'
+import ExamplesDialog from './ExamplesDialog'
 import { cloneJson } from '../../../utils/util'
 
 export default {
-  name: 'AddComponent',
+  name: 'ExampleAdd',
   components: {
-    DialogExamples
+    ExamplesDialog
   },
   mixins: [commonMixin],
   computed: {

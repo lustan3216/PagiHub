@@ -58,7 +58,7 @@ import { CATEGORY, NAME, ID } from '../../../const'
 import importTemplatesMixin from '../../../mixins/importTemplates'
 
 export default {
-  name: 'DialogExamples',
+  name: 'ExampleSelect',
   mixins: [importTemplatesMixin],
   props: {
     id: {
