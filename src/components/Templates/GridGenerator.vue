@@ -1,7 +1,7 @@
 <template>
   <grid-layout
     v-bind="innerProps"
-    :class="{ editable: isEditableMode }"
+    :class="{ editable: isDraftMode }"
     :col-num="36"
     :row-height="5"
     :style="innerStyles"

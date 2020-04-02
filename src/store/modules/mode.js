@@ -2,10 +2,10 @@ import { SET } from '../index'
 
 const PRODUCTION = 0
 const PREVIEW = 1
-const EDITABLE = 2
+const DRAFT = 2
 
 const state = {
-  mode: EDITABLE
+  mode: DRAFT
 }
 
 const mutations = {
@@ -16,8 +16,8 @@ const mutations = {
   SET_PREVIEW_MODE(state) {
     state.mode = PREVIEW
   },
-  SET_EDITABLE_MODE(state) {
-    state.mode = EDITABLE
+  SET_DRAFT_MODE(state) {
+    state.mode = DRAFT
   }
 }
 
@@ -28,8 +28,8 @@ const getters = {
   isPreviewMode() {
     return state.mode === PREVIEW
   },
-  isEditableMode() {
-    return state.mode === EDITABLE
+  isDraftMode() {
+    return state.mode === DRAFT
   }
 }
 

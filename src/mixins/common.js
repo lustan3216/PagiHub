@@ -2,7 +2,7 @@ import clone from 'clone'
 import store from '../store'
 import editMixin from './edit'
 import settingMixin from './setting'
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import { appendVm, removeVm } from '../utils/vmMap'
 
 export default {
@@ -33,13 +33,12 @@ export default {
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount
-    if (this.isEditableMode) appendVm(this)
+    if (this.isDraftMode) appendVm(this)
   },
   beforeDestroy() {
-    if (this.isEditableMode) removeVm(this.id)
+    if (this.isDraftMode) removeVm(this.id)
   },
   methods: {
-    ...mapMutations('nodes', ['APPEND_NESTED_NODES']),
     assignStyles(styles) {
       const allStyles = Object.assign({}, this.innerStyles, styles)
 

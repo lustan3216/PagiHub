@@ -1,4 +1,5 @@
-const idSet = new Set([0])
+export const ROOT_ID = 0
+const idSet = new Set([ROOT_ID])
 
 export function appendNestedIds(nodes) {
   nodes = Array.toArray(nodes)

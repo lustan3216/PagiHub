@@ -3,7 +3,7 @@
 
     <dialog-interacted v-if="isVisible" class="dialog white-back box-shadow">
       <div>
-        <editor-text :is-editable="true" />
+        <editor-text :is-draft="true" />
       </div>
     </dialog-interacted>
   </span>

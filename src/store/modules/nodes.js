@@ -1,8 +1,7 @@
 import clone from 'clone'
 import Vue from 'vue'
-import listTiTree from '../../vendor/listToTree'
+import listToTree from '../../vendor/listToTree'
 import { SET } from '../index'
-// import { merge } from '../../lodash'
 import { assignSet } from '../../utils/util'
 import { appendNestedIds } from '../../utils/keyId'
 import { gridGenerator as templateGridGenerator } from '../../template/basic'
@@ -131,7 +130,7 @@ const getters = {
 
 function mapToTree(currentNodesMap) {
   const currentNodesArray = Object.values(clone(currentNodesMap))
-  return listTiTree(currentNodesArray)
+  return listToTree(currentNodesArray)
 }
 
 export default {

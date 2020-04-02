@@ -1,7 +1,7 @@
 <template>
   <el-button class="wh-100 m-0 button">
     <editor-text
-      v-if="isEditableMode"
+      v-if="isDraftMode"
       :id="id"
       :only="['bold', 'italic', 'fontColor', 'font', 'underline', 'strike']"
       v-model="innerValue"

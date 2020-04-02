@@ -12,6 +12,14 @@ export const gridGenerator = function(children) {
   }
 }
 
+export const initTemplate = function() {
+  return {
+    tag: 'layers',
+    styles: { background: '#fff' },
+    children: [gridGenerator()]
+  }
+}
+
 export const carousel = function() {
   return {
     tag: 'carousel',

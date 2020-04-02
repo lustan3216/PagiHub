@@ -16,7 +16,7 @@ import ViewPort from './ViewPort'
 import Layers from '../Templates/Layers'
 
 export default {
-  name: 'PanelEditable',
+  name: 'PanelDraft',
   components: {
     ViewPort,
     Layers

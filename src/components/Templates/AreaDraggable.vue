@@ -3,7 +3,7 @@
     :style="innerStyles"
     v-model="innerChildren"
     handle=".drag-handler"
-    group="editableArea"
+    group="draftArea"
     class="edit-area"
     @input="$log(123)"
   >
@@ -17,7 +17,7 @@
       <component
         :class="{
           'no-click': isEditableId !== child.id && child.tag !== 'grid-generator' && child.tag !== 'carousel',
-          'fade-out': layoutEditable && child.tag !== 'grid-generator'
+          'fade-out': layoutDraft && child.tag !== 'grid-generator'
         }"
         :is="child.tag"
         :id="child.id"
@@ -45,7 +45,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['layoutEditable'])
+    ...mapState('app', ['layoutDraft'])
   },
   methods: {
     mouseLeave() {

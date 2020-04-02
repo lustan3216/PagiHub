@@ -6,7 +6,7 @@
         :resize-edges="{ left: true, right: true, bottom: false, top: false }"
         :draggable="false"
         :scale-ratio="scaleRatio"
-        :class="{ interact: isEditableMode }"
+        :class="{ interact: isDraftMode }"
         @resize="dialogResize"
       >
         <slot />

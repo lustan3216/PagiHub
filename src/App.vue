@@ -4,18 +4,18 @@
       <nav-bar />
 
       <panel-production v-if="isProductionMode" />
-      <panel-editable v-else />
+      <panel-draft v-else />
 
     </main>
 
-    <sidebar-right v-if="isEditableMode" />
+    <sidebar-right v-if="isDraftMode" />
   </div>
 </template>
 
 <script>
 import NavBar from './components/Layout/NavBar'
 import PanelProduction from './components/Layout/PanelProduction'
-import PanelEditable from './components/Layout/PanelEditable'
+import PanelDraft from './components/Layout/PanelDraft'
 import { mapActions } from 'vuex'
 
 export default {
@@ -24,7 +24,7 @@ export default {
     NavBar,
     SidebarRight: () => import('./components/Layout/SidebarRight'),
     PanelProduction,
-    PanelEditable
+    PanelDraft
   },
   created() {
     this.getRootNode()

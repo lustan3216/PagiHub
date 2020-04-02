@@ -103,7 +103,7 @@ Vue.mixin({
   computed: {
     isProductionMode: () => store.getters['mode/isProductionMode'],
     isPreviewMode: () => store.getters['mode/isPreviewMode'],
-    isEditableMode: () => store.getters['mode/isEditableMode']
+    isDraftMode: () => store.getters['mode/isDraftMode']
   }
 })
 

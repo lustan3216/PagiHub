@@ -10,12 +10,12 @@
       icon="el-icon-close"
       circle
       class="close box-shadow"
-      @click="SET_EDITABLE_MODE"
-      @shortkey.native="SET_EDITABLE_MODE"
+      @click="SET_DRAFT_MODE"
+      @shortkey.native="SET_DRAFT_MODE"
     />
   </el-tooltip>
 
-  <nav v-else-if="isEditableMode" class="flex-center">
+  <nav v-else-if="isDraftMode" class="flex-center">
     <el-tooltip effect="light" content="Preview" placement="bottom">
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
@@ -81,11 +81,11 @@ export default {
     ...mapGetters('mode', [
       'isProductionMode',
       'isPreviewMode',
-      'isEditableMode'
+      'isDraftMode'
     ])
   },
   methods: {
-    ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_EDITABLE_MODE']),
+    ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_DRAFT_MODE']),
     isMac,
     redo() {},
     undo() {},

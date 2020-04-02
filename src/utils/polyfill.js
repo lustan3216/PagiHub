@@ -36,6 +36,8 @@ Object.firstKey = function(e) {
   return Object.keys(e)[0]
 }
 
+Object.hasAnyKey = Object.firstKey
+
 Object.firstValue = function(e) {
   if (isPlainObject(e)) {
     return Object.values(e)[0]

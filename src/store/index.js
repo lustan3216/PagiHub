@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import nodes from './modules/nodes'
+import draft from './modules/draft'
 import app from './modules/app'
 import css from './modules/css'
 import mode from './modules/mode'
@@ -23,6 +24,7 @@ export default new Vuex.Store({
     nodes,
     app,
     css,
-    mode
+    mode,
+    draft
   }
 })

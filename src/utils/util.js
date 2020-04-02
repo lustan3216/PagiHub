@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import { isPlainObject } from '../lodash'
+import { cloneJson } from 'json-storer/src/utils'
+
+export { cloneJson }
 
 export function traversal(nodes, fn) {
   nodes.forEach(node => {
