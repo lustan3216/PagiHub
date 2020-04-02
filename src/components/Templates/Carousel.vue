@@ -15,7 +15,7 @@
       @click.stop.native="click(child.id)"
       @mouseleave="mouseLeave"
     >
-      <grid-generator :id="child.id" :children="child.children" class="h-100" />
+      <grid-generator :id="child.id" class="h-100" />
     </el-carousel-item>
   </el-carousel>
 </template>
@@ -34,17 +34,12 @@ export default {
     GridGenerator
   },
   mixins: [childrenMixin, commonMixin],
-  data() {
-    return {
-      isEditableId: null
-    }
-  },
   methods: {
     mouseLeave() {
-      this.isEditableId = null
+      // this.isEditableId = null
     },
     click(id) {
-      this.isEditableId = id
+      // this.isEditableId = id
     }
   }
 }

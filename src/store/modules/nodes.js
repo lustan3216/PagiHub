@@ -1,9 +1,8 @@
-import clone from 'clone'
 import Vue from 'vue'
-import listToTree from '../../vendor/listToTree'
+import listToTree from '../../utils/listToTree'
 import { SET } from '../index'
 import { assignSet } from '../../utils/util'
-import { appendNestedIds } from '../../utils/keyId'
+import { draftIds } from '../../utils/keyId'
 import { gridGenerator as templateGridGenerator } from '../../template/basic'
 
 const state = {
@@ -70,7 +69,7 @@ const actions = {
       children: [templateGridGenerator()]
     }
 
-    appendNestedIds(innerNodeTree)
+    draftIds.appendIdNested(innerNodeTree)
 
     commit('APPEND_NODE', {
       node: innerNodeTree,
@@ -99,15 +98,11 @@ const getters = {
     return getters.listToTree.tree
   },
 
-  childrenOf(state, getters) {
-    return getters.listToTree.childrenOf || {}
-  },
-
   childrenFrom: (state, getters) => id => {
     // 父層在render子層時，這裡會把children拿掉，強制component不能抓到孫子
     // 如果想要處理孫子，應該是再做一個component做父子管理
     // 這樣可以解決效能上問題，以及統一父子關係，讓每個component的innerChildren的數據不會因為子孫資料過期
-    return getters.childrenOf[id].map(_node => {
+    return getters.listToTree.childrenOf[id].map(_node => {
       const { children, ...node } = _node
       return node
     })
@@ -123,13 +118,20 @@ const getters = {
       path.unshift(map[parentId])
       findPath(parentId)
     }
+
     findPath(_id)
     return path
-  }
+  },
+
+  theParentForm: (state, getters) => id => {
+    return getters.parentPath(id).find(x => x.tag === 'form-generator')
+  },
+
+  isRootForm: (state, getters) => id => !getters.theParentForm(id)
 }
 
 function mapToTree(currentNodesMap) {
-  const currentNodesArray = Object.values(clone(currentNodesMap))
+  const currentNodesArray = Object.values(currentNodesMap)
   return listToTree(currentNodesArray)
 }
 

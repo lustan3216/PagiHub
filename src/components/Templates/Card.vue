@@ -1,7 +1,7 @@
 <template>
   <div class="h-100 flex-center">
     <el-card v-bind="innerProps" :style="innerStyles">
-      <grid-generator :id="firstChild.id" :children="firstChild.children" />
+      <grid-generator :id="firstChild.id" />
     </el-card>
   </div>
 </template>

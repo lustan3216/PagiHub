@@ -1,30 +1,43 @@
-/*
- 承襲form-create json
- Tag為大分類
- type為小分類
-
- {
- tag: form-item,
- type: input
- }
-
- {
- tag: form-generator,
- type: xxxx / or created by other people
- }
-
- {
- tag: grid-generator,
- type: xxxx / or created by other people
- }
- */
-
+import { ICON, ID, PARENT_ID, NAME, CATEGORY } from '../const'
+import { exampleIds } from '../utils/keyId'
 import basic from './basic'
-import form from './form'
+import formItem from './formItem'
 import formGroup from './formGroup'
 
-export default function() {
-  return [basic(), form(), formGroup()]
-}
+export const FORM_ITEM_ID = 1
 
-export { basic, form, formGroup }
+export const categories = [
+  {
+    [ID]: 0,
+    [NAME]: 'Basic',
+    [ICON]: 'el-icon-message'
+  },
+  {
+    [ID]: FORM_ITEM_ID,
+    [NAME]: 'FormItem',
+    [ICON]: 'el-icon-message'
+  },
+  {
+    [ID]: 2,
+    [NAME]: 'FormGroup',
+    [ICON]: 'el-icon-message'
+  }
+]
+
+const assignCategoryId = (array, id) => array.map(x => (x[CATEGORY] = [id]))
+
+export default function() {
+  assignCategoryId(basic, 0)
+  assignCategoryId(formItem, FORM_ITEM_ID)
+  assignCategoryId(formGroup, 2)
+
+  const allComponents = [...basic, ...formItem, ...formGroup]
+
+  exampleIds.appendIdNested(allComponents, (node, parentNode) => {
+    if (parentNode) {
+      node[PARENT_ID] = parentNode[ID]
+    }
+  })
+
+  return allComponents
+}

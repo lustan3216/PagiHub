@@ -1,52 +1,47 @@
 import { gridGenerator } from './basic'
-import { formSlider, formCheckBox, formSubmit, formTextarea } from './form'
+import { TAG, CHILDREN } from '../const'
+import { formSlider, formCheckBox, formSubmit, formTextarea } from './formItem'
 
 export const formGenerator = function() {
   return {
-    tag: 'form-generator',
-    children: [
+    [TAG]: 'form-generator',
+    [CHILDREN]: [
       gridGenerator([
         {
-          tag: 'grid-item',
+          [TAG]: 'grid-item',
           x: 0,
           y: 0,
           w: 33,
           h: 30,
-          children: [formTextarea()]
+          [CHILDREN]: [formTextarea()]
         },
         {
-          tag: 'grid-item',
+          [TAG]: 'grid-item',
           x: 0,
           y: 15,
           w: 22,
           h: 15,
-          children: [formCheckBox()]
+          [CHILDREN]: [formCheckBox()]
         },
         {
-          tag: 'grid-item',
+          [TAG]: 'grid-item',
           x: 22,
           y: 0,
           w: 22,
           h: 15,
-          children: [formSlider()]
+          [CHILDREN]: [formSlider()]
         },
         {
-          tag: 'grid-item',
+          [TAG]: 'grid-item',
           x: 0,
           y: 30,
           w: 15,
           h: 17,
-          children: [formSubmit()]
+          [CHILDREN]: [formSubmit()]
         }
       ])
     ]
   }
 }
 
-export default function() {
-  return {
-    name: 'FormGroup',
-    icon: 'el-icon-message',
-    components: [formGenerator()]
-  }
-}
+export default [formGenerator()]

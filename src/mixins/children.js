@@ -1,30 +1,16 @@
-import store from '../store'
-import clone from 'clone'
 import { mapMutations } from 'vuex'
-import { appendNestedIds } from '../utils/keyId'
+import { cloneJson } from '../utils/util'
+import { vmMap } from '../utils/vmMap'
 
 export default {
-  // 展示時component是沒有children的，會需要從父層傳下來
-  props: {
-    children: {
-      type: Array,
-      default: () => []
-    }
-  },
   data() {
-    let innerChildren = []
-
-    if (this.isExample) {
-      innerChildren = this.children || []
-    } else {
-      innerChildren = clone(store.getters['nodes/childrenFrom'](this.id)).sort(
-        (a, b) => a.sortIndex - b.sortIndex
-      )
-      appendNestedIds(innerChildren)
-    }
+    const getterName = `${this.isExample ? 'example' : 'nodes'}/childrenFrom`
+    const childrenFrom = this.$store.getters[getterName]
+    // TODO 要再確認有沒有需要排序 .sort((a, b) => a.sortIndex - b.sortIndex), 因為存的時候已經照順序存了
+    // appendNestedIds(innerChildren)
 
     return {
-      innerChildren
+      innerChildren: cloneJson(childrenFrom(this.id))
     }
   },
   computed: {
@@ -81,6 +67,10 @@ export default {
         const deletedNodes = this.difference(oldIds, newIds).map(
           id => oldChildren[oldIds.indexOf(id)]
         )
+
+        const parentVm = vmMap[this.node.parentId]
+        parentVm.remove(this.id)
+
         this.REMOVE_NESTED_NODES(deletedNodes) // 要傳nodes下去，因為帶有children
         throw 'done'
       } else {

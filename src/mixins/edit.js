@@ -1,6 +1,6 @@
 import clone from 'clone'
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { resetNestedIds } from '../utils/keyId'
+import { draftIds } from '../utils/keyId'
 
 const templates = require('../template/basic')
 
@@ -25,7 +25,7 @@ export default {
         : clone(clonedChildren[index])
       const { children, styles, ...node } = _node
 
-      resetNestedIds(node)
+      draftIds.resetNestedIds(node)
 
       this.APPEND_NODE({
         node,
@@ -40,7 +40,7 @@ export default {
       const node = this.childrenOf[this.id].find(x => x.id === childId)
       const clonedChildren = clone(this.innerChildren)
       const clonedNode = clone(node)
-      resetNestedIds(clonedNode)
+      draftIds.resetNestedIds(clonedNode)
 
       this.APPEND_NODE({
         node: clonedNode,

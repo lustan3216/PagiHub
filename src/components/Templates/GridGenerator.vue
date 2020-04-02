@@ -9,7 +9,7 @@
     :margin="[0, 0]"
     :responsive="true"
     :use-css-transforms="false"
-    @layout-updated="layoutUpdated"
+    @layout-updated="innerChildren = $event"
   >
     <template v-for="child in innerChildrenWithI">
       <grid-item
@@ -23,21 +23,21 @@
         drag-ignore-from=".no-drag"
         drag-allow-from="div"
       >
-        <grid-item-child :id="child.id" :children="child.children" />
+        <grid-item-child :id="child.id" />
       </grid-item>
     </template>
   </grid-layout>
 </template>
 
 <script>
-import { vmMap } from '../../utils/vmMap'
 import { mapState } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
+import { isUndefined } from '../../utils/polyfill'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import importTemplatesMixin from '../../mixins/importTemplates'
 import GridItemChild from './Abstract/GridItemChild'
-import { defaultSetting } from '../../settings/drawer'
+import { defaultSetting } from '../../settings/gridGenerator'
 
 export default {
   defaultSetting,
@@ -56,23 +56,10 @@ export default {
         // the i assigning here will affect data innerChild which is correct here
         // otherwise somehow it will bring a bug that makes layout immutable
         // anyway, just don't modify here
-        child.i = child.id || index
+
+        child.i = isUndefined(child.id) ? index : child.id
         return child
       })
-    }
-  },
-  watch: {
-    innerChildren(value) {
-      if (!value.length) {
-        const { parentId } = this.currentNodesMap[this.id]
-        const vm = vmMap[parentId]
-        vm.remove(this.id)
-      }
-    }
-  },
-  methods: {
-    layoutUpdated(layout) {
-      this.innerChildren = layout
     }
   }
 }

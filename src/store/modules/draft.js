@@ -2,8 +2,8 @@ import Vue from 'vue'
 import { cloneJson } from '../../utils/util'
 import jsonStorer from 'json-storer'
 import localforage from 'localforage'
-import listToTree from '../../vendor/listToTree'
-import { appendNestedIds } from '../../utils/keyId'
+import listToTree from '../../utils/listToTree'
+import { draftIds } from '../../utils/keyId'
 import { initTemplate } from '../../template/basic'
 import { ROOT_ID } from '../../utils/keyId'
 
@@ -24,7 +24,7 @@ const actions = {
         node: initTemplate(),
         parentId: ROOT_ID
       }
-      appendNestedIds(nodesMap)
+      draftIds.appendIdNested(nodesMap)
     }
 
     commit('SET', nodesMap)
@@ -38,13 +38,11 @@ const getters = {
 
   tree: (state, getters) => getters.listToTree.tree,
 
-  childrenOf: (state, getters) => getters.listToTree.childrenOf || {},
-
   childrenFrom: (state, getters) => id => {
     // 父層在render子層時，這裡會把children拿掉，強制component不能抓到孫子
     // 如果想要處理孫子，應該是再做一個component做父子管理
     // 這樣可以解決效能上問題，以及統一父子關係，讓每個component的innerChildren的數據不會因為子孫資料過期
-    return getters.childrenOf[id].map(_node => {
+    return getters.listToTree.childrenOf[id].map(_node => {
       const { children, ...node } = _node
       return node
     })

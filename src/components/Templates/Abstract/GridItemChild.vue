@@ -3,7 +3,6 @@
     <component
       :is="firstChild.tag"
       :id="firstChild.id"
-      :children="firstChild.children"
     />
   </middle-layer>
   <add-component v-else-if="isDraftMode && !isExample" :id="id" />

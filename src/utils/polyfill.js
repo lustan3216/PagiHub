@@ -1,8 +1,10 @@
 /* eslint-disabled */
 import { kebabCase, capitalize } from 'element-ui/src/utils/util'
+import { isUndefined } from 'element-ui/src/utils/types'
 import isPlainObject from 'is-plain-object'
 
 export { isPlainObject }
+export { isUndefined }
 
 export function toArray(e) {
   if (Array.isArray(e)) {

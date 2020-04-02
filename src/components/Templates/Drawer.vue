@@ -7,7 +7,7 @@
         :class="{ 'hide-header': hideHeader }"
         :visible.sync="drawer"
       >
-        <grid-generator :id="firstChild.id" :children="firstChild.children" />
+        <grid-generator :id="firstChild.id"/>
       </el-drawer>
     </portal>
   </el-button>

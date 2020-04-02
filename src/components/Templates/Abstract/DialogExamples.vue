@@ -11,27 +11,24 @@
       @open="$emit('open')"
       @close="visible = false"
     >
-      <el-tabs tab-position="left">
+      <el-tabs v-model="currentCategory" tab-position="left">
         <el-tab-pane
-          v-for="template in templates"
+          v-for="category in categories"
           :lazy="true"
-          :key="template.name"
-          :label="template.name"
+          :key="category.id"
+          :name="category.name"
+          :label="category.name"
         >
           <el-row :gutter="15" type="flex" style="flex-wrap: wrap">
             <el-col
-              v-for="(component, index) in template.components"
-              :key="index"
+              v-for="component in components"
+              :key="component.id"
               :span="8"
               class="m-b-15"
               style="min-height: 200px;"
             >
               <el-card shadow="hover">
-                <component
-                  :is="component.tag"
-                  :key="index"
-                  :children="component.children"
-                />
+                <component :is="component.tag" :id="component.id" />
 
                 <div style="padding: 14px;">
                   <span>{{ component.tag }}</span>
@@ -55,12 +52,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { basic, form, formGroup } from '../../../template'
+import { mapState } from 'vuex'
+import { categories, FORM_ITEM_ID } from '../../../template'
+import { CATEGORY, NAME, ID } from '../../../const'
 import importTemplatesMixin from '../../../mixins/importTemplates'
 
 export default {
-  name: 'DialogComponents',
+  name: 'DialogExamples',
   mixins: [importTemplatesMixin],
   props: {
     id: {
@@ -75,21 +73,29 @@ export default {
     }
   },
   data() {
+    let innerCategories = categories
+    const isRootForm = this.$store.getters['nodes/isRootForm'](this.id)
+
+    if (!isRootForm) {
+      innerCategories = innerCategories.filter(x => x[ID] === [FORM_ITEM_ID])
+    }
+
     return {
-      visible: false
+      visible: false,
+      currentCategory: innerCategories[0][NAME],
+      categories: innerCategories
     }
   },
   computed: {
-    ...mapGetters('nodes', ['parentPath']),
-    rootForm() {
-      return this.parentPath(this.id).find(x => x.tag === 'form-generator')
+    ...mapState('example', ['examples']),
+    currentCategoryId() {
+      return categories.find(x => x[NAME] === this.currentCategory)[ID]
     },
-    templates() {
-      if (this.rootForm) {
-        return [basic(), form(), formGroup()]
-      } else {
-        return [basic(), formGroup()]
-      }
+    components() {
+      return (
+        this.visible &&
+        this.examples.filter(x => x[CATEGORY].includes(this.currentCategoryId))
+      )
     }
   },
   methods: {

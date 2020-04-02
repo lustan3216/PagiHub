@@ -1,37 +1,36 @@
 <template>
   <div class="flex-center h-100 pointer">
-    <dialog-components :id="id" @add="addTemplate($event)" />
+    <dialog-examples :id="id" @add="addTemplate($event)" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { appendNestedIds } from '../../../utils/keyId'
+import { draftIds } from '../../../utils/keyId'
 import { vmMap } from '../../../utils/vmMap'
 import commonMixin from '../../../mixins/common'
-import DialogComponents from './DialogComponents'
+import DialogExamples from './DialogExamples'
 
 export default {
   name: 'AddComponent',
   components: {
-    DialogComponents
+    DialogExamples
   },
   mixins: [commonMixin],
   computed: {
-    ...mapGetters('nodes', ['parentPath']),
-    rootForm() {
-      return this.parentPath(this.id).find(x => x.tag === 'form-generator')
-    }
+    ...mapGetters('nodes', ['isRootForm', 'theRootForm'])
   },
   methods: {
     addTemplate(template) {
       this.cleanFormButtons(template)
-      appendNestedIds(template)
+      draftIds.appendIdNested(template)
       this.innerChildren = [template]
     },
     cleanFormButtons(template) {
-      if (this.rootForm && template.tag === 'form-generator') {
-        const vm = vmMap[this.rootForm.id]
+      const rootForm = this.theRootForm(this.id)
+
+      if (rootForm && template.tag === 'form-generator') {
+        const vm = vmMap[rootForm.id]
 
         template.children = template.children.filter(x => {
           const tag = x.children[0].tag

@@ -1,44 +1,39 @@
 export const ROOT_ID = 0
-const idSet = new Set([ROOT_ID])
+import { ID } from '../const'
+import { traversal } from './util'
 
-export function appendNestedIds(nodes) {
-  nodes = Array.toArray(nodes)
-  nodes.forEach(node => appendNestedId(node))
-}
+class KeyManagement {
+  idSet = new Set([ROOT_ID])
 
-function appendNestedId(node, key = 'id') {
-  if (node[key]) {
-    idSet.add(node[key])
-  } else {
-    node[key] = generateId()
-  }
-  appendNestedIds(node.children)
-}
-
-export function removeNestedIds(nodes) {
-  nodes = Array.toArray(nodes)
-  nodes.forEach(node => removeNestedId(node))
-}
-
-function removeNestedId(node, key = 'id') {
-  node[key] = undefined
-  removeNestedIds(node.children)
-}
-
-export function resetNestedIds(node, key = 'id') {
-  delete node.i
-  node[key] = generateId()
-
-  if (node.children && node.children.length) {
-    node.children.forEach(child => {
-      resetNestedIds(child)
+  appendIdNested(nodes, fn) {
+    traversal(nodes, (node, parentNode) => {
+      if (node[ID]) {
+        this.idSet.add(node[ID])
+      } else {
+        node[ID] = this.generateId()
+      }
+      fn && fn(node, parentNode)
     })
   }
-}
 
-export function generateId() {
-  const max = Math.max(...[...idSet])
-  const id = max + 1
-  idSet.add(id)
-  return id
+  resetNestedIds(nodes) {
+    traversal(nodes, node => {
+      delete node.i
+      // grid-item has this key
+      node[ID] = this.generateId()
+    })
+  }
+
+  generateId() {
+    const max = Math.max(...this.idSet)
+    const id = max + 1
+    this.idSet.add(id)
+    return id
+  }
+}
+const draftIds = new KeyManagement()
+const exampleIds = new KeyManagement()
+
+export {
+  draftIds, exampleIds
 }

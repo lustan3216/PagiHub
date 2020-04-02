@@ -1,9 +1,7 @@
-export default function listToTree(data, options) {
-  options = options || {}
-  const ID_KEY = options.idKey || 'id'
-  const PARENT_KEY = options.parentKey || 'parentId'
-  const CHILDREN_KEY = options.childrenKey || 'children'
+import { cloneJson } from '../utils/util'
+import { ID, PARENT_ID, CHILDREN } from '../const'
 
+export default function listToTree(data) {
   const tree = []
   const childrenOf = {}
   let item
@@ -11,13 +9,18 @@ export default function listToTree(data, options) {
   let parentId
 
   for (let i = 0, length = data.length; i < length; i++) {
-    item = data[i]
-    id = item[ID_KEY]
-    parentId = item[PARENT_KEY] || 0
+    if (data[i].__ob__) {
+      item = cloneJson(data[i])
+    } else {
+      item = data[i]
+    }
+
+    id = item[ID]
+    parentId = item[PARENT_ID] || 0
     // every item may have children
     childrenOf[id] = childrenOf[id] || []
     // init its children
-    item[CHILDREN_KEY] = childrenOf[id]
+    item[CHILDREN] = childrenOf[id]
     if (parentId !== 0) {
       // init its parent's children object
       childrenOf[parentId] = childrenOf[parentId] || []

@@ -5,6 +5,7 @@ import draft from './modules/draft'
 import app from './modules/app'
 import css from './modules/css'
 import mode from './modules/mode'
+import example from './modules/example'
 
 Vue.use(Vuex)
 
@@ -25,6 +26,7 @@ export default new Vuex.Store({
     app,
     css,
     mode,
-    draft
+    draft,
+    example
   }
 })

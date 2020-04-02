@@ -119,7 +119,8 @@ const app = new Vue({
   render: h => h(App),
   store
 }).$mount('#app')
-
-window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = app.constructor
+if (window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
+  window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = app.constructor
+}
 
 export { bus }
