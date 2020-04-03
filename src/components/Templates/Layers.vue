@@ -1,14 +1,13 @@
 <template>
-  <div class="layer">
-    <template v-for="(child, index) in innerChildren">
-      <component
-        :is="child.tag"
-        :key="child.id"
-        :id="child.id"
-        :style="{ 'z-index': index, ...innerStyles }"
-        :class="{ absolute: index }"
-      />
-    </template>
+  <div class="layers">
+    <div
+      v-for="(child, index) in innerChildren"
+      :style="{ 'z-index': index, ...innerStyles }"
+      :class="{ absolute: index }"
+      :key="index"
+    >
+      <component :is="child.tag" :id="child.id" />
+    </div>
   </div>
 </template>
 

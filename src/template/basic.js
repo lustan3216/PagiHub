@@ -1,4 +1,4 @@
-import { STYLES, TAG, CHILDREN } from '../const'
+import { CAN_NEW_ITEM, STYLES, TAG, CHILDREN } from '../const'
 
 export const gridGenerator = function(children) {
   const gridItems = [
@@ -10,21 +10,21 @@ export const gridGenerator = function(children) {
 
   return {
     [TAG]: 'grid-generator',
+    [CAN_NEW_ITEM]: true,
     [CHILDREN]: children || gridItems
   }
 }
 
 export const initTemplate = function() {
-  return {
-    [TAG]: 'layers',
-    [STYLES]: { background: '#fff' },
-    [CHILDREN]: [gridGenerator()]
-  }
+  const layers = layers()
+  layers[STYLES] = { background: '#fff' }
+  return layers
 }
 
 export const carousel = function() {
   return {
     [TAG]: 'carousel',
+    [CAN_NEW_ITEM]: true,
     [CHILDREN]: [gridGenerator(), gridGenerator(), gridGenerator()]
   }
 }
@@ -68,7 +68,9 @@ export const videoPlayer = function() {
 
 export const layers = function() {
   return {
-    [TAG]: 'layers'
+    [TAG]: 'layers',
+    [CAN_NEW_ITEM]: true,
+    [CHILDREN]: [gridGenerator()]
   }
 }
 

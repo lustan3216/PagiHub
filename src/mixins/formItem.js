@@ -35,12 +35,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('nodes', ['currentNodesMap']),
+    ...mapState('draft', ['nodesMap']),
     rootProps() {
       return this.rootForm.innerProps
     },
     innerRule() {
-      const node = clone(this.currentNodesMap[this.id]) || {}
+      const node = clone(this.nodesMap[this.id]) || {}
       const innerRule = node
       const {
         value,
@@ -87,7 +87,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('nodes', ['ASSIGN']),
+    ...mapMutations('draft', ['RECORD']),
     change(value) {
       this.api.validate(isValid => {
         this.isValid = isValid
@@ -96,7 +96,7 @@ export default {
     },
     updateRootData({ isValid, value }) {
       const field = this.innerRule[0].field
-      this.ASSIGN({ id: this.id, value })
+      this.RECORD([{ path: this.id, value: { value }}])
       this.rootForm.updateForm(field, value)
       this.rootForm.updateValid(field, isValid)
     }

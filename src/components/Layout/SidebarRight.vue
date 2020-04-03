@@ -69,7 +69,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('nodes', ['currentNodesMap']),
+    ...mapState('draft', ['nodesMap']),
     ...mapGetters('app', ['selectedComponentId', 'selectedComponentNode']),
     canShowSetting() {
       return (

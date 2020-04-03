@@ -48,3 +48,8 @@
         a: [{}, { 1: 3 }, x],
         b: { c: 5, d: { e: 6 }}
       }
+
+
+7. nodesTree 這些操作按鈕要抽城component，可以在draft裡面點選時浮出來操作
+
+8. carousel 當沒有看到的時候grid generator可以v-if，節省效能

@@ -8,7 +8,7 @@
 
 <script>
 import clone from 'clone'
-import { assignSet } from '../../../utils/util'
+import { assignSet } from '../../../utils/tool'
 import commonMixin from '../../../mixins/common'
 import formItemMixin from '../../../mixins/formItem'
 import { defaultSetting } from '../../../settings/formItem/formSwitch'

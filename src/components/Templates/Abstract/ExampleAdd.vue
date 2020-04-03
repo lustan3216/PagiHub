@@ -10,7 +10,7 @@ import { draftIds } from '../../../utils/keyId'
 import { vmMap } from '../../../utils/vmMap'
 import commonMixin from '../../../mixins/common'
 import ExamplesDialog from './ExamplesDialog'
-import { cloneJson } from '../../../utils/util'
+import { cloneJson } from '../../../utils/tool'
 
 export default {
   name: 'ExampleAdd',
@@ -19,7 +19,7 @@ export default {
   },
   mixins: [commonMixin],
   computed: {
-    ...mapGetters('nodes', ['isRootForm', 'theRootForm'])
+    ...mapGetters('draft', ['isRootForm', 'theRootForm'])
   },
   methods: {
     addTemplate(template) {

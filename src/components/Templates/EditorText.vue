@@ -188,10 +188,12 @@ export default {
         if (this.isExample) return
         if (this.id) {
           // 當在別的組建被使用時，不會有ID，所以不用update vuex
-          this.ASSIGN({
-            id: this.id,
-            value
-          })
+          this.RECORD([
+            {
+              path: this.id,
+              value: { value }
+            }
+          ])
         } else {
           this.$emit('input', value)
         }
@@ -222,7 +224,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('nodes', ['ASSIGN'])
+    ...mapMutations('draft', ['RECORD'])
   }
 }
 </script>

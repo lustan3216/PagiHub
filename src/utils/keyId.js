@@ -1,6 +1,6 @@
 export const ROOT_ID = 0
 import { ID, PARENT_ID } from '../const'
-import { traversal } from './util'
+import { traversal } from './tool'
 
 class KeyManagement {
   idSet = new Set([ROOT_ID])

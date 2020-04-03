@@ -32,7 +32,7 @@
 <script>
 import { mapState } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
-import { isUndefined } from '../../utils/polyfill'
+import { isUndefined } from '../../utils/tool'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import importTemplatesMixin from '../../mixins/importTemplates'
@@ -47,9 +47,9 @@ export default {
     GridItem: VueGridLayout.GridItem,
     GridItemChild
   },
-  mixins: [childrenMixin, commonMixin, importTemplatesMixin],
+  mixins: [commonMixin, importTemplatesMixin, childrenMixin],
   computed: {
-    ...mapState('nodes', ['currentNodesMap']),
+    ...mapState('draft', ['nodesMap']),
     innerChildrenWithI() {
       return this.innerChildren.map((child, index) => {
         // if layoutItem doesn't have i, it will crash
@@ -58,6 +58,7 @@ export default {
         // anyway, just don't modify here
 
         child.i = isUndefined(child.id) ? index : child.id
+        child.i = child.i + ''
         return child
       })
     }

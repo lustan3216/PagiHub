@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import nodes from './modules/nodes'
 import draft from './modules/draft'
 import app from './modules/app'
 import css from './modules/css'
@@ -22,7 +21,6 @@ export function SET(state, data) {
 export default new Vuex.Store({
   strict: true,
   modules: {
-    nodes,
     app,
     css,
     mode,

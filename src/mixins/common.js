@@ -1,12 +1,9 @@
-import clone from 'clone'
-import store from '../store'
-import editMixin from './edit'
-import settingMixin from './setting'
-import { mapState } from 'vuex'
-import { appendVm, removeVm } from '../utils/vmMap'
+import { mapGetters, mapMutations, mapState } from 'vuex'
+import { vmAppend, vmRemove } from '../utils/vmMap'
+import { merge, cloneJson } from '../utils/tool'
+import { STYLES, PROPS } from '../const'
 
 export default {
-  mixins: [editMixin, settingMixin],
   props: {
     id: {
       type: Number,
@@ -16,45 +13,46 @@ export default {
   inject: {
     isExample: { default: false }
   },
-  data() {
-    const node = store.state.nodes.currentNodesMap[this.id]
-    const innerStyles = node ? clone(node.styles || {}) : {}
-
-    return {
-      innerStyles
-    }
-  },
   computed: {
-    ...mapState('nodes', ['currentNodesMap']),
+    ...mapState('draft', ['nodesMap']),
+    ...mapGetters('draft', ['childrenOf', 'parentPath']),
     node() {
-      return this.currentNodesMap[this.id]
+      return this.nodesMap[this.id]
+    },
+    innerStyles() {
+      return this.node && this.node[STYLES] || {}
+    },
+    innerProps() {
+      const setting = cloneJson(this.$options.defaultSetting)
+      return merge(setting, this.node && this.node[PROPS] || {})
     }
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount
-    if (this.isDraftMode) appendVm(this)
+    if (this.isDraftMode) vmAppend(this)
   },
   beforeDestroy() {
-    if (this.isDraftMode) removeVm(this.id)
+    if (this.isDraftMode) vmRemove(this.id)
   },
   methods: {
+    ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_IDS']),
+    ...mapMutations('draft', ['RECORD']),
     assignStyles(styles) {
-      const allStyles = Object.assign({}, this.innerStyles, styles)
-
-      const validStyles = Object.keys(allStyles).reduce((all, key) => {
-        if (allStyles[key] || allStyles[key] === 0) {
-          // allStyles[key] === 0 => margin: 0;
-          all[key] = allStyles[key]
+      this.RECORD([
+        {
+          path: this.id,
+          value: { [STYLES]: styles }
         }
-        return all
-      }, {})
+      ])
+    },
 
-      this.innerStyles = validStyles
-
-      this.ASSIGN({
-        id: this.id,
-        styles: validStyles
-      })
+    assignProps(props) {
+      this.RECORD([
+        {
+          path: this.id,
+          value: { [PROPS]: props }
+        }
+      ])
     }
   }
 }

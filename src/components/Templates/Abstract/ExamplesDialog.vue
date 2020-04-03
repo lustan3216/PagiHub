@@ -74,7 +74,7 @@ export default {
   },
   data() {
     let innerCategories = categories
-    const isRootForm = this.$store.getters['nodes/isRootForm'](this.id)
+    const isRootForm = this.$store.getters['draft/isRootForm'](this.id)
 
     if (!isRootForm) {
       innerCategories = innerCategories.filter(x => x[ID] === [FORM_ITEM_ID])

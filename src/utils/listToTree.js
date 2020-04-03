@@ -1,4 +1,4 @@
-import { cloneJson } from '../utils/util'
+import { cloneJson } from './tool'
 import { ID, PARENT_ID, CHILDREN } from '../const'
 
 export default function listToTree(data) {

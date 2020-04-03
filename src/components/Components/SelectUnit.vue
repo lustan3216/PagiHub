@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { arraySubtract } from '../../utils/tool'
 export default {
   name: 'SelectUnit',
   props: {
@@ -47,7 +48,7 @@ export default {
       let units = ['px', '%', 'vh', 'vw']
       if (this.hasAuto) units.push('auto')
       if (this.exclude.length) {
-        units = units.subtract(this.exclude)
+        units = arraySubtract(units, this.exclude)
       }
       return units
     },

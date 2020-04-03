@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import { defaultSetting } from '../../settings/videoPlayer'
 // var videojs = require('../../video.js/dist/video.cjs.js');
@@ -11,7 +10,7 @@ import { defaultSetting } from '../../settings/videoPlayer'
 export default {
   defaultSetting,
   name: 'PlayerYoutube',
-  mixins: [commonMixin, childrenMixin],
+  mixins: [commonMixin],
   data() {
     return {
       recreate: null,

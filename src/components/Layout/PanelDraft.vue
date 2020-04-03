@@ -22,7 +22,7 @@ export default {
     Layers
   },
   computed: {
-    ...mapGetters('nodes', ['rootNode'])
+    ...mapGetters('draft', ['rootNode'])
   }
 }
 </script>

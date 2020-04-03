@@ -26,7 +26,7 @@ import clone from 'clone'
 import formCreate from '@form-create/element-ui'
 import { Switch, Tooltip, InputNumber } from 'element-ui'
 import { vmMap } from '../../utils/vmMap'
-import { isString } from '../../lodash'
+import { isString } from '../../utils/tool'
 
 formCreate.component('ElSwitch', Switch)
 formCreate.component('ElTooltip', Tooltip)
@@ -97,7 +97,7 @@ export default {
 
             let result = { [key]: value }
             if (!this.isRoot) result = { [this.name]: result }
-            this.vm.setSetting(result)
+            this.vm.assignProps(result)
           }
         }
       }

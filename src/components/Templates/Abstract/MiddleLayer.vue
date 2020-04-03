@@ -33,10 +33,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('nodes', ['currentNodesMap']),
+    ...mapState('draft', ['nodesMap']),
     ...mapGetters('app', ['selectedComponentId']),
     node() {
-      return this.currentNodesMap[this.id]
+      return this.nodesMap[this.id]
     },
     elevate() {
       return this.selectedComponentId === this.id

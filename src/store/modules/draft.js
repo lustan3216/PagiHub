@@ -1,18 +1,28 @@
-import Vue from 'vue'
-import { cloneJson } from '../../utils/util'
-import jsonStorer from 'json-storer'
+import JsonStorer from 'json-storer'
 import localforage from 'localforage'
 import listToTree from '../../utils/listToTree'
 import { draftIds } from '../../utils/keyId'
 import { initTemplate } from '../../template/basic'
 import { ROOT_ID } from '../../utils/keyId'
 
+const jsonStorer = new JsonStorer()
+
 const state = {
   nodesMap: {}
 }
 
 const mutations = {
-  RECORD(state, {}) {}
+  RECORD(state, payLoad) {
+    this.nodesMap = jsonStorer.record(payLoad)
+  },
+  REDO() {
+    // should have problem here
+    this.nodesMap = jsonStorer.redo()
+  },
+  UNDO() {
+    // should have problem here
+    this.nodesMap = jsonStorer.undo()
+  }
 }
 
 const actions = {
@@ -27,6 +37,7 @@ const actions = {
       draftIds.appendIdNested(nodesMap)
     }
 
+    jsonStorer.tree = nodesMap
     commit('SET', nodesMap)
   }
 }
@@ -52,18 +63,22 @@ const getters = {
     const map = state.nodesMap
     const path = []
 
-    const findPath = id => {
+    function findPath(id) {
       const { parentId } = map[id]
-
-      if (parentId) {
-        path.unshift(map[parentId])
-        findPath(parentId)
-      }
+      if (!parentId) return
+      path.unshift(map[parentId])
+      findPath(parentId)
     }
 
     findPath(_id)
     return path
-  }
+  },
+
+  theRootForm: (state, getters) => id => {
+    return getters.parentPath(id).find(x => x.tag === 'form-generator')
+  },
+
+  isRootForm: (state, getters) => id => !getters.theRootForm(id)
 }
 
 export default {

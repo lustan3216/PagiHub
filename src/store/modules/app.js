@@ -1,4 +1,5 @@
 import { SET } from '../index'
+import { arraySubtract } from '../../utils/tool'
 
 const state = {
   scaleRatio: 1,
@@ -7,8 +8,8 @@ const state = {
 
 const mutations = {
   SET,
-  CLEAN_SELECTED_COMPONENT_IDS(state) {
-    state.selectedComponentIds = []
+  CLEAN_SELECTED_COMPONENT_IDS(state, ids) {
+    state.selectedComponentIds = arraySubtract(state.selectedComponentIds, ids)
   },
   SET_SELECTED_COMPONENT_IDS(state, id) {
     const isNoExist = state.selectedComponentIds.includes(id)
@@ -26,7 +27,7 @@ const getters = {
   },
   selectedComponentNode(state, getters, rootState) {
     if (getters.selectedComponentId) {
-      return rootState.nodes.currentNodesMap[getters.selectedComponentId]
+      return rootState.nodes.nodesMap[getters.selectedComponentId]
     }
   }
 }

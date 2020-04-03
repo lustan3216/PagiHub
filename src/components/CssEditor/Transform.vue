@@ -9,7 +9,7 @@
             :max="1"/>
         </el-form-item>
       </el-col>
-      
+
       <el-col :span="8">
         <el-form-item label="Blur">
           <input-unit
@@ -18,7 +18,7 @@
             :max="30"/>
         </el-form-item>
       </el-col>
-      
+
       <el-col :span="8">
         <el-form-item label="Brightness">
           <input-unit
@@ -28,7 +28,7 @@
         </el-form-item>
       </el-col>
     </el-row>
-    
+
     <el-row :gutter="5" class="m-t-10">
       <el-col :span="8">
         <el-form-item label="Contrast">
@@ -38,7 +38,7 @@
             :max="200"/>
         </el-form-item>
       </el-col>
-      
+
       <el-col :span="8">
         <el-form-item label="Grayscale">
           <input-unit
@@ -47,7 +47,7 @@
             :max="100"/>
         </el-form-item>
       </el-col>
-      
+
       <el-col :span="8">
         <el-form-item label="Hue">
           <input-unit
@@ -57,7 +57,7 @@
         </el-form-item>
       </el-col>
     </el-row>
-    
+
     <el-row :gutter="5" class="m-t-10">
       <el-col :span="8">
         <el-form-item label="Brightness">
@@ -67,7 +67,7 @@
             :max="100"/>
         </el-form-item>
       </el-col>
-      
+
       <el-col :span="8">
         <el-form-item label="Saturate">
           <input-unit
@@ -76,7 +76,7 @@
             :max="1"/>
         </el-form-item>
       </el-col>
-      
+
       <el-col :span="8">
         <el-form-item label="Sepia">
           <input-unit
@@ -108,13 +108,6 @@ export default {
     return {
       value1: ''
     }
-  },
-  created() {
-    // effects.forEach(effect => {
-    //   this.$watch(effect, value => {
-    //     this.assignStyles({ filter: value ? `${effect}(${value})` : null })
-    //   })
-    // })
   },
   methods: {
     parseInt(value) {

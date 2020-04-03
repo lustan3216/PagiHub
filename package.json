@@ -16,7 +16,7 @@
     "csso": "^4.0.2",
     "deep-diff": "^1.0.2",
     "element-ui": "^2.11.1",
-    "json-storer": "file:./../json-storer",
+    "json-storer": "file:../json-storer",
     "list-to-tree": "^2.2.3",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",

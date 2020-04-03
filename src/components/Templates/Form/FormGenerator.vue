@@ -18,7 +18,7 @@ export default {
   provide() {
     if (this.isExample) return
 
-    const isRootForm = this.$store.getters['nodes/isRootForm'](this.id)
+    const isRootForm = this.$store.getters['draft/isRootForm'](this.id)
     if (isRootForm) {
       return { rootForm: this }
     }

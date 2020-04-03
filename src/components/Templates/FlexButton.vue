@@ -29,21 +29,23 @@ export default {
     }
   },
   data() {
-    const node = store.state.nodes.currentNodesMap[this.id]
+    const node = store.state.nodes.nodesMap[this.id]
     return {
       innerValue: (!this.isExample && node && node.value) || this.defaultText
     }
   },
   watch: {
     innerValue(value) {
-      this.ASSIGN({
-        id: this.id,
-        value
-      })
+      this.RECORD([
+        {
+          path: this.id,
+          value: { value }
+        }
+      ])
     }
   },
   methods: {
-    ...mapMutations('nodes', ['ASSIGN'])
+    ...mapMutations('draft', ['RECORD'])
   }
 }
 </script>

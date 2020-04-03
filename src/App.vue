@@ -29,7 +29,7 @@ export default {
     this.getRootNode()
   },
   methods: {
-    ...mapActions('nodes', ['getRootNode'])
+    ...mapActions('draft', ['getRootNode'])
   }
 }
 </script>

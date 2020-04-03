@@ -52,7 +52,7 @@
 import { Tree } from 'element-ui'
 import clone from 'clone'
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { traversal } from '../../utils/util'
+import { traversal } from '../../utils/tool'
 import { vmMap } from '../../utils/vmMap'
 import Visibility from './Visibility'
 
@@ -69,8 +69,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('nodes', ['currentNodesMap']),
-    ...mapGetters('nodes', ['tree']),
+    ...mapState('draft', ['nodesMap']),
+    ...mapGetters('draft', ['tree']),
     ...mapGetters('app', ['selectedComponentId']),
     neatTree() {
       const cloned = clone(this.tree)
@@ -113,7 +113,7 @@ export default {
       if (data.tag === 'grid-item') {
         vmMap[data.parentId].new(data.id)
       } else {
-        const parentNode = this.currentNodesMap[data.parentId]
+        const parentNode = this.nodesMap[data.parentId]
         vmMap[parentNode.parentId].copy(data.parentId)
       }
     },

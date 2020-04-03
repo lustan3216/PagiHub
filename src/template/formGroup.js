@@ -1,10 +1,11 @@
 import { gridGenerator } from './basic'
-import { TAG, CHILDREN } from '../const'
+import { TAG, CHILDREN, CAN_NEW_ITEM } from '../const'
 import { formSlider, formCheckBox, formSubmit, formTextarea } from './formItem'
 
 export const formGenerator = function() {
   return {
     [TAG]: 'form-generator',
+    [CAN_NEW_ITEM]: true,
     [CHILDREN]: [
       gridGenerator([
         {

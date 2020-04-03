@@ -1,22 +1,6 @@
 /* eslint-disabled */
 import { kebabCase, capitalize } from 'element-ui/src/utils/util'
-import { isUndefined } from 'element-ui/src/utils/types'
-import isPlainObject from 'is-plain-object'
-
-export { isPlainObject }
-export { isUndefined }
-
-export function toArray(e) {
-  if (Array.isArray(e)) {
-    return e
-  } else if (e === undefined) {
-    return []
-  } else {
-    return [e]
-  }
-}
-
-Array.toArray = toArray
+import { isPlainObject } from './tool'
 
 Array.uniq = function(e) {
   return [...new Set(e)]
@@ -28,10 +12,6 @@ Array.last = function(e) {
 
 Array.first = function(e) {
   return e[0]
-}
-
-Array.prototype.subtract = function(e) {
-  return this.filter(n => !Array.toArray(e).includes(n))
 }
 
 Object.firstKey = function(e) {
@@ -62,8 +42,4 @@ String.prototype.camelCase = function() {
   return this.replace(/([-_][a-z])/g, group =>
     group.toUpperCase().replace(/[-_]/g, '')
   )
-}
-
-Number.prototype.isFloat = function() {
-  return Number(this) === this && this % 1 !== 0
 }
