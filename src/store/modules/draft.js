@@ -5,7 +5,13 @@ import { draftIds } from '../../utils/keyId'
 import { initTemplate } from '../../template/basic'
 import { ROOT_ID } from '../../utils/keyId'
 
-const jsonStorer = new JsonStorer()
+const jsonStorer = new JsonStorer({
+  deltas: localforage.getItem('undoDeltas'),
+  onRecord() {
+    const undoDeltas = jsonStorer.deltas.slice(jsonStorer.currentIndex)
+    localforage.setItem('undoDeltas', undoDeltas)
+  }
+})
 
 const state = {
   nodesMap: {}
@@ -18,6 +24,7 @@ const mutations = {
   REDO() {
     // should have problem here
     this.nodesMap = jsonStorer.redo()
+    // const ids = jsonStorer.currentDeltaGroup.map(x => parseInt(x.path))
   },
   UNDO() {
     // should have problem here
