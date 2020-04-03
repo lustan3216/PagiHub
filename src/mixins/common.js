@@ -9,9 +9,8 @@ export default {
   mixins: [editMixin, settingMixin],
   props: {
     id: {
-      validator(value) {
-        return Number.isInteger(value) || value === undefined
-      }
+      type: Number,
+      required: true
     }
   },
   inject: {

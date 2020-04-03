@@ -66,9 +66,9 @@ export const videoPlayer = function() {
   }
 }
 
-export const layer = function() {
+export const layers = function() {
   return {
-    [TAG]: 'layer'
+    [TAG]: 'layers'
   }
 }
 
@@ -82,7 +82,7 @@ export const drawer = function() {
 }
 
 export default [
-  layer(),
+  layers(),
   flexButton(),
   flexImage(),
   gridGenerator(),
