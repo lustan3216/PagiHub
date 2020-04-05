@@ -1,5 +1,5 @@
 <template>
-  <middle-layer v-if="firstChild" :id="firstChild.id">
+  <middle-layer v-if="hasAnyChild" :id="firstChild.id">
     <component :is="firstChild.tag" :id="firstChild.id" />
   </middle-layer>
   <example-add
@@ -22,7 +22,12 @@ export default {
     MiddleLayer,
     ExampleAdd
   },
-  mixins: [importTemplates, childrenMixin, commonMixin]
+  mixins: [importTemplates, childrenMixin, commonMixin],
+  beforeDestroy() {
+    if (!this.isExample) {
+      console.log(this.id)
+    }
+  }
 }
 </script>
 

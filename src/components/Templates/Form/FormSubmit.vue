@@ -43,7 +43,9 @@ export default {
   },
   methods: {
     submit() {
-      this.rootForm.submit()
+      if (!this.isExample) {
+        this.rootForm.submit()
+      }
     }
   }
 }

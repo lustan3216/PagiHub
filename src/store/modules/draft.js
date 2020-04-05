@@ -4,40 +4,26 @@ import localforage from 'localforage'
 import listToTree from '../../utils/listToTree'
 import { SET } from '../index'
 import { draftIds } from '../../utils/keyId'
-import { traversal, vueNestedMerge } from '../../utils/tool'
+import { traversal } from '../../utils/tool'
 import { initTemplate as _initTemplate } from '../../template/basic'
 import { ROOT_ID } from '../../utils/keyId'
 
 const jsonStorer = new JsonStorer({
-  deltas: localforage.getItem('undoDeltas'),
-  callback: {
-    onRecord: updateLocalForage,
-    onRedo: updateLocalForage,
-    onUndo: updateLocalForage
-  },
   setter(tree, key, value) {
-    // vueNestedMerge(tree, { [key]: value })
     if (tree[key] && tree.__ob__) {
       tree[key] = value
     } else {
       Vue.set(tree, key, value)
     }
-    // Vue.set(store.state.draft.nodesMap, key, value)
-    // tree[key] = value
   },
+
   deleter(tree, key) {
     Vue.delete(tree, key)
-    // delete tree[key]
   }
 })
 
-function updateLocalForage() {
-  const undoDeltas = jsonStorer.deltas.slice(jsonStorer.currentIndex)
-  localforage.setItem('undoDeltas', undoDeltas)
-  localforage.setItem('asd', jsonStorer.tree)
-}
-
 window.jsonStorer = jsonStorer
+window.localforage = localforage
 
 const state = {
   nodesMap: {},
@@ -48,17 +34,19 @@ const mutations = {
   SET,
   RECORD(state, payLoad) {
     jsonStorer.record(payLoad)
+    localforage.setItem('asd', jsonStorer.tree)
   },
   REDO(state) {
     jsonStorer.redo()
+    localforage.setItem('asd', jsonStorer.tree)
   },
   UNDO(state) {
     jsonStorer.undo()
+    localforage.setItem('asd', jsonStorer.tree)
   },
   UPDATE_NODES_MAP(state, payload) {
     state.nodesMap = payload
     localforage.setItem(state.keyName, payload)
-    // const ids = jsonStorer.currentDeltaGroup.map(x => parseInt(x.path))
   }
 }
 
@@ -73,6 +61,7 @@ const actions = {
       const initTemplate = _initTemplate()
       initTemplate.parentId = 0
       draftIds.appendIdNested(initTemplate)
+
       traversal(initTemplate, _node => {
         const { children, ...node } = _node
         nodesMap[node.id] = node

@@ -1,5 +1,5 @@
 <template>
-  <grid-generator :id="firstChild.id" />
+  <grid-generator v-if="hasAnyChild" :id="firstChild.id" />
 </template>
 
 <script>

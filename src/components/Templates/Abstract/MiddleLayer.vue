@@ -7,7 +7,7 @@
     @mouseleave="noClick = true"
   >
     <div
-      v-if="isDraftMode && !isExample && isDraggableItem"
+      v-if="node && isDraftMode && !isExample && isDraggableItem"
       :class="{ 'no-click': noClick, 'no-drag': !noClick }"
       class="h-100"
     >

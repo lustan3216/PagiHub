@@ -31,7 +31,9 @@ export default {
   },
   methods: {
     reset() {
-      this.rootForm && this.rootForm.reset()
+      if (!this.isExample) {
+        this.rootForm.reset()
+      }
     }
   }
 }

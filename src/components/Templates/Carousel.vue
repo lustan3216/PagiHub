@@ -11,7 +11,6 @@
       v-if="child.visible !== false"
       :ref="child.id"
       :key="child.id"
-      :style="child.styles"
       @click.stop.native="click(child.id)"
       @mouseleave="mouseLeave"
     >

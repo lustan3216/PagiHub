@@ -1,9 +1,15 @@
 export const ROOT_ID = 0
-import { ID, PARENT_ID } from '../const'
+import { ID, PARENT_ID, TAG } from '../const'
 import { traversal } from './tool'
 
 class KeyManagement {
   idSet = new Set([ROOT_ID])
+
+  specialCase(node) {
+    if (node[TAG] === 'grid-item') {
+      node.i = node[ID]
+    }
+  }
 
   set restoreIds(ids) {
     this.idSet = new Set([ROOT_ID, ...ids])
@@ -20,6 +26,8 @@ class KeyManagement {
       if (parentNode) {
         node[PARENT_ID] = parentNode[ID]
       }
+
+      this.specialCase(node)
     })
   }
 
@@ -28,6 +36,8 @@ class KeyManagement {
       delete node.i
       // grid-item has this key
       node[ID] = this.generateId()
+
+      this.specialCase(node)
       if (parentNode) {
         node[PARENT_ID] = parentNode[ID]
       }

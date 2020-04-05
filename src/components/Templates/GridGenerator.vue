@@ -1,18 +1,19 @@
 <template>
   <grid-layout
+    v-if="hasAnyChild"
     v-bind="innerProps"
     :class="{ editable: isDraftMode }"
     :col-num="36"
     :row-height="5"
     :style="innerStyles"
-    :layout="innerChildrenWithI"
+    :layout="innerChildren"
     :margin="[0, 0]"
     :responsive="true"
     :use-css-transforms="false"
     @layout-updated="update($event)"
   >
     <grid-item
-      v-for="child in innerChildrenWithI"
+      v-for="child in innerChildren"
       :x="child.x"
       :y="child.y"
       :w="child.w"
@@ -30,7 +31,7 @@
 <script>
 import { mapState } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
-import { isUndefined } from '../../utils/tool'
+import { cloneJson } from '../../utils/tool'
 import childrenMixin from '../../mixins/children'
 import commonMixin from '../../mixins/common'
 import importTemplatesMixin from '../../mixins/importTemplates'
@@ -46,19 +47,41 @@ export default {
     GridItemChild
   },
   mixins: [commonMixin, importTemplatesMixin, childrenMixin],
+  data() {
+    const getterName = `${this.isExample ? 'example' : 'draft'}/childrenOf`
+    // 這裡沒必要排序，index 在各自component選擇性處理就可以
+    // appendNestedIds(innerChildren)
+    // children 因為每次更新 nodesMap，如果innerChildren用computed會所有的component都被更新
+    let innerChildren = this.$store.getters[getterName][this.id]
+    innerChildren = cloneJson(innerChildren)
+    innerChildren.forEach(child => {
+      if (!child.i) {
+        throw new Error('grid-item need an i key')
+      }
+    })
+    return {
+      innerChildren
+    }
+  },
   computed: {
-    ...mapState('draft', ['nodesMap']),
-    innerChildrenWithI() {
-      return this.innerChildren.map((child, index) => {
-        // if layoutItem doesn't have i, it will crash
-        // the i assigning here will affect data innerChild which is correct here
-        // otherwise somehow it will bring a bug that makes layout immutable
-        // anyway, just don't modify here
+    ...mapState('draft', ['nodesMap'])
+  },
+  methods: {
+    update(newChildren) {
+      // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
+      const records = []
 
-        child.i = isUndefined(child.id) ? index : child.id
-        // child.i 不能是字串，會有ｂｕｇ
-        return child
+      newChildren.forEach(child => {
+        const attrs = ['x', 'y', 'w', 'h']
+        attrs.forEach(attr => {
+          records.push({
+            path: `${child.id}.${attr}`,
+            value: child[attr]
+          })
+        })
       })
+
+      this.RECORD(records)
     }
   }
 }

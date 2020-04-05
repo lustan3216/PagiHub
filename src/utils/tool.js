@@ -56,3 +56,20 @@ export function deepFlatten(array) {
     return all
   }, array)
 }
+
+export function findChild(children, child) {
+  return children.find(x => x.id === child.id)
+}
+
+export function findChildIndex(children, child) {
+  return children.findIndex(x => x.id === child.id)
+}
+
+export function childDelete(children, child) {
+  const oldIndex = findChildIndex(children, child)
+  children.splice(oldIndex, 1)
+}
+
+export function childUpdate(oldchild, newChild) {
+  Object.assign(oldchild, newChild)
+}

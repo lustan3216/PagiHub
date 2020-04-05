@@ -7,7 +7,7 @@ export const gridGenerator = function(children) {
     { [TAG]: 'grid-item', x: 22, y: 19, w: 16, h: 52 },
     { [TAG]: 'grid-item', x: 22, y: 0, w: 50, h: 19 }
   ]
-
+  gridItems.forEach(item => item.i = item.id)
   return {
     [TAG]: 'grid-generator',
     [CAN_NEW_ITEM]: true,
