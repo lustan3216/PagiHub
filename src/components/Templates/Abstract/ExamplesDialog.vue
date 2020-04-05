@@ -1,6 +1,7 @@
 <template>
   <i class="el-icon-plus" @click.stop="open">
     <el-dialog
+      v-if="visible"
       ref="dialog"
       :visible="visible"
       :modal="false"
@@ -14,10 +15,10 @@
       <el-tabs v-model="currentCategory" tab-position="left">
         <el-tab-pane
           v-for="category in categories"
-          :lazy="true"
           :key="category.id"
           :name="category.name"
           :label="category.name"
+          lazy
         >
           <el-row :gutter="15" type="flex" style="flex-wrap: wrap">
             <el-col
@@ -58,7 +59,7 @@ import { CATEGORY, NAME, ID } from '../../../const'
 import importTemplatesMixin from '../../../mixins/importTemplates'
 
 export default {
-  name: 'ExampleSelect',
+  name: 'ExamplesDialog',
   mixins: [importTemplatesMixin],
   props: {
     id: {
@@ -73,23 +74,24 @@ export default {
     }
   },
   data() {
-    let innerCategories = categories
-    const isRootForm = this.$store.getters['draft/isRootForm'](this.id)
-
-    if (!isRootForm) {
-      innerCategories = innerCategories.filter(x => x[ID] === [FORM_ITEM_ID])
-    }
-
     return {
       visible: false,
-      currentCategory: innerCategories[0][NAME],
-      categories: innerCategories
+      currentCategory: categories[0][NAME]
     }
   },
   computed: {
     ...mapState('example', ['examples']),
+    categories() {
+      const isRootForm = this.$store.getters['draft/isRootForm'](this.id)
+
+      if (isRootForm) {
+        return categories
+      } else {
+        return categories.filter(x => x[ID] !== FORM_ITEM_ID)
+      }
+    },
     currentCategoryId() {
-      return categories.find(x => x[NAME] === this.currentCategory)[ID]
+      return this.categories.find(x => x[NAME] === this.currentCategory)[ID]
     },
     components() {
       return (

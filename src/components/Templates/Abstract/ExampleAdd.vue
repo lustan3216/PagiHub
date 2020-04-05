@@ -26,8 +26,7 @@ export default {
       // 因為resetNestedIds 會assign key，vuex會噴錯 strict
       template = cloneJson(template)
       this.cleanFormButtons(template)
-      draftIds.resetNestedIds(template)
-      this.$emit('onAdd', [template])
+      this.$emit('onAdd', template)
     },
     cleanFormButtons(template) {
       const rootForm = this.theRootForm(this.id)

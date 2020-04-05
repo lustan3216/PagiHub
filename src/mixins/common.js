@@ -20,11 +20,11 @@ export default {
       return this.nodesMap[this.id]
     },
     innerStyles() {
-      return this.node && this.node[STYLES] || {}
+      return (this.node && this.node[STYLES]) || {}
     },
     innerProps() {
       const setting = cloneJson(this.$options.defaultSetting)
-      return merge(setting, this.node && this.node[PROPS] || {})
+      return merge(setting, (this.node && this.node[PROPS]) || {})
     }
   },
   mounted() {

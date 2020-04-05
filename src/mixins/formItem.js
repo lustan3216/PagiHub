@@ -96,7 +96,7 @@ export default {
     },
     updateRootData({ isValid, value }) {
       const field = this.innerRule[0].field
-      this.RECORD([{ path: this.id, value: { value }}])
+      this.RECORD([{ path: `${this.id}.value`, value }])
       this.rootForm.updateForm(field, value)
       this.rootForm.updateValid(field, isValid)
     }

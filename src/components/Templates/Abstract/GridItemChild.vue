@@ -5,7 +5,7 @@
   <example-add
     v-else-if="isDraftMode && !isExample"
     :id="id"
-    @onAdd="innerChildren = $event"
+    @onAdd="create($event)"
   />
 </template>
 

@@ -26,7 +26,7 @@ export function assignStyles(id, styles) {
 export function vmNewNode({ id }) {
   // layers, grid-generator, carousel, form-generator
   // can new layer-item, grid-item, carousel-item, form-item
-  vmMap[id].new()
+  vmMap[id].create()
 }
 
 export function vmCopyNode(node) {
@@ -34,7 +34,7 @@ export function vmCopyNode(node) {
 
   // the convention is, if the parent is a node can new, then it must be
   const { id, parentId } = node
-  const parentNode = store.state.nodes.nodesMap[parentId]
+  const parentNode = store.state.draft.nodesMap[parentId]
   if (parentNode.canNewItem) {
     // if parentNode can new item, it means the node is one of layer-item, grid-item, carousel-item, form-item
     vmMap[parentId].copy(id)

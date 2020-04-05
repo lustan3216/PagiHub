@@ -33,8 +33,8 @@
         size="mini"
         type="text"
         icon="el-icon-refresh-left"
-        @shortkey.native="undo"
-        @click="undo"
+        @shortkey.native="UNDO"
+        @click="UNDO"
       />
     </el-tooltip>
 
@@ -44,8 +44,8 @@
         size="mini"
         type="text"
         icon="el-icon-refresh-right"
-        @shortkey.native="redo"
-        @click="redo"
+        @shortkey.native="REDO"
+        @click="REDO"
       />
     </el-tooltip>
 
@@ -86,9 +86,8 @@ export default {
   },
   methods: {
     ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_DRAFT_MODE']),
+    ...mapMutations('draft', ['REDO', 'UNDO']),
     isMac,
-    redo() {},
-    undo() {},
     publish() {}
   }
 }

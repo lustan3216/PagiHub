@@ -15,10 +15,18 @@ export const gridGenerator = function(children) {
   }
 }
 
+export const layers = function() {
+  return {
+    [TAG]: 'layers',
+    [CAN_NEW_ITEM]: true,
+    [CHILDREN]: [gridGenerator()]
+  }
+}
+
 export const initTemplate = function() {
-  const layers = layers()
-  layers[STYLES] = { background: '#fff' }
-  return layers
+  const _layers = layers()
+  _layers[STYLES] = { background: '#fff' }
+  return _layers
 }
 
 export const carousel = function() {
@@ -63,14 +71,6 @@ export const divider = function() {
 export const videoPlayer = function() {
   return {
     [TAG]: 'video-player'
-  }
-}
-
-export const layers = function() {
-  return {
-    [TAG]: 'layers',
-    [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [gridGenerator()]
   }
 }
 

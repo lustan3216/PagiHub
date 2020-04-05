@@ -9,23 +9,21 @@
     :margin="[0, 0]"
     :responsive="true"
     :use-css-transforms="false"
-    @layout-updated="innerChildren = $event"
+    @layout-updated="update($event)"
   >
-    <template v-for="child in innerChildrenWithI">
-      <grid-item
-        :x="child.x"
-        :y="child.y"
-        :w="child.w"
-        :h="child.h"
-        :i="child.id"
-        :ref="child.id"
-        :key="child.id"
-        drag-ignore-from=".no-drag"
-        drag-allow-from="div"
-      >
-        <grid-item-child :id="child.id" />
-      </grid-item>
-    </template>
+    <grid-item
+      v-for="child in innerChildrenWithI"
+      :x="child.x"
+      :y="child.y"
+      :w="child.w"
+      :h="child.h"
+      :i="child.id"
+      :key="child.id"
+      drag-ignore-from=".no-drag"
+      drag-allow-from="div"
+    >
+      <grid-item-child :id="child.id" />
+    </grid-item>
   </grid-layout>
 </template>
 
@@ -58,7 +56,7 @@ export default {
         // anyway, just don't modify here
 
         child.i = isUndefined(child.id) ? index : child.id
-        child.i = child.i + ''
+        // child.i 不能是字串，會有ｂｕｇ
         return child
       })
     }

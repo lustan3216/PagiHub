@@ -5,6 +5,10 @@ import { traversal } from './tool'
 class KeyManagement {
   idSet = new Set([ROOT_ID])
 
+  set restoreIds(ids) {
+    this.idSet = new Set([ROOT_ID, ...ids])
+  }
+
   appendIdNested(nodes, fn) {
     traversal(nodes, (node, parentNode) => {
       if (node[ID]) {
@@ -24,7 +28,6 @@ class KeyManagement {
       delete node.i
       // grid-item has this key
       node[ID] = this.generateId()
-
       if (parentNode) {
         node[PARENT_ID] = parentNode[ID]
       }

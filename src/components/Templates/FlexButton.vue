@@ -29,7 +29,7 @@ export default {
     }
   },
   data() {
-    const node = store.state.nodes.nodesMap[this.id]
+    const node = store.state.draft.nodesMap[this.id]
     return {
       innerValue: (!this.isExample && node && node.value) || this.defaultText
     }

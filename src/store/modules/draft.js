@@ -1,51 +1,86 @@
+import Vue from 'vue'
 import JsonStorer from 'json-storer'
 import localforage from 'localforage'
 import listToTree from '../../utils/listToTree'
+import { SET } from '../index'
 import { draftIds } from '../../utils/keyId'
-import { initTemplate } from '../../template/basic'
+import { traversal, vueNestedMerge } from '../../utils/tool'
+import { initTemplate as _initTemplate } from '../../template/basic'
 import { ROOT_ID } from '../../utils/keyId'
 
 const jsonStorer = new JsonStorer({
   deltas: localforage.getItem('undoDeltas'),
-  onRecord() {
-    const undoDeltas = jsonStorer.deltas.slice(jsonStorer.currentIndex)
-    localforage.setItem('undoDeltas', undoDeltas)
+  callback: {
+    onRecord: updateLocalForage,
+    onRedo: updateLocalForage,
+    onUndo: updateLocalForage
+  },
+  setter(tree, key, value) {
+    // vueNestedMerge(tree, { [key]: value })
+    if (tree[key] && tree.__ob__) {
+      tree[key] = value
+    } else {
+      Vue.set(tree, key, value)
+    }
+    // Vue.set(store.state.draft.nodesMap, key, value)
+    // tree[key] = value
+  },
+  deleter(tree, key) {
+    Vue.delete(tree, key)
+    // delete tree[key]
   }
 })
 
+function updateLocalForage() {
+  const undoDeltas = jsonStorer.deltas.slice(jsonStorer.currentIndex)
+  localforage.setItem('undoDeltas', undoDeltas)
+  localforage.setItem('asd', jsonStorer.tree)
+}
+
+window.jsonStorer = jsonStorer
+
 const state = {
-  nodesMap: {}
+  nodesMap: {},
+  keyName: 'asd'
 }
 
 const mutations = {
+  SET,
   RECORD(state, payLoad) {
-    this.nodesMap = jsonStorer.record(payLoad)
+    jsonStorer.record(payLoad)
   },
-  REDO() {
-    // should have problem here
-    this.nodesMap = jsonStorer.redo()
+  REDO(state) {
+    jsonStorer.redo()
+  },
+  UNDO(state) {
+    jsonStorer.undo()
+  },
+  UPDATE_NODES_MAP(state, payload) {
+    state.nodesMap = payload
+    localforage.setItem(state.keyName, payload)
     // const ids = jsonStorer.currentDeltaGroup.map(x => parseInt(x.path))
-  },
-  UNDO() {
-    // should have problem here
-    this.nodesMap = jsonStorer.undo()
   }
 }
 
 const actions = {
-  async getRootNode({ dispatch, commit }, keyName = 'asd') {
-    let nodesMap = await localforage.getItem(keyName)
+  async getRootNode({ commit, state }) {
+    const nodesMap = (await localforage.getItem(state.keyName)) || {}
 
-    if (!Object.hasAnyKey(nodesMap)) {
-      nodesMap = {
-        node: initTemplate(),
-        parentId: ROOT_ID
-      }
-      draftIds.appendIdNested(nodesMap)
+    if (Object.hasAnyKey(nodesMap)) {
+      const ids = Object.keys(nodesMap).map(x => parseInt(x))
+      draftIds.restoreIds = ids
+    } else {
+      const initTemplate = _initTemplate()
+      initTemplate.parentId = 0
+      draftIds.appendIdNested(initTemplate)
+      traversal(initTemplate, _node => {
+        const { children, ...node } = _node
+        nodesMap[node.id] = node
+      })
     }
 
-    jsonStorer.tree = nodesMap
-    commit('SET', nodesMap)
+    commit('UPDATE_NODES_MAP', nodesMap)
+    jsonStorer.tree = state.nodesMap
   }
 }
 
@@ -54,17 +89,9 @@ const getters = {
 
   listToTree: ({ nodesMap }) => listToTree(Object.values(nodesMap)),
 
-  tree: (state, getters) => getters.listToTree.tree,
+  childrenOf: (state, getters) => getters.listToTree.childrenOf,
 
-  childrenFrom: (state, getters) => id => {
-    // 父層在render子層時，這裡會把children拿掉，強制component不能抓到孫子
-    // 如果想要處理孫子，應該是再做一個component做父子管理
-    // 這樣可以解決效能上問題，以及統一父子關係，讓每個component的innerChildren的數據不會因為子孫資料過期
-    return getters.listToTree.childrenOf[id].map(_node => {
-      const { children, ...node } = _node
-      return node
-    })
-  },
+  tree: (state, getters) => getters.listToTree.tree,
 
   parentPath: state => _id => {
     const map = state.nodesMap
@@ -85,7 +112,11 @@ const getters = {
     return getters.parentPath(id).find(x => x.tag === 'form-generator')
   },
 
-  isRootForm: (state, getters) => id => !getters.theRootForm(id)
+  isRootForm: (state, getters) => id => {
+    return (
+      !getters.theRootForm(id) && state.nodesMap[id].tag === 'form-generator'
+    )
+  }
 }
 
 export default {

@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { cloneJson } from 'json-storer/src/utils'
 import { isUndefined, isString } from 'element-ui/src/utils/types'
 import isPlainObject from 'is-plain-object'
@@ -15,6 +16,25 @@ export function toArray(e) {
   } else {
     return [e]
   }
+}
+
+//
+export function vueNestedMerge(target, ...sources) {
+  if (!sources.length) return target
+  const source = sources.shift()
+
+  if (isPlainObject(target) && isPlainObject(source)) {
+    for (const key in source) {
+      if (isPlainObject(source[key])) {
+        if (!target[key]) Vue.set(target, key, {})
+        vueNestedMerge(target[key], source[key])
+      } else {
+        Vue.set(target, key, source[key])
+      }
+    }
+  }
+
+  return vueNestedMerge(target, ...sources)
 }
 
 export function arraySubtract(a, b) {

@@ -27,7 +27,7 @@ const getters = {
   },
   selectedComponentNode(state, getters, rootState) {
     if (getters.selectedComponentId) {
-      return rootState.nodes.nodesMap[getters.selectedComponentId]
+      return rootState.draft.nodesMap[getters.selectedComponentId]
     }
   }
 }
