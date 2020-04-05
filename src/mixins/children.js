@@ -67,16 +67,9 @@ export default {
         x => x.id === theNodeIdGonnaCopy
       )
 
-      const newNodesTree = {}
-
-      function getChildrenTree(node, newNodesTree) {
-        const children = this.childrenOf[node.id]
-        node.children = children
-        children.forEach(child => getChildrenTree(child, newNodesTree))
-      }
-
-      getChildrenTree(theNodeGonnaCopy, newNodesTree)
-      this.resetIdsAndRecord(newNodesTree)
+      const children = this.childrenOf[theNodeIdGonnaCopy]
+      theNodeGonnaCopy[CHILDREN] = children
+      this.resetIdsAndRecord(theNodeGonnaCopy)
       // const { id, tag } =
       // this.innerChildren.push({ id, tag })
     },

@@ -22,12 +22,7 @@ export default {
     MiddleLayer,
     ExampleAdd
   },
-  mixins: [importTemplates, childrenMixin, commonMixin],
-  beforeDestroy() {
-    if (!this.isExample) {
-      console.log(this.id)
-    }
-  }
+  mixins: [importTemplates, childrenMixin, commonMixin]
 }
 </script>
 

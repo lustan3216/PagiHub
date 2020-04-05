@@ -85,6 +85,7 @@ export default {
       traversal(cloned, node => {
         if (node.tag === 'grid-item') {
           Object.assign(node, node.children[0])
+          delete node.i
         }
 
         if (['card', 'drawer', 'form-generator'].includes(node.tag)) {
