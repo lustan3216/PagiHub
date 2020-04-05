@@ -132,6 +132,8 @@ export default {
   border: 10px solid transparent;
   background: transparent;
   width: calc(100vw - 330px);
+  @include calc-vh(height, '100vh - 60px');
+  overflow-y: scroll;
   position: absolute;
 }
 </style>

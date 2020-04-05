@@ -1,5 +1,5 @@
 <template>
-  <view-port class="class">
+  <view-port>
     <component
       v-if="rootNode"
       :id="rootNode.id"
@@ -26,9 +26,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.class {
-  @include calc-vh(height, '100vh - 60px');
-}
-</style>

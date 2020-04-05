@@ -4,12 +4,12 @@
     v-bind="innerProps"
     :class="{ editable: isDraftMode }"
     :col-num="36"
+    :vertical-compact="false"
     :row-height="5"
     :style="innerStyles"
     :layout="layout"
     :margin="[0, 0]"
     :responsive="true"
-    :use-css-transforms="false"
     @layout-updated="update($event)"
   >
     <grid-item
