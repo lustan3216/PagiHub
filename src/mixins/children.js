@@ -5,6 +5,7 @@ import { draftIds } from '../utils/keyId'
 
 export default {
   computed: {
+    ...mapGetters('draft', ['childrenOf']),
     ...mapGetters('example', ['examplesMapByTag']),
     firstChild() {
       return this.innerChildren[0]
@@ -81,17 +82,6 @@ export default {
     },
 
     remove(theNodeIdGonnaRemove) {
-      // remove only need to remove self and update by `updateDifferenceToVuex`
-      // the grand children will destroy it self since their parentNode is gone
-      // the rest need to do is updating grandChildren in vuex
-
-      // the above finish the current tier
-      // beneath is gonna delete grand children into vuex
-
-      // const theIndexGonnaRemove = this.innerChildren.findIndex(
-      //   x => x.id === theNodeIdGonnaRemove
-      // )
-
       const records = [
         {
           path: theNodeIdGonnaRemove,
@@ -99,7 +89,7 @@ export default {
         }
       ]
 
-      function newGrandChildrenRecords(nodeId) {
+      const newGrandChildrenRecords = nodeId => {
         this.childrenOf[nodeId].forEach(child => {
           records.push({
             path: child.id,
