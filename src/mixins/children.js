@@ -1,25 +1,9 @@
 import { mapGetters, mapMutations } from 'vuex'
 import { CHILDREN } from '../const'
-import {
-  childDelete,
-  childUpdate,
-  cloneJson,
-  isUndefined,
-  traversal
-} from '../utils/tool'
+import { cloneJson, traversal } from '../utils/tool'
 import { draftIds } from '../utils/keyId'
 
 export default {
-  data() {
-    const getterName = `${this.isExample ? 'example' : 'draft'}/childrenOf`
-    // 這裡沒必要排序，index 在各自component選擇性處理就可以
-    // appendNestedIds(innerChildren)
-    // children 因為每次更新 nodesMap，如果innerChildren用computed會所有的component都被更新
-    const children = this.$store.getters[getterName][this.id]
-    return {
-      innerChildren: children.map(({ id, tag }) => ({ id, tag }))
-    }
-  },
   computed: {
     ...mapGetters('example', ['examplesMapByTag']),
     firstChild() {
@@ -27,31 +11,18 @@ export default {
     },
     hasAnyChild() {
       return this.firstChild
-    }
-  },
-  watch: {
-    innerChildren: {
-      handler(newValue, oldValue) {
-        console.log(JSON.stringify(newValue, oldValue))
-      },
-      deep: true
-    }
-  },
-  created() {
-    this.innerChildren.forEach(oldChild => {
-      this.$watch(
-        () => this.nodesMap[oldChild.id],
-        (newChild, oldChild) => {
-          console.log(oldChild.id)
-          if (isUndefined(newChild)) {
-            childDelete(this.innerChildren, oldChild)
-          } else {
-            childUpdate(oldChild, newChild)
-          }
-        },
-        { deep: true }
+    },
+    innerChildren() {
+      const getterName = `${this.isExample ? 'example' : 'draft'}/childrenOf`
+      // 這裡沒必要排序，index 在各自component選擇性處理就可以
+      // appendNestedIds(innerChildren)
+      // children 因為每次更新 nodesMap，如果innerChildren用computed會所有的component都被更新
+      return this.$store.getters[getterName][this.id].map(
+        ({ children, moved, parentId, ...node }) => ({
+          ...node
+        })
       )
-    })
+    }
   },
   methods: {
     ...mapMutations('draft', ['RECORD']),
@@ -73,7 +44,7 @@ export default {
 
       this.RECORD(records)
 
-      return nodes
+      // return nodes
     },
 
     create(example) {
@@ -85,16 +56,12 @@ export default {
       const theTreeGonnaCreate =
         example || this.examplesMapByTag[tag][CHILDREN][0]
 
-      const { id } = this.resetIdsAndRecord(theTreeGonnaCreate)
-
-      this.innerChildren.push({ id, tag })
+      this.resetIdsAndRecord(theTreeGonnaCreate)
+      // const { id } =
+      // this.innerChildren.push({ id, tag })
     },
 
     copy(theNodeIdGonnaCopy) {
-      // copy should considerate to the grandChildren tree,
-      // however each node should only include own children and update by `updateDifferenceToVuex`
-      // the rest of grand children should new into vuex, they will take care it own self since they have commonMixin
-      // const clonedInnerChildren = cloneJson()
       const theNodeGonnaCopy = this.innerChildren.find(
         x => x.id === theNodeIdGonnaCopy
       )
@@ -108,9 +75,9 @@ export default {
       }
 
       getChildrenTree(theNodeGonnaCopy, newNodesTree)
-      const { id, tag } = this.resetIdsAndRecord(newNodesTree)
-
-      this.innerChildren.push({ id, tag })
+      this.resetIdsAndRecord(newNodesTree)
+      // const { id, tag } =
+      // this.innerChildren.push({ id, tag })
     },
 
     remove(theNodeIdGonnaRemove) {
@@ -121,9 +88,9 @@ export default {
       // the above finish the current tier
       // beneath is gonna delete grand children into vuex
 
-      const theIndexGonnaRemove = this.innerChildren.findIndex(
-        x => x.id === theNodeIdGonnaRemove
-      )
+      // const theIndexGonnaRemove = this.innerChildren.findIndex(
+      //   x => x.id === theNodeIdGonnaRemove
+      // )
 
       const records = [
         {
@@ -145,7 +112,7 @@ export default {
 
       newGrandChildrenRecords(theNodeIdGonnaRemove)
       this.RECORD(records)
-      this.innerChildren.splice(theIndexGonnaRemove, 1)
+      // this.innerChildren.splice(theIndexGonnaRemove, 1)
 
       // CLEAN_SELECTED_COMPONENT_IDS
       const allDeletedIds = [this.id, ...records.map(x => x.path)]
