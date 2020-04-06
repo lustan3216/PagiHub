@@ -59,7 +59,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['SET_SELECTED_COMPONENT_IDS']),
+    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDS']),
     vmCreateItem,
     vmCopyNode,
     vmRemoveNode

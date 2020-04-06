@@ -1,6 +1,5 @@
 <template>
   <el-collapse v-model="activeNames">
-
     <el-collapse-item name="6">
       <template slot="title">
         <span class="el-dropdown">Style</span>
@@ -8,14 +7,15 @@
           v-if="hasError"
           circle
           type="text"
-          icon="el-icon-warning"/>
+          icon="el-icon-warning" />
       </template>
 
       <el-input
         :rows="10"
         v-model="styles"
         type="textarea"
-        @change="cssoStyle" />
+        @change="cssoStyle"
+      />
     </el-collapse-item>
   </el-collapse>
 </template>
@@ -25,6 +25,7 @@ import csso from 'csso'
 
 export default {
   name: 'StyleBlock',
+  // eslint-disable-next-line
   props: ['planStyle'],
   data() {
     return {

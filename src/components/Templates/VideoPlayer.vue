@@ -32,9 +32,6 @@ export default {
         ]
       }
       return Object.assign(this.playerOptions, source, this.innerProps)
-    },
-    player() {
-      // return this.$refs.videoPlayer.player
     }
   },
   watch: {

@@ -2,11 +2,16 @@
   <controller-layer v-if="hasAnyChild" :id="firstChild.id">
     <component :is="firstChild.tag" :id="firstChild.id" />
   </controller-layer>
-  <example-add
-    v-else-if="isDraftMode && !isExample"
-    :id="id"
-    @onAdd="resetIdsAndRecord($event)"
-  />
+  <div v-else-if="isDraftMode && !isExample" class="flex-center h-100 pointer">
+    <example-add :id="id" @onAdd="resetIdsAndRecord($event)" />
+    {{ node.id }}
+    <el-button
+      type="text"
+      icon="el-icon-delete"
+      size="small"
+      @click.stop="() => remove(node.id)"
+    />
+  </div>
 </template>
 
 <script>
@@ -25,21 +30,3 @@ export default {
   mixins: [importTemplates, childrenMixin, nodeMixin]
 }
 </script>
-
-<style scoped lang="scss">
-.drag-handler-icon {
-  position: absolute;
-  width: 12px;
-  top: 5px;
-  left: 5px;
-}
-.edit-area {
-  height: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-.fade-out {
-  transition: opacity 0.6s ease;
-  opacity: 0.1;
-}
-</style>

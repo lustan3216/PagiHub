@@ -109,6 +109,7 @@ Vue.mixin({
 
 const bus = new Vue()
 
+// eslint-disable-next-line
 Vue.prototype.$log = console.log
 Vue.config.productionTip = false
 Vue.config.devtools = process.env.NODE_ENV === 'development'

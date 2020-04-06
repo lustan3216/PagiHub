@@ -1,4 +1,3 @@
-import basic from './formItem/basic'
 import { pxPercent } from './validation'
 import { boolean, select, string } from './util'
 

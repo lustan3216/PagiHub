@@ -1,14 +1,14 @@
 <template>
   <div class="h-100 flex-center">
     <el-card v-bind="innerProps" :style="innerStyles">
-      <grid-generator :id="firstChild.id" />
+      <grid-generator :id="id" />
     </el-card>
   </div>
 </template>
 
 <script>
-import childrenMixin from '../../mixins/children'
 import nodeMixin from '../../mixins/node'
+import childrenMixin from '../../mixins/children'
 import GridGenerator from './GridGenerator'
 import { defaultSetting } from '../../settings/card'
 
@@ -18,7 +18,7 @@ export default {
   components: {
     GridGenerator
   },
-  mixins: [childrenMixin, nodeMixin]
+  mixins: [nodeMixin, childrenMixin]
 }
 </script>
 

@@ -1,4 +1,4 @@
-import { string, slider, boolean } from './util'
+import { string, boolean } from './util'
 
 const src1 = 'src1'
 const src2 = 'src2'

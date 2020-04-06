@@ -1,31 +1,113 @@
 <template>
-  <div class="flex-center h-100 pointer">
-    <examples-dialog :id="id" @onSelect="addTemplate($event)" />
-  </div>
+  <el-button
+    type="text"
+    icon="el-icon-circle-plus-outline"
+    @click.stop="visible = true"
+  >
+    <el-dialog
+      v-if="visible"
+      ref="dialog"
+      :visible="visible"
+      :modal="false"
+      class="dialog"
+      append-to-body
+      top="5vh"
+      width="90vw"
+      @open="$emit('open')"
+      @close="visible = false"
+    >
+      <el-tabs v-model="currentCategory" tab-position="left">
+        <el-tab-pane
+          v-for="category in categories"
+          :key="category.id"
+          :name="category.name"
+          :label="category.name"
+          lazy
+        >
+          <el-row :gutter="15" type="flex" style="flex-wrap: wrap">
+            <el-col
+              v-for="component in components"
+              :key="component.id"
+              :span="8"
+              class="m-b-15"
+              style="min-height: 200px;"
+            >
+              <el-card shadow="hover">
+                <component :is="component.tag" :id="component.id" />
+
+                <div style="padding: 14px;">
+                  <span>{{ component.tag }}</span>
+                  <div class="bottom clearfix">
+                    <time class="time">20.1933</time>
+                    <el-button
+                      type="text"
+                      class="button"
+                      @click="addTemplate(component)"
+                    >操作按钮</el-button
+                    >
+                  </div>
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
+  </el-button>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { vmMap } from '../../../utils/vmMap'
 import nodeMixin from '../../../mixins/node'
-import ExamplesDialog from './ExamplesDialog'
 import { cloneJson } from '../../../utils/tool'
+import { categories, FORM_ITEM_ID } from '../../../template'
+import { CATEGORY, ID, NAME } from '../../../const'
+import importTemplatesMixin from '../../../mixins/importTemplates'
 
 export default {
   name: 'ExampleAdd',
-  components: {
-    ExamplesDialog
+  mixins: [nodeMixin, importTemplatesMixin],
+  provide() {
+    return {
+      rootForm: {},
+      isExample: true
+    }
   },
-  mixins: [nodeMixin],
+  data() {
+    return {
+      visible: false,
+      currentCategory: categories[0][NAME]
+    }
+  },
   computed: {
-    ...mapGetters('draft', ['isRootForm', 'theRootForm'])
+    ...mapGetters('draft', ['isRootForm', 'theRootForm']),
+    ...mapState('example', ['examples']),
+    categories() {
+      const isRootForm = this.$store.getters['draft/isRootForm'](this.id)
+
+      if (isRootForm) {
+        return categories
+      } else {
+        return categories.filter(x => x[ID] !== FORM_ITEM_ID)
+      }
+    },
+    currentCategoryId() {
+      return this.categories.find(x => x[NAME] === this.currentCategory)[ID]
+    },
+    components() {
+      return (
+        this.visible &&
+        this.examples.filter(x => x[CATEGORY].includes(this.currentCategoryId))
+      )
+    }
   },
   methods: {
     addTemplate(template) {
-      // 因為resetNestedIds 會assign key，vuex會噴錯 strict
       template = cloneJson(template)
       this.cleanFormButtons(template)
       this.$emit('onAdd', template)
+      this.visible = false
     },
     cleanFormButtons(template) {
       const rootForm = this.theRootForm(this.id)
@@ -48,21 +130,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.drag-handler-icon {
-  position: absolute;
-  width: 12px;
-  top: 5px;
-  left: 5px;
-}
-.edit-area {
-  height: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-.fade-out {
-  transition: opacity 0.6s ease;
-  opacity: 0.1;
-}
-</style>

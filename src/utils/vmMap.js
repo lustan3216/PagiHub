@@ -32,7 +32,7 @@ export function assignStyles(id, styles) {
 export function vmCreateItem({ id }) {
   // layers, grid-generator, carousel, form-generator
   // can new layer-item, grid-item, carousel-item, form-item
-  vm(id).create()
+  vm(id).createEmptyItem()
 }
 
 export function vmCopyNode(node) {

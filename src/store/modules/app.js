@@ -3,9 +3,7 @@ import { arraySubtract } from '../../utils/tool'
 
 const state = {
   scaleRatio: 1,
-  selectedComponentIds: [],
-  noVisibleComponentIds: [],
-  noTouchableComponentIds: []
+  selectedComponentIds: []
 }
 
 const mutations = {
@@ -13,9 +11,11 @@ const mutations = {
   CLEAN_SELECTED_COMPONENT_IDS(state, ids) {
     state.selectedComponentIds = arraySubtract(state.selectedComponentIds, ids)
   },
-  SET_SELECTED_COMPONENT_IDS(state, id) {
-    const isNoExist = state.selectedComponentIds.includes(id)
-    if (!isNoExist) {
+  TOGGLE_SELECTED_COMPONENT_IDS(state, id) {
+    const isExist = state.selectedComponentIds.includes(id)
+    if (isExist) {
+      state.selectedComponentIds = arraySubtract(state.selectedComponentIds, id)
+    } else {
       state.selectedComponentIds.push(id)
     }
   }

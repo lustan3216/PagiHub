@@ -70,7 +70,12 @@ export default {
   components: {
     SelectUnit
   },
-  props: ['computedStyle'],
+  props: {
+    computedStyle: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     const boxShadows = parse(this.computedStyle.boxShadow)
 

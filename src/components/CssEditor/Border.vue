@@ -15,7 +15,7 @@
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-  
+
     <el-row :gutter="5" type="flex">
       <el-col :span="3">
         <el-button
@@ -24,19 +24,19 @@
           icon="el-icon-delete"
           @click.stop="clean"/>
       </el-col>
-      
+
       <el-col :span="8">
         <el-form-item label="Width">
           <select-unit :value.sync="currentBorder.width" />
         </el-form-item>
       </el-col>
-    
+
       <el-col :span="3">
         <el-form-item label="Color">
           <el-color-picker v-model="currentBorder.color" show-alpha />
         </el-form-item>
       </el-col>
-    
+
       <el-col :span="7">
         <el-form-item label="Style">
           <el-select v-model="currentBorder.style" placeholder="-">
@@ -61,21 +61,26 @@ export default {
   components: {
     SelectUnit
   },
-  props: ['computedStyle'],
+  props: {
+    computedStyle: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     const attrs = ['border', 'borderTop', 'borderRight', 'borderBottom', 'borderLeft']
-    
+
     const borders = attrs.map(name => {
       const attrs = ['width', 'style', 'color']
       const result = { id: name }
-  
+
       attrs.forEach(x => {
         const isNone = this.computedStyle[`${name}Style`] === 'none'
         result[x] = isNone ? undefined : this.computedStyle[name + x.capitalize()]
       })
       return result
     })
-    
+
     return {
       currentId: attrs[0],
       attrs,
@@ -99,22 +104,22 @@ export default {
     borders: {
       handler(borders) {
         const styles = {}
-  
+
         borders.forEach((border, index) => {
           let value
           const isAll = !index
           const borderString = this.borderString(border)
           const validString = this.isCurrentBorderValid ? undefined : borderString
-          
+
           if (this.isAllChange) {
             value = isAll ? borderString : validString
           } else {
             value = isAll ? validString : borderString
           }
-          
+
           styles[border.id.kebabCase()] = value
         })
-        
+
         this.$emit('change', styles)
       },
       deep: true

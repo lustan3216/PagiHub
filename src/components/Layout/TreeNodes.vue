@@ -82,14 +82,14 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['SET_SELECTED_COMPONENT_IDS']),
+    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDS']),
     filterTagBySearching(value, data) {
       if (!value) return true
       return data.tag.indexOf(value) !== -1
     },
     nodeClick() {
       const componentId = this.$refs.tree.getCurrentKey()
-      this.SET_SELECTED_COMPONENT_IDS(+componentId)
+      this.TOGGLE_SELECTED_COMPONENT_IDS(+componentId)
     }
   }
 }

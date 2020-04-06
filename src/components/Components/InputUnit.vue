@@ -5,7 +5,8 @@
     v-model="number"
     size="mini"
     type="number"
-    clearable>
+    clearable
+  >
     <div slot="append">{{ unit || '-' }}</div>
   </el-input>
 </template>
@@ -27,6 +28,9 @@ export default {
       default: ''
     },
     value: {
+      validator() {
+        return true
+      },
       default: null
     }
   },

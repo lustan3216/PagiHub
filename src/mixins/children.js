@@ -36,6 +36,7 @@ export default {
       nodes.parentId = this.id
 
       traversal(nodes, (_node, _parentNode) => {
+        // eslint-disable-next-line
         const { children: _, ...node } = _node
         records.push({
           path: node.id,
@@ -46,15 +47,18 @@ export default {
       this.RECORD(records)
     },
 
-    create() {
+    createEmptyItem() {
       // 這裏拿到的example有可能有deep children
       // template has a `canNew` setup to check can new or not
       // layers, grid-generator, carousel, form-generator
       // can new layer-item, grid-item, carousel-item, form-item
       const { tag } = this.node
-      const theTreeGonnaCreate = this.examplesMapByTag[tag][CHILDREN][0]
+      // eslint-disable-next-line
+      const { children: _, ...emptyItem } = this.examplesMapByTag[tag][
+        CHILDREN
+      ][0]
 
-      this.resetIdsAndRecord(theTreeGonnaCreate)
+      this.resetIdsAndRecord(emptyItem)
     },
 
     copy(theNodeIdGonnaCopy) {

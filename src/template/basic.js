@@ -1,17 +1,19 @@
 import { CAN_NEW_ITEM, STYLES, TAG, CHILDREN } from '../const'
 
-export const gridGenerator = function(children) {
-  const gridItems = [
+const gridItems = function() {
+  return [
     { [TAG]: 'grid-item', x: 0, y: 0, w: 22, h: 71 },
     { [TAG]: 'grid-item', x: 38, y: 19, w: 34, h: 52 },
     { [TAG]: 'grid-item', x: 22, y: 19, w: 16, h: 52 },
     { [TAG]: 'grid-item', x: 22, y: 0, w: 50, h: 19 }
   ]
-  gridItems.forEach(item => item.i = item.id)
+}
+
+export const gridGenerator = function() {
   return {
     [TAG]: 'grid-generator',
     [CAN_NEW_ITEM]: true,
-    [CHILDREN]: children || gridItems
+    [CHILDREN]: gridItems()
   }
 }
 
@@ -40,7 +42,7 @@ export const carousel = function() {
 export const card = function() {
   return {
     [TAG]: 'card',
-    [CHILDREN]: [gridGenerator()]
+    [CHILDREN]: gridItems()
   }
 }
 
@@ -77,9 +79,7 @@ export const videoPlayer = function() {
 export const drawer = function() {
   return {
     [TAG]: 'drawer',
-    [CHILDREN]: [
-      gridGenerator([{ [TAG]: 'grid-item', x: 0, y: 0, w: 72, h: 10 }])
-    ]
+    [CHILDREN]: gridItems()
   }
 }
 

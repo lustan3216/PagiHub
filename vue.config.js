@@ -19,13 +19,14 @@ module.exports = {
           loader: 'vue-svg-loader'
         }
       ]
-    },
-    plugins: [new HardSourceWebpackPlugin()]
+    }
   },
   chainWebpack: config => {
     config.module.rules.delete('svg')
 
     config.plugin('analyzer').use(BundleAnalyzerPlugin)
+
+    config.plugin('cache').use(HardSourceWebpackPlugin)
     // config.plugin('circular').use(CircularDependencyPlugin)
   }
 }

@@ -12,7 +12,7 @@
             placeholder="Class"/>
         </el-form-item>
       </el-col>
-      
+
       <el-col :span="7">
         <el-form-item>
           <el-select v-model="value" placeholder="State" size="small">
@@ -22,14 +22,19 @@
         </el-form-item>
       </el-col>
     </el-row>
-    
+
   </div>
 </template>
 
 <script>
 export default {
   name: 'ClassState',
-  props: ['computedStyle'],
+  props: {
+    computedStyle: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       isCornerAll: true

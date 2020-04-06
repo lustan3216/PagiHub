@@ -8,17 +8,17 @@
   >
     <div
       v-if="node && isDraftMode && !isExample && isDraggableItem"
-      :class="{ noClick, noDrag: !noClick }"
       class="h-100"
     >
       <slot />
     </div>
+
     <slot v-else />
 
     <el-popover
-      v-if="$parent.$el"
+      v-if="$parent.$el && !isExample"
       :reference="$parent.$el"
-      placement="right"
+      :placement="node.canNewItem ? 'top' : 'right'"
       trigger="hover"
     >
       <span class="m-r-10">{{ node.tag | shortTagName }}</span>
@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import NodeController from '../../Layout/Controller/NodeController'
 import { shortTagName } from '../../../utils/node'
 
@@ -51,12 +51,12 @@ export default {
   },
   computed: {
     ...mapState('draft', ['nodesMap']),
-    ...mapGetters('app', ['selectedComponentId']),
+    ...mapState('app', ['selectedComponentIds']),
     node() {
       return this.nodesMap[this.id]
     },
     elevate() {
-      return this.selectedComponentId === this.id
+      return this.selectedComponentIds.includes(this.id)
     },
     isDraggableItem() {
       return [
@@ -71,9 +71,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['SET_SELECTED_COMPONENT_IDS']),
+    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDS']),
     setComponentId() {
-      this.SET_SELECTED_COMPONENT_IDS(+this.id)
+      this.TOGGLE_SELECTED_COMPONENT_IDS(+this.id)
     },
     dblclick() {
       this.noClick = false
@@ -88,6 +88,6 @@ export default {
 }
 .elevate {
   border-color: #589ff8ad !important;
-  box-shadow: 0 3px 20px -9px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 1px 3px 20px -5px rgba(0, 0, 0, 0.25) !important;
 }
 </style>

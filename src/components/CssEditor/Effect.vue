@@ -97,7 +97,12 @@ export default {
   components: {
     InputUnit
   },
-  props: ['computedStyle'],
+  props: {
+    computedStyle: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     // const styles = this.getStyles()
     //

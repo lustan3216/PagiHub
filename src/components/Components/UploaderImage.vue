@@ -4,7 +4,8 @@
     <el-dialog
       :visible.sync="dialogTableVisible"
       append-to-body
-      title="收货地址">
+      title="收货地址"
+    >
       <el-upload
         :on-preview="handlePictureCardPreview"
         :on-remove="handleRemove"
@@ -33,7 +34,7 @@ export default {
   },
   methods: {
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      // console.log(file, fileList)
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url

@@ -63,7 +63,8 @@ const actions = {
       draftIds.appendIdNested(initTemplate)
 
       traversal(initTemplate, _node => {
-        const { children, ...node } = _node
+        // eslint-disable-next-line
+        const { children: _, ...node } = _node
         nodesMap[node.id] = node
       })
     }

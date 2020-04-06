@@ -4,10 +4,10 @@
     <portal :disabled="isExample" to="Root">
       <el-drawer
         v-bind="innerProps"
-        :class="{ 'hide-header': hideHeader }"
+        :class="{ hideHeader }"
         :visible.sync="drawer"
       >
-        <grid-generator :id="firstChild.id"/>
+        <grid-generator :id="id" />
       </el-drawer>
     </portal>
   </el-button>
@@ -15,8 +15,8 @@
 
 <script>
 import { Drawer } from 'element-ui'
-import childrenMixin from '../../mixins/children'
 import nodeMixin from '../../mixins/node'
+import childrenMixin from '../../mixins/children'
 import GridGenerator from './GridGenerator'
 import { defaultSetting } from '../../settings/drawer'
 
@@ -27,7 +27,7 @@ export default {
     ElDrawer: Drawer,
     GridGenerator
   },
-  mixins: [childrenMixin, nodeMixin],
+  mixins: [nodeMixin, childrenMixin],
   data() {
     return {
       drawer: false,
@@ -56,7 +56,7 @@ export default {
     height: 100%;
   }
 }
-::v-deep.hide-header > div > div > .el-drawer__header {
+::v-deep.hideHeader > div > div > .el-drawer__header {
   display: none;
 }
 </style>

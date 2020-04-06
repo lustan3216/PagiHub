@@ -36,6 +36,9 @@ export default {
       default: false
     },
     value: {
+      validator() {
+        return true
+      },
       default: null
     },
     exclude: {
@@ -58,6 +61,7 @@ export default {
       } else if (parseInt(this.value) === 0) {
         return ['0', 'px']
       } else {
+        // eslint-disable-next-line
         const [_, number = '0', unit = 'px'] = this.value
           .toString()
           .match(/^(\d+)?([a-z|%]+)?/)
