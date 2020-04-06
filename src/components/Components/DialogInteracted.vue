@@ -44,81 +44,90 @@ export default {
   mounted() {
     const interact = interactjs(this.$el)
     const edges = this.resizeEdges
+
     if (this.resizable) {
-      interact.resizable({
-        // resize from all edges and corners
-        edges: this.resizeEdges,
-        ignoreFrom: '.vue-resizable-handle',
-        listeners: {
-          move: event => {
-            var target = event.target
-            if (edges.left && edges.right) {
-              target.style.width = event.rect.width / this.scaleRatio + 'px'
+      interact
+        .resizable({
+          // resize from all edges and corners
+          edges: this.resizeEdges,
+          ignoreFrom: '.vue-resizable-handle',
+          listeners: {
+            move: event => {
+              var target = event.target
+              if (edges.left && edges.right) {
+                target.style.width = event.rect.width / this.scaleRatio + 'px'
+              }
+
+              if (edges.top && edges.bottom) {
+                target.style.height = event.rect.height / this.scaleRatio + 'px'
+              }
+
+              let { x, y } = event.target.dataset
+
+              x = parseFloat(x) || 0
+              y = parseFloat(y) || 0
+              x += event.deltaRect.left / this.scaleRatio
+              y += event.deltaRect.top / this.scaleRatio
+
+              target.style.webkitTransform = target.style.transform = `translate(${x}px, ${y}px)`
+
+              target.setAttribute('data-x', x)
+              target.setAttribute('data-y', y)
+
+              this.$emit('resize', event)
             }
+          },
+          modifiers: [
+            // keep the edges inside the parent
+            interactjs.modifiers.restrictEdges({
+              // outer: 'parent'
+            }),
 
-            if (edges.top && edges.bottom) {
-              target.style.height = event.rect.height / this.scaleRatio + 'px'
-            }
+            // minimum size
+            interactjs.modifiers.restrictSize({
+              min: { width: 100, height: 50 }
+            })
+          ],
 
-            let { x, y } = event.target.dataset
+          inertia: true
+        })
+        .on(['resizeend'], () => this.$emit('resizeEnd'))
+        .on(['resizestart'], () => this.$emit('resizeStart'))
 
-            x = parseFloat(x) || 0
-            y = parseFloat(y) || 0
-            x += event.deltaRect.left / this.scaleRatio
-            y += event.deltaRect.top / this.scaleRatio
-
-            target.style.webkitTransform = target.style.transform = `translate(${x}px, ${y}px)`
-
-            target.setAttribute('data-x', x)
-            target.setAttribute('data-y', y)
-
-            this.$emit('resize', event)
-          }
-        },
-        modifiers: [
-          // keep the edges inside the parent
-          interactjs.modifiers.restrictEdges({
-            // outer: 'parent'
-          }),
-
-          // minimum size
-          interactjs.modifiers.restrictSize({
-            min: { width: 100, height: 50 }
-          })
-        ],
-
-        inertia: true
-      })
+      // interactjs(this.$el)
     }
 
     if (this.draggable) {
-      interact.draggable({
-        allowFrom: this.draggableHandler,
-        ignoreFrom: '.vue-resizable-handle',
-        listeners: {
-          move: event => {
-            const target = event.target
-            let { x, y } = event.target.dataset
-            x = (parseFloat(x) || 0) + event.dx
-            y = (parseFloat(y) || 0) + event.dy
+      interact
+        .draggable({
+          allowFrom: this.draggableHandler,
+          ignoreFrom: '.vue-resizable-handle',
+          listeners: {
+            move: event => {
+              const target = event.target
+              let { x, y } = event.target.dataset
+              x = (parseFloat(x) || 0) + event.dx
+              y = (parseFloat(y) || 0) + event.dy
 
-            const translate = `translate(${x}px, ${y}px)`
-            target.style.webkitTransform = target.style.transform = translate
+              const translate = `translate(${x}px, ${y}px)`
+              target.style.webkitTransform = target.style.transform = translate
 
-            target.setAttribute('data-x', x)
-            target.setAttribute('data-y', y)
+              target.setAttribute('data-x', x)
+              target.setAttribute('data-y', y)
 
-            this.$emit('drag', event)
-          }
-        },
-        inertia: true,
-        modifiers: [
-          interactjs.modifiers.restrictRect({
-            // restriction: 'parent',
-            endOnly: true
-          })
-        ]
-      })
+              this.$emit('drag', event)
+            }
+          },
+          inertia: true,
+          modifiers: [
+            interactjs.modifiers.restrictRect({
+              // restriction: 'parent',
+              endOnly: true
+            })
+          ]
+        })
+        .on(['dragstart'], () => this.$emit('dragStart'))
+        .on(['dragend'], () => this.$emit('dragEnd'))
     }
   },
   methods: {

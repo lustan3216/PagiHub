@@ -31,6 +31,7 @@ export default {
   directives: { Clickoutside },
   props: {
     value: {
+      type: String,
       required: true
     },
     colorFormat: {

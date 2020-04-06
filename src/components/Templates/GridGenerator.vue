@@ -2,8 +2,8 @@
   <grid-layout
     v-if="hasAnyChild"
     v-bind="innerProps"
-    :class="{ editable: isDraftMode }"
-    :col-num="36"
+    :class="{ editable: isDraftMode && !isAnimating }"
+    :col-num="12"
     :vertical-compact="false"
     :row-height="5"
     :style="innerStyles"
@@ -36,7 +36,6 @@ import nodeMixin from '../../mixins/node'
 import importTemplatesMixin from '../../mixins/importTemplates'
 import GridItemChild from './Abstract/GridItemChild'
 import { defaultSetting } from '../../settings/gridGenerator'
-import { $element } from '../../utils/vmMap'
 
 export default {
   defaultSetting,
@@ -53,6 +52,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', ['isAnimating']),
     ...mapState('draft', ['nodesMap'])
   },
   watch: {
@@ -65,7 +65,6 @@ export default {
     }
   },
   methods: {
-    $element,
     update(newChildren) {
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
       const records = []
@@ -87,13 +86,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* grid layout has performance issus when using border and border-radius */
 .editable {
-  border-radius: 3px;
-
   & > .vue-grid-item {
-    position: relative;
     border: 1px dashed #dedede;
-    border-radius: 3px;
+    box-sizing: inherit;
+    margin-left: -1px;
+    margin-top: -1px;
 
     & > div > .vue-grid-layout {
       border: none;

@@ -21,32 +21,33 @@
         <tree-nodes />
       </el-tab-pane>
 
-      <el-tab-pane label="CSS " name="css" lazy>
-        <tree-css />
+      <el-tab-pane
+        v-if="canShowSetting"
+        label="Setting"
+        name="setting"
+        lazy>
+        <setting-nested :id="selectedComponentId" :specs="specs" />
       </el-tab-pane>
 
-      <template v-if="canShowSetting">
-        <el-tab-pane label="Setting" name="setting" lazy>
-          <setting-nested :id="selectedComponentId" :specs="specs" />
-        </el-tab-pane>
-
-        <el-tab-pane label="Style" name="style" lazy>
-          <setting-styles />
-        </el-tab-pane>
-      </template>
-
-      <el-tab-pane label="Color" name="Color" lazy />
+      <el-tab-pane
+        v-if="selectedComponentIds.length"
+        label="Style"
+        name="style"
+        lazy
+      >
+        <setting-styles />
+      </el-tab-pane>
     </el-tabs>
   </component>
 </template>
 
 <script>
-import clone from 'clone'
 import formCreate from '@form-create/element-ui'
 import { mapState, mapGetters } from 'vuex'
 import SettingStyles from './SettingStyles'
 import SettingNested from './SettingNested'
 import allSettingSpecs from '../../settings'
+import { cloneJson } from '../../utils/tool'
 import FlexSidebar from '../Templates/FlexSidebar'
 import DialogInteracted from '../Components/DialogInteracted'
 
@@ -59,8 +60,7 @@ export default {
     DialogInteracted,
     FormCreate: formCreate.$form(),
     TreeNodes: () => import('./TreeNodes'),
-    TreeComponents: () => import('./TreeComponents'),
-    TreeCss: () => import('./TreeCss')
+    TreeComponents: () => import('./TreeComponents')
   },
   data() {
     return {
@@ -70,16 +70,16 @@ export default {
   },
   computed: {
     ...mapState('draft', ['nodesMap']),
+    ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentId', 'selectedComponentNode']),
     canShowSetting() {
-      return (
-        this.selectedComponentNode &&
-        this.specs &&
-        Object.keys(this.specs).length
-      )
+      return this.specs && Object.hasAnyKey(this.specs)
     },
     specs() {
-      return clone(allSettingSpecs[this.selectedComponentNode.tag.camelCase()])
+      if (!this.selectedComponentNode) return
+      return cloneJson(
+        allSettingSpecs[this.selectedComponentNode.tag.camelCase()]
+      )
     }
   },
   watch: {

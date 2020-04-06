@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="{ elevate }"
+    :class="{ elevate: elevate && isDraftMode }"
     class="layer h-100"
     @click.stop="setComponentId"
     @dblclick.stop="dblclick"
@@ -16,7 +16,7 @@
     <slot v-else />
 
     <el-popover
-      v-if="$parent.$el && !isExample"
+      v-if="$parent.$el && isDraftMode && !isExample"
       :reference="$parent.$el"
       :placement="node.canNewItem ? 'top' : 'right'"
       trigger="hover"
@@ -71,9 +71,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDS']),
+    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_ID']),
     setComponentId() {
-      this.TOGGLE_SELECTED_COMPONENT_IDS(+this.id)
+      this.TOGGLE_SELECTED_COMPONENT_ID(+this.id)
     },
     dblclick() {
       this.noClick = false

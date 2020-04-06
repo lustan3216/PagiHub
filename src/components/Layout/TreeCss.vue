@@ -104,7 +104,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDS']),
+    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_ID']),
     filterTagBySearching(value, data) {
       if (!value) return true
       return data.tag.indexOf(value) !== -1
@@ -122,7 +122,7 @@ export default {
     },
     nodeClick() {
       const componentId = this.$refs.tree.getCurrentKey()
-      this.TOGGLE_SELECTED_COMPONENT_IDS(+componentId)
+      this.TOGGLE_SELECTED_COMPONENT_ID(+componentId)
     }
   }
 }

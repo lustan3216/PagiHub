@@ -12,7 +12,7 @@
   </div>
   <div v-else>
     <div v-for="(object, key) in specs" :key="key">
-      <nested-settings
+      <settings-nested
         :id="id"
         :specs="object"
         :name="key"

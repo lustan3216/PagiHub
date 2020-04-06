@@ -63,3 +63,5 @@ b: { c: 5, d: { e: 6 }}
 12 點兩下進入編輯模式，ocmpoennt考慮要不要進入另一個工作區
 
 13. treenode 點了可以  import scrollIntoView from 'element-ui/src/utils/scroll-into-view' 
+
+14. color 快捷設定

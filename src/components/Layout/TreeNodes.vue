@@ -10,12 +10,13 @@
       ref="tree"
       :filter-node-method="filterTagBySearching"
       :data="neatTreeOnlyForDisplay"
+      :default-expanded-keys="selectedComponentIds"
       :indent="12"
       class="tree"
       node-key="id"
       highlight-current
       show-checkbox
-      @node-click="nodeClick"
+      @check="checkedChange"
     >
       <template v-slot="{ data }">
         <span class="justify-between w-100">
@@ -31,10 +32,9 @@
 </template>
 
 <script>
-import clone from 'clone'
 import { Tree } from 'element-ui'
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { traversal } from '../../utils/tool'
+import { traversal, cloneJson } from '../../utils/tool'
 import { shortTagName } from '../../utils/node'
 import NodeController from './Controller/NodeController'
 
@@ -53,11 +53,11 @@ export default {
   },
   computed: {
     ...mapState('draft', ['nodesMap']),
+    ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('draft', ['tree']),
-    ...mapGetters('app', ['selectedComponentId']),
     neatTreeOnlyForDisplay() {
       // 這棵樹是髒的，純粹為了渲染而已，建議不要使用裡面有資料是錯的
-      const cloned = clone(this.tree)
+      const cloned = cloneJson(this.tree)
       traversal(cloned, node => {
         if (node.tag === 'grid-item') {
           Object.assign(node, node.children[0])
@@ -74,22 +74,28 @@ export default {
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val)
-    }
-  },
-  mounted() {
-    if (this.selectedComponentId) {
-      this.$refs.tree.setCurrentKey(this.selectedComponentId)
+    },
+    selectedComponentIds: {
+      handler(newValue) {
+        this.$nextTick(() => {
+          this.$refs.tree.setChecked(1, false, true)
+          newValue.forEach(x => this.$refs.tree.setChecked(x, true))
+        })
+      },
+      immediate: true
     }
   },
   methods: {
-    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDS']),
+    ...mapMutations('app', [
+      'TOGGLE_SELECTED_COMPONENT_ID',
+      'SET_SELECTED_COMPONENT_IDS'
+    ]),
     filterTagBySearching(value, data) {
       if (!value) return true
       return data.tag.indexOf(value) !== -1
     },
-    nodeClick() {
-      const componentId = this.$refs.tree.getCurrentKey()
-      this.TOGGLE_SELECTED_COMPONENT_IDS(+componentId)
+    checkedChange({ id }) {
+      this.TOGGLE_SELECTED_COMPONENT_ID(id)
     }
   }
 }

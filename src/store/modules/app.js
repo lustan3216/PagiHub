@@ -2,6 +2,7 @@ import { SET } from '../index'
 import { arraySubtract } from '../../utils/tool'
 
 const state = {
+  isAnimating: false,
   scaleRatio: 1,
   selectedComponentIds: []
 }
@@ -11,7 +12,10 @@ const mutations = {
   CLEAN_SELECTED_COMPONENT_IDS(state, ids) {
     state.selectedComponentIds = arraySubtract(state.selectedComponentIds, ids)
   },
-  TOGGLE_SELECTED_COMPONENT_IDS(state, id) {
+  SET_SELECTED_COMPONENT_IDS(state, ids) {
+    state.selectedComponentIds = ids
+  },
+  TOGGLE_SELECTED_COMPONENT_ID(state, id) {
     const isExist = state.selectedComponentIds.includes(id)
     if (isExist) {
       state.selectedComponentIds = arraySubtract(state.selectedComponentIds, id)
