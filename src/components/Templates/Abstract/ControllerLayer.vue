@@ -8,20 +8,36 @@
   >
     <div
       v-if="node && isDraftMode && !isExample && isDraggableItem"
-      :class="{ noClick, 'noDrag': !noClick }"
+      :class="{ noClick, noDrag: !noClick }"
       class="h-100"
     >
       <slot />
     </div>
     <slot v-else />
+
+    <el-popover
+      v-if="$parent.$el"
+      :reference="$parent.$el"
+      placement="right"
+      trigger="hover"
+    >
+      <span class="m-r-10">{{ node.tag | shortTagName }}</span>
+      <node-controller :id="id" />
+    </el-popover>
   </div>
 </template>
-
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex'
+import NodeController from '../../Layout/Controller/NodeController'
+import { shortTagName } from '../../../utils/node'
+
 export default {
-  name: 'MiddleLayer',
+  name: 'ControllerLayer',
   inject: { isExample: { default: false }},
+  components: {
+    NodeController
+  },
+  filters: { shortTagName },
   props: {
     id: {
       type: Number,

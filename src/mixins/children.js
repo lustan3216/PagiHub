@@ -44,22 +44,17 @@ export default {
       })
 
       this.RECORD(records)
-
-      // return nodes
     },
 
-    create(example) {
+    create() {
       // 這裏拿到的example有可能有deep children
       // template has a `canNew` setup to check can new or not
       // layers, grid-generator, carousel, form-generator
       // can new layer-item, grid-item, carousel-item, form-item
-      const { tag } = example
-      const theTreeGonnaCreate =
-        example || this.examplesMapByTag[tag][CHILDREN][0]
+      const { tag } = this.node
+      const theTreeGonnaCreate = this.examplesMapByTag[tag][CHILDREN][0]
 
       this.resetIdsAndRecord(theTreeGonnaCreate)
-      // const { id } =
-      // this.innerChildren.push({ id, tag })
     },
 
     copy(theNodeIdGonnaCopy) {
@@ -70,8 +65,6 @@ export default {
       const children = this.childrenOf[theNodeIdGonnaCopy]
       theNodeGonnaCopy[CHILDREN] = children
       this.resetIdsAndRecord(theNodeGonnaCopy)
-      // const { id, tag } =
-      // this.innerChildren.push({ id, tag })
     },
 
     remove(theNodeIdGonnaRemove) {
@@ -82,20 +75,19 @@ export default {
         }
       ]
 
-      const newGrandChildrenRecords = nodeId => {
+      const grandChildrenRecords = nodeId => {
         this.childrenOf[nodeId].forEach(child => {
           records.push({
             path: child.id,
             value: undefined
           })
 
-          newGrandChildrenRecords(child.id)
+          grandChildrenRecords(child.id)
         })
       }
 
-      newGrandChildrenRecords(theNodeIdGonnaRemove)
+      grandChildrenRecords(theNodeIdGonnaRemove)
       this.RECORD(records)
-      // this.innerChildren.splice(theIndexGonnaRemove, 1)
 
       // CLEAN_SELECTED_COMPONENT_IDS
       const allDeletedIds = [this.id, ...records.map(x => x.path)]

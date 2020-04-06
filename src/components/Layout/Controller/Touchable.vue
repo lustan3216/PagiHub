@@ -9,35 +9,38 @@
 
 <script>
 import { vm as _vm } from '../../../utils/vmMap'
+import Vue from 'vue'
+const observable = Vue.observable({ ids: [] })
 
 export default {
-  name: 'Visible',
+  name: 'Touchable',
   props: {
     id: {
-      type: Number,
-      required: true
+      type: Number
     }
   },
-  data() {
-    const element = this.theElement()
-
-    return {
-      element,
-      touchable: !element.classList.contains('no-action')
-    }
-  },
-  watch: {
-    touchable(value) {
-      this.element.classList[value ? 'remove' : 'add']('no-action')
-    }
-  },
-  methods: {
-    theElement() {
+  computed: {
+    element() {
       const vm = _vm(this.id)
       return vm.$el.closest('.vue-grid-item') || vm.$el
     },
+    touchable() {
+      return observable.ids.indexOf(this.id) === -1
+    }
+  },
+  watch: {
+    touchable(canTouch) {
+      this.element.classList[canTouch ? 'remove' : 'add']('no-action')
+    }
+  },
+  methods: {
     click() {
-      this.touchable = !this.touchable
+      const index = observable.ids.indexOf(this.id)
+      if (index > -1) {
+        observable.ids.splice(index, 1)
+      } else {
+        observable.ids.push(this.id)
+      }
     }
   }
 }

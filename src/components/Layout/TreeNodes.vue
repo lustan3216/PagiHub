@@ -17,13 +17,13 @@
       show-checkbox
       @node-click="nodeClick"
     >
-      <template v-slot="{ node, data }">
+      <template v-slot="{ data }">
         <span class="justify-between w-100">
           <span class="el-tree-node__label align-center m-r-10">
-            {{ data.tag }} - {{ data.id }}
+            {{ data.tag | shortTagName }} - {{ data.id }}
           </span>
 
-          <node-controller :id="data.id" />
+          <node-controller :id="data.id" :exclude="['copy', 'delete']" />
         </span>
       </template>
     </el-tree>
@@ -35,6 +35,7 @@ import clone from 'clone'
 import { Tree } from 'element-ui'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { traversal } from '../../utils/tool'
+import { shortTagName } from '../../utils/node'
 import NodeController from './Controller/NodeController'
 
 export default {
@@ -43,6 +44,7 @@ export default {
     ElTree: Tree,
     NodeController
   },
+  filters: { shortTagName },
   data() {
     return {
       filterText: '',
@@ -64,13 +66,6 @@ export default {
 
         if (['card', 'drawer', 'form-generator'].includes(node.tag)) {
           Object.assign(node.children, node.children[0].children)
-        }
-
-        const splitTag = node.tag.split('-')
-        if (splitTag[1] === 'generator') {
-          node.tag = splitTag[0]
-        } else if (splitTag[0] === 'form') {
-          node.tag = splitTag[1]
         }
       })
       return cloned

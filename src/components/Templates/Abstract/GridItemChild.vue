@@ -1,11 +1,11 @@
 <template>
-  <middle-layer v-if="hasAnyChild" :id="firstChild.id">
+  <controller-layer v-if="hasAnyChild" :id="firstChild.id">
     <component :is="firstChild.tag" :id="firstChild.id" />
-  </middle-layer>
+  </controller-layer>
   <example-add
     v-else-if="isDraftMode && !isExample"
     :id="id"
-    @onAdd="create($event)"
+    @onAdd="resetIdsAndRecord($event)"
   />
 </template>
 
@@ -13,13 +13,13 @@
 import importTemplates from '../../../mixins/importTemplates'
 import childrenMixin from '../../../mixins/children'
 import nodeMixin from '../../../mixins/node'
-import MiddleLayer from './MiddleLayer'
+import ControllerLayer from './ControllerLayer'
 import ExampleAdd from './ExampleAdd'
 
 export default {
   name: 'GridItemChild',
   components: {
-    MiddleLayer,
+    ControllerLayer,
     ExampleAdd
   },
   mixins: [importTemplates, childrenMixin, nodeMixin]

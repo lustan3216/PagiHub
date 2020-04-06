@@ -36,6 +36,7 @@ import nodeMixin from '../../mixins/node'
 import importTemplatesMixin from '../../mixins/importTemplates'
 import GridItemChild from './Abstract/GridItemChild'
 import { defaultSetting } from '../../settings/gridGenerator'
+import { $element } from '../../utils/vmMap'
 
 export default {
   defaultSetting,
@@ -64,6 +65,7 @@ export default {
     }
   },
   methods: {
+    $element,
     update(newChildren) {
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
       const records = []

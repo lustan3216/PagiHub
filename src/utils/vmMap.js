@@ -29,7 +29,7 @@ export function assignStyles(id, styles) {
   vm(id).assignStyles(styles)
 }
 
-export function vmNewNode({ id }) {
+export function vmCreateItem({ id }) {
   // layers, grid-generator, carousel, form-generator
   // can new layer-item, grid-item, carousel-item, form-item
   vm(id).create()
