@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import commonMixin from '../../../mixins/common'
+import nodeMixin from '../../../mixins/node'
 import formItemMixin from '../../../mixins/formItem'
 import { defaultSetting } from '../../../settings/formItem/formInput'
 
@@ -16,6 +16,6 @@ export default {
   defaultSetting,
   type: 'InputNumber',
   name: 'FormNumber',
-  mixins: [commonMixin, formItemMixin]
+  mixins: [nodeMixin, formItemMixin]
 }
 </script>

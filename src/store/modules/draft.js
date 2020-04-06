@@ -27,7 +27,7 @@ window.localforage = localforage
 
 const state = {
   nodesMap: {},
-  keyName: 'asd'
+  componentName: 'asd'
 }
 
 const mutations = {
@@ -46,13 +46,13 @@ const mutations = {
   },
   UPDATE_NODES_MAP(state, payload) {
     state.nodesMap = payload
-    localforage.setItem(state.keyName, payload)
+    localforage.setItem(state.componentName, payload)
   }
 }
 
 const actions = {
   async getRootNode({ commit, state }) {
-    const nodesMap = (await localforage.getItem(state.keyName)) || {}
+    const nodesMap = (await localforage.getItem(state.componentName)) || {}
 
     if (Object.hasAnyKey(nodesMap)) {
       const ids = Object.keys(nodesMap).map(x => parseInt(x))

@@ -9,7 +9,7 @@
     <el-tree
       ref="tree"
       :filter-node-method="filterTagBySearching"
-      :data="neatTree"
+      :data="neatTreeOnlyForDisplay"
       :indent="12"
       class="tree"
       node-key="id"
@@ -23,33 +23,7 @@
             {{ data.tag }} - {{ data.id }}
           </span>
 
-          <span>
-            <visibility v-if="data.tag !== 'grid-item'" :id="data.id" />
-
-            <el-button type="text" size="mini" icon="el-icon-attract" />
-
-            <el-button
-              v-if="data.canNew"
-              type="text"
-              size="mini"
-              icon="el-icon-copy-document"
-              @click.stop="() => vmNewNode(data)"
-            />
-
-            <el-button
-              type="text"
-              size="mini"
-              icon="el-icon-copy-document"
-              @click.stop="() => vmCopyNode(data)"
-            />
-
-            <el-button
-              type="text"
-              icon="el-icon-delete"
-              size="mini"
-              @click.stop="() => vmRemoveNode(data)"
-            />
-          </span>
+          <node-controller :id="data.id" />
         </span>
       </template>
     </el-tree>
@@ -57,18 +31,17 @@
 </template>
 
 <script>
-import { Tree } from 'element-ui'
 import clone from 'clone'
+import { Tree } from 'element-ui'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { traversal } from '../../utils/tool'
-import { vmNewNode, vmCopyNode, vmRemoveNode } from '../../utils/vmMap'
-import Visibility from './Visibility'
+import NodeController from './Controller/NodeController'
 
 export default {
   name: 'TreeNodes',
   components: {
     ElTree: Tree,
-    Visibility
+    NodeController
   },
   data() {
     return {
@@ -80,7 +53,8 @@ export default {
     ...mapState('draft', ['nodesMap']),
     ...mapGetters('draft', ['tree']),
     ...mapGetters('app', ['selectedComponentId']),
-    neatTree() {
+    neatTreeOnlyForDisplay() {
+      // 這棵樹是髒的，純粹為了渲染而已，建議不要使用裡面有資料是錯的
       const cloned = clone(this.tree)
       traversal(cloned, node => {
         if (node.tag === 'grid-item') {
@@ -90,6 +64,13 @@ export default {
 
         if (['card', 'drawer', 'form-generator'].includes(node.tag)) {
           Object.assign(node.children, node.children[0].children)
+        }
+
+        const splitTag = node.tag.split('-')
+        if (splitTag[1] === 'generator') {
+          node.tag = splitTag[0]
+        } else if (splitTag[0] === 'form') {
+          node.tag = splitTag[1]
         }
       })
       return cloned
@@ -106,9 +87,6 @@ export default {
     }
   },
   methods: {
-    vmNewNode,
-    vmCopyNode,
-    vmRemoveNode,
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_IDS']),
     filterTagBySearching(value, data) {
       if (!value) return true

@@ -48,6 +48,7 @@ export default {
       interact.resizable({
         // resize from all edges and corners
         edges: this.resizeEdges,
+        ignoreFrom: '.vue-resizable-handle',
         listeners: {
           move: event => {
             var target = event.target
@@ -93,6 +94,7 @@ export default {
     if (this.draggable) {
       interact.draggable({
         allowFrom: this.draggableHandler,
+        ignoreFrom: '.vue-resizable-handle',
         listeners: {
           move: event => {
             const target = event.target

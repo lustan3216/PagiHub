@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import commonMixin from '../../../mixins/common'
+import nodeMixin from '../../../mixins/node'
 import FlexButton from '../FlexButton'
 import { defaultSetting } from '../../../settings/formItem/formInput'
 
@@ -17,7 +17,7 @@ export default {
   components: {
     FlexButton
   },
-  mixins: [commonMixin],
+  mixins: [nodeMixin],
   inject: ['rootForm'],
   created() {
     if (!this.isExample) {

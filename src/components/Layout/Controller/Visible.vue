@@ -1,6 +1,6 @@
 <template>
   <el-button
-    :icon="visible ? 'el-icon-view' : 'el-icon-star-off'"
+    :icon="visible ? 'el-icon-view' : 'el-icon-circle-close'"
     type="text"
     size="mini"
     @click.stop="click"
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { vmMap } from '../../utils/vmMap'
+import { vm as _vm } from '../../../utils/vmMap'
 
 export default {
   name: 'Visibility',
@@ -19,15 +19,11 @@ export default {
     }
   },
   data() {
-    // 新增複製時，有可能拿不到vm
-    const vm = vmMap[this.id]
+    const element = this.theElement()
+
     return {
-      visible: vm ? !vm.$el.classList.contains('invisible') : true
-    }
-  },
-  computed: {
-    element() {
-      return vmMap[this.id].$el
+      element,
+      visible: !element.classList.contains('invisible')
     }
   },
   watch: {
@@ -36,6 +32,10 @@ export default {
     }
   },
   methods: {
+    theElement() {
+      const vm = _vm(this.id)
+      return vm.$el.closest('.vue-grid-item') || vm.$el
+    },
     click() {
       this.visible = !this.visible
     }

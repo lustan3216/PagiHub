@@ -8,7 +8,7 @@
 
 <script>
 import childrenMixin from '../../mixins/children'
-import commonMixin from '../../mixins/common'
+import nodeMixin from '../../mixins/node'
 import GridGenerator from './GridGenerator'
 import { defaultSetting } from '../../settings/card'
 
@@ -18,7 +18,7 @@ export default {
   components: {
     GridGenerator
   },
-  mixins: [childrenMixin, commonMixin]
+  mixins: [childrenMixin, nodeMixin]
 }
 </script>
 

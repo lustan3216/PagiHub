@@ -40,16 +40,26 @@
   'a[0].a = undefined' 不做事 ?
   'a[0] = undefined' 刪除 要用 diff？
   'a = oldValue newArray [1,2,3] 直接用diff生delta
-  'a[0] = newValue break throw // 因為不知道是要換掉還是插入 
+  'a[0] = newValue break throw // 因為不知道是要換掉還是插入
 
 ```
+
 {
-        1: [1, 3],
-        a: [{}, { 1: 3 }, x],
-        b: { c: 5, d: { e: 6 }}
-      }
+1: [1, 3],
+a: [{}, { 1: 3 }, x],
+b: { c: 5, d: { e: 6 }}
+}
 
+7. nodesTree 這些操作按鈕要抽城 component，可以在 draft 裡面點選時浮出來操作
 
-7. nodesTree 這些操作按鈕要抽城component，可以在draft裡面點選時浮出來操作
+8. carousel 當沒有看到的時候 grid generator 可以 v-if，節省效能
 
-8. carousel 當沒有看到的時候grid generator可以v-if，節省效能
+9. component 區快
+
+10. 上傳檔案
+
+11 css要做overflow
+
+12 點兩下進入編輯模式，ocmpoennt考慮要不要進入另一個工作區
+
+13. treenode 點了可以  import scrollIntoView from 'element-ui/src/utils/scroll-into-view' 

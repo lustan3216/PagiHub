@@ -8,7 +8,7 @@
   >
     <div
       v-if="node && isDraftMode && !isExample && isDraggableItem"
-      :class="{ 'no-click': noClick, 'no-drag': !noClick }"
+      :class="{ noClick, 'noDrag': !noClick }"
       class="h-100"
     >
       <slot />
@@ -24,7 +24,8 @@ export default {
   inject: { isExample: { default: false }},
   props: {
     id: {
-      type: Number
+      type: Number,
+      required: true
     }
   },
   data() {

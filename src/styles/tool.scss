@@ -70,7 +70,7 @@
   border-radius: 50%;
 }
 
-.no-click {
+.noClick {
   pointer-events: none;
 }
 
@@ -95,7 +95,12 @@
 }
 
 .invisible {
+  opacity: 0 !important;
   visibility: hidden !important;
+}
+
+.opacity {
+  opacity: 0 !important;
 }
 
 .no-shadow {
@@ -121,4 +126,8 @@
 
 .box-shadow {
   box-shadow: 0 5px 20px 0 rgba(32, 48, 60, 0.11);
+}
+
+.no-action {
+  pointer-events: none;
 }

@@ -22,7 +22,7 @@
 <script>
 import { Carousel, CarouselItem } from 'element-ui'
 import childrenMixin from '../../mixins/children'
-import commonMixin from '../../mixins/common'
+import nodeMixin from '../../mixins/node'
 import GridGenerator from './GridGenerator'
 
 export default {
@@ -32,7 +32,7 @@ export default {
     ElCarouselItem: CarouselItem,
     GridGenerator
   },
-  mixins: [childrenMixin, commonMixin],
+  mixins: [childrenMixin, nodeMixin],
   methods: {
     mouseLeave() {
       // this.isEditableId = null

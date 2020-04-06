@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import commonMixin from '../../../mixins/common'
+import nodeMixin from '../../../mixins/node'
 import formItemMixin from '../../../mixins/formItem'
 import { defaultSetting } from '../../../settings/formItem/formTimePicker'
 
@@ -15,7 +15,7 @@ export default {
   defaultSetting,
   type: 'TimePicker',
   name: 'FormTimePicker',
-  mixins: [commonMixin, formItemMixin]
+  mixins: [nodeMixin, formItemMixin]
 }
 </script>
 

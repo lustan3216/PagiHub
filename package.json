@@ -17,7 +17,6 @@
     "element-ui": "^2.11.1",
     "json-storer": "file:../json-storer",
     "localforage": "^1.7.3",
-    "lodash": "^4.17.15",
     "normalize.css": "^8.0.1",
     "plyr": "^3.5.10",
     "portal-vue": "^2.1.6",

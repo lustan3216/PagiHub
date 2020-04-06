@@ -3,14 +3,14 @@
 </template>
 
 <script>
-import commonMixin from '../../mixins/common'
+import nodeMixin from '../../mixins/node'
 import { defaultSetting } from '../../settings/videoPlayer'
 // var videojs = require('../../video.js/dist/video.cjs.js');
 
 export default {
   defaultSetting,
   name: 'PlayerYoutube',
-  mixins: [commonMixin],
+  mixins: [nodeMixin],
   data() {
     return {
       recreate: null,

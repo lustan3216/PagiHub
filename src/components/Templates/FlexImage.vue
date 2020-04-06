@@ -3,13 +3,13 @@
 </template>
 
 <script>
-import commonMixin from '../../mixins/common'
+import nodeMixin from '../../mixins/node'
 import { defaultSetting } from '../../settings/flexImage'
 
 export default {
   defaultSetting,
   name: 'FlexImage',
-  mixins: [commonMixin]
+  mixins: [nodeMixin]
 }
 </script>
 

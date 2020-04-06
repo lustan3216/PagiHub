@@ -9,7 +9,7 @@
 
 <script>
 import clone from 'clone'
-import commonMixin from '../../../mixins/common'
+import nodeMixin from '../../../mixins/node'
 import formItemMixin from '../../../mixins/formItem'
 import { defaultSetting } from '../../../settings/formItem/formCheckbox'
 
@@ -17,7 +17,7 @@ export default {
   defaultSetting,
   type: 'checkbox',
   name: 'FormCheckbox',
-  mixins: [commonMixin, formItemMixin],
+  mixins: [nodeMixin, formItemMixin],
   computed: {
     innerRule2() {
       const rule = clone(this.innerRule[0])

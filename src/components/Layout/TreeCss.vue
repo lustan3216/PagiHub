@@ -54,7 +54,7 @@ import clone from 'clone'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { traversal } from '../../utils/tool'
 import { vmMap } from '../../utils/vmMap'
-import Visibility from './Visibility'
+import Visibility from './Controller/Visible'
 
 export default {
   name: 'TreeCss',

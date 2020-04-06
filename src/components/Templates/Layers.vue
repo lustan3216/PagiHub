@@ -13,7 +13,7 @@
 
 <script>
 import GridGenerator from './GridGenerator'
-import commonMixin from '../../mixins/common'
+import nodeMixin from '../../mixins/node'
 import childrenMixin from '../../mixins/children'
 
 export default {
@@ -21,7 +21,7 @@ export default {
   components: {
     GridGenerator
   },
-  mixins: [commonMixin, childrenMixin]
+  mixins: [nodeMixin, childrenMixin]
 }
 </script>
 

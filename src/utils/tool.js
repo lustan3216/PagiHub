@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import { cloneJson } from 'json-storer/src/utils'
+import merge from 'element-ui/src/utils/merge'
 import { isUndefined, isString } from 'element-ui/src/utils/types'
 import isPlainObject from 'is-plain-object'
-import merge from 'lodash/merge'
 
 export { cloneJson, isUndefined, isPlainObject, isString, merge }
 

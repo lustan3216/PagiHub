@@ -112,7 +112,7 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.bubble.css'
 
 import { quillEditor } from 'vue-quill-editor'
-import commonMixin from '../../mixins/common'
+import nodeMixin from '../../mixins/node'
 import { mapMutations } from 'vuex'
 import ColorPicker from '../Components/ColorPicker'
 import FontIcon from 'quill/assets/icons/color.svg'
@@ -126,7 +126,7 @@ export default {
     FontIcon,
     BackgroundIcon
   },
-  mixins: [commonMixin],
+  mixins: [nodeMixin],
   props: {
     value: {
       type: String,

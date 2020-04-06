@@ -10,7 +10,7 @@
 <script>
 import clone from 'clone'
 import { merge } from '../../../utils/tool'
-import commonMixin from '../../../mixins/common'
+import nodeMixin from '../../../mixins/node'
 import formItemMixin from '../../../mixins/formItem'
 import { defaultSetting } from '../../../settings/formItem/formSwitch'
 
@@ -18,7 +18,7 @@ export default {
   defaultSetting,
   type: 'switch',
   name: 'FormSwitch',
-  mixins: [commonMixin, formItemMixin],
+  mixins: [nodeMixin, formItemMixin],
   data() {
     // to solve a element-ui bug comes from the object reference different
     return {

@@ -3,7 +3,9 @@ import { arraySubtract } from '../../utils/tool'
 
 const state = {
   scaleRatio: 1,
-  selectedComponentIds: []
+  selectedComponentIds: [],
+  noVisibleComponentIds: [],
+  noTouchableComponentIds: []
 }
 
 const mutations = {

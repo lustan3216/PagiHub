@@ -4,7 +4,7 @@
 
 <script>
 import GridGenerator from '../GridGenerator'
-import commonMixin from '../../../mixins/common'
+import nodeMixin from '../../../mixins/node'
 import childrenMixin from '../../../mixins/children'
 import { defaultSetting } from '../../../settings/formGenerator'
 
@@ -14,7 +14,7 @@ export default {
   components: {
     GridGenerator
   },
-  mixins: [commonMixin, childrenMixin],
+  mixins: [nodeMixin, childrenMixin],
   provide() {
     if (this.isExample) return
 

@@ -6,9 +6,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { draftIds } from '../../../utils/keyId'
 import { vmMap } from '../../../utils/vmMap'
-import commonMixin from '../../../mixins/common'
+import nodeMixin from '../../../mixins/node'
 import ExamplesDialog from './ExamplesDialog'
 import { cloneJson } from '../../../utils/tool'
 
@@ -17,7 +16,7 @@ export default {
   components: {
     ExamplesDialog
   },
-  mixins: [commonMixin],
+  mixins: [nodeMixin],
   computed: {
     ...mapGetters('draft', ['isRootForm', 'theRootForm'])
   },

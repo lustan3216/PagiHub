@@ -12,7 +12,7 @@
 <script>
 import importTemplates from '../../../mixins/importTemplates'
 import childrenMixin from '../../../mixins/children'
-import commonMixin from '../../../mixins/common'
+import nodeMixin from '../../../mixins/node'
 import MiddleLayer from './MiddleLayer'
 import ExampleAdd from './ExampleAdd'
 
@@ -22,7 +22,7 @@ export default {
     MiddleLayer,
     ExampleAdd
   },
-  mixins: [importTemplates, childrenMixin, commonMixin]
+  mixins: [importTemplates, childrenMixin, nodeMixin]
 }
 </script>
 

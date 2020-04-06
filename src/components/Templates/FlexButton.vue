@@ -12,7 +12,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import commonMixin from '../../mixins/common'
+import nodeMixin from '../../mixins/node'
 import EditorText from './EditorText'
 import store from '../../store'
 
@@ -21,7 +21,7 @@ export default {
   components: {
     EditorText
   },
-  mixins: [commonMixin],
+  mixins: [nodeMixin],
   props: {
     defaultText: {
       type: String,

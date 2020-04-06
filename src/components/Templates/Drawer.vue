@@ -16,7 +16,7 @@
 <script>
 import { Drawer } from 'element-ui'
 import childrenMixin from '../../mixins/children'
-import commonMixin from '../../mixins/common'
+import nodeMixin from '../../mixins/node'
 import GridGenerator from './GridGenerator'
 import { defaultSetting } from '../../settings/drawer'
 
@@ -27,7 +27,7 @@ export default {
     ElDrawer: Drawer,
     GridGenerator
   },
-  mixins: [childrenMixin, commonMixin],
+  mixins: [childrenMixin, nodeMixin],
   data() {
     return {
       drawer: false,

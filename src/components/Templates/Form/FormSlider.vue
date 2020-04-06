@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import commonMixin from '../../../mixins/common'
+import nodeMixin from '../../../mixins/node'
 import formItemMixin from '../../../mixins/formItem'
 import { defaultSetting } from '../../../settings/formItem/formSlider'
 
@@ -17,7 +17,7 @@ export default {
   defaultSetting,
   type: 'slider',
   name: 'FormSlider',
-  mixins: [commonMixin, formItemMixin],
+  mixins: [nodeMixin, formItemMixin],
   computed: {
     vertical() {
       return this.innerRule[0].props.vertical

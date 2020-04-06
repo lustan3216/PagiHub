@@ -20,7 +20,7 @@
       :h="child.h"
       :i="child.id"
       :key="child.id"
-      drag-ignore-from=".no-drag"
+      drag-ignore-from=".noDrag"
       drag-allow-from="div"
     >
       <grid-item-child :id="child.id" />
@@ -32,7 +32,7 @@
 import { mapState } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
-import commonMixin from '../../mixins/common'
+import nodeMixin from '../../mixins/node'
 import importTemplatesMixin from '../../mixins/importTemplates'
 import GridItemChild from './Abstract/GridItemChild'
 import { defaultSetting } from '../../settings/gridGenerator'
@@ -45,7 +45,7 @@ export default {
     GridItem: VueGridLayout.GridItem,
     GridItemChild
   },
-  mixins: [commonMixin, importTemplatesMixin, childrenMixin],
+  mixins: [nodeMixin, importTemplatesMixin, childrenMixin],
   data() {
     return {
       layout: []
@@ -93,12 +93,12 @@ export default {
     border: 1px dashed #dedede;
     border-radius: 3px;
 
-    & > .vue-resizable-handle {
-      z-index: 10000;
-    }
     & > div > .vue-grid-layout {
       border: none;
     }
   }
+}
+::v-deep.editable .vue-resizable-handle {
+  z-index: 10;
 }
 </style>

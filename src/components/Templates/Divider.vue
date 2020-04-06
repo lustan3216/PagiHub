@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import commonMixin from '../../mixins/common'
+import nodeMixin from '../../mixins/node'
 
 export default {
   name: 'Divider',
-  mixins: [commonMixin],
+  mixins: [nodeMixin],
   data() {
     return {
       isHover: false
