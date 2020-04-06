@@ -86,11 +86,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* grid layout has performance issus when using border and border-radius */
+/* grid layout has performance issue when using border and border-radius */
 .editable {
   & > .vue-grid-item {
     border: 1px dashed #dedede;
-    box-sizing: inherit;
     margin-left: -1px;
     margin-top: -1px;
 
@@ -99,6 +98,7 @@ export default {
     }
   }
 }
+
 ::v-deep.editable .vue-resizable-handle {
   z-index: 10;
 }
