@@ -1,17 +1,19 @@
 import 'normalize.css'
-
-import './utils/polyfill'
-import vhCheck from 'vh-check'
-vhCheck()
-
 import './styles/vender.scss'
 import './styles/index.scss'
+import 'intersection-observer'
+import '@babel/polyfill'
+import './utils/polyfill'
+import vhCheck from 'vh-check'
 import Vue from 'vue'
 import App from './App.vue'
-
 import store from './store'
 import VueShortKey from 'vue-shortkey'
 import PortalVue from 'portal-vue'
+import VueObserveVisibility from 'vue-observe-visibility'
+
+vhCheck()
+Vue.use(VueObserveVisibility)
 window.store = store
 Vue.use(PortalVue)
 Vue.use(VueShortKey)

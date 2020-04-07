@@ -9,59 +9,22 @@
 2. 這裏應該要改成從 object node 裡面，且存在 object node
    style block 是不是跟 class block 功能合併
 
-3. 組建可以複製 剪下，再用滑鼠點+號
+3. video player to plyr
 
-4. video player to plyr
+4. element-ui carousel to swiper
 
-5. element-ui carousel to swiper
+5. component 區快
 
-```bash
+6. 上傳檔案
 
-  {
-    a: {
-      b: {
-        c: 1
-      }
-    }
-  }
+11 css 要做 overflow
 
-  'a.b = undefined'  刪除
-  'a.b.c = undefined'  刪除
-  'a.b.c.d = undefined'  不做事
+12 點兩下進入編輯模式，ocmpoennt 考慮要不要進入另一個工作區
 
-  'a.b = 2'  更新
-  'a.b.c = 2'  更新
-  'a.b.c.d = 2'  新增
-
-  {
-    a: [1,2,3,4]
-  }
-
-  'a[0].a = undefined' 不做事 ?
-  'a[0] = undefined' 刪除 要用 diff？
-  'a = oldValue newArray [1,2,3] 直接用diff生delta
-  'a[0] = newValue break throw // 因為不知道是要換掉還是插入
-
-```
-
-{
-1: [1, 3],
-a: [{}, { 1: 3 }, x],
-b: { c: 5, d: { e: 6 }}
-}
-
-7. nodesTree 這些操作按鈕要抽城 component，可以在 draft 裡面點選時浮出來操作
-
-8. carousel 當沒有看到的時候 grid generator 可以 v-if，節省效能
-
-9. component 區快
-
-10. 上傳檔案
-
-11 css要做overflow
-
-12 點兩下進入編輯模式，ocmpoennt考慮要不要進入另一個工作區
-
-13. treenode 點了可以  import scrollIntoView from 'element-ui/src/utils/scroll-into-view' 
+13. treenode 點了可以 import scrollIntoView from 'element-ui/src/utils/scroll-into-view'
 
 14. color 快捷設定
+
+15. scss code 的東西做成 variable 可以是輸入匡
+
+16. v-observe-visibility="visibilityChanged" 要優化 載入速度

@@ -3,6 +3,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 
 module.exports = {
+  transpileDependencies: [
+    /vue/
+  ],
   css: {
     extract: false,
     loaderOptions: {
