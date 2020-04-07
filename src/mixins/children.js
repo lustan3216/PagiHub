@@ -22,7 +22,7 @@ export default {
   methods: {
     ...mapMutations('draft', ['RECORD']),
 
-    appendNodesToParentAndRecord(nodes) {
+    addNodesToParentAndRecord(nodes) {
       const records = []
 
       nodes = cloneJson(nodes)
@@ -52,7 +52,7 @@ export default {
       // eslint-disable-next-line
       const { [CHILDREN]: _, ...emptyItem } = this.examplesMapByTag[tag][CHILDREN][0]
 
-      this.appendNodesToParentAndRecord(emptyItem)
+      this.addNodesToParentAndRecord(emptyItem)
     },
 
     _copy(theNodeIdGonnaCopy) {
@@ -63,7 +63,7 @@ export default {
 
       const children = this.childrenOf[theNodeIdGonnaCopy]
       theNodeGonnaCopy[CHILDREN] = children
-      this.appendNodesToParentAndRecord(theNodeGonnaCopy)
+      this.addNodesToParentAndRecord(theNodeGonnaCopy)
     },
 
     _remove(theNodeIdGonnaRemove) {

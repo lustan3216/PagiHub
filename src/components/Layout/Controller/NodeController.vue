@@ -25,14 +25,14 @@
           icon="el-icon-document-add"
           size="small"
           @click="paste"
-          @shortkey.native="paste"
+          @shortkey.native="multiPaste"
         />
       </el-tooltip>
 
       <example-add
         v-if="isGridItem"
         :id="id"
-        @onAdd="appendNodesToParentAndRecord($event)"
+        @onAdd="addNodesToParentAndRecord($event)"
       />
 
       <visibility :id="id" />
@@ -58,7 +58,7 @@
       <i
         v-shortkey="{ del: ['del'], del: ['backspace'] }"
         v-if="selected && !exclude.includes('delete')"
-        @shortkey="() => vmRemoveNode(node)"
+        @shortkey="multiDelete"
       />
     </span>
   </span>
@@ -67,12 +67,17 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 import Touchable from './Touchable'
+import jsonStorer from '../../../store/jsonStorer'
 import ExampleAdd from './ExampleAdd'
 import Visibility from './Visible'
-import childrenMixin from '../../../mixins/children'
 import { GRID_ITEM, TAG } from '../../../const'
-import { vmCreateItem, vmCopyNode, vmRemoveNode } from '../../../utils/vmMap'
 import { isMac } from '../../../utils/device'
+import {
+  vmCreateItem,
+  vmCopyNode,
+  vmRemoveNode,
+  vmAddNodesToParentAndRecord
+} from '../../../utils/vmMap'
 import { findFirstCommonParentTree, shortTagName } from '../../../utils/node'
 
 export default {
@@ -83,7 +88,6 @@ export default {
     ExampleAdd
   },
   filters: { shortTagName },
-  mixins: [childrenMixin],
   props: {
     id: {
       type: Number,
@@ -113,15 +117,23 @@ export default {
       if (this.onlyOneCopyComponentId) {
         return this.nodesMap[this.onlyOneCopyComponentId]
       }
+    },
+    selectedNodes() {
+      return this.selectedComponentIds.map(id => this.nodesMap[id])
     }
   },
   methods: {
+    ...mapMutations('draft', ['RECORD']),
     ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_ID']),
     isMac,
     vmCreateItem,
     vmCopyNode,
     vmRemoveNode,
-    paste() {
+    addNodesToParentAndRecord(nodes) {
+      vmAddNodesToParentAndRecord(this.id, nodes)
+    },
+    paste(_id) {
+      const id = _id || this.id
       if (this.onlyOneCopyComponentId === this.id) {
         vmCopyNode(this.onlyOneCopyComponentNode)
       } else if (this.isGridItem) {
@@ -129,12 +141,22 @@ export default {
           this.onlyOneCopyComponentNode &&
           this.onlyOneCopyComponentNode[TAG] !== GRID_ITEM
         ) {
-          this.appendNodesToParentAndRecord(this.onlyOneCopyComponentNode)
+          vmAddNodesToParentAndRecord(id, this.onlyOneCopyComponentNode)
         } else if (this.copyComponentIds.length > 1) {
           const tree = findFirstCommonParentTree(this.copyComponentIds)
-          this.appendNodesToParentAndRecord(tree)
+          vmAddNodesToParentAndRecord(id, tree)
         }
       }
+    },
+    multiPaste() {
+      jsonStorer.recordsMerge(() => {
+        this.selectedNodes.forEach(node => this.paste(node.id))
+      })
+    },
+    multiDelete() {
+      jsonStorer.recordsMerge(() => {
+        this.selectedNodes.forEach(node => this.vmRemoveNode(node))
+      })
     }
   }
 }

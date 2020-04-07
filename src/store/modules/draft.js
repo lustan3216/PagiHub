@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import JsonStorer from 'json-storer'
+import jsonStorer from '../jsonStorer'
 import localforage from 'localforage'
 import listToTree from '../../utils/listToTree'
 import { SET } from '../index'
@@ -8,21 +7,6 @@ import { traversal } from '../../utils/tool'
 import { initTemplate as _initTemplate } from '../../template/basic'
 import { ROOT_ID } from '../../utils/keyId'
 
-const jsonStorer = new JsonStorer({
-  setter(tree, key, value) {
-    if (tree[key] && tree.__ob__) {
-      tree[key] = value
-    } else {
-      Vue.set(tree, key, value)
-    }
-  },
-
-  deleter(tree, key) {
-    Vue.delete(tree, key)
-  }
-})
-
-window.jsonStorer = jsonStorer
 window.localforage = localforage
 
 const state = {
@@ -36,11 +20,11 @@ const mutations = {
     jsonStorer.record(payLoad)
     localforage.setItem('asd', jsonStorer.tree)
   },
-  REDO(state) {
+  REDO() {
     jsonStorer.redo()
     localforage.setItem('asd', jsonStorer.tree)
   },
-  UNDO(state) {
+  UNDO() {
     jsonStorer.undo()
     localforage.setItem('asd', jsonStorer.tree)
   },

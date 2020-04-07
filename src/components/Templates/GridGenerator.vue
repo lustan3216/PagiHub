@@ -1,6 +1,5 @@
 <template>
   <grid-layout
-    v-if="layout.length"
     v-bind="innerProps"
     :class="{ editable: isDraftMode && !isAnimating }"
     :col-num="12"
@@ -59,6 +58,9 @@ export default {
     innerChildren: {
       handler(newValue) {
         this.layout = newValue
+        if (!newValue.length) {
+          this.$destroy()
+        }
       },
       deep: true,
       immediate: true

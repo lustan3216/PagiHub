@@ -58,3 +58,7 @@ export function vmCopyNode(node) {
 export function vmRemoveNode({ id, parentId }) {
   vm(parentId)._remove(id)
 }
+
+export function vmAddNodesToParentAndRecord(id, nodes) {
+  vm(id).addNodesToParentAndRecord(nodes)
+}
