@@ -71,7 +71,10 @@ export default {
   computed: {
     ...mapState('draft', ['nodesMap']),
     ...mapState('app', ['selectedComponentIds']),
-    ...mapGetters('app', ['theOnlySelectedComponentId', 'selectedComponentNode']),
+    ...mapGetters('app', [
+      'theOnlySelectedComponentId',
+      'selectedComponentNode'
+    ]),
     canShowSetting() {
       return this.specs && Object.hasAnyKey(this.specs)
     },
@@ -103,7 +106,7 @@ export default {
   padding: 0 10px;
   background: rgba(255, 255, 255, 0.87);
   box-shadow: 1px 1px 19px 6px rgba(0, 0, 0, 0.1);
-  position: absolute;
+  position: fixed;
   left: calc(100vw - 350px);
   bottom: 0;
   top: 0;

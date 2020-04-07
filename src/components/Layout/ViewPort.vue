@@ -136,8 +136,8 @@ export default {
   width: calc(100vw - 330px);
   @include calc-vh(height, '100vh - 70px');
   overflow-y: scroll;
-  @include calc-vh(height, '100vh - 70px');
   position: absolute;
+  overflow-x: hidden;
 }
 .dragger {
   font-size: 18px;
