@@ -89,6 +89,7 @@ export default {
   methods: {
     ...mapMutations('draft', ['RECORD']),
     change(value) {
+      if (this.isExample) return
       this.api.validate(isValid => {
         this.isValid = isValid
         this.updateRootData({ isValid, value })

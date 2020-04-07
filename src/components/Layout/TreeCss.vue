@@ -24,7 +24,7 @@
           </span>
 
           <span>
-            <visibility v-if="data.tag !== 'grid-item'" :id="data.id" />
+            <visibility v-if="data.tag !== gridItem" :id="data.id" />
 
             <el-button type="text" size="mini" icon="el-icon-attract" />
 
@@ -54,6 +54,7 @@ import clone from 'clone'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { traversal } from '../../utils/tool'
 import { vmMap } from '../../utils/vmMap'
+import { GRID_ITEM } from '../../const'
 import Visibility from './Controller/Visible'
 
 export default {
@@ -71,11 +72,14 @@ export default {
   computed: {
     ...mapState('draft', ['nodesMap']),
     ...mapGetters('draft', ['tree']),
-    ...mapGetters('app', ['selectedComponentId']),
+    ...mapGetters('app', ['theOnlySelectedComponentId']),
+    gridItem() {
+      return GRID_ITEM
+    },
     neatTree() {
       const cloned = clone(this.tree)
       traversal(cloned, function(node) {
-        if (node.tag === 'grid-item') {
+        if (node.tag === GRID_ITEM) {
           Object.assign(node, node.children[0])
         }
 
@@ -92,8 +96,8 @@ export default {
     }
   },
   mounted() {
-    if (this.selectedComponentId) {
-      this.$refs.tree.setCurrentKey(this.selectedComponentId)
+    if (this.theOnlySelectedComponentId) {
+      this.$refs.tree.setCurrentKey(this.theOnlySelectedComponentId)
     }
   },
   beforeDestroy() {
@@ -110,7 +114,7 @@ export default {
       return data.tag.indexOf(value) !== -1
     },
     copy(data) {
-      if (data.tag === 'grid-item') {
+      if (data.tag === GRID_ITEM) {
         vmMap[data.parentId].new(data.id)
       } else {
         const parentNode = this.nodesMap[data.parentId]

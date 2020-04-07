@@ -1,5 +1,6 @@
 <template>
   <el-carousel
+    v-if="innerChildren.length"
     ref="carousel"
     :style="innerStyles"
     :autoplay="false"
@@ -8,7 +9,6 @@
   >
     <el-carousel-item
       v-for="child in innerChildren"
-      v-if="child.visible !== false"
       :ref="child.id"
       :key="child.id"
       @click.stop.native="click(child.id)"

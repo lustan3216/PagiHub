@@ -26,7 +26,7 @@
         label="Setting"
         name="setting"
         lazy>
-        <setting-nested :id="selectedComponentId" :specs="specs" />
+        <setting-nested :id="theOnlySelectedComponentId" :specs="specs" />
       </el-tab-pane>
 
       <el-tab-pane
@@ -71,7 +71,7 @@ export default {
   computed: {
     ...mapState('draft', ['nodesMap']),
     ...mapState('app', ['selectedComponentIds']),
-    ...mapGetters('app', ['selectedComponentId', 'selectedComponentNode']),
+    ...mapGetters('app', ['theOnlySelectedComponentId', 'selectedComponentNode']),
     canShowSetting() {
       return this.specs && Object.hasAnyKey(this.specs)
     },

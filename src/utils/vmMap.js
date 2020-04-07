@@ -22,7 +22,8 @@ export function getPlanStyle(id) {
 }
 
 export function $element(id) {
-  return vm(id).$el
+  const _vm = vm(id)
+  return _vm && _vm.$el
 }
 
 export function assignStyles(id, styles) {

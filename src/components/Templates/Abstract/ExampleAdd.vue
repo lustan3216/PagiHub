@@ -84,7 +84,7 @@ export default {
     ...mapGetters('draft', ['isRootForm', 'theRootForm']),
     ...mapState('example', ['examples']),
     categories() {
-      const isRootForm = this.$store.getters['draft/isRootForm'](this.id)
+      const isRootForm = this.isRootForm(this.id)
 
       if (isRootForm) {
         return categories

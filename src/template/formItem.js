@@ -1,15 +1,18 @@
-import { VALUE, PROPS, TAG, VALIDATE, FIELD } from '../const'
+import { VALUE, PROPS, TAG, VALIDATE, FIELD, CAN_DRAG, CAN_EDIT_TEXT } from '../const'
 
 export const formSubmit = () => ({
-  [TAG]: 'form-submit'
+  [TAG]: 'form-submit',
+  [CAN_EDIT_TEXT]: true
 })
 
 export const formLabel = () => ({
-  [TAG]: 'form-label'
+  [TAG]: 'form-label',
+  [CAN_EDIT_TEXT]: true
 })
 
 export const formReset = () => ({
-  [TAG]: 'form-reset'
+  [TAG]: 'form-reset',
+  [CAN_EDIT_TEXT]: true
 })
 
 export const formInput = () => ({
@@ -23,7 +26,8 @@ export const formInput = () => ({
 })
 
 export const formTextarea = () => ({
-  [TAG]: 'form-textarea'
+  [TAG]: 'form-textarea',
+  [CAN_DRAG]: true
 })
 
 export const formInputNumber = () => ({
@@ -63,7 +67,8 @@ export const formRate = () => ({
 })
 
 export const formSlider = () => ({
-  [TAG]: 'form-slider'
+  [TAG]: 'form-slider',
+  [CAN_DRAG]: true
 })
 
 export default [

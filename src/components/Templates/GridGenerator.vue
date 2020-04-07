@@ -1,6 +1,6 @@
 <template>
   <grid-layout
-    v-if="hasAnyChild"
+    v-if="layout.length"
     v-bind="innerProps"
     :class="{ editable: isDraftMode && !isAnimating }"
     :col-num="12"
@@ -66,6 +66,7 @@ export default {
   },
   methods: {
     update(newChildren) {
+      if (this.isExample) return
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
       const records = []
 

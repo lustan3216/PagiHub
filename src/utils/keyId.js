@@ -1,12 +1,12 @@
 export const ROOT_ID = 0
-import { ID, PARENT_ID, TAG } from '../const'
+import { ID, PARENT_ID, TAG, GRID_ITEM } from '../const'
 import { traversal } from './tool'
 
 class KeyManagement {
   idSet = new Set([ROOT_ID])
 
   specialCase(node) {
-    if (node[TAG] === 'grid-item') {
+    if (node[TAG] === GRID_ITEM) {
       node.i = node[ID]
     }
   }

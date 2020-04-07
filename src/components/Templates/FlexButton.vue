@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import nodeMixin from '../../mixins/node'
 import EditorText from './EditorText'
 import store from '../../store'
@@ -33,19 +32,6 @@ export default {
     return {
       innerValue: (!this.isExample && node && node.value) || this.defaultText
     }
-  },
-  watch: {
-    innerValue(value) {
-      this.RECORD([
-        {
-          path: this.id,
-          value: { value }
-        }
-      ])
-    }
-  },
-  methods: {
-    ...mapMutations('draft', ['RECORD'])
   }
 }
 </script>

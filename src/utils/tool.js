@@ -8,6 +8,10 @@ export { cloneJson, isUndefined, isPlainObject, isString, merge }
 
 export const isArray = Array.isArray
 
+export function allEqual(arr) {
+  return arr.every(v => v === arr[0])
+}
+
 export function toArray(e) {
   if (isArray(e)) {
     return e

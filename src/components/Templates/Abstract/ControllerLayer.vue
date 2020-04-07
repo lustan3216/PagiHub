@@ -1,13 +1,17 @@
 <template>
   <div
-    :class="{ elevate: elevate && isDraftMode }"
+    v-if="isDraftMode"
+    :class="{ elevate: selected }"
     class="layer h-100"
-    @click.stop="setComponentId"
+    @click.exact.stop="SET_SELECTED_COMPONENT_ID(id)"
+    @click.ctrl.exact.stop="TOGGLE_SELECTED_COMPONENT_ID(id)"
+    @click.meta.exact.stop="TOGGLE_SELECTED_COMPONENT_ID(id)"
     @dblclick.stop="dblclick"
-    @mouseleave="noClick = true"
+    @mouseleave="canNotClick = true"
   >
     <div
-      v-if="node && isDraftMode && !isExample && isDraggableItem"
+      v-if="canDrag || canEditText"
+      :class="{ noDrag: !canNotClick, canNotClick }"
       class="h-100"
     >
       <slot />
@@ -15,8 +19,9 @@
 
     <slot v-else />
 
+    <!--  $parent.$el 可能會拿到 #comment node, 會沒有 setAttribute 方法而壞掉  -->
     <el-popover
-      v-if="$parent.$el && isDraftMode && !isExample"
+      v-if="!isExample && $parent.$el && $parent.$el.setAttribute"
       :reference="$parent.$el"
       :placement="node.canNewItem ? 'top' : 'right'"
       trigger="hover"
@@ -25,7 +30,12 @@
       <node-controller :id="id" />
     </el-popover>
   </div>
+
+  <div v-else class="layer h-100">
+    <slot />
+  </div>
 </template>
+
 <script>
 import { mapState, mapMutations } from 'vuex'
 import NodeController from '../../Layout/Controller/NodeController'
@@ -46,7 +56,7 @@ export default {
   },
   data() {
     return {
-      noClick: true
+      canNotClick: true
     }
   },
   computed: {
@@ -55,28 +65,23 @@ export default {
     node() {
       return this.nodesMap[this.id]
     },
-    elevate() {
+    selected() {
       return this.selectedComponentIds.includes(this.id)
     },
-    isDraggableItem() {
-      return [
-        'video-player',
-        'form-slider',
-        'form-textarea',
-        'editor',
-        'flex-button',
-        'form-submit',
-        'form-reset'
-      ].includes(this.node.tag)
+    canEditText() {
+      return this.node && this.node.canEditText
+    },
+    canDrag() {
+      return this.node && this.node.canDrag
     }
   },
   methods: {
-    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_ID']),
-    setComponentId() {
-      this.TOGGLE_SELECTED_COMPONENT_ID(+this.id)
-    },
+    ...mapMutations('app', [
+      'SET_SELECTED_COMPONENT_ID',
+      'TOGGLE_SELECTED_COMPONENT_ID'
+    ]),
     dblclick() {
-      this.noClick = false
+      this.canNotClick = false
     }
   }
 }
@@ -89,5 +94,8 @@ export default {
 .elevate {
   border-color: #589ff8ad !important;
   box-shadow: 1px 3px 20px -5px rgba(0, 0, 0, 0.25) !important;
+}
+.canNotClick {
+  pointer-events: none;
 }
 </style>

@@ -10,11 +10,11 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import store from './store'
-import VueShortkey from 'vue-shortkey'
+import VueShortKey from 'vue-shortkey'
 import PortalVue from 'portal-vue'
 window.store = store
 Vue.use(PortalVue)
-Vue.use(VueShortkey)
+Vue.use(VueShortKey)
 
 import {
   Dialog,

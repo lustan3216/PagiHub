@@ -49,6 +49,17 @@
       />
     </el-tooltip>
 
+    <el-tooltip effect="light" content="Copy" placement="bottom">
+      <el-button
+        v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
+        size="mini"
+        type="text"
+        icon="el-icon-document-copy"
+        @shortkey.native="copy"
+        @click="copy"
+      />
+    </el-tooltip>
+
     <portal-target name="view-port-controller" class="d-inline-block m-l-15" />
 
     <el-popover effect="light" trigger="hover" placement="bottom">
@@ -73,22 +84,28 @@
 
 <script>
 import { isMac } from '../../utils/device'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
+import { Message } from 'element-ui'
 
 export default {
   name: 'NavBar',
   computed: {
-    ...mapGetters('mode', [
-      'isProductionMode',
-      'isPreviewMode',
-      'isDraftMode'
-    ])
+    ...mapState('app', ['copyComponentIds']),
+    ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode'])
   },
   methods: {
+    ...mapMutations('app', ['SET_COPY_SELECTED_COMPONENT_IDS']),
     ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_DRAFT_MODE']),
     ...mapMutations('draft', ['REDO', 'UNDO']),
     isMac,
-    publish() {}
+    publish() {},
+    copy() {
+      this.SET_COPY_SELECTED_COMPONENT_IDS()
+      const length = this.copyComponentIds.length
+      if (length) {
+        Message.info(`Copy ${length} Components`)
+      }
+    }
   }
 }
 </script>

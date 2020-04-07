@@ -1,4 +1,4 @@
-import { TAG, CHILDREN, CAN_NEW_ITEM } from '../const'
+import { GRID_ITEM, TAG, CHILDREN, CAN_NEW_ITEM } from '../const'
 import { formSlider, formCheckBox, formSubmit, formTextarea } from './formItem'
 
 export const formGenerator = function() {
@@ -7,7 +7,7 @@ export const formGenerator = function() {
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: [
       {
-        [TAG]: 'grid-item',
+        [TAG]: GRID_ITEM,
         x: 0,
         y: 0,
         w: 33,
@@ -15,7 +15,7 @@ export const formGenerator = function() {
         [CHILDREN]: [formTextarea()]
       },
       {
-        [TAG]: 'grid-item',
+        [TAG]: GRID_ITEM,
         x: 0,
         y: 15,
         w: 22,
@@ -23,7 +23,7 @@ export const formGenerator = function() {
         [CHILDREN]: [formCheckBox()]
       },
       {
-        [TAG]: 'grid-item',
+        [TAG]: GRID_ITEM,
         x: 22,
         y: 0,
         w: 22,
@@ -31,7 +31,7 @@ export const formGenerator = function() {
         [CHILDREN]: [formSlider()]
       },
       {
-        [TAG]: 'grid-item',
+        [TAG]: GRID_ITEM,
         x: 0,
         y: 30,
         w: 15,

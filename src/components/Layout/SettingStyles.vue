@@ -102,9 +102,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('app', ['selectedComponentId']),
+    ...mapGetters('app', ['theOnlySelectedComponentId']),
     computedStyle() {
-      const styles = getComputedStyle(this.selectedComponentId)
+      const styles = getComputedStyle(this.theOnlySelectedComponentId)
 
       return attributes.reduce((all, attr) => {
         all[attr] = styles[attr]
@@ -112,7 +112,7 @@ export default {
       }, {})
     },
     planStyle() {
-      return getPlanStyle(this.selectedComponentId) || ''
+      return getPlanStyle(this.theOnlySelectedComponentId) || ''
     }
   },
   methods: {

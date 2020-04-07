@@ -37,6 +37,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import { traversal, cloneJson } from '../../utils/tool'
 import { shortTagName } from '../../utils/node'
 import NodeController from './Controller/NodeController'
+import { GRID_ITEM } from '../../const'
 
 export default {
   name: 'TreeNodes',
@@ -59,7 +60,7 @@ export default {
       // 這棵樹是髒的，純粹為了渲染而已，建議不要使用裡面有資料是錯的
       const cloned = cloneJson(this.tree)
       traversal(cloned, node => {
-        if (node.tag === 'grid-item') {
+        if (node.tag === GRID_ITEM) {
           Object.assign(node, node.children[0])
           delete node.i
         }
@@ -87,8 +88,7 @@ export default {
   },
   methods: {
     ...mapMutations('app', [
-      'TOGGLE_SELECTED_COMPONENT_ID',
-      'SET_SELECTED_COMPONENT_IDS'
+      'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
     filterTagBySearching(value, data) {
       if (!value) return true

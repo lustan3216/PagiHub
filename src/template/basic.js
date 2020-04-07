@@ -1,11 +1,11 @@
-import { CAN_NEW_ITEM, STYLES, TAG, CHILDREN } from '../const'
+import { GRID_ITEM, CAN_NEW_ITEM, STYLES, TAG, CHILDREN, CAN_EDIT_TEXT, CAN_DRAG } from '../const'
 
 const gridItems = function() {
   return [
-    { [TAG]: 'grid-item', x: 0, y: 0, w: 22, h: 71 },
-    { [TAG]: 'grid-item', x: 38, y: 19, w: 34, h: 52 },
-    { [TAG]: 'grid-item', x: 22, y: 19, w: 16, h: 52 },
-    { [TAG]: 'grid-item', x: 22, y: 0, w: 50, h: 19 }
+    { [TAG]: GRID_ITEM, x: 0, y: 0, w: 22, h: 71 },
+    { [TAG]: GRID_ITEM, x: 38, y: 19, w: 34, h: 52 },
+    { [TAG]: GRID_ITEM, x: 22, y: 19, w: 16, h: 52 },
+    { [TAG]: GRID_ITEM, x: 22, y: 0, w: 50, h: 19 }
   ]
 }
 
@@ -48,13 +48,15 @@ export const card = function() {
 
 export const editorText = function() {
   return {
-    [TAG]: 'editor-text'
+    [TAG]: 'editor-text',
+    [CAN_EDIT_TEXT]: true
   }
 }
 
 export const flexButton = function() {
   return {
-    [TAG]: 'flex-button'
+    [TAG]: 'flex-button',
+    [CAN_EDIT_TEXT]: true
   }
 }
 
@@ -72,7 +74,8 @@ export const divider = function() {
 
 export const videoPlayer = function() {
   return {
-    [TAG]: 'video-player'
+    [TAG]: 'video-player',
+    [CAN_DRAG]: true
   }
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="layers">
+  <div v-if="innerChildren.length" class="layers">
     <div
       v-for="(child, index) in innerChildren"
       :style="{ 'z-index': index, ...innerStyles }"

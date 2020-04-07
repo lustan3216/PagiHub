@@ -7,19 +7,13 @@ export default {
   computed: {
     ...mapGetters('draft', ['childrenOf']),
     ...mapGetters('example', ['examplesMapByTag']),
-    firstChild() {
-      return this.innerChildren[0]
-    },
-    hasAnyChild() {
-      return this.firstChild
-    },
     innerChildren() {
       const getterName = `${this.isExample ? 'example' : 'draft'}/childrenOf`
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
       // children 因為每次更新 nodesMap，如果innerChildren用computed會所有的component都被更新
       return this.$store.getters[getterName][this.id].map(
-        ({ children, moved, parentId, ...node }) => ({
+        ({ [CHILDREN]: _, moved, parentId, ...node }) => ({
           ...node
         })
       )
@@ -37,7 +31,7 @@ export default {
 
       traversal(nodes, (_node, _parentNode) => {
         // eslint-disable-next-line
-        const { children: _, ...node } = _node
+        const { [CHILDREN]: _, ...node } = _node
         records.push({
           path: node.id,
           value: { ...node, parentId: node.parentId }
@@ -54,9 +48,7 @@ export default {
       // can new layer-item, grid-item, carousel-item, form-item
       const { tag } = this.node
       // eslint-disable-next-line
-      const { children: _, ...emptyItem } = this.examplesMapByTag[tag][
-        CHILDREN
-      ][0]
+      const { [CHILDREN]: _, ...emptyItem } = this.examplesMapByTag[tag][CHILDREN][0]
 
       this.resetIdsAndRecord(emptyItem)
     },

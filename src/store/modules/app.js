@@ -1,19 +1,24 @@
 import { SET } from '../index'
-import { arraySubtract } from '../../utils/tool'
+import { arraySubtract, toArray } from '../../utils/tool'
 
 const state = {
   isAnimating: false,
   scaleRatio: 1,
-  selectedComponentIds: []
+  selectedComponentIds: [],
+  copyComponentIds: []
 }
 
 const mutations = {
   SET,
+  SET_COPY_SELECTED_COMPONENT_IDS(state) {
+    state.copyComponentIds = state.selectedComponentIds
+  },
   CLEAN_SELECTED_COMPONENT_IDS(state, ids) {
     state.selectedComponentIds = arraySubtract(state.selectedComponentIds, ids)
   },
-  SET_SELECTED_COMPONENT_IDS(state, ids) {
-    state.selectedComponentIds = ids
+  SET_SELECTED_COMPONENT_ID(state, id) {
+    const isExist = state.selectedComponentIds.includes(id)
+    state.selectedComponentIds = isExist ? [] : [id]
   },
   TOGGLE_SELECTED_COMPONENT_ID(state, id) {
     const isExist = state.selectedComponentIds.includes(id)
@@ -26,14 +31,14 @@ const mutations = {
 }
 
 const getters = {
-  selectedComponentId(state) {
-    if (state.selectedComponentIds.length) {
+  theOnlySelectedComponentId(state) {
+    if (state.selectedComponentIds.length === 1) {
       return +state.selectedComponentIds[0]
     }
   },
   selectedComponentNode(state, getters, rootState) {
-    if (getters.selectedComponentId) {
-      return rootState.draft.nodesMap[getters.selectedComponentId]
+    if (getters.theOnlySelectedComponentId) {
+      return rootState.draft.nodesMap[getters.theOnlySelectedComponentId]
     }
   }
 }

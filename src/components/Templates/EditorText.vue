@@ -100,7 +100,7 @@
       class="h-100"
     />
   </div>
-  <div v-else class="h-100 quillWrapper" @mouseover="lazyLoaded = true">
+  <div v-else class="h-100 quill-editor" @mouseover="lazyLoaded = true">
     <div class="ql-container">
       <div class="ql-editor" v-html="innerContent" />
     </div>
@@ -190,8 +190,8 @@ export default {
           // 當在別的組建被使用時，不會有ID，所以不用update vuex
           this.RECORD([
             {
-              path: this.id,
-              value: { value }
+              path: `${this.id}.value`,
+              value
             }
           ])
         } else {
@@ -248,12 +248,6 @@ export default {
 .m-l-12 {
   margin-left: 12px !important;
 }
-
-.ql-editor {
-  min-height: 200px;
-  font-size: 16px;
-}
-
 .quillWrapper .ql-editor ul[data-checked='false'] > li::before,
 .quillWrapper .ql-editor ul[data-checked='true'] > li::before {
   font-size: 1.35em;
