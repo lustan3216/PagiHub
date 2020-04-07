@@ -50,7 +50,7 @@ export default {
         .resizable({
           // resize from all edges and corners
           edges: this.resizeEdges,
-          ignoreFrom: '.vue-resizable-handle',
+          ignoreFrom: '.vue-grid-item',
           listeners: {
             move: event => {
               var target = event.target
@@ -101,7 +101,7 @@ export default {
       interact
         .draggable({
           allowFrom: this.draggableHandler,
-          ignoreFrom: '.vue-resizable-handle',
+          ignoreFrom: '.vue-grid-item',
           listeners: {
             move: event => {
               const target = event.target

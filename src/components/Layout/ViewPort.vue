@@ -3,8 +3,6 @@
     <div v-mousewheel="callback">
       <dialog-interacted
         ref="browser"
-        :resize-edges="{ left: true, right: true, bottom: false, top: false }"
-        :draggable="false"
         :scale-ratio="scaleRatio"
         :class="{ interact: isDraftMode }"
         @resize="dialogResize"
@@ -138,6 +136,16 @@ export default {
   width: calc(100vw - 330px);
   @include calc-vh(height, '100vh - 70px');
   overflow-y: scroll;
+  @include calc-vh(height, '100vh - 70px');
   position: absolute;
+}
+.dragger {
+  font-size: 18px;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100000;
 }
 </style>
