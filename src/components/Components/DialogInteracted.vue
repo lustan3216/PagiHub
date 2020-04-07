@@ -22,9 +22,13 @@ export default {
       type: Boolean,
       default: true
     },
-    draggableHandler: {
-      type: String,
-      default: '*'
+    resizeOptions: {
+      type: Object,
+      default: () => ({})
+    },
+    dragOptions: {
+      type: Object,
+      default: () => ({})
     },
     resizable: {
       type: Boolean,
@@ -50,7 +54,6 @@ export default {
         .resizable({
           // resize from all edges and corners
           edges: this.resizeEdges,
-          ignoreFrom: '.vue-grid-item',
           listeners: {
             move: event => {
               var target = event.target
@@ -89,7 +92,8 @@ export default {
             })
           ],
 
-          inertia: true
+          inertia: true,
+          ...this.resizeOptions
         })
         .on(['resizeend'], () => this.$emit('resizeEnd'))
         .on(['resizestart'], () => this.$emit('resizeStart'))
@@ -100,8 +104,6 @@ export default {
     if (this.draggable) {
       interact
         .draggable({
-          allowFrom: this.draggableHandler,
-          ignoreFrom: '.vue-grid-item',
           listeners: {
             move: event => {
               const target = event.target
@@ -124,7 +126,8 @@ export default {
               // restriction: 'parent',
               endOnly: true
             })
-          ]
+          ],
+          ...this.dragOptions
         })
         .on(['dragstart'], () => this.$emit('dragStart'))
         .on(['dragend'], () => this.$emit('dragEnd'))

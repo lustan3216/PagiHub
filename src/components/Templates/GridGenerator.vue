@@ -8,6 +8,8 @@
     :style="innerStyles"
     :layout="layout"
     :margin="[0, 0]"
+    :is-draggable="isDraftMode || isExample"
+    :is-resizable="isDraftMode || isExample"
     :responsive="true"
     @layout-updated="update($event)"
   >

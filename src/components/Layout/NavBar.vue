@@ -1,21 +1,25 @@
 <template>
-  <el-tooltip
-    v-if="isPreviewMode"
-    effect="light"
-    content="Close Preview"
-    placement="bottom"
-  >
-    <el-button
-      v-shortkey="['esc']"
-      icon="el-icon-close"
-      circle
-      class="close box-shadow"
-      @click="SET_DRAFT_MODE"
-      @shortkey.native="SET_DRAFT_MODE"
+  <div v-if="isPreviewMode" class="preview">
+    <el-tooltip effect="light" content="Close Preview" placement="bottom">
+      <el-button
+        v-shortkey="['esc']"
+        icon="el-icon-close"
+        circle
+        class="box-shadow"
+        @click="SET_DRAFT_MODE"
+        @shortkey.native="SET_DRAFT_MODE"
+      />
+    </el-tooltip>
+
+    <portal-target
+      name="view-port-controller"
+      class="d-inline-block m-l-15 box-shadow"
     />
-  </el-tooltip>
+  </div>
 
   <nav v-else-if="isDraftMode" class="flex-center">
+    <portal-target name="view-port-controller" class="d-inline-block m-l-15" />
+
     <el-tooltip effect="light" content="Preview" placement="bottom">
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
@@ -59,8 +63,6 @@
         @click="copy"
       />
     </el-tooltip>
-
-    <portal-target name="view-port-controller" class="d-inline-block m-l-15" />
 
     <el-popover effect="light" trigger="hover" placement="bottom">
       <span>Are u sure to Publish？</span>
@@ -120,10 +122,11 @@ nav {
   font-size: 16px;
   padding: 7px;
 }
-.close {
+.preview {
   position: fixed;
-  left: 15px;
-  top: 15px;
-  z-index: 300;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
 }
 </style>

@@ -5,6 +5,8 @@
         ref="browser"
         :scale-ratio="scaleRatio"
         :class="{ interact: isDraftMode }"
+        :resize-options="{ ignoreFrom: '.vue-grid-item' }"
+        :drag-options="{ ignoreFrom: '.vue-grid-item' }"
         @resize="dialogResize"
         @resizeStart="appSET({ isAnimating: true })"
         @resizeEnd="appSET({ isAnimating: false })"
@@ -43,7 +45,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import DialogInteracted from '../Components/DialogInteracted'
 import mousewheel from 'element-ui/lib/directives/mousewheel'
 
@@ -85,11 +87,19 @@ export default {
     }
   },
   computed: {
+    ...mapState('mode', ['mode']),
     scalePercent() {
       return Math.ceil(+this.scaleRatio * 100)
     },
     isCustom() {
       return this.options[0] === this.current
+    }
+  },
+  watch: {
+    mode() {
+      this.$nextTick(() => {
+        this.canvasWidthRollback()
+      })
     }
   },
   mounted() {
