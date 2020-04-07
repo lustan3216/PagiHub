@@ -6,7 +6,7 @@
     placement="bottom"
   >
     <el-button
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
+      v-shortkey="['esc']"
       icon="el-icon-close"
       circle
       class="close box-shadow"

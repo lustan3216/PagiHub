@@ -18,17 +18,6 @@
     </div>
 
     <slot v-else />
-
-    <!--  $parent.$el 可能會拿到 #comment node, 會沒有 setAttribute 方法而壞掉  -->
-    <el-popover
-      v-if="!isExample && $parent.$el && $parent.$el.setAttribute"
-      :reference="$parent.$el"
-      :placement="node.canNewItem ? 'top' : 'right'"
-      trigger="hover"
-    >
-      <span class="m-r-10">{{ node.tag | shortTagName }}</span>
-      <node-controller :id="id" />
-    </el-popover>
   </div>
 
   <div v-else class="layer h-100">

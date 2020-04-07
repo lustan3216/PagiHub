@@ -1,6 +1,8 @@
 import store from '../store'
 export const vmMap = {}
 
+window.vmMap = vmMap
+
 export function vm(id) {
   return vmMap[id]
 }
@@ -33,7 +35,7 @@ export function assignStyles(id, styles) {
 export function vmCreateItem({ id }) {
   // layers, grid-generator, carousel, form-generator
   // can new layer-item, grid-item, carousel-item, form-item
-  vm(id).createEmptyItem()
+  vm(id)._createEmptyItem()
 }
 
 export function vmCopyNode(node) {
@@ -45,14 +47,14 @@ export function vmCopyNode(node) {
 
   if (parentNode.canNewItem) {
     // if parentNode can new item, it means the node is one of layer-item, grid-item, carousel-item, form-item
-    vm(parentId).copy(id)
+    vm(parentId)._copy(id)
   } else {
     // if parentNode can not new item, it means the node is a child of layer-item, grid-item, carousel-item, form-item
     const grandParentId = parentNode.parentId
-    vm(grandParentId).copy(parentId)
+    vm(grandParentId)._copy(parentId)
   }
 }
 
 export function vmRemoveNode({ id, parentId }) {
-  vm(parentId).remove(id)
+  vm(parentId)._remove(id)
 }

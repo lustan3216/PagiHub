@@ -59,7 +59,6 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { vmMap } from '../../../utils/vmMap'
-import nodeMixin from '../../../mixins/node'
 import { cloneJson } from '../../../utils/tool'
 import { categories, FORM_ITEM_ID } from '../../../template'
 import { CATEGORY, ID, NAME } from '../../../const'
@@ -67,11 +66,17 @@ import importTemplatesMixin from '../../../mixins/importTemplates'
 
 export default {
   name: 'ExampleAdd',
-  mixins: [nodeMixin, importTemplatesMixin],
+  mixins: [importTemplatesMixin],
   provide() {
     return {
       rootForm: {},
       isExample: true
+    }
+  },
+  props: {
+    id: {
+      type: Number,
+      required: true
     }
   },
   data() {

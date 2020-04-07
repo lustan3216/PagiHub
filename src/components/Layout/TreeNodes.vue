@@ -19,13 +19,11 @@
       @check="checkedChange"
     >
       <template v-slot="{ data }">
-        <span class="justify-between w-100">
-          <span class="el-tree-node__label align-center m-r-10">
-            {{ data.tag | shortTagName }} - {{ data.id }}
-          </span>
-
-          <node-controller :id="data.id" :exclude="['copy', 'delete']" />
-        </span>
+        <node-controller
+          :id="data.id"
+          :exclude="['copy', 'delete']"
+          class="w-100"
+        />
       </template>
     </el-tree>
   </div>
@@ -87,9 +85,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', [
-      'TOGGLE_SELECTED_COMPONENT_ID'
-    ]),
+    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_ID']),
     filterTagBySearching(value, data) {
       if (!value) return true
       return data.tag.indexOf(value) !== -1

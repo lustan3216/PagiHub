@@ -22,7 +22,7 @@ export default {
   methods: {
     ...mapMutations('draft', ['RECORD']),
 
-    resetIdsAndRecord(nodes) {
+    appendNodesToParentAndRecord(nodes) {
       const records = []
 
       nodes = cloneJson(nodes)
@@ -41,7 +41,9 @@ export default {
       this.RECORD(records)
     },
 
-    createEmptyItem() {
+    _createEmptyItem() {
+      // should use vmMap method to call to keep consistency
+
       // 這裏拿到的example有可能有deep children
       // template has a `canNew` setup to check can new or not
       // layers, grid-generator, carousel, form-generator
@@ -50,20 +52,22 @@ export default {
       // eslint-disable-next-line
       const { [CHILDREN]: _, ...emptyItem } = this.examplesMapByTag[tag][CHILDREN][0]
 
-      this.resetIdsAndRecord(emptyItem)
+      this.appendNodesToParentAndRecord(emptyItem)
     },
 
-    copy(theNodeIdGonnaCopy) {
+    _copy(theNodeIdGonnaCopy) {
+      // should use vmMap method to call to keep consistency
       const theNodeGonnaCopy = this.innerChildren.find(
         x => x.id === theNodeIdGonnaCopy
       )
 
       const children = this.childrenOf[theNodeIdGonnaCopy]
       theNodeGonnaCopy[CHILDREN] = children
-      this.resetIdsAndRecord(theNodeGonnaCopy)
+      this.appendNodesToParentAndRecord(theNodeGonnaCopy)
     },
 
-    remove(theNodeIdGonnaRemove) {
+    _remove(theNodeIdGonnaRemove) {
+      // should use vmMap method to call to keep consistency
       const records = [
         {
           path: theNodeIdGonnaRemove,
