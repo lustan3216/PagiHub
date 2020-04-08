@@ -1,62 +1,52 @@
 import localforage from 'localforage'
-import jsonStorer from '../jsonStorer'
-import listToTree from '../../utils/listToTree'
-import { SET } from '../index'
-import { componentIds } from '../../utils/keyId'
-import { traversal } from '../../utils/tool'
-import { initTemplate as _initTemplate } from '../../template/basic'
+import jsonStorer from '../../jsonStorer'
+import listToTree from '../../../utils/listToTree'
+import { SET } from '../../index'
+import { componentIds } from '../../../utils/keyId'
+import { nestedToLinerObject } from '../../../utils/tool'
+import { initTemplate as _initTemplate } from '../../../template/basic'
 
 const state = {
   nodesMap: {},
-  componentId: 0
+  draftComponentId: null
 }
 
 const mutations = {
   SET,
   INIT_NODES_MAP(state, payLoad) {
     state.nodesMap = payLoad
-    localforage.setItem(state.componentId, state.nodesMap)
   },
   RECORD(state, payLoad) {
-    jsonStorer(state.componentId).record(payLoad)
-    localforage.setItem(state.componentId, state.nodesMap)
+    jsonStorer(state.draftComponentId).record(payLoad)
   },
   REDO() {
-    jsonStorer(state.componentId).redo()
-    localforage.setItem(state.componentId, state.nodesMap)
+    jsonStorer(state.draftComponentId).redo()
   },
   UNDO() {
-    jsonStorer(state.componentId).undo()
-    localforage.setItem(state.componentId, state.nodesMap)
+    jsonStorer(state.draftComponentId).undo()
   }
 }
 
 const actions = {
-  setComponent({ commit, state, dispatch }, componentId) {
-    commit('SET', { componentId })
+  setComponent({ commit, state, dispatch }, draftComponentId) {
+    commit('SET', { draftComponentId })
     dispatch('getRootNode')
   },
 
   async getRootNode({ commit, state }) {
-    const nodesMap = (await localforage.getItem(state.componentId)) || {}
+    const nodesMap = (await localforage.getItem(state.draftComponentId.toString())) || {}
 
     if (Object.hasAnyKey(nodesMap)) {
-      const ids = Object.keys(nodesMap).map(x => parseInt(x))
-      componentIds.restoreIds = ids
+      componentIds.restoreIds(nodesMap)
     } else {
       const initTemplate = _initTemplate()
       initTemplate.parentId = 0
       componentIds.appendIdNested(initTemplate)
-
-      traversal(initTemplate, _node => {
-        // eslint-disable-next-line
-        const { children: _, ...node } = _node
-        nodesMap[node.id] = node
-      })
+      nestedToLinerObject(nodesMap, initTemplate)
     }
 
     commit('INIT_NODES_MAP', nodesMap)
-    jsonStorer(state.componentId).tree = nodesMap
+    jsonStorer(state.draftComponentId).tree = nodesMap
   }
 }
 

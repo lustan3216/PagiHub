@@ -16,7 +16,10 @@
       <el-row :gutter="5">
         <el-col :span="8">
           <el-form-item>
-            <el-select v-model="boxShadow.inset" placeholder="Outline">
+            <el-select
+              v-model="boxShadow.inset"
+              placeholder="Outline"
+            >
               <el-option value="Outline"/>
               <el-option value="Inset"/>
             </el-select>
@@ -25,13 +28,19 @@
 
         <el-col :span="8">
           <el-form-item label="X">
-            <select-unit :value.sync="boxShadow.offsetX" :exclude="['%']"/>
+            <select-unit
+              :value.sync="boxShadow.offsetX"
+              :exclude="['%']"
+            />
           </el-form-item>
         </el-col>
 
         <el-col :span="8">
           <el-form-item label="Y">
-            <select-unit :value.sync="boxShadow.offsetY" :exclude="['%']"/>
+            <select-unit
+              :value.sync="boxShadow.offsetY"
+              :exclude="['%']"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -39,19 +48,28 @@
       <el-row :gutter="5">
         <el-col :span="8">
           <el-form-item label="Blur">
-            <select-unit :value.sync="boxShadow.blurRadius" :exclude="['%']"/>
+            <select-unit
+              :value.sync="boxShadow.blurRadius"
+              :exclude="['%']"
+            />
           </el-form-item>
         </el-col>
 
         <el-col :span="8">
           <el-form-item label="Spread">
-            <select-unit :value.sync="boxShadow.spreadRadius" :exclude="['%']"/>
+            <select-unit
+              :value.sync="boxShadow.spreadRadius"
+              :exclude="['%']"
+            />
           </el-form-item>
         </el-col>
 
         <el-col :span="3">
           <el-form-item label="Color">
-            <el-color-picker v-model="boxShadow.color" show-alpha />
+            <el-color-picker
+              v-model="boxShadow.color"
+              show-alpha
+            />
           </el-form-item>
         </el-col>
       </el-row>

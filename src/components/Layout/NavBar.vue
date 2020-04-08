@@ -1,11 +1,19 @@
 <template>
-  <dialog-interacted v-if="isPreviewMode" :resizable="false" class="preview">
+  <dialog-interacted
+    v-if="isPreviewMode"
+    :resizable="false"
+    class="preview"
+  >
     <portal-target
       name="view-port-controller"
       class="d-inline-block m-l-15 box-shadow"
     />
 
-    <el-tooltip effect="light" content="Close Preview" placement="bottom">
+    <el-tooltip
+      effect="light"
+      content="Close Preview"
+      placement="bottom"
+    >
       <el-button
         v-shortkey="['esc']"
         icon="el-icon-close"
@@ -17,24 +25,38 @@
     </el-tooltip>
   </dialog-interacted>
 
-  <nav v-else-if="isDraftMode" class="flex-center">
-    <portal-target name="view-port-controller" class="d-inline-block m-l-15" />
+  <nav
+    v-else-if="isDraftMode"
+    class="flex-center"
+  >
+    <portal-target
+      name="view-port-controller"
+      class="d-inline-block m-l-15"
+    />
 
-    <el-tooltip effect="light" content="Preview" placement="bottom">
+    <el-tooltip
+      effect="light"
+      content="Preview"
+      placement="bottom"
+    >
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
         icon="el-icon-data-analysis"
-        size="mini"
+
         type="text"
         @click="SET_PREVIEW_MODE"
         @shortkey.native="SET_PREVIEW_MODE"
       />
     </el-tooltip>
 
-    <el-tooltip effect="light" content="Undo" placement="bottom">
+    <el-tooltip
+      effect="light"
+      content="Undo"
+      placement="bottom"
+    >
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
-        size="mini"
+
         type="text"
         icon="el-icon-refresh-left"
         @shortkey.native="UNDO"
@@ -42,10 +64,14 @@
       />
     </el-tooltip>
 
-    <el-tooltip effect="light" content="Redo" placement="bottom">
+    <el-tooltip
+      effect="light"
+      content="Redo"
+      placement="bottom"
+    >
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
-        size="mini"
+
         type="text"
         icon="el-icon-refresh-right"
         @shortkey.native="REDO"
@@ -53,10 +79,14 @@
       />
     </el-tooltip>
 
-    <el-tooltip effect="light" content="Copy" placement="bottom">
+    <el-tooltip
+      effect="light"
+      content="Copy"
+      placement="bottom"
+    >
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
-        size="mini"
+
         type="text"
         icon="el-icon-document-copy"
         @shortkey.native="copy"
@@ -73,7 +103,7 @@
       <span>Are u sure to Publish？</span>
       <el-button
         type="info"
-        size="mini"
+
         icon="el-icon-circle-check"
         circle
         @click="publish"
@@ -81,7 +111,7 @@
 
       <el-button
         slot="reference"
-        size="mini"
+
         type="text"
         icon="el-icon-upload"
       />

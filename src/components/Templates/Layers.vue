@@ -1,12 +1,18 @@
 <template>
-  <div v-if="innerChildren.length" class="layers">
+  <div
+    v-if="innerChildren.length"
+    class="layers"
+  >
     <div
       v-for="(child, index) in innerChildren"
       :style="{ 'z-index': index, ...innerStyles }"
       :class="{ absolute: index }"
       :key="index"
     >
-      <component :is="child.tag" :id="child.id" />
+      <component
+        :is="child.tag"
+        :id="child.id"
+      />
     </div>
   </div>
 </template>

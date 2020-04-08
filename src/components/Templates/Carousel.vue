@@ -14,7 +14,10 @@
       @click.stop.native="click(child.id)"
       @mouseleave="mouseLeave"
     >
-      <grid-generator :id="child.id" class="h-100" />
+      <grid-generator
+        :id="child.id"
+        class="h-100"
+      />
     </el-carousel-item>
   </el-carousel>
 </template>

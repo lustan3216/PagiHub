@@ -24,13 +24,19 @@
           </span>
 
           <span>
-            <visibility v-if="data.tag !== gridItem" :id="data.id" />
-
-            <el-button type="text" size="mini" icon="el-icon-attract" />
+            <visibility
+              v-if="data.tag !== gridItem"
+              :id="data.id"
+            />
 
             <el-button
               type="text"
-              size="mini"
+              icon="el-icon-attract"
+            />
+
+            <el-button
+              type="text"
+
               icon="el-icon-copy-document"
               @click.stop="() => copy(data)"
             />
@@ -38,7 +44,7 @@
             <el-button
               type="text"
               icon="el-icon-delete"
-              size="mini"
+
               @click.stop="() => remove(data)"
             />
           </span>

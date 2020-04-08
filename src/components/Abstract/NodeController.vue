@@ -8,7 +8,6 @@
       <el-button
         v-if="node.canNewItem"
         type="text"
-        size="mini"
         icon="el-icon-plus"
         @click.stop="() => vmCreateItem(node)"
       />
@@ -42,7 +41,6 @@
       <el-button
         v-if="!exclude.includes('copy')"
         type="text"
-        size="mini"
         icon="el-icon-copy-document"
         @click.stop="() => vmCopyNode(node)"
       />
@@ -51,7 +49,6 @@
         v-if="!exclude.includes('delete')"
         type="text"
         icon="el-icon-delete"
-        size="mini"
         @click.stop="() => vmRemoveNode(node)"
       />
 

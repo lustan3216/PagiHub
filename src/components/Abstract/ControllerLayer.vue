@@ -20,7 +20,10 @@
     <slot v-else />
   </div>
 
-  <div v-else class="layer h-100">
+  <div
+    v-else
+    class="layer h-100"
+  >
     <slot />
   </div>
 </template>

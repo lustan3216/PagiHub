@@ -1,7 +1,13 @@
 <template>
-  <div v-if="lazyLoaded" class="h-100">
+  <div
+    v-if="lazyLoaded"
+    class="h-100"
+  >
     <div :id="`toolbar${_uid}`">
-      <span v-show="toggledBar" class="ql-formats m-l-12">
+      <span
+        v-show="toggledBar"
+        class="ql-formats m-l-12"
+      >
         <select
           v-if="only.includes('header')"
           class="ql-header"
@@ -16,13 +22,25 @@
           <option selected>Normal</option>
         </select>
 
-        <button v-if="only.includes('link')" class="ql-link" />
+        <button
+          v-if="only.includes('link')"
+          class="ql-link"
+        />
 
-        <button v-if="only.includes('bold')" class="ql-bold" />
+        <button
+          v-if="only.includes('bold')"
+          class="ql-bold"
+        />
 
-        <button v-if="only.includes('italic')" class="ql-italic" />
+        <button
+          v-if="only.includes('italic')"
+          class="ql-italic"
+        />
 
-        <color-picker v-if="only.includes('fontColor')" v-model="fontColor">
+        <color-picker
+          v-if="only.includes('fontColor')"
+          v-model="fontColor"
+        >
           <font-icon />
         </color-picker>
 
@@ -39,9 +57,16 @@
           value="ordered"
         />
 
-        <button v-if="only.includes('bullet')" class="ql-list" value="bullet" />
+        <button
+          v-if="only.includes('bullet')"
+          class="ql-list"
+          value="bullet"
+        />
 
-        <select v-if="only.includes('align')" class="ql-align">
+        <select
+          v-if="only.includes('align')"
+          class="ql-align"
+        >
           <option selected />
           <option value="center" />
           <option value="right" />
@@ -49,7 +74,10 @@
         </select>
       </span>
 
-      <span v-show="!toggledBar" class="ql-formats m-l-12">
+      <span
+        v-show="!toggledBar"
+        class="ql-formats m-l-12"
+      >
         <select
           v-if="only.includes('font')"
           class="ql-font"
@@ -60,11 +88,21 @@
           <option value="monospace">Monospace</option>
         </select>
 
-        <button v-if="only.includes('underline')" class="ql-underline" />
+        <button
+          v-if="only.includes('underline')"
+          class="ql-underline"
+        />
 
-        <button v-if="only.includes('strike')" class="ql-strike" />
+        <button
+          v-if="only.includes('strike')"
+          class="ql-strike"
+        />
 
-        <button v-if="only.includes('script')" class="ql-script" value="sub" />
+        <button
+          v-if="only.includes('script')"
+          class="ql-script"
+          value="sub"
+        />
 
         <button
           v-if="only.includes('script')"
@@ -72,13 +110,27 @@
           value="super"
         />
 
-        <button v-if="only.includes('indent')" class="ql-indent" value="-1" />
+        <button
+          v-if="only.includes('indent')"
+          class="ql-indent"
+          value="-1"
+        />
 
-        <button v-if="only.includes('indent')" class="ql-indent" value="+1" />
+        <button
+          v-if="only.includes('indent')"
+          class="ql-indent"
+          value="+1"
+        />
 
-        <button v-if="only.includes('blockquote')" class="ql-blockquote" />
+        <button
+          v-if="only.includes('blockquote')"
+          class="ql-blockquote"
+        />
 
-        <button v-if="only.includes('codeBlock')" class="ql-code-block" />
+        <button
+          v-if="only.includes('codeBlock')"
+          class="ql-code-block"
+        />
       </span>
 
       <span class="ql-formats">
@@ -100,9 +152,16 @@
       class="h-100"
     />
   </div>
-  <div v-else class="h-100 quill-editor" @mouseover="lazyLoaded = true">
+  <div
+    v-else
+    class="h-100 quill-editor"
+    @mouseover="lazyLoaded = true"
+  >
     <div class="ql-container">
-      <div class="ql-editor" v-html="innerContent" />
+      <div
+        class="ql-editor"
+        v-html="innerContent"
+      />
     </div>
   </div>
 </template>

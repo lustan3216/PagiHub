@@ -11,12 +11,16 @@
     />
   </div>
   <div v-else>
-    <div v-for="(object, key) in specs" :key="key">
+    <div
+      v-for="(object, key) in specs"
+      :key="key"
+    >
       <settings-nested
         :id="id"
         :specs="object"
         :name="key"
-        :key="key" />
+        :key="key"
+      />
     </div>
   </div>
 </template>

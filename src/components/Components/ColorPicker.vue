@@ -4,7 +4,10 @@
     class="el-color-picker ql-picker ql-color-picker"
     @click="showPicker = !showPicker"
   >
-    <span ref="icon" class="ql-picker-label">
+    <span
+      ref="icon"
+      class="ql-picker-label"
+    >
       <slot />
     </span>
     <picker-dropdown

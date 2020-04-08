@@ -14,6 +14,10 @@
   display: flex !important;
 }
 
+.flex1 {
+  flex: 1 !important;
+}
+
 .flex-column {
   display: flex;
   flex-direction: column;
@@ -68,6 +72,10 @@
 
 .circle {
   border-radius: 50%;
+}
+
+.no-radius {
+  border-radius: initial !important;
 }
 
 .pointer {

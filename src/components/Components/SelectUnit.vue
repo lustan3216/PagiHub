@@ -1,6 +1,13 @@
 <template>
-  <el-select v-if="isAuto" v-model="unit">
-    <el-option v-for="unit in units" :key="unit" :value="unit" />
+  <el-select
+    v-if="isAuto"
+    v-model="unit"
+  >
+    <el-option
+      v-for="unit in units"
+      :key="unit"
+      :value="unit"
+    />
   </el-select>
 
   <el-input
@@ -8,12 +15,20 @@
     :prefix-icon="icon"
     v-model="number"
     type="number"
-    size="mini"
+
     clearable
     class="number"
   >
-    <el-select slot="append" v-model="unit" placeholder="-">
-      <el-option v-for="unit in units" :key="unit" :value="unit" />
+    <el-select
+      slot="append"
+      v-model="unit"
+      placeholder="-"
+    >
+      <el-option
+        v-for="unit in units"
+        :key="unit"
+        :value="unit"
+      />
     </el-select>
   </el-input>
 </template>

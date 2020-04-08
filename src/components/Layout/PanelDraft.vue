@@ -1,6 +1,10 @@
 <template>
   <view-port>
-    <component v-if="rootNode" :id="rootNode.id" :is="rootNode.tag" />
+    <component
+      v-if="rootNode"
+      :id="rootNode.id"
+      :is="rootNode.tag"
+    />
     <portal-target name="Root" />
   </view-port>
 </template>

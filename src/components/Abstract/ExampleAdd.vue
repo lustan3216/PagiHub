@@ -16,7 +16,10 @@
       @open="$emit('open')"
       @close="visible = false"
     >
-      <el-tabs v-model="currentCategory" tab-position="left">
+      <el-tabs
+        v-model="currentCategory"
+        tab-position="left"
+      >
         <el-tab-pane
           v-for="category in categories"
           :key="category.id"
@@ -24,7 +27,11 @@
           :label="category.name"
           lazy
         >
-          <el-row :gutter="15" type="flex" style="flex-wrap: wrap">
+          <el-row
+            :gutter="15"
+            type="flex"
+            style="flex-wrap: wrap"
+          >
             <el-col
               v-for="component in components"
               :key="component.id"
@@ -33,7 +40,10 @@
               style="min-height: 200px;"
             >
               <el-card shadow="hover">
-                <component :is="component.tag" :id="component.id" />
+                <component
+                  :is="component.tag"
+                  :id="component.id"
+                />
 
                 <div style="padding: 14px;">
                   <span>{{ component.tag }}</span>
@@ -43,8 +53,7 @@
                       type="text"
                       class="button"
                       @click="addTemplate(component)"
-                    >操作按钮</el-button
-                    >
+                    >操作按钮</el-button>
                   </div>
                 </div>
               </el-card>

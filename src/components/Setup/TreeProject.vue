@@ -1,0 +1,152 @@
+<template>
+  <div>
+    <el-input
+      v-model="filterText"
+      placeholder="输入关键字进行过滤"
+      size="small"
+      class="m-b-10 transparent"
+    />
+    <el-tree
+      ref="tree"
+      :data="tree"
+      :filter-node-method="filterTagBySearching"
+      :expand-on-click-node="false"
+      :indent="16"
+      :allow-drop="allowDrop"
+      class="tree"
+      node-key="id"
+      draggable
+      @node-drop="nodeParentChange"
+    >
+      <span
+        slot-scope="{ data }"
+        class="custom-tree-node justify-between align-center w-100"
+        @click="() => nodeClick(data)"
+      >
+        <span class="el-tree-node__label m-r-10">
+          <i
+            v-if="TYPE.PROJECT === data.type"
+            class="el-icon-files"
+          />
+          <i
+            v-if="TYPE.FOLDER === data.type"
+            class="el-icon-folder-opened"
+          />
+          <i
+            v-if="TYPE.COMPONENT_SET === data.type"
+            class="el-icon-lollipop"
+          />
+          {{ data.name }} {{ data.id }}
+        </span>
+
+        <span>
+          <dialog-folder
+            v-if="[PROJECT, FOLDER].includes(data.type)"
+            :parent-id="data.id"
+          />
+
+          <dialog-component-set
+            v-if="[PROJECT, FOLDER].includes(data.type)"
+            :parent-id="data.id"
+          />
+
+          <dialog-delete :id="data.id" />
+
+          <component
+            :id="data.id"
+            :parent-id="data.parentId"
+            :is="`dialog-${TYPE_STRING[data.type].kebabCase()}`"
+          />
+        </span>
+      </span>
+    </el-tree>
+  </div>
+</template>
+
+<script>
+import { mapActions, mapGetters } from 'vuex'
+import { Tree, MessageBox, Message } from 'element-ui'
+import { TYPE, TYPE_STRING } from '../../const'
+import { projectIds } from '../../utils/keyId'
+import DialogProject from './Dialog/DialogProject'
+import DialogFolder from './Dialog/DialogFolder'
+import DialogComponentSet from './Dialog/DialogComponentSet'
+import DialogDelete from './Dialog/DialogDelete'
+
+export default {
+  name: 'TreeProject',
+  components: {
+    ElTree: Tree,
+    DialogComponentSet,
+    DialogProject,
+    DialogFolder,
+    DialogDelete
+  },
+  data() {
+    return {
+      filterText: '',
+      TYPE,
+      TYPE_STRING,
+      ...TYPE
+    }
+  },
+  computed: {
+    ...mapGetters('project', ['tree'])
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val)
+    }
+  },
+  created() {
+    this.getProjects()
+  },
+  methods: {
+    ...mapActions('draft', ['setComponent']),
+    ...mapActions('project', ['modifyProjectNodeParent', 'getProjects']),
+    updateToLatest() {},
+    nodeParentChange({ data: childData }, { data: parentData }, action) {
+      if (action === 'inner') {
+        this.modifyProjectNodeParent({
+          parentId: parentData.id,
+          id: childData.id
+        })
+      }
+    },
+    nodeClick(node) {
+      if (TYPE.COMPONENT_SET === node.type) {
+        this.setComponent(node.id)
+      }
+    },
+    allowDrop(_, { data: dropData }, action) {
+      return (
+        action === 'inner' &&
+        [TYPE.FOLDER, TYPE.PROJECT].includes(dropData.type)
+      )
+    },
+    filterTagBySearching(value, data) {
+      value = value.toLowerCase().toString()
+      return data.name.toLowerCase().indexOf(value) !== -1
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.custom-tree-node {
+  font-size: 14px;
+  padding-right: 8px;
+}
+
+.tree {
+  background: transparent;
+  @include calc-vh(height, '100vh - 140px');
+  overflow: scroll;
+}
+
+::v-deep.el-input.is-disabled .el-input__inner {
+  background-color: transparent;
+  border-color: transparent;
+  color: #c0c4cc;
+}
+</style>

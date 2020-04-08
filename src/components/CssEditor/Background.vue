@@ -2,7 +2,10 @@
   <div>
     <span class="el-dropdown">Background</span>
 
-    <el-row :gutter="5" class="m-t-10">
+    <el-row
+      :gutter="5"
+      class="m-t-10"
+    >
       <el-col :span="8">
         <el-form-item label="color">
           <el-color-picker v-model="backgroundColor" />

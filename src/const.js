@@ -20,13 +20,11 @@ export const GRID_ITEM = 'grid-item'
 export const TYPE = {
   PROJECT: 0,
   FOLDER: 1,
-  COMPONENT: 2,
-  COMPONENT_IS_USED: 3
+  COMPONENT_SET: 2
 }
 
 export const TYPE_STRING = {
   [TYPE.PROJECT]: 'project',
   [TYPE.FOLDER]: 'folder',
-  [TYPE.COMPONENT]: 'component',
-  [TYPE.COMPONENT_IS_USED]: 'componentIsUsed'
+  [TYPE.COMPONENT_SET]: 'componentSet'
 }

@@ -1,5 +1,8 @@
 <template>
-  <div class="h-100" @mouseleave="mouseleave" />
+  <div
+    class="h-100"
+    @mouseleave="mouseleave"
+  />
 </template>
 
 <script>

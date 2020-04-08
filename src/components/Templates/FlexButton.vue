@@ -6,7 +6,10 @@
       :only="['bold', 'italic', 'fontColor', 'font', 'underline', 'strike']"
       v-model="innerValue"
     />
-    <div v-else v-html="innerValue" />
+    <div
+      v-else
+      v-html="innerValue"
+    />
   </el-button>
 </template>
 

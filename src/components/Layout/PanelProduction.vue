@@ -1,6 +1,9 @@
 <template>
   <div>
-    <component :id="rootNode.id" :is="rootNode.tag" />
+    <component
+      :id="rootNode.id"
+      :is="rootNode.tag"
+    />
     <portal-target name="Root" />
   </div>
 </template>

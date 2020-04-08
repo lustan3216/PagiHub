@@ -11,7 +11,8 @@ class KeyManagement {
     }
   }
 
-  set restoreIds(ids) {
+  restoreIds(object) {
+    const ids = Object.keys(object).map(x => parseInt(x))
     this.idSet = new Set([ROOT_ID, ...ids])
   }
 

@@ -1,7 +1,14 @@
 <template>
-  <el-button type="primary" style="margin-left: 16px;" @click="drawer = true">
+  <el-button
+    type="primary"
+    style="margin-left: 16px;"
+    @click="drawer = true"
+  >
     Drawer
-    <portal :disabled="isExample" to="Root">
+    <portal
+      :disabled="isExample"
+      to="Root"
+    >
       <el-drawer
         v-bind="innerProps"
         :class="{ hideHeader }"

@@ -2,17 +2,23 @@
   <div>
     <span class="el-dropdown">Corner</span>
 
-    <el-row :gutter="5" class="m-t-10">
+    <el-row
+      :gutter="5"
+      class="m-t-10"
+    >
       <el-col :span="3">
         <el-button
           circle
-          size="mini"
+
           icon="el-icon-full-screen"
           @click.stop="isCornerAll = !isCornerAll"
         />
       </el-col>
 
-      <el-col v-if="isCornerAll" :span="10">
+      <el-col
+        v-if="isCornerAll"
+        :span="10"
+      >
         <el-form-item>
           <select-unit
             :value.sync="computedStyle.borderTopLeftRadius"
@@ -40,7 +46,10 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="10" :offset="3">
+        <el-col
+          :span="10"
+          :offset="3"
+        >
           <el-form-item>
             <select-unit
               :value.sync="computedStyle.borderBottomLeftRadius"

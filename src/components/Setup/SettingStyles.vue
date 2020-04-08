@@ -1,19 +1,31 @@
 <template>
-  <el-form size="mini" label-position="top">
+  <el-form label-position="top">
     <class-state />
 
-    <dimension :computed-style="computedStyle" @change="assignStyles" />
+    <dimension
+      :computed-style="computedStyle"
+      @change="assignStyles"
+    />
 
-    <corner :computed-style="computedStyle" @change="assignStyles" />
+    <corner
+      :computed-style="computedStyle"
+      @change="assignStyles"
+    />
 
     <!--<margin-->
     <!--:computed-style="computedStyle"-->
     <!--@change="assignStyles"-->
     <!--/>-->
 
-    <padding :computed-style="computedStyle" @change="assignStyles" />
+    <padding
+      :computed-style="computedStyle"
+      @change="assignStyles"
+    />
 
-    <border :computed-style="computedStyle" @change="assignStyles" />
+    <border
+      :computed-style="computedStyle"
+      @change="assignStyles"
+    />
 
     <!--    <background-->
     <!--      :computed-style="computedStyle"-->
@@ -21,16 +33,31 @@
     <!--    />-->
 
     <el-collapse v-model="activeNames">
-      <el-collapse-item title="Shadow" name="6">
-        <box-shadows :computed-style="computedStyle" @change="assignStyles" />
+      <el-collapse-item
+        title="Shadow"
+        name="6"
+      >
+        <box-shadows
+          :computed-style="computedStyle"
+          @change="assignStyles"
+        />
       </el-collapse-item>
 
-      <el-collapse-item title="Effect" name="7">
-        <effect :computed-style="computedStyle" @change="assignStyles" />
+      <el-collapse-item
+        title="Effect"
+        name="7"
+      >
+        <effect
+          :computed-style="computedStyle"
+          @change="assignStyles"
+        />
       </el-collapse-item>
     </el-collapse>
 
-    <style-block :plan-style="planStyle" @change="assignStyles" />
+    <style-block
+      :plan-style="planStyle"
+      @change="assignStyles"
+    />
   </el-form>
 </template>
 

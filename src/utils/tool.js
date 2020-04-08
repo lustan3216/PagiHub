@@ -73,3 +73,13 @@ export function deleteBy(children, key, value) {
   const oldIndex = findIndexBy(children, key, value)
   children.splice(oldIndex, 1)
 }
+
+export function nestedToLinerObject(target, nestedObject, key = 'children') {
+  traversal(nestedObject, _node => {
+    // eslint-disable-next-line
+    const { children: _, ...node } = _node
+    target[node.id] = node
+  })
+
+  return target
+}

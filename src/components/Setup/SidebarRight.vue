@@ -13,11 +13,20 @@
     />
 
     <el-tabs v-model="activeName">
-      <el-tab-pane label="Components" name="Components" lazy>
-        <tree-components />
+      <el-tab-pane
+        label="Project"
+        name="Project"
+        lazy
+      >
+        <tree-project />
       </el-tab-pane>
 
-      <el-tab-pane label="Nodes " name="Nodes" lazy>
+      <el-tab-pane
+        v-if="draftComponentId"
+        label="Nodes "
+        name="Nodes"
+        lazy
+      >
         <tree-nodes />
       </el-tab-pane>
 
@@ -25,8 +34,12 @@
         v-if="canShowSetting"
         label="Setting"
         name="setting"
-        lazy>
-        <setting-nested :id="theOnlySelectedComponentId" :specs="specs" />
+        lazy
+      >
+        <setting-nested
+          :id="theOnlySelectedComponentId"
+          :specs="specs"
+        />
       </el-tab-pane>
 
       <el-tab-pane
@@ -60,16 +73,16 @@ export default {
     DialogInteracted,
     FormCreate: formCreate.$form(),
     TreeNodes: () => import('./TreeNodes'),
-    TreeComponents: () => import('./TreeComponents')
+    TreeProject: () => import('./TreeProject')
   },
   data() {
     return {
       isFloat: false,
-      activeName: 'Components'
+      activeName: 'Project'
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
+    ...mapState('draft', ['nodesMap', 'draftComponentId']),
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', [
       'theOnlySelectedComponentId',

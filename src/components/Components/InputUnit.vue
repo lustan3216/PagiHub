@@ -3,7 +3,7 @@
     v-bind="$attrs"
     :disabled="isAuto"
     v-model="number"
-    size="mini"
+
     type="number"
     clearable
   >

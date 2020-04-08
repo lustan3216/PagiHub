@@ -1,5 +1,9 @@
 <template>
-  <el-image v-bind="innerProps" :style="innerStyles" class="wh-100" />
+  <el-image
+    v-bind="innerProps"
+    :style="innerStyles"
+    class="wh-100"
+  />
 </template>
 
 <script>

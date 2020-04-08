@@ -100,7 +100,7 @@ export default {
 <style scoped lang="scss">
 .tree {
   background: transparent;
-  height: calc(100% - 70px);
+  @include calc-vh(height, '100vh - 140px');
   overflow: scroll;
 }
 </style>

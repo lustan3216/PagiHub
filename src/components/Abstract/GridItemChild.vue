@@ -1,6 +1,12 @@
 <template>
-  <controller-layer v-if="firstChild" :id="firstChild.id">
-    <component :is="firstChild.tag" :id="firstChild.id" />
+  <controller-layer
+    v-if="firstChild"
+    :id="firstChild.id"
+  >
+    <component
+      :is="firstChild.tag"
+      :id="firstChild.id"
+    />
 
     <el-popover
       v-if="mounted && !isExample && isDraftMode"

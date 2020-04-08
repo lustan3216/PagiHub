@@ -1,6 +1,9 @@
 <template>
   <div class="h-100 flex-center">
-    <el-card v-bind="innerProps" :style="innerStyles">
+    <el-card
+      v-bind="innerProps"
+      :style="innerStyles"
+    >
       <grid-generator :id="id" />
     </el-card>
   </div>

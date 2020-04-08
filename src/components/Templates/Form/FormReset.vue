@@ -3,7 +3,8 @@
     :style="innerStyles"
     :id="id"
     default-text="Reset"
-    @click="reset" />
+    @click="reset"
+  />
 </template>
 
 <script>

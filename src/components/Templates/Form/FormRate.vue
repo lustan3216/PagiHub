@@ -3,7 +3,8 @@
     :style="innerStyles"
     v-model="api"
     :rule="innerRule2"
-    :option="option" />
+    :option="option"
+  />
 </template>
 
 <script>

@@ -2,7 +2,7 @@
   <el-button
     :icon="touchable ? 'el-icon-thumb' : 'el-icon-circle-close'"
     type="text"
-    size="mini"
+
     @click.stop="click"
   />
 </template>

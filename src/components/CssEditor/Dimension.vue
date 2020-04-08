@@ -1,6 +1,9 @@
 <template>
   <div>
-    <el-row :gutter="5" class="m-t-10">
+    <el-row
+      :gutter="5"
+      class="m-t-10"
+    >
       <el-col :span="8">
         <el-form-item label="Height">
           <select-unit :value.sync="computedStyle.height" />
@@ -20,7 +23,10 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="5" class="m-t-10">
+    <el-row
+      :gutter="5"
+      class="m-t-10"
+    >
       <el-col :span="8">
         <el-form-item label="Width">
           <select-unit :value.sync="computedStyle.width" />

@@ -2,7 +2,7 @@
   <el-button
     :icon="visible ? 'el-icon-view' : 'el-icon-circle-close'"
     type="text"
-    size="mini"
+
     @click.stop="click"
   />
 </template>

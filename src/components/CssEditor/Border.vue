@@ -1,6 +1,9 @@
 <template>
   <div>
-    <el-dropdown class="m-b-10" @command="currentId = $event">
+    <el-dropdown
+      class="m-b-10"
+      @command="currentId = $event"
+    >
       <span class="el-dropdown-link">
         {{ currentId.capitalize() }}
         <i class="el-icon-arrow-down el-icon--right"/>
@@ -16,13 +19,17 @@
       </el-dropdown-menu>
     </el-dropdown>
 
-    <el-row :gutter="5" type="flex">
+    <el-row
+      :gutter="5"
+      type="flex"
+    >
       <el-col :span="3">
         <el-button
           circle
-          size="mini"
+
           icon="el-icon-delete"
-          @click.stop="clean"/>
+          @click.stop="clean"
+        />
       </el-col>
 
       <el-col :span="8">
@@ -33,13 +40,19 @@
 
       <el-col :span="3">
         <el-form-item label="Color">
-          <el-color-picker v-model="currentBorder.color" show-alpha />
+          <el-color-picker
+            v-model="currentBorder.color"
+            show-alpha
+          />
         </el-form-item>
       </el-col>
 
       <el-col :span="7">
         <el-form-item label="Style">
-          <el-select v-model="currentBorder.style" placeholder="-">
+          <el-select
+            v-model="currentBorder.style"
+            placeholder="-"
+          >
             <el-option
               v-for="style in borderStyles"
               :key="style"

@@ -58,7 +58,7 @@ import {
   Tooltip,
   Popover
 } from 'element-ui'
-
+Vue.prototype.$ELEMENT = { size: 'mini' }
 Vue.use(Dialog)
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)

@@ -4,7 +4,8 @@
     v-model="api"
     :id="id"
     :rule="innerRule"
-    :option="option" />
+    :option="option"
+  />
 </template>
 
 <script>

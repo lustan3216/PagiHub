@@ -38,7 +38,10 @@
         </el-dropdown-menu>
       </el-dropdown>
 
-      <el-button size="small" @click="scaleRollback">
+      <el-button
+        size="small"
+        @click="scaleRollback"
+      >
         {{ scalePercent }} %
       </el-button>
     </portal>

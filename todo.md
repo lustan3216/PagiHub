@@ -1,4 +1,6 @@
-1.
+keyId maangement
+projectId including: Project, Folder, componentSet
+componentId component
 
 每個組件都是一串 JSON，且要分版本，引用時給類似 github 名字以及版本號
 該專案的 component 更新時，只會自動更新該專案內的 component
@@ -16,7 +18,7 @@
 
 project / folder / component
 
-component刪除的話，其他component的飲用怎麼辦
+component 刪除的話，其他 component 的飲用怎麼辦
 
 1. 可以改名
 2. 每個節點可以有敘述

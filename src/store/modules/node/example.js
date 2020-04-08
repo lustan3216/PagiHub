@@ -1,6 +1,6 @@
-import allExampleComponents from '../../template'
-import { TAG, CHILDREN } from '../../const'
-import { traversal } from '../../utils/tool'
+import allExampleComponents from '../../../template'
+import { TAG, CHILDREN } from '../../../const'
+import { traversal } from '../../../utils/tool'
 
 const state = {
   examples: allExampleComponents()

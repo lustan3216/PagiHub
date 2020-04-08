@@ -7,7 +7,8 @@
           v-if="hasError"
           circle
           type="text"
-          icon="el-icon-warning" />
+          icon="el-icon-warning"
+        />
       </template>
 
       <el-input
