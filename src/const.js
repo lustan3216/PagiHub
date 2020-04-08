@@ -16,3 +16,17 @@ export const CAN_EDIT_TEXT = 'canEditText'
 export const CAN_DRAG = 'canDrag'
 
 export const GRID_ITEM = 'grid-item'
+
+export const TYPE = {
+  PROJECT: 0,
+  FOLDER: 1,
+  COMPONENT: 2,
+  COMPONENT_IS_USED: 3
+}
+
+export const TYPE_STRING = {
+  [TYPE.PROJECT]: 'project',
+  [TYPE.FOLDER]: 'folder',
+  [TYPE.COMPONENT]: 'component',
+  [TYPE.COMPONENT_IS_USED]: 'componentIsUsed'
+}

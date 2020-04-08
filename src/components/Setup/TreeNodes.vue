@@ -31,11 +31,11 @@
 
 <script>
 import { Tree } from 'element-ui'
+import { GRID_ITEM } from '../../const'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { traversal, cloneJson } from '../../utils/tool'
 import { shortTagName } from '../../utils/node'
-import NodeController from './Controller/NodeController'
-import { GRID_ITEM } from '../../const'
+import NodeController from '../Abstract/NodeController'
 
 export default {
   name: 'TreeNodes',
@@ -87,8 +87,8 @@ export default {
   methods: {
     ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_ID']),
     filterTagBySearching(value, data) {
-      if (!value) return true
-      return data.tag.indexOf(value) !== -1
+      value = value.toLowerCase().toString()
+      return data.name.toLowerCase().indexOf(value) !== -1
     },
     checkedChange({ id }) {
       this.TOGGLE_SELECTED_COMPONENT_ID(id)

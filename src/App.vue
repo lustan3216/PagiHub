@@ -15,21 +15,14 @@
 import NavBar from './components/Layout/NavBar'
 import PanelProduction from './components/Layout/PanelProduction'
 import PanelDraft from './components/Layout/PanelDraft'
-import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
   components: {
     NavBar,
-    SidebarRight: () => import('./components/Layout/SidebarRight'),
+    SidebarRight: () => import('./components/Setup/SidebarRight'),
     PanelProduction,
     PanelDraft
-  },
-  created() {
-    this.getRootNode()
-  },
-  methods: {
-    ...mapActions('draft', ['getRootNode'])
   }
 }
 </script>

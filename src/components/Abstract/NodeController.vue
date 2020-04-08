@@ -67,18 +67,18 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 import Touchable from './Touchable'
-import jsonStorer from '../../../store/jsonStorer'
+import jsonStorer from '../../store/jsonStorer'
 import ExampleAdd from './ExampleAdd'
 import Visibility from './Visible'
-import { GRID_ITEM, TAG } from '../../../const'
-import { isMac } from '../../../utils/device'
+import { GRID_ITEM, TAG } from '../../const'
+import { isMac } from '../../utils/device'
 import {
   vmCreateItem,
   vmCopyNode,
   vmRemoveNode,
   vmAddNodesToParentAndRecord
-} from '../../../utils/vmMap'
-import { findFirstCommonParentTree, shortTagName } from '../../../utils/node'
+} from '../../utils/vmMap'
+import { findFirstCommonParentTree, shortTagName } from '../../utils/node'
 
 export default {
   name: 'NodeController',

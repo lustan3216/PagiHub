@@ -1,7 +1,7 @@
 import { mapGetters, mapMutations } from 'vuex'
 import { CHILDREN } from '../const'
 import { cloneJson, traversal } from '../utils/tool'
-import { draftIds } from '../utils/keyId'
+import { componentIds } from '../utils/keyId'
 
 export default {
   computed: {
@@ -22,11 +22,11 @@ export default {
   methods: {
     ...mapMutations('draft', ['RECORD']),
 
-    addNodesToParentAndRecord(nodes) {
+    _addNodesToParentAndRecord(nodes) {
       const records = []
 
       nodes = cloneJson(nodes)
-      draftIds.resetNestedIds(nodes)
+      componentIds.resetNestedIds(nodes)
       nodes.parentId = this.id
 
       traversal(nodes, (_node, _parentNode) => {

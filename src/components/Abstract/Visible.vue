@@ -1,6 +1,6 @@
 <template>
   <el-button
-    :icon="touchable ? 'el-icon-thumb' : 'el-icon-circle-close'"
+    :icon="visible ? 'el-icon-view' : 'el-icon-circle-close'"
     type="text"
     size="mini"
     @click.stop="click"
@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import { vm as _vm } from '../../../utils/vmMap'
+import { vm as _vm } from '../../utils/vmMap'
 import Vue from 'vue'
 const observable = Vue.observable({ ids: [] })
 
 export default {
-  name: 'Touchable',
+  name: 'Visible',
   props: {
     id: {
       type: Number,
@@ -25,13 +25,13 @@ export default {
       const vm = _vm(this.id)
       return vm.$el.closest('.vue-grid-item') || vm.$el
     },
-    touchable() {
+    visible() {
       return observable.ids.indexOf(this.id) === -1
     }
   },
   watch: {
-    touchable(canTouch) {
-      this.element.classList[canTouch ? 'remove' : 'add']('no-action')
+    visible(canTouch) {
+      this.element.classList[canTouch ? 'remove' : 'add']('invisible')
     }
   },
   methods: {

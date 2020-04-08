@@ -6,6 +6,30 @@
 每個版本可以附上 List 敘述，
 有更新版本就顯示 icon
 
+一個 project 裡面可以有很多 component
+一個 project 可以有很多 folder
+每個 component 有版本
+
+一個 project 下得 版本會自動更新
+
+跨 project 的話就不行
+
+project / folder / component
+
+component刪除的話，其他component的飲用怎麼辦
+
+1. 可以改名
+2. 每個節點可以有敘述
+3. 自動更新或不自動更新
+
+每個 component 是一個 jsonStorer
+
+要顯示該 component 引用了哪些 component
+
+要做個按鈕 可以選取組建後變成組建
+
+是組建的要變成點兩下進入該 component 編輯
+
 2. 這裏應該要改成從 object node 裡面，且存在 object node
    style block 是不是跟 class block 功能合併
 
@@ -28,3 +52,13 @@
 15. scss code 的東西做成 variable 可以是輸入匡
 
 16. v-observe-visibility="visibilityChanged" 要優化 載入速度
+
+17. root layers 要可以新增
+
+18 style 要改成針對組建改 style 而不是外誆，外誆可以改 griditem，可以在 style 區塊做個按鈕，可直接選到 grid item
+
+19. 每一段時間草稿要儲存到 server, 修改過後 3 秒後送出，要算出跟 server 版本的 diff 在送出，如果途中有出錯就直接送整個 tree 改掉
+
+20 component 要用 uuid
+
+21

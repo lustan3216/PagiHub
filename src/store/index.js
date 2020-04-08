@@ -5,6 +5,7 @@ import app from './modules/app'
 import css from './modules/css'
 import mode from './modules/mode'
 import example from './modules/example'
+import project from './modules/project'
 
 Vue.use(Vuex)
 
@@ -18,13 +19,16 @@ export function SET(state, data) {
   }
 }
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   modules: {
     app,
     css,
     mode,
     draft,
-    example
+    example,
+    project
   }
 })
+
+export default store

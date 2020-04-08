@@ -6,7 +6,7 @@
     @click.exact.stop="SET_SELECTED_COMPONENT_ID(id)"
     @click.ctrl.exact.stop="TOGGLE_SELECTED_COMPONENT_ID(id)"
     @click.meta.exact.stop="TOGGLE_SELECTED_COMPONENT_ID(id)"
-    @dblclick.stop="dblclick"
+    @dblclick.stop="canNotClick = false"
     @mouseleave="canNotClick = true"
   >
     <div
@@ -27,8 +27,8 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import NodeController from '../../Layout/Controller/NodeController'
-import { shortTagName } from '../../../utils/node'
+import NodeController from './NodeController'
+import { shortTagName } from '../../utils/node'
 
 export default {
   name: 'ControllerLayer',
@@ -68,10 +68,7 @@ export default {
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_ID'
-    ]),
-    dblclick() {
-      this.canNotClick = false
-    }
+    ])
   }
 }
 </script>

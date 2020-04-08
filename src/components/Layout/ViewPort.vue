@@ -7,6 +7,7 @@
         :class="{ interact: isDraftMode }"
         :resize-options="{ ignoreFrom: '.vue-grid-item' }"
         :drag-options="{ ignoreFrom: '.vue-grid-item' }"
+        :draggable="isDraftMode"
         @resize="dialogResize"
         @resizeStart="appSET({ isAnimating: true })"
         @resizeEnd="appSET({ isAnimating: false })"

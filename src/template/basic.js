@@ -1,4 +1,12 @@
-import { GRID_ITEM, CAN_NEW_ITEM, STYLES, TAG, CHILDREN, CAN_EDIT_TEXT, CAN_DRAG } from '../const'
+import {
+  GRID_ITEM,
+  CAN_NEW_ITEM,
+  STYLES,
+  TAG,
+  CHILDREN,
+  CAN_EDIT_TEXT,
+  CAN_DRAG
+} from '../const'
 
 const gridItems = function() {
   return [
@@ -35,6 +43,7 @@ export const carousel = function() {
   return {
     [TAG]: 'carousel',
     [CAN_NEW_ITEM]: true,
+    [CAN_DRAG]: true,
     [CHILDREN]: [gridGenerator(), gridGenerator(), gridGenerator()]
   }
 }

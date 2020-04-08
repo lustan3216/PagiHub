@@ -61,19 +61,15 @@ export function deepFlatten(array) {
   }, array)
 }
 
-export function findChild(children, child) {
-  return children.find(x => x.id === child.id)
+export function findBy(children, key, value) {
+  return children.find(x => x[key] === value)
 }
 
-export function findChildIndex(children, child) {
-  return children.findIndex(x => x.id === child.id)
+export function findIndexBy(children, key, value) {
+  return children.findIndex(x => x[key] === value)
 }
 
-export function childDelete(children, child) {
-  const oldIndex = findChildIndex(children, child)
+export function deleteBy(children, key, value) {
+  const oldIndex = findIndexBy(children, key, value)
   children.splice(oldIndex, 1)
-}
-
-export function childUpdate(oldchild, newChild) {
-  Object.assign(oldchild, newChild)
 }

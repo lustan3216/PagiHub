@@ -22,11 +22,11 @@
 </template>
 
 <script>
-import importTemplates from '../../../mixins/importTemplates'
-import childrenMixin from '../../../mixins/children'
-import nodeMixin from '../../../mixins/node'
+import importTemplates from '../../mixins/importTemplates'
+import childrenMixin from '../../mixins/children'
+import nodeMixin from '../../mixins/node'
 import ControllerLayer from './ControllerLayer'
-import NodeController from '../../Layout/Controller/NodeController'
+import NodeController from './NodeController'
 
 export default {
   name: 'GridItemChild',

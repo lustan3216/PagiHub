@@ -51,7 +51,8 @@ class KeyManagement {
     return id
   }
 }
-const draftIds = new KeyManagement()
+const componentIds = new KeyManagement()
 const exampleIds = new KeyManagement()
+const projectIds = new KeyManagement()
 
-export { draftIds, exampleIds }
+export { componentIds, exampleIds, projectIds }

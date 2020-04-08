@@ -1,21 +1,21 @@
 <template>
-  <div v-if="isPreviewMode" class="preview">
+  <dialog-interacted v-if="isPreviewMode" :resizable="false" class="preview">
+    <portal-target
+      name="view-port-controller"
+      class="d-inline-block m-l-15 box-shadow"
+    />
+
     <el-tooltip effect="light" content="Close Preview" placement="bottom">
       <el-button
         v-shortkey="['esc']"
         icon="el-icon-close"
         circle
-        class="box-shadow"
+        class="box-shadow m-l-15"
         @click="SET_DRAFT_MODE"
         @shortkey.native="SET_DRAFT_MODE"
       />
     </el-tooltip>
-
-    <portal-target
-      name="view-port-controller"
-      class="d-inline-block m-l-15 box-shadow"
-    />
-  </div>
+  </dialog-interacted>
 
   <nav v-else-if="isDraftMode" class="flex-center">
     <portal-target name="view-port-controller" class="d-inline-block m-l-15" />
@@ -64,7 +64,12 @@
       />
     </el-tooltip>
 
-    <el-popover effect="light" trigger="hover" placement="bottom">
+    <el-popover
+      effect="light"
+      trigger="hover"
+      placement="bottom"
+      class="m-l-10"
+    >
       <span>Are u sure to Publish？</span>
       <el-button
         type="info"
@@ -88,9 +93,13 @@
 import { isMac } from '../../utils/device'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { Message } from 'element-ui'
+import DialogInteracted from '../Components/DialogInteracted'
 
 export default {
   name: 'NavBar',
+  components: {
+    DialogInteracted
+  },
   computed: {
     ...mapState('app', ['copyComponentIds']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode'])
@@ -124,9 +133,7 @@ nav {
 }
 .preview {
   position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 35%;
   z-index: 10;
 }
 </style>

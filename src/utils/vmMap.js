@@ -60,5 +60,5 @@ export function vmRemoveNode({ id, parentId }) {
 }
 
 export function vmAddNodesToParentAndRecord(id, nodes) {
-  vm(id).addNodesToParentAndRecord(nodes)
+  vm(id)._addNodesToParentAndRecord(nodes)
 }
