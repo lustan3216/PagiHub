@@ -17,13 +17,13 @@ const mutations = {
     state.nodesMap = payLoad
   },
   RECORD(state, payLoad) {
-    jsonStorer(state.draftComponentId).record(payLoad)
+    jsonStorer.current.record(payLoad)
   },
   REDO() {
-    jsonStorer(state.draftComponentId).redo()
+    jsonStorer.current.redo()
   },
   UNDO() {
-    jsonStorer(state.draftComponentId).undo()
+    jsonStorer.current.undo()
   }
 }
 
@@ -34,7 +34,8 @@ const actions = {
   },
 
   async getRootNode({ commit, state }) {
-    const nodesMap = (await localforage.getItem(state.draftComponentId.toString())) || {}
+    const nodesMap =
+      (await localforage.getItem(state.draftComponentId.toString())) || {}
 
     if (Object.hasAnyKey(nodesMap)) {
       componentIds.restoreIds(nodesMap)
@@ -46,7 +47,7 @@ const actions = {
     }
 
     commit('INIT_NODES_MAP', nodesMap)
-    jsonStorer(state.draftComponentId).tree = nodesMap
+    jsonStorer.current.tree = nodesMap
   }
 }
 

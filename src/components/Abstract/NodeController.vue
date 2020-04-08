@@ -146,12 +146,12 @@ export default {
       }
     },
     multiPaste() {
-      jsonStorer.recordsMerge(() => {
+      jsonStorer.current.recordsMerge(() => {
         this.selectedNodes.forEach(node => this.paste(node.id))
       })
     },
     multiDelete() {
-      jsonStorer.recordsMerge(() => {
+      jsonStorer.current.recordsMerge(() => {
         this.selectedNodes.forEach(node => this.vmRemoveNode(node))
       })
     }

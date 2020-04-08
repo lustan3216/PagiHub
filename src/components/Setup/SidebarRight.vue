@@ -22,33 +22,31 @@
       </el-tab-pane>
 
       <el-tab-pane
-        v-if="draftComponentId"
         label="Nodes "
         name="Nodes"
         lazy
       >
-        <tree-nodes />
+        <tree-nodes v-if="draftComponentId" />
       </el-tab-pane>
 
       <el-tab-pane
-        v-if="canShowSetting"
         label="Setting"
         name="setting"
         lazy
       >
         <setting-nested
+          v-if="canShowSetting"
           :id="theOnlySelectedComponentId"
           :specs="specs"
         />
       </el-tab-pane>
 
       <el-tab-pane
-        v-if="selectedComponentIds.length"
         label="Style"
         name="style"
         lazy
       >
-        <setting-styles />
+        <setting-styles v-if="selectedComponentIds.length" />
       </el-tab-pane>
     </el-tabs>
   </component>
@@ -111,17 +109,18 @@ export default {
 <style>
 .sidebar {
   padding-right: 10px;
-  width: 350px;
+  width: 300px;
   overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: calc(100vw - 300px);
+  z-index: 300;
 }
 
 .float {
   padding: 0 10px;
   background: rgba(255, 255, 255, 0.87);
   box-shadow: 1px 1px 19px 6px rgba(0, 0, 0, 0.1);
-  position: fixed;
-  left: calc(100vw - 350px);
-  bottom: 0;
-  top: 0;
 }
 </style>

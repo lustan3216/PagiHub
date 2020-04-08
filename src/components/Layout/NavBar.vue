@@ -42,7 +42,6 @@
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
         icon="el-icon-data-analysis"
-
         type="text"
         @click="SET_PREVIEW_MODE"
         @shortkey.native="SET_PREVIEW_MODE"
@@ -56,7 +55,6 @@
     >
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
-
         type="text"
         icon="el-icon-refresh-left"
         @shortkey.native="UNDO"
@@ -71,7 +69,6 @@
     >
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
-
         type="text"
         icon="el-icon-refresh-right"
         @shortkey.native="REDO"
@@ -86,7 +83,6 @@
     >
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
-
         type="text"
         icon="el-icon-document-copy"
         @shortkey.native="copy"
@@ -103,7 +99,6 @@
       <span>Are u sure to Publish？</span>
       <el-button
         type="info"
-
         icon="el-icon-circle-check"
         circle
         @click="publish"
@@ -111,7 +106,6 @@
 
       <el-button
         slot="reference"
-
         type="text"
         icon="el-icon-upload"
       />
@@ -156,6 +150,11 @@ nav {
   text-align: center;
   height: 35px;
   padding: 5px 20px;
+  z-index: 300;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 .el-button {
   font-size: 16px;

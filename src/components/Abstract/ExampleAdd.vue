@@ -8,7 +8,6 @@
       v-if="visible"
       ref="dialog"
       :visible="visible"
-      :modal="false"
       class="dialog"
       append-to-body
       top="5vh"

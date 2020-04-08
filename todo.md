@@ -2,6 +2,8 @@ keyId maangement
 projectId including: Project, Folder, componentSet
 componentId component
 
+componentSet 旁邊可以 選版本號
+
 每個組件都是一串 JSON，且要分版本，引用時給類似 github 名字以及版本號
 該專案的 component 更新時，只會自動更新該專案內的 component
 其他專案的不會更新，除非手動選取更新，fork 的版本會等於複製時的版本，fork 版本更新會從當下版本號更新
@@ -15,8 +17,6 @@ componentId component
 一個 project 下得 版本會自動更新
 
 跨 project 的話就不行
-
-project / folder / component
 
 component 刪除的話，其他 component 的飲用怎麼辦
 
@@ -61,6 +61,6 @@ component 刪除的話，其他 component 的飲用怎麼辦
 
 19. 每一段時間草稿要儲存到 server, 修改過後 3 秒後送出，要算出跟 server 版本的 diff 在送出，如果途中有出錯就直接送整個 tree 改掉
 
-20 component 要用 uuid
+20 component 要用 uuid ?
 
-21
+21 每個 grid item 都可以點了 連結到 componentSet
