@@ -3,14 +3,14 @@
 }
 
 .m-l-5 {
-  margin-left: 5px;
+  margin-left: 5px !important;
 }
 
 .m-l-10 {
   margin-left: 10px;
 }
 
-.m-l-15{
+.m-l-15 {
   margin-left: 15px;
 }
 
@@ -44,4 +44,8 @@
 
 .p-5 {
   padding: 5px !important;
+}
+
+.p-r-10 {
+  padding-right: 10px !important;
 }

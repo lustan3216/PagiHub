@@ -26,7 +26,7 @@
         name="Nodes"
         lazy
       >
-        <tree-nodes v-if="draftComponentId" />
+        <tree-nodes v-if="selectedComponentSetId" />
       </el-tab-pane>
 
       <el-tab-pane
@@ -55,8 +55,8 @@
 <script>
 import formCreate from '@form-create/element-ui'
 import { mapState, mapGetters } from 'vuex'
-import SettingStyles from './SettingStyles'
-import SettingNested from './SettingNested'
+import SettingStyles from '../Setup/SettingStyles'
+import SettingNested from '../Setup/SettingNested'
 import allSettingSpecs from '../../settings'
 import { cloneJson } from '../../utils/tool'
 import FlexSidebar from '../Templates/FlexSidebar'
@@ -70,8 +70,8 @@ export default {
     SettingNested,
     DialogInteracted,
     FormCreate: formCreate.$form(),
-    TreeNodes: () => import('./TreeNodes'),
-    TreeProject: () => import('./TreeProject')
+    TreeNodes: () => import('../Setup/TreeNodes'),
+    TreeProject: () => import('../Setup/TreeProject')
   },
   data() {
     return {
@@ -80,7 +80,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap', 'draftComponentId']),
+    ...mapState('draft', ['nodesMap', 'selectedComponentSetId']),
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', [
       'theOnlySelectedComponentId',

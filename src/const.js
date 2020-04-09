@@ -15,7 +15,10 @@ export const CAN_NEW_ITEM = 'canNewItem'
 export const CAN_EDIT_TEXT = 'canEditText'
 export const CAN_DRAG = 'canDrag'
 
+export const LAYERS = 'layers'
 export const GRID_ITEM = 'grid-item'
+
+export const SORT_INDEX = 'sortIndex'
 
 export const TYPE = {
   PROJECT: 0,

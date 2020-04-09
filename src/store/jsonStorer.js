@@ -6,7 +6,7 @@ const map = {}
 
 export default {
   get current() {
-    const name = store.state.draft.draftComponentId
+    const name = store.state.draft.selectedComponentSetId
 
     if (!map[name]) {
       const jsonStorer = new JsonStorer({

@@ -20,7 +20,7 @@ export default {
   name: 'App',
   components: {
     NavBar,
-    SidebarRight: () => import('./components/Setup/SidebarRight'),
+    SidebarRight: () => import('./components/Layout/SidebarRight'),
     PanelProduction,
     PanelDraft
   }

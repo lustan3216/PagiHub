@@ -1,30 +1,50 @@
 <template>
-  <div
-    v-if="innerChildren.length"
-    class="layers"
-  >
-    <div
-      v-for="(child, index) in innerChildren"
-      :style="{ 'z-index': index, ...innerStyles }"
-      :class="{ absolute: index }"
-      :key="index"
-    >
-      <grid-generator :id="child.id" />
-    </div>
+  <div class="layers">
+    <template v-for="(child, index) in sortChildren">
+      <grid-generator
+        v-popover:popover
+        :style="{ 'z-index': index }"
+        :class="{ absolute: index }"
+        :key="child.id"
+        :id="child.id"
+      />
+
+      <el-popover
+        v-if="!isExample && isDraftMode"
+        ref="popover"
+        :key="`pop${child.id}`"
+        placement="top"
+        trigger="hover"
+      >
+        <node-controller :id="child.id" />
+      </el-popover>
+    </template>
   </div>
 </template>
 
 <script>
 import GridGenerator from './GridGenerator'
+import GridItemChild from '../Abstract/GridItemChild'
+import NodeController from '../Abstract/NodeController'
 import nodeMixin from '../../mixins/node'
 import childrenMixin from '../../mixins/children'
+import { SORT_INDEX } from '../../const'
 
 export default {
   name: 'Layers',
   components: {
-    GridGenerator
+    GridGenerator,
+    GridItemChild,
+    NodeController
   },
-  mixins: [nodeMixin, childrenMixin]
+  mixins: [nodeMixin, childrenMixin],
+  computed: {
+    sortChildren() {
+      return Array.from(this.innerChildren).sort(
+        (a, b) => a[SORT_INDEX] - b[SORT_INDEX]
+      )
+    }
+  }
 }
 </script>
 

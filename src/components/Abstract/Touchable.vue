@@ -23,7 +23,7 @@ export default {
   computed: {
     element() {
       const vm = _vm(this.id)
-      return vm.$el.closest('.vue-grid-item') || vm.$el
+      return vm.$el
     },
     touchable() {
       return observable.ids.indexOf(this.id) === -1

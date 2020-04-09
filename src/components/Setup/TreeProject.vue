@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-r-10">
     <el-input
       v-model="filterText"
       placeholder="输入关键字进行过滤"
@@ -10,17 +10,17 @@
       ref="tree"
       :data="tree"
       :filter-node-method="filterTagBySearching"
-      :expand-on-click-node="false"
       :indent="16"
       :allow-drop="allowDrop"
       class="tree"
       node-key="id"
       draggable
+      check-strictly
       @node-drop="nodeParentChange"
     >
       <span
         slot-scope="{ data }"
-        class="custom-tree-node justify-between align-center w-100"
+        class="justify-between align-center w-100"
         @click="() => nodeClick(data)"
       >
         <span class="el-tree-node__label m-r-10">
@@ -43,19 +43,25 @@
           <dialog-folder
             v-if="[PROJECT, FOLDER].includes(data.type)"
             :parent-id="data.id"
+            class="m-l-5"
           />
 
           <dialog-component-set
             v-if="[PROJECT, FOLDER].includes(data.type)"
             :parent-id="data.id"
+            class="m-l-5"
           />
 
-          <dialog-delete :id="data.id" />
+          <dialog-delete
+            :id="data.id"
+            class="m-l-5"
+          />
 
           <component
             :id="data.id"
             :parent-id="data.parentId"
             :is="`dialog-${TYPE_STRING[data.type].kebabCase()}`"
+            class="m-l-5"
           />
         </span>
       </span>
@@ -64,10 +70,10 @@
 </template>
 
 <script>
+import localforage from 'localforage'
+import { Tree } from 'element-ui'
 import { mapActions, mapGetters } from 'vuex'
-import { Tree, MessageBox, Message } from 'element-ui'
 import { TYPE, TYPE_STRING } from '../../const'
-import { projectIds } from '../../utils/keyId'
 import DialogProject from './Dialog/DialogProject'
 import DialogFolder from './Dialog/DialogFolder'
 import DialogComponentSet from './Dialog/DialogComponentSet'
@@ -101,10 +107,14 @@ export default {
   created() {
     this.getProjects()
   },
+  mounted() {
+    localforage.getItem('editingComponentSetId').then(componentSetId => {
+      this.setComponent(componentSetId)
+    })
+  },
   methods: {
     ...mapActions('draft', ['setComponent']),
     ...mapActions('project', ['modifyProjectNodeParent', 'getProjects']),
-    updateToLatest() {},
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {
         this.modifyProjectNodeParent({
@@ -133,11 +143,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.custom-tree-node {
-  font-size: 14px;
-  padding-right: 8px;
-}
-
 .tree {
   background: transparent;
   @include calc-vh(height, '100vh - 140px');

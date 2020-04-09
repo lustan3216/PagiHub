@@ -6,7 +6,7 @@
   >
     <dialog-confirmable
       :visible.sync="visible"
-      title="Component"
+      title="Component Set"
       width="30%"
       @confirm="onSubmit"
       @close="initData"
@@ -57,6 +57,18 @@
         <el-form-item label="Auto Update">
           <el-checkbox v-model="form.autoUpdate" />
         </el-form-item>
+
+        <div v-if="selectedComponentIds.length">
+          <p>
+            You have selected {{ selectedComponentIds.length }} components. Do
+            you want to create the component set by these components?
+          </p>
+          <span>Create by Selected</span>
+          <el-checkbox
+            v-model="createBySelected"
+            class="m-l-15"
+          />
+        </div>
       </el-form>
     </dialog-confirmable>
   </el-button>
@@ -78,14 +90,15 @@ export default {
     id: {
       type: Number
     },
-    // eslint-disable-next-line
     parentId: {
-      type: Number
+      type: Number,
+      required: true
     }
   },
   data() {
     return {
       visible: false,
+      createBySelected: true,
       form: {
         name: '',
         autoUpdate: true,
@@ -109,6 +122,7 @@ export default {
   },
   computed: {
     ...mapState('project', ['projectMap']),
+    ...mapState('app', ['selectedComponentIds']),
     isExist() {
       return Boolean(this.id)
     }

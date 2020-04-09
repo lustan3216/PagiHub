@@ -1,9 +1,8 @@
 <template>
   <view-port>
-    <component
+    <layers
       v-if="rootNode"
       :id="rootNode.id"
-      :is="rootNode.tag"
     />
     <portal-target name="Root" />
   </view-port>

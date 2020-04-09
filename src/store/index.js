@@ -60,7 +60,7 @@ function updateNodesMap(mutation, state) {
     ].includes(mutation.type)
   ) {
     localforage.setItem(
-      state.draft.draftComponentId.toString(),
+      state.draft.selectedComponentSetId.toString(),
       state.draft.nodesMap
     )
   }

@@ -23,7 +23,7 @@
           type="text"
           icon="el-icon-document-add"
           size="small"
-          @click="paste"
+          @click="vmPasteCopyComponents(id)"
           @shortkey.native="multiPaste"
         />
       </el-tooltip>
@@ -31,7 +31,7 @@
       <example-add
         v-if="isGridItem"
         :id="id"
-        @onAdd="addNodesToParentAndRecord($event)"
+        @onAdd="vmAddNodesToParentAndRecord(id, $event)"
       />
 
       <visibility :id="id" />
@@ -67,15 +67,16 @@ import Touchable from './Touchable'
 import jsonStorer from '../../store/jsonStorer'
 import ExampleAdd from './ExampleAdd'
 import Visibility from './Visible'
-import { GRID_ITEM, TAG } from '../../const'
+import { GRID_ITEM } from '../../const'
 import { isMac } from '../../utils/device'
 import {
   vmCreateItem,
   vmCopyNode,
   vmRemoveNode,
-  vmAddNodesToParentAndRecord
+  vmAddNodesToParentAndRecord,
+  vmPasteCopyComponents
 } from '../../utils/vmMap'
-import { findFirstCommonParentTree, shortTagName } from '../../utils/node'
+import { shortTagName } from '../../utils/node'
 
 export default {
   name: 'NodeController',
@@ -107,14 +108,6 @@ export default {
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },
-    onlyOneCopyComponentId() {
-      return this.copyComponentIds.length === 1 && this.copyComponentIds[0]
-    },
-    onlyOneCopyComponentNode() {
-      if (this.onlyOneCopyComponentId) {
-        return this.nodesMap[this.onlyOneCopyComponentId]
-      }
-    },
     selectedNodes() {
       return this.selectedComponentIds.map(id => this.nodesMap[id])
     }
@@ -126,28 +119,11 @@ export default {
     vmCreateItem,
     vmCopyNode,
     vmRemoveNode,
-    addNodesToParentAndRecord(nodes) {
-      vmAddNodesToParentAndRecord(this.id, nodes)
-    },
-    paste(_id) {
-      const id = _id || this.id
-      if (this.onlyOneCopyComponentId === this.id) {
-        vmCopyNode(this.onlyOneCopyComponentNode)
-      } else if (this.isGridItem) {
-        if (
-          this.onlyOneCopyComponentNode &&
-          this.onlyOneCopyComponentNode[TAG] !== GRID_ITEM
-        ) {
-          vmAddNodesToParentAndRecord(id, this.onlyOneCopyComponentNode)
-        } else if (this.copyComponentIds.length > 1) {
-          const tree = findFirstCommonParentTree(this.copyComponentIds)
-          vmAddNodesToParentAndRecord(id, tree)
-        }
-      }
-    },
+    vmPasteCopyComponents,
+    vmAddNodesToParentAndRecord,
     multiPaste() {
       jsonStorer.current.recordsMerge(() => {
-        this.selectedNodes.forEach(node => this.paste(node.id))
+        this.selectedNodes.forEach(node => this.vmPasteCopyComponents(node.id))
       })
     },
     multiDelete() {

@@ -83,9 +83,9 @@ const actions = {
 
 const getters = {
   listToTree(state) {
-    const value = Object.values(state.projectMap).sort(
-      (a, b) => a.type - b.type
-    )
+    const value = Object.values(state.projectMap)
+      .sort((a, b) => a.type - b.type)
+
     return listToTree(cloneJson(value))
   },
   childrenOf(state, getters) {

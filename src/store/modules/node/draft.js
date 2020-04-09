@@ -8,7 +8,7 @@ import { initTemplate as _initTemplate } from '../../../template/basic'
 
 const state = {
   nodesMap: {},
-  draftComponentId: null
+  selectedComponentSetId: null
 }
 
 const mutations = {
@@ -28,14 +28,15 @@ const mutations = {
 }
 
 const actions = {
-  setComponent({ commit, state, dispatch }, draftComponentId) {
-    commit('SET', { draftComponentId })
+  setComponent({ commit, state, dispatch }, selectedComponentSetId) {
+    commit('SET', { selectedComponentSetId })
+    localforage.setItem('editingComponentSetId', selectedComponentSetId)
     dispatch('getRootNode')
   },
 
   async getRootNode({ commit, state }) {
     const nodesMap =
-      (await localforage.getItem(state.draftComponentId.toString())) || {}
+      (await localforage.getItem(state.selectedComponentSetId.toString())) || {}
 
     if (Object.hasAnyKey(nodesMap)) {
       componentIds.restoreIds(nodesMap)

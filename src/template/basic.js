@@ -34,9 +34,7 @@ export const layers = function() {
 }
 
 export const initTemplate = function() {
-  const _layers = layers()
-  _layers[STYLES] = { background: '#fff' }
-  return _layers
+  return layers()
 }
 
 export const carousel = function() {
