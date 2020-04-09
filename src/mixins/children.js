@@ -50,9 +50,11 @@ export default {
       // can new layer-item, grid-item, carousel-item, form-item
       const { tag } = this.node
       // eslint-disable-next-line
-      const { [CHILDREN]: _, ...emptyItem } = this.examplesMapByTag[tag][CHILDREN][0]
+      const { [CHILDREN]: _, ...emptyItem } = this.examplesMapByTag[tag][
+        CHILDREN
+      ][0]
 
-      this.addNodesToParentAndRecord(emptyItem)
+      this._addNodesToParentAndRecord(emptyItem)
     },
 
     _copy(theNodeIdGonnaCopy) {
@@ -63,7 +65,7 @@ export default {
 
       const children = this.childrenOf[theNodeIdGonnaCopy]
       theNodeGonnaCopy[CHILDREN] = children
-      this.addNodesToParentAndRecord(theNodeGonnaCopy)
+      this._addNodesToParentAndRecord(theNodeGonnaCopy)
     },
 
     _remove(theNodeIdGonnaRemove) {
