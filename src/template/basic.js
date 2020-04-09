@@ -1,7 +1,6 @@
 import {
   GRID_ITEM,
   CAN_NEW_ITEM,
-  STYLES,
   TAG,
   CHILDREN,
   CAN_EDIT_TEXT,

@@ -35,8 +35,10 @@ const actions = {
   },
 
   async getRootNode({ commit, state }) {
-    const nodesMap =
-      (await localforage.getItem(state.selectedComponentSetId.toString())) || {}
+    const selectedId = state.selectedComponentSetId
+    if (!selectedId) return
+
+    const nodesMap = (await localforage.getItem(selectedId.toString())) || {}
 
     if (Object.hasAnyKey(nodesMap)) {
       componentIds.restoreIds(nodesMap)
