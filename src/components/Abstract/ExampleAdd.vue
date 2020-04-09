@@ -39,8 +39,8 @@
               style="min-height: 200px;"
             >
               <el-card shadow="hover">
-                <component
-                  :is="component.tag"
+                <async-component
+                  :tag="component.tag"
                   :id="component.id"
                 />
 
@@ -70,16 +70,18 @@ import { vmMap } from '../../utils/vmMap'
 import { cloneJson } from '../../utils/tool'
 import { categories, FORM_ITEM_ID } from '../../template'
 import { CATEGORY, ID, NAME } from '../../const'
-import importTemplatesMixin from '../../mixins/importTemplates'
+import AsyncComponent from './AsyncComponent'
 
 export default {
   name: 'ExampleAdd',
-  mixins: [importTemplatesMixin],
   provide() {
     return {
       rootForm: {},
       isExample: true
     }
+  },
+  components: {
+    AsyncComponent
   },
   props: {
     id: {

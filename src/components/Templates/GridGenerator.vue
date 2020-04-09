@@ -34,7 +34,6 @@ import { mapState } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '../../mixins/children'
 import nodeMixin from '../../mixins/node'
-import importTemplatesMixin from '../../mixins/importTemplates'
 import GridItemChild from '../Abstract/GridItemChild'
 import { defaultSetting } from '../../settings/gridGenerator'
 
@@ -46,7 +45,7 @@ export default {
     GridItem: VueGridLayout.GridItem,
     GridItemChild
   },
-  mixins: [nodeMixin, importTemplatesMixin, childrenMixin],
+  mixins: [nodeMixin, childrenMixin],
   data() {
     return {
       layout: []

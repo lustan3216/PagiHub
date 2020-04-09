@@ -1,46 +1,51 @@
 <template>
-  <controller-layer
-    v-if="firstChild"
-    :id="firstChild.id"
-  >
-    <component
-      :is="firstChild.tag"
+  <lazy-load>
+    <controller-layer
+      v-if="firstChild"
       :id="firstChild.id"
-    />
-
-    <el-popover
-      v-if="mounted && !isExample && isDraftMode"
-      :reference="parentEl"
-      :placement="firstChild.canNewItem ? 'top' : 'right'"
-      trigger="hover"
     >
-      <node-controller :id="firstChild.id" />
-    </el-popover>
-  </controller-layer>
+      <async-component
+        :tag="firstChild.tag"
+        :id="firstChild.id"
+      />
 
-  <controller-layer
-    v-else-if="isDraftMode && !isExample"
-    :id="id"
-    class="flex-center pointer"
-  >
-    <node-controller :id="id" />
-  </controller-layer>
+      <el-popover
+        v-if="mounted && !isExample && isDraftMode"
+        :reference="parentEl"
+        :placement="firstChild.canNewItem ? 'top' : 'right'"
+        trigger="hover"
+      >
+        <node-controller :id="firstChild.id" />
+      </el-popover>
+    </controller-layer>
+
+    <controller-layer
+      v-else-if="isDraftMode && !isExample"
+      :id="id"
+      class="flex-center pointer"
+    >
+      <node-controller :id="id" />
+    </controller-layer>
+  </lazy-load>
 </template>
 
 <script>
-import importTemplates from '../../mixins/importTemplates'
 import childrenMixin from '../../mixins/children'
 import nodeMixin from '../../mixins/node'
 import ControllerLayer from './ControllerLayer'
 import NodeController from './NodeController'
+import AsyncComponent from './AsyncComponent'
+import LazyLoad from './LazyLoad'
 
 export default {
   name: 'GridItemChild',
   components: {
     ControllerLayer,
-    NodeController
+    NodeController,
+    AsyncComponent,
+    LazyLoad
   },
-  mixins: [importTemplates, childrenMixin, nodeMixin],
+  mixins: [childrenMixin, nodeMixin],
   data() {
     return {
       mounted: false

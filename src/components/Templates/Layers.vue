@@ -9,10 +9,7 @@
       :class="{ absolute: index }"
       :key="index"
     >
-      <component
-        :is="child.tag"
-        :id="child.id"
-      />
+      <grid-generator :id="child.id" />
     </div>
   </div>
 </template>
