@@ -1,7 +1,6 @@
 <template>
   <grid-layout
     v-bind="innerProps"
-    :class="{ editable: isDraftMode && !isAnimating }"
     :col-num="12"
     :vertical-compact="false"
     :row-height="5"
@@ -52,7 +51,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['isAnimating']),
     ...mapState('draft', ['nodesMap'])
   },
   watch: {
@@ -92,14 +90,8 @@ export default {
 <style lang="scss" scoped>
 /* grid layout has performance issue when using border and border-radius */
 .editable {
-  & > .vue-grid-item {
-    border: 1px dashed #dedede;
-    margin-left: -1px;
-    margin-top: -1px;
-
-    & > div > .vue-grid-layout {
-      border: none;
-    }
+  & > div > .vue-grid-layout {
+    border: none;
   }
 }
 

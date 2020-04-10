@@ -26,7 +26,7 @@
         <node-controller
           v-if="data && data.id"
           :id="data.id"
-          :exclude="['copy', 'delete']"
+          :exclude="['copy']"
           class="w-100"
         />
       </template>
@@ -39,7 +39,7 @@ import { Tree } from 'element-ui'
 import { SORT_INDEX, LAYERS } from '../../const'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { shortTagName } from '../../utils/node'
-import { cloneJson, traversal } from '../../utils/tool'
+import { cloneJson, traversal, arraySubtract } from '../../utils/tool'
 import NodeController from '../Abstract/NodeController'
 
 export default {
@@ -77,8 +77,12 @@ export default {
     selectedComponentIds: {
       handler(newValue) {
         this.$nextTick(() => {
-          this.$refs.tree.setChecked(1, false, true)
-          newValue.forEach(x => this.$refs.tree.setChecked(x, true))
+          const { tree } = this.$refs
+          const checked = tree.getCheckedKeys()
+          arraySubtract(checked, newValue).forEach(key =>
+            tree.setChecked(key, false)
+          )
+          newValue.forEach(x => tree.setChecked(x, true))
         })
       },
       immediate: true

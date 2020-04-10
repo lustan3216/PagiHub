@@ -36,8 +36,6 @@
 
       <visibility :id="id" />
 
-      <touchable :id="id" />
-
       <el-button
         v-if="!exclude.includes('copy')"
         type="text"

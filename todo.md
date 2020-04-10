@@ -55,32 +55,30 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 
 19. 每一段時間草稿要儲存到 server, 修改過後 3 秒後送出，要算出跟 server 版本的 diff 在送出，如果途中有出錯就直接送整個 tree 改掉
 
-20 component 要用 uuid ?
+20 component 要用 ulid ?
 
-21 每個 grid item 都可以點了 連結到 componentSet
+21 每個 grid item 都可以點了 連結到 componentSet / tooltip / link
 
 23. class / hover
 
-24. 讓組件可以下 tooltip / link
+24. 中英文字體
 
-25. 中英文字體
+25. vue-awesome-swiper
 
-26. vue-awesome-swiper
+26. google map
 
-27. google map
+27. svg
 
-28. svg
+28. uploader image / svg
 
-29. uploader image / svg
-
-30. 對齊
+29. 對齊
 
 32 顏色可以設定快捷
 
 34. 組建一改 全部都要改，但有被修過的參數不用改
 
-35. iframe 要可以自動 resize，且可內船 data or 外傳
+35. debounce 送出更新區塊
 
-36. debounce 送出更新區塊
+36. iframe 要可以自動 resize，且可內船 data or 外傳
 
 37. PWA

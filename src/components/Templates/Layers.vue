@@ -1,24 +1,12 @@
 <template>
   <div class="layers">
-    <template v-for="(child, index) in sortChildren">
-      <grid-generator
-        v-popover:popover
-        :style="{ 'z-index': index }"
-        :class="{ absolute: index }"
-        :key="child.id"
-        :id="child.id"
-      />
-
-      <el-popover
-        v-if="!isExample && isDraftMode"
-        ref="popover"
-        :key="`pop${child.id}`"
-        placement="top"
-        trigger="hover"
-      >
-        <node-controller :id="child.id" />
-      </el-popover>
-    </template>
+    <grid-generator
+      v-for="(child, index) in sortChildren"
+      :style="{ 'z-index': index }"
+      :class="{ absolute: index }"
+      :key="child.id"
+      :id="child.id"
+    />
   </div>
 </template>
 

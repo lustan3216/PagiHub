@@ -1,5 +1,5 @@
 <template>
-  <lazy-load>
+  <lazy-load :class="{ 'dash-border': isDraftMode && !isAnimating }">
     <controller-layer
       v-if="firstChild"
       :id="firstChild.id"
@@ -22,7 +22,7 @@
     <controller-layer
       v-else-if="isDraftMode && !isExample"
       :id="id"
-      class="flex-center pointer"
+      class="flex-center"
     >
       <node-controller :id="id" />
     </controller-layer>
@@ -36,6 +36,7 @@ import ControllerLayer from './ControllerLayer'
 import NodeController from './NodeController'
 import AsyncComponent from './AsyncComponent'
 import LazyLoad from './LazyLoad'
+import { mapState } from 'vuex'
 
 export default {
   name: 'GridItemChild',
@@ -52,6 +53,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', ['isAnimating']),
     firstChild() {
       return this.innerChildren[0]
     },
@@ -69,3 +71,14 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.dash-border {
+  border: 1px dashed #dedede;
+  margin-left: -1px;
+  margin-top: -1px;
+}
+::v-deep.invisible + .vue-resizable-handle {
+  display: none;
+}
+</style>
