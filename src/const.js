@@ -19,6 +19,7 @@ export const LAYERS = 'layers'
 export const GRID_ITEM = 'grid-item'
 
 export const SORT_INDEX = 'sortIndex'
+export const PATH = 'path'
 
 export const TYPE = {
   PROJECT: 0,

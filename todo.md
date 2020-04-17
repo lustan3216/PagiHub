@@ -45,8 +45,6 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 
 11 css 要做 overflow
 
-12 點兩下進入編輯模式，ocmpoennt 考慮要不要進入另一個工作區
-
 14. color 快捷設定
 
 15. 上傳檔案
@@ -82,3 +80,11 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 36. iframe 要可以自動 resize，且可內船 data or 外傳
 
 37. PWA
+
+38. form
+
+39. 動畫
+
+40. nodes tree 裡面可以拖拉
+
+41. grid item 不能調寬，layout 可以

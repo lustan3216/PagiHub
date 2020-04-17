@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <el-divider />
-  </div>
+  <el-divider />
 </template>
 
 <script>
-import nodeMixin from '../../mixins/node'
+import nodeMixin from './mixins/node'
 
 export default {
   name: 'Divider',

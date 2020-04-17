@@ -1,0 +1,55 @@
+<template>
+  <setting-generator
+    :id="id"
+    :spec="spec"
+  />
+</template>
+
+<script>
+import SettingGenerator from './Common/SettingGenerator'
+import { boolean, assignDefaultValue, color } from './utils/util'
+import form, {
+  FIELD,
+  SHOW_LABEL,
+  DISABLED,
+  SIZE,
+  VALUE
+} from './utils/form'
+
+const SHOW_ALPHA = 'showAlpha'
+
+export const defaultSetting = {
+  [FIELD]: 'formCheckbox',
+  [SHOW_LABEL]: true,
+  [DISABLED]: false,
+  [SIZE]: 'mini',
+  [SHOW_ALPHA]: true,
+  [VALUE]: '#fff'
+}
+
+export default {
+  name: 'FormColorPicker',
+  components: { SettingGenerator },
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
+  data() {
+    return {
+      spec: assignDefaultValue(
+        [
+          form[FIELD],
+          form[SHOW_LABEL],
+          form[DISABLED],
+          form[SIZE],
+          boolean(SHOW_ALPHA),
+          color(VALUE)
+        ],
+        defaultSetting
+      )
+    }
+  }
+}
+</script>

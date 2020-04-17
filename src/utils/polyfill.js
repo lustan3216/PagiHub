@@ -44,6 +44,12 @@ String.prototype.camelCase = function() {
   )
 }
 
+String.prototype.bigCamelCase = function() {
+  if (!this) return ''
+
+  return this.camelCase().capitalize()
+}
+
 /**
  * Element.closest() polyfill
  * https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill

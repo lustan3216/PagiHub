@@ -1,13 +1,12 @@
 <template>
-  <el-carousel
-    v-if="innerChildren.length"
+  <swiper
     ref="carousel"
     :style="innerStyles"
     :autoplay="false"
     trigger="click"
     class="wh-100"
   >
-    <el-carousel-item
+    <swiper-slide
       v-for="child in innerChildren"
       :ref="child.id"
       :key="child.id"
@@ -18,21 +17,38 @@
         :id="child.id"
         class="h-100"
       />
-    </el-carousel-item>
-  </el-carousel>
+    </swiper-slide>
+    <div
+      slot="pagination"
+      class="swiper-pagination"
+    />
+    <div
+      slot="button-prev"
+      class="swiper-button-prev"
+    />
+    <div
+      slot="button-next"
+      class="swiper-button-next"
+    />
+    <div
+      slot="scrollbar"
+      class="swiper-scrollbar"
+    />
+  </swiper>
 </template>
 
 <script>
-import { Carousel, CarouselItem } from 'element-ui'
-import childrenMixin from '../../mixins/children'
-import nodeMixin from '../../mixins/node'
+import 'swiper/css/swiper.css'
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import childrenMixin from './mixins/children'
+import nodeMixin from './mixins/node'
 import GridGenerator from './GridGenerator'
 
 export default {
   name: 'Carousel',
   components: {
-    ElCarousel: Carousel,
-    ElCarouselItem: CarouselItem,
+    Swiper,
+    SwiperSlide,
     GridGenerator
   },
   mixins: [childrenMixin, nodeMixin],

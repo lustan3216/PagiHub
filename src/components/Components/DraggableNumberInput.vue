@@ -1,5 +1,5 @@
-<template>
-  <el-input/>
+`<template>
+  <el-input />
 </template>
 
 <script>
@@ -8,6 +8,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

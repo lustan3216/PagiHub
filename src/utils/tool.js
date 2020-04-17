@@ -2,8 +2,9 @@ import { cloneJson } from 'json-storer/src/utils'
 import merge from 'element-ui/src/utils/merge'
 import { isUndefined, isString } from 'element-ui/src/utils/types'
 import isPlainObject from 'is-plain-object'
+import getValueByPath from 'lodash.get'
 
-export { cloneJson, isUndefined, isPlainObject, isString, merge }
+export { cloneJson, isUndefined, isPlainObject, isString, merge, getValueByPath }
 
 export const isArray = Array.isArray
 

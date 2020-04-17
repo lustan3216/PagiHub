@@ -14,11 +14,13 @@
 </template>
 
 <script>
-import nodeMixin from '../../mixins/node'
+import nodeMixin from './mixins/node'
 import EditorText from './EditorText'
 import store from '../../store'
+import { defaultSetting } from '../Setup/EditorSetting/FlexButton'
 
 export default {
+  defaultSetting,
   name: 'FlexButton',
   components: {
     EditorText

@@ -68,7 +68,7 @@
 import { mapGetters, mapState } from 'vuex'
 import { vmMap } from '../../utils/vmMap'
 import { cloneJson } from '../../utils/tool'
-import { categories, FORM_ITEM_ID } from '../../template'
+import { categories, FORM_ITEM_ID } from '../../example'
 import { CATEGORY, ID, NAME } from '../../const'
 import AsyncComponent from './AsyncComponent'
 

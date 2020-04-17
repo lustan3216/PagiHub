@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import nodeMixin from '../../mixins/node'
-import childrenMixin from '../../mixins/children'
+import nodeMixin from './mixins/node'
+import childrenMixin from './mixins/children'
 import GridGenerator from './GridGenerator'
-import { defaultSetting } from '../../settings/card'
+import { defaultSetting } from '../Setup/EditorSetting/Card'
 
 export default {
   defaultSetting,

@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import nodeMixin from '../../mixins/node'
-import { defaultSetting } from '../../settings/flexImage'
+import nodeMixin from './mixins/node'
+import { defaultSetting } from '../Setup/EditorSetting/FlexImage'
 
 export default {
   defaultSetting,

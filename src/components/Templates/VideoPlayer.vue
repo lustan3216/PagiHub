@@ -1,63 +1,36 @@
 <template>
-  <div
-    class="h-100"
+  <vue-plyr
+    :options="innerProps"
     @mouseleave="mouseleave"
-  />
+  >
+    <div
+      data-plyr-provider="youtube"
+      data-plyr-embed-id="bTqVqk7FSmY"
+    />
+  </vue-plyr>
 </template>
 
 <script>
-import nodeMixin from '../../mixins/node'
-import { defaultSetting } from '../../settings/videoPlayer'
-// var videojs = require('../../video.js/dist/video.cjs.js');
+import nodeMixin from './mixins/node'
+import { defaultSetting } from '../Setup/EditorSetting/VideoPlayer'
+import VuePlyr from 'vue-plyr'
 
 export default {
   defaultSetting,
-  name: 'PlayerYoutube',
+  name: 'VideoPlayer',
+  components: {
+    VuePlyr
+  },
   mixins: [nodeMixin],
-  data() {
-    return {
-      recreate: null,
-      playerOptions: {
-        playbackRates: [0.5, 0.7, 1.0, 1.5, 1.7, 2.0],
-        techOrder: ['html5', 'youtube']
-      }
-    }
-  },
   computed: {
-    options() {
-      const type = src =>
-        src.includes('youtube.com') ? 'video/youtube' : 'video/mp4'
-      const { src1, src2 } = this.innerProps
-      const source = {
-        sources: [
-          { type: type(src1), src: src1 },
-          { type: type(src2), src: src2 }
-        ]
-      }
-      return Object.assign(this.playerOptions, source, this.innerProps)
-    }
-  },
-  watch: {
-    options: {
-      handler() {
-        this.recreate = +new Date()
-      },
-      deep: true
+    player() {
+      return this.$refs.plyr.player
     }
   },
   methods: {
     mouseleave() {
-      // this.player.pause()
+      this.player.pause()
     }
   }
 }
 </script>
-<style scoped>
-.player {
-  overflow: hidden;
-}
-::v-deep.player .video-js {
-  height: 100%;
-  width: 100%;
-}
-</style>

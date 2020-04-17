@@ -1,45 +1,43 @@
 <template>
-  <grid-layout
-    v-bind="innerProps"
-    :col-num="12"
-    :vertical-compact="false"
-    :row-height="5"
-    :style="innerStyles"
-    :layout="layout"
-    :margin="[0, 0]"
-    :is-draggable="isDraftMode || isExample"
-    :is-resizable="isDraftMode || isExample"
-    :responsive="true"
-    @layout-updated="update($event)"
-  >
-    <grid-item
-      v-for="child in layout"
-      :x="child.x"
-      :y="child.y"
-      :w="child.w"
-      :h="child.h"
-      :i="child.id"
-      :key="child.id"
-      drag-ignore-from=".noDrag"
-      drag-allow-from="div"
+  <controller-layer :id="id">
+    <grid-layout
+      v-bind="innerProps"
+      :style="innerStyles"
+      :layout="layout"
+      :margin="[0, 0]"
+      :row-height="1"
+      :is-draggable="isDraftMode || isExample"
+      :is-resizable="isDraftMode || isExample"
+      :responsive="true"
+      @layout-updated="update($event)"
     >
-      <grid-item-child :id="child.id" />
-    </grid-item>
-  </grid-layout>
+      <grid-item
+        v-for="child in layout"
+        v-bind="{ ...child, ...child.props }"
+        :key="child.id"
+        drag-ignore-from=".noDrag"
+        drag-allow-from="div"
+      >
+        <grid-item-child :id="child.id" />
+      </grid-item>
+    </grid-layout>
+  </controller-layer>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
-import childrenMixin from '../../mixins/children'
-import nodeMixin from '../../mixins/node'
+import childrenMixin from './mixins/children'
+import nodeMixin from './mixins/node'
 import GridItemChild from '../Abstract/GridItemChild'
-import { defaultSetting } from '../../settings/gridGenerator'
+import ControllerLayer from '../Abstract/ControllerLayer'
+import { defaultSetting } from '../Setup/EditorSetting/GridGenerator'
 
 export default {
   defaultSetting,
   name: 'GridGenerator',
   components: {
+    ControllerLayer,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem,
     GridItemChild

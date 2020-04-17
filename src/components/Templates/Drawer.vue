@@ -22,10 +22,10 @@
 
 <script>
 import { Drawer } from 'element-ui'
-import nodeMixin from '../../mixins/node'
-import childrenMixin from '../../mixins/children'
+import nodeMixin from './mixins/node'
+import childrenMixin from './mixins/children'
 import GridGenerator from './GridGenerator'
-import { defaultSetting } from '../../settings/drawer'
+import { defaultSetting } from '../Setup/EditorSetting/Drawer'
 
 export default {
   defaultSetting,

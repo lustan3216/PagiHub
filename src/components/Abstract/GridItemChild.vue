@@ -2,6 +2,7 @@
   <lazy-load :class="{ 'dash-border': isDraftMode && !isAnimating }">
     <controller-layer
       v-if="firstChild"
+      :style="innerStyles"
       :id="firstChild.id"
     >
       <async-component
@@ -22,6 +23,7 @@
     <controller-layer
       v-else-if="isDraftMode && !isExample"
       :id="id"
+      :style="innerStyles"
       class="flex-center"
     >
       <node-controller :id="id" />
@@ -30,8 +32,8 @@
 </template>
 
 <script>
-import childrenMixin from '../../mixins/children'
-import nodeMixin from '../../mixins/node'
+import childrenMixin from '../Templates/mixins/children'
+import nodeMixin from '../Templates/mixins/node'
 import ControllerLayer from './ControllerLayer'
 import NodeController from './NodeController'
 import AsyncComponent from './AsyncComponent'

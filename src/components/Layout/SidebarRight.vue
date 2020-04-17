@@ -34,11 +34,7 @@
         name="setting"
         lazy
       >
-        <setting-nested
-          v-if="canShowSetting"
-          :id="theOnlySelectedComponentId"
-          :specs="specs"
-        />
+        <panel-settings />
       </el-tab-pane>
 
       <el-tab-pane
@@ -46,7 +42,7 @@
         name="style"
         lazy
       >
-        <setting-styles v-if="selectedComponentIds.length" />
+        <panel-styles v-if="selectedComponentIds.length" />
       </el-tab-pane>
     </el-tabs>
   </component>
@@ -55,19 +51,17 @@
 <script>
 import formCreate from '@form-create/element-ui'
 import { mapState, mapGetters } from 'vuex'
-import SettingStyles from '../Setup/SettingStyles'
-import SettingNested from '../Setup/SettingNested'
-import allSettingSpecs from '../../settings'
-import { cloneJson } from '../../utils/tool'
-import FlexSidebar from '../Templates/FlexSidebar'
+import PanelStyles from '../Setup/PanelStyles'
+import PanelSettings from '../Setup/PanelSettings'
+import FlexSidebar from '../Components/FlexSidebar'
 import DialogInteracted from '../Components/DialogInteracted'
 
 export default {
   name: 'SidebarRight',
   components: {
     FlexSidebar,
-    SettingStyles,
-    SettingNested,
+    PanelStyles,
+    PanelSettings,
     DialogInteracted,
     FormCreate: formCreate.$form(),
     TreeNodes: () => import('../Setup/TreeNodes'),
@@ -82,19 +76,7 @@ export default {
   computed: {
     ...mapState('draft', ['nodesMap', 'selectedComponentSetId']),
     ...mapState('app', ['selectedComponentIds']),
-    ...mapGetters('app', [
-      'theOnlySelectedComponentId',
-      'selectedComponentNode'
-    ]),
-    canShowSetting() {
-      return this.specs && Object.hasAnyKey(this.specs)
-    },
-    specs() {
-      if (!this.selectedComponentNode) return
-      return cloneJson(
-        allSettingSpecs[this.selectedComponentNode.tag.camelCase()]
-      )
-    }
+    ...mapGetters('app', ['theOnlySelectedComponentId'])
   },
   watch: {
     isFloat(value) {

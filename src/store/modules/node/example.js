@@ -1,4 +1,4 @@
-import allExampleComponents from '../../../template'
+import allExampleComponents from '../../../example'
 import { TAG, CHILDREN } from '../../../const'
 import { traversal } from '../../../utils/tool'
 
