@@ -14,6 +14,7 @@ const self = {
   components: {
     SettingCard: () => import('./EditorSetting/SettingCard'),
     SettingDrawer: () => import('./EditorSetting/SettingDrawer'),
+    SettingDivider: () => import('./EditorSetting/SettingDivider'),
     SettingFlexButton: () => import('./EditorSetting/SettingFlexButton'),
     SettingFlexImage: () => import('./EditorSetting/SettingFlexImage'),
     SettingGridGenerator: () => import('./EditorSetting/SettingGridGenerator'),

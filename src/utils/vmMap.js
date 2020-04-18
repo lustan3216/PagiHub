@@ -82,3 +82,7 @@ export function vmPasteCopyComponents(id) {
     }
   }
 }
+
+export function isThisTag(id, tag) {
+  return vm(id).$options._componentTag === tag
+}

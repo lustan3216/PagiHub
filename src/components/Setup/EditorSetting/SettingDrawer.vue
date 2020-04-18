@@ -10,16 +10,12 @@ import { pxPercent } from './utils/validation'
 import SettingGenerator from './Common/SettingGenerator'
 import { boolean, select, assignDefaultValue, selectUnit } from './utils/util'
 
-const SHOW_CLOSE = 'showClose'
-const MODAL = 'modal'
-const DIRECTION = 'direction'
-const SIZE = 'size'
-
 export const defaultSetting = {
-  [SHOW_CLOSE]: true,
-  [MODAL]: true,
-  [DIRECTION]: 'ltr',
-  [SIZE]: '30%'
+  showClose: true,
+  modal: true,
+  direction: 'ltr',
+  size: '30%',
+  toRoot: true
 }
 
 export default {
@@ -35,13 +31,14 @@ export default {
     return {
       spec: assignDefaultValue(
         [
-          boolean(SHOW_CLOSE),
-          boolean(MODAL),
-          selectUnit(SIZE, {
+          boolean('toRoot'),
+          boolean('showClose'),
+          boolean('modal'),
+          selectUnit('size', {
             validate: [pxPercent],
             props: { exclude: ['vw', 'vh'] }
           }),
-          select(DIRECTION, {
+          select('direction', {
             options: [
               { label: 'Left', value: 'ltr' },
               { label: 'Right', value: 'rtl' },

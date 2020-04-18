@@ -40,7 +40,7 @@ import { SORT_INDEX, LAYERS } from '../../const'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { shortTagName } from '../../utils/node'
 import { cloneJson, traversal, arraySubtract } from '../../utils/tool'
-import NodeController from '../Abstract/NodeController'
+import NodeController from '../TemplateUtils/NodeController'
 
 export default {
   name: 'TreeNodes',

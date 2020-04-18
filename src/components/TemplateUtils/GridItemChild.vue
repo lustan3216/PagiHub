@@ -1,28 +1,37 @@
 <template>
-  <lazy-load :class="{ 'dash-border': isDraftMode && !isAnimating }">
+  <div
+    :class="{ 'dash-border': isDraftMode && !isAnimating }"
+    class="h-100"
+  >
     <template v-if="firstChild">
-      <portal-target
-        v-if="isDraftMode"
-        :name="`GridItemChild${firstChild.id}`"
-      />
-      <controller-layer
-        :style="innerStyles"
-        :id="firstChild.id"
-      >
-        <async-component
-          :tag="firstChild.tag"
-          :id="firstChild.id"
-        />
+      <template v-if="isDraftMode">
+        <portal-target :name="`GridItemChild${firstChild.id}`" />
 
-        <el-popover
-          v-if="mounted && !isExample && isDraftMode"
-          :reference="parentEl"
-          :placement="firstChild.canNewItem ? 'top' : 'right'"
-          trigger="hover"
+        <controller-layer
+          :style="innerStyles"
+          :id="firstChild.id"
         >
-          <node-controller :id="firstChild.id" />
-        </el-popover>
-      </controller-layer>
+          <async-component
+            :tag="firstChild.tag"
+            :id="firstChild.id"
+          />
+
+          <el-popover
+            v-if="mounted && !isExample"
+            :reference="parentEl"
+            :placement="firstChild.canNewItem ? 'top' : 'right'"
+            trigger="hover"
+          >
+            <node-controller :id="firstChild.id" />
+          </el-popover>
+        </controller-layer>
+      </template>
+
+      <async-component
+        v-else
+        :tag="firstChild.tag"
+        :id="firstChild.id"
+      />
     </template>
 
     <controller-layer
@@ -33,7 +42,7 @@
     >
       <node-controller :id="id" />
     </controller-layer>
-  </lazy-load>
+  </div>
 </template>
 
 <script>
@@ -42,7 +51,6 @@ import nodeMixin from '../Templates/mixins/node'
 import ControllerLayer from './ControllerLayer'
 import NodeController from './NodeController'
 import AsyncComponent from './AsyncComponent'
-import LazyLoad from './LazyLoad'
 import { mapState } from 'vuex'
 
 export default {
@@ -50,8 +58,7 @@ export default {
   components: {
     ControllerLayer,
     NodeController,
-    AsyncComponent,
-    LazyLoad
+    AsyncComponent
   },
   mixins: [childrenMixin, nodeMixin],
   data() {

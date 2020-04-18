@@ -100,7 +100,7 @@
 
 .invisible {
   opacity: 0 !important;
-  display: none !important;
+  visibility: hidden !important;
   pointer-events: none !important;
 }
 
@@ -129,8 +129,8 @@
   position: relative;
 }
 
-.no-touch {
-  touch-action: none !important;
+.absolute {
+  position: absolute !important;
 }
 
 .box-shadow {
@@ -138,5 +138,8 @@
 }
 
 .no-action {
+  touch-action: none !important;
   pointer-events: none !important;
 }
+
+

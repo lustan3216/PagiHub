@@ -116,14 +116,6 @@ export default {
       return this.unit === 'auto'
     }
   },
-  watch: {
-    match: {
-      handler() {
-        console.log(123)
-      },
-      deep: true
-    }
-  },
   methods: {
     isInvalid(value) {
       return value === null || value === 'none' || value === ''

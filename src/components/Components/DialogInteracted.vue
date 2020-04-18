@@ -115,8 +115,8 @@ export default {
               x = (parseFloat(x) || 0) + event.dx
               y = (parseFloat(y) || 0) + event.dy
 
-              const translate = `translate(${x}px, ${y}px)`
-              target.style.webkitTransform = target.style.transform = translate
+              const transform = `translate(${x}px, ${y}px)`
+              target.style.webkitTransform = target.style.transform = transform
 
               target.setAttribute('data-x', x)
               target.setAttribute('data-y', y)
@@ -139,7 +139,7 @@ export default {
   },
   methods: {
     reset() {
-      this.$el.style.transform = null
+      this.$el.style.webkitTransform = this.$el.style.transform = null
       this.$el.setAttribute('data-x', 0)
       this.$el.setAttribute('data-y', 0)
     }

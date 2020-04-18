@@ -5,10 +5,8 @@
     @click.stop="visible = true"
   >
     <el-dialog
-      v-if="visible"
       ref="dialog"
-      :visible="visible"
-      :modal="false"
+      :visible.sync="visible"
       class="dialog"
       append-to-body
       top="5vh"
@@ -40,13 +38,15 @@
               style="min-height: 200px;"
             >
               <el-card shadow="hover">
-                <async-component
-                  :tag="component.tag"
-                  :id="component.id"
-                />
+                <div class="relative">
+                  <async-component
+                    :tag="component.tag"
+                    :id="component.id"
+                  />
+                </div>
 
                 <div style="padding: 14px;">
-                  <span>{{ component.tag }}</span>
+                  <span>{{ component.name || component.tag }}</span>
                   <div class="bottom clearfix">
                     <time class="time">20.1933</time>
                     <el-button
@@ -72,6 +72,7 @@ import { cloneJson } from '../../utils/tool'
 import { categories, FORM_ITEM_ID } from '../../example'
 import { CATEGORY, ID, NAME } from '../../const'
 import AsyncComponent from './AsyncComponent'
+import { Card } from 'element-ui'
 
 export default {
   name: 'ExampleAdd',
@@ -82,7 +83,8 @@ export default {
     }
   },
   components: {
-    AsyncComponent
+    AsyncComponent,
+    ElCard: Card
   },
   props: {
     id: {
@@ -116,6 +118,13 @@ export default {
         this.visible &&
         this.examples.filter(x => x[CATEGORY].includes(this.currentCategoryId))
       )
+    }
+  },
+  watch: {
+    visible(value) {
+      if (!value) {
+        console.log(this.$refs.dialog)
+      }
     }
   },
   methods: {

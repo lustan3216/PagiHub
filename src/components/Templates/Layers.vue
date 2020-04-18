@@ -1,5 +1,5 @@
 <template>
-  <div class="layers">
+  <div class="relative h-100">
     <grid-generator
       v-for="(child, index) in sortChildren"
       :style="{ 'z-index': index }"
@@ -12,8 +12,8 @@
 
 <script>
 import GridGenerator from './GridGenerator'
-import GridItemChild from '../Abstract/GridItemChild'
-import NodeController from '../Abstract/NodeController'
+import GridItemChild from '../TemplateUtils/GridItemChild'
+import NodeController from '../TemplateUtils/NodeController'
 import nodeMixin from './mixins/node'
 import childrenMixin from './mixins/children'
 import { SORT_INDEX } from '../../const'
@@ -37,11 +37,6 @@ export default {
 </script>
 
 <style scoped>
-.layers {
-  position: relative;
-  z-index: 0;
-  height: 100%;
-}
 .absolute {
   position: absolute;
   top: 0;

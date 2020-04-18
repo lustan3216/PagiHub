@@ -1,13 +1,22 @@
 <template>
-  <component
-    :is="tag"
-    :id="id"
-  />
+  <div
+    v-observe-visibility="options"
+    class="h-100"
+  >
+    <component
+      :is="tag"
+      :id="id"
+    />
+  </div>
 </template>
 
 <script>
+import { ObserveVisibility } from 'vue-observe-visibility'
 export default {
   name: 'LazyLoadComponent',
+  directives: {
+    ObserveVisibility
+  },
   components: {
     FlexImage: () => import('../Templates/FlexImage'),
     FlexButton: () => import('../Templates/FlexButton'),
@@ -48,6 +57,22 @@ export default {
     id: {
       type: Number,
       required: true
+    }
+  },
+  data() {
+    return {
+      vIf: false,
+      options: {
+        callback: isVisible => {
+          this.vIf = isVisible
+          if (isVisible && this.isProductionMode && this.isPreviewMode) {
+            this.options = false
+          }
+        },
+        intersection: {
+          rootMargin: '100px'
+        }
+      }
     }
   }
 }

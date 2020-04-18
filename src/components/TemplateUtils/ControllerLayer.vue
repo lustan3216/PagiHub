@@ -78,6 +78,8 @@ export default {
 
 <style scoped lang="scss">
 .layer {
+  padding-top: 1px;
+  margin-top: -1px;
   transition: box-shadow 0.6s, border-color 0.6s;
 }
 .elevate {

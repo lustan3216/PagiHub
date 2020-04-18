@@ -28,8 +28,8 @@
 import { mapState } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from './mixins/children'
-import GridItemChild from '../Abstract/GridItemChild'
-import ControllerLayer from '../Abstract/ControllerLayer'
+import GridItemChild from '../TemplateUtils/GridItemChild'
+import ControllerLayer from '../TemplateUtils/ControllerLayer'
 
 export default {
   name: 'GridGenerator',

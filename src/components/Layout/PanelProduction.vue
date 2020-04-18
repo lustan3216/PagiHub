@@ -1,21 +1,21 @@
 <template>
-  <div>
+  <layers-root>
     <component
       :id="rootNode.id"
       :is="rootNode.tag"
     />
     <portal-target name="Root" />
-  </div>
+  </layers-root>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import Layers from '../Templates/Layers'
+import LayersRoot from '../Templates/LayersRoot'
 
 export default {
   name: 'PanelProduction',
   components: {
-    Layers
+    LayersRoot
   },
   computed: {
     ...mapGetters('draft', ['rootNode'])

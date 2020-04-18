@@ -1,6 +1,8 @@
 <template>
   <el-button
     v-if="isDraftMode"
+    v-bind="innerProps"
+    :style="innerStyles"
     class="wh-100 m-0 button"
   >
     <editor-text
@@ -27,6 +29,8 @@
 
   <el-button
     v-else
+    v-bind="innerProps"
+    :style="innerStyles"
     class="wh-100 m-0 button"
     @click="link"
     v-html="innerValue"
@@ -39,8 +43,9 @@ import childrenMixin from './mixins/children'
 import { vm } from '../../utils/vmMap'
 import { TYPE } from '../../const'
 import EditorText from './EditorText'
-import AsyncComponent from '../Abstract/AsyncComponent'
+import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
+import { REDIRECT_TO } from '../Setup/EditorSetting/SettingFlexButton'
 
 export default {
   defaultSetting,
@@ -57,7 +62,7 @@ export default {
   },
   methods: {
     link() {
-      const linkId = this.innerProps.redirectTo
+      const linkId = this.innerProps[REDIRECT_TO]
       const component = linkId && this.nodesMap[linkId]
 
       if (component && component.type === TYPE.COMPONENT_SET) {
@@ -71,9 +76,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.edit-area {
-  height: 100%;
-}
 ::v-deep.button {
   & .ql-editor,
   & .ql-container {

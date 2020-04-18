@@ -23,9 +23,11 @@ export const number = (field, extraOptions) => ({
 })
 
 export const select = (field, { options, ...extraOptions } = {}) => {
-  if (!isPlainObject(options[0])) {
-    options = options.map(label => ({ value: label, label }))
-  }
+  options.forEach((option, index) => {
+    if (!isPlainObject(option)) {
+      options[index] = { value: option, label: option.capitalize() }
+    }
+  })
 
   return {
     field,

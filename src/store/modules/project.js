@@ -36,7 +36,7 @@ const mutations = {
 }
 
 const actions = {
-  async getProjects({ commit }) {
+  async getProjects({ commit, dispatch }) {
     const projectMap = (await localforage.getItem('project')) || {}
 
     if (Object.hasAnyKey(projectMap)) {
@@ -50,6 +50,9 @@ const actions = {
     }
 
     commit('SET', { projectMap })
+
+    const componentSetId = await localforage.getItem('editingComponentSetId')
+    dispatch('draft/setComponent', componentSetId, { root: true })
   },
 
   async appendProjectNode({ commit }, _node) {
@@ -83,8 +86,9 @@ const actions = {
 
 const getters = {
   listToTree(state) {
-    const value = Object.values(state.projectMap)
-      .sort((a, b) => a.type - b.type)
+    const value = Object.values(state.projectMap).sort(
+      (a, b) => a.type - b.type
+    )
 
     return listToTree(cloneJson(value))
   },

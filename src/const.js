@@ -17,6 +17,7 @@ export const CAN_DRAG = 'canDrag'
 
 export const LAYERS = 'layers'
 export const GRID_ITEM = 'grid-item'
+export const GRID_ITEM_CHILD = 'grid-item-child'
 
 export const SORT_INDEX = 'sortIndex'
 export const PATH = 'path'

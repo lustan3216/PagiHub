@@ -1,3 +1,5 @@
+component name 都才是最後要顯示的，因為會有例外最外層 tag 是 button 但名字是 drawer
+
 componentSet 旁邊可以 選版本號
 
 每個組件都是一串 JSON，且要分版本，引用時給類似 github 名字以及版本號
@@ -65,4 +67,20 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>grid item 可以給tool tip</li>  
 <li>可以做tabs</li>
 <li>style希望可以做到，用滑鼠可以選擇任意dom做樣式</li>
+<li>根本就不用有formgenerator, 讓submit reset直接去選誰是他管的就好了</li>
+<li>icon</li>
+<li>form 要可慮可不可以lazyload 不然驗證會有問題</li>
+<li>grid item and layout 在不同尺寸要可以控制隱藏</li>
+<li>拿爸爸拿小孩，直接在tree裡面做完，不用一直跟store拿，反正有strict保護, vm 應該也可以順便</li>
+<li>code hightlight</li>
+<li>button group checkbox group radio</li>
 </ol>
+
+font size
+font align
+font color
+font family
+font background color
+Link
+Table
+todo list

@@ -3,7 +3,14 @@
     v-bind="innerProps"
     :style="innerStyles"
     class="wh-100"
-  />
+  >
+    <div
+      slot="error"
+      class="el-image__error"
+    >
+      {{ innerProps.error }}
+    </div>
+  </el-image>
 </template>
 
 <script>

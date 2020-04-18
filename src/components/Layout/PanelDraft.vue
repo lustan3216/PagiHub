@@ -1,27 +1,29 @@
 <template>
   <view-port>
-    <root-layers
+    <layers-root
       v-if="rootNode"
       :id="rootNode.id"
     />
-    <portal-target name="Root" />
   </view-port>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import ViewPort from './ViewPort'
-import RootLayers from '../Templates/RootLayers'
+import LayersRoot from '../Templates/LayersRoot'
 import { isMac } from '../../utils/device'
 
 export default {
   name: 'PanelDraft',
   components: {
     ViewPort,
-    RootLayers
+    LayersRoot
   },
   computed: {
     ...mapGetters('draft', ['rootNode'])
+  },
+  beforeCreate() {
+    this.$store.dispatch('project/getProjects')
   },
   methods: {
     isMac

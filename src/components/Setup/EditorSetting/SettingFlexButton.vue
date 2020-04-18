@@ -8,18 +8,14 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import SettingGenerator from './Common/SettingGenerator'
-import { select, boolean, assignDefaultValue } from './utils/util'
+import { select, assignDefaultValue } from './utils/util'
 import { TYPE as NODE_TYPE } from '../../../const'
 
-const PLAIN = 'plain'
-const ICON = 'icon'
-const TYPE = 'type'
-const REDIRECT_TO = 'redirectTo'
+export const REDIRECT_TO = 'redirectTo'
 
 export const defaultSetting = {
-  [PLAIN]: false,
-  [ICON]: undefined,
-  [TYPE]: 'primary'
+  icon: undefined,
+  type: 'primary'
 }
 
 export default {
@@ -41,9 +37,8 @@ export default {
     },
     spec() {
       const specArray = [
-        boolean(PLAIN),
-        select(TYPE, {
-          options: ['primary', 'text']
+        select('type', {
+          options: [{ label: 'Button', value: null }, 'text']
         })
       ]
 

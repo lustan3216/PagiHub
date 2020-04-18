@@ -5,7 +5,8 @@ import {
   CHILDREN,
   CAN_EDIT_TEXT,
   CAN_DRAG,
-  STYLE
+  STYLE,
+  NAME
 } from '../const'
 
 const gridItems = function() {
@@ -28,9 +29,9 @@ export const layers = function() {
   }
 }
 
-export const rootLayers = function() {
+export const layersRoot = function() {
   return {
-    [TAG]: 'rootLayers',
+    [TAG]: 'layersRoot',
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: [gridGenerator()]
   }
@@ -87,7 +88,7 @@ export const videoPlayer = function() {
 
 export const drawer = function() {
   const button = flexButton()
-
+  button[NAME] = 'drawer'
   button[CHILDREN] = [{
     [TAG]: 'drawer',
     [STYLE]: { background: '#fff' },

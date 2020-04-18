@@ -1,6 +1,11 @@
 <template>
   <div>
     <div v-mousewheel="callback">
+      <view-port-cover
+        v-if="$refs.browser"
+        :view-port-el="$refs.browser.$el"
+        class="viewport viewPortCover"
+      />
       <dialog-interacted
         ref="browser"
         :scale-ratio="scaleRatio"
@@ -8,6 +13,7 @@
         :resize-options="{ ignoreFrom: '.vue-grid-item' }"
         :drag-options="{ ignoreFrom: '.vue-grid-item' }"
         :draggable="isDraftMode"
+        class="viewport"
         @resize="dialogResize"
         @resizeStart="appSET({ isAnimating: true })"
         @resizeEnd="appSET({ isAnimating: false })"
@@ -51,6 +57,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import DialogInteracted from '../Components/DialogInteracted'
+import ViewPortCover from './ViewPortCover'
 import mousewheel from 'element-ui/lib/directives/mousewheel'
 
 export default {
@@ -59,7 +66,8 @@ export default {
     mousewheel
   },
   components: {
-    DialogInteracted
+    DialogInteracted,
+    ViewPortCover
   },
   data() {
     const options = [
@@ -83,7 +91,10 @@ export default {
           let scaleRatio = this.scaleRatio + pixelY * -0.008
           scaleRatio = Math.min(Math.max(0.5, scaleRatio), 1.25)
 
-          this.$el.style.transform = `scale(${scaleRatio.toFixed(2)})`
+          this.$el.style.webkitTransform = this.$el.style.transform = `scale(${scaleRatio.toFixed(
+            2
+          )})`
+
           this.appSET({ scaleRatio })
           this.scaleRatio = scaleRatio
         }
@@ -117,7 +128,7 @@ export default {
       this.canvasWidth = +event.target.clientWidth.toFixed()
     },
     scaleRollback() {
-      this.$el.style.transform = null
+      this.$el.style.webkitTransform = this.$el.style.transform = null
       this.scaleRatio = 1
       this.canvasWidthReset()
     },
@@ -144,23 +155,19 @@ export default {
 
 <style scoped lang="scss">
 .interact {
-  top: 45px;
   box-shadow: 0 5px 20px 0 rgba(32, 48, 60, 0.11);
   border: 10px solid transparent;
   background: transparent;
-  width: calc(100vw - 330px);
-  @include calc-vh(height, '100vh - 70px');
   overflow-y: scroll;
-  position: absolute;
   overflow-x: hidden;
 }
-.dragger {
-  font-size: 18px;
-  padding: 10px;
+.viewport {
+  top: 45px;
+  width: calc(100vw - 330px);
+  @include calc-vh(height, '100vh - 70px');
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 100000;
+}
+.viewPortCover {
+  border: 10px solid transparent;
 }
 </style>

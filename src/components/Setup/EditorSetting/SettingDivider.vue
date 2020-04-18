@@ -10,11 +10,11 @@ import SettingGenerator from './Common/SettingGenerator'
 import { select, assignDefaultValue } from './utils/util'
 
 export const defaultSetting = {
-  shadow: 'always'
+  direction: 'horizontal'
 }
 
 export default {
-  name: 'SettingCard',
+  name: 'SettingFlexImage',
   components: { SettingGenerator },
   props: {
     id: {
@@ -25,7 +25,11 @@ export default {
   data() {
     return {
       spec: assignDefaultValue(
-        [select('shadow', { options: ['always', 'hover', 'never'] })],
+        [
+          select('direction', {
+            options: ['horizontal', 'vertical']
+          })
+        ],
         defaultSetting
       )
     }

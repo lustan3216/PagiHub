@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { Card } from 'element-ui'
 import nodeMixin from './mixins/node'
 import childrenMixin from './mixins/children'
 import GridGeneratorInner from './GridGeneratorInner'
@@ -22,7 +23,8 @@ export default {
   defaultSetting,
   name: 'Card',
   components: {
-    GridGeneratorInner
+    GridGeneratorInner,
+    ElCard: Card
   },
   mixins: [nodeMixin, childrenMixin]
 }

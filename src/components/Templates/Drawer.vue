@@ -1,17 +1,23 @@
 <template>
   <portal
-    :disabled="isExample"
+    :disabled="!innerProps.toRoot"
     to="Root"
   >
+    <div
+      v-if="innerProps.modal && visible"
+      class="v-modal absolute"
+    />
     <el-drawer
       v-mousewheel="mousewheel"
+      v-if="visible"
       v-bind="innerProps"
       :key="innerProps.modal"
-      :append-to-body="isPreviewMode || isProductionMode"
+      :append-to-body="false"
       :modal-append-to-body="false"
       :visible.sync="visible"
       :with-header="innerProps.showClose"
-      class="drawer"
+      :modal="false"
+      class="absolute"
     >
       <controller-layer
         :id="id"
@@ -33,7 +39,7 @@ import nodeMixin from './mixins/node'
 import GridGeneratorInner from './GridGeneratorInner'
 import mousewheel from 'element-ui/lib/directives/mousewheel'
 import { defaultSetting } from '../Setup/EditorSetting/SettingDrawer'
-import ControllerLayer from '../Abstract/ControllerLayer'
+import ControllerLayer from '../TemplateUtils/ControllerLayer'
 
 export default {
   defaultSetting,

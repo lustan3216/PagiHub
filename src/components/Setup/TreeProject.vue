@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import localforage from 'localforage'
 import { Tree } from 'element-ui'
 import { mapActions, mapGetters } from 'vuex'
 import { TYPE, TYPE_STRING } from '../../const'
@@ -104,17 +103,8 @@ export default {
       this.$refs.tree.filter(val)
     }
   },
-  created() {
-    this.getProjects()
-  },
-  mounted() {
-    localforage.getItem('editingComponentSetId').then(componentSetId => {
-      this.setComponent(componentSetId)
-    })
-  },
   methods: {
-    ...mapActions('draft', ['setComponent']),
-    ...mapActions('project', ['modifyProjectNodeParent', 'getProjects']),
+    ...mapActions('project', ['modifyProjectNodeParent']),
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {
         this.modifyProjectNodeParent({

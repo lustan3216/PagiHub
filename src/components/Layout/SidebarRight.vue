@@ -12,7 +12,10 @@
       @click="isFloat = !isFloat"
     />
 
-    <el-tabs v-model="activeName">
+    <el-tabs
+      v-model="activeName"
+      type="card"
+    >
       <el-tab-pane
         label="Project"
         name="Project"
@@ -22,7 +25,7 @@
       </el-tab-pane>
 
       <el-tab-pane
-        label="Nodes "
+        label="Nodes"
         name="Nodes"
         lazy
       >
@@ -53,13 +56,11 @@ import formCreate from '@form-create/element-ui'
 import { mapState, mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
-import FlexSidebar from '../Components/FlexSidebar'
 import DialogInteracted from '../Components/DialogInteracted'
 
 export default {
   name: 'SidebarRight',
   components: {
-    FlexSidebar,
     PanelStyles,
     PanelSettings,
     DialogInteracted,
@@ -70,7 +71,7 @@ export default {
   data() {
     return {
       isFloat: false,
-      activeName: 'Project'
+      activeName: 'Nodes'
     }
   },
   computed: {
