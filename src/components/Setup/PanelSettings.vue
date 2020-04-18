@@ -12,27 +12,29 @@ import { mapGetters } from 'vuex'
 const self = {
   name: 'PanelSettings',
   components: {
-    Card: () => import('./EditorSetting/Card'),
-    Drawer: () => import('./EditorSetting/Drawer'),
-    FlexButton: () => import('./EditorSetting/FlexButton'),
-    FlexImage: () => import('./EditorSetting/FlexImage'),
-    GridGenerator: () => import('./EditorSetting/GridGenerator'),
-    GridItem: () => import('./EditorSetting/GridItem'),
-    VideoPlayer: () => import('./EditorSetting/VideoPlayer'),
+    SettingCard: () => import('./EditorSetting/SettingCard'),
+    SettingDrawer: () => import('./EditorSetting/SettingDrawer'),
+    SettingFlexButton: () => import('./EditorSetting/SettingFlexButton'),
+    SettingFlexImage: () => import('./EditorSetting/SettingFlexImage'),
+    SettingGridGenerator: () => import('./EditorSetting/SettingGridGenerator'),
+    SettingGridItem: () => import('./EditorSetting/SettingGridItem'),
+    SettingVideoPlayer: () => import('./EditorSetting/SettingVideoPlayer'),
 
-    FormGenerator: () => import('./EditorSetting/FormGenerator'),
-    FormCheckbox: () => import('./EditorSetting/FormCheckbox'),
-    FormColorPicker: () => import('./EditorSetting/FormColorPicker'),
-    FormDatePicker: () => import('./EditorSetting/FormDatePicker'),
-    FormInput: () => import('./EditorSetting/FormInput'),
-    FormNumber: () => import('./EditorSetting/FormNumber'),
-    FormRadio: () => import('./EditorSetting/FormRadio'),
-    FormRate: () => import('./EditorSetting/FormRate'),
-    FormSelect: () => import('./EditorSetting/FormSelect'),
-    FormSlider: () => import('./EditorSetting/FormSlider'),
-    FormSwitch: () => import('./EditorSetting/FormSwitch'),
-    FormTextarea: () => import('./EditorSetting/FormTextarea'),
-    FormTimePicker: () => import('./EditorSetting/FormTimePicker')
+    SettingFormGenerator: () => import('./EditorSetting/SettingFormGenerator'),
+    SettingFormCheckbox: () => import('./EditorSetting/SettingFormCheckbox'),
+    SettingFormColorPicker: () =>
+      import('./EditorSetting/SettingFormColorPicker'),
+    SettingFormDatePicker: () =>
+      import('./EditorSetting/SettingFormDatePicker'),
+    SettingFormInput: () => import('./EditorSetting/SettingFormInput'),
+    SettingFormNumber: () => import('./EditorSetting/SettingFormNumber'),
+    SettingFormRadio: () => import('./EditorSetting/SettingFormRadio'),
+    SettingFormRate: () => import('./EditorSetting/SettingFormRate'),
+    SettingFormSelect: () => import('./EditorSetting/SettingFormSelect'),
+    SettingFormSlider: () => import('./EditorSetting/SettingFormSlider'),
+    SettingFormSwitch: () => import('./EditorSetting/SettingFormSwitch'),
+    SettingFormTextarea: () => import('./EditorSetting/SettingFormTextarea'),
+    SettingFormTimePicker: () => import('./EditorSetting/SettingFormTimePicker')
   },
   computed: {
     ...mapGetters('app', [
@@ -43,7 +45,7 @@ const self = {
       return self.components[this.componentTag]
     },
     componentTag() {
-      return this.selectedComponentNode.tag.bigCamelCase()
+      return `Setting${this.selectedComponentNode.tag.bigCamelCase()}`
     }
   }
 }

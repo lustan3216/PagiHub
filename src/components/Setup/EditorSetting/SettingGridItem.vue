@@ -42,7 +42,7 @@ export const defaultSetting = {
 }
 
 export default {
-  name: 'GridItem',
+  name: 'SettingGridItem',
   components: { SettingGenerator },
   props: {
     id: {

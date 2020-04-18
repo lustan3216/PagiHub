@@ -4,16 +4,12 @@ import {
   TAG,
   CHILDREN,
   CAN_EDIT_TEXT,
-  CAN_DRAG
+  CAN_DRAG,
+  STYLE
 } from '../const'
 
 const gridItems = function() {
-  return [
-    { [TAG]: GRID_ITEM, x: 0, y: 0, w: 22, h: 71 },
-    { [TAG]: GRID_ITEM, x: 38, y: 19, w: 34, h: 52 },
-    { [TAG]: GRID_ITEM, x: 22, y: 19, w: 16, h: 52 },
-    { [TAG]: GRID_ITEM, x: 22, y: 0, w: 50, h: 19 }
-  ]
+  return [{ [TAG]: GRID_ITEM, x: 0, y: 0, w: 22, h: 71 }]
 }
 
 export const gridGenerator = function() {
@@ -32,8 +28,12 @@ export const layers = function() {
   }
 }
 
-export const initTemplate = function() {
-  return layers()
+export const rootLayers = function() {
+  return {
+    [TAG]: 'rootLayers',
+    [CAN_NEW_ITEM]: true,
+    [CHILDREN]: [gridGenerator()]
+  }
 }
 
 export const carousel = function() {
@@ -86,10 +86,15 @@ export const videoPlayer = function() {
 }
 
 export const drawer = function() {
-  return {
+  const button = flexButton()
+
+  button[CHILDREN] = [{
     [TAG]: 'drawer',
+    [STYLE]: { background: '#fff' },
     [CHILDREN]: gridItems()
-  }
+  }]
+
+  return button
 }
 
 export default [

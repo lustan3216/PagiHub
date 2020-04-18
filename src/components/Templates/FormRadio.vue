@@ -11,7 +11,7 @@
 <script>
 import nodeMixin from './mixins/node'
 import formItemMixin from './mixins/formItem'
-import { defaultSetting } from '../Setup/EditorSetting/FormRadio'
+import { defaultSetting } from '../Setup/EditorSetting/SettingFormRadio'
 
 export default {
   defaultSetting,

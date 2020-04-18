@@ -12,7 +12,7 @@
 
 <script>
 import nodeMixin from './mixins/node'
-import { defaultSetting } from '../Setup/EditorSetting/VideoPlayer'
+import { defaultSetting } from '../Setup/EditorSetting/SettingVideoPlayer'
 import VuePlyr from 'vue-plyr'
 
 export default {

@@ -1,69 +1,72 @@
 <template>
-  <el-button
-    type="primary"
-    style="margin-left: 16px;"
-    @click="drawer = true"
+  <portal
+    :disabled="isExample"
+    to="Root"
   >
-    Drawer
-    <portal
-      :disabled="isExample"
-      to="Root"
+    <el-drawer
+      v-mousewheel="mousewheel"
+      v-bind="innerProps"
+      :key="innerProps.modal"
+      :append-to-body="isPreviewMode || isProductionMode"
+      :modal-append-to-body="false"
+      :visible.sync="visible"
+      :with-header="innerProps.showClose"
+      class="drawer"
     >
-      <el-drawer
-        v-bind="innerProps"
-        :class="{ hideHeader }"
-        :visible.sync="drawer"
+      <controller-layer
+        :id="id"
+        :style="innerStyles"
+        class="h-100"
       >
-        <grid-generator :id="id" />
-      </el-drawer>
-    </portal>
-  </el-button>
+        <grid-generator-inner
+          :id="id"
+          :inner-props="innerProps"
+        />
+      </controller-layer>
+    </el-drawer>
+  </portal>
 </template>
 
 <script>
 import { Drawer } from 'element-ui'
 import nodeMixin from './mixins/node'
-import childrenMixin from './mixins/children'
-import GridGenerator from './GridGenerator'
-import { defaultSetting } from '../Setup/EditorSetting/Drawer'
+import GridGeneratorInner from './GridGeneratorInner'
+import mousewheel from 'element-ui/lib/directives/mousewheel'
+import { defaultSetting } from '../Setup/EditorSetting/SettingDrawer'
+import ControllerLayer from '../Abstract/ControllerLayer'
 
 export default {
   defaultSetting,
   name: 'Drawer',
   components: {
     ElDrawer: Drawer,
-    GridGenerator
+    ControllerLayer,
+    GridGeneratorInner
   },
-  mixins: [nodeMixin, childrenMixin],
+  directives: {
+    mousewheel
+  },
+  mixins: [nodeMixin],
   data() {
     return {
-      drawer: false,
-      direction: 'ttb'
+      visible: false
     }
   },
-  computed: {
-    hideHeader() {
-      return true
+  methods: {
+    toggleVisibility() {
+      this.visible = !this.visible
+    },
+    mousewheel(event) {
+      event.preventDefault()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.edit-area {
-  height: 100%;
-}
-::v-deep.el-card {
-  height: 94%;
-  width: 94%;
-  margin-left: calc(3% - 2px);
-  margin-top: calc(3% - 2px);
-  & > .el-card__body {
-    padding: 0;
-    height: 100%;
-  }
-}
-::v-deep.hideHeader > div > div > .el-drawer__header {
-  display: none;
+::v-deep.drawer .el-drawer {
+  box-shadow: none;
+  background-color: transparent;
+  overflow: initial;
 }
 </style>

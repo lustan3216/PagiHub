@@ -38,3 +38,11 @@ button.el-button--text {
     height: 100%;
   }
 }
+
+.el-drawer__header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px !important;
+  z-index: 10;
+}

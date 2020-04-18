@@ -45,7 +45,9 @@ export default {
     if (selectedComponentNode) {
       innerRules = cloneJson(this.spec)
       innerRules.forEach(spec => {
-        spec.value = getValueByPath(this.vmProps, spec.path, spec.value)
+        const vmProps = vm(this.id).innerProps
+        const path = spec.path ? `${spec.path}.${spec.field}` : `${spec.field}`
+        spec.value = getValueByPath(vmProps, path, spec.value)
         spec.on = { change: value => this.updateRecord(spec, value) }
       })
     }
@@ -62,9 +64,6 @@ export default {
   },
   computed: {
     ...mapGetters('app', ['selectedComponentNode']),
-    vmProps() {
-      return vm(this.id).innerProps
-    },
     canShowSetting() {
       return Object.hasAnyKey(this.innerRules)
     }
@@ -76,6 +75,8 @@ export default {
       //   value = Array.uniq(value)
       //   this.api.updateRule(key, { value })
       // }
+      this.api.setValue(spec.field, value)
+
       const path = spec.path
         ? `${this.id}.${PROPS}.${spec.path}.${spec.field}`
         : `${this.id}.${PROPS}.${spec.field}`

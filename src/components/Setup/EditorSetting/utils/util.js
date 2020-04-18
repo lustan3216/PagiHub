@@ -1,4 +1,4 @@
-import { getValueByPath } from '../../../../utils/tool'
+import { getValueByPath, isPlainObject } from '../../../../utils/tool'
 
 export const assignDefaultValue = (array, defaultSetting) => {
   array.forEach(object => {
@@ -22,13 +22,19 @@ export const number = (field, extraOptions) => ({
   ...extraOptions
 })
 
-export const select = (field, { options, ...extraOptions } = {}) => ({
-  field,
-  title: field,
-  type: 'select',
-  options: options.map(label => ({ value: label, label })),
-  ...extraOptions
-})
+export const select = (field, { options, ...extraOptions } = {}) => {
+  if (!isPlainObject(options[0])) {
+    options = options.map(label => ({ value: label, label }))
+  }
+
+  return {
+    field,
+    title: field,
+    type: 'select',
+    options,
+    ...extraOptions
+  }
+}
 
 export const selectCreate = (field, { options } = {}) => ({
   field,
@@ -93,4 +99,11 @@ export const datepicker = field => ({
   props: {
     type: 'datetime'
   }
+})
+
+export const selectUnit = (field, extraOptions) => ({
+  field,
+  title: field,
+  type: 'SelectUnit',
+  ...extraOptions
 })

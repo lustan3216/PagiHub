@@ -5,7 +5,7 @@
 <script>
 import nodeMixin from './mixins/node'
 import formItemMixin from './mixins/formItem'
-import { defaultSetting } from '../Setup/EditorSetting/FormInput'
+import { defaultSetting } from '../Setup/EditorSetting/SettingFormInput'
 
 export default {
   defaultSetting,

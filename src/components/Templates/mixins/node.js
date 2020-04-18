@@ -1,7 +1,7 @@
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import { vmAppend, vmRemove } from '../../../utils/vmMap'
 import { merge, cloneJson } from '../../../utils/tool'
-import { STYLES, PROPS } from '../../../const'
+import { STYLE, PROPS, VALUE } from '../../../const'
 
 export default {
   props: {
@@ -15,12 +15,14 @@ export default {
   },
   computed: {
     ...mapState('draft', ['nodesMap']),
-    ...mapGetters('draft', ['childrenOf', 'parentPath']),
     node() {
       return this.nodesMap[this.id]
     },
+    innerValue() {
+      return this.node && this.node[VALUE]
+    },
     innerStyles() {
-      return (this.node && this.node[STYLES]) || {}
+      return (this.node && this.node[STYLE]) || {}
     },
     innerProps() {
       const setting = cloneJson(this.$options.defaultSetting || {})
@@ -40,7 +42,7 @@ export default {
     assignStyles(styles) {
       this.RECORD([
         {
-          path: `${this.id}.${STYLES}`,
+          path: `${this.id}.${STYLE}`,
           value: styles
         }
       ])

@@ -30,7 +30,7 @@ export const defaultSetting = {
 }
 
 export default {
-  name: 'FormSlider',
+  name: 'SettingFormSlider',
   components: { SettingGenerator },
   props: {
     id: {

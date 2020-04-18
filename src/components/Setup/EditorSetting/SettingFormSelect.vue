@@ -46,7 +46,7 @@ export const defaultSetting = {
 }
 
 export default {
-  name: 'FormSelect',
+  name: 'SettingFormSelect',
   components: { SettingGenerator },
   props: {
     id: {

@@ -22,7 +22,7 @@ export const defaultSetting = {
 }
 
 export default {
-  name: 'FlexImage',
+  name: 'SettingFlexImage',
   components: { SettingGenerator },
   props: {
     id: {

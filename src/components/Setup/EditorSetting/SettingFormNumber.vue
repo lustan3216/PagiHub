@@ -7,36 +7,38 @@
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { assignDefaultValue, boolean, number, string } from './utils/util'
+import { assignDefaultValue, number, boolean, select } from './utils/util'
 import form, {
   FIELD,
   SHOW_LABEL,
-  PLACEHOLDER,
   DISABLED,
-  READONLY,
-  VALUE,
-  SIZE
+  MIN,
+  MAX,
+  SIZE,
+  VALUE
 } from './utils/form'
 
-const SHOW_WORD_LIMIT = 'showWordLimit'
-const MAX_LENGTH = 'maxLength'
-const MIN_LENGTH = 'minLength'
+const STEP = 'step'
+const PRECISION = 'precision'
+const CONTROLS = 'controls'
+const CONTROLS_POSITION = 'controlsPosition'
 
 export const defaultSetting = {
-  [FIELD]: 'textarea',
+  [FIELD]: 'formInputNumber',
   [SHOW_LABEL]: true,
-  [PLACEHOLDER]: false,
   [DISABLED]: false,
-  [READONLY]: false,
   [SIZE]: 'mini',
-  [MAX_LENGTH]: false,
-  [MIN_LENGTH]: false,
-  [SHOW_WORD_LIMIT]: true,
-  [VALUE]: ''
+  [MIN]: 0,
+  [MAX]: 10,
+  [STEP]: 1,
+  [PRECISION]: 1,
+  [CONTROLS]: true,
+  [CONTROLS_POSITION]: 'right',
+  [VALUE]: 10
 }
 
 export default {
-  name: 'FormTextarea',
+  name: 'SettingFormNumber',
   components: { SettingGenerator },
   props: {
     id: {
@@ -50,14 +52,15 @@ export default {
         [
           form[FIELD],
           form[SHOW_LABEL],
-          form[PLACEHOLDER],
           form[DISABLED],
-          form[READONLY],
           form[SIZE],
-          number(MAX_LENGTH),
-          number(MIN_LENGTH),
-          boolean(SHOW_WORD_LIMIT),
-          string(VALUE)
+          form[MIN],
+          form[MAX],
+          number(STEP),
+          number(PRECISION),
+          boolean(CONTROLS),
+          select(CONTROLS_POSITION, { options: ['right', 'left'] }),
+          number(VALUE)
         ],
         defaultSetting
       )

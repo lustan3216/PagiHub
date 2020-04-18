@@ -3,7 +3,7 @@
     :style="innerStyles"
     v-model="api"
     :id="id"
-    :rule="innerRule2"
+    :rule="_innerRule"
     :option="option"
   />
 </template>
@@ -12,7 +12,7 @@
 import clone from 'clone'
 import nodeMixin from './mixins/node'
 import formItemMixin from './mixins/formItem'
-import { defaultSetting } from '../Setup/EditorSetting/FormCheckbox'
+import { defaultSetting } from '../Setup/EditorSetting/SettingFormCheckbox'
 
 export default {
   defaultSetting,
@@ -20,7 +20,7 @@ export default {
   name: 'FormCheckbox',
   mixins: [nodeMixin, formItemMixin],
   computed: {
-    innerRule2() {
+    _innerRule() {
       const rule = clone(this.innerRule[0])
       const { button } = rule.props
       if (button) {

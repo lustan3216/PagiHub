@@ -28,7 +28,7 @@ export const defaultSetting = {
 }
 
 export default {
-  name: 'VideoPlayer',
+  name: 'SettingVideoPlayer',
   components: { SettingGenerator },
   props: {
     id: {

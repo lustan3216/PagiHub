@@ -7,20 +7,16 @@
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { select, boolean, assignDefaultValue } from './utils/util'
+import { select, assignDefaultValue } from './utils/util'
 
-const PLAIN = 'plain'
-const ICON = 'icon'
-const TYPE = 'type'
+const SHADOW = 'shadow'
 
 export const defaultSetting = {
-  [PLAIN]: false,
-  [ICON]: undefined,
-  [TYPE]: 'primary'
+  [SHADOW]: 'always'
 }
 
 export default {
-  name: 'FlexButton',
+  name: 'SettingCard',
   components: { SettingGenerator },
   props: {
     id: {
@@ -31,12 +27,7 @@ export default {
   data() {
     return {
       spec: assignDefaultValue(
-        [
-          boolean(PLAIN),
-          select(TYPE, {
-            options: ['primary', 'text']
-          })
-        ],
+        [select(SHADOW, { options: ['always', 'hover', 'never'] })],
         defaultSetting
       )
     }

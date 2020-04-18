@@ -1,24 +1,29 @@
 <template>
   <lazy-load :class="{ 'dash-border': isDraftMode && !isAnimating }">
-    <controller-layer
-      v-if="firstChild"
-      :style="innerStyles"
-      :id="firstChild.id"
-    >
-      <async-component
-        :tag="firstChild.tag"
-        :id="firstChild.id"
+    <template v-if="firstChild">
+      <portal-target
+        v-if="isDraftMode"
+        :name="`GridItemChild${firstChild.id}`"
       />
-
-      <el-popover
-        v-if="mounted && !isExample && isDraftMode"
-        :reference="parentEl"
-        :placement="firstChild.canNewItem ? 'top' : 'right'"
-        trigger="hover"
+      <controller-layer
+        :style="innerStyles"
+        :id="firstChild.id"
       >
-        <node-controller :id="firstChild.id" />
-      </el-popover>
-    </controller-layer>
+        <async-component
+          :tag="firstChild.tag"
+          :id="firstChild.id"
+        />
+
+        <el-popover
+          v-if="mounted && !isExample && isDraftMode"
+          :reference="parentEl"
+          :placement="firstChild.canNewItem ? 'top' : 'right'"
+          trigger="hover"
+        >
+          <node-controller :id="firstChild.id" />
+        </el-popover>
+      </controller-layer>
+    </template>
 
     <controller-layer
       v-else-if="isDraftMode && !isExample"

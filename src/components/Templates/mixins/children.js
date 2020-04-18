@@ -1,12 +1,16 @@
-import { mapGetters, mapMutations } from 'vuex'
-import { CHILDREN } from '../../../const'
+import { mapGetters, mapMutations, mapState } from 'vuex'
+import { CHILDREN, GRID_ITEM } from '../../../const'
 import { cloneJson, traversal } from '../../../utils/tool'
 import { componentIds } from '../../../utils/keyId'
 
 export default {
   computed: {
-    ...mapGetters('draft', ['childrenOf']),
+    ...mapState('draft', ['nodesMap']),
+    ...mapGetters('draft', ['childrenOf', 'parentPath']),
     ...mapGetters('example', ['examplesMapByTag']),
+    node() {
+      return this.nodesMap[this.id]
+    },
     innerChildren() {
       const getterName = `${this.isExample ? 'example' : 'draft'}/childrenOf`
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
@@ -87,6 +91,23 @@ export default {
       }
 
       grandChildrenRecords(theNodeIdGonnaRemove)
+
+      const parentNodes = this.parentPath(theNodeIdGonnaRemove)
+      for (let i = 0; i < parentNodes.length; i++) {
+        const { id, tag } = parentNodes[parentNodes.length - 1 - i]
+
+        if (tag === GRID_ITEM) {
+          break
+        }
+
+        if (this.childrenOf[id].length === 1) {
+          records.push({
+            path: id,
+            value: undefined
+          })
+        }
+      }
+
       this.RECORD(records)
 
       // CLEAN_SELECTED_COMPONENT_IDS

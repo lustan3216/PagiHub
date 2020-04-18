@@ -10,7 +10,7 @@
 <script>
 import nodeMixin from './mixins/node'
 import FlexButton from './FlexButton'
-import { defaultSetting } from '../Setup/EditorSetting/FormInput'
+import { defaultSetting } from '../Setup/EditorSetting/SettingFormInput'
 
 export default {
   defaultSetting,

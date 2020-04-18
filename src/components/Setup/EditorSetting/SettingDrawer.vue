@@ -8,33 +8,22 @@
 <script>
 import { pxPercent } from './utils/validation'
 import SettingGenerator from './Common/SettingGenerator'
-import {
-  boolean,
-  select,
-  string,
-  assignDefaultValue
-} from './utils/util'
+import { boolean, select, assignDefaultValue, selectUnit } from './utils/util'
 
-const APPEND_TO_BODY = 'appendToBody'
-const MODAL_APPEND_TO_BODY = 'modal-append-to-body'
-const CLOSE_ON_PRESS_ESCAPE = 'close-on-press-escape'
-const SHOW_CLOSE = 'show-close'
+const SHOW_CLOSE = 'showClose'
 const MODAL = 'modal'
 const DIRECTION = 'direction'
 const SIZE = 'size'
 
 export const defaultSetting = {
-  [APPEND_TO_BODY]: true,
-  [MODAL_APPEND_TO_BODY]: true,
-  [CLOSE_ON_PRESS_ESCAPE]: false,
-  [SHOW_CLOSE]: false,
-  [MODAL]: false,
+  [SHOW_CLOSE]: true,
+  [MODAL]: true,
   [DIRECTION]: 'ltr',
   [SIZE]: '30%'
 }
 
 export default {
-  name: 'Drawer',
+  name: 'SettingDrawer',
   components: { SettingGenerator },
   props: {
     id: {
@@ -46,14 +35,19 @@ export default {
     return {
       spec: assignDefaultValue(
         [
-          boolean(APPEND_TO_BODY),
-          boolean(MODAL_APPEND_TO_BODY),
-          boolean(CLOSE_ON_PRESS_ESCAPE),
           boolean(SHOW_CLOSE),
-          boolean([MODAL]),
-          string(SIZE, { validate: [pxPercent] }),
+          boolean(MODAL),
+          selectUnit(SIZE, {
+            validate: [pxPercent],
+            props: { exclude: ['vw', 'vh'] }
+          }),
           select(DIRECTION, {
-            options: ['ltr', 'rtl', 'ttb', 'btt']
+            options: [
+              { label: 'Left', value: 'ltr' },
+              { label: 'Right', value: 'rtl' },
+              { label: 'Top', value: 'ttb' },
+              { label: 'Bottom', value: 'btt' }
+            ]
           })
         ],
         defaultSetting
@@ -62,3 +56,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+::v-deep .el-input-group__append {
+  text-align: center;
+}
+</style>

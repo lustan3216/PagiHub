@@ -1,18 +1,22 @@
 <template>
-  <grid-generator :id="id" />
+  <grid-generator-inner
+    :id="id"
+    :inner-props="innerProps"
+    :inner-style="innerStyles"
+  />
 </template>
 
 <script>
-import GridGenerator from './GridGenerator'
+import GridGeneratorInner from './GridGeneratorInner'
 import nodeMixin from './mixins/node'
 import childrenMixin from './mixins/children'
-import { defaultSetting } from '../Setup/EditorSetting/FormGenerator'
+import { defaultSetting } from '../Setup/EditorSetting/SettingFormGenerator'
 
 export default {
   defaultSetting,
   name: 'FormGenerator',
   components: {
-    GridGenerator
+    GridGeneratorInner
   },
   mixins: [nodeMixin, childrenMixin],
   provide() {

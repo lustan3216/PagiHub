@@ -12,7 +12,7 @@ import clone from 'clone'
 import { merge } from '../../utils/tool'
 import nodeMixin from './mixins/node'
 import formItemMixin from './mixins/formItem'
-import { defaultSetting } from '../Setup/EditorSetting/FormSwitch'
+import { defaultSetting } from '../Setup/EditorSetting/SettingFormSwitch'
 
 export default {
   defaultSetting,

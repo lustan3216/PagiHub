@@ -4,7 +4,7 @@ import listToTree from '../../../utils/listToTree'
 import { SET } from '../../index'
 import { componentIds } from '../../../utils/keyId'
 import { nestedToLinerObject } from '../../../utils/tool'
-import { initTemplate as _initTemplate } from '../../../example/basic'
+import { rootLayers } from '../../../example/basic'
 
 const state = {
   nodesMap: {},
@@ -43,7 +43,7 @@ const actions = {
     if (Object.hasAnyKey(nodesMap)) {
       componentIds.restoreIds(nodesMap)
     } else {
-      const initTemplate = _initTemplate()
+      const initTemplate = rootLayers()
       initTemplate.parentId = 0
       componentIds.appendIdNested(initTemplate)
       nestedToLinerObject(nodesMap, initTemplate)

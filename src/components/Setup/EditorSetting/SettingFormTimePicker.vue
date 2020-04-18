@@ -27,15 +27,15 @@ import form, {
 const EDITABLE = 'editable'
 const START_PLACEHOLDER = 'startPlaceholder'
 const END_PLACEHOLDER = 'endPlaceholder'
-const TYPE = 'type'
+const IS_RANGE = 'isRange'
+const ARROW_CONTROL = 'arrowControl'
 const FORMAT = 'format'
 const ALIGN = 'align'
 const RANGE_SEPARATOR = 'rangeSeparator'
-const UNLINK_PANELS = 'unlinkPanels'
 const DEFAULT_VALUE = 'defaultValue'
 
 export const defaultSetting = {
-  [FIELD]: 'formDatepicker',
+  [FIELD]: 'formTimepicker',
   [SHOW_LABEL]: true,
   [READONLY]: false,
   [DISABLED]: false,
@@ -43,10 +43,10 @@ export const defaultSetting = {
   [SIZE]: 'mini',
   [PLACEHOLDER]: 'mini',
   [EDITABLE]: true,
-  [UNLINK_PANELS]: true,
   [START_PLACEHOLDER]: 'startPlaceholder',
   [END_PLACEHOLDER]: 'endPlaceholder',
-  [TYPE]: 'datetime',
+  [IS_RANGE]: false,
+  [ARROW_CONTROL]: true,
   [FORMAT]: 'yyyy-MM-dd',
   [ALIGN]: 'left',
   [RANGE_SEPARATOR]: '-',
@@ -54,7 +54,7 @@ export const defaultSetting = {
 }
 
 export default {
-  name: 'FormDatePicker',
+  name: 'SettingFormTimePicker',
   components: { SettingGenerator },
   props: {
     id: {
@@ -73,21 +73,10 @@ export default {
           form[SIZE],
           form[PLACEHOLDER],
           boolean(EDITABLE),
-          boolean(UNLINK_PANELS),
           string(START_PLACEHOLDER),
           string(END_PLACEHOLDER),
-          select(TYPE, {
-            options: [
-              'year',
-              'month',
-              'date',
-              'dates',
-              'week',
-              'datetime',
-              'datetimerange',
-              'daterange'
-            ]
-          }),
+          boolean(IS_RANGE),
+          boolean(ARROW_CONTROL),
           string(FORMAT),
           select(ALIGN, {
             options: ['left', 'month', 'right']

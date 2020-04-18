@@ -187,10 +187,6 @@ export default {
   },
   mixins: [nodeMixin],
   props: {
-    value: {
-      type: String,
-      default: 'I am Editor'
-    },
     only: {
       type: Array,
       default() {
@@ -240,7 +236,7 @@ export default {
         if (vm && vm.value) {
           return vm.value
         } else {
-          return this.value
+          return 'Edit me'
         }
       },
       set(value) {

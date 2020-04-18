@@ -7,40 +7,28 @@
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { boolean, assignDefaultValue, colorAlpha } from './utils/util'
+import { boolean, assignDefaultValue, color } from './utils/util'
 import form, {
   FIELD,
   SHOW_LABEL,
-  SIZE,
-  MIN,
-  MAX,
-  VALUE,
   DISABLED,
-  OPTIONS
+  SIZE,
+  VALUE
 } from './utils/form'
 
-const TEXT_COLOR = 'textColor'
-const FILL = 'fill'
-const BUTTON = 'button'
+const SHOW_ALPHA = 'showAlpha'
 
 export const defaultSetting = {
-  [FIELD]: 'formRadio',
+  [FIELD]: 'formCheckbox',
   [SHOW_LABEL]: true,
   [DISABLED]: false,
   [SIZE]: 'mini',
-  [MIN]: 0,
-  [MAX]: 10,
-  [OPTIONS]: [],
-
-  [TEXT_COLOR]: '#ffffff',
-  [FILL]: '#409EFF',
-  [BUTTON]: false,
-
-  [VALUE]: false
+  [SHOW_ALPHA]: true,
+  [VALUE]: '#fff'
 }
 
 export default {
-  name: 'FormRadio',
+  name: 'SettingFormColorPicker',
   components: { SettingGenerator },
   props: {
     id: {
@@ -56,12 +44,8 @@ export default {
           form[SHOW_LABEL],
           form[DISABLED],
           form[SIZE],
-          form[MIN],
-          form[MAX],
-          form[OPTIONS],
-          colorAlpha(TEXT_COLOR),
-          colorAlpha(FILL),
-          boolean(BUTTON)
+          boolean(SHOW_ALPHA),
+          color(VALUE)
         ],
         defaultSetting
       )

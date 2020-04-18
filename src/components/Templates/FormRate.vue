@@ -11,7 +11,7 @@
 import clone from 'clone'
 import nodeMixin from './mixins/node'
 import formItemMixin from './mixins/formItem'
-import { defaultSetting } from '../Setup/EditorSetting/FormRate'
+import { defaultSetting } from '../Setup/EditorSetting/SettingFormRate'
 
 export default {
   defaultSetting,

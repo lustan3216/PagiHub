@@ -15,6 +15,7 @@ export default {
     Carousel: () => import('../Templates/Carousel'),
     EditorText: () => import('../Templates/EditorText'),
     GridGenerator: () => import('../Templates/GridGenerator'),
+    GridGeneratorInner: () => import('../Templates/GridGeneratorInner'),
 
     Divider: () => import('../Templates/Divider'),
     VideoPlayer: () => import('../Templates/VideoPlayer'),

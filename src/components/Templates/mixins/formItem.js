@@ -3,7 +3,6 @@ import { mapMutations, mapState } from 'vuex'
 import formCreate from '@form-create/element-ui'
 import {
   Slider,
-  Switch,
   Tooltip,
   InputNumber,
   RadioGroup,
@@ -12,6 +11,10 @@ import {
   Rate
 } from 'element-ui'
 
+import Switch from '../../../vendor/element-ui/Switch'
+import SelectUnit from '../../Components/SelectUnit'
+
+formCreate.component('SelectUnit', SelectUnit)
 formCreate.component('ElSwitch', Switch)
 formCreate.component('ElSlider', Slider)
 formCreate.component('ElTooltip', Tooltip)

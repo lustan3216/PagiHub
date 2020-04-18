@@ -20,7 +20,8 @@ const MD = 'md'
 const SM = 'sm'
 const XS = 'xs'
 const XXS = 'xxs'
-
+// margin
+// responsive
 export const defaultSetting = {
   [COL_NUM]: 72,
   [ROW_HEIGHT]: 5,
@@ -42,7 +43,7 @@ export const defaultSetting = {
 }
 
 export default {
-  name: 'GridGenerator',
+  name: 'SettingGridGenerator',
   components: { SettingGenerator },
   props: {
     id: {

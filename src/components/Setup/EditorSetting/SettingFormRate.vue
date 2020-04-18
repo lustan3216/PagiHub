@@ -49,7 +49,7 @@ export const defaultSetting = {
 }
 
 export default {
-  name: 'FormRate',
+  name: 'SettingFormRate',
   components: { SettingGenerator },
   props: {
     id: {

@@ -12,10 +12,10 @@
 
   <el-input
     v-else
+    ref="input"
     :prefix-icon="icon"
     v-model="number"
     type="number"
-
     clearable
     class="number"
   >
@@ -99,6 +99,7 @@ export default {
         }
 
         this.$emit('update:value', result)
+        this.$emit('change', result)
       }
     },
     unit: {
@@ -108,10 +109,19 @@ export default {
       set(unit) {
         const number = unit === 'auto' ? '' : this.number || '0'
         this.$emit('update:value', number + unit)
+        this.$emit('change', number + unit)
       }
     },
     isAuto() {
       return this.unit === 'auto'
+    }
+  },
+  watch: {
+    match: {
+      handler() {
+        console.log(123)
+      },
+      deep: true
     }
   },
   methods: {

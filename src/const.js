@@ -1,4 +1,4 @@
-export const STYLES = 'styles'
+export const STYLE = 'style'
 export const TAG = 'tag'
 export const CHILDREN = 'children'
 export const NAME = 'name'

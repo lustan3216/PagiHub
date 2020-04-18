@@ -10,7 +10,7 @@
 <script>
 import nodeMixin from './mixins/node'
 import formItemMixin from './mixins/formItem'
-import { defaultSetting } from '../Setup/EditorSetting/FormDatePicker'
+import { defaultSetting } from '../Setup/EditorSetting/SettingFormDatePicker'
 
 export default {
   defaultSetting,

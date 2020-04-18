@@ -1,5 +1,9 @@
 <template>
-  <div :style="{ 'z-index': zIndex }">
+  <!-- fake-transform 是為了讓裡面的position: fixed 保持一致，不然一開始沒有的話，position: fixed會跑去body底下 -->
+  <div
+    :style="{ 'z-index': zIndex }"
+    class="fake-transform"
+  >
     <slot />
   </div>
 </template>

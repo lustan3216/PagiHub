@@ -4,7 +4,10 @@
       v-bind="innerProps"
       :style="innerStyles"
     >
-      <grid-generator :id="id" />
+      <grid-generator-inner
+        :id="id"
+        :inner-props="innerProps"
+      />
     </el-card>
   </div>
 </template>
@@ -12,14 +15,14 @@
 <script>
 import nodeMixin from './mixins/node'
 import childrenMixin from './mixins/children'
-import GridGenerator from './GridGenerator'
-import { defaultSetting } from '../Setup/EditorSetting/Card'
+import GridGeneratorInner from './GridGeneratorInner'
+import { defaultSetting } from '../Setup/EditorSetting/SettingCard'
 
 export default {
   defaultSetting,
   name: 'Card',
   components: {
-    GridGenerator
+    GridGeneratorInner
   },
   mixins: [nodeMixin, childrenMixin]
 }

@@ -11,7 +11,7 @@
 <script>
 import nodeMixin from './mixins/node'
 import formItemMixin from './mixins/formItem'
-import { defaultSetting } from '../Setup/EditorSetting/FormTextarea'
+import { defaultSetting } from '../Setup/EditorSetting/SettingFormTextarea'
 
 export default {
   defaultSetting,

@@ -7,38 +7,47 @@
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { assignDefaultValue, number, boolean, select } from './utils/util'
+import { assignDefaultValue, number, boolean } from './utils/util'
 import form, {
   FIELD,
   SHOW_LABEL,
   DISABLED,
-  MIN,
-  MAX,
   SIZE,
-  VALUE
+  VALUE,
+  MIN,
+  MAX
 } from './utils/form'
 
 const STEP = 'step'
 const PRECISION = 'precision'
-const CONTROLS = 'controls'
-const CONTROLS_POSITION = 'controlsPosition'
+const SHOW_INPUT = 'showInput'
+const SHOW_INPUT_CONTROLS = 'showInputControls'
+const SHOW_STOPS = 'showStops'
+const SHOW_TOOL_TIP = 'showTooltip'
+const RANGE = 'range'
+const VERTICAL = 'vertical'
 
 export const defaultSetting = {
-  [FIELD]: 'formInputNumber',
+  [FIELD]: 'formSlider',
   [SHOW_LABEL]: true,
   [DISABLED]: false,
   [SIZE]: 'mini',
   [MIN]: 0,
   [MAX]: 10,
+
   [STEP]: 1,
   [PRECISION]: 1,
-  [CONTROLS]: true,
-  [CONTROLS_POSITION]: 'right',
-  [VALUE]: 10
+  [SHOW_INPUT]: true,
+  [SHOW_INPUT_CONTROLS]: true,
+  [SHOW_STOPS]: false,
+  [SHOW_TOOL_TIP]: true,
+  [RANGE]: true,
+  [VERTICAL]: false,
+  [VALUE]: 0
 }
 
 export default {
-  name: 'FormNumber',
+  name: 'SettingFormSlider',
   components: { SettingGenerator },
   props: {
     id: {
@@ -58,9 +67,13 @@ export default {
           form[MAX],
           number(STEP),
           number(PRECISION),
-          boolean(CONTROLS),
-          select(CONTROLS_POSITION, { options: ['right', 'left'] }),
-          number(VALUE),
+          boolean(SHOW_INPUT),
+          boolean(SHOW_INPUT_CONTROLS),
+          boolean(SHOW_STOPS),
+          boolean(SHOW_TOOL_TIP),
+          boolean(RANGE),
+          boolean(VERTICAL),
+          number(VALUE)
         ],
         defaultSetting
       )
