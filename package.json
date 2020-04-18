@@ -19,6 +19,7 @@
     "json-storer": "file:../json-storer",
     "localforage": "^1.7.3",
     "lodash.get": "^4.4.2",
+    "mutationobserver-shim": "^0.3.5",
     "normalize.css": "^8.0.1",
     "plyr": "^3.5.10",
     "portal-vue": "^2.1.6",

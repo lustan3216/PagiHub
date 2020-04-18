@@ -15,6 +15,9 @@ export default {
       required: true
     }
   },
+  beforeCreate() {
+    require('mutationobserver-shim')
+  },
   mounted() {
     const { $el } = this.$refs.viewPortCover
 

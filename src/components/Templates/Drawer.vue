@@ -5,7 +5,7 @@
   >
     <div
       v-if="innerProps.modal && visible"
-      class="v-modal absolute"
+      class="v-modal"
     />
     <el-drawer
       v-mousewheel="mousewheel"
@@ -17,7 +17,6 @@
       :visible.sync="visible"
       :with-header="innerProps.showClose"
       :modal="false"
-      class="absolute"
     >
       <controller-layer
         :id="id"
