@@ -5,21 +5,21 @@
       class="m-t-10"
     >
       <el-col :span="8">
-        <el-form-item label="Height">
-          <select-unit :value.sync="computedStyle.height" />
-        </el-form-item>
+
+        <select-unit :value.sync="computedStyle.height" />
+        <span class="el-form-item__label">Height</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Min Height">
-          <select-unit :value.sync="computedStyle.minHeight" />
-        </el-form-item>
+
+        <select-unit :value.sync="computedStyle.minHeight" />
+        <span class="el-form-item__label">Min Height</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Max Height">
-          <select-unit :value.sync="computedStyle.maxHeight" />
-        </el-form-item>
+
+        <select-unit :value.sync="computedStyle.maxHeight" />
+        <span class="el-form-item__label">Max Height</span>
       </el-col>
     </el-row>
 
@@ -28,21 +28,21 @@
       class="m-t-10"
     >
       <el-col :span="8">
-        <el-form-item label="Width">
-          <select-unit :value.sync="computedStyle.width" />
-        </el-form-item>
+
+        <select-unit :value.sync="computedStyle.width" />
+        <span class="el-form-item__label">Width</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Min Width">
-          <select-unit :value.sync="computedStyle.minWidth" />
-        </el-form-item>
+
+        <select-unit :value.sync="computedStyle.minWidth" />
+        <span class="el-form-item__label">Min Width</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Max Width">
-          <select-unit :value.sync="computedStyle.maxWidth" />
-        </el-form-item>
+
+        <select-unit :value.sync="computedStyle.maxWidth" />
+        <span class="el-form-item__label">Max Width</span>
       </el-col>
     </el-row>
   </div>

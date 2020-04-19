@@ -1,51 +1,89 @@
 <template>
-  <span
+  <div
     v-clickoutside="hide"
-    class="el-color-picker ql-picker ql-color-picker"
-    @click="showPicker = !showPicker"
+    :class="[
+      'el-color-picker',
+      colorDisabled ? 'is-disabled' : '',
+      colorSize ? `el-color-picker--${colorSize}` : ''
+    ]"
   >
-    <span
-      ref="icon"
-      class="ql-picker-label"
+    <div
+      v-if="colorDisabled"
+      class="el-color-picker__mask"
+    />
+    <div
+      class="el-color-picker__trigger"
+      @click="handleTrigger"
     >
-      <slot />
-    </span>
+      <span
+        :class="{ 'is-alpha': showAlpha }"
+        class="el-color-picker__color"
+      >
+        <span
+          :style="{
+            backgroundColor: displayedColor
+          }"
+          class="el-color-picker__color-inner"
+        />
+        <span
+          v-if="!value && !showPanelColor"
+          class="el-color-picker__empty el-icon-close"
+        />
+      </span>
+      <span
+        v-show="value || showPanelColor"
+        class="el-color-picker__icon el-icon-arrow-down"
+      />
+    </div>
     <picker-dropdown
-      :show-alpha="showAlpha"
-      :color="color"
+      ref="dropdown"
+      :class="['el-color-picker__panel', popperClass || '']"
       v-model="showPicker"
-      class="el-color-picker__panel"
+      :color="color"
+      :show-alpha="showAlpha"
+      :predefine="predefine"
       @pick="confirmValue"
       @clear="clearValue"
     />
-  </span>
+  </div>
 </template>
 
 <script>
-// import ElColorPickerDropdown from 'element-ui/packages/color-picker/src/components/picker-dropdown'
 import Color from 'element-ui/packages/color-picker/src/color'
-import PickerDropdown from 'element-ui/packages/color-picker/src/components/picker-dropdown'
+import PickerDropdown from 'element-ui/packages/color-picker/src/components/picker-dropdown.vue'
 import Clickoutside from 'element-ui/src/utils/clickoutside'
+import Emitter from 'element-ui/src/mixins/emitter'
+
 export default {
-  name: 'ColorPicker',
+  name: 'ElColorPicker',
+
+  directives: { Clickoutside },
+
   components: {
     PickerDropdown
   },
-  directives: { Clickoutside },
+
+  mixins: [Emitter],
+
   props: {
-    value: {
-      type: String,
-      required: true
+    value: null,
+    showAlpha: Boolean,
+    colorFormat: String,
+    disabled: Boolean,
+    size: String,
+    popperClass: String,
+    predefine: Array
+  },
+
+  inject: {
+    elForm: {
+      default: ''
     },
-    colorFormat: {
-      type: String,
-      default: 'rgb'
-    },
-    showAlpha: {
-      type: Boolean,
-      default: true
+    elFormItem: {
+      default: ''
     }
   },
+
   data() {
     const color = new Color({
       enableAlpha: this.showAlpha,
@@ -54,9 +92,11 @@ export default {
 
     return {
       color,
-      showPicker: false
+      showPicker: false,
+      showPanelColor: false
     }
   },
+
   computed: {
     displayedColor() {
       if (!this.value && !this.showPanelColor) {
@@ -64,49 +104,84 @@ export default {
       }
 
       return this.displayedRgb(this.color, this.showAlpha)
+    },
+
+    _elFormItemSize() {
+      return (this.elFormItem || {}).elFormItemSize
+    },
+
+    colorSize() {
+      return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size
+    },
+
+    colorDisabled() {
+      return this.disabled || (this.elForm || {}).disabled
     }
   },
+
   watch: {
     value(val) {
-      if (val && val !== this.color.value) {
+      if (!val) {
+        this.showPanelColor = false
+      } else if (val && val !== this.color.value) {
         this.color.fromString(val)
       }
     },
     color: {
-      handler({ value }) {
-        const colorLabel = this.$refs.icon.querySelector('.ql-color-label')
-        if (colorLabel) {
-          colorLabel.style.stroke = value
-          colorLabel.style.fill = value
-        }
-      },
-      deep: true
+      deep: true,
+      handler() {
+        this.showPanelColor = true
+      }
     },
-    displayedColor() {
+    displayedColor(val) {
       if (!this.showPicker) return
       const currentValueColor = new Color({
         enableAlpha: this.showAlpha,
         format: this.colorFormat
       })
       currentValueColor.fromString(this.value)
+
+      const currentValueColorRgb = this.displayedRgb(
+        currentValueColor,
+        this.showAlpha
+      )
+      if (val !== currentValueColorRgb) {
+        this.$emit('active-change', val)
+      }
     }
   },
+
   mounted() {
     const value = this.value
     if (value) {
       this.color.fromString(value)
     }
+    this.popperElm = this.$refs.dropdown.$el
   },
+
   methods: {
+    handleTrigger() {
+      if (this.colorDisabled) return
+      this.showPicker = !this.showPicker
+    },
     confirmValue() {
       const value = this.color.value
       this.$emit('input', value)
       this.$emit('change', value)
+      this.dispatch('ElFormItem', 'el.form.change', value)
       this.showPicker = false
     },
     clearValue() {
       this.$emit('input', null)
       this.$emit('change', null)
+      if (this.value !== null) {
+        this.dispatch('ElFormItem', 'el.form.change', null)
+      }
+      this.showPanelColor = false
+      this.showPicker = false
+      this.resetColor()
+    },
+    hide() {
       this.showPicker = false
       this.resetColor()
     },
@@ -114,6 +189,8 @@ export default {
       this.$nextTick(_ => {
         if (this.value) {
           this.color.fromString(this.value)
+        } else {
+          this.showPanelColor = false
         }
       })
     },
@@ -126,13 +203,7 @@ export default {
       return showAlpha
         ? `rgba(${r}, ${g}, ${b}, ${color.get('alpha') / 100})`
         : `rgb(${r}, ${g}, ${b})`
-    },
-    hide() {
-      this.showPicker = false
-      this.resetColor()
     }
   }
 }
 </script>
-
-<style scoped lang="scss"></style>

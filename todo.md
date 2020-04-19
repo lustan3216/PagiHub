@@ -49,6 +49,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>拿爸爸拿小孩，直接在tree裡面做完，不用一直跟store拿，反正有strict保護, vm 應該也可以順便</li>
 <li>向modal的close可以用rendeless方式做一個component控制</li>
 <li>檢查當example時有沒有不小心更新draft檢查當</li>
+<li>測試</li>
 </ol>
 
 ### Functionality
@@ -81,6 +82,9 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>中英文字體</li>
 <li>svg</li>
 <li>對齊</li>
+<li>text-shadow</li>
+<li>font align</li>
+<li>font family</li>
 </ol>
 
 ### Setting
@@ -99,14 +103,3 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>code hightlight</li>
 </ol>
 
-測試
-
-text-shadow
-letter-spacing
-font size
-font align
-font color
-font family
-font space
-line height
-font background color

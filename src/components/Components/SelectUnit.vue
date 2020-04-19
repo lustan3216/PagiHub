@@ -18,6 +18,7 @@
     type="number"
     clearable
     class="number"
+    @change="$emit('change', innerValue)"
   >
     <el-select
       slot="append"
@@ -61,6 +62,11 @@ export default {
       default: () => []
     }
   },
+  data() {
+    return {
+      innerValue: this.value
+    }
+  },
   computed: {
     units() {
       let units = ['px', '%', 'vh', 'vw']
@@ -71,13 +77,13 @@ export default {
       return units
     },
     match() {
-      if (this.isInvalid(this.value)) {
+      if (this.isInvalid(this.innerValue)) {
         return ['', '']
-      } else if (parseInt(this.value) === 0) {
+      } else if (parseInt(this.innerValue) === 0) {
         return ['0', 'px']
       } else {
         // eslint-disable-next-line
-        const [_, number = '0', unit = 'px'] = this.value
+        const [_, number = '0', unit = 'px'] = this.innerValue
           .toString()
           .match(/^(\d+)?([a-z|%]+)?/)
         return [number, unit]
@@ -99,7 +105,7 @@ export default {
         }
 
         this.$emit('update:value', result)
-        this.$emit('change', result)
+        this.innerValue = result
       }
     },
     unit: {
@@ -108,17 +114,27 @@ export default {
       },
       set(unit) {
         const number = unit === 'auto' ? '' : this.number || '0'
-        this.$emit('update:value', number + unit)
-        this.$emit('change', number + unit)
+        const result = number + unit
+
+        this.$emit('update:value', result)
+        this.innerValue = result
       }
     },
     isAuto() {
       return this.unit === 'auto'
     }
   },
+  watch: {
+    value(newValue) {
+      this.innerValue = newValue
+    }
+  },
   methods: {
     isInvalid(value) {
       return value === null || value === 'none' || value === ''
+    },
+    focus() {
+      this.$refs.input.focus()
     }
   }
 }

@@ -7,65 +7,59 @@
       class="m-t-10"
     >
       <el-col :span="8">
-        <el-form-item label="color">
-          <el-color-picker v-model="backgroundColor" />
-        </el-form-item>
+        <el-color-picker v-model="backgroundColor" />
+        <span class="el-form-item__label">Color</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="repeat">
-          <uploader-image />
-        </el-form-item>
+        <uploader-image />
+        <span class="el-form-item__label">Repeat</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="repeat">
-          <el-select>
-            <el-option value="repeat" />
-            <el-option value="repeat-x" />
-            <el-option value="repeat-y" />
-            <el-option value="no-repeat" />
-          </el-select>
-        </el-form-item>
+
+        <el-select>
+          <el-option value="repeat" />
+          <el-option value="repeat-x" />
+          <el-option value="repeat-y" />
+          <el-option value="no-repeat" />
+        </el-select>
+        <span class="el-form-item__label">Repeat</span>
       </el-col>
     </el-row>
 
     <el-row :gutter="5">
       <el-col :span="8">
-        <el-form-item label="position">
-          <el-select>
-            <el-option value="left top" />
-            <el-option value="left center" />
-            <el-option value="left bottom" />
-            <el-option value="right top" />
-            <el-option value="right center" />
-            <el-option value="right bottom" />
-            <el-option value="center top" />
-            <el-option value="center center" />
-            <el-option value="center bottom" />
-          </el-select>
-
-        </el-form-item>
+        <el-select>
+          <el-option value="left top" />
+          <el-option value="left center" />
+          <el-option value="left bottom" />
+          <el-option value="right top" />
+          <el-option value="right center" />
+          <el-option value="right bottom" />
+          <el-option value="center top" />
+          <el-option value="center center" />
+          <el-option value="center bottom" />
+        </el-select>
+        <span class="el-form-item__label">position</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="attachment">
-          <el-select>
-            <el-option value="scroll" />
-            <el-option value="fixed" />
-            <el-option value="local" />
-          </el-select>
-        </el-form-item>
+        <el-select>
+          <el-option value="scroll" />
+          <el-option value="fixed" />
+          <el-option value="local" />
+        </el-select>
+        <span class="el-form-item__label">attachment</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="size">
-          <el-select>
-            <el-option value="auto" />
-            <el-option value="cover" />
-            <el-option value="contain" />
-          </el-select>
-        </el-form-item>
+        <el-select>
+          <el-option value="auto" />
+          <el-option value="cover" />
+          <el-option value="contain" />
+        </el-select>
+        <span class="el-form-item__label">size</span>
       </el-col>
     </el-row>
 

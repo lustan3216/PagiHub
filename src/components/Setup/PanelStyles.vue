@@ -1,6 +1,11 @@
 <template>
   <el-form label-position="top">
-    <class-state />
+    <!--    <class-state :computed-style="computedStyle" />-->
+
+    <portal-target
+      name="PanelStyles"
+      slim
+    />
 
     <dimension
       :computed-style="computedStyle"
@@ -165,6 +170,8 @@ export default {
 ::v-deep {
   .el-col {
     text-align: center;
+    position: relative;
+    padding-bottom: 22px;
   }
   .el-form-item {
     text-align: center;
@@ -177,6 +184,7 @@ export default {
     white-space: nowrap;
     transform: translateX(-50%);
     position: absolute;
+    left: 50%;
   }
 }
 </style>

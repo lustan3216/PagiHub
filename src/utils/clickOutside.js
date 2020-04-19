@@ -60,7 +60,7 @@ export default {
 
   update(el, binding, vnode) {
     if (binding.value) {
-      if (findIndex(el) > -1) {
+      if (el[ctx] && findIndex(el) > -1) {
         el[ctx].documentHandler = createDocumentHandler(el, binding, vnode)
         el[ctx].methodName = binding.expression
         el[ctx].bindingFn = binding.value

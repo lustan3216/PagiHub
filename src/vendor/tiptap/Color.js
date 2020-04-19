@@ -1,32 +1,31 @@
 import { Mark } from 'tiptap'
-import { updateMark, markInputRule } from 'tiptap-commands'
+import { updateMark, markInputRule, removeMark } from 'tiptap-commands'
 
-export default class FontTextColor extends Mark {
+export default class Color extends Mark {
   get name() {
-    return 'fontTextColor'
+    return 'color'
   }
 
   get schema() {
     return {
       attrs: {
-        fontTextColor: {
-          default: 'yellow'
+        color: {
+          default: null
         }
       },
       parseDOM: [
         {
           style: 'color',
-          getAttrs: mark =>
-            mark.indexOf('rgb') !== -1 ? { fontTextColor: mark } : ''
+          getAttrs: mark => ({ color: mark })
         }
       ],
-      toDOM: mark => ['span', { style: `color: yellow` }, 0]
+      toDOM: mark => ['span', { style: `color: ${mark.attrs.color}` }, 0]
     }
   }
 
   commands({ type }) {
     return attrs => {
-      if (attrs.fontSize) {
+      if (attrs.color) {
         return updateMark(type, attrs)
       }
 

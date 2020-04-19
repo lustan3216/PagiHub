@@ -9,7 +9,7 @@
     @dblclick.stop="dblclick"
   >
     <div
-      v-click-outside="asd"
+      v-click-outside="coConfig"
       v-if="canDrag || canEditText"
       :class="{ noDrag: !canNotEdit, canNotEdit }"
       class="h-100"
@@ -70,7 +70,7 @@ export default {
     canDrag() {
       return this.node && this.node.canDrag
     },
-    asd() {
+    coConfig() {
       return !this.canNotEdit && this.clickOutside
     }
   },

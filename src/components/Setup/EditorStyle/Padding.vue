@@ -19,53 +19,43 @@
         v-if="isAll"
         :span="10"
       >
-        <el-form-item>
-          <select-unit
-            :value.sync="computedStyle.padding"
-            icon="el-icon-rank"
-          />
-        </el-form-item>
+        <select-unit
+          :value.sync="computedStyle.padding"
+          icon="el-icon-rank"
+        />
       </el-col>
 
       <template v-else>
 
         <el-col :span="10">
-          <el-form-item class="m-b-10">
-            <select-unit
-              :value.sync="computedStyle.paddingTop"
-              icon="el-icon-top"
-            />
-          </el-form-item>
+          <select-unit
+            :value.sync="computedStyle.paddingTop"
+            icon="el-icon-top"
+          />
         </el-col>
 
         <el-col :span="10">
-          <el-form-item class="m-b-10">
-            <select-unit
-              :value.sync="computedStyle.paddingBottom"
-              icon="el-icon-bottom"
-            />
-          </el-form-item>
+          <select-unit
+            :value.sync="computedStyle.paddingBottom"
+            icon="el-icon-bottom"
+          />
         </el-col>
 
         <el-col
           :span="10"
           :offset="3"
         >
-          <el-form-item>
-            <select-unit
-              :value.sync="computedStyle.paddingLeft"
-              icon="el-icon-back"
-            />
-          </el-form-item>
+          <select-unit
+            :value.sync="computedStyle.paddingLeft"
+            icon="el-icon-back"
+          />
         </el-col>
 
         <el-col :span="10">
-          <el-form-item>
-            <select-unit
-              :value.sync="computedStyle.paddingRight"
-              icon="el-icon-right"
-            />
-          </el-form-item>
+          <select-unit
+            :value.sync="computedStyle.paddingRight"
+            icon="el-icon-right"
+          />
         </el-col>
       </template>
 

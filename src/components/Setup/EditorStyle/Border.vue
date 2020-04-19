@@ -33,34 +33,32 @@
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Width">
-          <select-unit :value.sync="currentBorder.width" />
-        </el-form-item>
+        <select-unit :value.sync="currentBorder.width" />
+        <span class="el-form-item__label">Width</span>
       </el-col>
 
       <el-col :span="3">
-        <el-form-item label="Color">
-          <el-color-picker
-            v-model="currentBorder.color"
-            show-alpha
-          />
-        </el-form-item>
+        <el-color-picker
+          v-model="currentBorder.color"
+          show-alpha
+        />
+        <span class="el-form-item__label">Color</span>
+
       </el-col>
 
       <el-col :span="7">
-        <el-form-item label="Style">
-          <el-select
-            v-model="currentBorder.style"
-            placeholder="-"
-          >
-            <el-option
-              v-for="style in borderStyles"
-              :key="style"
-              :value="style"
-              :label="style.capitalize()"
-            />
-          </el-select>
-        </el-form-item>
+        <el-select
+          v-model="currentBorder.style"
+          placeholder="-"
+        >
+          <el-option
+            v-for="style in borderStyles"
+            :key="style"
+            :value="style"
+            :label="style.capitalize()"
+          />
+        </el-select>
+        <span class="el-form-item__label">Style</span>
       </el-col>
     </el-row>
   </div>

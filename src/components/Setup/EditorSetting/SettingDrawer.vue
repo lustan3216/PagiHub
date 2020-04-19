@@ -53,9 +53,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-::v-deep .el-input-group__append {
-  text-align: center;
-}
-</style>

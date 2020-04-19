@@ -15,62 +15,55 @@
     >
       <el-row :gutter="5">
         <el-col :span="8">
-          <el-form-item>
-            <el-select
-              v-model="boxShadow.inset"
-              placeholder="Outline"
-            >
-              <el-option value="Outline"/>
-              <el-option value="Inset"/>
-            </el-select>
-          </el-form-item>
+          <el-select
+            v-model="boxShadow.inset"
+            placeholder="Outline"
+          >
+            <el-option value="Outline"/>
+            <el-option value="Inset"/>
+          </el-select>
         </el-col>
 
         <el-col :span="8">
-          <el-form-item label="X">
-            <select-unit
-              :value.sync="boxShadow.offsetX"
-              :exclude="['%']"
-            />
-          </el-form-item>
+          <select-unit
+            :value.sync="boxShadow.offsetX"
+            :exclude="['%']"
+          />
+          <span class="el-form-item__label">X</span>
         </el-col>
 
         <el-col :span="8">
-          <el-form-item label="Y">
-            <select-unit
-              :value.sync="boxShadow.offsetY"
-              :exclude="['%']"
-            />
-          </el-form-item>
+          <select-unit
+            :value.sync="boxShadow.offsetY"
+            :exclude="['%']"
+          />
         </el-col>
+        <span class="el-form-item__label">Y</span>
       </el-row>
 
       <el-row :gutter="5">
         <el-col :span="8">
-          <el-form-item label="Blur">
-            <select-unit
-              :value.sync="boxShadow.blurRadius"
-              :exclude="['%']"
-            />
-          </el-form-item>
+          <select-unit
+            :value.sync="boxShadow.blurRadius"
+            :exclude="['%']"
+          />
+          <span class="el-form-item__label">Blur</span>
         </el-col>
 
         <el-col :span="8">
-          <el-form-item label="Spread">
-            <select-unit
-              :value.sync="boxShadow.spreadRadius"
-              :exclude="['%']"
-            />
-          </el-form-item>
+          <select-unit
+            :value.sync="boxShadow.spreadRadius"
+            :exclude="['%']"
+          />
+          <span class="el-form-item__label">Spread</span>
         </el-col>
 
         <el-col :span="3">
-          <el-form-item label="Color">
-            <el-color-picker
-              v-model="boxShadow.color"
-              show-alpha
-            />
-          </el-form-item>
+          <el-color-picker
+            v-model="boxShadow.color"
+            show-alpha
+          />
+          <span class="el-form-item__label">Color</span>
         </el-col>
       </el-row>
 

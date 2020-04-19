@@ -1,29 +1,29 @@
 import { Mark } from 'tiptap'
 import { updateMark, markInputRule, removeMark } from 'tiptap-commands'
 
-export default class FontFamily extends Mark {
+export default class LetterSpacing extends Mark {
   get name() {
-    return 'fontFamily'
+    return 'letterSpacing'
   }
 
   get schema() {
     return {
       attrs: {
-        fontFamily: {
+        letterSpacing: {
           default: null
         }
       },
       parseDOM: [{
-        style: 'font-family',
-        getAttrs: mark => ({ fontFamily: mark })
+        style: 'letter-spacing',
+        getAttrs: mark => ({ letterSpacing: mark })
       }],
-      toDOM: mark => ['span', { style: `font-family: ${mark.attrs.fontFamily}` }, 0]
+      toDOM: mark => ['span', { style: `letter-spacing: ${mark.attrs.letterSpacing}` }, 0]
     }
   }
 
   commands({ type }) {
     return attrs => {
-      if (attrs.fontFamily) {
+      if (attrs.letterSpacing) {
         return updateMark(type, attrs)
       }
 

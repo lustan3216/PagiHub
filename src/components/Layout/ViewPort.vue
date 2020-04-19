@@ -160,7 +160,7 @@ export default {
   overflow-y: scroll;
   overflow-x: hidden;
   top: 45px;
-  width: calc(100vw - 330px);
+  width: calc(100vw - 350px);
   @include calc-vh(height, '100vh - 70px');
   position: absolute;
 }

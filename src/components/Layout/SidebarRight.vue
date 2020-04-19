@@ -89,14 +89,14 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .sidebar-right {
   padding-right: 10px;
-  width: 300px;
+  width: 320px;
   overflow: hidden;
   position: fixed;
   top: 0;
-  left: calc(100vw - 300px);
+  left: calc(100vw - 320px);
   z-index: 300;
 }
 

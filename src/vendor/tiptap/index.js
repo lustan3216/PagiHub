@@ -1,6 +1,8 @@
-import FontBackgroundColor from './FontBackgroundColor'
+import BackgroundColor from './BackgroundColor'
 import FontFamily from './FontFamily'
 import FontSize from './FontSize'
-import FontTextColor from './FontTextColor'
+import Color from './Color'
+import LetterSpacing from './LetterSpacing'
+import LineHeight from './LineHeight'
 
-export { FontBackgroundColor, FontFamily, FontSize, FontTextColor }
+export { BackgroundColor, FontFamily, FontSize, Color, LetterSpacing, LineHeight }

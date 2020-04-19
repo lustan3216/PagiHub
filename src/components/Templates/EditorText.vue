@@ -1,67 +1,237 @@
 <template>
   <div v-if="editor">
     <portal :to="`GridItemChild${id}`">
-      <editor-text-tutorial class="tutorial" />
+      <editor-text-tutorial class="tutorial z-index1" />
     </portal>
 
-    <editor-menu-bubble
-      :editor="editor"
-      class="menububble"
-      @hide="hideLinkMenu"
-    >
-      <div
-        slot-scope="{ commands, isActive, getMarkAttrs, menu }"
-        :class="{ 'is-active': menu.isActive }"
-        :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
-        class="menububble"
-      >
-        <form
-          v-if="linkMenuIsActive"
-          class="menububble__form"
-          @submit.prevent="setLinkUrl(commands.link, linkUrl)"
-        >
-          <input
-            ref="linkInput"
-            v-model="linkUrl"
-            class="menububble__input"
-            type="text"
-            placeholder="https://"
-            @keydown.esc="hideLinkMenu"
-          >
-          <button
-            class="menububble__button"
-            type="button"
-            @click="setLinkUrl(commands.link, null)"
-          >
-            <img
-              svg-inline
-              src="icons/remove.svg"
+    <template v-if="selected">
+      <portal to="PanelStyles">
+        <editor-menu-bubble :editor="editor">
+          <div slot-scope="{ commands, getMarkAttrs, isActive }">
+            <el-row
+              :gutter="5"
+              type="flex"
+              class="menubar"
             >
-          </button>
-        </form>
+              <el-col :span="12">
+                <el-select
+                  ref="fontFamily"
+                  :value="getMarkAttrs('fontFamily').fontFamily"
+                  @change="commands.fontFamily({ fontFamily: $event })"
+                />
+                <span class="el-form-item__label">Font Family</span>
+              </el-col>
 
-        <template v-else>
-          <button
-            :class="{ 'is-active': isActive.link() }"
-            class="menububble__button"
-            @click="showLinkMenu(getMarkAttrs('link'))"
+              <el-col :span="4">
+                <color-picker
+                  :value="getMarkAttrs('color').color"
+                  show-alpha
+                  @change="commands.color({ color: $event })"
+                />
+                <span class="el-form-item__label">Font Color</span>
+              </el-col>
+
+              <el-col :span="8">
+                <color-picker
+                  :value="getMarkAttrs('backgroundColor').backgroundColor"
+                  show-alpha
+                  @change="
+                    commands.backgroundColor({ backgroundColor: $event })
+                  "
+                />
+                <span class="el-form-item__label">Font Background</span>
+              </el-col>
+            </el-row>
+
+            <el-row
+              :gutter="5"
+              type="flex"
+              class="menubar"
+            >
+              <el-col :span="8">
+                <select-unit
+                  ref="fontSize"
+                  :value="getMarkAttrs('fontSize').fontSize"
+                  @change="$event => setAttribute('fontSize', $event)"
+                />
+                <span class="el-form-item__label">Font Size</span>
+              </el-col>
+
+              <el-col :span="8">
+                <select-unit
+                  ref="letterSpacing"
+                  :value="getMarkAttrs('letterSpacing').letterSpacing"
+                  @change="$event => setAttribute('letterSpacing', $event)"
+                />
+                <span class="el-form-item__label">
+                  Letter Spacing
+                </span>
+              </el-col>
+
+              <el-col :span="8">
+                <select-unit
+                  ref="lineHeight"
+                  :value="getMarkAttrs('lineHeight').lineHeight"
+                  @change="$event => setAttribute('lineHeight', $event)"
+                />
+                <span class="el-form-item__label">
+                  Line Height
+                </span>
+              </el-col>
+            </el-row>
+          </div>
+        </editor-menu-bubble>
+      </portal>
+
+      <editor-menu-bubble
+        :editor="editor"
+        class="menububble"
+        @hide="hideLinkMenu"
+      >
+        <div
+          slot-scope="{ commands, isActive, getMarkAttrs, menu }"
+          :class="{ 'is-active': menu.isActive }"
+          :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
+          class="menububble"
+        >
+          <form
+            v-if="linkMenuIsActive"
+            class="menububble__form"
+            @submit.prevent="setLinkUrl(commands.link, linkUrl)"
           >
-            <span>{{ isActive.link() ? 'Update Link' : 'Add Link' }}</span>
+            <input
+              ref="linkInput"
+              v-model="linkUrl"
+              class="menububble__input"
+              type="text"
+              placeholder="https://"
+              @keydown.esc="hideLinkMenu"
+            >
+            <button
+              class="menububble__button"
+              type="button"
+              @click="setLinkUrl(commands.link, null)"
+            >
+              <img
+                svg-inline
+                src="icons/remove.svg"
+              >
+            </button>
+          </form>
+
+          <template v-else>
+            <button
+              class="menububble__button"
+              @click="showLinkMenu(getMarkAttrs('link'))"
+            >
+              <img
+                svg-inline
+                src="icons/link.svg"
+              >
+            </button>
+          </template>
+
+          <button
+            class="menubar__button"
+            @click="
+              commands.createTable({
+                rowsCount: 3,
+                colsCount: 3,
+                withHeaderRow: false
+              })
+            "
+          >
             <img
               svg-inline
-              src="icons/link.svg"
+              src="icons/table.svg"
             >
           </button>
-        </template>
-      </div>
-    </editor-menu-bubble>
+
+          <template v-if="isActive.table()">
+            <button
+              class="menubar__button"
+              @click="commands.deleteTable"
+            >
+              <img
+                svg-inline
+                src="icons/delete_table.svg"
+              >
+            </button>
+            <button
+              class="menubar__button"
+              @click="commands.addColumnBefore"
+            >
+              <img
+                svg-inline
+                src="icons/add_col_before.svg"
+              >
+            </button>
+            <button
+              class="menubar__button"
+              @click="commands.addColumnAfter"
+            >
+              <img
+                svg-inline
+                src="icons/add_col_after.svg"
+              >
+            </button>
+            <button
+              class="menubar__button"
+              @click="commands.deleteColumn"
+            >
+              <img
+                svg-inline
+                src="icons/delete_col.svg"
+              >
+            </button>
+            <button
+              class="menubar__button"
+              @click="commands.addRowBefore"
+            >
+              <img
+                svg-inline
+                src="icons/add_row_before.svg"
+              >
+            </button>
+            <button
+              class="menubar__button"
+              @click="commands.addRowAfter"
+            >
+              <img
+                svg-inline
+                src="icons/add_row_after.svg"
+              >
+            </button>
+            <button
+              class="menubar__button"
+              @click="commands.deleteRow"
+            >
+              <img
+                svg-inline
+                src="icons/delete_row.svg"
+              >
+            </button>
+            <button
+              class="menubar__button"
+              @click="commands.toggleCellMerge"
+            >
+              <img
+                svg-inline
+                src="icons/combine_cells.svg"
+              >
+            </button>
+          </template>
+        </div>
+      </editor-menu-bubble>
+    </template>
 
     <editor-content :editor="editor" />
   </div>
 </template>
 <script>
-import { Editor, EditorContent, EditorMenuBubble } from 'tiptap'
-
+import { Editor, EditorContent, EditorMenuBubble, EditorMenuBar } from 'tiptap'
+import SelectUnit from '@/components/Components/SelectUnit'
+import ColorPicker from '@/components/Components/ColorPicker'
 import {
   Blockquote,
   CodeBlock,
@@ -86,19 +256,25 @@ import {
   TableRow
 } from 'tiptap-extensions'
 import {
-  FontTextColor,
-  FontBackgroundColor,
+  Color,
+  BackgroundColor,
   FontFamily,
-  FontSize
+  FontSize,
+  LetterSpacing,
+  LineHeight
 } from '../../vendor/tiptap'
 import nodeMixin from '@/components/Templates/mixins/node'
 import EditorTextTutorial from '../TemplateUtils/EditorTextTutorial'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     EditorContent,
     EditorTextTutorial,
-    EditorMenuBubble
+    EditorMenuBubble,
+    EditorMenuBar,
+    SelectUnit,
+    ColorPicker
   },
   mixins: [nodeMixin],
   props: {
@@ -125,14 +301,10 @@ export default {
       linkMenuIsActive: false
     }
   },
-  watch: {
-    innerValue: {
-      handler(value) {
-        const restore = this.saveCursor()
-        this.editor.setContent(value)
-        restore()
-      },
-      deep: true
+  computed: {
+    ...mapState('app', ['selectedComponentIds']),
+    selected() {
+      return this.selectedComponentIds.includes(this.id)
     }
   },
   created() {
@@ -161,30 +333,6 @@ export default {
     this.editor.destroy()
   },
   methods: {
-    saveCursor: () => {
-      let currentActive = null
-      if (window.getSelection) {
-        const sel = window.getSelection()
-        if (sel.getRangeAt && sel.rangeCount) {
-          currentActive = sel.getRangeAt(0)
-        }
-      } else if (document.selection && document.selection.createRange) {
-        currentActive = document.selection.createRange()
-      }
-
-      return restore => {
-        const range = currentActive
-        if (range) {
-          if (window.getSelection) {
-            const sel = window.getSelection()
-            sel.removeAllRanges()
-            sel.addRange(range)
-          } else if (document.selection && range.select) {
-            range.select()
-          }
-        }
-      }
-    },
     showLinkMenu(attrs) {
       this.linkUrl = attrs.href
       this.linkMenuIsActive = true
@@ -200,6 +348,10 @@ export default {
       command({ href: url })
       this.hideLinkMenu()
       this.editor.focus()
+    },
+    setAttribute(attr, value) {
+      this.editor.commands[attr]({ [attr]: value })
+      this.$refs[attr].focus()
     }
   }
 }
@@ -226,10 +378,12 @@ const extensions = [
   new TableCell(),
   new TableRow(),
   new History(),
-  new FontTextColor(),
-  new FontBackgroundColor(),
+  new Color(),
+  new BackgroundColor(),
   new FontFamily(),
-  new FontSize()
+  new FontSize(),
+  new LetterSpacing(),
+  new LineHeight()
 ]
 </script>
 
@@ -303,6 +457,41 @@ $color-grey: #dddddd;
     border: none;
     background: transparent;
     color: $color-white;
+  }
+}
+.menubar {
+  margin-bottom: 1rem;
+  transition: visibility 0.2s 0.4s, opacity 0.2s 0.4s;
+
+  &.is-hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  &.is-focused {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0.2s, opacity 0.2s;
+  }
+
+  &__button {
+    font-weight: bold;
+    display: inline-flex;
+    background: transparent;
+    border: 0;
+    color: $color-black;
+    padding: 3px;
+    margin-right: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba($color-black, 0.05);
+    }
+
+    &.is-active {
+      background-color: rgba($color-black, 0.1);
+    }
   }
 }
 </style>

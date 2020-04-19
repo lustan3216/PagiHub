@@ -5,33 +5,30 @@
       class="m-t-10"
     >
       <el-col :span="8">
-        <el-form-item label="Opacity">
-          <input-unit
-            :value="parseInt(computedStyle.opacity)"
-            :min="0"
-            :max="1"
-          />
-        </el-form-item>
+        <input-unit
+          :value="parseInt(computedStyle.opacity)"
+          :min="0"
+          :max="1"
+        />
+        <span class="el-form-item__label">Opacity</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Blur">
-          <input-unit
-            :value="parseInt(computedStyle.blur)"
-            :min="0"
-            :max="30"
-          />
-        </el-form-item>
+        <input-unit
+          :value="parseInt(computedStyle.blur)"
+          :min="0"
+          :max="30"
+        />
+        <span class="el-form-item__label">Blur</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Brightness">
-          <input-unit
-            :value="parseInt(computedStyle.brightness)"
-            :min="0"
-            :max="200"
-          />
-        </el-form-item>
+        <input-unit
+          :value="parseInt(computedStyle.brightness)"
+          :min="0"
+          :max="200"
+        />
+        <span class="el-form-item__label">Brightness</span>
       </el-col>
     </el-row>
 
@@ -40,33 +37,30 @@
       class="m-t-10"
     >
       <el-col :span="8">
-        <el-form-item label="Contrast">
-          <input-unit
-            :value="parseInt(computedStyle.contrast)"
-            :min="0"
-            :max="200"
-          />
-        </el-form-item>
+        <input-unit
+          :value="parseInt(computedStyle.contrast)"
+          :min="0"
+          :max="200"
+        />
+        <span class="el-form-item__label">Contrast</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Grayscale">
-          <input-unit
-            :value="parseInt(computedStyle.grayscale)"
-            :min="0"
-            :max="100"
-          />
-        </el-form-item>
+        <input-unit
+          :value="parseInt(computedStyle.grayscale)"
+          :min="0"
+          :max="100"
+        />
+        <span class="el-form-item__label">Grayscale</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Hue">
-          <input-unit
-            :value="parseInt(computedStyle.hueRotate)"
-            :min="0"
-            :max="360"
-          />
-        </el-form-item>
+        <input-unit
+          :value="parseInt(computedStyle.hueRotate)"
+          :min="0"
+          :max="360"
+        />
+        <span class="el-form-item__label">Hue</span>
       </el-col>
     </el-row>
 
@@ -75,33 +69,30 @@
       class="m-t-10"
     >
       <el-col :span="8">
-        <el-form-item label="Brightness">
-          <input-unit
-            :value="parseInt(computedStyle.brightness)"
-            :min="0"
-            :max="100"
-          />
-        </el-form-item>
+        <input-unit
+          :value="parseInt(computedStyle.brightness)"
+          :min="0"
+          :max="100"
+        />
+        <span class="el-form-item__label">Brightness</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Saturate">
-          <input-unit
-            :value="parseInt(computedStyle.saturate)"
-            :min="0"
-            :max="1"
-          />
-        </el-form-item>
+        <input-unit
+          :value="parseInt(computedStyle.saturate)"
+          :min="0"
+          :max="1"
+        />
+        <span class="el-form-item__label">Saturate</span>
       </el-col>
 
       <el-col :span="8">
-        <el-form-item label="Sepia">
-          <input-unit
-            :value="parseInt(computedStyle.sepia)"
-            :min="0"
-            :max="1"
-          />
-        </el-form-item>
+        <input-unit
+          :value="parseInt(computedStyle.sepia)"
+          :min="0"
+          :max="1"
+        />
+        <span class="el-form-item__label">Sepia</span>
       </el-col>
     </el-row>
   </div>
