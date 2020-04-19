@@ -40,8 +40,8 @@
 <script>
 import 'swiper/css/swiper.css'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import childrenMixin from './mixins/children'
-import nodeMixin from './mixins/node'
+import childrenMixin from '@/components/Templates/mixins/children'
+import nodeMixin from '@/components/Templates/mixins/node'
 import GridGenerator from './GridGenerator'
 
 export default {

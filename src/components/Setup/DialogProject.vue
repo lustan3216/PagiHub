@@ -37,9 +37,9 @@
 </template>
 
 <script>
-import DialogConfirmable from '../Components/DialogConfirmable'
+import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import { mapActions, mapState } from 'vuex'
-import { TYPE } from '../../const'
+import { TYPE } from '@/const'
 
 export default {
   name: 'DialogProject',

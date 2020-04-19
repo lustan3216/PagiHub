@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import nodeMixin from './mixins/node'
-import formItemMixin from './mixins/formItem'
+import nodeMixin from '@/components/Templates/mixins/node'
+import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormTimePicker'
 
 export default {

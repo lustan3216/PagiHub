@@ -13,9 +13,9 @@
 </template>
 
 <script>
-import { isMac } from '../../utils/device'
+import { isMac } from '@/utils/device'
 import EditorText from '../Templates/EditorText'
-import DialogInteracted from '../Components/DialogInteracted'
+import DialogInteracted from '@/components/Components/DialogInteracted'
 export default {
   name: 'EditorCss',
   components: {

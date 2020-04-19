@@ -14,9 +14,9 @@
 import GridGenerator from './GridGenerator'
 import GridItemChild from '../TemplateUtils/GridItemChild'
 import NodeController from '../TemplateUtils/NodeController'
-import nodeMixin from './mixins/node'
-import childrenMixin from './mixins/children'
-import { SORT_INDEX } from '../../const'
+import nodeMixin from '@/components/Templates/mixins/node'
+import childrenMixin from '@/components/Templates/mixins/children'
+import { SORT_INDEX } from '@/const'
 
 export default {
   name: 'RootLayers',

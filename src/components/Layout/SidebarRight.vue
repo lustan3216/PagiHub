@@ -56,7 +56,7 @@ import formCreate from '@form-create/element-ui'
 import { mapState, mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
-import DialogInteracted from '../Components/DialogInteracted'
+import DialogInteracted from '@/components/Components/DialogInteracted'
 
 export default {
   name: 'SidebarRight',

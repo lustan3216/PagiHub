@@ -9,7 +9,7 @@
 import { mapState, mapGetters } from 'vuex'
 import SettingGenerator from './Common/SettingGenerator'
 import { select, assignDefaultValue } from './utils/util'
-import { TYPE as NODE_TYPE } from '../../../const'
+import { TYPE as NODE_TYPE } from '@/const'
 
 export const REDIRECT_TO = 'redirectTo'
 

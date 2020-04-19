@@ -75,10 +75,10 @@
 </template>
 
 <script>
-import { TYPE } from '../../const'
+import { TYPE } from '@/const'
 import { mapActions, mapState } from 'vuex'
-import { name, requiredSelect } from '../../validator'
-import DialogConfirmable from '../Components/DialogConfirmable'
+import { name, requiredSelect } from '@/validator'
+import DialogConfirmable from '@/components/Components/DialogConfirmable'
 
 export default {
   name: 'DialogComponentSet',

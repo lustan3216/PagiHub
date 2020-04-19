@@ -14,8 +14,8 @@
 
 <script>
 import { Card } from 'element-ui'
-import nodeMixin from './mixins/node'
-import childrenMixin from './mixins/children'
+import nodeMixin from '@/components/Templates/mixins/node'
+import childrenMixin from '@/components/Templates/mixins/children'
 import GridGeneratorInner from './GridGeneratorInner'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCard'
 

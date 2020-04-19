@@ -80,8 +80,8 @@
 
 <script>
 import csso from 'csso'
-import SelectUnit from '../../Components/SelectUnit'
-import { parse, stringify } from '../../../utils/boxShadow'
+import SelectUnit from '@/components/Components/SelectUnit'
+import { parse, stringify } from '@/utils/boxShadow'
 
 export default {
   name: 'BoxShadows',

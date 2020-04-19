@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import nodeMixin from './mixins/node'
+import nodeMixin from '@/components/Templates/mixins/node'
 import { Divider } from 'element-ui'
 
 export default {

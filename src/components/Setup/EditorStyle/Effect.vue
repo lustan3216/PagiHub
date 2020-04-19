@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import InputUnit from '../../Components/InputUnit'
+import InputUnit from '@/components/Components/InputUnit'
 
 export default {
   name: 'Effect',

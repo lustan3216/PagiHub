@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import SelectUnit from '../../Components/SelectUnit'
+import SelectUnit from '@/components/Components/SelectUnit'
 
 export default {
   name: 'Border',

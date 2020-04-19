@@ -1,7 +1,7 @@
 import { mapGetters, mapMutations, mapState } from 'vuex'
-import { CHILDREN, GRID_ITEM } from '../../../const'
-import { cloneJson, traversal } from '../../../utils/tool'
-import { componentIds } from '../../../utils/keyId'
+import { CHILDREN, GRID_ITEM } from '@/const'
+import { cloneJson, traversal } from '@/utils/tool'
+import { componentIds } from '@/utils/keyId'
 
 export default {
   computed: {

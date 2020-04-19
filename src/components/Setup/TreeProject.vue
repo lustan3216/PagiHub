@@ -72,7 +72,7 @@
 <script>
 import { Tree } from 'element-ui'
 import { mapActions, mapGetters } from 'vuex'
-import { TYPE, TYPE_STRING } from '../../const'
+import { TYPE, TYPE_STRING } from '@/const'
 import DialogProject from './DialogProject'
 import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'

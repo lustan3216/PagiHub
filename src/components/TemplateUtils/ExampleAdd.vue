@@ -67,10 +67,10 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { vmMap } from '../../utils/vmMap'
-import { cloneJson } from '../../utils/tool'
+import { vmMap } from '@/utils/vmMap'
+import { cloneJson } from '@/utils/tool'
 import { categories, FORM_ITEM_ID } from '../../example'
-import { CATEGORY, ID, NAME } from '../../const'
+import { CATEGORY, ID, NAME } from '@/const'
 import AsyncComponent from './AsyncComponent'
 import { Card } from 'element-ui'
 

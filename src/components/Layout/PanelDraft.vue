@@ -11,7 +11,7 @@
 import { mapGetters } from 'vuex'
 import ViewPort from './ViewPort'
 import LayersRoot from '../Templates/LayersRoot'
-import { isMac } from '../../utils/device'
+import { isMac } from '@/utils/device'
 
 export default {
   name: 'PanelDraft',

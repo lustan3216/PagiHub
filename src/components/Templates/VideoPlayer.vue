@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import nodeMixin from './mixins/node'
+import nodeMixin from '@/components/Templates/mixins/node'
 import { defaultSetting } from '../Setup/EditorSetting/SettingVideoPlayer'
 import VuePlyr from 'vue-plyr'
 

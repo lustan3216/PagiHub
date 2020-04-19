@@ -12,7 +12,7 @@ import {
 } from 'element-ui'
 
 import Switch from '../../../vendor/element-ui/Switch'
-import SelectUnit from '../../Components/SelectUnit'
+import SelectUnit from '@/components/Components/SelectUnit'
 
 formCreate.component('SelectUnit', SelectUnit)
 formCreate.component('ElSwitch', Switch)

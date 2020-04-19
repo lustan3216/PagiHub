@@ -114,10 +114,10 @@
 </template>
 
 <script>
-import { isMac } from '../../utils/device'
+import { isMac } from '@/utils/device'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { Message } from 'element-ui'
-import DialogInteracted from '../Components/DialogInteracted'
+import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 
 export default {

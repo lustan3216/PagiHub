@@ -1,4 +1,4 @@
-import { getValueByPath, isPlainObject } from '../../../../utils/tool'
+import { getValueByPath, isPlainObject } from '@/utils/tool'
 
 export const assignDefaultValue = (array, defaultSetting) => {
   array.forEach(object => {

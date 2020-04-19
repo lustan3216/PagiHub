@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import nodeMixin from './mixins/node'
+import nodeMixin from '@/components/Templates/mixins/node'
 import FlexButton from './FlexButton'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormInput'
 

@@ -1,7 +1,7 @@
 import { mapMutations, mapState } from 'vuex'
-import { vmAppend, vmRemove } from '../../../utils/vmMap'
-import { merge, cloneJson } from '../../../utils/tool'
-import { STYLE, PROPS, VALUE } from '../../../const'
+import { vmAppend, vmRemove } from '@/utils/vmMap'
+import { merge, cloneJson } from '@/utils/tool'
+import { STYLE, PROPS, VALUE } from '@/const'
 
 export default {
   props: {

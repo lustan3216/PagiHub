@@ -75,7 +75,7 @@ import BoxShadows from './EditorStyle/BoxShadows'
 import StyleBlock from './EditorStyle/StyleBlock'
 import Transition from './EditorStyle/Transition'
 import { mapGetters } from 'vuex'
-import { getComputedStyle, assignStyles, getPlanStyle } from '../../utils/vmMap'
+import { getComputedStyle, assignStyles, getPlanStyle } from '@/utils/vmMap'
 
 const attributes = [
   'width',

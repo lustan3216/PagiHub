@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import nodeMixin from './mixins/node'
+import nodeMixin from '@/components/Templates/mixins/node'
 // childrenMixin 要拿來新增刪除小孩的
-import childrenMixin from './mixins/children'
+import childrenMixin from '@/components/Templates/mixins/children'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import GridGeneratorInner from './GridGeneratorInner'
 import { defaultSetting } from '../Setup/EditorSetting/SettingGridGenerator'

@@ -58,9 +58,9 @@
 import { Tree } from 'element-ui'
 import clone from 'clone'
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { traversal } from '../../utils/tool'
-import { vmMap } from '../../utils/vmMap'
-import { GRID_ITEM } from '../../const'
+import { traversal } from '@/utils/tool'
+import { vmMap } from '@/utils/vmMap'
+import { GRID_ITEM } from '@/const'
 import Visibility from '../TemplateUtils/Visible'
 
 export default {

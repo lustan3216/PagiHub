@@ -1,5 +1,5 @@
 import { SET } from '../index'
-import { arraySubtract } from '../../utils/tool'
+import { arraySubtract } from '@/utils/tool'
 
 const state = {
   isAnimating: false,

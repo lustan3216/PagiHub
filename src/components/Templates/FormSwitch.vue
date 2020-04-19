@@ -9,9 +9,9 @@
 
 <script>
 import clone from 'clone'
-import { merge } from '../../utils/tool'
-import nodeMixin from './mixins/node'
-import formItemMixin from './mixins/formItem'
+import { merge } from '@/utils/tool'
+import nodeMixin from '@/components/Templates/mixins/node'
+import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSwitch'
 
 export default {

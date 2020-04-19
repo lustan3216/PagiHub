@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import UploaderImage from '../../Components/UploaderImage'
+import UploaderImage from '@/components/Components/UploaderImage'
 
 export default {
   name: 'Background',

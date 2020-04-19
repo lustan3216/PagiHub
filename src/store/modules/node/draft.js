@@ -1,9 +1,9 @@
 import localforage from 'localforage'
 import jsonStorer from '../../jsonStorer'
-import listToTree from '../../../utils/listToTree'
+import listToTree from '@/utils/listToTree'
 import { SET } from '../../index'
-import { componentIds } from '../../../utils/keyId'
-import { nestedToLinerObject } from '../../../utils/tool'
+import { componentIds } from '@/utils/keyId'
+import { nestedToLinerObject } from '@/utils/tool'
 import { layersRoot } from '../../../example/basic'
 
 const state = {

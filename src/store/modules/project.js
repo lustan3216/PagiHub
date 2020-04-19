@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import { SET } from '../index'
-import { TYPE } from '../../const'
-import listToTree from '../../utils/listToTree'
-import { cloneJson, nestedToLinerObject } from '../../utils/tool'
-import { projectIds } from '../../utils/keyId'
+import { TYPE } from '@/const'
+import listToTree from '@/utils/listToTree'
+import { cloneJson, nestedToLinerObject } from '@/utils/tool'
+import { projectIds } from '@/utils/keyId'
 import localforage from 'localforage'
 
 const _initTemplate = () => ({

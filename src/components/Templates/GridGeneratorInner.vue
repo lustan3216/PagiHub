@@ -27,7 +27,7 @@
 <script>
 import { mapState } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
-import childrenMixin from './mixins/children'
+import childrenMixin from '@/components/Templates/mixins/children'
 import GridItemChild from '../TemplateUtils/GridItemChild'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 

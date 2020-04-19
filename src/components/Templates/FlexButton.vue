@@ -38,10 +38,10 @@
 </template>
 
 <script>
-import nodeMixin from './mixins/node'
-import childrenMixin from './mixins/children'
-import { vm } from '../../utils/vmMap'
-import { TYPE } from '../../const'
+import nodeMixin from '@/components/Templates/mixins/node'
+import childrenMixin from '@/components/Templates/mixins/children'
+import { vm } from '@/utils/vmMap'
+import { TYPE } from '@/const'
 import EditorText from './EditorText'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'

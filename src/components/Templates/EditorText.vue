@@ -91,7 +91,7 @@ import {
   FontFamily,
   FontSize
 } from '../../vendor/tiptap'
-import nodeMixin from './mixins/node'
+import nodeMixin from '@/components/Templates/mixins/node'
 import EditorTextTutorial from '../TemplateUtils/EditorTextTutorial'
 
 export default {

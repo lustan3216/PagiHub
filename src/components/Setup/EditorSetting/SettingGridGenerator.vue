@@ -8,7 +8,7 @@
 <script>
 import SettingGenerator from './Common/SettingGenerator'
 import { number, boolean, assignDefaultValue } from './utils/util'
-import { PATH } from '../../../const'
+import { PATH } from '@/const'
 
 const COL_NUM = 'colNum'
 const ROW_HEIGHT = 'rowHeight'

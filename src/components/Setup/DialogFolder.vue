@@ -38,8 +38,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import DialogConfirmable from '../Components/DialogConfirmable'
-import { TYPE } from '../../const'
+import DialogConfirmable from '@/components/Components/DialogConfirmable'
+import { TYPE } from '@/const'
 
 export default {
   name: 'DialogFolder',

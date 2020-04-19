@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { arraySubtract } from '../../utils/tool'
+import { arraySubtract } from '@/utils/tool'
 export default {
   name: 'SelectUnit',
   props: {

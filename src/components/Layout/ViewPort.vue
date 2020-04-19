@@ -55,7 +55,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import DialogInteracted from '../Components/DialogInteracted'
+import DialogInteracted from '@/components/Components/DialogInteracted'
 import ViewPortCover from './ViewPortCover'
 import mousewheel from 'element-ui/lib/directives/mousewheel'
 

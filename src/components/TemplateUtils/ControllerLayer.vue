@@ -31,8 +31,8 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import NodeController from './NodeController'
-import { shortTagName } from '../../utils/node'
-import clickOutside from '../../utils/clickOutside'
+import { shortTagName } from '@/utils/node'
+import clickOutside from '@/utils/clickOutside'
 
 export default {
   name: 'ControllerLayer',

@@ -40,8 +40,8 @@
 
 <script>
 import { Table, TableColumn } from 'element-ui'
-import { isMac } from '../../utils/device'
-import { isArray } from '../../utils/tool'
+import { isMac } from '@/utils/device'
+import { isArray } from '@/utils/tool'
 
 export default {
   name: 'EditorTextTutorial',

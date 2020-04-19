@@ -34,7 +34,7 @@
 
 <script>
 import { Drawer } from 'element-ui'
-import nodeMixin from './mixins/node'
+import nodeMixin from '@/components/Templates/mixins/node'
 import GridGeneratorInner from './GridGeneratorInner'
 import mousewheel from 'element-ui/lib/directives/mousewheel'
 import { defaultSetting } from '../Setup/EditorSetting/SettingDrawer'

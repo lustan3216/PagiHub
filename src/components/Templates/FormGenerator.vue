@@ -8,8 +8,8 @@
 
 <script>
 import GridGeneratorInner from './GridGeneratorInner'
-import nodeMixin from './mixins/node'
-import childrenMixin from './mixins/children'
+import nodeMixin from '@/components/Templates/mixins/node'
+import childrenMixin from '@/components/Templates/mixins/children'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormGenerator'
 
 export default {
