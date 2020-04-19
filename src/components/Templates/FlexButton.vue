@@ -5,9 +5,9 @@
     :style="innerStyles"
     class="wh-100 m-0 button"
   >
-    <editor-text
+    <editor-text-inner
       :id="id"
-      default-content="Edit Me"
+      :value="innerValue || 'Edit Me'"
     />
 
     <template v-if="firstChild">
@@ -42,7 +42,7 @@ import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { vm } from '@/utils/vmMap'
 import { TYPE } from '@/const'
-import EditorText from './EditorText'
+import EditorTextInner from './EditorTextInner'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { REDIRECT_TO } from '../Setup/EditorSetting/SettingFlexButton'
@@ -51,7 +51,7 @@ export default {
   defaultSetting,
   name: 'FlexButton',
   components: {
-    EditorText,
+    EditorTextInner,
     AsyncComponent
   },
   mixins: [nodeMixin, childrenMixin],

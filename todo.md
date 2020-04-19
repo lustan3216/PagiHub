@@ -46,7 +46,6 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>如果小孩沒了 要刪除自己，看哪幾個 teampltea 要，不要再 watch 裡面做，直接在刪除方法裡面算好，因為要考慮 undo, root Layer 不能刪</li>
 <li>根本就不用有formgenerator, 讓submit reset直接去選誰是他管的就好了</li>
 <li>form 要可慮可不可以lazyload 不然驗證會有問題</li>
-<li>拿爸爸拿小孩，直接在tree裡面做完，不用一直跟store拿，反正有strict保護, vm 應該也可以順便</li>
 <li>向modal的close可以用rendeless方式做一個component控制</li>
 <li>檢查當example時有沒有不小心更新draft檢查當</li>
 <li>測試</li>
