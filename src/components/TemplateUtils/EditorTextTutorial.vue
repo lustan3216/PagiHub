@@ -1,8 +1,6 @@
 <template>
   <el-button
-    slot="reference"
-    style="width: 28px;"
-    circle
+    type="text"
     icon="el-icon-question"
     @click.stop="visible = true"
   >

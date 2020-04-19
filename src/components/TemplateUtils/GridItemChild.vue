@@ -5,8 +5,6 @@
   >
     <template v-if="firstChild">
       <template v-if="isDraftMode">
-        <portal-target :name="`GridItemChild${firstChild.id}`" />
-
         <controller-layer
           :style="innerStyles"
           :id="firstChild.id"

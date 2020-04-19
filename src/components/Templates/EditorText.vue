@@ -1,7 +1,7 @@
 <template>
   <div v-if="editor">
-    <portal :to="`GridItemChild${id}`">
-      <editor-text-tutorial class="tutorial z-index1" />
+    <portal :to="`NodeController${id}`">
+      <editor-text-tutorial />
     </portal>
 
     <template v-if="selected">
@@ -391,18 +391,6 @@ const extensions = [
 $color-black: #000000;
 $color-white: #ffffff;
 $color-grey: #dddddd;
-
-.tutorial {
-  right: 5px;
-  top: 5px;
-  position: absolute;
-}
-
-.setting {
-  right: 5px;
-  top: 35px;
-  position: absolute;
-}
 
 .menububble {
   font-size: 13px;

@@ -26,7 +26,7 @@
         <node-controller
           v-if="data && data.id"
           :id="data.id"
-          :exclude="['copy']"
+          :exclude="['copy', 'portal']"
           class="w-100"
         />
       </template>

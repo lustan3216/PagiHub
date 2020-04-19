@@ -84,7 +84,8 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>對齊</li>
 <li>text-shadow</li>
 <li>font align</li>
-<li>font family</li>
+<li>font family/ 用font picker做但要google帳號</li>
+<li>每個template要定義可以編輯的style，只顯示那些，當多選時只用重疊的</li>
 </ol>
 
 ### Setting
@@ -102,4 +103,3 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>grid item and layout 在不同尺寸要可以控制隱藏</li>
 <li>code hightlight</li>
 </ol>
-

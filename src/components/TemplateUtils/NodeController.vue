@@ -5,6 +5,12 @@
     </span>
 
     <span>
+      <portal-target
+        v-if="!exclude.includes('portal')"
+        :name="`NodeController${id}`"
+        slim
+      />
+
       <el-button
         v-if="node.canNewItem"
         type="text"
