@@ -30,8 +30,8 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { required } from '../../../validator'
-import DialogConfirmable from '../../Components/DialogConfirmable'
+import { required } from '../../validator'
+import DialogConfirmable from '../Components/DialogConfirmable'
 
 export default {
   name: 'DialogSettingComponent',

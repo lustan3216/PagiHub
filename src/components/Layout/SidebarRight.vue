@@ -2,7 +2,7 @@
   <component
     :is="isFloat ? 'DialogInteracted' : 'div'"
     :class="{ float: isFloat }"
-    class="sidebar"
+    class="sidebar-right"
   >
     <el-button
       :icon="`el-icon${isFloat ? '-map' : ''}-location`"
@@ -90,19 +90,18 @@ export default {
 </script>
 
 <style>
-.sidebar {
+.sidebar-right {
   padding-right: 10px;
   width: 300px;
   overflow: hidden;
   position: fixed;
-  bottom: 0;
   top: 0;
   left: calc(100vw - 300px);
   z-index: 300;
 }
 
 .float {
-  padding: 0 10px;
+  padding: 0 10px 20px;
   background: rgba(255, 255, 255, 0.87);
   box-shadow: 1px 1px 19px 6px rgba(0, 0, 0, 0.1);
 }

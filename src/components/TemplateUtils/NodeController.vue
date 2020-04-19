@@ -114,7 +114,7 @@ export default {
   },
   methods: {
     ...mapMutations('draft', ['RECORD']),
-    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_ID']),
+    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDS']),
     isMac,
     vmCreateItem,
     vmCopyNode,

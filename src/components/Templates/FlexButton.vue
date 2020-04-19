@@ -7,7 +7,7 @@
   >
     <editor-text
       :id="id"
-      :only="['bold', 'italic', 'fontColor', 'font', 'underline', 'strike']"
+      default-content="Edit Me"
     />
 
     <template v-if="firstChild">

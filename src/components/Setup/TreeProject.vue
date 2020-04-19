@@ -73,10 +73,10 @@
 import { Tree } from 'element-ui'
 import { mapActions, mapGetters } from 'vuex'
 import { TYPE, TYPE_STRING } from '../../const'
-import DialogProject from './Dialog/DialogProject'
-import DialogFolder from './Dialog/DialogFolder'
-import DialogComponentSet from './Dialog/DialogComponentSet'
-import DialogDelete from './Dialog/DialogDelete'
+import DialogProject from './DialogProject'
+import DialogFolder from './DialogFolder'
+import DialogComponentSet from './DialogComponentSet'
+import DialogDelete from './DialogDelete'
 
 export default {
   name: 'TreeProject',
@@ -135,7 +135,6 @@ export default {
 <style scoped lang="scss">
 .tree {
   background: transparent;
-  @include calc-vh(height, '100vh - 140px');
   overflow: scroll;
 }
 

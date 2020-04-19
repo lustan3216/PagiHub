@@ -25,62 +25,88 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 
 組建只能編輯，不能再新增刪除組建，除非改頭 或在複製一個出去
 
+### Project
+
 <ol>
-<li>考慮拖移的 grid item 可不可以直接 merge 進去</li>  
 <li>自動更新或不自動更新</li>  
-<li>要顯示該 component 引用了哪些 component</li>  
+<li>要顯示該 component 引用了哪些 component</li>
+<li>是組建的要變成點兩下進入該 component 編輯</li>
 <li>要做個按鈕 可以選取組建後變成組建</li>  
-<li>是組建的要變成點兩下進入該 component 編輯</li>  
-<li>這裏應該要改成從 object node 裡面，且存在 object node style block 是不是跟 class block 功能合併</li>  
-<li>scss code 的東西做成 variable 可以是輸入匡</li>  
-<li>css 要做 overflow</li>  
-<li>color 快捷設定, 思考顏色可不可以變成 component, 這樣就也可以分享</li>  
-<li>style 要改成針對組建改 style 而不是外誆，外誆可以改 griditem，可以在 style 區塊做個按鈕，可直接選到 grid item</li>  
-<li>每一段時間草稿要儲存到 server, 修改過後 3 秒後送出，要算出跟 server 版本的 diff 在送出，如果途中有出錯就直接送整個 tree 改掉</li>  
-<li>component 要用 ulid ?</li>  
-<li>每個 grid item 都可以點了 連結到 componentSet / tooltip / link</li>  
-<li>class / hover / click</li>  
-<li>中英文字體</li>  
-<li>svg</li>  
-<li>uploader image / svg / video, consider how to compress</li>  
-<li>對齊</li>  
-<li>組建一改 全部都要改，但有被修過的參數不用改</li>  
+<li>組建一改 全部都要改，但有被修過的參數不用改</li>
+<li>nodes tree 裡面可以拖拉</li>
+<li>node tree, project 編輯時不要關起來</li>
+</ol>
+
+### Data Base
+
+<ol>
+<li>每一段時間草稿要儲存到 server, 修改過後 3 秒後送出，要算出跟 server 版本的 diff 在送出，如果途中有出錯就直接送整個 tree 改掉</li>
+<li>component 要用 ulid ?</li>
 <li>debounce 送出更新區塊</li>  
+<li>如果小孩沒了 要刪除自己，看哪幾個 teampltea 要，不要再 watch 裡面做，直接在刪除方法裡面算好，因為要考慮 undo, root Layer 不能刪</li>
+<li>根本就不用有formgenerator, 讓submit reset直接去選誰是他管的就好了</li>
+<li>form 要可慮可不可以lazyload 不然驗證會有問題</li>
+<li>拿爸爸拿小孩，直接在tree裡面做完，不用一直跟store拿，反正有strict保護, vm 應該也可以順便</li>
+<li>向modal的close可以用rendeless方式做一個component控制</li>
+<li>檢查當example時有沒有不小心更新draft檢查當</li>
+</ol>
+
+### Functionality
+
+<ol>
+<li>考慮拖移的 grid item 可不可以直接 merge 進去 layout</li>
+<li>這裏應該要改成從 object node 裡面，且存在 object node style block 是不是跟 class block 功能合併</li>
 <li>iframe 要可以自動 resize，且可內船 data or 外傳，而且是reactive的，可以互動</li>  
 <li>PWA</li>  
 <li>form 比動畫先</li>  
-<li>動畫</li>  
-<li>nodes tree 裡面可以拖拉</li>  
-<li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridLayout 可以固定寬</li>  
-<li>node 可以拖拉到 setting style panel 上就可編輯，也可以拖拉到 空的 GridItem 上, 拖到 grid layout 上就新增</li>  
-<li>如果小孩沒了 要刪除自己，看哪幾個 teampltea 要，不要再 watch 裡面做，直接在刪除方法裡面算好，因為要考慮 undo, root Layer 不能刪</li>  
-<li>grid item 也要做 vertical comapct 的設定</li>  
+<li>動畫</li>
 <li>vue-awesome-swiper</li>  
 <li>google map</li>  
-<li>video player to plyr</li>  
-<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed</li>  
-<li>layout 可以每個局部都 設定</li>  
-<li>button 做成點了可以轉跳 componentSet 或是打開dialog or drawer or popover</li>  
-<li>比較扯的概念，可以引入Bit的component</li>  
-<li>轉跳時componentSet時，要考慮tree，如果是一樣的話就只更新不一樣的地方，但如果是一樣的componentSet的話，照理來說vue自己已經幫我處理了，應該不會重新渲染吧？！</li>  
-<li>node tree, project 編輯時不要關起來</li>  
-<li>grid item 可以給tool tip</li>  
-<li>可以做tabs</li>
-<li>style希望可以做到，用滑鼠可以選擇任意dom做樣式</li>
-<li>根本就不用有formgenerator, 讓submit reset直接去選誰是他管的就好了</li>
+<li>video player to plyr</li>
+<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed</li>
+<li>轉跳要做成局部轉跳/ 轉跳時componentSet時，要考慮tree，如果是一樣的話就只更新不一樣的地方，但如果是一樣的componentSet的話，照理來說vue自己已經幫我處理了，應該不會重新渲染吧？！</li>
 <li>icon</li>
-<li>form 要可慮可不可以lazyload 不然驗證會有問題</li>
-<li>grid item and layout 在不同尺寸要可以控制隱藏</li>
-<li>拿爸爸拿小孩，直接在tree裡面做完，不用一直跟store拿，反正有strict保護, vm 應該也可以順便</li>
-<li>code hightlight</li>
 <li>button group checkbox group radio</li>
+<li>每個project都有全局設定，字型包，顏色，自行試試看能不能用functal變成組建</li>
 </ol>
 
+### Style
+
+<ol>
+<li>scss code 的東西做成 variable 可以是輸入匡</li>
+<li>css 要做 overflow</li>
+<li>color 快捷設定, 思考顏色可不可以變成 component, 這樣就也可以分享</li>
+<li>style 要改成針對組建改 style 而不是外誆，外誆可以改 griditem，可以在 style 區塊做個按鈕，可直接選到 grid item</li>
+<li>class / hover / click</li>  
+<li>中英文字體</li>
+<li>svg</li>
+<li>對齊</li>
+</ol>
+
+### Setting
+
+<ol>
+<li>這裏應該要改成從 object node 裡面，且存在 object node style block 是不是跟 class block 功能合併</li>
+<li>每個 button 都可以點了 連結到 componentSet / tooltip / link</li>
+<li>每個grid item tooltip</li>
+<li>uploader image / svg / video, consider how to compress</li>
+<li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridLayout 可以固定寬</li>
+<li>node 可以拖拉到 setting style panel 上就可編輯，也可以拖拉到 空的 GridItem 上, 拖到 grid layout 上就新增</li>
+<li>grid item 也要做 vertical comapct 的設定</li>
+<li>layout 可以每個局部都 設定</li>
+<li>button 做成點了可以轉跳 componentSet 或是打開dialog or drawer or popover</li>
+<li>grid item and layout 在不同尺寸要可以控制隱藏</li>
+<li>code hightlight</li>
+</ol>
+
+測試
+
+text-shadow
+letter-spacing
 font size
 font align
 font color
 font family
+font space
+line height
 font background color
-Link
-Table
-todo list

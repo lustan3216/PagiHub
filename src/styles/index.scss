@@ -1,3 +1,4 @@
+@import './vender.scss';
 @import './element.scss';
 @import './transition.scss';
 @import './tool.scss';
@@ -23,4 +24,21 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type='number'] {
   -moz-appearance: textfield;
+}
+
+//.fake-transform.interact::-webkit-scrollbar {
+//  display: none;
+//}
+//
+//.fake-transform.interact {
+//  -ms-overflow-style: none;
+//  height: 100%;
+//  width: calc(100vw + 18px);
+//  overflow: auto;
+//}
+
+.svg-inline {
+  width: 16px;
+  fill: #909399;
+  padding-left: 5px;
 }

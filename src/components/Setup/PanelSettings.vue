@@ -20,6 +20,7 @@ const self = {
     SettingGridGenerator: () => import('./EditorSetting/SettingGridGenerator'),
     SettingGridItem: () => import('./EditorSetting/SettingGridItem'),
     SettingVideoPlayer: () => import('./EditorSetting/SettingVideoPlayer'),
+    SettingEditorText: () => import('./EditorSetting/SettingEditorText'),
 
     SettingFormGenerator: () => import('./EditorSetting/SettingFormGenerator'),
     SettingFormCheckbox: () => import('./EditorSetting/SettingFormCheckbox'),

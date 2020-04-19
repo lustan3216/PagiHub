@@ -1,5 +1,6 @@
 <template>
   <portal
+    v-if="visible"
     :disabled="!innerProps.toRoot"
     to="Root"
   >
@@ -9,7 +10,6 @@
     />
     <el-drawer
       v-mousewheel="mousewheel"
-      v-if="visible"
       v-bind="innerProps"
       :key="innerProps.modal"
       :append-to-body="false"

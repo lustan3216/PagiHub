@@ -1,8 +1,9 @@
 <template>
   <portal-target
     ref="viewPortCover"
+    :class="{ class: !isDraftMode }"
+    class="fake-transform"
     name="Root"
-    class="viewport viewPortCover"
   />
 </template>
 
@@ -61,5 +62,13 @@ export default {
 <style scoped lang="scss">
 .z1000 {
   z-index: 1000;
+}
+.class {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 </style>

@@ -118,7 +118,7 @@ import { isMac } from '../../utils/device'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { Message } from 'element-ui'
 import DialogInteracted from '../Components/DialogInteracted'
-import DialogComponentSet from '../Setup/Dialog/DialogComponentSet'
+import DialogComponentSet from '../Setup/DialogComponentSet'
 
 export default {
   name: 'NavBar',

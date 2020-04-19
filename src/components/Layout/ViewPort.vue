@@ -4,7 +4,7 @@
       <view-port-cover
         v-if="$refs.browser"
         :view-port-el="$refs.browser.$el"
-        class="viewport viewPortCover"
+        :class="{ interact: isDraftMode }"
       />
       <dialog-interacted
         ref="browser"
@@ -13,7 +13,6 @@
         :resize-options="{ ignoreFrom: '.vue-grid-item' }"
         :drag-options="{ ignoreFrom: '.vue-grid-item' }"
         :draggable="isDraftMode"
-        class="viewport"
         @resize="dialogResize"
         @resizeStart="appSET({ isAnimating: true })"
         @resizeEnd="appSET({ isAnimating: false })"
@@ -160,14 +159,9 @@ export default {
   background: transparent;
   overflow-y: scroll;
   overflow-x: hidden;
-}
-.viewport {
   top: 45px;
   width: calc(100vw - 330px);
   @include calc-vh(height, '100vh - 70px');
   position: absolute;
-}
-.viewPortCover {
-  border: 10px solid transparent;
 }
 </style>

@@ -89,7 +89,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_ID']),
+    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDS']),
     ...mapMutations('draft', ['RECORD']),
     allowDrop(drag, drop, action) {
       const sameLayer = drag.parent === drop.parent
@@ -110,7 +110,7 @@ export default {
       return data.name.toLowerCase().indexOf(value) !== -1
     },
     checkedChange({ id }) {
-      this.TOGGLE_SELECTED_COMPONENT_ID(id)
+      this.TOGGLE_SELECTED_COMPONENT_IDS(id)
     }
   }
 }
@@ -119,7 +119,6 @@ export default {
 <style scoped lang="scss">
 .tree {
   background: transparent;
-  @include calc-vh(height, '100vh - 140px');
   overflow: scroll;
 }
 </style>

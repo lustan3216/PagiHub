@@ -1,6 +1,5 @@
 import '@babel/polyfill'
 import 'normalize.css'
-import './styles/vender.scss'
 import './styles/index.scss'
 import 'intersection-observer'
 import './utils/polyfill'

@@ -4,14 +4,14 @@
     :class="{ elevate: selected }"
     class="layer h-100"
     @click.exact.stop="SET_SELECTED_COMPONENT_ID(id)"
-    @click.ctrl.exact.stop="TOGGLE_SELECTED_COMPONENT_ID(id)"
-    @click.meta.exact.stop="TOGGLE_SELECTED_COMPONENT_ID(id)"
-    @dblclick.stop="canNotClick = false"
-    @mouseleave="canNotClick = true"
+    @click.ctrl.exact.stop="TOGGLE_SELECTED_COMPONENT_IDS(id)"
+    @click.meta.exact.stop="TOGGLE_SELECTED_COMPONENT_IDS(id)"
+    @dblclick.stop="dblclick"
   >
     <div
+      v-click-outside="asd"
       v-if="canDrag || canEditText"
-      :class="{ noDrag: !canNotClick, canNotClick }"
+      :class="{ noDrag: !canNotEdit, canNotEdit }"
       class="h-100"
     >
       <slot />
@@ -32,12 +32,16 @@
 import { mapState, mapMutations } from 'vuex'
 import NodeController from './NodeController'
 import { shortTagName } from '../../utils/node'
+import clickOutside from '../../utils/clickOutside'
 
 export default {
   name: 'ControllerLayer',
   inject: { isExample: { default: false }},
   components: {
     NodeController
+  },
+  directives: {
+    clickOutside
   },
   filters: { shortTagName },
   props: {
@@ -48,7 +52,7 @@ export default {
   },
   data() {
     return {
-      canNotClick: true
+      canNotEdit: true
     }
   },
   computed: {
@@ -65,13 +69,30 @@ export default {
     },
     canDrag() {
       return this.node && this.node.canDrag
+    },
+    asd() {
+      return !this.canNotEdit && this.clickOutside
     }
   },
   methods: {
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
-      'TOGGLE_SELECTED_COMPONENT_ID'
-    ])
+      'TOGGLE_SELECTED_COMPONENT_ID',
+      'TOGGLE_SELECTED_COMPONENT_IDS'
+    ]),
+    dblclick() {
+      this.canNotEdit = false
+      this.SET_SELECTED_COMPONENT_ID(this.id)
+    },
+    clickOutside(event) {
+      const inSideBar = document
+        .querySelector('.sidebar-right')
+        .contains(event.target)
+
+      if (!inSideBar) {
+        this.canNotEdit = true
+      }
+    }
   }
 }
 </script>
@@ -86,7 +107,7 @@ export default {
   border-color: #589ff8ad !important;
   box-shadow: 1px 3px 20px -5px rgba(0, 0, 0, 0.25) !important;
 }
-.canNotClick {
+.canNotEdit {
   pointer-events: none;
 }
 </style>

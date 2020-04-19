@@ -1,9 +1,9 @@
 <template>
-  <div class="relative h-100">
+  <div class="relative">
     <grid-generator
       v-for="(child, index) in sortChildren"
       :style="{ 'z-index': index }"
-      :class="{ absolute: index }"
+      :class="{ absolute: index, 'h-100': index }"
       :key="child.id"
       :id="child.id"
     />

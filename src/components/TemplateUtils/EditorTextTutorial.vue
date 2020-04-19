@@ -4,8 +4,7 @@
     style="width: 28px;"
     circle
     icon="el-icon-question"
-    class="link"
-    @click="visible = true"
+    @click.stop="visible = true"
   >
     <el-dialog
       :visible.sync="visible"
@@ -90,6 +89,10 @@ const data = [
     shortCut: ['Ctrl + i', 'Cmd + i']
   },
   {
+    format: 'TodoList',
+    markdown: '[ ] Text'
+  },
+  {
     format: 'BulletList',
     markdown: '* Text',
     shortCut: 'Shift + Ctrl + 8'
@@ -98,6 +101,18 @@ const data = [
     format: 'OrderedList',
     markdown: '1. Text',
     shortCut: 'Shift + Ctrl + 9'
+  },
+  {
+    format: 'ListItem - Add Item',
+    shortCut: 'Enter'
+  },
+  {
+    format: 'ListItem - Nest Item',
+    shortCut: 'Tab'
+  },
+  {
+    format: 'ListItem - Undo Nest Item',
+    shortCut: 'Shift + Tab'
   },
   {
     format: 'Code',
@@ -143,5 +158,3 @@ const data = [
   }
 ]
 </script>
-
-<style scoped lang="scss"></style>
