@@ -1,11 +1,14 @@
 <template>
   <vue-plyr
+    ref="plyr"
+    :key="JSON.stringify(innerProps)"
     :options="innerProps"
+    class="h-100"
     @mouseleave="mouseleave"
   >
     <div
-      data-plyr-provider="youtube"
-      data-plyr-embed-id="bTqVqk7FSmY"
+      :data-plyr-provider="innerProps.provider"
+      :data-plyr-embed-id="innerProps.embedId"
     />
   </vue-plyr>
 </template>
@@ -14,7 +17,7 @@
 import nodeMixin from '@/components/Templates/mixins/node'
 import { defaultSetting } from '../Setup/EditorSetting/SettingVideoPlayer'
 import VuePlyr from 'vue-plyr'
-
+// volume	Number	1
 export default {
   defaultSetting,
   name: 'VideoPlayer',
@@ -34,3 +37,8 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+::v-deep .plyr {
+  height: 100%;
+}
+</style>

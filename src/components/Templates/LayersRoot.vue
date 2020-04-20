@@ -1,9 +1,9 @@
 <template>
-  <div class="relative">
+  <div class="relative h-100">
     <grid-generator
       v-for="(child, index) in sortChildren"
       :style="{ 'z-index': index }"
-      :class="{ absolute: index, 'h-100': index }"
+      :class="{ absolute: index }"
       :key="child.id"
       :id="child.id"
     />
@@ -12,7 +12,7 @@
 
 <script>
 import GridGenerator from './GridGenerator'
-import GridItemChild from '../TemplateUtils/GridItemChild'
+import GridItemChild from './GridItemChild'
 import NodeController from '../TemplateUtils/NodeController'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'

@@ -21,7 +21,7 @@
         name="Project"
         lazy
       >
-        <tree-project />
+        <panel-project class="panel" />
       </el-tab-pane>
 
       <el-tab-pane
@@ -29,7 +29,10 @@
         name="Nodes"
         lazy
       >
-        <tree-nodes v-if="selectedComponentSetId" />
+        <panel-nodes
+          v-if="selectedComponentSetId"
+          class="panel"
+        />
       </el-tab-pane>
 
       <el-tab-pane
@@ -37,7 +40,7 @@
         name="setting"
         lazy
       >
-        <panel-settings />
+        <panel-settings class="panel" />
       </el-tab-pane>
 
       <el-tab-pane
@@ -45,7 +48,10 @@
         name="style"
         lazy
       >
-        <panel-styles v-if="selectedComponentIds.length" />
+        <panel-styles
+          v-if="selectedComponentIds.length"
+          class="panel"
+        />
       </el-tab-pane>
     </el-tabs>
   </component>
@@ -65,8 +71,8 @@ export default {
     PanelSettings,
     DialogInteracted,
     FormCreate: formCreate.$form(),
-    TreeNodes: () => import('../Setup/TreeNodes'),
-    TreeProject: () => import('../Setup/TreeProject')
+    PanelNodes: () => import('../Setup/PanelNodes'),
+    PanelProject: () => import('../Setup/PanelProject')
   },
   data() {
     return {
@@ -97,7 +103,12 @@ export default {
   position: fixed;
   top: 0;
   left: calc(100vw - 320px);
-  z-index: 300;
+  z-index: 110;
+}
+
+.panel {
+  @include calc-vh(height, '100vh - 95px');
+  overflow-y: scroll;
 }
 
 .float {

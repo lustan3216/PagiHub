@@ -43,7 +43,7 @@ import { cloneJson, traversal, arraySubtract } from '@/utils/tool'
 import NodeController from '../TemplateUtils/NodeController'
 
 export default {
-  name: 'TreeNodes',
+  name: 'PanelNodes',
   components: {
     ElTree: Tree,
     NodeController

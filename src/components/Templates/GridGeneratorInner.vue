@@ -14,6 +14,7 @@
   >
     <grid-item
       v-for="child in layout"
+      :ref="child.id"
       v-bind="{ ...child, ...child.props }"
       :key="child.id"
       drag-ignore-from=".noDrag"
@@ -25,11 +26,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
+import { AUTO_SIZE } from '@/const'
 import childrenMixin from '@/components/Templates/mixins/children'
-import GridItemChild from '../TemplateUtils/GridItemChild'
+import GridItemChild from './GridItemChild'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
+import { vm } from '@/utils/vmMap'
 
 export default {
   name: 'GridGenerator',
@@ -63,12 +66,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap'])
+    ...mapState('draft', ['nodesMap']),
+    ...mapGetters('draft', ['childrenOf'])
   },
   watch: {
     innerChildren: {
-      handler(newValue) {
-        this.layout = newValue
+      handler(newChildren) {
+        this.itemAutoSize(newChildren)
+        this.layout = newChildren
       },
       deep: true,
       immediate: true
@@ -91,6 +96,26 @@ export default {
       })
 
       this.RECORD(records)
+    },
+    itemAutoSize(newChildren) {
+      // 第一次加在不執行
+      if (!this.layout.length) return
+
+      newChildren.forEach(node => {
+        const grandChild = this.childrenOf[node.id][0]
+        // 檢查曾祖孫有沒有autosize
+        if (!grandChild || !grandChild[AUTO_SIZE]) return
+
+        this.$nextTick(() => {
+          const child = this.$refs[node.id][0]
+          // 新增組建的時候，有可能組建還沒渲染就autosize，會造成零空間
+          if (!vm(grandChild.id)) return
+
+          child.$el.classList.add('disable-h-100')
+          child.autoSize()
+          child.$el.classList.remove('disable-h-100')
+        })
+      })
     }
   }
 }

@@ -18,6 +18,9 @@ export default {
     node() {
       return this.nodesMap[this.id]
     },
+    parentNode() {
+      return this.nodesMap[this.node.parentId]
+    },
     innerValue() {
       return this.node && this.node[VALUE]
     },
@@ -31,10 +34,10 @@ export default {
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount
-    if (this.isDraftMode) vmAppend(this)
+    if (this.isDraftMode && !this.isExample) vmAppend(this)
   },
   beforeDestroy() {
-    if (this.isDraftMode) vmRemove(this.id)
+    if (this.isDraftMode && !this.isExample) vmRemove(this.id)
   },
   methods: {
     ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_IDS']),

@@ -1,4 +1,5 @@
-import { getValueByPath, isPlainObject } from '@/utils/tool'
+import { getValueByPath, isPlainObject, cloneJson } from '@/utils/tool'
+import { urlPath } from './validation'
 
 export const assignDefaultValue = (array, defaultSetting) => {
   array.forEach(object => {
@@ -17,12 +18,13 @@ export const assignDefaultValue = (array, defaultSetting) => {
 
 export const number = (field, extraOptions) => ({
   field,
-  title: field,
+  title: field.readable(),
   type: 'InputNumber',
   ...extraOptions
 })
 
 export const select = (field, { options, ...extraOptions } = {}) => {
+  options = cloneJson(options)
   options.forEach((option, index) => {
     if (!isPlainObject(option)) {
       options[index] = { value: option, label: option.capitalize() }
@@ -31,7 +33,7 @@ export const select = (field, { options, ...extraOptions } = {}) => {
 
   return {
     field,
-    title: field,
+    title: field.readable(),
     type: 'select',
     options,
     ...extraOptions
@@ -40,7 +42,7 @@ export const select = (field, { options, ...extraOptions } = {}) => {
 
 export const selectCreate = (field, { options } = {}) => ({
   field,
-  title: field,
+  title: field.readable(),
   type: 'select',
   value: options,
   props: {
@@ -55,7 +57,15 @@ export const selectCreate = (field, { options } = {}) => ({
 export const string = (field, extraOptions) => ({
   field,
   type: 'input',
-  title: field,
+  title: field.readable(),
+  ...extraOptions
+})
+
+export const url = (field, extraOptions) => ({
+  field,
+  type: 'input',
+  title: field.readable(),
+  validate: [urlPath],
   ...extraOptions
 })
 
@@ -63,7 +73,7 @@ export const slider = (field, { step = 0.1, min = 0, max = 1 }) => {
   return {
     field,
     type: 'slider',
-    title: field,
+    title: field.readable(),
     props: {
       step,
       min,
@@ -74,20 +84,20 @@ export const slider = (field, { step = 0.1, min = 0, max = 1 }) => {
 
 export const boolean = (field, extraOptions) => ({
   field,
-  title: field,
+  title: field.readable(),
   type: 'switch',
   ...extraOptions
 })
 
 export const color = field => ({
   field,
-  title: field,
+  title: field.readable(),
   type: 'ColorPicker'
 })
 
 export const colorAlpha = field => ({
   field,
-  title: field,
+  title: field.readable(),
   type: 'ColorPicker',
   props: {
     showAlpha: true
@@ -96,7 +106,7 @@ export const colorAlpha = field => ({
 
 export const datepicker = field => ({
   field,
-  title: field,
+  title: field.readable(),
   type: 'DatePicker',
   props: {
     type: 'datetime'
@@ -105,7 +115,7 @@ export const datepicker = field => ({
 
 export const selectUnit = (field, extraOptions) => ({
   field,
-  title: field,
+  title: field.readable(),
   type: 'SelectUnit',
   ...extraOptions
 })

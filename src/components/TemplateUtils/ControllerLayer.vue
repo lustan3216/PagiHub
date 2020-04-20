@@ -19,19 +19,11 @@
 
     <slot v-else />
   </div>
-
-  <div
-    v-else
-    class="layer h-100"
-  >
-    <slot />
-  </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
 import NodeController from './NodeController'
-import { shortTagName } from '@/utils/node'
 import clickOutside from '@/utils/clickOutside'
 
 export default {
@@ -43,7 +35,6 @@ export default {
   directives: {
     clickOutside
   },
-  filters: { shortTagName },
   props: {
     id: {
       type: Number,

@@ -7,24 +7,37 @@
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { string, select, assignDefaultValue } from './utils/util'
+import { string, select, assignDefaultValue, url, boolean } from './utils/util'
 import { required } from './utils/validation'
 
-const CONTROLS = 'controls'
-const SETTINGS = 'settings'
-const AUTOPAUSE = 'autopause'
-const SEEKTIME = 'seekTime'
-const VOLUME = 'volume'
-const MUTED = 'muted'
-const CLICKTOPLAY = 'clickToPlay'
-const HIDECONTROLS = 'hideControls'
-const RESETONEND = 'resetOnEnd'
-const PROVIDER = 'provider'
-const EMBED_ID = 'embedId'
-
 export const defaultSetting = {
-  [PROVIDER]: 'youtube',
-  [EMBED_ID]: 'bTqVqk7FSmY'
+  provider: 'youtube',
+  embedId: 'bTqVqk7FSmY',
+  controls: [
+    'play-large',
+    'play',
+    'progress',
+    'current-time',
+    'mute',
+    'volume',
+    'captions',
+    'settings',
+    'pip',
+    'airplay',
+    'fullscreen'
+  ],
+  autoplay: false,
+  settings: ['captions', 'quality', 'speed', 'loop'],
+  // iconUrl: undefined,
+  blankVideo: 'https://cdn.plyr.io/static/blank.mp4',
+  volume: true,
+  muted: false,
+  clickToPlay: true,
+  disableContextMenu: true,
+  hideControls: true,
+  resetOnEnd: false,
+  displayDuration: false,
+  fullscreen: { enabled: true, fallback: true, iosNative: false }
 }
 
 export default {
@@ -40,11 +53,37 @@ export default {
     return {
       spec: assignDefaultValue(
         [
-          select(PROVIDER, {
+          select('provider', {
             options: ['youtube', 'vimeo']
           }),
-          string(EMBED_ID, {
+          string('embedId', {
             validate: [required]
+          }),
+          select('controls', {
+            options: defaultSetting.controls,
+            props: {
+              multiple: true
+            }
+          }),
+          select('settings', {
+            options: defaultSetting.settings,
+            props: {
+              multiple: true
+            }
+          }),
+          // url('iconUrl'),
+          boolean('autoplay'),
+          boolean('volume'),
+          boolean('muted'),
+          boolean('clickToPlay'),
+          boolean('disableContextMenu'),
+          boolean('hideControls'),
+          boolean('resetOnEnd'),
+          boolean('displayDuration'),
+          boolean('enabled', { path: 'fullscreen', title: 'Fullscreen allow' }),
+          boolean('iosNative', {
+            path: 'fullscreen',
+            title: 'Fullscreen iOS support'
           })
         ],
         defaultSetting

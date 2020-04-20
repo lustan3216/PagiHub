@@ -79,7 +79,7 @@ import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
 
 export default {
-  name: 'TreeProject',
+  name: 'PanelProject',
   components: {
     ElTree: Tree,
     DialogComponentSet,
@@ -105,6 +105,7 @@ export default {
   },
   methods: {
     ...mapActions('project', ['modifyProjectNodeParent']),
+    ...mapActions('draft', ['setComponent']),
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {
         this.modifyProjectNodeParent({

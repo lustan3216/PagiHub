@@ -6,7 +6,8 @@ import {
   CAN_EDIT_TEXT,
   CAN_DRAG,
   STYLE,
-  NAME
+  NAME,
+  AUTO_SIZE
 } from '../const'
 
 const gridItems = function() {
@@ -82,7 +83,8 @@ export const divider = function() {
 export const videoPlayer = function() {
   return {
     [TAG]: 'video-player',
-    [CAN_DRAG]: true
+    [CAN_DRAG]: true,
+    [AUTO_SIZE]: true
   }
 }
 

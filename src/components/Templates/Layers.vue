@@ -12,7 +12,7 @@
 
 <script>
 import GridGenerator from './GridGenerator'
-import GridItemChild from '../TemplateUtils/GridItemChild'
+import GridItemChild from './GridItemChild'
 import NodeController from '../TemplateUtils/NodeController'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'

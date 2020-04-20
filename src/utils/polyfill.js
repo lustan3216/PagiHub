@@ -36,6 +36,10 @@ String.prototype.kebabCase = function() {
   return kebabCase(this)
 }
 
+String.prototype.readable = function() {
+  return this.kebabCase().capitalize().replace(/-(\w)/g, (x) => ` ${x[1].toUpperCase()}`)
+}
+
 String.prototype.camelCase = function() {
   if (!this) return ''
 

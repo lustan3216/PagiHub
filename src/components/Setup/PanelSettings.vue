@@ -3,6 +3,7 @@
     v-if="theOnlySelectedComponentId && hasComponent"
     :is="componentTag"
     :id="theOnlySelectedComponentId"
+    class="p-r-10"
   />
 </template>
 
@@ -53,3 +54,9 @@ const self = {
 
 export default self
 </script>
+
+<style scoped lang="scss">
+::v-deep .el-form-item {
+  margin-bottom: 8px;
+}
+</style>

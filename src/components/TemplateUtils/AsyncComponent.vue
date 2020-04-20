@@ -4,6 +4,7 @@
     class="h-100"
   >
     <component
+      v-if="vIf"
       :is="tag"
       :id="id"
     />
@@ -64,8 +65,8 @@ export default {
       vIf: false,
       options: {
         callback: isVisible => {
-          this.vIf = isVisible
-          if (isVisible && this.isProductionMode && this.isPreviewMode) {
+          if (isVisible) {
+            this.vIf = isVisible
             this.options = false
           }
         },

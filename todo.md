@@ -60,14 +60,14 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>PWA</li>  
 <li>form 比動畫先</li>  
 <li>動畫</li>
+<li>轉跳要做成局部轉跳/ 轉跳時componentSet時，要考慮tree，如果是一樣的話就只更新不一樣的地方，但如果是一樣的componentSet的話，照理來說vue自己已經幫我處理了，應該不會重新渲染吧？！</li>
+<li>每個project都有全局設定，字型包，顏色，自行試試看能不能用functal變成組建</li>
+
+<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed</li>
 <li>vue-awesome-swiper</li>  
 <li>google map</li>  
 <li>video player to plyr</li>
-<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed</li>
-<li>轉跳要做成局部轉跳/ 轉跳時componentSet時，要考慮tree，如果是一樣的話就只更新不一樣的地方，但如果是一樣的componentSet的話，照理來說vue自己已經幫我處理了，應該不會重新渲染吧？！</li>
 <li>icon</li>
-<li>button group checkbox group radio</li>
-<li>每個project都有全局設定，字型包，顏色，自行試試看能不能用functal變成組建</li>
 </ol>
 
 ### Style
@@ -85,6 +85,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>font align</li>
 <li>font family/ 用font picker做但要google帳號</li>
 <li>每個template要定義可以編輯的style，只顯示那些，當多選時只用重疊的</li>
+<li>寬高要disable，逼他們用layout</li>
 </ol>
 
 ### Setting
@@ -100,5 +101,4 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>layout 可以每個局部都 設定</li>
 <li>button 做成點了可以轉跳 componentSet 或是打開dialog or drawer or popover</li>
 <li>grid item and layout 在不同尺寸要可以控制隱藏</li>
-<li>code hightlight</li>
 </ol>

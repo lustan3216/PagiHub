@@ -64,7 +64,7 @@ import { GRID_ITEM } from '@/const'
 import Visibility from '../TemplateUtils/Visible'
 
 export default {
-  name: 'TreeCss',
+  name: 'PanelCss',
   components: {
     ElTree: Tree,
     Visibility
