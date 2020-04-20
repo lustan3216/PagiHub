@@ -152,7 +152,7 @@ nav {
   text-align: center;
   height: 35px;
   padding: 5px 20px;
-  z-index: 100;
+  z-index: 200;
   position: fixed;
   top: 0;
   left: 0;

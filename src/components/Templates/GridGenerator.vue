@@ -1,13 +1,8 @@
 <template>
-  <controller-layer
+  <grid-generator-inner
     :id="id"
-    :inner-style="innerStyles"
-  >
-    <grid-generator-inner
-      :id="id"
-      :inner-props="innerProps"
-    />
-  </controller-layer>
+    :inner-props="innerProps"
+  />
 </template>
 
 <script>
