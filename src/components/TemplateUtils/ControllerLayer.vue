@@ -2,10 +2,10 @@
   <div
     v-if="isDraftMode"
     :class="{ elevate: selected }"
-    class="layer h-100"
-    @click.exact.stop="SET_SELECTED_COMPONENT_ID(id)"
-    @click.ctrl.exact.stop="TOGGLE_SELECTED_COMPONENT_IDS(id)"
-    @click.meta.exact.stop="TOGGLE_SELECTED_COMPONENT_IDS(id)"
+    class="controlLayer h-100"
+    @click.exact.stop="!isExample && SET_SELECTED_COMPONENT_ID(id)"
+    @click.ctrl.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
+    @click.meta.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
     @dblclick.stop="dblclick"
   >
     <div
@@ -69,7 +69,7 @@ export default {
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_ID',
-      'TOGGLE_SELECTED_COMPONENT_IDS'
+      'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     dblclick() {
       this.canNotEdit = false
@@ -89,9 +89,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.layer {
-  padding-top: 1px;
-  margin-top: -1px;
+.controlLayer {
+  overflow: auto;
   transition: box-shadow 0.6s, border-color 0.6s;
 }
 .elevate {

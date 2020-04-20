@@ -16,10 +16,14 @@
 <script>
 import nodeMixin from '@/components/Templates/mixins/node'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexImage'
+import { Image } from 'element-ui'
 
 export default {
   defaultSetting,
   name: 'FlexImage',
+  components: {
+    ElImage: Image
+  },
   mixins: [nodeMixin]
 }
 </script>

@@ -154,8 +154,8 @@ export default {
 
 <style scoped lang="scss">
 .interact {
-  box-shadow: 0 5px 20px 0 rgba(32, 48, 60, 0.11);
-  border: 10px solid transparent;
+  box-shadow: 0 0 15px 0 rgba(32, 48, 60, 0.11);
+  border: 5px solid transparent;
   background: transparent;
   overflow-y: scroll;
   overflow-x: hidden;

@@ -6,7 +6,7 @@
   >
     <portal-target
       name="view-port-controller"
-      class="d-inline-block m-l-15 box-shadow"
+      class="inline-block m-l-15 box-shadow"
     />
 
     <el-tooltip
@@ -31,7 +31,7 @@
   >
     <portal-target
       name="view-port-controller"
-      class="d-inline-block m-l-15"
+      class="inline-block m-l-15"
     />
 
     <el-tooltip

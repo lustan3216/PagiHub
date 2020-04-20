@@ -1,15 +1,21 @@
-import { getValueByPath, isPlainObject, cloneJson } from '@/utils/tool'
+import {
+  getValueByPath,
+  isPlainObject,
+  cloneJson,
+  isUndefined
+} from '@/utils/tool'
 import { urlPath } from './validation'
 
 export const assignDefaultValue = (array, defaultSetting) => {
   array.forEach(object => {
+    let value
     if (object.path) {
-      object.value = getValueByPath(
-        defaultSetting,
-        `${object.path}.${object.field}`
-      )
+      value = getValueByPath(defaultSetting, `${object.path}.${object.field}`)
     } else {
-      object.value = defaultSetting[object.field]
+      value = defaultSetting[object.field]
+    }
+    if (!isUndefined(value)) {
+      object.value = value
     }
   })
 

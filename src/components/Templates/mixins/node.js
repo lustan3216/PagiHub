@@ -18,9 +18,6 @@ export default {
     node() {
       return this.nodesMap[this.id]
     },
-    parentNode() {
-      return this.nodesMap[this.node.parentId]
-    },
     innerValue() {
       return this.node && this.node[VALUE]
     },

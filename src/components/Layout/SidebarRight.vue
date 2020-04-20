@@ -12,6 +12,23 @@
       @click="isFloat = !isFloat"
     />
 
+    <i
+      v-shortkey="['shift', 'a']"
+      @shortkey="activeName = 'Project'"
+    />
+    <i
+      v-shortkey="['shift', 's']"
+      @shortkey="activeName = 'Nodes'"
+    />
+    <i
+      v-shortkey="['shift', 'd']"
+      @shortkey="activeName = 'Setting'"
+    />
+    <i
+      v-shortkey="['shift', 'f']"
+      @shortkey="activeName = 'Style'"
+    />
+
     <el-tabs
       v-model="activeName"
       type="card"
@@ -37,7 +54,7 @@
 
       <el-tab-pane
         label="Setting"
-        name="setting"
+        name="Setting"
         lazy
       >
         <panel-settings class="panel" />
@@ -45,7 +62,7 @@
 
       <el-tab-pane
         label="Style"
-        name="style"
+        name="Style"
         lazy
       >
         <panel-styles

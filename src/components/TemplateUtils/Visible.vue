@@ -22,11 +22,12 @@ export default {
   },
   computed: {
     element() {
-      if (this.isGridItemParent) {
-        return this.parentVm.$el.parentNode
-      } else {
-        return this.selfVm.$el
-      }
+      return this.selfVm.$el
+      // if (this.isGridItemParent) {
+      //   return this.parentVm.$el.parentNode
+      // } else {
+      //
+      // }
     },
     selfVm() {
       return vm(this.id)
@@ -45,8 +46,12 @@ export default {
     }
   },
   watch: {
-    visible(canTouch) {
-      this.element.classList[canTouch ? 'remove' : 'add']('invisible')
+    visible(visible) {
+      if (visible) {
+        delete this.element.dataset.invisible
+      } else {
+        this.element.dataset.invisible = ''
+      }
     }
   },
   methods: {

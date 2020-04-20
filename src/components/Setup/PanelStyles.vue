@@ -1,6 +1,12 @@
 <template>
   <el-form label-position="top">
     <!--    <class-state :computed-style="computedStyle" />-->
+    <node-info
+      v-if="theOnlySelectedComponentId"
+      :id="theOnlySelectedComponentId"
+      class="text-center m-b-10 block"
+      show-family
+    />
 
     <portal-target
       name="PanelStyles"
@@ -81,6 +87,7 @@ import StyleBlock from './EditorStyle/StyleBlock'
 import Transition from './EditorStyle/Transition'
 import { mapGetters } from 'vuex'
 import { getComputedStyle, assignStyles, getPlanStyle } from '@/utils/vmMap'
+import NodeInfo from '@/components/TemplateUtils/NodeInfo'
 
 const attributes = [
   'width',
@@ -125,7 +132,8 @@ export default {
     Effect,
     BoxShadows,
     StyleBlock,
-    Transition
+    Transition,
+    NodeInfo
   },
   data() {
     return {

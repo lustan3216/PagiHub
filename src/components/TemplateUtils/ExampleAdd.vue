@@ -120,13 +120,6 @@ export default {
       )
     }
   },
-  watch: {
-    visible(value) {
-      if (!value) {
-        console.log(this.$refs.dialog)
-      }
-    }
-  },
   methods: {
     addTemplate(template) {
       template = cloneJson(template)

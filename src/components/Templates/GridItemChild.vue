@@ -84,7 +84,7 @@ export default {
   margin-left: -1px;
   margin-top: -1px;
 }
-::v-deep.invisible + .vue-resizable-handle {
+::v-deep[data-invisible] + .vue-resizable-handle {
   display: none;
 }
 </style>

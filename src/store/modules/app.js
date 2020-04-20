@@ -23,7 +23,7 @@ const mutations = {
     const isExist = state.selectedComponentIds.includes(id)
     state.selectedComponentIds = isExist ? [] : [id]
   },
-  TOGGLE_SELECTED_COMPONENT_IDS(state, id) {
+  TOGGLE_SELECTED_COMPONENT_IN_IDS(state, id) {
     const isExist = state.selectedComponentIds.includes(id)
     if (isExist) {
       state.selectedComponentIds = arraySubtract(state.selectedComponentIds, id)

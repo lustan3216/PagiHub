@@ -6,7 +6,11 @@
   font-weight: bold;
 }
 
-.d-inline-block {
+.block {
+  display: block;
+}
+
+.inline-block {
   display: inline-block;
 }
 
@@ -104,6 +108,7 @@
   overflow: hidden;
 }
 
+[data-invisible],
 .invisible {
   opacity: 0 !important;
   visibility: hidden !important;
@@ -143,7 +148,7 @@
   box-shadow: 0 5px 20px 0 rgba(32, 48, 60, 0.11);
 }
 
-.no-action {
+[data-no-action], .no-action {
   touch-action: none !important;
   pointer-events: none !important;
 }

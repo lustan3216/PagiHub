@@ -38,8 +38,8 @@
 import { Tree } from 'element-ui'
 import { SORT_INDEX, LAYERS } from '@/const'
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { shortTagName } from '@/utils/node'
 import { cloneJson, traversal, arraySubtract } from '@/utils/tool'
+import { isMac } from '@/utils/device'
 import NodeController from '../TemplateUtils/NodeController'
 
 export default {
@@ -48,11 +48,11 @@ export default {
     ElTree: Tree,
     NodeController
   },
-  filters: { shortTagName },
   data() {
     return {
       filterText: '',
-      selected: null
+      selected: null,
+      pressCtrl: false
     }
   },
   computed: {
@@ -79,8 +79,8 @@ export default {
         this.$nextTick(() => {
           const { tree } = this.$refs
           const checked = tree.getCheckedKeys()
-          arraySubtract(checked, newValue).forEach(key =>
-            tree.setChecked(key, false)
+          arraySubtract(checked, newValue).forEach(id =>
+            tree.setChecked(id, false)
           )
           newValue.forEach(x => tree.setChecked(x, true))
         })
@@ -88,9 +88,42 @@ export default {
       immediate: true
     }
   },
+  mounted() {
+    window.addEventListener('keydown', this.keydwon)
+    window.addEventListener('keyup', this.keyup)
+  },
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.keydwon)
+    window.removeEventListener('keyup', this.keyup)
+  },
   methods: {
-    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDS']),
+    ...mapMutations('app', [
+      'TOGGLE_SELECTED_COMPONENT_IN_IDS',
+      'TOGGLE_SELECTED_COMPONENT_ID'
+    ]),
     ...mapMutations('draft', ['RECORD']),
+    keydwon(e) {
+      if (isMac()) {
+        if (e.metaKey) {
+          this.pressCtrl = true
+        }
+      } else {
+        if (e.ctrlKey) {
+          this.pressCtrl = true
+        }
+      }
+    },
+    keyup(e) {
+      if (isMac()) {
+        if (e.metaKey) {
+          this.pressCtrl = false
+        }
+      } else {
+        if (e.ctrlKey) {
+          this.pressCtrl = false
+        }
+      }
+    },
     allowDrop(drag, drop, action) {
       const sameLayer = drag.parent === drop.parent
       return sameLayer && ['prev', 'next'].includes(action)
@@ -110,7 +143,14 @@ export default {
       return data.name.toLowerCase().indexOf(value) !== -1
     },
     checkedChange({ id }) {
-      this.TOGGLE_SELECTED_COMPONENT_IDS(id)
+      if (this.pressCtrl) {
+        this.TOGGLE_SELECTED_COMPONENT_IN_IDS(id)
+      } else {
+        this.selectedComponentIds.forEach(id => {
+          this.$refs.tree.setChecked(id, false)
+        })
+        this.TOGGLE_SELECTED_COMPONENT_ID(id)
+      }
     }
   }
 }

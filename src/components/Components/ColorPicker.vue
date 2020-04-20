@@ -49,6 +49,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import Color from 'element-ui/packages/color-picker/src/color'
 import PickerDropdown from 'element-ui/packages/color-picker/src/components/picker-dropdown.vue'
 import Clickoutside from 'element-ui/src/utils/clickoutside'

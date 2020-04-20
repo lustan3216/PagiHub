@@ -1,8 +1,9 @@
 <template>
   <span class="justify-between align-center">
-    <span class="el-tree-node__label m-r-10">
-      {{ node.tag | shortTagName }} {{ id }}
-    </span>
+    <node-info
+      :id="id"
+      class="m-r-10"
+    />
 
     <span>
       <portal-target
@@ -73,6 +74,7 @@ import Touchable from './Touchable'
 import jsonStorer from '../../store/jsonStorer'
 import ExampleAdd from './ExampleAdd'
 import Visibility from './Visible'
+import NodeInfo from './NodeInfo'
 import { GRID_ITEM } from '@/const'
 import { isMac } from '@/utils/device'
 import {
@@ -82,16 +84,15 @@ import {
   vmAddNodesToParentAndRecord,
   vmPasteCopyComponents
 } from '@/utils/vmMap'
-import { shortTagName } from '@/utils/node'
 
 export default {
   name: 'NodeController',
   components: {
     Visibility,
     Touchable,
-    ExampleAdd
+    ExampleAdd,
+    NodeInfo
   },
-  filters: { shortTagName },
   props: {
     id: {
       type: Number,
@@ -120,7 +121,7 @@ export default {
   },
   methods: {
     ...mapMutations('draft', ['RECORD']),
-    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDS']),
+    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IN_IDS']),
     isMac,
     vmCreateItem,
     vmCopyNode,

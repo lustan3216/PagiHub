@@ -45,7 +45,7 @@ export function vmCopyNode(node) {
 
   // the convention is, if the parent is a node can new, then it must be
   const { id, parentId } = node
-  const parentNode = store.state.draft.nodesMap[parentId]
+  const parentNode = vmMap[parentId].node
 
   if (parentNode.canNewItem) {
     // if parentNode can new item, it means the node is one of layer-item, grid-item, carousel-item, form-item

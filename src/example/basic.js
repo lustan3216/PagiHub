@@ -91,11 +91,13 @@ export const videoPlayer = function() {
 export const drawer = function() {
   const button = flexButton()
   button[NAME] = 'drawer'
-  button[CHILDREN] = [{
-    [TAG]: 'drawer',
-    [STYLE]: { background: '#fff' },
-    [CHILDREN]: gridItems()
-  }]
+  button[CHILDREN] = [
+    {
+      [TAG]: 'drawer',
+      [STYLE]: { background: '#fff' },
+      [CHILDREN]: gridItems()
+    }
+  ]
 
   return button
 }
@@ -110,5 +112,6 @@ export default [
   videoPlayer(),
   editorText(),
   card(),
-  drawer()
+  drawer(),
+  layersRoot()
 ]

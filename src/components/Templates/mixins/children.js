@@ -11,9 +11,6 @@ export default {
     node() {
       return this.nodesMap[this.id]
     },
-    parentNode() {
-      return this.nodesMap[this.node.parentId]
-    },
     innerChildren() {
       const getterName = `${this.isExample ? 'example' : 'draft'}/childrenOf`
       // 這裡沒必要排序，index 在各自component選擇性處理就可以

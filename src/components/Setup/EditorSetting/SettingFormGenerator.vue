@@ -7,8 +7,7 @@
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { pxPercent } from './utils/validation'
-import { boolean, select, string, assignDefaultValue } from './utils/util'
+import { boolean, select, assignDefaultValue } from './utils/util'
 import { PATH } from '@/const'
 
 const INLINE = 'inline'

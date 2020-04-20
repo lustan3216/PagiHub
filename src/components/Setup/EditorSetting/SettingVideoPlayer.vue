@@ -1,13 +1,21 @@
 <template>
-  <setting-generator
-    :id="id"
-    :spec="spec"
-  />
+  <div>
+    <setting-generator
+      :id="id"
+      :spec="spec"
+    />
+
+    <h4>Fullscreen</h4>
+    <setting-generator
+      :id="id"
+      :spec="spec2"
+    />
+  </div>
 </template>
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { string, select, assignDefaultValue, url, boolean } from './utils/util'
+import { string, select, assignDefaultValue, boolean } from './utils/util'
 import { required } from './utils/validation'
 
 export const defaultSetting = {
@@ -79,11 +87,16 @@ export default {
           boolean('disableContextMenu'),
           boolean('hideControls'),
           boolean('resetOnEnd'),
-          boolean('displayDuration'),
-          boolean('enabled', { path: 'fullscreen', title: 'Fullscreen allow' }),
+          boolean('displayDuration')
+        ],
+        defaultSetting
+      ),
+      spec2: assignDefaultValue(
+        [
+          boolean('enabled', { path: 'fullscreen', title: 'Enable' }),
           boolean('iosNative', {
             path: 'fullscreen',
-            title: 'Fullscreen iOS support'
+            title: 'iOS support'
           })
         ],
         defaultSetting

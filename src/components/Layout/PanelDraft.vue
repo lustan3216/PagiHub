@@ -3,6 +3,7 @@
     <layers-root
       v-if="rootNode"
       :id="rootNode.id"
+      class="panelDraft"
     />
   </view-port>
 </template>
@@ -30,3 +31,9 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.panelDraft {
+  margin: 8px;
+}
+</style>

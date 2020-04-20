@@ -9,8 +9,10 @@ import App from './App.vue'
 import store from './store'
 import VueShortKey from 'vue-shortkey'
 import PortalVue from 'portal-vue'
-
+import formCreate from '@form-create/element-ui'
 vhCheck()
+
+Vue.use(formCreate)
 Vue.use(PortalVue)
 Vue.use(VueShortKey, { prevent: ['input', 'textarea', '.ProseMirror'] })
 window.store = store
@@ -38,7 +40,6 @@ import {
   Collapse,
   CollapseItem,
   ColorPicker,
-  Image,
   Loading,
   Tooltip,
   Popover,
@@ -70,7 +71,6 @@ Vue.use(Col)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
 Vue.use(ColorPicker)
-Vue.use(Image)
 Vue.use(Tooltip)
 Vue.use(Popover)
 Vue.use(Form)

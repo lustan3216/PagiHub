@@ -1,5 +1,17 @@
 <template>
   <div>
+    <node-info
+      :id="theOnlySelectedComponentId"
+      parent
+    />
+    <node-info
+      :id="theOnlySelectedComponentId"
+      parent
+    />
+    <span class="el-tree-node__label"> > </span>
+    <node-info
+      :id="theOnlySelectedComponentId"
+    />
     <el-input
       v-model="filterText"
       placeholder="输入关键字进行过滤"
@@ -36,7 +48,6 @@
 
             <el-button
               type="text"
-
               icon="el-icon-copy-document"
               @click.stop="() => copy(data)"
             />
@@ -44,7 +55,6 @@
             <el-button
               type="text"
               icon="el-icon-delete"
-
               @click.stop="() => remove(data)"
             />
           </span>
@@ -62,12 +72,14 @@ import { traversal } from '@/utils/tool'
 import { vmMap } from '@/utils/vmMap'
 import { GRID_ITEM } from '@/const'
 import Visibility from '../TemplateUtils/Visible'
+import NodeInfo from '../TemplateUtils/NodeInfo'
 
 export default {
   name: 'PanelCss',
   components: {
     ElTree: Tree,
-    Visibility
+    Visibility,
+    NodeInfo
   },
   data() {
     return {
@@ -114,7 +126,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IDSS']),
+    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IN_IDSS']),
     filterTagBySearching(value, data) {
       if (!value) return true
       return data.tag.indexOf(value) !== -1
@@ -132,7 +144,7 @@ export default {
     },
     nodeClick() {
       const componentId = this.$refs.tree.getCurrentKey()
-      this.TOGGLE_SELECTED_COMPONENT_IDS(+componentId)
+      this.TOGGLE_SELECTED_COMPONENT_IN_IDS(+componentId)
     }
   }
 }

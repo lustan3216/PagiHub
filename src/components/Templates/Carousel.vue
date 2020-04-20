@@ -3,6 +3,7 @@
     ref="carousel"
     :style="innerStyles"
     :autoplay="false"
+    :options="innerProps"
     trigger="click"
     class="wh-100"
   >
@@ -18,22 +19,30 @@
         class="h-100"
       />
     </swiper-slide>
+
     <div
+      v-if="innerProps.pagination"
       slot="pagination"
       class="swiper-pagination"
     />
-    <div
-      slot="button-prev"
-      class="swiper-button-prev"
-    />
-    <div
-      slot="button-next"
-      class="swiper-button-next"
-    />
-    <div
-      slot="scrollbar"
-      class="swiper-scrollbar"
-    />
+
+    <template v-if="innerProps.navigation">
+      <div
+        slot="button-prev"
+        class="swiper-button-prev"
+      />
+      <div
+        slot="button-next"
+        class="swiper-button-next"
+      />
+    </template>
+
+    <template v-if="innerProps.scrollBar">
+      <div
+        slot="scrollbar"
+        class="swiper-scrollbar"
+      />
+    </template>
   </swiper>
 </template>
 
