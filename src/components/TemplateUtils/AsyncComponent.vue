@@ -1,23 +1,13 @@
 <template>
-  <div
-    v-observe-visibility="options"
-    class="h-100"
-  >
-    <component
-      v-if="vIf"
-      :is="tag"
-      :id="id"
-    />
-  </div>
+  <component
+    :is="tag"
+    :id="id"
+  />
 </template>
 
 <script>
-import { ObserveVisibility } from 'vue-observe-visibility'
 export default {
-  name: 'LazyLoadComponent',
-  directives: {
-    ObserveVisibility
-  },
+  name: 'AsyncComponent',
   components: {
     FlexImage: () => import('../Templates/FlexImage'),
     FlexButton: () => import('../Templates/FlexButton'),
@@ -32,6 +22,7 @@ export default {
     Layers: () => import('../Templates/Layers'),
     Card: () => import('../Templates/Card'),
     Drawer: () => import('../Templates/Drawer'),
+    LayersInteract: () => import('../Templates/LayersInteract'),
 
     FormGenerator: () => import('../Templates/FormGenerator'),
     FormTextarea: () => import('../Templates/FormTextarea'),
@@ -58,22 +49,6 @@ export default {
     id: {
       type: Number,
       required: true
-    }
-  },
-  data() {
-    return {
-      vIf: false,
-      options: {
-        callback: isVisible => {
-          if (isVisible) {
-            this.vIf = isVisible
-            this.options = false
-          }
-        },
-        intersection: {
-          rootMargin: '100px'
-        }
-      }
     }
   }
 }

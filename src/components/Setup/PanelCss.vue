@@ -67,9 +67,8 @@
 <script>
 import { Tree } from 'element-ui'
 import clone from 'clone'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { traversal } from '@/utils/tool'
-import { vmMap } from '@/utils/vmMap'
 import { GRID_ITEM } from '@/const'
 import Visibility from '../TemplateUtils/Visible'
 import NodeInfo from '../TemplateUtils/NodeInfo'
@@ -88,7 +87,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
     ...mapGetters('draft', ['tree']),
     ...mapGetters('app', ['theOnlySelectedComponentId']),
     gridItem() {
@@ -120,7 +118,7 @@ export default {
   },
   beforeDestroy() {
     if (this.selected) {
-      vmMap[this.selected].$el
+      this.vmMap[this.selected].$el
         .closest('.vue-grid-item')
         .classList.remove('elevate')
     }
@@ -133,14 +131,14 @@ export default {
     },
     copy(data) {
       if (data.tag === GRID_ITEM) {
-        vmMap[data.parentId].new(data.id)
+        this.vmMap[data.parentId].new(data.id)
       } else {
-        const parentNode = this.nodesMap[data.parentId]
-        vmMap[parentNode.parentId].copy(data.parentId)
+        const parentNode = this.draftNodesMap[data.parentId]
+        this.vmMap[parentNode.parentId].copy(data.parentId)
       }
     },
     remove(data) {
-      vmMap[data.parentId].remove(data.id)
+      this.vmMap[data.parentId].remove(data.id)
     },
     nodeClick() {
       const componentId = this.$refs.tree.getCurrentKey()

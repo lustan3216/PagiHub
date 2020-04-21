@@ -28,10 +28,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
+    ...mapState('project', ['projectMap']),
     ...mapGetters('draft', ['childrenOf']),
-    linkableNode() {
-      return Object.values(this.nodesMap).filter(
+    linkableComponentSet() {
+      return Object.values(this.projectMap).filter(
         node => node.type === NODE_TYPE.COMPONENT_SET
       )
     },
@@ -44,7 +44,7 @@ export default {
 
       if (!this.childrenOf[this.id].length) {
         const redirectTo = select(REDIRECT_TO, {
-          options: this.linkableNode.map(node => ({
+          options: this.linkableComponentSet.map(node => ({
             label: `${node.name || node.tag} ${node.id}`,
             value: node.id
           }))

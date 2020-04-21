@@ -17,6 +17,7 @@
       :visible.sync="visible"
       :with-header="innerProps.showClose"
       :modal="false"
+      :show-close="false"
     >
       <controller-layer
         :id="id"
@@ -39,6 +40,8 @@ import GridGeneratorInner from './GridGeneratorInner'
 import mousewheel from 'element-ui/lib/directives/mousewheel'
 import { defaultSetting } from '../Setup/EditorSetting/SettingDrawer'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
+import { asyncGetValue } from '@/utils/tool'
+import { PROPS } from '@/const'
 
 export default {
   defaultSetting,
@@ -54,10 +57,49 @@ export default {
   mixins: [nodeMixin],
   data() {
     return {
-      visible: false
+      visible: false,
+      theButtonVmCanClose: null
+    }
+  },
+  computed: {
+    buttonCanCloseId() {
+      return this.innerProps.buttonCanCloseId
+    },
+    theButtonNodeCanClose() {
+      return this.draftNodesMap[this.buttonCanCloseId]
+    }
+  },
+  watch: {
+    theButtonNodeCanClose(node) {
+      // the node is deleted
+      this.interactWithButton(node)
+      if (!node) {
+        this.RECORD([
+          {
+            path: `${this.id}.${PROPS}.buttonCanCloseId`,
+            value: undefined
+          }
+        ])
+      }
+    },
+    visible(visible) {
+      this.interactWithButton(visible)
     }
   },
   methods: {
+    interactWithButton(visible) {
+      // the child vm not mount yet even Drawer mounted.
+      if (visible) {
+        asyncGetValue(() => this.vmMap[this.buttonCanCloseId]).then(vm => {
+          this.theButtonVmCanClose = vm
+          vm.registerClickEvent(this.id, () => {
+            this.visible = false
+          })
+        })
+      } else {
+        this.theButtonVmCanClose.removeClickEvent(this.id)
+      }
+    },
     toggleVisibility() {
       this.visible = !this.visible
     },

@@ -22,9 +22,9 @@ export const assignDefaultValue = (array, defaultSetting) => {
   return array
 }
 
-export const number = (field, extraOptions) => ({
+export const number = (field, extraOptions = {}) => ({
   field,
-  title: field.readable(),
+  title: readable(extraOptions.title || field),
   type: 'InputNumber',
   ...extraOptions
 })
@@ -37,91 +37,103 @@ export const select = (field, { options, ...extraOptions } = {}) => {
     }
   })
 
+  if (isUndefined(extraOptions.props)) {
+    extraOptions.props = { clearable: true }
+  } else if (isUndefined(extraOptions.props.clearable)) {
+    extraOptions.props.clearable = true
+  }
+
   return {
     field,
-    title: field.readable(),
     type: 'select',
     options,
-    ...extraOptions
+    ...extraOptions,
+    title: readable(extraOptions.title || field)
   }
 }
 
-export const selectCreate = (field, { options } = {}) => ({
+export const selectCreate = (field, extraOptions = {}) => ({
   field,
-  title: field.readable(),
   type: 'select',
-  value: options,
   props: {
     noDataText: '可以打字製造',
     allowCreate: true,
     multiple: true,
     filterable: true,
     placeholder: '请选择文章标签'
-  }
+  },
+  ...extraOptions,
+  title: readable(extraOptions.title || field)
 })
 
-export const string = (field, extraOptions) => ({
+export const string = (field, extraOptions = {}) => ({
   field,
   type: 'input',
-  title: field.readable(),
-  ...extraOptions
+  ...extraOptions,
+  title: readable(extraOptions.title || field)
 })
 
-export const url = (field, extraOptions) => ({
+export const url = (field, extraOptions = {}) => ({
   field,
   type: 'input',
-  title: field.readable(),
   validate: [urlPath],
-  ...extraOptions
+  ...extraOptions,
+  title: readable(extraOptions.title || field)
 })
 
-export const slider = (field, { step = 0.1, min = 0, max = 1 }) => {
+export const slider = (field, extraOptions = {}) => {
   return {
     field,
     type: 'slider',
-    title: field.readable(),
-    props: {
-      step,
-      min,
-      max
-    }
+    ...extraOptions,
+    title: readable(extraOptions.title || field)
   }
 }
 
-export const boolean = (field, extraOptions) => ({
+export const boolean = (field, extraOptions = {}) => ({
   field,
-  title: field.readable(),
   type: 'switch',
-  ...extraOptions
+  ...extraOptions,
+  title: readable(extraOptions.title || field)
 })
 
-export const color = field => ({
+export const color = (field, extraOptions = {}) => ({
   field,
-  title: field.readable(),
-  type: 'ColorPicker'
+  type: 'ColorPicker',
+  ...extraOptions,
+  title: readable(extraOptions.title || field)
 })
 
-export const colorAlpha = field => ({
+export const colorAlpha = (field, extraOptions = {}) => ({
   field,
-  title: field.readable(),
   type: 'ColorPicker',
   props: {
     showAlpha: true
-  }
+  },
+  ...extraOptions,
+  title: readable(extraOptions.title || field)
 })
 
-export const datepicker = field => ({
+export const datepicker = (field, extraOptions = {}) => ({
   field,
-  title: field.readable(),
   type: 'DatePicker',
   props: {
     type: 'datetime'
-  }
+  },
+  ...extraOptions,
+  title: readable(extraOptions.title || field)
 })
 
-export const selectUnit = (field, extraOptions) => ({
+export const selectUnit = (field, extraOptions = {}) => ({
   field,
-  title: field.readable(),
+  title: readable(extraOptions.title || field),
   type: 'SelectUnit',
   ...extraOptions
 })
+
+function readable(value) {
+  return value
+    .kebabCase()
+    .capitalize()
+    .replace(/-(\w)/g, x => ` ${x[1].toUpperCase()}`)
+}

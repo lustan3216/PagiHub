@@ -17,6 +17,7 @@ export const CAN_DRAG = 'canDrag'
 export const AUTO_SIZE = 'autoSize'
 
 export const LAYERS = 'layers'
+export const GRID_GENERATOR = 'grid-generator'
 export const GRID_ITEM = 'grid-item'
 export const GRID_ITEM_CHILD = 'grid-item-child'
 

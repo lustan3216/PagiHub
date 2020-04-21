@@ -13,6 +13,7 @@
       :default-expanded-keys="selectedComponentIds"
       :indent="12"
       :allow-drop="allowDrop"
+      :expand-on-click-node="false"
       class="tree"
       node-key="id"
       highlight-current
@@ -28,8 +29,9 @@
           :id="data.id"
           :exclude="['copy', 'portal']"
           class="w-100"
-          @mouseover.native.stop="hoverNode"
-          @mouseleave="hoverLeaveNode"
+          @dblclick.native.stop="scrollIntoView(data.id)"
+          @mouseover.native.stop="hoverNode(data.id)"
+          @mouseleave.native.stop="hoverLeaveNode(data.id)"
         />
       </template>
     </el-tree>
@@ -43,7 +45,9 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import { cloneJson, traversal, arraySubtract } from '@/utils/tool'
 import { isMac } from '@/utils/device'
 import NodeController from '../TemplateUtils/NodeController'
-import { vm } from '@/utils/vmMap'
+import { on, off } from 'element-ui/src/utils/dom.js'
+
+require('smoothscroll-polyfill').polyfill()
 
 export default {
   name: 'PanelNodes',
@@ -59,7 +63,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('draft', ['tree']),
     innerTree() {
@@ -92,17 +95,18 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener('keydown', this.keydwon)
-    window.addEventListener('keyup', this.keyup)
+    on(window, 'keydown', this.keydwon)
+    on(window, 'keyup', this.keyup)
   },
   beforeDestroy() {
-    window.removeEventListener('keydown', this.keydwon)
-    window.removeEventListener('keyup', this.keyup)
+    off(window, 'keydown', this.keydwon)
+    off(window, 'keyup', this.keyup)
   },
   methods: {
     ...mapMutations('app', [
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
-      'TOGGLE_SELECTED_COMPONENT_ID'
+      'TOGGLE_SELECTED_COMPONENT_ID',
+      'SET_HOVER_COMPONENT_ID'
     ]),
     ...mapMutations('draft', ['RECORD']),
     keydwon(e) {
@@ -155,8 +159,15 @@ export default {
         this.TOGGLE_SELECTED_COMPONENT_ID(id)
       }
     },
-    hoverNode(id) {},
-    hoverLeaveNode(id) {}
+    hoverNode(id) {
+      this.SET_HOVER_COMPONENT_ID(id)
+    },
+    hoverLeaveNode() {
+      this.SET_HOVER_COMPONENT_ID(null)
+    },
+    scrollIntoView(id) {
+      this.vmMap[id].$el.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 }
 </script>

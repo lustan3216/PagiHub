@@ -11,12 +11,14 @@
 <script>
 import formCreate from '@form-create/element-ui'
 import { mapGetters } from 'vuex'
-import { vm } from '@/utils/vmMap'
 import { Switch, Tooltip, InputNumber } from 'element-ui'
 import { cloneJson, getValueByPath } from '@/utils/tool'
+import { vm } from '@/utils/vmMap'
 import { mapMutations } from 'vuex'
 import { PROPS } from '@/const'
+import SelectUnit from '@/components/Components/SelectUnit'
 
+formCreate.component('SelectUnit', SelectUnit)
 formCreate.component('ElSwitch', Switch)
 formCreate.component('ElTooltip', Tooltip)
 formCreate.component('ElInputNumber', InputNumber)

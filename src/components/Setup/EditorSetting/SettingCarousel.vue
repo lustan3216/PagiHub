@@ -338,9 +338,8 @@ export default {
     return data
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
     currentProps() {
-      return this.nodesMap[this.id].props || {}
+      return this.draftNodesMap[this.id].props || {}
     }
   }
 }

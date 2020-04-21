@@ -17,6 +17,18 @@ Vue.use(PortalVue)
 Vue.use(VueShortKey, { prevent: ['input', 'textarea', '.ProseMirror'] })
 window.store = store
 
+import vmMap from '@/utils/vmMap'
+
+Vue.mixin({
+  computed: {
+    isProductionMode: () => store.getters['mode/isProductionMode'],
+    isPreviewMode: () => store.getters['mode/isPreviewMode'],
+    isDraftMode: () => store.getters['mode/isDraftMode'],
+    draftNodesMap: () => store.state.draft.nodesMap,
+    vmMap: () => vmMap
+  }
+})
+
 import {
   Dialog,
   Dropdown,
@@ -76,14 +88,6 @@ Vue.use(Popover)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Loading.directive)
-
-Vue.mixin({
-  computed: {
-    isProductionMode: () => store.getters['mode/isProductionMode'],
-    isPreviewMode: () => store.getters['mode/isPreviewMode'],
-    isDraftMode: () => store.getters['mode/isDraftMode']
-  }
-})
 
 // eslint-disable-next-line
 Vue.prototype.$log = console.log

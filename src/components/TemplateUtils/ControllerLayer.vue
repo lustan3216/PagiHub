@@ -1,8 +1,8 @@
 <template>
   <div
     v-if="isDraftMode"
-    :class="{ elevate: selected }"
-    class="controlLayer h-100"
+    :class="{ elevate: selected, 'dash-border': !isAnimating }"
+    class="control-layer h-100"
     @click.exact.stop="!isExample && SET_SELECTED_COMPONENT_ID(id)"
     @click.ctrl.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
     @click.meta.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
@@ -16,13 +16,8 @@
     >
       <slot />
     </div>
-    <!--blank div to make consistency and might accept innerStyle in the future-->
-    <div
-      v-else
-      class="h-100"
-    >
-      <slot />
-    </div>
+
+    <slot v-else />
   </div>
 </template>
 
@@ -31,8 +26,8 @@ import { mapState, mapMutations } from 'vuex'
 import NodeController from './NodeController'
 import clickOutside from '@/utils/clickOutside'
 
-const vmMap = {}
-
+const controllerVmMap = {}
+window.controller = controllerVmMap
 export default {
   name: 'ControllerLayer',
   inject: { isExample: { default: false }},
@@ -54,10 +49,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
-    ...mapState('app', ['selectedComponentIds']),
+    ...mapState('app', ['isAnimating', 'selectedComponentIds']),
     node() {
-      return this.nodesMap[this.id]
+      return this.draftNodesMap[this.id]
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)
@@ -74,12 +68,12 @@ export default {
   },
   created() {
     if (this.isDraftMode && !this.isExample) {
-      vmMap[this.id] = this
+      controllerVmMap[this.id] = this
     }
   },
   beforeDestroy() {
     if (this.isDraftMode && !this.isExample) {
-      delete vmMap[this.id]
+      delete controllerVmMap[this.id]
     }
   },
   methods: {
@@ -89,15 +83,8 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     dblclick() {
-      if (this.canNotEdit) {
-        this.canNotEdit = false
-        this.SET_SELECTED_COMPONENT_ID(this.id)
-      } else {
-        this.canNotEdit = true
-        const { parentId } = this.node
-        this.SET_SELECTED_COMPONENT_ID(parentId)
-        vmMap[parentId].canNotEdit = false
-      }
+      this.canNotEdit = false
+      this.SET_SELECTED_COMPONENT_ID(this.id)
     },
     clickOutside(event) {
       const inSideBar = document
@@ -113,7 +100,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.controlLayer {
+.control-layer {
   overflow: auto;
   transition: box-shadow 0.6s, border-color 0.6s;
 }
@@ -123,5 +110,10 @@ export default {
 }
 .canNotEdit {
   pointer-events: none;
+}
+.dash-border {
+  border: 1px dashed #dedede;
+  margin-left: -1px;
+  margin-top: -1px;
 }
 </style>

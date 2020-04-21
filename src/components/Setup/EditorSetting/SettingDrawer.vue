@@ -2,6 +2,7 @@
   <setting-generator
     :id="id"
     :spec="spec"
+    :key="JSON.stringify(allChildren)"
   />
 </template>
 
@@ -9,13 +10,14 @@
 import { pxPercent } from './utils/validation'
 import SettingGenerator from './Common/SettingGenerator'
 import { boolean, select, assignDefaultValue, selectUnit } from './utils/util'
+import { shortTagName, traversalChildrenOf } from '@/utils/node'
 
 export const defaultSetting = {
-  showClose: true,
   modal: true,
   direction: 'ltr',
   size: '30%',
-  toRoot: true
+  toRoot: true,
+  buttonCanCloseId: null
 }
 
 export default {
@@ -27,16 +29,34 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      spec: assignDefaultValue(
+  computed: {
+    allChildren() {
+      const allChildren = []
+      traversalChildrenOf(this.id, child => {
+        if (child.tag.includes('button')) {
+          allChildren.push(child)
+        }
+      })
+      return allChildren
+    },
+    options() {
+      return this.allChildren.map(node => ({
+        value: node.id,
+        label: `${shortTagName(node.tag)} ${node.id}`
+      }))
+    },
+    spec() {
+      return assignDefaultValue(
         [
           boolean('toRoot'),
-          boolean('showClose'),
           boolean('modal'),
           selectUnit('size', {
             validate: [pxPercent],
             props: { exclude: ['vw', 'vh'] }
+          }),
+          select('buttonCanCloseId', {
+            options: this.options,
+            title: 'buttonCanClose'
           }),
           select('direction', {
             options: [

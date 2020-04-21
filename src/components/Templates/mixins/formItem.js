@@ -38,12 +38,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
     rootProps() {
       return this.rootForm.innerProps
     },
     innerRule() {
-      const node = clone(this.nodesMap[this.id]) || {}
+      const node = clone(this.draftNodesMap[this.id]) || {}
       const innerRule = node
       const {
         value,

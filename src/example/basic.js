@@ -1,4 +1,5 @@
 import {
+  GRID_GENERATOR,
   GRID_ITEM,
   CAN_NEW_ITEM,
   TAG,
@@ -16,7 +17,7 @@ const gridItems = function() {
 
 export const gridGenerator = function() {
   return {
-    [TAG]: 'grid-generator',
+    [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: gridItems()
   }
@@ -30,9 +31,9 @@ export const layers = function() {
   }
 }
 
-export const layersRoot = function() {
+export const layersInteract = function() {
   return {
-    [TAG]: 'layersRoot',
+    [TAG]: 'layersInteract',
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: [gridGenerator()]
   }
@@ -112,5 +113,6 @@ export default [
   videoPlayer(),
   editorText(),
   card(),
-  drawer()
+  drawer(),
+  layersInteract()
 ]

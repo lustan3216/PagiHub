@@ -10,7 +10,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import LayersRoot from '../Templates/LayersRoot'
+import LayersRoot from '../Templates/LayersInteract'
 
 export default {
   name: 'PanelProduction',

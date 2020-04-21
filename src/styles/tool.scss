@@ -115,6 +115,16 @@
   pointer-events: none !important;
 }
 
+.hover-cover {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: rgba(88, 159, 248, 0.2) !important;
+}
+
 .opacity {
   opacity: 0 !important;
 }
@@ -148,7 +158,8 @@
   box-shadow: 0 5px 20px 0 rgba(32, 48, 60, 0.11);
 }
 
-[data-no-action], .no-action {
+[data-no-action],
+.no-action {
   touch-action: none !important;
   pointer-events: none !important;
 }

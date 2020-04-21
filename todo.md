@@ -62,7 +62,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>組建</li>
 <li>Grid layout 不用有control layer，style 可以append在自己身上，但heihgt width trnasform等等不能動</li>
 <li>Layer 除了第一層不要有底</li>
-<li>Layer 除了第一層不要有底</li>
+<li>tree noed點兩下滑到那邊</li>
 </ol>
 
 ### Style

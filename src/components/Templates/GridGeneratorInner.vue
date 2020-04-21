@@ -10,7 +10,7 @@
     :is-draggable="isDraftMode || isExample"
     :is-resizable="isDraftMode || isExample"
     :responsive="true"
-    @layout-updated="update($event)"
+    @layout-updated="layoutUpdated($event)"
   >
     <grid-item
       v-for="child in layout"
@@ -32,7 +32,6 @@ import { AUTO_SIZE } from '@/const'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridItemChild from './GridItemChild'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
-import { vm } from '@/utils/vmMap'
 
 export default {
   name: 'GridGenerator',
@@ -80,7 +79,7 @@ export default {
     }
   },
   methods: {
-    update(newChildren) {
+    layoutUpdated(newChildren) {
       if (this.isExample) return
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
       const records = []
@@ -109,7 +108,7 @@ export default {
         this.$nextTick(() => {
           const child = this.$refs[node.id][0]
           // 新增組建的時候，有可能組建還沒渲染就autosize，會造成零空間
-          if (!vm(grandChild.id)) return
+          if (!this.vmMap[grandChild.id]) return
 
           child.$el.classList.add('disable-h-100')
           child.autoSize()
@@ -128,7 +127,6 @@ export default {
     border: none;
   }
 }
-
 ::v-deep.editable .vue-resizable-handle {
   z-index: 10;
 }

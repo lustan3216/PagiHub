@@ -52,7 +52,7 @@ const actions = {
     commit('SET', { projectMap })
 
     const componentSetId = await localforage.getItem('editingComponentSetId')
-    dispatch('draft/setComponent', componentSetId, { root: true })
+    dispatch('draft/setComponentSet', componentSetId, { root: true })
   },
 
   async appendProjectNode({ commit }, _node) {
@@ -69,7 +69,7 @@ const actions = {
     commit('APPEND_NODE', { id, node })
   },
 
-  deleteProjectNode({ commit, getters }, id) {
+  deleteProjectNode({ commit, getters, dispatch }, id) {
     const ids = [id]
     const grandChildrenRecords = nodeId => {
       getters.childrenOf[nodeId].forEach(child => {
@@ -78,8 +78,8 @@ const actions = {
         grandChildrenRecords(child.id)
       })
     }
-
     grandChildrenRecords(id)
+    dispatch('draft/removeComponentSet', id, { root: true })
     ids.forEach(id => commit('DELETE_NODE', id))
   }
 }

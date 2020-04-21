@@ -104,10 +104,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
     ...mapState('app', ['selectedComponentIds', 'copyComponentIds']),
     node() {
-      return this.nodesMap[this.id]
+      return this.draftNodesMap[this.id]
     },
     isGridItem() {
       return this.node.tag === GRID_ITEM
@@ -116,7 +115,7 @@ export default {
       return this.selectedComponentIds.includes(this.id)
     },
     selectedNodes() {
-      return this.selectedComponentIds.map(id => this.nodesMap[id])
+      return this.selectedComponentIds.map(id => this.draftNodesMap[id])
     }
   },
   methods: {

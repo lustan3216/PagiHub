@@ -98,7 +98,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap', 'selectedComponentSetId']),
+    ...mapState('draft', ['selectedComponentSetId']),
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['theOnlySelectedComponentId'])
   },

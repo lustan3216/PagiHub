@@ -6,6 +6,7 @@
       :class="{ absolute: index }"
       :key="child.id"
       :id="child.id"
+      :data-layer="Boolean(index)"
     />
   </div>
 </template>
@@ -19,7 +20,7 @@ import childrenMixin from '@/components/Templates/mixins/children'
 import { SORT_INDEX } from '@/const'
 
 export default {
-  name: 'RootLayers',
+  name: 'LayersInteract',
   components: {
     GridGenerator,
     GridItemChild,
@@ -43,5 +44,8 @@ export default {
   bottom: 0;
   right: 0;
   left: 0;
+}
+[data-layer] {
+  height: 0 !important;
 }
 </style>

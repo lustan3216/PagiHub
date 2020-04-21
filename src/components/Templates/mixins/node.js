@@ -1,7 +1,9 @@
 import { mapMutations, mapState } from 'vuex'
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { merge, cloneJson } from '@/utils/tool'
-import { STYLE, PROPS, VALUE } from '@/const'
+import { STYLE, PROPS, VALUE, GRID_GENERATOR } from '@/const'
+
+let hoverNode
 
 export default {
   props: {
@@ -14,9 +16,12 @@ export default {
     isExample: { default: false }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
+    ...mapState('app', ['hoverComponentId']),
+    hover() {
+      return this.hoverComponentId === this.id
+    },
     node() {
-      return this.nodesMap[this.id]
+      return this.draftNodesMap[this.id]
     },
     innerValue() {
       return this.node && this.node[VALUE]
@@ -27,6 +32,20 @@ export default {
     innerProps() {
       const setting = cloneJson(this.$options.defaultSetting || {})
       return merge(setting, (this.node && this.node[PROPS]) || {})
+    }
+  },
+  watch: {
+    hover(hover) {
+      const $el =
+        this.node.tag === GRID_GENERATOR ? this.$el : this.$el.parentNode
+
+      if (hover) {
+        hoverNode = document.createElement('DIV')
+        hoverNode.className = 'hover-cover'
+        $el.appendChild(hoverNode)
+      } else {
+        $el.removeChild(hoverNode)
+      }
     }
   },
   mounted() {

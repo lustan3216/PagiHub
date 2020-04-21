@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     ...mapActions('project', ['modifyProjectNodeParent']),
-    ...mapActions('draft', ['setComponent']),
+    ...mapActions('draft', ['setComponentSet']),
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {
         this.modifyProjectNodeParent({
@@ -116,7 +116,7 @@ export default {
     },
     nodeClick(node) {
       if (TYPE.COMPONENT_SET === node.type) {
-        this.setComponent(node.id)
+        this.setComponentSet(node.id)
       }
     },
     allowDrop(_, { data: dropData }, action) {

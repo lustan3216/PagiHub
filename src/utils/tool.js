@@ -3,8 +3,22 @@ import merge from 'element-ui/src/utils/merge'
 import { isUndefined, isString } from 'element-ui/src/utils/types'
 import isPlainObject from 'is-plain-object'
 import getValueByPath from 'lodash.get'
+import { on, off } from 'element-ui/src/utils/dom.js'
+export {
+  cloneJson,
+  isUndefined,
+  isPlainObject,
+  isString,
+  merge,
+  getValueByPath,
+  on,
+  off
+}
 
-export { cloneJson, isUndefined, isPlainObject, isString, merge, getValueByPath }
+export function onWithOff(a, b, c) {
+  on(a, b, c)
+  return () => off(a, b, c)
+}
 
 export const isArray = Array.isArray
 
@@ -42,17 +56,17 @@ export function deepFlatten(array) {
   }, array)
 }
 
-export function findBy(children, key, value) {
-  return children.find(x => x[key] === value)
+export function findBy(array, key, value) {
+  return array.find(x => x[key] === value)
 }
 
-export function findIndexBy(children, key, value) {
-  return children.findIndex(x => x[key] === value)
+export function findIndexBy(array, key, value) {
+  return array.findIndex(x => x[key] === value)
 }
 
-export function deleteBy(children, key, value) {
-  const oldIndex = findIndexBy(children, key, value)
-  children.splice(oldIndex, 1)
+export function deleteBy(array, key, value) {
+  const oldIndex = findIndexBy(array, key, value)
+  array.splice(oldIndex, 1)
 }
 
 export function nestedToLinerObject(target, nestedObject, key = 'children') {
@@ -63,4 +77,21 @@ export function nestedToLinerObject(target, nestedObject, key = 'children') {
   })
 
   return target
+}
+
+export function asyncGetValue(fn, timeout = 2000) {
+  return new Promise(resolve => {
+    const id = requestAnimationFrame(() => {
+      const value = fn()
+
+      if (!isUndefined(value)) {
+        cancelAnimationFrame(id)
+        resolve(value)
+      }
+
+      setTimeout(function() {
+        cancelAnimationFrame(id)
+      }, timeout)
+    })
+  })
 }

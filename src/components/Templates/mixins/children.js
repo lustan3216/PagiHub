@@ -1,21 +1,21 @@
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import { CHILDREN, GRID_ITEM } from '@/const'
 import { cloneJson, traversal } from '@/utils/tool'
+import { traversalChildrenOf } from '@/utils/node'
 import { componentIds } from '@/utils/keyId'
 
 export default {
   computed: {
-    ...mapState('draft', ['nodesMap']),
     ...mapGetters('draft', ['childrenOf', 'parentPath']),
     ...mapGetters('example', ['examplesMapByTag']),
     node() {
-      return this.nodesMap[this.id]
+      return this.draftNodesMap[this.id]
     },
     innerChildren() {
       const getterName = `${this.isExample ? 'example' : 'draft'}/childrenOf`
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
-      // children 因為每次更新 nodesMap，如果innerChildren用computed會所有的component都被更新
+      // children 因為每次更新 draftNodesMap，如果innerChildren用computed會所有的component都被更新
       return this.$store.getters[getterName][this.id].map(
         ({ [CHILDREN]: _, moved, parentId, ...node }) => ({
           ...node
@@ -79,18 +79,12 @@ export default {
         }
       ]
 
-      const grandChildrenRecords = nodeId => {
-        this.childrenOf[nodeId].forEach(child => {
-          records.push({
-            path: child.id,
-            value: undefined
-          })
-
-          grandChildrenRecords(child.id)
+      traversalChildrenOf(theNodeIdGonnaRemove, child => {
+        records.push({
+          path: child.id,
+          value: undefined
         })
-      }
-
-      grandChildrenRecords(theNodeIdGonnaRemove)
+      })
 
       const parentNodes = this.parentPath(theNodeIdGonnaRemove)
       for (let i = 0; i < parentNodes.length; i++) {

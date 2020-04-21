@@ -1,9 +1,9 @@
 <template>
   <view-port>
-    <layers-root
+    <layersInteract
       v-if="rootNode"
       :id="rootNode.id"
-      class="panelDraft"
+      class="panel-draft"
     />
   </view-port>
 </template>
@@ -11,14 +11,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import ViewPort from './ViewPort'
-import LayersRoot from '../Templates/LayersRoot'
+import LayersInteract from '../Templates/LayersInteract'
 import { isMac } from '@/utils/device'
 
 export default {
   name: 'PanelDraft',
   components: {
     ViewPort,
-    LayersRoot
+    LayersInteract
   },
   computed: {
     ...mapGetters('draft', ['rootNode'])
@@ -33,7 +33,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.panelDraft {
-  margin: 8px;
+.panel-draft {
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 1px;
 }
 </style>

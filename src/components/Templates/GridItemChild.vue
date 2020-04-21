@@ -1,10 +1,10 @@
 <template>
   <controller-layer
     v-if="firstChild && isDraftMode"
-    :class="{ 'dash-border': !isAnimating }"
     :style="innerStyles"
     :id="firstChild.id"
   >
+    <portal-target :name="`GridItemChild${firstChild.id}`" />
     <async-component
       :tag="firstChild.tag"
       :id="firstChild.id"
@@ -28,12 +28,14 @@
 
   <controller-layer
     v-else-if="isDraftMode && !isExample"
-    :class="{ 'dash-border': !isAnimating }"
     :id="id"
     :style="innerStyles"
     class="flex-center"
   >
-    <node-controller :id="id" />
+    <node-controller
+      :id="id"
+      class="h-100"
+    />
   </controller-layer>
 </template>
 
@@ -43,7 +45,6 @@ import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import NodeController from '../TemplateUtils/NodeController'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
-import { mapState } from 'vuex'
 
 export default {
   name: 'GridItemChild',
@@ -59,7 +60,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['isAnimating']),
     firstChild() {
       return this.innerChildren[0]
     },
@@ -79,11 +79,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.dash-border {
-  border: 1px dashed #dedede;
-  margin-left: -1px;
-  margin-top: -1px;
-}
 ::v-deep[data-invisible] + .vue-resizable-handle {
   display: none;
 }

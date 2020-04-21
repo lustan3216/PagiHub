@@ -5,7 +5,8 @@ const state = {
   isAnimating: false,
   scaleRatio: 1,
   selectedComponentIds: [],
-  copyComponentIds: []
+  copyComponentIds: [],
+  hoverComponentId: null
 }
 
 const mutations = {
@@ -15,6 +16,9 @@ const mutations = {
   },
   CLEAN_SELECTED_COMPONENT_IDS(state, ids) {
     state.selectedComponentIds = arraySubtract(state.selectedComponentIds, ids)
+  },
+  SET_HOVER_COMPONENT_ID(state, id) {
+    state.hoverComponentId = id
   },
   SET_SELECTED_COMPONENT_ID(state, id) {
     state.selectedComponentIds = [id]

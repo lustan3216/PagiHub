@@ -67,7 +67,6 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { vmMap } from '@/utils/vmMap'
 import { cloneJson } from '@/utils/tool'
 import { categories, FORM_ITEM_ID } from '../../example'
 import { CATEGORY, ID, NAME } from '@/const'
@@ -131,7 +130,7 @@ export default {
       const rootForm = this.theRootForm(this.id)
 
       if (rootForm && template.tag === 'form-generator') {
-        const vm = vmMap[rootForm.id]
+        const vm = this.vmMap[rootForm.id]
 
         template.children = template.children.filter(x => {
           const tag = x.children[0].tag

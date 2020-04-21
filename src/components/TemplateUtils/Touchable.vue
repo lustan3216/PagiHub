@@ -1,13 +1,12 @@
 <template>
   <el-button
-    :icon="touchable ? 'el-icon-thumb' : 'el-icon-circle-close'"
+    :icon="touchable ? 'el-icon-unlock' : 'el-icon-lock'"
     type="text"
     @click.stop="click"
   />
 </template>
 
 <script>
-import { vm } from '@/utils/vmMap'
 import Vue from 'vue'
 import { GRID_ITEM_CHILD } from '@/const'
 const observable = Vue.observable({ ids: [] })
@@ -25,13 +24,13 @@ export default {
       return this.selfVm.$el
     },
     selfVm() {
-      return vm(this.id)
+      return this.vmMap[this.id]
     },
     parentId() {
       return this.selfVm.node.parentId
     },
     parentVm() {
-      return vm(this.parentId)
+      return this.vmMap[this.parentId]
     },
     isGridItemParent() {
       return this.parentVm.$options._componentTag === GRID_ITEM_CHILD

@@ -4,7 +4,7 @@ import listToTree from '@/utils/listToTree'
 import { SET } from '../../index'
 import { componentIds } from '@/utils/keyId'
 import { nestedToLinerObject } from '@/utils/tool'
-import { layersRoot } from '../../../example/basic'
+import { layersInteract } from '../../../example/basic'
 
 const state = {
   nodesMap: {},
@@ -28,10 +28,20 @@ const mutations = {
 }
 
 const actions = {
-  setComponent({ commit, state, dispatch }, selectedComponentSetId) {
+  setComponentSet({ commit, state, dispatch }, selectedComponentSetId) {
     commit('SET', { selectedComponentSetId })
     localforage.setItem('editingComponentSetId', selectedComponentSetId)
     dispatch('getRootNode')
+  },
+
+  removeComponentSet({ state: { selectedComponentSetId }, commit }, id) {
+    if (id === selectedComponentSetId) {
+      localforage.setItem('editingComponentSetId', null)
+      commit('SET', {
+        nodesMap: {},
+        selectedComponentSetId: null
+      })
+    }
   },
 
   async getRootNode({ commit, state }) {
@@ -43,7 +53,7 @@ const actions = {
     if (Object.hasAnyKey(nodesMap)) {
       componentIds.restoreIds(nodesMap)
     } else {
-      const initTemplate = layersRoot()
+      const initTemplate = layersInteract()
       initTemplate.parentId = 0
       componentIds.appendIdNested(initTemplate)
       nestedToLinerObject(nodesMap, initTemplate)

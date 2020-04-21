@@ -10,21 +10,29 @@
       :value="innerValue || 'Edit Me'"
     />
 
-    <template v-if="firstChild">
-      <portal :to="`GridItemChild${id}`">
+    <portal
+      v-if="availableEvents.length"
+      :to="`GridItemChild${id}`"
+    >
+      <el-tooltip
+        effect="light"
+        content="Replace all actions in this button for nicer editing UX. It only shows in Draft mode."
+        placement="top"
+      >
         <el-button
           class="link"
-          icon="el-icon-video-play"
+          icon="el-icon-thumb"
           circle
-          @click="link"
+          @click="onClick"
         />
-      </portal>
+      </el-tooltip>
+    </portal>
 
-      <async-component
-        :tag="firstChild.tag"
-        :id="firstChild.id"
-      />
-    </template>
+    <async-component
+      v-if="firstChild"
+      :tag="firstChild.tag"
+      :id="firstChild.id"
+    />
   </el-button>
 
   <el-button
@@ -32,20 +40,20 @@
     v-bind="innerProps"
     :style="innerStyles"
     class="wh-100 m-0 button"
-    @click="link"
+    @click="onClick"
     v-html="innerValue"
   />
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
-import { vm } from '@/utils/vmMap'
-import { TYPE } from '@/const'
 import EditorTextInner from './EditorTextInner'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { REDIRECT_TO } from '../Setup/EditorSetting/SettingFlexButton'
+import { deleteBy } from '@/utils/tool'
 
 export default {
   defaultSetting,
@@ -55,21 +63,48 @@ export default {
     AsyncComponent
   },
   mixins: [nodeMixin, childrenMixin],
+  data() {
+    return {
+      clickEvents: []
+    }
+  },
   computed: {
     firstChild() {
       return this.innerChildren[0]
+    },
+    redirectComponentSet() {
+      const linkId = this.innerProps[REDIRECT_TO]
+      return linkId && this.draftNodesMap[linkId]
+    },
+    availableEvents() {
+      const events = this.clickEvents.map(x => x.fn)
+      if (this.firstChild || this.redirectComponentSet) {
+        return [...events, this.redirect]
+      } else {
+        return events
+      }
     }
   },
   methods: {
-    link() {
-      const linkId = this.innerProps[REDIRECT_TO]
-      const component = linkId && this.nodesMap[linkId]
-
-      if (component && component.type === TYPE.COMPONENT_SET) {
+    onClick() {
+      this.availableEvents.forEach(event => event())
+    },
+    redirect() {
+      if (this.redirectComponentSet) {
         // convert node tree, tree 要cache
       } else if (this.firstChild) {
-        vm(this.firstChild.id).toggleVisibility()
+        this.vmMap[this.firstChild.id].toggleVisibility()
       }
+    },
+    registerClickEvent(id, fn) {
+      if (this.redirectComponentSet) {
+        Message.eroor('Already link to a componentSet')
+      } else {
+        this.clickEvents.push({ id, fn })
+      }
+    },
+    removeClickEvent(id) {
+      deleteBy(this.clickEvents, 'id', id)
     }
   }
 }
@@ -90,8 +125,9 @@ export default {
   }
 }
 .link {
-  right: 5px;
-  top: 5px;
+  right: -5px;
+  top: -5px;
   position: absolute;
+  padding: 5px;
 }
 </style>

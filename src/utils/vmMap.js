@@ -1,8 +1,9 @@
 import store from '../store'
 import { GRID_ITEM, TAG } from '../const'
 import { findFirstCommonParentTree } from './node'
-export const vmMap = {}
+const vmMap = {}
 
+export default vmMap
 window.vmMap = vmMap
 
 export function vm(id) {
