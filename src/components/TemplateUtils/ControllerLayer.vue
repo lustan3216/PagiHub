@@ -16,8 +16,13 @@
     >
       <slot />
     </div>
-
-    <slot v-else />
+    <!--blank div to make consistency and might accept innerStyle in the future-->
+    <div
+      v-else
+      class="h-100"
+    >
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -25,6 +30,8 @@
 import { mapState, mapMutations } from 'vuex'
 import NodeController from './NodeController'
 import clickOutside from '@/utils/clickOutside'
+
+const vmMap = {}
 
 export default {
   name: 'ControllerLayer',
@@ -65,6 +72,16 @@ export default {
       return !this.canNotEdit && this.clickOutside
     }
   },
+  created() {
+    if (this.isDraftMode && !this.isExample) {
+      vmMap[this.id] = this
+    }
+  },
+  beforeDestroy() {
+    if (this.isDraftMode && !this.isExample) {
+      delete vmMap[this.id]
+    }
+  },
   methods: {
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
@@ -72,8 +89,15 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     dblclick() {
-      this.canNotEdit = false
-      this.SET_SELECTED_COMPONENT_ID(this.id)
+      if (this.canNotEdit) {
+        this.canNotEdit = false
+        this.SET_SELECTED_COMPONENT_ID(this.id)
+      } else {
+        this.canNotEdit = true
+        const { parentId } = this.node
+        this.SET_SELECTED_COMPONENT_ID(parentId)
+        vmMap[parentId].canNotEdit = false
+      }
     },
     clickOutside(event) {
       const inSideBar = document

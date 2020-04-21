@@ -60,7 +60,9 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>icon</li>
 <li>setting 區塊做個按鈕，可直接選到上一層組建</li>
 <li>組建</li>
-<li>Layer and craausel 要考慮grid layout要怎麼處理control layer</li>
+<li>Grid layout 不用有control layer，style 可以append在自己身上，但heihgt width trnasform等等不能動</li>
+<li>Layer 除了第一層不要有底</li>
+<li>Layer 除了第一層不要有底</li>
 </ol>
 
 ### Style

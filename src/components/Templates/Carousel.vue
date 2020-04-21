@@ -11,13 +11,17 @@
       v-for="child in innerChildren"
       :ref="child.id"
       :key="child.id"
-      @click.stop.native="click(child.id)"
-      @mouseleave="mouseLeave"
+      @mouseover.native.stop="asd = child.id"
     >
-      <grid-generator
+      <controller-layer
+        :style="child.styles"
         :id="child.id"
-        class="h-100"
-      />
+      >
+        <grid-generator
+          :id="child.id"
+          class="h-100"
+        />
+      </controller-layer>
     </swiper-slide>
 
     <div
@@ -52,15 +56,32 @@ import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import childrenMixin from '@/components/Templates/mixins/children'
 import nodeMixin from '@/components/Templates/mixins/node'
 import GridGenerator from './GridGenerator'
+import ControllerLayer from '../TemplateUtils/ControllerLayer'
 
 export default {
   name: 'Carousel',
   components: {
     Swiper,
     SwiperSlide,
-    GridGenerator
+    GridGenerator,
+    ControllerLayer
   },
   mixins: [childrenMixin, nodeMixin],
+  data() {
+    return {
+      asd: null
+    }
+  },
+  computed: {
+    parentEl() {
+      return (
+        this.$parent &&
+        this.$parent.$el &&
+        this.$parent.$el.setAttribute &&
+        this.$parent.$el
+      )
+    }
+  },
   methods: {
     mouseLeave() {
       // this.isEditableId = null

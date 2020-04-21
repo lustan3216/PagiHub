@@ -112,6 +112,5 @@ export default [
   videoPlayer(),
   editorText(),
   card(),
-  drawer(),
-  layersRoot()
+  drawer()
 ]

@@ -28,6 +28,8 @@
           :id="data.id"
           :exclude="['copy', 'portal']"
           class="w-100"
+          @mouseover.native.stop="hoverNode"
+          @mouseleave="hoverLeaveNode"
         />
       </template>
     </el-tree>
@@ -41,6 +43,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import { cloneJson, traversal, arraySubtract } from '@/utils/tool'
 import { isMac } from '@/utils/device'
 import NodeController from '../TemplateUtils/NodeController'
+import { vm } from '@/utils/vmMap'
 
 export default {
   name: 'PanelNodes',
@@ -151,7 +154,9 @@ export default {
         })
         this.TOGGLE_SELECTED_COMPONENT_ID(id)
       }
-    }
+    },
+    hoverNode(id) {},
+    hoverLeaveNode(id) {}
   }
 }
 </script>

@@ -25,7 +25,7 @@ const XXS = 'xxs'
 export const defaultSetting = {
   [COL_NUM]: 72,
   [ROW_HEIGHT]: 5,
-  [VERTICAL_COMPACT]: true,
+  [VERTICAL_COMPACT]: false,
   [COLS]: {
     [LG]: 72,
     [MD]: 54,
