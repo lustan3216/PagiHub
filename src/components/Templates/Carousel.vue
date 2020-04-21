@@ -1,9 +1,10 @@
 <template>
   <swiper
-    ref="carousel"
+    ref="swiper"
     :style="innerStyles"
     :autoplay="false"
-    :options="innerProps"
+    :options="transformedInnerProps"
+    :allow-touch-move="lockGridLayout"
     trigger="click"
     class="wh-100"
   >
@@ -13,9 +14,25 @@
       :key="child.id"
       @mouseover.native.stop="asd = child.id"
     >
+      <portal :to="`GridItemChild${id}`">
+        <el-tooltip
+          effect="light"
+          content="To switch draggable between carousel and grid layout."
+          placement="top"
+        >
+          <el-button
+            :icon="lockGridLayout ? 'el-icon-unlock' : 'el-icon-lock'"
+            class="lock"
+            circle
+            @click="lockGridLayout = !lockGridLayout"
+          />
+        </el-tooltip>
+      </portal>
+
       <controller-layer
         :style="child.styles"
         :id="child.id"
+        :data-no-action="lockGridLayout"
       >
         <grid-generator
           :id="child.id"
@@ -69,10 +86,17 @@ export default {
   mixins: [childrenMixin, nodeMixin],
   data() {
     return {
-      asd: null
+      asd: null,
+      lockGridLayout: true
     }
   },
   computed: {
+    transformedInnerProps() {
+      return {
+        ...this.innerProps,
+        autoPlay: this.innerProps.autoPlay && this.lockGridLayout
+      }
+    },
     parentEl() {
       return (
         this.$parent &&
@@ -82,10 +106,12 @@ export default {
       )
     }
   },
+  watch: {
+    lockGridLayout(value) {
+      this.$refs.swiper.$swiper.allowTouchMove = value
+    }
+  },
   methods: {
-    mouseLeave() {
-      // this.isEditableId = null
-    },
     click(id) {
       // this.isEditableId = id
     }
@@ -110,5 +136,12 @@ export default {
 
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
+}
+.lock {
+  right: -5px;
+  top: -5px;
+  position: absolute;
+  padding: 5px;
+  z-index: 10;
 }
 </style>

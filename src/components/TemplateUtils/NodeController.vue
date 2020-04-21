@@ -38,6 +38,7 @@
       <example-add
         v-if="isGridItem"
         :id="id"
+        style="width: 14px;"
         @onAdd="vmAddNodesToParentAndRecord(id, $event)"
       />
 

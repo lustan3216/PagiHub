@@ -105,6 +105,7 @@ export const drawer = function() {
 
 export default [
   layers(),
+  layersInteract(),
   flexButton(),
   flexImage(),
   gridGenerator(),
@@ -113,6 +114,5 @@ export default [
   videoPlayer(),
   editorText(),
   card(),
-  drawer(),
-  layersInteract()
+  drawer()
 ]

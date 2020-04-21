@@ -20,7 +20,7 @@
         placement="top"
       >
         <el-button
-          class="link"
+          class="redirect"
           icon="el-icon-thumb"
           circle
           @click="onClick"
@@ -124,7 +124,7 @@ export default {
     min-height: inherit;
   }
 }
-.link {
+.redirect {
   right: -5px;
   top: -5px;
   position: absolute;
