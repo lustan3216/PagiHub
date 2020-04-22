@@ -3,7 +3,7 @@
     v-if="isDraftMode"
     :class="{ elevate: selected, 'dash-border': !isAnimating }"
     class="control-layer h-100"
-    @click.exact.stop="!isExample && SET_SELECTED_COMPONENT_ID(id)"
+    @click.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_ID(id)"
     @click.ctrl.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
     @click.meta.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
     @dblclick.stop="dblclick"
@@ -17,7 +17,9 @@
       <slot />
     </div>
 
-    <slot v-else />
+    <div v-else class="h-100 pointer">
+      <slot  />
+    </div>
   </div>
 </template>
 
@@ -117,12 +119,14 @@ export default {
 }
 ::v-deep.canNotEdit {
   pointer-events: none;
+
   & > .swiper-container {
     cursor: unset !important;
   }
 }
 .dash-border {
   border: 1px dashed #dedede;
-  box-sizing: border-box;
+  margin-left: -1px;
+  margin-top: -1px;
 }
 </style>

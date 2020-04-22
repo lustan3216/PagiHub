@@ -72,7 +72,7 @@ export const carousel = function() {
   })
   return {
     [TAG]: 'carousel',
-    [CAN_NEW_ITEM]: true,
+    [CAN_NEW_ITEM]: false,
     [CAN_DRAG]: true,
     [CHILDREN]: [
       layersInteract({

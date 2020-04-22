@@ -3,7 +3,7 @@
     v-observe-visibility="options"
     class="h-100"
   >
-    <template v-if="inViewPort && this.innerProps.keyboard">
+    <template v-if="inViewPort && innerProps.keyboard">
       <i
         v-shortkey="['arrowup']"
         v-if="canUp"
@@ -26,13 +26,45 @@
       />
     </template>
 
-    <layers-interact
-      v-if="arrow === 'never'"
-      :id="layerInteractId"
-      class="layers-interact"
-    />
+    <template v-if="innerProps.arrow === 'custom'">
+      <layers-interact
+        :id="layerInteractId"
+        class="layers-interact"
+      />
+
+      <portal :to="`GridItemChild${prevGridItemId}`">
+        <el-tooltip
+          effect="light"
+          content="Replace Prev action in this button for nicer editing UX. It only shows in Draft mode."
+          placement="top"
+        >
+          <el-button
+            class="prev"
+            icon="el-icon-thumb"
+            circle
+            @click="carousel.prev()"
+          />
+        </el-tooltip>
+      </portal>
+
+      <portal :to="`GridItemChild${nextGridItemId}`">
+        <el-tooltip
+          effect="light"
+          content="Replace Next action in this button for nicer editing UX. It only shows in Draft mode."
+          placement="top"
+        >
+          <el-button
+            class="next"
+            icon="el-icon-thumb"
+            circle
+            @click="carousel.next()"
+          />
+        </el-tooltip>
+      </portal>
+    </template>
+
     <el-carousel
-      ref="carousel"
+      :ref="id"
       :style="innerStyles"
       v-bind="innerProps"
       :indicator-position="hasIndicator"
@@ -44,7 +76,7 @@
       <el-carousel-item
         v-for="child in gridGenerators"
         :key="child.id"
-        class="asd"
+        :class="`carousel-item-${id}`"
       >
         <controller-layer
           :style="child.styles"
@@ -62,6 +94,7 @@
 
 <script>
 import interactjs from 'interactjs'
+import { mapGetters } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import childrenMixin from '@/components/Templates/mixins/children'
 import nodeMixin from '@/components/Templates/mixins/node'
@@ -69,7 +102,7 @@ import GridGenerator from './GridGenerator'
 import LayersInteract from './LayersInteract'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
-import { GRID_GENERATOR, LAYERS_INTERACT } from '@/const'
+import { CHILDREN, GRID_GENERATOR, LAYERS_INTERACT } from '@/const'
 
 export default {
   defaultSetting,
@@ -96,11 +129,18 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('draft', ['childrenOf']),
     gridGenerators() {
       return this.innerChildren.filter(x => x.tag === GRID_GENERATOR)
     },
     layerInteractId() {
       return this.innerChildren.filter(x => x.tag === LAYERS_INTERACT)[0].id
+    },
+    prevGridItemId() {
+      return this.childrenOf[this.layerInteractId][0][CHILDREN][0].id
+    },
+    nextGridItemId() {
+      return this.childrenOf[this.layerInteractId][0][CHILDREN][1].id
     },
     arrow() {
       return this.innerProps.arrow === 'custom'
@@ -146,14 +186,14 @@ export default {
       )
     },
     carousel() {
-      return this.$refs.carousel
+      return this.$refs[this.id]
     }
   },
   mounted() {
     let i = true
     const position = { x: 0, y: 0 }
 
-    interactjs('.asd').draggable({
+    interactjs(`.carousel-item-${this.id}`).draggable({
       ignoreFrom: '.vue-grid-item',
       listeners: {
         move: event => {
@@ -230,5 +270,12 @@ export default {
     right: initial;
     left: 0;
   }
+}
+.prev,
+.next {
+  right: -5px;
+  top: -5px;
+  position: absolute;
+  padding: 5px;
 }
 </style>

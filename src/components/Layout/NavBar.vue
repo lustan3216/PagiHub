@@ -5,7 +5,7 @@
     class="preview"
   >
     <portal-target
-      name="view-port-controller"
+      name="ViewPort"
       class="inline-block m-l-15 box-shadow"
     />
 
@@ -30,7 +30,7 @@
     class="flex-center"
   >
     <portal-target
-      name="view-port-controller"
+      name="ViewPort"
       class="inline-block m-l-15"
     />
 

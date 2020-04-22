@@ -24,7 +24,7 @@
       </dialog-interacted>
     </div>
 
-    <portal to="view-port-controller">
+    <portal to="ViewPort">
       <el-dropdown
         split-button
         size="small"

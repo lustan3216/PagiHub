@@ -11,7 +11,7 @@
     />
 
     <el-popover
-      v-if="mounted && !isExample"
+      v-if="mounted && !isExample && !isAnimating"
       :reference="parentEl"
       :placement="firstChild.canNewItem ? 'top' : 'right'"
       trigger="hover"
@@ -32,6 +32,7 @@
     :style="innerStyles"
     class="flex-center"
   >
+    <portal-target :name="`GridItemChild${id}`" />
     <node-controller
       v-if="!isExample"
       :id="id"
@@ -41,6 +42,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
@@ -61,6 +63,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', ['isAnimating']),
     firstChild() {
       return this.innerChildren[0]
     },
