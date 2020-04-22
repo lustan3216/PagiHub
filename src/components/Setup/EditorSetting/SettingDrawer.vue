@@ -42,7 +42,7 @@ export default {
     options() {
       return this.allChildren.map(node => ({
         value: node.id,
-        label: `${shortTagName(node.tag)} ${node.id}`
+        label: `${shortTagName(node)} ${node.id}`
       }))
     },
     spec() {

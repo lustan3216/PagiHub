@@ -30,7 +30,7 @@
           :exclude="['copy', 'portal']"
           class="w-100"
           @dblclick.native.stop="scrollIntoView(data.id)"
-          @mouseover.native.stop="hoverNode(data.id)"
+          @mouseenter.native.stop="hoverNode(data.id)"
           @mouseleave.native.stop="hoverLeaveNode(data.id)"
         />
       </template>
@@ -105,8 +105,7 @@ export default {
   methods: {
     ...mapMutations('app', [
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
-      'TOGGLE_SELECTED_COMPONENT_ID',
-      'SET_HOVER_COMPONENT_ID'
+      'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
     ...mapMutations('draft', ['RECORD']),
     keydwon(e) {
@@ -160,10 +159,10 @@ export default {
       }
     },
     hoverNode(id) {
-      this.SET_HOVER_COMPONENT_ID(id)
+      this.$bus.$emit(`hover-${id}`, true)
     },
-    hoverLeaveNode() {
-      this.SET_HOVER_COMPONENT_ID(null)
+    hoverLeaveNode(id) {
+      this.$bus.$emit(`hover-${id}`, false)
     },
     scrollIntoView(id) {
       this.vmMap[id].$el.scrollIntoView({ behavior: 'smooth' })

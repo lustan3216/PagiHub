@@ -1,52 +1,51 @@
 <template>
-  <div class="h-100">
+  <div
+    v-observe-visibility="options"
+    class="h-100"
+  >
+    <template v-if="inViewPort && this.innerProps.keyboard">
+      <i
+        v-shortkey="['arrowup']"
+        v-if="canUp"
+        @shortkey="carousel.prev()"
+      />
+      <i
+        v-shortkey="['arrowdown']"
+        v-if="canDown"
+        @shortkey="carousel.next()"
+      />
+      <i
+        v-shortkey="['arrowleft']"
+        v-if="canLeft"
+        @shortkey="carousel.prev()"
+      />
+      <i
+        v-shortkey="['arrowright']"
+        v-if="canRight"
+        @shortkey="carousel.next()"
+      />
+    </template>
+
     <layers-interact
+      v-if="arrow === 'never'"
       :id="layerInteractId"
       class="layers-interact"
     />
-    <swiper
-      ref="swiper"
+    <el-carousel
+      ref="carousel"
       :style="innerStyles"
-      :options="transformedInnerProps"
-      :key="JSON.stringify(transformedInnerProps)"
+      v-bind="innerProps"
+      :indicator-position="hasIndicator"
+      :class="{ indicatorTop, indicatorLeft }"
+      :arrow="arrow"
+      draggable="false"
       class="wh-100"
     >
-      <swiper-slide
+      <el-carousel-item
         v-for="child in gridGenerators"
-        :ref="child.id"
         :key="child.id"
+        class="asd"
       >
-        <portal
-          v-if="isDraftMode && !isExample"
-          :to="`GridItemChild${id}`"
-        >
-          <el-tooltip
-            :content="
-              canNotDrag
-                ? 'Unlock to operate carousel and enable autoplay'
-                : 'Lock to edit grid layout. Autoplay will stop for temporary'
-            "
-            effect="light"
-            placement="top"
-          >
-            <el-button
-              v-if="swiper"
-              icon="el-icon-caret-left"
-              class="left"
-              circle
-              @click="swiper.slidePrev()"
-            />
-
-            <el-button
-              v-if="swiper"
-              icon="el-icon-caret-right"
-              class="right"
-              circle
-              @click="swiper.slideNext()"
-            />
-          </el-tooltip>
-        </portal>
-
         <controller-layer
           :style="child.styles"
           :id="child.id"
@@ -56,28 +55,14 @@
             class="h-100"
           />
         </controller-layer>
-      </swiper-slide>
-
-      <div
-        v-if="innerProps.pagination"
-        slot="pagination"
-        class="swiper-pagination"
-      />
-
-      <template v-if="innerProps.scrollBar">
-        <div
-          slot="scrollbar"
-          class="swiper-scrollbar"
-        />
-      </template>
-    </swiper>
+      </el-carousel-item>
+    </el-carousel>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import 'swiper/css/swiper.css'
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import interactjs from 'interactjs'
+import { ObserveVisibility } from 'vue-observe-visibility'
 import childrenMixin from '@/components/Templates/mixins/children'
 import nodeMixin from '@/components/Templates/mixins/node'
 import GridGenerator from './GridGenerator'
@@ -90,18 +75,24 @@ export default {
   defaultSetting,
   name: 'Carousel',
   components: {
-    Swiper,
-    SwiperSlide,
     GridGenerator,
     ControllerLayer,
     LayersInteract
+  },
+  directives: {
+    ObserveVisibility
   },
   mixins: [childrenMixin, nodeMixin],
   data() {
     return {
       canNotDrag: false,
       currentIndex: 0,
-      swiper: null
+      inViewPort: false,
+      options: {
+        callback: isVisible => {
+          this.inViewPort = isVisible
+        }
+      }
     }
   },
   computed: {
@@ -111,30 +102,40 @@ export default {
     layerInteractId() {
       return this.innerChildren.filter(x => x.tag === LAYERS_INTERACT)[0].id
     },
-    transformedInnerProps() {
-      if (this.isDraftMode) {
-        return {
-          ...this.innerProps,
-          freeMode: false,
-          mousewheel: false,
-          autoplay: false,
-          allowTouchMove: false,
-          keyboard: true,
-          breakpoints: this.breakpoints,
-          initialSlide: this.currentIndex
-        }
-      } else {
-        return {
-          ...this.innerProps,
-          breakpoints: this.breakpoints
-        }
-      }
+    arrow() {
+      return this.innerProps.arrow === 'custom'
+        ? 'never'
+        : this.innerProps.arrow
     },
-    breakpoints() {
-      return (this.innerProps.breakpoints || []).reduce((acc, x) => {
-        acc[x.breakpoint] = x
-        return acc
-      }, {})
+    hasIndicator() {
+      return this.innerProps.indicatorPosition === 'none' ? 'none' : ''
+    },
+    indicatorTop() {
+      return this.innerProps.indicatorPosition === 'top'
+    },
+    indicatorLeft() {
+      return this.innerProps.indicatorPosition === 'left'
+    },
+    isHorizontal() {
+      return this.innerProps.direction === 'horizontal'
+    },
+    canUp() {
+      return !this.isHorizontal && !this.isFirst
+    },
+    canDown() {
+      return !this.isHorizontal && !this.isEnd
+    },
+    canRight() {
+      return this.isHorizontal && !this.isEnd
+    },
+    canLeft() {
+      return this.isHorizontal && !this.isFirst
+    },
+    isFirst() {
+      return this.carousel.activeIndex === 0
+    },
+    isEnd() {
+      return this.innerChildren.length - 2 === this.carousel.activeIndex
     },
     parentEl() {
       return (
@@ -143,17 +144,52 @@ export default {
         this.$parent.$el.setAttribute &&
         this.$parent.$el
       )
+    },
+    carousel() {
+      return this.$refs.carousel
     }
   },
-  watch: {
-    transformedInnerProps: {
-      handler() {
-        this.$nextTick(() => {
-          this.swiper = this.$refs.swiper.$swiper
-        })
-      },
-      immediate: true
-    }
+  mounted() {
+    let i = true
+    const position = { x: 0, y: 0 }
+
+    interactjs('.asd').draggable({
+      ignoreFrom: '.vue-grid-item',
+      listeners: {
+        move: event => {
+          if (!this.innerProps.allowDrag) {
+            return
+          }
+
+          position.x += event.dx
+          position.y += event.dy
+          // event.target.style.transform = `translate(${position.x}px, ${position.y}px)`
+
+          if (this.isHorizontal) {
+            if (i && position.x < -50) {
+              i = false
+              this.carousel.next()
+            } else if (i && position.x > 50) {
+              i = false
+              this.carousel.prev()
+            }
+          } else {
+            if (i && position.y < -50) {
+              i = false
+              this.carousel.next()
+            } else if (i && position.y > 50) {
+              i = false
+              this.carousel.prev()
+            }
+          }
+        },
+        end() {
+          i = true
+          position.x = 0
+          position.y = 0
+        }
+      }
+    })
   }
 }
 </script>
@@ -174,27 +210,25 @@ export default {
 }
 
 .el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
-}
-.left {
-  right: 25px;
-  top: -5px;
-  position: absolute;
-  padding: 5px;
-  z-index: 10;
-}
-.right {
-  right: -5px;
-  top: -5px;
-  position: absolute;
-  padding: 5px;
-  z-index: 10;
+  background-color: #bbbec1;
 }
 .layers-interact {
   z-index: 10;
   height: 0;
 }
-.rotate90 {
-  transform: rotate(90deg);
+
+::v-deep {
+  .el-carousel__indicators {
+    z-index: 30;
+  }
+  &.indicatorTop .el-carousel__indicators--horizontal {
+    bottom: initial;
+    top: 0;
+  }
+
+  &.indicatorLeft .el-carousel__indicators--vertical {
+    right: initial;
+    left: 0;
+  }
 }
 </style>

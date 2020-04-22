@@ -54,7 +54,7 @@ export default {
       // can new layer-item, grid-item, carousel-item, form-item
       const { tag } = this.node
       // eslint-disable-next-line
-      const emptyItem = this.examplesMapByTag[tag][CHILDREN][0]
+      const emptyItem = Array.last(this.examplesMapByTag[tag][CHILDREN])
 
       this._addNodesToParentAndRecord(emptyItem)
     },

@@ -41,7 +41,8 @@ export function findFirstCommonParentTree(ids) {
 }
 
 const cache = {}
-export function shortTagName(tag) {
+export function shortTagName(node) {
+  const tag = node.name || node.tag
   if (cache[tag]) {
     return cache[tag]
   }

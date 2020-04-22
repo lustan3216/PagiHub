@@ -6,6 +6,7 @@
         :view-port-el="$refs.browser.$el"
         :class="{ interact: isDraftMode }"
       />
+
       <dialog-interacted
         ref="browser"
         :scale-ratio="scaleRatio"
@@ -163,5 +164,9 @@ export default {
   width: calc(100vw - 350px);
   @include calc-vh(height, '100vh - 70px');
   position: absolute;
+}
+.draggable {
+  touch-action: none;
+  user-select: none;
 }
 </style>

@@ -53,14 +53,14 @@ export default {
       return this.draftNodesMap[this.id]
     },
     nodeShortName() {
-      return this.shortTagName(this.node.tag)
+      return this.shortTagName(this.node)
     },
     firstChildNode() {
       const child = this.childrenOf[this.id][0]
       return child && this.draftNodesMap[child.id]
     },
     firstChildNodeShortName() {
-      return this.shortTagName(this.firstChildNode.tag)
+      return this.shortTagName(this.firstChildNode)
     },
     parentId() {
       return this.node[PARENT_ID]
@@ -69,7 +69,7 @@ export default {
       return this.draftNodesMap[this[PARENT_ID]]
     },
     parentNodeShortName() {
-      return this.shortTagName(this.parentNode.tag)
+      return this.shortTagName(this.parentNode)
     }
   },
   methods: {

@@ -56,11 +56,15 @@ import {
   Tooltip,
   Popover,
   Form,
-  FormItem
+  FormItem,
+  Carousel,
+  CarouselItem
 } from 'element-ui'
 Vue.prototype.$ELEMENT = { size: 'mini' }
 Vue.prototype.$loading = Loading.service
 
+Vue.use(Carousel)
+Vue.use(CarouselItem)
 Vue.use(Dialog)
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)
@@ -91,6 +95,7 @@ Vue.use(Loading.directive)
 
 // eslint-disable-next-line
 Vue.prototype.$log = console.log
+Vue.prototype.$bus = new Vue()
 Vue.config.productionTip = false
 Vue.config.devtools = process.env.NODE_ENV === 'development'
 

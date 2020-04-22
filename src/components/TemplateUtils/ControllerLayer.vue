@@ -67,12 +67,7 @@ export default {
       return !this.canNotEdit && this.clickOutside
     },
     isGridItem() {
-      console.log(this.node.tag, GRID_ITEM)
       return this.node.tag === GRID_ITEM
-    },
-    isGridLayout() {
-      console.log(this.node.tag, GRID_GENERATOR)
-      return this.node.tag === GRID_GENERATOR
     }
   },
   created() {
@@ -125,7 +120,6 @@ export default {
 }
 .dash-border {
   border: 1px dashed #dedede;
-  margin-left: -1px;
-  margin-top: -1px;
+  box-sizing: border-box;
 }
 </style>

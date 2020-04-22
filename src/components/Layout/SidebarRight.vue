@@ -47,7 +47,7 @@
         lazy
       >
         <panel-nodes
-          v-if="selectedComponentSetId"
+          v-if="activeName === 'Nodes'"
           class="panel"
         />
       </el-tab-pane>
@@ -57,7 +57,10 @@
         name="Setting"
         lazy
       >
-        <panel-settings class="panel" />
+        <panel-settings
+          v-if="activeName === 'Setting'"
+          class="panel"
+        />
       </el-tab-pane>
 
       <el-tab-pane
@@ -66,7 +69,7 @@
         lazy
       >
         <panel-styles
-          v-if="selectedComponentIds.length"
+          v-if="selectedComponentIds.length && activeName === 'Style'"
           class="panel"
         />
       </el-tab-pane>

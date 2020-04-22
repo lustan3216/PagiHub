@@ -50,7 +50,7 @@
 
                 <div class="p-5">
                   <div class="el-form-item__label">
-                    {{ shortTagName(component.name || component.tag) }}
+                    {{ shortTagName(component) }}
                   </div>
 
                   <el-button

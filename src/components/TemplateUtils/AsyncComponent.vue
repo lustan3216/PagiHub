@@ -5,7 +5,6 @@
     class="h-100"
   >
     <component
-      v-if="vIf"
       :is="tag"
       :id="id"
     />
@@ -15,7 +14,7 @@
 <script>
 import { ObserveVisibility } from 'vue-observe-visibility'
 export default {
-  name: 'LazyLoadComponent',
+  name: 'AsyncComponent',
   directives: {
     ObserveVisibility
   },
@@ -31,6 +30,7 @@ export default {
     Divider: () => import('../Templates/Divider'),
     VideoPlayer: () => import('../Templates/VideoPlayer'),
     Layers: () => import('../Templates/Layers'),
+    LayersInteract: () => import('../Templates/LayersInteract'),
     Card: () => import('../Templates/Card'),
     Drawer: () => import('../Templates/Drawer'),
 
@@ -72,7 +72,7 @@ export default {
           }
         },
         intersection: {
-          rootMargin: '100px'
+          rootMargin: '100px 0px'
         }
       }
     }

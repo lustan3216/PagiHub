@@ -7,6 +7,7 @@ import {
   CAN_EDIT_TEXT,
   CAN_DRAG,
   CAN_NOT_DELETE,
+  CAN_NOT_COPY,
   STYLE,
   NAME,
   AUTO_SIZE
@@ -44,10 +45,11 @@ export const layersInteract = function(options) {
 
 export const carousel = function() {
   const _gridGenerator = gridGenerator({
+    [CAN_NOT_COPY]: true,
     [CAN_NOT_DELETE]: true,
     [CHILDREN]: [
-      { [TAG]: GRID_ITEM, x: 0, y: 0, w: 22, h: 71 },
-      { [TAG]: GRID_ITEM, x: 23, y: 0, w: 22, h: 71 }
+      { [TAG]: GRID_ITEM, x: 0, y: 0, w: 22, h: 71, [NAME]: 'prev', [CAN_NOT_COPY]: true, [CAN_NOT_DELETE]: true },
+      { [TAG]: GRID_ITEM, x: 23, y: 0, w: 22, h: 71, [NAME]: 'next', [CAN_NOT_COPY]: true, [CAN_NOT_DELETE]: true }
     ]
   })
   return {
@@ -56,13 +58,15 @@ export const carousel = function() {
     [CAN_DRAG]: true,
     [CHILDREN]: [
       layersInteract({
+        [NAME]: 'Indicators',
+        [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true,
         [CAN_NEW_ITEM]: false,
         [CHILDREN]: [_gridGenerator]
       }),
-      gridGenerator(),
-      gridGenerator(),
-      gridGenerator()
+      gridGenerator({ name: 'slider' }),
+      gridGenerator({ name: 'slider' }),
+      gridGenerator({ name: 'slider' })
     ]
   }
 }

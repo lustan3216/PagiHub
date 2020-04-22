@@ -47,7 +47,7 @@
       <touchable :id="id" />
 
       <el-button
-        v-if="!exclude.includes('copy')"
+        v-if="!exclude.includes('copy') && canCopy"
         type="text"
         icon="el-icon-copy-document"
         @click.stop="() => vmCopyNode(node)"
@@ -76,7 +76,7 @@ import jsonStorer from '../../store/jsonStorer'
 import ExampleAdd from './ExampleAdd'
 import Visibility from './Visible'
 import NodeInfo from './NodeInfo'
-import { CAN_NOT_DELETE, GRID_ITEM } from '@/const'
+import { CAN_NOT_COPY, CAN_NOT_DELETE, GRID_ITEM } from '@/const'
 import { isMac } from '@/utils/device'
 import {
   vmCreateItem,
@@ -112,6 +112,9 @@ export default {
     },
     canDelete() {
       return this.node[CAN_NOT_DELETE] !== true
+    },
+    canCopy() {
+      return this.node[CAN_NOT_COPY] !== true
     },
     isGridItem() {
       return this.node.tag === GRID_ITEM

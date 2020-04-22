@@ -49,11 +49,11 @@ export const select = (field, { options, ...extraOptions } = {}) => {
     }
   })
 
-  if (isUndefined(extraOptions.props)) {
-    extraOptions.props = { clearable: true }
-  } else if (isUndefined(extraOptions.props.clearable)) {
-    extraOptions.props.clearable = true
-  }
+  // if (isUndefined(extraOptions.props)) {
+  //   extraOptions.props = { clearable: true }
+  // } else if (isUndefined(extraOptions.props.clearable)) {
+  //   extraOptions.props.clearable = true
+  // }
 
   return {
     field,
