@@ -25,10 +25,13 @@
 import { mapState, mapMutations } from 'vuex'
 import NodeController from './NodeController'
 import clickOutside from '@/utils/clickOutside'
-import { GRID_GENERATOR, GRID_ITEM } from '@/const'
+import { GRID_ITEM } from '@/const'
 
 const controllerVmMap = {}
-window.controller = controllerVmMap
+if (process.env.NODE_ENV !== 'production') {
+  window.controller = controllerVmMap
+}
+
 export default {
   name: 'ControllerLayer',
   inject: { isExample: { default: false }},

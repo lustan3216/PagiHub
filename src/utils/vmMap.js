@@ -4,7 +4,9 @@ import { findFirstCommonParentTree } from './node'
 const vmMap = {}
 
 export default vmMap
-window.vmMap = vmMap
+if (process.env.NODE_ENV !== 'production') {
+  window.vmMap = vmMap
+}
 
 export function vm(id) {
   return vmMap[id]

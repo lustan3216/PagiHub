@@ -15,7 +15,9 @@ vhCheck()
 Vue.use(formCreate)
 Vue.use(PortalVue)
 Vue.use(VueShortKey, { prevent: ['input', 'textarea', '.ProseMirror'] })
-window.store = store
+if (process.env.NODE_ENV !== 'production') {
+  window.store = store
+}
 
 import vmMap from '@/utils/vmMap'
 
@@ -104,6 +106,6 @@ const app = new Vue({
   store
 }).$mount('#app')
 
-if (window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
+if (process.env.NODE_ENV !== 'production' && window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
   window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = app.constructor
 }
