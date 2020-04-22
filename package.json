@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
-    "@form-create/element-ui": "^1.0.4",
+    "@form-create/element-ui": "^1.0.10",
     "bezier-easing": "^2.1.0",
     "csso": "^4.0.2",
     "element-ui": "^2.11.1",

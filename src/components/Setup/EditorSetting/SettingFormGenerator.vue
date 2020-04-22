@@ -1,13 +1,13 @@
 <template>
   <setting-generator
     :id="id"
-    :spec="spec"
+    :rules="spec"
   />
 </template>
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { boolean, select, assignDefaultValue } from './utils/util'
+import { boolean, select, assignDefaultValue } from './utils/ruleTool'
 import { PATH } from '@/const'
 
 const INLINE = 'inline'

@@ -1,13 +1,13 @@
 <template>
   <setting-generator
     :id="id"
-    :spec="spec"
+    :rules="spec"
   />
 </template>
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { select, assignDefaultValue } from './utils/util'
+import { select, assignDefaultValue } from './utils/ruleTool'
 
 export const defaultSetting = {
   shadow: 'always'

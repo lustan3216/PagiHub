@@ -1,13 +1,13 @@
 <template>
   <setting-generator
     :id="id"
-    :spec="spec"
+    :rules="spec"
   />
 </template>
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { assignDefaultValue, boolean, number, string } from './utils/util'
+import { assignDefaultValue, boolean, number, string } from './utils/ruleTool'
 import form, {
   FIELD,
   SHOW_LABEL,

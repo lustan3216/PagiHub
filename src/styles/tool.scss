@@ -67,6 +67,11 @@
   }
 }
 
+[data-layer], .h-0 {
+  height: 0 !important;
+  box-shadow: 1px 3px 20px -5px rgba(0, 0, 0, 0.25) !important;
+}
+
 .wh-100 {
   width: 100% !important;
   height: 100% !important;

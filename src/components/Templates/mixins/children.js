@@ -1,4 +1,4 @@
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { CHILDREN, GRID_ITEM } from '@/const'
 import { cloneJson, traversal } from '@/utils/tool'
 import { traversalChildrenOf } from '@/utils/node'

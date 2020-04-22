@@ -6,20 +6,32 @@ import {
 } from '@/utils/tool'
 import { urlPath } from './validation'
 
-export const assignDefaultValue = (array, defaultSetting) => {
-  array.forEach(object => {
+export function traversalRules(rules, fn) {
+  rules.forEach(rule => {
+    if (rule.type === 'group') {
+      traversalRules(rule.props.rules, fn)
+    } else if (rule.control && rule.control.length) {
+      rule.control.forEach(x => traversalRules(x.rule, fn))
+    }
+
+    fn(rule)
+  })
+}
+
+export const assignDefaultValue = (rules, defaultSetting) => {
+  traversalRules(rules, rule => {
     let value
-    if (object.path) {
-      value = getValueByPath(defaultSetting, `${object.path}.${object.field}`)
+    if (rule.path) {
+      value = getValueByPath(defaultSetting, `${rule.path}.${rule.field}`)
     } else {
-      value = defaultSetting[object.field]
+      value = defaultSetting[rule.field]
     }
     if (!isUndefined(value)) {
-      object.value = value
+      rule.value = value
     }
   })
 
-  return array
+  return rules
 }
 
 export const number = (field, extraOptions = {}) => ({
@@ -33,7 +45,7 @@ export const select = (field, { options, ...extraOptions } = {}) => {
   options = cloneJson(options)
   options.forEach((option, index) => {
     if (!isPlainObject(option)) {
-      options[index] = { value: option, label: option.capitalize() }
+      options[index] = { value: option, label: option.toString().capitalize() }
     }
   })
 

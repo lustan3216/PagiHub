@@ -1,5 +1,5 @@
 import { required, stringify } from './validation'
-import { string, boolean, select, number, selectCreate } from './util'
+import { string, boolean, select, number, selectCreate } from './ruleTool'
 
 export const FIELD = 'field'
 export const PLACEHOLDER = 'placeholder'

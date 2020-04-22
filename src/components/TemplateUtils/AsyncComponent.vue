@@ -1,13 +1,24 @@
 <template>
-  <component
-    :is="tag"
-    :id="id"
-  />
+  <!--  should have observe-visibility here, otherwise some nested layout case, the grid layout will not work right-->
+  <div
+    v-observe-visibility="options"
+    class="h-100"
+  >
+    <component
+      v-if="vIf"
+      :is="tag"
+      :id="id"
+    />
+  </div>
 </template>
 
 <script>
+import { ObserveVisibility } from 'vue-observe-visibility'
 export default {
-  name: 'AsyncComponent',
+  name: 'LazyLoadComponent',
+  directives: {
+    ObserveVisibility
+  },
   components: {
     FlexImage: () => import('../Templates/FlexImage'),
     FlexButton: () => import('../Templates/FlexButton'),
@@ -22,7 +33,6 @@ export default {
     Layers: () => import('../Templates/Layers'),
     Card: () => import('../Templates/Card'),
     Drawer: () => import('../Templates/Drawer'),
-    LayersInteract: () => import('../Templates/LayersInteract'),
 
     FormGenerator: () => import('../Templates/FormGenerator'),
     FormTextarea: () => import('../Templates/FormTextarea'),
@@ -49,6 +59,22 @@ export default {
     id: {
       type: Number,
       required: true
+    }
+  },
+  data() {
+    return {
+      vIf: false,
+      options: {
+        callback: isVisible => {
+          if (isVisible) {
+            this.vIf = isVisible
+            this.options = false
+          }
+        },
+        intersection: {
+          rootMargin: '100px'
+        }
+      }
     }
   }
 }

@@ -38,23 +38,28 @@
               style="min-height: 200px;"
             >
               <el-card shadow="hover">
-                <div class="relative">
+                <div
+                  class="relative z-index1"
+                  style="min-height: 200px;"
+                >
                   <async-component
                     :tag="component.tag"
                     :id="component.id"
                   />
                 </div>
 
-                <div style="padding: 14px;">
-                  <span>{{ component.name || component.tag }}</span>
-                  <div class="bottom clearfix">
-                    <time class="time">20.1933</time>
-                    <el-button
-                      type="text"
-                      class="button"
-                      @click="addTemplate(component)"
-                    >操作按钮</el-button>
+                <div class="p-5">
+                  <div class="el-form-item__label">
+                    {{ shortTagName(component.name || component.tag) }}
                   </div>
+
+                  <el-button
+                    type="text"
+                    class="button"
+                    @click="addTemplate(component)"
+                  >
+                    操作按钮
+                  </el-button>
                 </div>
               </el-card>
             </el-col>
@@ -70,6 +75,7 @@ import { mapGetters, mapState } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import { categories, FORM_ITEM_ID } from '../../example'
 import { CATEGORY, ID, NAME } from '@/const'
+import { shortTagName } from '@/utils/node'
 import AsyncComponent from './AsyncComponent'
 import { Card } from 'element-ui'
 
@@ -120,6 +126,7 @@ export default {
     }
   },
   methods: {
+    shortTagName,
     addTemplate(template) {
       template = cloneJson(template)
       this.cleanFormButtons(template)

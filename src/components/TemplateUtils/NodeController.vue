@@ -36,7 +36,7 @@
       </el-tooltip>
 
       <example-add
-        v-if="isGridItem"
+        v-if="isGridItem && hasNotChild"
         :id="id"
         style="width: 14px;"
         @onAdd="vmAddNodesToParentAndRecord(id, $event)"
@@ -54,7 +54,7 @@
       />
 
       <el-button
-        v-if="!exclude.includes('delete')"
+        v-if="!exclude.includes('delete') && canDelete"
         type="text"
         icon="el-icon-delete"
         @click.stop="() => vmRemoveNode(node)"
@@ -70,13 +70,13 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState, mapGetters } from 'vuex'
 import Touchable from './Touchable'
 import jsonStorer from '../../store/jsonStorer'
 import ExampleAdd from './ExampleAdd'
 import Visibility from './Visible'
 import NodeInfo from './NodeInfo'
-import { GRID_ITEM } from '@/const'
+import { CAN_NOT_DELETE, GRID_ITEM } from '@/const'
 import { isMac } from '@/utils/device'
 import {
   vmCreateItem,
@@ -106,11 +106,18 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds', 'copyComponentIds']),
+    ...mapGetters('draft', ['childrenOf']),
     node() {
       return this.draftNodesMap[this.id]
     },
+    canDelete() {
+      return this.node[CAN_NOT_DELETE] !== true
+    },
     isGridItem() {
       return this.node.tag === GRID_ITEM
+    },
+    hasNotChild() {
+      return !this.childrenOf[this.id].length
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)

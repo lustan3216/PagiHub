@@ -6,7 +6,7 @@
       :class="{ absolute: index }"
       :key="child.id"
       :id="child.id"
-      :data-layer="Boolean(index)"
+      data-layer
     />
   </div>
 </template>
@@ -44,8 +44,5 @@ export default {
   bottom: 0;
   right: 0;
   left: 0;
-}
-[data-layer] {
-  height: 0 !important;
 }
 </style>

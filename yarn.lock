@@ -758,20 +758,20 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@form-create/core@^1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@form-create/core/-/core-1.0.9.tgz#aead3e86136d36bcfdeafc8cb824e6ee4e25d724"
-  integrity sha512-SHrbFUI6ba8LuUcTfTuVIhl8P7CQ9dy08Z1sDxeaJJ6tAr2g9YwmkBhA9t3OvHBKALOqXrhZcMrgobQxUX2LWg==
+"@form-create/core@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@form-create/core/-/core-1.0.10.tgz#badd9aba1d1b0529f7c17b7fb1e4c0851e499802"
+  integrity sha512-MBCF/IM8w4LmosbWW2fxM1lxIligNT+8aU83tcviu+Ky7mX04BH64rQ/gvD3iwg8AonhJmjbp8j0YBqLtzXSaw==
   dependencies:
     "@form-create/utils" "^1.0.8"
     vue "^2.6.10"
 
-"@form-create/element-ui@^1.0.4":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@form-create/element-ui/-/element-ui-1.0.9.tgz#58effcbdc9c1855e13dead8a748a0334be06079c"
-  integrity sha512-b9IBx/TuOulPhhfTqZtd+K64oAzjYrWee89Qo/vMuuokpFeOAXI/SvQGIjQX4XZp+5iGcrV3aV1jNN0Ooj5Z7Q==
+"@form-create/element-ui@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@form-create/element-ui/-/element-ui-1.0.10.tgz#5f9147317efff0c8b51463bdadc7f541a6d8f133"
+  integrity sha512-bIh3UlTVyqHF7llfbqsxvfZOh2POJlGlijIPKlKoBh5b6EInrjfwDAZX36Pa6k/vGqJBWmFgXty20YgYn8YsQg==
   dependencies:
-    "@form-create/core" "^1.0.9"
+    "@form-create/core" "^1.0.10"
     "@form-create/utils" "^1.0.8"
     element-ui "^2.8.2"
 

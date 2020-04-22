@@ -25,13 +25,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* grid layout has performance issue when using border and border-radius */
-.editable {
-  & > div > .vue-grid-layout {
-    border: none;
-  }
-}
-
 ::v-deep.editable .vue-resizable-handle {
   z-index: 10;
 }

@@ -1,7 +1,7 @@
 <template>
   <setting-generator
     :id="id"
-    :spec="spec"
+    :rules="spec"
   />
 </template>
 
@@ -13,7 +13,7 @@ import {
   boolean,
   string,
   datepicker
-} from './utils/util'
+} from './utils/ruleTool'
 import form, {
   FIELD,
   SHOW_LABEL,

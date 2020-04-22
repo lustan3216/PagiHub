@@ -1,13 +1,13 @@
 <template>
   <setting-generator
     :id="id"
-    :spec="spec"
+    :rules="spec"
   />
 </template>
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { number, boolean, assignDefaultValue } from './utils/util'
+import { number, boolean, assignDefaultValue } from './utils/ruleTool'
 import { PATH } from '@/const'
 
 const COL_NUM = 'colNum'

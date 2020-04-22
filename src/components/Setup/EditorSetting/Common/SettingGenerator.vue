@@ -17,6 +17,7 @@ import { vm } from '@/utils/vmMap'
 import { mapMutations } from 'vuex'
 import { PROPS } from '@/const'
 import SelectUnit from '@/components/Components/SelectUnit'
+import { traversalRules } from '../utils/ruleTool'
 
 formCreate.component('SelectUnit', SelectUnit)
 formCreate.component('ElSwitch', Switch)
@@ -33,7 +34,7 @@ export default {
       type: Number,
       required: true
     },
-    spec: {
+    rules: {
       type: Array,
       required: true
     }
@@ -45,13 +46,8 @@ export default {
     ]
 
     if (selectedComponentNode) {
-      innerRules = cloneJson(this.spec)
-      innerRules.forEach(spec => {
-        const vmProps = vm(this.id).innerProps
-        const path = spec.path ? `${spec.path}.${spec.field}` : `${spec.field}`
-        spec.value = getValueByPath(vmProps, path, spec.value)
-        spec.on = { change: value => this.updateRecord(spec, value) }
-      })
+      innerRules = this.rules
+      traversalRules(innerRules, this.transformRule)
     }
 
     return {
@@ -72,19 +68,31 @@ export default {
   },
   methods: {
     ...mapMutations('draft', ['RECORD']),
-    updateRecord(spec, value) {
-      // if (key === 'options') {
-      //   value = Array.uniq(value)
-      //   this.api.updateRule(key, { value })
-      // }
-      this.api.setValue(spec.field, value)
+    transformRule(rule) {
+      const vmProps = vm(this.id).innerProps
+      const path = rule.path ? `${rule.path}.${rule.field}` : `${rule.field}`
 
-      const path = spec.path
-        ? `${this.id}.${PROPS}.${spec.path}.${spec.field}`
-        : `${this.id}.${PROPS}.${spec.field}`
+      defaultValueCache[rule.field] = cloneJson(rule.value)
+
+      rule.value = getValueByPath(vmProps, path, rule.value)
+      rule.on = { change: value => this.updateRecord(rule, value) }
+    },
+    updateRecord(rule, value) {
+      this.api.setValue(rule.field, value)
+
+      // same as default, thus delete the setting
+      if (defaultValueCache[rule.field] === value) {
+        value = undefined
+      }
+
+      const path = rule.path
+        ? `${this.id}.${PROPS}.${rule.path}.${rule.field}`
+        : `${this.id}.${PROPS}.${rule.field}`
 
       this.RECORD([{ path, value }])
     }
   }
 }
+
+const defaultValueCache = {}
 </script>

@@ -2,20 +2,20 @@
   <div>
     <setting-generator
       :id="id"
-      :spec="spec"
+      :rules="spec"
     />
 
     <h4>Fullscreen</h4>
     <setting-generator
       :id="id"
-      :spec="spec2"
+      :rules="spec2"
     />
   </div>
 </template>
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { string, select, assignDefaultValue, boolean } from './utils/util'
+import { string, select, assignDefaultValue, boolean } from './utils/ruleTool'
 import { required } from './utils/validation'
 
 export const defaultSetting = {

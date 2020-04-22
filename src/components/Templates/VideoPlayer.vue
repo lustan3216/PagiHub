@@ -1,7 +1,6 @@
 <template>
   <vue-plyr
     ref="plyr"
-    :key="JSON.stringify(innerProps)"
     :options="innerProps"
     class="h-100"
     @mouseleave="mouseleave"

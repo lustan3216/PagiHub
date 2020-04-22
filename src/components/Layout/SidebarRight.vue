@@ -13,19 +13,19 @@
     />
 
     <i
-      v-shortkey="['shift', 'a']"
+      v-shortkey="['a']"
       @shortkey="activeName = 'Project'"
     />
     <i
-      v-shortkey="['shift', 's']"
+      v-shortkey="['s']"
       @shortkey="activeName = 'Nodes'"
     />
     <i
-      v-shortkey="['shift', 'd']"
+      v-shortkey="['d']"
       @shortkey="activeName = 'Setting'"
     />
     <i
-      v-shortkey="['shift', 'f']"
+      v-shortkey="['f']"
       @shortkey="activeName = 'Style'"
     />
 

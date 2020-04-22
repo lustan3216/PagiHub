@@ -25,6 +25,7 @@
 import { mapState, mapMutations } from 'vuex'
 import NodeController from './NodeController'
 import clickOutside from '@/utils/clickOutside'
+import { GRID_GENERATOR, GRID_ITEM } from '@/const'
 
 const controllerVmMap = {}
 window.controller = controllerVmMap
@@ -64,6 +65,14 @@ export default {
     },
     coConfig() {
       return !this.canNotEdit && this.clickOutside
+    },
+    isGridItem() {
+      console.log(this.node.tag, GRID_ITEM)
+      return this.node.tag === GRID_ITEM
+    },
+    isGridLayout() {
+      console.log(this.node.tag, GRID_GENERATOR)
+      return this.node.tag === GRID_GENERATOR
     }
   },
   created() {
@@ -108,8 +117,11 @@ export default {
   border-color: #589ff8ad !important;
   box-shadow: 1px 3px 20px -5px rgba(0, 0, 0, 0.25) !important;
 }
-.canNotEdit {
+::v-deep.canNotEdit {
   pointer-events: none;
+  & > .swiper-container {
+    cursor: unset !important;
+  }
 }
 .dash-border {
   border: 1px dashed #dedede;

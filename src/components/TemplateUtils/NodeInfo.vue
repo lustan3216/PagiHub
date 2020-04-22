@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import { PARENT_ID } from '@/const'
 import { shortTagName } from '@/utils/node'
 

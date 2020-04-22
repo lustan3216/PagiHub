@@ -2,21 +2,15 @@
   <div>
     <setting-generator
       :id="id"
-      :spec="basic"
+      :rules="basic"
     />
-    <template v-if="currentProps.effect === 'fade'">
-      <h4>Fade Effect</h4>
-      <setting-generator
-        :id="id"
-        :spec="fadeEffect"
-      />
-    </template>
 
     <template v-if="currentProps.effect === 'cube'">
       <h4>Cube Effect</h4>
       <setting-generator
         :id="id"
-        :spec="cubeEffect"
+        :key="currentProps.effect"
+        :rules="cubeEffect"
       />
     </template>
 
@@ -24,7 +18,8 @@
       <h4>Cover Flow Effect</h4>
       <setting-generator
         :id="id"
-        :spec="coverflowEffect"
+        :key="currentProps.effect"
+        :rules="coverflowEffect"
       />
     </template>
 
@@ -32,39 +27,39 @@
       <h4>Flip Effect</h4>
       <setting-generator
         :id="id"
-        :spec="flipEffect"
+        :key="currentProps.effect"
+        :rules="flipEffect"
       />
     </template>
 
     <h4>Breakpoints</h4>
     <setting-generator
       :id="id"
-      :spec="breakpoints"
+      :rules="breakpoints"
       class="breakpoints"
     />
 
     <h4>Navigation</h4>
     <setting-generator
       :id="id"
-      :spec="navigation"
+      :rules="navigation"
     />
 
     <h4>Pagination</h4>
     <setting-generator
       :id="id"
-      :spec="pagination"
+      :rules="pagination"
     />
 
     <h4>Scrollbar</h4>
     <setting-generator
       :id="id"
-      :spec="scrollbar"
+      :rules="scrollbar"
     />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import SettingGenerator from './Common/SettingGenerator'
 import {
   assignDefaultValue,
@@ -72,8 +67,9 @@ import {
   boolean,
   select,
   number
-} from './utils/util'
+} from './utils/ruleTool'
 import { required } from './utils/validation'
+
 // data-swiper-parallax 在grid item設定
 // speed: 600,
 //   parallax: true,
@@ -84,14 +80,23 @@ export const defaultSetting = {
   slidersPerView: 1,
   direction: 'horizontal', // horizontal
   centeredSlides: true,
-  freeMode: true,
+  freeMode: false,
   mousewheel: true,
   grabCursor: true,
+  watchOverflow: true,
   loop: true,
   loopFillGroupWithBlank: true,
   effect: 'slide',
   autoHeight: true, // enable auto height
   zoom: false,
+  breakpoints: [
+    {
+      breakpoint: 320,
+      spaceBetween: 0,
+      slidesPerView: 1,
+      slidesPerColumn: 1
+    }
+  ],
   navigation: {
     nextEl: null,
     prevEl: null,
@@ -101,6 +106,7 @@ export const defaultSetting = {
     hide: true
   },
   pagination: {
+    el: null,
     dynamicBullets: true,
     clickable: true
   },
@@ -116,11 +122,15 @@ export const defaultSetting = {
     modifier: 1,
     slideShadows: true
   },
+  fadeEffect: {
+    crossFade: true
+  },
   keyboard: {
     enabled: true
   },
   autoplay: false
 }
+
 export default {
   name: 'SettingCarousel',
   components: { SettingGenerator },
@@ -144,16 +154,34 @@ export default {
             props: { step: 100 },
             info: 'Duration of transition between slides (in ms)'
           }),
-          number('delay', { path: 'autoplay' }),
-          boolean('autoplay'),
+          boolean('autoplay', {
+            control: [
+              {
+                value: true,
+                rule: [
+                  number('delay', {
+                    path: 'autoplay',
+                    props: { min: 0, step: 100 }
+                  })
+                ]
+              },
+              {
+                value: false,
+                rule: [
+                  boolean('freeMode', {
+                    info: 'If true then slides will not have fixed positions'
+                  })
+                ]
+              }
+            ]
+          }),
           boolean('autoHeight', {
             info:
               'Set to true and slider wrapper will adopt its height to the height of the currently active slide'
           }),
-
-          boolean('vertical'),
-          boolean('freeMode', {
-            info: 'If true then slides will not have fixed positions'
+          boolean('watchOverflow', {
+            info:
+              'When enabled Swiper will be disabled and hide navigation buttons on case there are not enough slides for sliding'
           }),
           boolean('mousewheel'),
           boolean('enabled', { path: 'keyboard', title: 'keyboard' }),
@@ -178,8 +206,7 @@ export default {
           value: [],
           props: {
             rules: [
-              string('Breakpoint', {
-                value: '320',
+              string('breakpoint', {
                 validate: [
                   required,
                   {
@@ -191,18 +218,15 @@ export default {
                 info: 'Distance between slides in px.'
               }),
               number('spaceBetween', {
-                value: 0,
                 min: 0,
                 info: 'Distance between slides in px.'
               }),
               number('slidesPerView', {
-                value: 1,
                 min: 0,
                 info:
                   "Number of slides per view (slides visible at the same time on slider's container). \n If you use it with 'auto' value and along with loop: true then you need to specify loopedSlides parameter with amount of slides to loop \n slidesPerView: 'auto' is currently not compatible with multirow mode, when slidesPerColumn > 1"
               }),
               number('slidesPerColumn', {
-                value: 1,
                 min: 0,
                 info:
                   'Number of slides per column, for multirow layout. \nslidesPerColumn > 1 is currently not compatible with loop mode (loop: true)'
@@ -226,7 +250,7 @@ export default {
           boolean('hideOnClick', {
             path: 'navigation',
             info:
-              "	Toggle navigation buttons visibility after click on Slider's container"
+              "Toggle navigation buttons visibility after click on Slider's container"
           })
         ],
         defaultSetting
@@ -235,21 +259,38 @@ export default {
         [
           select('el', {
             path: 'pagination',
-            options: []
-          }),
-          select('type', {
-            path: 'pagination',
-            options: ['progressbar', 'fraction']
-          }),
-          boolean('dynamicBullets', {
-            path: 'pagination',
-            info:
-              '	Good to enable if you use bullets pagination with a lot of slides. So it will keep only few bullets visible at the same time.'
-          }),
-          number('dynamicMainBullets', {
-            path: 'pagination',
-            info:
-              '	The number of main bullets visible when dynamicBullets enabled.'
+            options: [],
+            control: [
+              {
+                handle: x => x,
+                rule: [
+                  select('type', {
+                    path: 'pagination',
+                    options: ['progressbar', 'fraction']
+                  })
+                ]
+              },
+              {
+                handle: x => x,
+                rule: [
+                  boolean('dynamicBullets', {
+                    path: 'pagination',
+                    info:
+                      '	Good to enable if you use bullets pagination with a lot of slides. So it will keep only few bullets visible at the same time.'
+                  })
+                ]
+              },
+              {
+                handle: x => x,
+                rule: [
+                  number('dynamicMainBullets', {
+                    path: 'pagination',
+                    info:
+                      '	The number of main bullets visible when dynamicBullets enabled.'
+                  })
+                ]
+              }
+            ]
           })
         ],
         defaultSetting
@@ -258,19 +299,17 @@ export default {
         [
           select('el', {
             path: 'scrollbar',
-            options: []
-          }),
-          boolean('draggable', {
-            path: 'scrollbar'
-          })
-        ],
-        defaultSetting
-      ),
-      fadeEffect: assignDefaultValue(
-        [
-          boolean('crossFade', {
-            path: 'fadeEffect',
-            info: 'Enables slides cross fade'
+            options: [],
+            control: [
+              {
+                handle: x => Boolean(x),
+                rule: [
+                  boolean('draggable', {
+                    path: 'scrollbar'
+                  })
+                ]
+              }
+            ]
           })
         ],
         defaultSetting
@@ -329,6 +368,7 @@ export default {
           }),
           number('shadowScale', {
             path: 'cubeEffect',
+            props: { step: 0.01 },
             info: '	Main shadow scale ratio'
           })
         ],

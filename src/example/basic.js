@@ -6,6 +6,7 @@ import {
   CHILDREN,
   CAN_EDIT_TEXT,
   CAN_DRAG,
+  CAN_NOT_DELETE,
   STYLE,
   NAME,
   AUTO_SIZE
@@ -15,11 +16,12 @@ const gridItems = function() {
   return [{ [TAG]: GRID_ITEM, x: 0, y: 0, w: 22, h: 71 }]
 }
 
-export const gridGenerator = function() {
+export const gridGenerator = function(options) {
   return {
     [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
-    [CHILDREN]: gridItems()
+    [CHILDREN]: gridItems(),
+    ...options
   }
 }
 
@@ -31,20 +33,37 @@ export const layers = function() {
   }
 }
 
-export const layersInteract = function() {
+export const layersInteract = function(options) {
   return {
-    [TAG]: 'layersInteract',
+    [TAG]: 'layers-interact',
     [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [gridGenerator()]
+    [CHILDREN]: [gridGenerator()],
+    ...options
   }
 }
 
 export const carousel = function() {
+  const _gridGenerator = gridGenerator({
+    [CAN_NOT_DELETE]: true,
+    [CHILDREN]: [
+      { [TAG]: GRID_ITEM, x: 0, y: 0, w: 22, h: 71 },
+      { [TAG]: GRID_ITEM, x: 23, y: 0, w: 22, h: 71 }
+    ]
+  })
   return {
     [TAG]: 'carousel',
     [CAN_NEW_ITEM]: true,
     [CAN_DRAG]: true,
-    [CHILDREN]: [gridGenerator(), gridGenerator(), gridGenerator()]
+    [CHILDREN]: [
+      layersInteract({
+        [CAN_NOT_DELETE]: true,
+        [CAN_NEW_ITEM]: false,
+        [CHILDREN]: [_gridGenerator]
+      }),
+      gridGenerator(),
+      gridGenerator(),
+      gridGenerator()
+    ]
   }
 }
 

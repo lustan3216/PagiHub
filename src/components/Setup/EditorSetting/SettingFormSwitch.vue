@@ -1,13 +1,13 @@
 <template>
   <setting-generator
     :id="id"
-    :spec="spec"
+    :rules="spec"
   />
 </template>
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { assignDefaultValue, colorAlpha, string } from './utils/util'
+import { assignDefaultValue, colorAlpha, string } from './utils/ruleTool'
 import form, { FIELD, SHOW_LABEL, DISABLED, SIZE, VALUE } from './utils/form'
 
 const ACTIVE_COLOR = 'activeColor'

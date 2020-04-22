@@ -1,7 +1,7 @@
 <template>
   <setting-generator
     :id="id"
-    :spec="spec"
+    :rules="spec"
     :key="JSON.stringify(allChildren)"
   />
 </template>
@@ -9,7 +9,7 @@
 <script>
 import { pxPercent } from './utils/validation'
 import SettingGenerator from './Common/SettingGenerator'
-import { boolean, select, assignDefaultValue, selectUnit } from './utils/util'
+import { boolean, select, assignDefaultValue, selectUnit } from './utils/ruleTool'
 import { shortTagName, traversalChildrenOf } from '@/utils/node'
 
 export const defaultSetting = {

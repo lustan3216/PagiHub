@@ -27,12 +27,13 @@
   />
 
   <controller-layer
-    v-else-if="isDraftMode && !isExample"
+    v-else-if="isDraftMode"
     :id="id"
     :style="innerStyles"
     class="flex-center"
   >
     <node-controller
+      v-if="!isExample"
       :id="id"
       class="h-100"
     />

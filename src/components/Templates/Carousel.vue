@@ -1,101 +1,140 @@
 <template>
-  <swiper
-    ref="swiper"
-    :style="innerStyles"
-    :autoplay="false"
-    :options="transformedInnerProps"
-    :allow-touch-move="lockGridLayout"
-    trigger="click"
-    class="wh-100"
-  >
-    <swiper-slide
-      v-for="child in innerChildren"
-      :ref="child.id"
-      :key="child.id"
-      @mouseover.native.stop="asd = child.id"
-    >
-      <portal :to="`GridItemChild${id}`">
-        <el-tooltip
-          effect="light"
-          content="To switch draggable between carousel and grid layout."
-          placement="top"
-        >
-          <el-button
-            :icon="lockGridLayout ? 'el-icon-unlock' : 'el-icon-lock'"
-            class="lock"
-            circle
-            @click="lockGridLayout = !lockGridLayout"
-          />
-        </el-tooltip>
-      </portal>
-
-      <controller-layer
-        :style="child.styles"
-        :id="child.id"
-        :data-no-action="lockGridLayout"
-      >
-        <grid-generator
-          :id="child.id"
-          class="h-100"
-        />
-      </controller-layer>
-    </swiper-slide>
-
-    <div
-      v-if="innerProps.pagination"
-      slot="pagination"
-      class="swiper-pagination"
+  <div class="h-100">
+    <layers-interact
+      :id="layerInteractId"
+      class="layers-interact"
     />
+    <swiper
+      ref="swiper"
+      :style="innerStyles"
+      :options="transformedInnerProps"
+      :key="JSON.stringify(transformedInnerProps)"
+      class="wh-100"
+    >
+      <swiper-slide
+        v-for="child in gridGenerators"
+        :ref="child.id"
+        :key="child.id"
+      >
+        <portal
+          v-if="isDraftMode && !isExample"
+          :to="`GridItemChild${id}`"
+        >
+          <el-tooltip
+            :content="
+              canNotDrag
+                ? 'Unlock to operate carousel and enable autoplay'
+                : 'Lock to edit grid layout. Autoplay will stop for temporary'
+            "
+            effect="light"
+            placement="top"
+          >
+            <el-button
+              v-if="swiper"
+              icon="el-icon-caret-left"
+              class="left"
+              circle
+              @click="swiper.slidePrev()"
+            />
 
-    <template v-if="innerProps.navigation">
-      <div
-        slot="button-prev"
-        class="swiper-button-prev"
-      />
-      <div
-        slot="button-next"
-        class="swiper-button-next"
-      />
-    </template>
+            <el-button
+              v-if="swiper"
+              icon="el-icon-caret-right"
+              class="right"
+              circle
+              @click="swiper.slideNext()"
+            />
+          </el-tooltip>
+        </portal>
 
-    <template v-if="innerProps.scrollBar">
+        <controller-layer
+          :style="child.styles"
+          :id="child.id"
+        >
+          <grid-generator
+            :id="child.id"
+            class="h-100"
+          />
+        </controller-layer>
+      </swiper-slide>
+
       <div
-        slot="scrollbar"
-        class="swiper-scrollbar"
+        v-if="innerProps.pagination"
+        slot="pagination"
+        class="swiper-pagination"
       />
-    </template>
-  </swiper>
+
+      <template v-if="innerProps.scrollBar">
+        <div
+          slot="scrollbar"
+          class="swiper-scrollbar"
+        />
+      </template>
+    </swiper>
+  </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import 'swiper/css/swiper.css'
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import childrenMixin from '@/components/Templates/mixins/children'
 import nodeMixin from '@/components/Templates/mixins/node'
 import GridGenerator from './GridGenerator'
+import LayersInteract from './LayersInteract'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
+import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
+import { GRID_GENERATOR, LAYERS_INTERACT } from '@/const'
 
 export default {
+  defaultSetting,
   name: 'Carousel',
   components: {
     Swiper,
     SwiperSlide,
     GridGenerator,
-    ControllerLayer
+    ControllerLayer,
+    LayersInteract
   },
   mixins: [childrenMixin, nodeMixin],
   data() {
     return {
-      asd: null,
-      lockGridLayout: true
+      canNotDrag: false,
+      currentIndex: 0,
+      swiper: null
     }
   },
   computed: {
+    gridGenerators() {
+      return this.innerChildren.filter(x => x.tag === GRID_GENERATOR)
+    },
+    layerInteractId() {
+      return this.innerChildren.filter(x => x.tag === LAYERS_INTERACT)[0].id
+    },
     transformedInnerProps() {
-      return {
-        ...this.innerProps,
-        autoPlay: this.innerProps.autoPlay && this.lockGridLayout
+      if (this.isDraftMode) {
+        return {
+          ...this.innerProps,
+          freeMode: false,
+          mousewheel: false,
+          autoplay: false,
+          allowTouchMove: false,
+          keyboard: true,
+          breakpoints: this.breakpoints,
+          initialSlide: this.currentIndex
+        }
+      } else {
+        return {
+          ...this.innerProps,
+          breakpoints: this.breakpoints
+        }
       }
+    },
+    breakpoints() {
+      return (this.innerProps.breakpoints || []).reduce((acc, x) => {
+        acc[x.breakpoint] = x
+        return acc
+      }, {})
     },
     parentEl() {
       return (
@@ -107,13 +146,13 @@ export default {
     }
   },
   watch: {
-    lockGridLayout(value) {
-      this.$refs.swiper.$swiper.allowTouchMove = value
-    }
-  },
-  methods: {
-    click(id) {
-      // this.isEditableId = id
+    transformedInnerProps: {
+      handler() {
+        this.$nextTick(() => {
+          this.swiper = this.$refs.swiper.$swiper
+        })
+      },
+      immediate: true
     }
   }
 }
@@ -137,11 +176,25 @@ export default {
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
 }
-.lock {
+.left {
+  right: 25px;
+  top: -5px;
+  position: absolute;
+  padding: 5px;
+  z-index: 10;
+}
+.right {
   right: -5px;
   top: -5px;
   position: absolute;
   padding: 5px;
   z-index: 10;
+}
+.layers-interact {
+  z-index: 10;
+  height: 0;
+}
+.rotate90 {
+  transform: rotate(90deg);
 }
 </style>

@@ -1,13 +1,13 @@
 <template>
   <setting-generator
     :id="id"
-    :spec="spec"
+    :rules="spec"
   />
 </template>
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { select, string, assignDefaultValue } from './utils/util'
+import { select, string, assignDefaultValue } from './utils/ruleTool'
 
 const SRC = 'src'
 const FIT = 'fit'

@@ -4,7 +4,7 @@
     :style="innerStyle"
     :layout="layout"
     :margin="[0, 0]"
-    :row-height="1"
+    :row-height="2"
     :col-num="288"
     :cols="{ lg: 288, md: 216, sm: 144, xs: 96, xxs: 48 }"
     :is-draggable="isDraftMode || isExample"
@@ -34,7 +34,7 @@ import GridItemChild from './GridItemChild'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 
 export default {
-  name: 'GridGenerator',
+  name: 'GridGeneratorInner',
   components: {
     ControllerLayer,
     GridLayout: VueGridLayout.GridLayout,
@@ -119,15 +119,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-/* grid layout has performance issue when using border and border-radius */
-.editable {
-  & > div > .vue-grid-layout {
-    border: none;
-  }
-}
-::v-deep.editable .vue-resizable-handle {
-  z-index: 10;
-}
-</style>
