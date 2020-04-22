@@ -165,8 +165,4 @@ export default {
   @include calc-vh(height, '100vh - 70px');
   position: absolute;
 }
-.draggable {
-  touch-action: none;
-  user-select: none;
-}
 </style>

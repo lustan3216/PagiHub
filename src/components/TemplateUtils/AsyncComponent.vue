@@ -5,6 +5,7 @@
     class="h-100"
   >
     <component
+      v-if="vIf"
       :is="tag"
       :id="id"
     />

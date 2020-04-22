@@ -48,8 +48,26 @@ export const carousel = function() {
     [CAN_NOT_COPY]: true,
     [CAN_NOT_DELETE]: true,
     [CHILDREN]: [
-      { [TAG]: GRID_ITEM, x: 0, y: 0, w: 22, h: 71, [NAME]: 'prev', [CAN_NOT_COPY]: true, [CAN_NOT_DELETE]: true },
-      { [TAG]: GRID_ITEM, x: 23, y: 0, w: 22, h: 71, [NAME]: 'next', [CAN_NOT_COPY]: true, [CAN_NOT_DELETE]: true }
+      {
+        x: 0,
+        y: 0,
+        w: 22,
+        h: 71,
+        [TAG]: GRID_ITEM,
+        [NAME]: 'prev',
+        [CAN_NOT_COPY]: true,
+        [CAN_NOT_DELETE]: true
+      },
+      {
+        x: 23,
+        y: 0,
+        w: 22,
+        h: 71,
+        [TAG]: GRID_ITEM,
+        [NAME]: 'next',
+        [CAN_NOT_COPY]: true,
+        [CAN_NOT_DELETE]: true
+      }
     ]
   })
   return {

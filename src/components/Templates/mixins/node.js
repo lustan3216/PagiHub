@@ -4,7 +4,7 @@ import { merge, cloneJson } from '@/utils/tool'
 import { STYLE, PROPS, VALUE, GRID_GENERATOR } from '@/const'
 
 let hoverNode = []
-window.asd = hoverNode
+
 export default {
   props: {
     id: {
