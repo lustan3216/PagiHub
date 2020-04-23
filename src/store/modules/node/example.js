@@ -1,4 +1,4 @@
-import allExampleComponents from '../../../example'
+import allExampleComponents from '../../../templateJson'
 import { TAG, CHILDREN } from '@/const'
 import { traversal } from '@/utils/tool'
 

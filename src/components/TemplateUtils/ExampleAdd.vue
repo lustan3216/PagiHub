@@ -73,7 +73,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { cloneJson } from '@/utils/tool'
-import { categories, FORM_ITEM_ID } from '../../example'
+import { categories, FORM_ITEM_ID } from '../../templateJson'
 import { CATEGORY, ID, NAME } from '@/const'
 import { shortTagName } from '@/utils/node'
 import AsyncComponent from './AsyncComponent'

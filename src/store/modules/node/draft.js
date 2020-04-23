@@ -4,7 +4,7 @@ import listToTree from '@/utils/listToTree'
 import { SET } from '../../index'
 import { componentIds } from '@/utils/keyId'
 import { nestedToLinerObject } from '@/utils/tool'
-import { layersInteract } from '../../../example/basic'
+import { layersInteract } from '../../../templateJson/basic'
 
 const state = {
   nodesMap: {},
