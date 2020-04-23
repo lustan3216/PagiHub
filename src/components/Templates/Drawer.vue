@@ -24,7 +24,7 @@
         :style="innerStyles"
         class="h-100"
       >
-        <grid-generator-inner
+        <grid-layout-inner
           :id="id"
           :inner-props="innerProps"
         />
@@ -36,7 +36,7 @@
 <script>
 import { Drawer } from 'element-ui'
 import nodeMixin from '@/components/Templates/mixins/node'
-import GridGeneratorInner from './GridGeneratorInner'
+import GridLayoutInner from './GridLayoutInner'
 import mousewheel from 'element-ui/lib/directives/mousewheel'
 import { defaultSetting } from '../Setup/EditorSetting/SettingDrawer'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
@@ -49,7 +49,7 @@ export default {
   components: {
     ElDrawer: Drawer,
     ControllerLayer,
-    GridGeneratorInner
+    GridLayoutInner
   },
   directives: {
     mousewheel

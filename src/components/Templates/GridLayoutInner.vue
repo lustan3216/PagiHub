@@ -1,5 +1,5 @@
 <template>
-  <grid-layout
+  <vue-grid-layout
     v-bind="innerProps"
     :style="innerStyle"
     :layout="layout"
@@ -12,7 +12,7 @@
     :responsive="true"
     @layout-updated="layoutUpdated($event)"
   >
-    <grid-item
+    <vue-grid-item
       v-for="child in layout"
       :ref="child.id"
       v-bind="{ ...child, ...child.props }"
@@ -21,8 +21,8 @@
       drag-allow-from="div"
     >
       <grid-item-child :id="child.id" />
-    </grid-item>
-  </grid-layout>
+    </vue-grid-item>
+  </vue-grid-layout>
 </template>
 
 <script>
@@ -34,11 +34,11 @@ import GridItemChild from './GridItemChild'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 
 export default {
-  name: 'GridGeneratorInner',
+  name: 'GridLayoutInner',
   components: {
     ControllerLayer,
-    GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem,
+    VueGridLayout: VueGridLayout.GridLayout,
+    VueGridItem: VueGridLayout.GridItem,
     GridItemChild
   },
   mixins: [childrenMixin],

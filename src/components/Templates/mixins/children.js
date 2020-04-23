@@ -50,7 +50,7 @@ export default {
 
       // 這裏拿到的example有可能有deep children
       // template has a `canNew` setup to check can new or not
-      // layers, grid-generator, carousel, form-generator
+      // layers, grid-layout, carousel, form-generator
       // can new layer-item, grid-item, carousel-item, form-item
       const { tag } = this.node
       // eslint-disable-next-line

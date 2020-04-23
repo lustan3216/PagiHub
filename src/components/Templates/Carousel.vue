@@ -74,7 +74,7 @@
       class="wh-100"
     >
       <el-carousel-item
-        v-for="child in gridGenerators"
+        v-for="child in gridLayouts"
         :key="child.id"
         :class="`carousel-item-${id}`"
       >
@@ -82,7 +82,7 @@
           :style="child.styles"
           :id="child.id"
         >
-          <grid-generator
+          <grid-layout
             :id="child.id"
             class="h-100"
           />
@@ -98,17 +98,17 @@ import { mapGetters } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import childrenMixin from '@/components/Templates/mixins/children'
 import nodeMixin from '@/components/Templates/mixins/node'
-import GridGenerator from './GridGenerator'
+import GridLayout from './GridLayout'
 import LayersInteract from './LayersInteract'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
-import { CHILDREN, GRID_GENERATOR, LAYERS_INTERACT } from '@/const'
+import { CHILDREN, GRID_LAYOUT, LAYERS_INTERACT } from '@/const'
 
 export default {
   defaultSetting,
   name: 'Carousel',
   components: {
-    GridGenerator,
+    GridLayout,
     ControllerLayer,
     LayersInteract
   },
@@ -130,8 +130,8 @@ export default {
   },
   computed: {
     ...mapGetters('draft', ['childrenOf']),
-    gridGenerators() {
-      return this.innerChildren.filter(x => x.tag === GRID_GENERATOR)
+    gridLayouts() {
+      return this.innerChildren.filter(x => x.tag === GRID_LAYOUT)
     },
     layerInteractId() {
       return this.innerChildren.filter(x => x.tag === LAYERS_INTERACT)[0].id

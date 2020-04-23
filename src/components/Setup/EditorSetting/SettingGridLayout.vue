@@ -7,8 +7,7 @@
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { number, boolean, assignDefaultValue } from './utils/ruleTool'
-import { PATH } from '@/const'
+import { boolean, assignDefaultValue } from './utils/ruleTool'
 
 const VERTICAL_COMPACT = 'verticalCompact'
 const BREAK_POINT = 'breakPoint'
@@ -31,7 +30,7 @@ export const defaultSetting = {
 }
 
 export default {
-  name: 'SettingGridGenerator',
+  name: 'SettingGridLayout',
   components: { SettingGenerator },
   props: {
     id: {

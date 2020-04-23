@@ -38,7 +38,7 @@ export function assignStyles(id, styles) {
 }
 
 export function vmCreateItem({ id }) {
-  // layers, grid-generator, carousel, form-generator
+  // layers, grid-layout, carousel, form-generator
   // can new layer-item, grid-item, carousel-item, form-item
   vm(id)._createEmptyItem()
 }
