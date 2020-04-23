@@ -63,6 +63,7 @@ export default {
     }
   },
   data() {
+    // draftMode因為css & setting需要拿vm，不打開拿不到
     return {
       vIf: false,
       options: {

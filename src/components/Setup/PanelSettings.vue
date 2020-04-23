@@ -1,29 +1,18 @@
 <template>
-  <div>
-    <node-info
-      v-if="theOnlySelectedComponentId"
-      :id="theOnlySelectedComponentId"
-      class="text-center m-b-10 block"
-      show-family
-    />
-
-    <component
-      v-if="theOnlySelectedComponentId && hasComponent"
-      :is="componentTag"
-      :id="theOnlySelectedComponentId"
-      class="p-r-10"
-    />
-  </div>
+  <component
+    v-if="theOnlySelectedComponentId && hasComponent"
+    :is="componentTag"
+    :id="theOnlySelectedComponentId"
+    class="p-r-10"
+  />
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import NodeInfo from '@/components/TemplateUtils/NodeInfo'
 
 const self = {
   name: 'PanelSettings',
   components: {
-    NodeInfo,
     SettingCard: () => import('./EditorSetting/SettingCard'),
     SettingDrawer: () => import('./EditorSetting/SettingDrawer'),
     SettingDivider: () => import('./EditorSetting/SettingDivider'),

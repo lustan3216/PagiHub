@@ -2,7 +2,7 @@
   <span>
     <el-button
       v-if="parentId && showFamily"
-      @click="selectdNode(parentId)"
+      @click="selectedNode(parentId)"
     >
       {{ parentNodeShortName }} {{ parentId }}
     </el-button>
@@ -23,7 +23,7 @@
 
     <el-button
       v-if="firstChildNode && showFamily"
-      @click="selectdNode(firstChildNode)"
+      @click="selectedNode(firstChildNode.id)"
     >
       {{ firstChildNodeShortName }} {{ firstChildNode.id }}
     </el-button>
@@ -32,7 +32,7 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex'
-import { PARENT_ID } from '@/const'
+import { PARENT_ID, SOFT_DELETE } from '@/const'
 import { shortTagName } from '@/utils/node'
 
 export default {
@@ -57,7 +57,7 @@ export default {
     },
     firstChildNode() {
       const child = this.childrenOf[this.id][0]
-      return child && this.draftNodesMap[child.id]
+      return child && !child[SOFT_DELETE] && this.draftNodesMap[child.id]
     },
     firstChildNodeShortName() {
       return this.shortTagName(this.firstChildNode)
@@ -75,7 +75,7 @@ export default {
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
     shortTagName,
-    selectdNode(id) {
+    selectedNode(id) {
       this.SET_SELECTED_COMPONENT_ID(id)
     }
   }

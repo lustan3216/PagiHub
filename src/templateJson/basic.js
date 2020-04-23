@@ -10,7 +10,8 @@ import {
   CAN_NOT_COPY,
   STYLE,
   NAME,
-  AUTO_SIZE
+  AUTO_HEIGHT,
+  SOFT_DELETE
 } from '../const'
 
 const gridItems = function() {
@@ -76,7 +77,8 @@ export const carousel = function() {
     [CAN_DRAG]: true,
     [CHILDREN]: [
       layersInteract({
-        [NAME]: 'Indicators',
+        [NAME]: 'indicators',
+        [SOFT_DELETE]: true,
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true,
         [CAN_NEW_ITEM]: false,
@@ -126,7 +128,7 @@ export const videoPlayer = function() {
   return {
     [TAG]: 'video-player',
     [CAN_DRAG]: true,
-    [AUTO_SIZE]: true
+    [AUTO_HEIGHT]: true
   }
 }
 

@@ -28,7 +28,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
-import { AUTO_SIZE } from '@/const'
+import { AUTO_HEIGHT } from '@/const'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridItemChild from './GridItemChild'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
@@ -103,7 +103,7 @@ export default {
       newChildren.forEach(node => {
         const grandChild = this.childrenOf[node.id][0]
         // 檢查曾祖孫有沒有autosize
-        if (!grandChild || !grandChild[AUTO_SIZE]) return
+        if (!grandChild || !grandChild[AUTO_HEIGHT]) return
 
         this.$nextTick(() => {
           const child = this.$refs[node.id][0]

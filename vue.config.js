@@ -4,7 +4,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 
 module.exports = {
-  transpileDependencies: [/vue/],
+  transpileDependencies: ['element-ui'],
   css: {
     extract: false,
     loaderOptions: {
@@ -19,6 +19,15 @@ module.exports = {
       path.resolve(__dirname, 'src/assets/icons')
     )
 
+    // config.merge({
+    //   module: {
+    //     rule: {
+    //       exclude: [
+    //
+    //       ]
+    //     }
+    //   }
+    // })
     config.resolve.alias.set('@', path.resolve(__dirname, 'src'))
 
     config.module

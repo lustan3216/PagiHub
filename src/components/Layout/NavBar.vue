@@ -48,6 +48,8 @@
       />
     </el-tooltip>
 
+    <my-space />
+
     <el-tooltip
       effect="light"
       content="Undo"
@@ -119,10 +121,12 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import { Message } from 'element-ui'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
+import MySpace from './MySpace'
 
 export default {
   name: 'NavBar',
   components: {
+    MySpace,
     DialogInteracted,
     DialogComponentSet
   },

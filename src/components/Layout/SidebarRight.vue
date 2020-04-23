@@ -57,6 +57,13 @@
         name="Setting"
         lazy
       >
+        <node-info
+          v-if="theOnlySelectedComponentId"
+          :id="theOnlySelectedComponentId"
+          class="text-center m-b-10 block"
+          show-family
+        />
+
         <panel-settings
           v-if="activeName === 'Setting'"
           class="panel"
@@ -68,6 +75,13 @@
         name="Style"
         lazy
       >
+        <node-info
+          v-if="theOnlySelectedComponentId"
+          :id="theOnlySelectedComponentId"
+          class="text-center m-b-10 block"
+          show-family
+        />
+
         <panel-styles
           v-if="selectedComponentIds.length && activeName === 'Style'"
           class="panel"
@@ -82,6 +96,7 @@ import formCreate from '@form-create/element-ui'
 import { mapState, mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
+import NodeInfo from '../TemplateUtils/NodeInfo'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 
 export default {
@@ -91,6 +106,7 @@ export default {
     PanelSettings,
     DialogInteracted,
     FormCreate: formCreate.$form(),
+    NodeInfo,
     PanelNodes: () => import('../Setup/PanelNodes'),
     PanelProject: () => import('../Setup/PanelProject')
   },
