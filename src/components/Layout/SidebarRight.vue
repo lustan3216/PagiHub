@@ -143,7 +143,7 @@ export default {
 }
 
 .panel {
-  @include calc-vh(height, '100vh - 95px');
+  @include calc-vh(height, '100vh - 130px');
   overflow-y: scroll;
 }
 

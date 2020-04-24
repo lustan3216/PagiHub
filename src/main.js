@@ -96,6 +96,7 @@ Vue.use(FormItem)
 Vue.use(Loading.directive)
 
 // eslint-disable-next-line
+Vue.prototype.$Log = console.log
 Vue.prototype.$log = console.log
 Vue.prototype.$bus = new Vue()
 Vue.config.productionTip = false
@@ -106,6 +107,9 @@ const app = new Vue({
   store
 }).$mount('#app')
 
-if (process.env.NODE_ENV !== 'production' && window.__VUE_DEVTOOLS_GLOBAL_HOOK__) {
+if (
+  process.env.NODE_ENV !== 'production' &&
+  window.__VUE_DEVTOOLS_GLOBAL_HOOK__
+) {
   window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = app.constructor
 }

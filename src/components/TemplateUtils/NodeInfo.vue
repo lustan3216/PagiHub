@@ -1,7 +1,10 @@
 <template>
   <span>
     <el-button
+      v-shortkey="['q']"
       v-if="parentId && showFamily"
+      class="p-5"
+      @shortkey.native="selectedNode(parentId)"
       @click="selectedNode(parentId)"
     >
       {{ parentNodeShortName }} {{ parentId }}
@@ -22,7 +25,10 @@
     </span>
 
     <el-button
+      v-shortkey="['w']"
       v-if="firstChildNode && showFamily"
+      class="p-5"
+      @shortkey.native="selectedNode(firstChildNode.id)"
       @click="selectedNode(firstChildNode.id)"
     >
       {{ firstChildNodeShortName }} {{ firstChildNode.id }}

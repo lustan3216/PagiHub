@@ -31,7 +31,8 @@
         @click="canvasWidthRollback"
         @command="canvasWidthChange"
       >
-        {{ isCustom ? `${canvasWidth} px` : current }}
+        <!--    need to reduce 4 pixel for border    -->
+        {{ isCustom ? `${canvasWidth - 4} px` : current }}
 
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item
@@ -138,7 +139,8 @@ export default {
       browser.reset()
     },
     canvasWidthChange(command) {
-      const pixel = parseInt(command)
+      // 4 pixel because border
+      const pixel = parseInt(command) - 4
 
       this.option = command
 

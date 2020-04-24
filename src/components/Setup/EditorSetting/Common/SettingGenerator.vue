@@ -48,7 +48,7 @@ export default {
     ]
 
     if (selectedComponentNode) {
-      innerRules = this.rules
+      innerRules = cloneJson(this.rules)
       traversalRules(innerRules, this.transformRule)
     }
 
@@ -74,8 +74,7 @@ export default {
       const vmProps = vm(this.id).innerProps
       const path = rule.path ? `${rule.path}.${rule.field}` : `${rule.field}`
 
-      defaultValueCache[rule.field] = cloneJson(rule.value)
-
+      defaultValueCache[rule.field] = rule.value
       rule.value = getValueByPath(vmProps, path, rule.value)
       rule.on = { change: value => this.updateRecord(rule, value) }
     },

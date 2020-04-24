@@ -3,17 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "test": "cypress open",
     "lint": "vue-cli-service lint --fix",
-    "purge": "rm -rf ./node_modules/.cache/hard-source",
-    "test": "cypress open"
+    "dev": "vue-cli-service serve",
+    "purge": "rm -rf ./node_modules/.cache/hard-source"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
     "@form-create/element-ui": "^1.0.10",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
     "@vue/babel-preset-jsx": "^1.1.2",
+    "babel-plugin-transform-flow-comments": "^6.22.0",
     "bezier-easing": "^2.1.0",
     "csso": "^4.0.2",
     "element-ui": "^2.11.1",

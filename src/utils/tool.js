@@ -4,6 +4,7 @@ import { isUndefined, isString } from 'element-ui/src/utils/types'
 import isPlainObject from 'is-plain-object'
 import getValueByPath from 'lodash.get'
 import { on, off } from 'element-ui/src/utils/dom.js'
+
 export {
   cloneJson,
   isUndefined,
@@ -93,5 +94,13 @@ export function asyncGetValue(fn, timeout = 2000) {
         cancelAnimationFrame(id)
       }, timeout)
     })
+  })
+}
+
+export function cached(fn) {
+  const cache = Object.create(null)
+  return (function cachedFn(str) {
+    const hit = cache[str]
+    return hit || (cache[str] = fn(str))
   })
 }

@@ -17,8 +17,11 @@
       <slot />
     </div>
 
-    <div v-else class="h-100 pointer">
-      <slot  />
+    <div
+      v-else
+      class="h-100 pointer"
+    >
+      <slot />
     </div>
   </div>
 </template>

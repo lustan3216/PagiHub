@@ -76,7 +76,6 @@ import Dimension from './EditorStyle/Dimension'
 import Effect from './EditorStyle/Effect'
 import Background from './EditorStyle/Background'
 import BoxShadows from './EditorStyle/BoxShadows'
-import StyleBlock from './EditorStyle/StyleBlock'
 import Transition from './EditorStyle/Transition'
 import { mapGetters } from 'vuex'
 import { getComputedStyle, assignStyles, getPlanStyle } from '@/utils/vmMap'
@@ -123,7 +122,6 @@ export default {
     Corner,
     Effect,
     BoxShadows,
-    StyleBlock,
     Transition
   },
   data() {

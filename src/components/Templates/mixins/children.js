@@ -99,6 +99,8 @@ export default {
             path: id,
             value: undefined
           })
+        } else {
+          break
         }
       }
 

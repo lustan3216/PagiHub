@@ -2,7 +2,7 @@
   <!--  should have observe-visibility here, otherwise some nested layout case, the grid layout will not work right-->
   <div
     v-observe-visibility="options"
-    class="h-100"
+    class="h-100 border-box"
   >
     <component
       v-if="vIf"

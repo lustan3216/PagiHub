@@ -1,6 +1,6 @@
 /* eslint-disabled */
-import { kebabCase, capitalize } from 'element-ui/src/utils/util'
 import { isPlainObject } from './tool'
+import { kebabCase, capitalize } from './string'
 
 Array.uniq = function(e) {
   return [...new Set(e)]
@@ -36,12 +36,8 @@ String.prototype.kebabCase = function() {
   return kebabCase(this)
 }
 
-String.prototype.camelCase = function() {
-  if (!this) return ''
-
-  return this.replace(/([-_][a-z])/g, group =>
-    group.toUpperCase().replace(/[-_]/g, '')
-  )
+String.prototype.camelCase = function(){
+  return require('./string').camelCase(this)
 }
 
 String.prototype.bigCamelCase = function() {

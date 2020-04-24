@@ -24,6 +24,7 @@
 
 <script>
 import { Slider } from 'element-ui'
+import { isPlainObject as _isPlainObject } from '@/utils/tool'
 
 export default {
   name: 'SliderPoints',
@@ -42,13 +43,20 @@ export default {
     // eslint-disable-next-line
     marks: Object,
     value: {
-      type: Array,
+      type: [Array, Object],
       required: true
     }
   },
   data() {
+    const isPlainObject = _isPlainObject(this.value)
     return {
-      points: this.value
+      isPlainObject,
+      points: isPlainObject ? Object.values(this.value) : this.value
+    }
+  },
+  computed: {
+    keys() {
+      return this.isPlainObject && Object.keys(this.value)
     }
   },
   methods: {
@@ -57,7 +65,12 @@ export default {
       if (this.points[index + 1] < value) return
 
       this.points.splice(index, 1, value)
-      this.$emit('input', this.points)
+
+      if (this.isPlainObject) {
+        this.$emit('input', this.zipToObject(this.points))
+      } else {
+        this.$emit('input', this.points)
+      }
     },
     onChange(index, value) {
       if (this.points[index - 1] > value) {
@@ -68,13 +81,23 @@ export default {
       }
 
       this.points.splice(index, 1, value)
-      this.$emit('input', this.points)
-      this.$emit('change', this.points)
+
+      if (this.isPlainObject) {
+        const value = this.zipToObject(this.points)
+        this.$emit('input', value)
+        this.$emit('change', value)
+      } else {
+        this.$emit('input', this.points)
+        this.$emit('change', this.points)
+      }
     },
     reset(event, index) {
       this.$nextTick(() => {
         this.$refs[index][0].firstValue = this.points[index]
       })
+    },
+    zipToObject(values) {
+      return this.keys.reduce((obj, k, i) => ({ ...obj, [k]: values[i] }), {})
     }
   }
 }

@@ -4,7 +4,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 
 module.exports = {
-  transpileDependencies: ['element-ui'],
+  transpileDependencies: ['element-ui', 'vue-grid-layout', 'vue'],
   css: {
     extract: false,
     loaderOptions: {
@@ -19,15 +19,15 @@ module.exports = {
       path.resolve(__dirname, 'src/assets/icons')
     )
 
-    // config.merge({
-    //   module: {
-    //     rule: {
-    //       exclude: [
-    //
-    //       ]
-    //     }
-    //   }
-    // })
+    config.resolve.alias.set(
+      'shared/util',
+      path.resolve(__dirname, 'node_modules/vue/src/shared/util')
+    )
+    config.resolve.alias.set(
+      'web/util/style',
+      path.resolve(__dirname, 'node_modules/vue/src/platforms/web/util/style')
+    )
+
     config.resolve.alias.set('@', path.resolve(__dirname, 'src'))
 
     config.module
@@ -37,6 +37,7 @@ module.exports = {
       .options({
         addAttributes: { class: 'svg-inline' }
       })
+
     config.plugin('analyzer').use(BundleAnalyzerPlugin)
 
     config.plugin('cache').use(HardSourceWebpackPlugin)
