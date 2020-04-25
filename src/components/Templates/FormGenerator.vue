@@ -1,5 +1,5 @@
 <template>
-  <grid-layout-inner
+  <grid-generator-inner
     :id="id"
     :inner-props="innerProps"
     :inner-style="innerStyles"
@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import GridLayoutInner from './GridLayoutInner'
+import gridGeneratorInner from './GridGeneratorInner'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormGenerator'
@@ -16,7 +16,7 @@ export default {
   defaultSetting,
   name: 'FormGenerator',
   components: {
-    GridLayoutInner
+    gridGeneratorInner
   },
   mixins: [nodeMixin, childrenMixin],
   provide() {

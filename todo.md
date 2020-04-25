@@ -90,7 +90,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>這裏應該要改成從 object node 裡面，且存在 object node style block 是不是跟 class block 功能合併</li>
 <li>每個 button 都可以點了 連結到 componentSet / tooltip / link</li>
 <li>uploader image / svg / video, consider how to compress</li>
-<li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridLayout 可以固定寬</li>
+<li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridGenerator 可以固定寬</li>
 <li>node 可以拖拉到 setting style panel 上就可編輯，也可以拖拉到 空的 GridItem 上, 拖到 grid layout 上就新增</li>
 <li>layout 可以每個局部都 設定</li>
 <li>button 做成點了可以轉跳 componentSet 或是打開dialog or drawer or popover</li>

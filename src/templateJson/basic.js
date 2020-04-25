@@ -1,5 +1,5 @@
 import {
-  GRID_LAYOUT,
+  GRID_GENERATOR,
   GRID_ITEM,
   CAN_NEW_ITEM,
   TAG,
@@ -26,9 +26,9 @@ const gridItems = function() {
   ]
 }
 
-export const gridLayout = function(options) {
+export const gridGenerator = function(options) {
   return {
-    [TAG]: GRID_LAYOUT,
+    [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: gridItems(),
     ...options
@@ -39,7 +39,7 @@ export const layers = function() {
   return {
     [TAG]: 'layers',
     [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [gridLayout()]
+    [CHILDREN]: [gridGenerator()]
   }
 }
 
@@ -47,13 +47,13 @@ export const layersInteract = function(options) {
   return {
     [TAG]: 'layers-interact',
     [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [gridLayout()],
+    [CHILDREN]: [gridGenerator()],
     ...options
   }
 }
 
 export const carousel = function() {
-  const _gridLayout = gridLayout({
+  const _gridGenerator = gridGenerator({
     [CAN_NOT_COPY]: true,
     [CAN_NOT_DELETE]: true,
     [CHILDREN]: [
@@ -84,11 +84,11 @@ export const carousel = function() {
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true,
         [CAN_NEW_ITEM]: false,
-        [CHILDREN]: [_gridLayout]
+        [CHILDREN]: [_gridGenerator]
       }),
-      gridLayout({ name: 'slider' }),
-      gridLayout({ name: 'slider' }),
-      gridLayout({ name: 'slider' })
+      gridGenerator({ name: 'slider' }),
+      gridGenerator({ name: 'slider' }),
+      gridGenerator({ name: 'slider' })
     ]
   }
 }
@@ -153,7 +153,7 @@ export default [
   layersInteract(),
   flexButton(),
   flexImage(),
-  gridLayout(),
+  gridGenerator(),
   carousel(),
   divider(),
   videoPlayer(),

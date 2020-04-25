@@ -1,7 +1,7 @@
 <template>
-  <vue-grid-layout
+  <vue-grid-generator
     v-free-style="freeStyle"
-    ref="gridLayout"
+    ref="gridGenerator"
     v-bind="innerProps"
     :style="innerStyle"
     :layout="layout"
@@ -22,13 +22,12 @@
     >
       <grid-item-child :id="child.id" />
     </vue-grid-item>
-  </vue-grid-layout>
+  </vue-grid-generator>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
-import GridItem from 'vue-grid-layout/src/components/GridItem.vue'
 import { AUTO_HEIGHT, PROPS } from '@/const'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridItemChild from './GridItemChild'
@@ -39,11 +38,11 @@ import { getValueByPath } from '@/utils/tool'
 const points = ['lg', 'md', 'sm', 'xs', 'xxs']
 
 export default {
-  name: 'GridLayoutInner',
+  name: 'GridGeneratorInner',
   components: {
     ControllerLayer,
-    VueGridLayout: VueGridLayout.GridLayout,
-    VueGridItem: GridItem,
+    VueGridGenerator: VueGridLayout.GridLayout,
+    VueGridItem: VueGridLayout.GridItem,
     GridItemChild
   },
   directives: {
@@ -108,7 +107,7 @@ export default {
     },
     'innerProps.breakpoints': {
       handler() {
-        this.$refs.gridLayout.responsiveGridLayout()
+        this.$refs.gridGenerator.responsivegridGenerator()
       },
       deep: true
     },
@@ -120,7 +119,7 @@ export default {
     }
   },
   mounted() {
-    this.$refs.gridLayout.eventBus.$on('updateWidth', width => {
+    this.$refs.gridGenerator.eventBus.$on('updateWidth', width => {
       this.calcCurrentBreakPoint()
     })
   },

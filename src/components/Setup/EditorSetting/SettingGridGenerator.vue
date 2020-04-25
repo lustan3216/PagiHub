@@ -49,7 +49,7 @@ export const defaultSetting = {
 }
 
 export default {
-  name: 'SettingGridLayout',
+  name: 'SettingGridGenerator',
   components: { SettingGenerator },
   props: {
     id: {

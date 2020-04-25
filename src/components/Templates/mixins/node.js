@@ -1,7 +1,7 @@
 import { mapMutations } from 'vuex'
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { deepmerge, cloneJson } from '@/utils/tool'
-import { STYLE, PROPS, VALUE, GRID_LAYOUT } from '@/const'
+import { STYLE, PROPS, VALUE, GRID_GENERATOR } from '@/const'
 
 let hoverNode = []
 
@@ -48,7 +48,7 @@ export default {
     ...mapMutations('draft', ['RECORD']),
     hoverCover(hover) {
       const $el =
-        this.node.tag === GRID_LAYOUT ? this.$el : this.$el.parentNode
+        this.node.tag === GRID_GENERATOR ? this.$el : this.$el.parentNode
 
       if (hover) {
         const node = document.createElement('DIV')

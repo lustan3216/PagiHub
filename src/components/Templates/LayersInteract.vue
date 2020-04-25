@@ -1,6 +1,6 @@
 <template>
   <div class="relative h-100">
-    <grid-layout
+    <grid-generator
       v-for="(child, index) in sortChildren"
       :style="{ 'z-index': index }"
       :class="{ absolute: index }"
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import GridLayout from './GridLayout'
+import gridGenerator from './GridGenerator'
 import GridItemChild from './GridItemChild'
 import NodeController from '../TemplateUtils/NodeController'
 import nodeMixin from '@/components/Templates/mixins/node'
@@ -22,7 +22,7 @@ import { SORT_INDEX } from '@/const'
 export default {
   name: 'LayersInteract',
   components: {
-    GridLayout,
+    gridGenerator,
     GridItemChild,
     NodeController
   },

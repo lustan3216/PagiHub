@@ -7,7 +7,7 @@ context('Actions', () => {
 
   describe('component hover', () => {
     it('layers')
-    it('gridLayout')
+    it('gridGenerator')
     it('gridItem')
   })
 })

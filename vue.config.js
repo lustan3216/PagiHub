@@ -4,7 +4,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 
 module.exports = {
-  transpileDependencies: ['element-ui', 'vue-grid-layout', 'vue'],
+  transpileDependencies: ['element-ui', 'vue-grid-generator', 'vue'],
   css: {
     extract: false,
     loaderOptions: {

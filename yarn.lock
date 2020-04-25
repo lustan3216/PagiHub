@@ -11957,9 +11957,9 @@ vue-eslint-parser@^2.0.3:
     esquery "^1.0.0"
     lodash "^4.17.4"
 
-vue-grid-layout@^2.3.6:
+vue-grid-generator@^2.3.6:
   version "2.3.7"
-  resolved "https://registry.yarnpkg.com/vue-grid-layout/-/vue-grid-layout-2.3.7.tgz#d148f013ef2ca9dc1cb5d5298e7966aa50f54431"
+  resolved "https://registry.yarnpkg.com/vue-grid-generator/-/vue-grid-generator-2.3.7.tgz#d148f013ef2ca9dc1cb5d5298e7966aa50f54431"
   integrity sha512-q3FMiuog0hPsK/IUKtlg2A/lwPo86YlLaX9+wEiCTjUU++GabM2o9hDhRVruDJZLUah55iTg8LRttBxrxPv0WQ==
   dependencies:
     element-resize-detector "^1.1.15"
