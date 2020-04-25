@@ -1,40 +1,26 @@
 <template>
   <vue-grid-layout
+    v-free-style="freeStyle"
     ref="gridLayout"
     v-bind="innerProps"
     :style="innerStyle"
     :layout="layout"
-    :row-height="1"
-    :margin="[innerProps.horizontalMargin, 0]"
+    :margin="[0, 0]"
     :is-draggable="(innerProps.isDraggable && isDraftMode) || isExample"
     :is-resizable="(innerProps.isResizable && isDraftMode) || isExample"
     @layout-updated="layoutUpdated($event)"
   >
-    <div v-style>
-      .asd, .fdsewqf { {{ `padding-bottom:${innerProps.verticalMargin}px` }} }
-      .dsfe, .fdsewqf { {{ `padding-bottom:${innerProps.verticalMargin}px;` }} }
-    </div>
-
     <vue-grid-item
       v-for="child in layout"
       :ref="child.id"
       v-bind="{ ...child, ...child.props }"
       :key="child.id"
+      :style="itemPadding"
       drag-ignore-from=".noDrag"
       drag-allow-from="div"
+      class="item"
     >
-      <div
-        :log="
-          $Log(
-            `padding:${innerProps.vertical ||
-            0}px ${innerProps.horizontalMargin || 0}px`
-          )
-        "
-        :style="`padding-bottom:${innerProps.verticalMargin}px`"
-        class="h-100 item"
-      >
-        <grid-item-child :id="child.id" />
-      </div>
+      <grid-item-child :id="child.id" />
     </vue-grid-item>
   </vue-grid-layout>
 </template>
@@ -43,11 +29,14 @@
 import { mapState, mapGetters } from 'vuex'
 import VueGridLayout from 'vue-grid-layout'
 import GridItem from 'vue-grid-layout/src/components/GridItem.vue'
-import { AUTO_HEIGHT } from '@/const'
+import { AUTO_HEIGHT, PROPS } from '@/const'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridItemChild from './GridItemChild'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
-import style from '../../directive/style'
+import freeStyle from '@/directive/freeStyle'
+import { getValueByPath } from '@/utils/tool'
+
+const points = ['lg', 'md', 'sm', 'xs', 'xxs']
 
 export default {
   name: 'GridLayoutInner',
@@ -58,7 +47,7 @@ export default {
     GridItemChild
   },
   directives: {
-    style
+    freeStyle
   },
   mixins: [childrenMixin],
   inject: {
@@ -81,24 +70,37 @@ export default {
   data() {
     return {
       layout: [],
-      heights: []
+      currentBreakPoint: 0
     }
   },
   computed: {
     ...mapState('draft', ['nodesMap']),
-    ...mapGetters('draft', ['childrenOf'])
+    ...mapGetters('draft', ['childrenOf']),
+    freeStyle() {
+      return `
+       ::v-deep .vue-resizable-handle {
+          margin-bottom:${this.innerProps.verticalMargin}px;
+          margin-right:${this.innerProps.horizontalMargin}px
+      }`
+    },
+    itemPadding() {
+      return `padding:${this.innerProps.verticalMargin}px ${this.innerProps.horizontalMargin}px`
+    }
   },
   watch: {
     innerChildren: {
       handler(newChildren) {
-        this.itemAutoHeight(newChildren)
-        this.layout = newChildren
-        this.layout.forEach((child, index) => {
-          this.layout[index].h =
-            this.layout[index].h + this.innerProps.verticalMargin
-          // this.layout[index].y = Math.round(
-          //   this.layout[index].y / this.innerProps.verticalMargin
-          // )
+        this.$nextTick(() => {
+          this.itemAutoHeight(newChildren)
+          this.calcCurrentBreakPoint()
+          this.layout = newChildren.map((child, index) => ({
+            id: child.id,
+            i: child.i,
+            x: this.findAncestorValue(index, 'x'),
+            y: this.findAncestorValue(index, 'y'),
+            w: this.findAncestorValue(index, 'w'),
+            h: this.findAncestorValue(index, 'h')
+          }))
         })
       },
       deep: true,
@@ -110,40 +112,68 @@ export default {
       },
       deep: true
     },
-    // 'innerProps.verticalMargin'() {
-    //   this.childrenResize()
-    // },
+    'innerProps.verticalMargin'() {
+      this.childrenResize()
+    },
     'innerProps.horizontalMargin'() {
       this.childrenResize()
     }
   },
+  mounted() {
+    this.$refs.gridLayout.eventBus.$on('updateWidth', width => {
+      this.calcCurrentBreakPoint()
+    })
+  },
   methods: {
-    childrenResize() {
-      const { $children } = this.$refs.gridLayout
-      this.heights = $children.map((child, index) => {
-        if (this.layout[index]) {
-          child.margin = [this.innerProps.horizontalMargin, 0]
-          //
-          // this.layout[index].h =
-          //   this.layout[index].h / this.innerProps.verticalMargin
-          // this.layout[index].y =
-          //   this.layout[index].y / this.innerProps.verticalMargin
-          child.createStyle()
+    calcCurrentBreakPoint(_width) {
+      const width = _width || this.$el.clientWidth
+      this.currentBreakPoint = points.find(
+        key => width >= this.innerProps.breakpoints[key]
+      )
+    },
+    findAncestorValue(childIndex, key) {
+      // to avoid breakpoints data too large in the future
+      // find value self first, once can't find it, here will try to find the closest value from parent
+      let value
+      // const points = ['lg', 'md', 'sm', 'xs', 'xxs']
+      const length = points.indexOf(this.currentBreakPoint)
+      for (let i = length; i >= 0; i--) {
+        value = getValueByPath(this.innerChildren, [
+          childIndex,
+          PROPS,
+          points[i],
+          key
+        ])
+        if (Number.isInteger(value)) {
+          break
         }
+      }
 
-        // return child.$el.style.width
+      return value
+    },
+    childrenResize() {
+      this.layout.forEach((child, index) => {
+        this.layout[index].h =
+          this.layout[index].h + this.innerProps.verticalMargin
       })
     },
     layoutUpdated(newChildren) {
       if (this.isExample) return
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
       const records = []
+      this.calcCurrentBreakPoint()
 
-      newChildren.forEach(child => {
+      newChildren.forEach((child, index) => {
         const attrs = ['x', 'y', 'w', 'h']
         attrs.forEach(attr => {
+          const ancestorValue = this.findAncestorValue(index, attr)
+
+          if (ancestorValue === child[attr]) {
+            return
+          }
+
           records.push({
-            path: `${child.id}.${attr}`,
+            path: `${child.id}.${PROPS}.${this.currentBreakPoint}.${attr}`,
             value: child[attr]
           })
         })
@@ -152,7 +182,7 @@ export default {
       this.RECORD(records)
     },
     itemAutoHeight(newChildren) {
-      // 第一次加在不執行
+      // 第一次加載不執行
       if (!this.layout.length) return
 
       newChildren.forEach(node => {

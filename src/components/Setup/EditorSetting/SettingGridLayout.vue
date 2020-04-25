@@ -26,6 +26,7 @@
 <script>
 import SettingGenerator from './Common/SettingGenerator'
 import { boolean, assignDefaultValue, number } from './utils/ruleTool'
+import { deepmerge } from '@/utils/tool'
 
 export const defaultSetting = {
   isResizable: true,
@@ -33,7 +34,7 @@ export const defaultSetting = {
   preventCollision: false,
   verticalCompact: false,
   responsive: true,
-  rowHeight: 1,
+  rowHeight: 5,
   horizontalMargin: 0,
   verticalMargin: 0,
   colNum: 12,
@@ -72,8 +73,9 @@ export default {
               }
             ]
           }),
-          number('horizontalMargin'),
-          number('verticalMargin')
+          number('rowHeight'),
+          number('horizontalMargin', { title: 'Horizontal Interval' }),
+          number('verticalMargin', { title: 'Vertical Interval' })
         ],
         defaultSetting
       )
@@ -81,32 +83,36 @@ export default {
   },
   computed: {
     currentProps() {
-      return this.draftNodesMap[this.id].props || {}
+      return deepmerge({}, defaultSetting, this.draftNodesMap[this.id].props)
     },
     responsive() {
-      return this.currentProps.responsive === undefined
+      return this.currentProps.responsive === true
     },
     breakpoints() {
       return assignDefaultValue(
         [
           number('lg', {
             path: 'breakpoints',
+            props: { min: this.currentProps.breakpoints.md },
             title: 'Large Desktop',
             info: this.info('lg')
           }),
           number('md', {
             path: 'breakpoints',
             title: 'Desktop',
+            props: { min: this.currentProps.breakpoints.sm },
             info: this.info('md')
           }),
           number('sm', {
             path: 'breakpoints',
             title: 'Tablet',
+            props: { min: this.currentProps.breakpoints.xs },
             info: this.info('sm')
           }),
           number('xs', {
             path: 'breakpoints',
             title: 'Mobile',
+            props: { min: this.currentProps.breakpoints.xxs },
             info: this.info('xs')
           }),
           number('xxs', {
@@ -125,26 +131,31 @@ export default {
         [
           number('lg', {
             path: 'cols',
+            props: { max: 288, min: 0 },
             title: 'Large Desktop',
             info: this.info('lg')
           }),
           number('md', {
             path: 'cols',
+            props: { max: 288, min: 0 },
             title: 'Desktop',
             info: this.info('md')
           }),
           number('sm', {
             path: 'cols',
+            props: { max: 288, min: 0 },
             title: 'Tablet',
             info: this.info('sm')
           }),
           number('xs', {
             path: 'cols',
+            props: { max: 288, min: 0 },
             title: 'Mobile',
             info: this.info('xs')
           }),
           number('xxs', {
             path: 'cols',
+            props: { max: 288, min: 0 },
             title: 'Tiny Mobile',
             info: this.info('xxs')
           })

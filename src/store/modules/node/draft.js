@@ -55,6 +55,7 @@ const actions = {
     } else {
       const initTemplate = layersInteract()
       initTemplate.parentId = 0
+      initTemplate.name = 'Root'
       componentIds.appendIdNested(initTemplate)
       nestedToLinerObject(nodesMap, initTemplate)
     }

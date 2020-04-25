@@ -11,11 +11,19 @@ import {
   STYLE,
   NAME,
   AUTO_HEIGHT,
-  SOFT_DELETE
+  SOFT_DELETE,
+  PROPS
 } from '../const'
 
 const gridItems = function() {
-  return [{ [TAG]: GRID_ITEM, x: 0, y: 0, w: 22, h: 71 }]
+  return [
+    {
+      [TAG]: GRID_ITEM,
+      [PROPS]: {
+        lg: { x: 0, y: 0, w: 22, h: 71 }
+      }
+    }
+  ]
 }
 
 export const gridLayout = function(options) {
@@ -50,20 +58,14 @@ export const carousel = function() {
     [CAN_NOT_DELETE]: true,
     [CHILDREN]: [
       {
-        x: 0,
-        y: 0,
-        w: 22,
-        h: 71,
+        [PROPS]: { lg: { x: 0, y: 0, w: 22, h: 71 }},
         [TAG]: GRID_ITEM,
         [NAME]: 'prev',
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true
       },
       {
-        x: 23,
-        y: 0,
-        w: 22,
-        h: 71,
+        [PROPS]: { lg: { x: 23, y: 0, w: 22, h: 71 }},
         [TAG]: GRID_ITEM,
         [NAME]: 'next',
         [CAN_NOT_COPY]: true,

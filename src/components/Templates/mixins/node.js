@@ -1,6 +1,6 @@
 import { mapMutations } from 'vuex'
 import { vmAppend, vmRemove } from '@/utils/vmMap'
-import { merge, cloneJson } from '@/utils/tool'
+import { deepmerge, cloneJson } from '@/utils/tool'
 import { STYLE, PROPS, VALUE, GRID_LAYOUT } from '@/const'
 
 let hoverNode = []
@@ -27,7 +27,7 @@ export default {
     },
     innerProps() {
       const setting = cloneJson(this.$options.defaultSetting || {})
-      return merge(setting, (this.node && this.node[PROPS]) || {})
+      return deepmerge(setting, (this.node && this.node[PROPS]) || {})
     }
   },
   mounted() {

@@ -1,5 +1,5 @@
 import { cloneJson } from 'json-storer/src/utils'
-import merge from 'element-ui/src/utils/merge'
+import deepmerge from 'deepmerge'
 import { isUndefined, isString } from 'element-ui/src/utils/types'
 import isPlainObject from 'is-plain-object'
 import getValueByPath from 'lodash.get'
@@ -10,8 +10,8 @@ export {
   isUndefined,
   isPlainObject,
   isString,
-  merge,
   getValueByPath,
+  deepmerge,
   on,
   off
 }
@@ -99,8 +99,8 @@ export function asyncGetValue(fn, timeout = 2000) {
 
 export function cached(fn) {
   const cache = Object.create(null)
-  return (function cachedFn(str) {
+  return function cachedFn(str) {
     const hit = cache[str]
     return hit || (cache[str] = fn(str))
-  })
+  }
 }

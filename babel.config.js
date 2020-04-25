@@ -1,7 +1,6 @@
 module.exports = {
-  presets: [['@vue/app', { useBuiltIns: 'entry' }]],
+  presets: [['@vue/app', { useBuiltIns: 'entry' }], '@babel/preset-flow'],
   plugins: [
-    'transform-flow-comments',
     [
       'component',
       {

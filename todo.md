@@ -107,6 +107,14 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>scss code 的東西做成 variable 可以是輸入匡</li>
 <li>中英文字體</li>
 <li>每個grid item tooltip</li>
-<li>PWA</li>  
 <li>動畫</li>
 </ol>
+
+form 表單
+整合 style
+component 組建
+style 變 component 還有飲用
+
+先寫測試
+
+動畫
