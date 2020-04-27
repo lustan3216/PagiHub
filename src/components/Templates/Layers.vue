@@ -6,6 +6,7 @@
       :class="{ absolute: index }"
       :key="child.id"
       :id="child.id"
+      data-layer
     />
   </div>
 </template>

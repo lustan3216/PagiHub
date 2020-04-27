@@ -10,7 +10,7 @@
 import { mapGetters, mapMutations } from 'vuex'
 import SettingGenerator from './Common/SettingGenerator'
 import { assignDefaultValue, boolean, select, number } from './utils/ruleTool'
-import { SOFT_DELETE, LAYERS_INTERACT } from '@/const'
+import { SOFT_DELETE, LAYERS } from '@/const'
 
 // https://gs-shop.github.io/vue-slick-carousel/#/api
 // data-swiper-parallax 在grid item設定
@@ -115,12 +115,12 @@ export default {
       api.trigger('indicatorPosition', 'change', value ? 'bottom' : 'right')
     },
     arrow(value) {
-      const layersInteractNode = this.childrenOf[this.id].find(
-        x => x.tag === LAYERS_INTERACT
+      const layersNode = this.childrenOf[this.id].find(
+        x => x.tag === LAYERS
       )
       this.RECORD([
         {
-          path: `${layersInteractNode.id}.${SOFT_DELETE}`,
+          path: `${layersNode.id}.${SOFT_DELETE}`,
           value: value !== 'custom'
         }
       ])

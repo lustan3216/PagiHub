@@ -27,9 +27,9 @@
     </template>
 
     <template v-if="innerProps.arrow === 'custom'">
-      <layers-interact
-        :id="layerInteractId"
-        class="layers-interact"
+      <layers
+        :id="layerId"
+        class="layers"
       />
 
       <portal :to="`GridItemChild${prevGridItemId}`">
@@ -99,10 +99,10 @@ import { ObserveVisibility } from 'vue-observe-visibility'
 import childrenMixin from '@/components/Templates/mixins/children'
 import nodeMixin from '@/components/Templates/mixins/node'
 import gridGenerator from './GridGenerator'
-import LayersInteract from './LayersInteract'
+import Layers from './Layers'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
-import { CHILDREN, GRID_GENERATOR, LAYERS_INTERACT } from '@/const'
+import { CHILDREN, GRID_GENERATOR, LAYERS } from '@/const'
 
 export default {
   defaultSetting,
@@ -110,7 +110,7 @@ export default {
   components: {
     gridGenerator,
     ControllerLayer,
-    LayersInteract
+    Layers
   },
   directives: {
     ObserveVisibility
@@ -133,14 +133,14 @@ export default {
     gridGenerators() {
       return this.innerChildren.filter(x => x.tag === GRID_GENERATOR)
     },
-    layerInteractId() {
-      return this.innerChildren.filter(x => x.tag === LAYERS_INTERACT)[0].id
+    layerId() {
+      return this.innerChildren.filter(x => x.tag === LAYERS)[0].id
     },
     prevGridItemId() {
-      return this.childrenOf[this.layerInteractId][0][CHILDREN][0].id
+      return this.childrenOf[this.layerId][0][CHILDREN][0].id
     },
     nextGridItemId() {
-      return this.childrenOf[this.layerInteractId][0][CHILDREN][1].id
+      return this.childrenOf[this.layerId][0][CHILDREN][1].id
     },
     arrow() {
       return this.innerProps.arrow === 'custom'
@@ -252,7 +252,7 @@ export default {
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #bbbec1;
 }
-.layers-interact {
+.layers {
   z-index: 10;
   height: 0;
 }

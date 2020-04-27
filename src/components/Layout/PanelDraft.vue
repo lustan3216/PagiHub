@@ -1,6 +1,6 @@
 <template>
   <view-port>
-    <layersInteract
+    <layers
       v-if="rootNode"
       ref="panelDraft"
       :id="rootNode.id"
@@ -12,7 +12,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import ViewPort from './ViewPort'
-import LayersInteract from '../Templates/LayersInteract'
+import Layers from '../Templates/Layers'
 import { isMac } from '@/utils/device'
 import Selection from '@simonwep/selection-js'
 
@@ -20,7 +20,7 @@ export default {
   name: 'PanelDraft',
   components: {
     ViewPort,
-    LayersInteract
+    Layers
   },
   computed: {
     ...mapGetters('draft', ['rootNode'])

@@ -30,7 +30,6 @@ export default {
     Divider: () => import('../Templates/Divider'),
     VideoPlayer: () => import('../Templates/VideoPlayer'),
     Layers: () => import('../Templates/Layers'),
-    LayersInteract: () => import('../Templates/LayersInteract'),
     Card: () => import('../Templates/Card'),
     Drawer: () => import('../Templates/Drawer'),
 

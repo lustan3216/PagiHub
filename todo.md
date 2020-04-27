@@ -54,16 +54,14 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed</li>  
 <li>google map</li>  
 <li>icon</li>
-<li>setting 區塊做個按鈕，可直接選到上一層組建</li>
 <li>組建</li>
 <li>Grid layout 不用有control layer，style 可以append在自己身上，但heihgt width trnasform等等不能動</li>
-<li>Layer 除了第一層不要有底</li>
-<li>tree noed點兩下滑到那邊</li>
 <li>grid layout 在拉的時候案control of shift可以所比例</li>
 <li>pandel draft 要可以拖動</li>
-<li>visiblity lock 的時候不要被選到</li>
+
 <li>time line/ steps/ transfer / cascader / map </li>
 <li>form item 會卡到lazyload 要處理 </li>
+<li>form validator</li>
 </ol>
 
 ### Style
@@ -107,7 +105,6 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>Sidebar可以分別被猜拆來</li>
 <li>scss code 的東西做成 variable 可以是輸入匡</li>
 <li>中英文字體</li>
-<li>每個grid item tooltip</li>
 </ol>
 
 ### Bug
@@ -117,6 +114,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>多個ｃｏｐｙ的時候有問題，且多選複製時</li>
 <li>touchable and visbilty 有ｂｕｇ</li>
 <li>texteditor 選取壞掉 todolist也不見</li>
+<li>visiblity lock 的時候不要被選到</li>
 </ol>
 
 form 表單

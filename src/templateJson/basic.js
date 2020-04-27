@@ -35,17 +35,9 @@ export const gridGenerator = function(options) {
   }
 }
 
-export const layers = function() {
+export const layers = function(options) {
   return {
     [TAG]: 'layers',
-    [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [gridGenerator()]
-  }
-}
-
-export const layersInteract = function(options) {
-  return {
-    [TAG]: 'layers-interact',
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: [gridGenerator()],
     ...options
@@ -78,7 +70,7 @@ export const carousel = function() {
     [CAN_NEW_ITEM]: false,
     [CAN_DRAG]: true,
     [CHILDREN]: [
-      layersInteract({
+      layers({
         [NAME]: 'indicators',
         [SOFT_DELETE]: true,
         [CAN_NOT_COPY]: true,
@@ -151,7 +143,6 @@ export const drawer = function() {
 
 export default [
   layers(),
-  layersInteract(),
   card(),
   flexButton(),
   flexImage(),
