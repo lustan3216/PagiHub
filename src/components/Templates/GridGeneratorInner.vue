@@ -5,7 +5,7 @@
     v-bind="innerProps"
     :style="innerStyle"
     :layout="layout"
-    :margin="[0, 0]"
+    :margin="[0, 1]"
     :is-draggable="(innerProps.isDraggable && isDraftMode) || isExample"
     :is-resizable="(innerProps.isResizable && isDraftMode) || isExample"
     @layout-updated="layoutUpdated($event)"
@@ -19,6 +19,8 @@
       drag-ignore-from=".noDrag"
       drag-allow-from="div"
       class="item"
+      @mouseenter.native="$bus.$emit('selection-enable', false)"
+      @mouseleave.native="$bus.$emit('selection-enable', true)"
     >
       <grid-item-child :id="child.id" />
     </vue-grid-item>
@@ -34,6 +36,7 @@ import GridItemChild from './GridItemChild'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import freeStyle from '@/directive/freeStyle'
 import { getValueByPath } from '@/utils/tool'
+import { debounce } from 'throttle-debounce'
 
 const points = ['lg', 'md', 'sm', 'xs', 'xxs']
 
@@ -69,7 +72,7 @@ export default {
   data() {
     return {
       layout: [],
-      currentBreakPoint: 0
+      width: 0
     }
   },
   computed: {
@@ -84,6 +87,15 @@ export default {
     },
     itemPadding() {
       return `padding:${this.innerProps.verticalMargin}px ${this.innerProps.horizontalMargin}px`
+    },
+    currentBreakPoint() {
+      if (this.innerProps.responsive || this.isExample) {
+        return 'lg'
+      } else {
+        return points.find(
+          key => this.width >= this.innerProps.breakpoints[key]
+        )
+      }
     }
   },
   watch: {
@@ -91,15 +103,7 @@ export default {
       handler(newChildren) {
         this.$nextTick(() => {
           this.itemAutoHeight(newChildren)
-          this.calcCurrentBreakPoint()
-          this.layout = newChildren.map((child, index) => ({
-            id: child.id,
-            i: child.i,
-            x: this.findAncestorValue(index, 'x'),
-            y: this.findAncestorValue(index, 'y'),
-            w: this.findAncestorValue(index, 'w'),
-            h: this.findAncestorValue(index, 'h')
-          }))
+          this.getCurrentLayout(newChildren)
         })
       },
       deep: true,
@@ -107,7 +111,7 @@ export default {
     },
     'innerProps.breakpoints': {
       handler() {
-        this.$refs.gridGenerator.responsivegridGenerator()
+        this.$refs.gridGenerator.responsiveGridLayout()
       },
       deep: true
     },
@@ -116,19 +120,32 @@ export default {
     },
     'innerProps.horizontalMargin'() {
       this.childrenResize()
+    },
+    currentBreakPoint() {
+      this.getCurrentLayout(this.innerChildren)
     }
   },
   mounted() {
-    this.$refs.gridGenerator.eventBus.$on('updateWidth', width => {
-      this.calcCurrentBreakPoint()
-    })
+    this.width = this.$el.clientWidth
+    this.$refs.gridGenerator.eventBus.$on(
+      'updateWidth',
+      debounce(700, width => {
+        if (width) {
+          this.width = this.$el.clientWidth
+        }
+      })
+    )
   },
   methods: {
-    calcCurrentBreakPoint(_width) {
-      const width = _width || this.$el.clientWidth
-      this.currentBreakPoint = points.find(
-        key => width >= this.innerProps.breakpoints[key]
-      )
+    getCurrentLayout(children) {
+      this.layout = children.map((child, index) => ({
+        id: child.id,
+        i: child.i,
+        x: this.findAncestorValue(index, 'x'),
+        y: this.findAncestorValue(index, 'y'),
+        w: this.findAncestorValue(index, 'w'),
+        h: this.findAncestorValue(index, 'h')
+      }))
     },
     findAncestorValue(childIndex, key) {
       // to avoid breakpoints data too large in the future
@@ -160,7 +177,6 @@ export default {
       if (this.isExample) return
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
       const records = []
-      this.calcCurrentBreakPoint()
 
       newChildren.forEach((child, index) => {
         const attrs = ['x', 'y', 'w', 'h']
@@ -186,18 +202,18 @@ export default {
 
       newChildren.forEach(node => {
         const grandChild = this.childrenOf[node.id][0]
-        // 檢查曾祖孫有沒有autosize
-        if (!grandChild || !grandChild[AUTO_HEIGHT]) return
+        // 檢查自己、曾祖孫有沒有autosize
+        if (grandChild && (grandChild[AUTO_HEIGHT] || node[AUTO_HEIGHT])) {
+          this.$nextTick(() => {
+            const child = this.$refs[node.id][0]
+            // 新增組建的時候，有可能組建還沒渲染就autosize，會造成零空間
+            if (!this.vmMap[grandChild.id]) return
 
-        this.$nextTick(() => {
-          const child = this.$refs[node.id][0]
-          // 新增組建的時候，有可能組建還沒渲染就autosize，會造成零空間
-          if (!this.vmMap[grandChild.id]) return
-
-          child.$el.classList.add('disable-h-100')
-          child.autoSize()
-          child.$el.classList.remove('disable-h-100')
-        })
+            child.$el.classList.add('disable-h-100')
+            child.autoSize()
+            child.$el.classList.remove('disable-h-100')
+          })
+        }
       })
     }
   }

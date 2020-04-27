@@ -73,7 +73,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { cloneJson } from '@/utils/tool'
-import { categories, FORM_ITEM_ID } from '../../templateJson'
+import { categories } from '../../templateJson'
 import { CATEGORY, ID, NAME } from '@/const'
 import { shortTagName } from '@/utils/node'
 import AsyncComponent from './AsyncComponent'
@@ -107,13 +107,7 @@ export default {
     ...mapGetters('draft', ['isRootForm', 'theRootForm']),
     ...mapState('example', ['examples']),
     categories() {
-      const isRootForm = this.isRootForm(this.id)
-
-      if (isRootForm) {
-        return categories
-      } else {
-        return categories.filter(x => x[ID] !== FORM_ITEM_ID)
-      }
+      return categories
     },
     currentCategoryId() {
       return this.categories.find(x => x[NAME] === this.currentCategory)[ID]

@@ -3,13 +3,14 @@
     v-if="theOnlySelectedComponentId && hasComponent"
     :is="componentTag"
     :id="theOnlySelectedComponentId"
+    :key="theOnlySelectedComponentId"
     class="p-r-10"
   />
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-
+import { bigCamelCase } from '@/utils/string'
 const self = {
   name: 'PanelSettings',
   components: {
@@ -23,7 +24,7 @@ const self = {
     SettingVideoPlayer: () => import('./EditorSetting/SettingVideoPlayer'),
     SettingCarousel: () => import('./EditorSetting/SettingCarousel'),
 
-    SettingFormGenerator: () => import('./EditorSetting/SettingFormGenerator'),
+    SettingFormSubmit: () => import('./EditorSetting/SettingFormSubmit'),
     SettingFormCheckbox: () => import('./EditorSetting/SettingFormCheckbox'),
     SettingFormColorPicker: () =>
       import('./EditorSetting/SettingFormColorPicker'),
@@ -48,7 +49,7 @@ const self = {
       return self.components[this.componentTag]
     },
     componentTag() {
-      return `Setting${this.selectedComponentNode.tag.bigCamelCase()}`
+      return `Setting${bigCamelCase(this.selectedComponentNode.tag)}`
     }
   }
 }
@@ -57,7 +58,12 @@ export default self
 </script>
 
 <style scoped lang="scss">
-::v-deep .el-form-item {
-  margin-bottom: 8px;
+::v-deep {
+  .el-form-item {
+    margin-bottom: 8px;
+  }
+  h4 {
+    margin: 5px 0;
+  }
 }
 </style>

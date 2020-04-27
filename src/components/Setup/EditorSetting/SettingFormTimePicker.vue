@@ -1,94 +1,77 @@
-<template>
-  <setting-generator
-    :id="id"
-    :rules="spec"
-  />
-</template>
-
 <script>
-import SettingGenerator from './Common/SettingGenerator'
 import {
-  assignDefaultValue,
   select,
   boolean,
   string,
-  datepicker
+  datepicker,
+  iconSelect
 } from './utils/ruleTool'
-import form, {
-  FIELD,
-  SHOW_LABEL,
-  READONLY,
-  DISABLED,
-  CLEARABLE,
-  SIZE,
-  PLACEHOLDER
+import {
+  settings,
+  base,
+  placeholder,
+  clearable,
+  editable,
+  readonly
 } from './utils/form'
-
-const EDITABLE = 'editable'
-const START_PLACEHOLDER = 'startPlaceholder'
-const END_PLACEHOLDER = 'endPlaceholder'
-const IS_RANGE = 'isRange'
-const ARROW_CONTROL = 'arrowControl'
-const FORMAT = 'format'
-const ALIGN = 'align'
-const RANGE_SEPARATOR = 'rangeSeparator'
-const DEFAULT_VALUE = 'defaultValue'
+import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
-  [FIELD]: 'formTimepicker',
-  [SHOW_LABEL]: true,
-  [READONLY]: false,
-  [DISABLED]: false,
-  [CLEARABLE]: true,
-  [SIZE]: 'mini',
-  [PLACEHOLDER]: 'mini',
-  [EDITABLE]: true,
-  [START_PLACEHOLDER]: 'startPlaceholder',
-  [END_PLACEHOLDER]: 'endPlaceholder',
-  [IS_RANGE]: false,
-  [ARROW_CONTROL]: true,
-  [FORMAT]: 'yyyy-MM-dd',
-  [ALIGN]: 'left',
-  [RANGE_SEPARATOR]: '-',
-  [DEFAULT_VALUE]: new Date()
+  ...settings,
+  field: 'timePicker',
+  readonly: false,
+  clearable: true,
+  placeholder: 'mini',
+  editable: true,
+  startPlaceholder: 'startPlaceholder',
+  endPlaceholder: 'endPlaceholder',
+  isRange: false,
+  arrowControl: true,
+  align: 'center',
+  rangeSeparator: '-',
+  defaultValue: new Date()
 }
 
-export default {
-  name: 'SettingFormTimePicker',
-  components: { SettingGenerator },
-  props: {
-    id: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      spec: assignDefaultValue(
-        [
-          form[FIELD],
-          form[SHOW_LABEL],
-          form[DISABLED],
-          form[CLEARABLE],
-          form[SIZE],
-          form[PLACEHOLDER],
-          boolean(EDITABLE),
-          string(START_PLACEHOLDER),
-          string(END_PLACEHOLDER),
-          boolean(IS_RANGE),
-          boolean(ARROW_CONTROL),
-          string(FORMAT),
-          select(ALIGN, {
-            options: ['left', 'month', 'right']
-          }),
-          select(RANGE_SEPARATOR, {
-            options: ['-', '/', '~']
-          }),
-          datepicker(DEFAULT_VALUE)
-        ],
-        defaultSetting
-      )
-    }
-  }
+const _base = base()
+_base.push(clearable())
+_base.push(editable())
+_base.push(readonly())
+
+const rules = {
+  base: _base,
+  customize: [
+    boolean('arrowControl'),
+    boolean('isRange', {
+      control: [
+        {
+          value: true,
+          rule: [
+            select('rangeSeparator', {
+              options: ['-', '/', '~']
+            }),
+            string('startPlaceholder'),
+            string('endPlaceholder')
+          ]
+        },
+        {
+          value: false,
+          rule: [placeholder()]
+        }
+      ]
+    }),
+    string('valueFormat', {
+      title: 'format',
+      info:
+        'https://element.eleme.io/#/zh-CN/component/date-picker#ri-qi-ge-shi'
+    }),
+    iconSelect('prefixIcon'),
+    iconSelect('clearIcon')
+  ]
 }
+
+export default FormSettingGenerator(
+  'SettingFormTextarea',
+  rules,
+  defaultSetting
+)
 </script>

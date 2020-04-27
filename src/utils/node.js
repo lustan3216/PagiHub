@@ -1,5 +1,6 @@
 import store from '../store'
 import { allEqual, cloneJson } from './tool'
+import { capitalize } from './string'
 
 export function findFirstCommonParentTree(ids) {
   // familyPaths = [
@@ -55,7 +56,7 @@ export function shortTagName(node) {
   } else {
     cache[tag] = tag
   }
-  cache[tag] = cache[tag].capitalize().replace('-', '')
+  cache[tag] = capitalize(cache[tag]).replace('-', '')
   return cache[tag]
 }
 

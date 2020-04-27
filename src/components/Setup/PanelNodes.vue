@@ -40,12 +40,12 @@
 
 <script>
 import { Tree } from 'element-ui'
-import { SORT_INDEX, LAYERS, SOFT_DELETE } from '@/const'
+import { SORT_INDEX, LAYERS, SOFT_DELETE, PROPS, STYLE } from '@/const'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { cloneJson, traversal, arraySubtract, deleteBy } from '@/utils/tool'
 import { isMac } from '@/utils/device'
 import NodeController from '../TemplateUtils/NodeController'
-import { on, off } from 'element-ui/src/utils/dom.js'
+import { on, off } from 'element-ui/src/utils/dom'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -75,6 +75,9 @@ export default {
         if (node[SOFT_DELETE]) {
           deleteBy(parentNode.children, 'id', node.id)
         }
+
+        delete node[PROPS]
+        delete node[STYLE]
       })
 
       return cloneTree

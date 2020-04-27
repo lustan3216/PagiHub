@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <main class="w-100">
+    <main class="w-100 z-index1 relative">
       <nav-bar />
 
       <panel-production v-if="isProductionMode" />

@@ -3,16 +3,16 @@
     :style="innerStyles"
     v-model="api"
     :id="id"
-    :rule="_innerRule"
+    :rule="innerRule2"
     :option="option"
   />
 </template>
 
 <script>
-import clone from 'clone'
 import nodeMixin from '@/components/Templates/mixins/node'
 import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormCheckbox'
+import { cloneJson } from '@/utils/tool'
 
 export default {
   defaultSetting,
@@ -20,8 +20,8 @@ export default {
   name: 'FormCheckbox',
   mixins: [nodeMixin, formItemMixin],
   computed: {
-    _innerRule() {
-      const rule = clone(this.innerRule[0])
+    innerRule2() {
+      const rule = cloneJson(this.innerRule[0])
       const { button } = rule.props
       if (button) {
         rule.props.type = 'button'

@@ -2,10 +2,9 @@
   <!--  should have observe-visibility here, otherwise some nested layout case, the grid layout will not work right-->
   <div
     v-observe-visibility="options"
-    class="h-100 border-box"
+    class="h-100 border-box over-auto"
   >
     <component
-      v-if="vIf"
       :is="tag"
       :id="id"
     />
@@ -35,17 +34,14 @@ export default {
     Card: () => import('../Templates/Card'),
     Drawer: () => import('../Templates/Drawer'),
 
-    FormGenerator: () => import('../Templates/FormGenerator'),
     FormTextarea: () => import('../Templates/FormTextarea'),
     FormColorPicker: () => import('../Templates/FormColorPicker'),
     FormCheckbox: () => import('../Templates/FormCheckbox'),
     FormDatePicker: () => import('../Templates/FormDatePicker'),
     FormInput: () => import('../Templates/FormInput'),
-    FormLabel: () => import('../Templates/FormLabel'),
     FormNumber: () => import('../Templates/FormNumber'),
     FormRadio: () => import('../Templates/FormRadio'),
     FormRate: () => import('../Templates/FormRate'),
-    FormReset: () => import('../Templates/FormReset'),
     FormSelect: () => import('../Templates/FormSelect'),
     FormSlider: () => import('../Templates/FormSlider'),
     FormSubmit: () => import('../Templates/FormSubmit'),

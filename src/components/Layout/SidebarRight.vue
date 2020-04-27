@@ -139,7 +139,6 @@ export default {
   position: fixed;
   top: 0;
   left: calc(100vw - 320px);
-  z-index: 201;
 }
 
 .panel {

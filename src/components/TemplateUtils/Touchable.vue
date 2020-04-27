@@ -21,7 +21,11 @@ export default {
   },
   computed: {
     element() {
-      return this.selfVm.$el
+      if (this.isGridItemParent) {
+        return this.parentVm.$el.parentNode
+      } else {
+        return this.selfVm.$el
+      }
     },
     selfVm() {
       return this.vmMap[this.id]

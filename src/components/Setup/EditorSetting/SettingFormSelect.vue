@@ -1,81 +1,47 @@
-<template>
-  <setting-generator
-    :id="id"
-    :rules="spec"
-  />
-</template>
-
 <script>
-import SettingGenerator from './Common/SettingGenerator'
-import { assignDefaultValue, number, boolean, string } from './utils/ruleTool'
-import form, {
-  FIELD,
-  SHOW_LABEL,
-  DISABLED,
-  SIZE,
-  CLEARABLE,
-  OPTIONS,
-  PLACEHOLDER,
-  VALUE
-} from './utils/form'
-
-const MULTIPLE = 'multiple'
-const MULTIPLE_LIMIT = 'multipleLimit'
-const FILTERABLE = 'filterable'
-const ALLOW_CREATE = 'allowCreate'
-const NO_MATCH_TEXT = 'noMatchText'
-const NO_DATA_TEXT = 'noDataText'
+import { string, number, boolean } from './utils/ruleTool'
+import { settings, base, placeholder, clearable, options } from './utils/form'
+import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
-  [FIELD]: 'formSelect',
-  [SHOW_LABEL]: true,
-  [DISABLED]: false,
-  [SIZE]: 5,
-  [CLEARABLE]: 5,
-  [OPTIONS]: 5,
-  [PLACEHOLDER]: 5,
-  [MULTIPLE]: false,
-  [FILTERABLE]: false,
-  [ALLOW_CREATE]: false,
+  ...settings,
+  field: 'select',
+  clearable: true,
+  options: [],
+  placeholder: 'placeholder',
+  multiple: false,
+  allowCreate: false,
+  collapseTags: false,
+  multipleLimit: 0,
+  filterable: true,
 
-  [MULTIPLE_LIMIT]: 0,
-  [NO_MATCH_TEXT]: '无匹配数据',
-  [NO_DATA_TEXT]: '无数据',
+  noMatchText: '无匹配数据',
+  noDataText: '无数据',
 
-  [VALUE]: ['example']
+  value: ['example']
 }
 
-export default {
-  name: 'SettingFormSelect',
-  components: { SettingGenerator },
-  props: {
-    id: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      spec: assignDefaultValue(
-        [
-          form[FIELD],
-          form[SHOW_LABEL],
-          form[DISABLED],
-          form[SIZE],
-          form[CLEARABLE],
-          form[PLACEHOLDER],
-          form[OPTIONS],
+const _base = base()
+_base.splice(2, 0, placeholder())
+_base.push(clearable())
 
-          string(NO_DATA_TEXT),
-          string(NO_MATCH_TEXT),
-          boolean(ALLOW_CREATE),
-          boolean(FILTERABLE),
-          boolean(MULTIPLE_LIMIT),
-          number(MULTIPLE)
-        ],
-        defaultSetting
-      )
-    }
-  }
+const rules = {
+  base: _base,
+  customize: [
+    options(),
+    boolean('multiple', {
+      control: [
+        {
+          value: true,
+          rule: [number('multipleLimit', { info: '0 means unlimited' })]
+        }
+      ]
+    }),
+    string('noDataText'),
+    string('noMatchText'),
+    boolean('allowCreate')
+  ]
 }
+
+export default FormSettingGenerator('SettingFormSelect', rules, defaultSetting)
 </script>

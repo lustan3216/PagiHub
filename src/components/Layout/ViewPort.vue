@@ -13,7 +13,7 @@
         :class="{ interact: isDraftMode }"
         :resize-options="{ ignoreFrom: '.vue-grid-item' }"
         :drag-options="{ ignoreFrom: '.vue-grid-item' }"
-        :draggable="isDraftMode"
+        :draggable="false"
         @resize="dialogResize"
         @resizeStart="appSET({ isAnimating: true })"
         @resizeEnd="appSET({ isAnimating: false })"
@@ -158,10 +158,9 @@ export default {
 <style scoped lang="scss">
 .interact {
   box-shadow: 0 0 15px 0 rgba(32, 48, 60, 0.11);
-  border: 5px solid transparent;
+  padding: 5px;
+  box-sizing: border-box;
   background: transparent;
-  overflow-y: scroll;
-  overflow-x: hidden;
   top: 45px;
   width: calc(100vw - 350px);
   @include calc-vh(height, '100vh - 70px');

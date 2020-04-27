@@ -7,12 +7,13 @@
 
 <script>
 import SettingGenerator from './Common/SettingGenerator'
-import { select, assignDefaultValue } from './utils/ruleTool'
+import { select, boolean, assignDefaultValue } from './utils/ruleTool'
 
 export const defaultSetting = {
   isDraggable: true,
   isResizable: true,
-  static: false
+  static: false,
+  autoHeight: false
 }
 
 const options = [
@@ -36,7 +37,8 @@ export default {
         [
           select('isDraggable', { options }),
           select('isResizable', { options }),
-          select('static', { options })
+          select('static', { options }),
+          boolean('autoHeight')
         ],
         defaultSetting
       )

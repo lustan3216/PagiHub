@@ -1,38 +1,117 @@
-import { required, stringify } from './validation'
-import { string, boolean, select, number, selectCreate } from './ruleTool'
+import { required, text } from '@/validator'
+import {
+  string,
+  boolean,
+  select,
+  number,
+  selectCreate,
+  selectUnit
+} from './ruleTool'
 
-export const FIELD = 'field'
-export const PLACEHOLDER = 'placeholder'
-export const DISABLED = 'disabled'
-export const SIZE = 'size'
-export const SHOW_LABEL = 'showLabel'
-export const CLEARABLE = 'clearable'
-export const READONLY = 'readonly'
-export const MIN = 'min'
-export const MAX = 'max'
-export const OPTIONS = 'options'
-export const VALUE = 'value'
+export const settings = {
+  label: 'default',
+  form: {
+    labelWidth: '125px',
+    labelPosition: 'right',
+    hideRequiredAsterisk: false,
+    showMessage: true,
+    inlineMessage: true,
+    inline: false
+  },
+  size: 'mini',
+  disabled: false,
+  readonly: false,
+  statusIcon: false,
+  hidden: false
+}
 
-export default {
-  [FIELD]: string(FIELD, { validate: [required, stringify] }),
+export function editable() {
+  return boolean('editable', { value: false })
+}
 
-  [PLACEHOLDER]: string(PLACEHOLDER, { validate: [stringify] }),
+export function clearable() {
+  return boolean('clearable')
+}
 
-  [DISABLED]: boolean(DISABLED, { value: false }),
+export function prefixIcon() {
+  return boolean('prefixIcon')
+}
 
-  [SHOW_LABEL]: boolean(SHOW_LABEL),
+export function suffixIcon() {
+  return boolean('suffixIcon')
+}
 
-  [CLEARABLE]: boolean(CLEARABLE),
+export function min() {
+  return number('min')
+}
 
-  [READONLY]: boolean(READONLY),
+export function max() {
+  return number('max')
+}
 
-  [MIN]: number(MIN),
+export function options() {
+  return selectCreate('options', { options: ['example1', 'example2'] })
+}
 
-  [MAX]: number(MAX),
+export function placeholder() {
+  return string('placeholder', { validate: [text] })
+}
 
-  [OPTIONS]: selectCreate(OPTIONS, { options: ['example1', 'example2'] }),
+export function readonly() {
+  return boolean('readonly')
+}
 
-  [SIZE]: select(SIZE, {
-    options: ['large', 'medium', 'small', 'MINi']
-  })
+export function base(fn) {
+  const rules = [
+    // submit and reset in the FormSettingGenerator due to they are reactive
+    string('field', { validate: [required, text] }),
+    select('size', { options: ['large', 'medium', 'small', 'mini'] }),
+    select('validate', {
+      props: { multiple: true },
+      options: [
+        'text',
+        'url',
+        'englishAndNumber',
+        'mandarin',
+        'biggerThanZero',
+        'number',
+        'email',
+        'required'
+      ],
+      control: [
+        {
+          value: ['text'],
+          rule: [string('Regex')]
+        },
+        {
+          handle: x => x !== ['none'],
+          rule: [
+            boolean('statusIcon', { path: 'form' }),
+            boolean('showMessage', { path: 'form' }),
+            boolean('inlineMessage', { path: 'form' })
+          ]
+        }
+      ]
+    }),
+    select('label', {
+      options: ['default', 'custom'],
+      control: [
+        {
+          value: 'default',
+          rule: [
+            boolean('inline', { path: 'form' }),
+            boolean('hideRequiredAsterisk', { path: 'form' }),
+            selectUnit('labelWidth', { path: 'form' })
+          ]
+        }
+      ]
+    }),
+    boolean('disabled')
+  ]
+
+  if (fn) {
+    return rules.filter(fn)
+  } else {
+    return rules
+  }
 }

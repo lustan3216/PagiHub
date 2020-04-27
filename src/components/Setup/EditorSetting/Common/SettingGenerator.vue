@@ -10,7 +10,6 @@
 
 <script>
 import formCreate from '@form-create/element-ui'
-import { mapGetters } from 'vuex'
 import { Switch, Tooltip, InputNumber } from 'element-ui'
 import { cloneJson, getValueByPath } from '@/utils/tool'
 import { vm } from '@/utils/vmMap'
@@ -63,7 +62,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('app', ['selectedComponentNode']),
     canShowSetting() {
       return Object.hasAnyKey(this.innerRules)
     }

@@ -28,9 +28,16 @@ export default {
     innerRule: {
       handler(_rule) {
         const rule = cloneJson(_rule[0])
-        deepmerge(this.keepSameObject, rule)
-        this.keepSameObject.props.activeValue = rule.props.activeText
-        this.keepSameObject.props.inactiveValue = rule.props.inactiveValue
+        this.keepSameObject = deepmerge(this.keepSameObject, rule)
+        // if (this.keepSameObject.props) {
+        //   this.keepSameObject.props.activeValue = rule.props.activeText
+        //   this.keepSameObject.props.inactiveValue = rule.props.inactiveValue
+        // } else {
+        //   this.keepSameObject.props = {
+        //     activeValue: rule.props.activeValue,
+        //     inactiveValue: rule.props.inactiveValue
+        //   }
+        // }
       },
       immediate: true
     }

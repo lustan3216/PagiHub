@@ -1,70 +1,44 @@
-<template>
-  <setting-generator
-    :id="id"
-    :rules="spec"
-  />
-</template>
-
 <script>
-import SettingGenerator from './Common/SettingGenerator'
-import { assignDefaultValue, number, boolean, select } from './utils/ruleTool'
-import form, {
-  FIELD,
-  SHOW_LABEL,
-  DISABLED,
-  MIN,
-  MAX,
-  SIZE,
-  VALUE
-} from './utils/form'
-
-const STEP = 'step'
-const PRECISION = 'precision'
-const CONTROLS = 'controls'
-const CONTROLS_POSITION = 'controlsPosition'
+import { number, boolean, select } from './utils/ruleTool'
+import { settings, base, clearable, min, max, placeholder } from './utils/form'
+import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
-  [FIELD]: 'formInputNumber',
-  [SHOW_LABEL]: true,
-  [DISABLED]: false,
-  [SIZE]: 'mini',
-  [MIN]: 0,
-  [MAX]: 10,
-  [STEP]: 1,
-  [PRECISION]: 1,
-  [CONTROLS]: true,
-  [CONTROLS_POSITION]: 'right',
-  [VALUE]: 10
+  ...settings,
+  field: 'InputNumber',
+  value: 10,
+  controls: true,
+  min: 0,
+  max: 10,
+  step: 1,
+  precision: 1,
+  controlsPosition: ''
 }
 
-export default {
-  name: 'SettingFormNumber',
-  components: { SettingGenerator },
-  props: {
-    id: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      spec: assignDefaultValue(
-        [
-          form[FIELD],
-          form[SHOW_LABEL],
-          form[DISABLED],
-          form[SIZE],
-          form[MIN],
-          form[MAX],
-          number(STEP),
-          number(PRECISION),
-          boolean(CONTROLS),
-          select(CONTROLS_POSITION, { options: ['right', 'left'] }),
-          number(VALUE)
-        ],
-        defaultSetting
-      )
-    }
-  }
+const _base = base()
+_base.splice(2, 0, placeholder())
+
+const rules = {
+  base: [..._base, clearable()],
+  customize: [
+    min(),
+    max(),
+    number('step'),
+    number('precision', { step: 0.01 }),
+    boolean('controls', {
+      control: [
+        {
+          value: true,
+          rule: [
+            select('controlsPosition', {
+              options: [{ label: 'Both Side', value: '' }, 'right']
+            })
+          ]
+        }
+      ]
+    })
+  ]
 }
+
+export default FormSettingGenerator('SettingFormNumber', rules, defaultSetting)
 </script>

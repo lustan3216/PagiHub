@@ -48,6 +48,27 @@ export const defaultSetting = {
   cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }
 }
 
+export const rules = assignDefaultValue(
+  [
+    boolean('isResizable'),
+    boolean('isDraggable'),
+    boolean('preventCollision'),
+    boolean('verticalCompact'),
+    boolean('responsive', {
+      control: [
+        {
+          value: false,
+          rule: [number('colNum', { title: 'Column Number' })]
+        }
+      ]
+    }),
+    number('rowHeight'),
+    number('horizontalMargin', { title: 'Horizontal Interval' }),
+    number('verticalMargin', { title: 'Vertical Interval' })
+  ],
+  defaultSetting
+)
+
 export default {
   name: 'SettingGridGenerator',
   components: { SettingGenerator },
@@ -59,26 +80,7 @@ export default {
   },
   data() {
     return {
-      spec: assignDefaultValue(
-        [
-          boolean('isResizable'),
-          boolean('isDraggable'),
-          boolean('preventCollision'),
-          boolean('verticalCompact'),
-          boolean('responsive', {
-            control: [
-              {
-                value: false,
-                rule: [number('colNum', { title: 'Column Number' })]
-              }
-            ]
-          }),
-          number('rowHeight'),
-          number('horizontalMargin', { title: 'Horizontal Interval' }),
-          number('verticalMargin', { title: 'Vertical Interval' })
-        ],
-        defaultSetting
-      )
+      spec: rules
     }
   },
   computed: {

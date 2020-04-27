@@ -43,9 +43,6 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>每一段時間草稿要儲存到 server, 修改過後 3 秒後送出，要算出跟 server 版本的 diff 在送出，如果途中有出錯就直接送整個 tree 改掉</li>
 <li>component 要用 ulid ?</li>
 <li>debounce 送出更新區塊</li>  
-<li>根本就不用有formgenerator, 讓submit reset直接去選誰是他管的就好了</li>
-<li>form 要可慮可不可以lazyload 不然驗證會有問題</li>
-<li>可以控制的層，做一個單個gridItem的component控制，可以隱藏但不能刪除</li>
 </ol>
 
 ### Functionality
@@ -54,8 +51,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>考慮拖移的 grid item 可不可以直接 merge 進去 layout</li>
 <li>這裏應該要改成從 object node 裡面，且存在 object node style block 是不是跟 class block 功能合併</li>  
 <li>轉跳要做成局部轉跳/ 轉跳時componentSet時，要考慮tree，如果是一樣的話就只更新不一樣的地方，但如果是一樣的componentSet的話，照理來說vue自己已經幫我處理了，應該不會重新渲染吧？！</li>
-<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed</li>
-<li>vue-awesome-swiper</li>  
+<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed</li>  
 <li>google map</li>  
 <li>icon</li>
 <li>setting 區塊做個按鈕，可直接選到上一層組建</li>
@@ -64,6 +60,10 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>Layer 除了第一層不要有底</li>
 <li>tree noed點兩下滑到那邊</li>
 <li>grid layout 在拉的時候案control of shift可以所比例</li>
+<li>pandel draft 要可以拖動</li>
+<li>visiblity lock 的時候不要被選到</li>
+<li>time line/ steps/ transfer / cascader / map </li>
+<li>form item 會卡到lazyload 要處理 </li>
 </ol>
 
 ### Style
@@ -95,6 +95,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>layout 可以每個局部都 設定</li>
 <li>button 做成點了可以轉跳 componentSet 或是打開dialog or drawer or popover</li>
 <li>grid item and layout 在不同尺寸要可以控制隱藏</li>
+<li>options看能不能都存成integer</li>
 </ol>
 
 ### Last
@@ -107,7 +108,15 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>scss code 的東西做成 variable 可以是輸入匡</li>
 <li>中英文字體</li>
 <li>每個grid item tooltip</li>
-<li>動畫</li>
+</ol>
+
+### Bug
+
+<ol>
+<li>邊界拉動的時候，selection要disable</li>
+<li>多個ｃｏｐｙ的時候有問題，且多選複製時</li>
+<li>touchable and visbilty 有ｂｕｇ</li>
+<li>texteditor 選取壞掉 todolist也不見</li>
 </ol>
 
 form 表單

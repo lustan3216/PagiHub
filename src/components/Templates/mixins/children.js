@@ -16,11 +16,10 @@ export default {
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
       // children 因為每次更新 draftNodesMap，如果innerChildren用computed會所有的component都被更新
-      return this.$store.getters[getterName][this.id].map(
-        ({ [CHILDREN]: _, moved, parentId, ...node }) => ({
-          ...node
-        })
-      )
+      const children = this.$store.getters[getterName][this.id] || []
+      return children.map(({ [CHILDREN]: _, moved, parentId, ...node }) => ({
+        ...node
+      }))
     }
   },
   methods: {

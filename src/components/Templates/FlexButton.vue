@@ -20,10 +20,10 @@
         placement="top"
       >
         <el-button
-          class="redirect"
+          class="action"
           icon="el-icon-thumb"
           circle
-          @click="onClick"
+          @click.stop="onClick"
         />
       </el-tooltip>
     </portal>
@@ -124,7 +124,7 @@ export default {
     min-height: inherit;
   }
 }
-.redirect {
+.action {
   right: -5px;
   top: -5px;
   position: absolute;

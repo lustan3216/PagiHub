@@ -1,24 +1,25 @@
-import { VALUE, PROPS, TAG, VALIDATE, FIELD, CAN_DRAG, CAN_EDIT_TEXT } from '../const'
+import {
+  INITIATE,
+  VALUE,
+  PROPS,
+  TAG,
+  VALIDATE,
+  FIELD,
+  CAN_DRAG,
+  CAN_EDIT
+} from '../const'
 
 export const formSubmit = () => ({
   [TAG]: 'form-submit',
-  [CAN_EDIT_TEXT]: true
-})
-
-export const formLabel = () => ({
-  [TAG]: 'form-label',
-  [CAN_EDIT_TEXT]: true
-})
-
-export const formReset = () => ({
-  [TAG]: 'form-reset',
-  [CAN_EDIT_TEXT]: true
+  [CAN_EDIT]: true,
+  [INITIATE]: true
 })
 
 export const formInput = () => ({
   [TAG]: 'form-input',
   [FIELD]: '商品名称',
   [VALUE]: 'iphone 7',
+  [CAN_EDIT]: true,
   [PROPS]: {
     type: 'text'
   },
@@ -27,7 +28,7 @@ export const formInput = () => ({
 
 export const formTextarea = () => ({
   [TAG]: 'form-textarea',
-  [CAN_DRAG]: true
+  [CAN_EDIT]: true
 })
 
 export const formInputNumber = () => ({
@@ -72,9 +73,7 @@ export const formSlider = () => ({
 })
 
 export default [
-  formLabel(),
   formSubmit(),
-  formReset(),
   formTextarea(),
   formInput(),
   formInputNumber(),

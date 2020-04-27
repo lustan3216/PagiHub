@@ -1,59 +1,27 @@
-<template>
-  <setting-generator
-    :id="id"
-    :rules="spec"
-  />
-</template>
-
 <script>
-import SettingGenerator from './Common/SettingGenerator'
-import { assignDefaultValue, string } from './utils/ruleTool'
-import form, {
-  FIELD,
-  SHOW_LABEL,
-  PLACEHOLDER,
-  CLEARABLE,
-  DISABLED,
-  READONLY,
-  SIZE,
-  VALUE
-} from './utils/form'
+import { iconSelect } from './utils/ruleTool'
+import { settings, base, placeholder, clearable, readonly } from './utils/form'
+import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
-  [FIELD]: 'formInput',
-  [SHOW_LABEL]: true,
-  [DISABLED]: true,
-  [PLACEHOLDER]: false,
-  [CLEARABLE]: 'mini',
-  [READONLY]: 'mini',
-  [SIZE]: 'mini',
-  [VALUE]: ''
+  ...settings,
+  field: 'formInput',
+  type: 'text',
+  placeholder: 'placeholder',
+  clearable: true,
+  prefixIcon: null,
+  suffixIcon: null
 }
 
-export default {
-  name: 'SettingFormInput',
-  components: { SettingGenerator },
-  props: {
-    id: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      spec: assignDefaultValue(
-        [
-          form[FIELD],
-          form[SHOW_LABEL],
-          form[PLACEHOLDER],
-          form[DISABLED],
-          form[CLEARABLE],
-          form[SIZE],
-          string(VALUE)
-        ],
-        defaultSetting
-      )
-    }
-  }
+const _base = base()
+_base.splice(2, 0, placeholder())
+_base.push(clearable())
+_base.push(readonly())
+
+const rules = {
+  base: _base,
+  customize: [iconSelect('prefixIcon'), iconSelect('suffixIcon')]
 }
+
+export default FormSettingGenerator('SettingFormInput', rules, defaultSetting)
 </script>

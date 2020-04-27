@@ -9,3 +9,9 @@ export function camelCase(value) {
     group.toUpperCase().replace(/[-_]/g, '')
   )
 }
+
+export function bigCamelCase(value) {
+  if (!value) return ''
+
+  return capitalize(camelCase(value))
+}

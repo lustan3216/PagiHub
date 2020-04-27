@@ -2,20 +2,25 @@ import {
   getValueByPath,
   isPlainObject,
   cloneJson,
-  isUndefined
+  isUndefined,
+  isArray
 } from '@/utils/tool'
-import { urlPath } from './validation'
+import { urlPath } from '@/validator'
 
 export function traversalRules(rules, fn) {
-  rules.forEach(rule => {
-    if (rule.type === 'group') {
-      traversalRules(rule.props.rules, fn)
-    } else if (rule.control && rule.control.length) {
-      rule.control.forEach(x => traversalRules(x.rule, fn))
-    }
+  if (rules.isPlainObject) {
+    Object.values(rules).forEach(x => traversalRules(x, fn))
+  } else if (isArray(rules)) {
+    rules.forEach(rule => {
+      if (rule.type === 'group') {
+        traversalRules(rule.props.rules, fn)
+      } else if (rule.control && rule.control.length) {
+        rule.control.forEach(x => traversalRules(x.rule, fn))
+      }
 
-    fn(rule)
-  })
+      fn(rule)
+    })
+  }
 }
 
 export const assignDefaultValue = (rules, defaultSetting) => {
@@ -42,6 +47,34 @@ export const number = (field, extraOptions = {}) => ({
 })
 
 export const select = (field, { options, ...extraOptions } = {}) => {
+  return {
+    field,
+    type: 'select',
+    options: parseOptions(options),
+    ...extraOptions,
+    title: readable(extraOptions.title || field)
+  }
+}
+
+export const selectCreate = (field, { options, ...extraOptions } = {}) => {
+
+  return {
+    field,
+    type: 'select',
+    props: {
+      noDataText: 'Can Create by typing',
+      allowCreate: true,
+      multiple: true,
+      filterable: true,
+      placeholder: '请选择文章标签'
+    },
+    options: parseOptions(options),
+    ...extraOptions,
+    title: readable(extraOptions.title || field)
+  }
+}
+
+function parseOptions(options) {
   options = cloneJson(options)
   options.forEach((option, index) => {
     if (!isPlainObject(option)) {
@@ -49,36 +82,17 @@ export const select = (field, { options, ...extraOptions } = {}) => {
     }
   })
 
-  // if (isUndefined(extraOptions.props)) {
-  //   extraOptions.props = { clearable: true }
-  // } else if (isUndefined(extraOptions.props.clearable)) {
-  //   extraOptions.props.clearable = true
-  // }
-
-  return {
-    field,
-    type: 'select',
-    options,
-    ...extraOptions,
-    title: readable(extraOptions.title || field)
-  }
+  return options
 }
 
-export const selectCreate = (field, extraOptions = {}) => ({
+export const string = (field, extraOptions = {}) => ({
   field,
-  type: 'select',
-  props: {
-    noDataText: '可以打字製造',
-    allowCreate: true,
-    multiple: true,
-    filterable: true,
-    placeholder: '请选择文章标签'
-  },
+  type: 'input',
   ...extraOptions,
   title: readable(extraOptions.title || field)
 })
 
-export const string = (field, extraOptions = {}) => ({
+export const iconSelect = (field, extraOptions = {}) => ({
   field,
   type: 'input',
   ...extraOptions,

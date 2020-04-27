@@ -14,8 +14,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import ViewPort from './ViewPort'
 import LayersInteract from '../Templates/LayersInteract'
 import { isMac } from '@/utils/device'
-import { onWithOff, asyncGetValue } from '@/utils/tool'
-let off
+import Selection from '@simonwep/selection-js'
 
 export default {
   name: 'PanelDraft',
@@ -30,25 +29,55 @@ export default {
     this.$store.dispatch('project/getProjects')
   },
   mounted() {
-    let scrollId
-    asyncGetValue(() => {
-      return this.$refs.panelDraft && this.$refs.panelDraft.$el
-    }).then($el => {
-      off = onWithOff($el, 'scroll', () => {
-        this.SET({ isAnimating: true })
+    let selection
 
-        window.clearTimeout(scrollId)
-        scrollId = setTimeout(() => {
-          this.SET({ isAnimating: false })
-        }, 66)
+    this.$nextTick(() => {
+      selection = Selection.create({
+        class: 'selection',
+        selectables: ['.control-layer'],
+        boundaries: ['.panel-draft']
       })
+        .on('start', ({ inst, selected, oe }) => {
+          // Remove class if the user isn't pressing the control key or ⌘ key
+          if (!oe.ctrlKey && !oe.metaKey) {
+            // Unselect all elements
+            for (const el of selected) {
+              el.classList.remove('selected')
+              inst.removeFromSelection(el)
+            }
+
+            // Clear previous selection
+            inst.clearSelection()
+          }
+        })
+        .on('move', ({ changed: { removed, added }}) => {
+          for (const el of added) {
+            el.classList.add('selected')
+          }
+
+          for (const el of removed) {
+            el.classList.remove('selected')
+          }
+        })
+        .on('stop', ({ inst, selected }) => {
+          selected.forEach(({ id }) => {
+            this.TOGGLE_SELECTED_COMPONENT_IN_IDS(+id)
+          })
+
+          inst.keepSelection()
+        })
     })
-  },
-  beforeDestroy() {
-    off()
+
+    this.$bus.$on('selection-enable', value => {
+      value ? selection.enable() : selection.disable()
+    })
   },
   methods: {
     ...mapMutations('app', ['SET']),
+    ...mapMutations('app', [
+      'SET_SELECTED_COMPONENT_ID',
+      'TOGGLE_SELECTED_COMPONENT_IN_IDS'
+    ]),
     isMac
   }
 }

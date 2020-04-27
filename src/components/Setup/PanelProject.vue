@@ -60,7 +60,7 @@
           <component
             :id="data.id"
             :parent-id="data.parentId"
-            :is="`dialog-${TYPE_STRING[data.type].kebabCase()}`"
+            :is="`dialog-${kebabCase(TYPE_STRING[data.type])}`"
             class="m-l-5"
           />
         </span>
@@ -77,6 +77,7 @@ import DialogProject from './DialogProject'
 import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
+import { kebabCase } from '@/utils/string'
 
 export default {
   name: 'PanelProject',
@@ -104,6 +105,7 @@ export default {
     }
   },
   methods: {
+    kebabCase,
     ...mapActions('project', ['modifyProjectNodeParent']),
     ...mapActions('draft', ['setComponentSet']),
     nodeParentChange({ data: childData }, { data: parentData }, action) {

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import clone from 'clone'
+import { cloneJson } from '@/utils/tool'
 import nodeMixin from '@/components/Templates/mixins/node'
 import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormRate'
@@ -20,7 +20,7 @@ export default {
   mixins: [nodeMixin, formItemMixin],
   computed: {
     innerRule2() {
-      const rule = clone(this.innerRule[0])
+      const rule = cloneJson(this.innerRule[0])
       rule.props.colors = [
         rule.props.lowColor,
         rule.props.midColor,

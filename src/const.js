@@ -12,12 +12,14 @@ export const VALUE = 'value'
 export const CATEGORY = 'category'
 
 export const CAN_NEW_ITEM = 'canNewItem'
-export const CAN_EDIT_TEXT = 'canEditText'
+export const CAN_EDIT = 'canEditText'
 export const CAN_DRAG = 'canDrag'
 export const CAN_NOT_DELETE = 'canNotDelete'
 export const CAN_NOT_COPY = 'canNotCopy'
 export const AUTO_HEIGHT = 'autoHeight'
 export const SOFT_DELETE = 'softDelete'
+// it is used to define some action only happen at the firs time add
+export const INITIATE = 'initiate'
 
 export const LAYERS = 'layers'
 export const LAYERS_INTERACT = 'layers-interact'

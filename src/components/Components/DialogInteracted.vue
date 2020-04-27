@@ -49,18 +49,30 @@ export default {
       default: 1
     }
   },
+  computed: {
+    interact() {
+      return interactjs(this.$el)
+    }
+  },
+  watch: {
+    resizable(value) {
+      this.interact.resizable(value)
+    },
+    draggable(value) {
+      this.interact.draggable(value)
+    }
+  },
   mounted() {
-    const interact = interactjs(this.$el)
     const edges = this.resizeEdges
 
     if (this.resizable) {
-      interact
+      this.interact
         .resizable({
           // resize from all edges and corners
           edges: this.resizeEdges,
           listeners: {
             move: event => {
-              var target = event.target
+              const target = event.target
               if (edges.left && edges.right) {
                 target.style.width = event.rect.width / this.scaleRatio + 'px'
               }
@@ -99,14 +111,18 @@ export default {
           inertia: true,
           ...this.resizeOptions
         })
-        .on(['resizeend'], () => this.$emit('resizeEnd'))
-        .on(['resizestart'], () => this.$emit('resizeStart'))
-
-      // interactjs(this.$el)
+        .on(['resizeend'], () => {
+          this.$emit('resizeEnd')
+          // this.$bus.$emit('selection-enable', true)
+        })
+        .on(['resizestart'], () => {
+          this.$emit('resizeStart')
+          // this.$bus.$emit('selection-enable', false)
+        })
     }
 
     if (this.draggable) {
-      interact
+      this.interact
         .draggable({
           listeners: {
             move: event => {
@@ -133,8 +149,14 @@ export default {
           ],
           ...this.dragOptions
         })
-        .on(['dragstart'], () => this.$emit('dragStart'))
-        .on(['dragend'], () => this.$emit('dragEnd'))
+        .on(['dragstart'], () => {
+          this.$emit('dragStart')
+          // this.$bus.$emit('selection-enable', false)
+        })
+        .on(['dragend'], () => {
+          this.$emit('dragEnd')
+          // this.$bus.$emit('selection-enable', true)
+        })
     }
   },
   methods: {

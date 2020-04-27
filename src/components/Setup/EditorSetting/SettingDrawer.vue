@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { pxPercent } from './utils/validation'
+import { pxPercent } from '@/validator'
 import SettingGenerator from './Common/SettingGenerator'
 import { boolean, select, assignDefaultValue, selectUnit } from './utils/ruleTool'
 import { shortTagName, traversalChildrenOf } from '@/utils/node'

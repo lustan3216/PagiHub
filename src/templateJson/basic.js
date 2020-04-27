@@ -4,7 +4,7 @@ import {
   CAN_NEW_ITEM,
   TAG,
   CHILDREN,
-  CAN_EDIT_TEXT,
+  CAN_EDIT,
   CAN_DRAG,
   CAN_NOT_DELETE,
   CAN_NOT_COPY,
@@ -20,7 +20,7 @@ const gridItems = function() {
     {
       [TAG]: GRID_ITEM,
       [PROPS]: {
-        lg: { x: 0, y: 0, w: 22, h: 71 }
+        lg: { x: 0, y: 0, w: 22, h: 30 }
       }
     }
   ]
@@ -96,6 +96,7 @@ export const carousel = function() {
 export const card = function() {
   return {
     [TAG]: 'card',
+    [CAN_NEW_ITEM]: true,
     [CHILDREN]: gridItems()
   }
 }
@@ -103,14 +104,14 @@ export const card = function() {
 export const editorText = function() {
   return {
     [TAG]: 'editor-text',
-    [CAN_EDIT_TEXT]: true
+    [CAN_EDIT]: true
   }
 }
 
 export const flexButton = function() {
   return {
     [TAG]: 'flex-button',
-    [CAN_EDIT_TEXT]: true
+    [CAN_EDIT]: true
   }
 }
 
@@ -151,6 +152,7 @@ export const drawer = function() {
 export default [
   layers(),
   layersInteract(),
+  card(),
   flexButton(),
   flexImage(),
   gridGenerator(),
@@ -158,6 +160,5 @@ export default [
   divider(),
   videoPlayer(),
   editorText(),
-  card(),
   drawer()
 ]

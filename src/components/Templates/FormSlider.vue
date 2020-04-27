@@ -4,44 +4,35 @@
     v-model="api"
     :rule="innerRule"
     :option="option"
-    :class="{ vertical }"
   />
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import nodeMixin from '@/components/Templates/mixins/node'
 import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSlider'
+import { PROPS } from '@/const'
 
 export default {
   defaultSetting,
   type: 'slider',
   name: 'FormSlider',
   mixins: [nodeMixin, formItemMixin],
-  computed: {
-    vertical() {
-      return this.innerRule[0].props.vertical
+  watch: {
+    'innerProps.isRange'(value) {
+      if (value) {
+        this.RECORD([
+          {
+            path: `${this.id}.${PROPS}.showInput`,
+            value: undefined
+          }
+        ])
+      }
     }
+  },
+  methods: {
+    ...mapMutations('draft', ['RECORD'])
   }
 }
 </script>
-
-<style scoped lang="scss">
-::v-deep.vertical {
-  height: 100%;
-
-  .el-slider,
-  .el-form-item__content,
-  .el-form-item,
-  .el-col,
-  .el-row,
-  .el-form {
-    height: 100%;
-  }
-
-  .el-slider {
-    height: calc(100% - 20px) !important;
-    margin-top: 10px;
-  }
-}
-</style>

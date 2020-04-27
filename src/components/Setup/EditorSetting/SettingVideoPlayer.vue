@@ -16,7 +16,7 @@
 <script>
 import SettingGenerator from './Common/SettingGenerator'
 import { string, select, assignDefaultValue, boolean } from './utils/ruleTool'
-import { required } from './utils/validation'
+import { required } from '@/validator'
 
 export const defaultSetting = {
   provider: 'youtube',

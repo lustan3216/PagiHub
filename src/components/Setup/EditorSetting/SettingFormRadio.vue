@@ -1,71 +1,43 @@
-<template>
-  <setting-generator
-    :id="id"
-    :rules="spec"
-  />
-</template>
-
 <script>
-import SettingGenerator from './Common/SettingGenerator'
-import { boolean, assignDefaultValue, colorAlpha } from './utils/ruleTool'
-import form, {
-  FIELD,
-  SHOW_LABEL,
-  SIZE,
-  MIN,
-  MAX,
-  VALUE,
-  DISABLED,
-  OPTIONS
-} from './utils/form'
-
-const TEXT_COLOR = 'textColor'
-const FILL = 'fill'
-const BUTTON = 'button'
+import { color, boolean, select } from './utils/ruleTool'
+import { settings, options, base } from './utils/form'
+import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
-  [FIELD]: 'formRadio',
-  [SHOW_LABEL]: true,
-  [DISABLED]: false,
-  [SIZE]: 'mini',
-  [MIN]: 0,
-  [MAX]: 10,
-  [OPTIONS]: [],
-
-  [TEXT_COLOR]: '#ffffff',
-  [FILL]: '#409EFF',
-  [BUTTON]: false,
-
-  [VALUE]: false
+  ...settings,
+  field: 'FormRadio',
+  button: false,
+  options: ['example1', 'example2'],
+  value: 'example1',
+  textColor: '#ffffff',
+  fill: '#153454',
+  border: true
 }
 
-export default {
-  name: 'SettingFormRadio',
-  components: { SettingGenerator },
-  props: {
-    id: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      spec: assignDefaultValue(
-        [
-          form[FIELD],
-          form[SHOW_LABEL],
-          form[DISABLED],
-          form[SIZE],
-          form[MIN],
-          form[MAX],
-          form[OPTIONS],
-          colorAlpha(TEXT_COLOR),
-          colorAlpha(FILL),
-          boolean(BUTTON)
-        ],
-        defaultSetting
-      )
-    }
-  }
+const rules = {
+  base: base(x => x.field !== 'size'),
+  customize: [
+    options(),
+    boolean('type', {
+      props: { activeValue: 'button', inactiveValue: null },
+      title: 'button',
+      control: [
+        {
+          value: 'button',
+          rule: [
+            select('size', { options: ['large', 'medium', 'small', 'mini'] }),
+            color('textColor'),
+            color('fill')
+          ]
+        },
+        {
+          value: null,
+          rule: [boolean('border')]
+        }
+      ]
+    })
+  ]
 }
+
+export default FormSettingGenerator('SettingFormRadio', rules, defaultSetting)
 </script>
