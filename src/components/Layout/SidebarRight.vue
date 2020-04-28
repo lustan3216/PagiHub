@@ -1,17 +1,5 @@
 <template>
-  <component
-    :is="isFloat ? 'DialogInteracted' : 'div'"
-    :class="{ float: isFloat }"
-    class="sidebar-right"
-  >
-    <el-button
-      :icon="`el-icon${isFloat ? '-map' : ''}-location`"
-      class="transparent"
-      circle
-      type="mini"
-      @click="isFloat = !isFloat"
-    />
-
+  <div class="sidebar-right">
     <i
       v-shortkey="['a']"
       @shortkey="activeName = 'Project'"
@@ -74,20 +62,18 @@
         />
       </el-tab-pane>
     </el-tabs>
-  </component>
+  </div>
 </template>
 
 <script>
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
-import DialogInteracted from '@/components/Components/DialogInteracted'
 
 export default {
   name: 'SidebarRight',
   components: {
     PanelStyles,
     PanelSettings,
-    DialogInteracted,
     PanelNodes: () => import('../Setup/PanelNodes'),
     PanelProject: () => import('../Setup/PanelProject')
   },
@@ -95,13 +81,6 @@ export default {
     return {
       isFloat: false,
       activeName: 'Nodes'
-    }
-  },
-  watch: {
-    isFloat(value) {
-      if (!value) {
-        this.$el.style.webkitTransform = null
-      }
     }
   }
 }
@@ -120,11 +99,5 @@ export default {
 .panel {
   @include calc-vh(height, '100vh - 130px');
   overflow-y: scroll;
-}
-
-.float {
-  padding: 0 10px 20px;
-  background: rgba(255, 255, 255, 0.87);
-  box-shadow: 1px 1px 19px 6px rgba(0, 0, 0, 0.1);
 }
 </style>

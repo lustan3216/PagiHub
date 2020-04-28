@@ -1,4 +1,5 @@
 <template>
+  <!-- id here is for selection using, can not delete -->
   <div
     v-if="isDraftMode && node"
     :id="id"
@@ -24,6 +25,13 @@
     >
       <slot />
     </div>
+  </div>
+
+  <div
+    v-else-if="node"
+    class="control-layer h-100"
+  >
+    <slot />
   </div>
 </template>
 

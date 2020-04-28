@@ -35,19 +35,12 @@ export default {
       selection = Selection.create({
         class: 'selection',
         selectables: ['.control-layer'],
-        boundaries: ['.panel-draft']
+        boundaries: ['.panel-draft'],
+        startareas: ['.panel-draft']
       })
-        .on('start', ({ inst, selected, oe }) => {
-          // Remove class if the user isn't pressing the control key or ⌘ key
-          if (!oe.ctrlKey && !oe.metaKey) {
-            // Unselect all elements
-            for (const el of selected) {
-              el.classList.remove('selected')
-              inst.removeFromSelection(el)
-            }
-
-            // Clear previous selection
-            inst.clearSelection()
+        .on('start', ({ inst, oe }) => {
+          if (!oe.path[0].classList.contains('panel-draft')) {
+            inst.cancel()
           }
         })
         .on('move', ({ changed: { removed, added }}) => {
@@ -63,14 +56,14 @@ export default {
           selected.forEach(({ id }) => {
             this.TOGGLE_SELECTED_COMPONENT_IN_IDS(+id)
           })
-
+          inst.enable()
           inst.keepSelection()
         })
     })
 
-    this.$bus.$on('selection-enable', value => {
+    /* this.$bus.$on('selection-enable', value => {
       value ? selection.enable() : selection.disable()
-    })
+    })*/
   },
   methods: {
     ...mapMutations('app', ['SET']),

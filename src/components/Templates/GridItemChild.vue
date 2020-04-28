@@ -1,43 +1,43 @@
 <template>
   <controller-layer
-    v-if="firstChild && isDraftMode"
+    v-if="firstChild"
     :style="innerStyles"
     :id="firstChild.id"
   >
-    <portal-target :name="`GridItemChild${firstChild.id}`" />
     <async-component
       :tag="firstChild.tag"
       :id="firstChild.id"
     />
 
-    <el-popover
-      v-if="mounted && !isExample && !isAnimating"
-      :reference="parentEl"
-      :placement="firstChild.canNewItem ? 'top' : 'right'"
-      trigger="hover"
-    >
-      <node-controller :id="firstChild.id" />
-    </el-popover>
+    <template v-if="isDraftMode">
+      <el-popover
+        v-if="mounted && !isExample && !isAnimating"
+        :reference="parentEl"
+        :placement="firstChild.canNewItem ? 'top' : 'right'"
+        trigger="hover"
+      >
+        <node-controller :id="firstChild.id" />
+      </el-popover>
+
+      <portal-target :name="`GridItemChild${firstChild.id}`" />
+    </template>
+
   </controller-layer>
 
-  <async-component
-    v-else-if="firstChild"
-    :tag="firstChild.tag"
-    :id="firstChild.id"
-  />
-
   <controller-layer
-    v-else-if="isDraftMode"
+    v-else
     :id="id"
     :style="innerStyles"
     class="flex-center"
   >
-    <portal-target :name="`GridItemChild${id}`" />
-    <node-controller
-      v-if="!isExample"
-      :id="id"
-      class="h-100"
-    />
+    <template v-if="isDraftMode">
+      <portal-target :name="`GridItemChild${id}`" />
+      <node-controller
+        v-if="!isExample"
+        :id="id"
+        class="h-100"
+      />
+    </template>
   </controller-layer>
 </template>
 

@@ -19,8 +19,6 @@
       drag-ignore-from=".noDrag"
       drag-allow-from="div"
       class="item"
-      @mouseenter.native="$bus.$emit('selection-enable', false)"
-      @mouseleave.native="$bus.$emit('selection-enable', true)"
     >
       <grid-item-child :id="child.id" />
     </vue-grid-item>

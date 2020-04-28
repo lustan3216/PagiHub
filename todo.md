@@ -34,7 +34,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>要做個按鈕 可以選取組建後變成組建</li>  
 <li>組建一改 全部都要改，但有被修過的參數不用改</li>
 <li>nodes tree 裡面可以拖拉</li>
-<li>node tree, project 編輯時不要關起來</li>
+<li>node tree, project 編輯時不要關起來 / 可以刪除新增 copy 之後馬上選 select最後一個元素</li>
 </ol>
 
 ### Data Base
@@ -91,7 +91,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>每個 button 都可以點了 連結到 componentSet / tooltip / link</li>
 <li>uploader image / svg / video, consider how to compress</li>
 <li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridGenerator 可以固定寬</li>
-<li>node 可以拖拉到 setting style panel 上就可編輯，也可以拖拉到 空的 GridItem 上, 拖到 grid layout 上就新增</li>
+<li>node 可以拖拉到 setting style panel 上就可編輯，也ㄉㄛ可以拖拉到 空的 GridItem 上, 拖到 grid layout 上就新增</li>
 <li>layout 可以每個局部都 設定</li>
 <li>button 做成點了可以轉跳 componentSet 或是打開dialog or drawer or popover</li>
 <li>grid item and layout 在不同尺寸要可以控制隱藏</li>
@@ -107,7 +107,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <ol>
 <li>iframe 要可以自動 resize，且可內船 data or 外傳，而且是reactive的，可以互動</li>
 <li>每個project都有全局設定，字型包，顏色，自行試試看能不能用functal變成組建</li>
-<li>sidebarRight設定要被技術</li>
+<li>sidebarRight設定要被記住</li>
 <li>Sidebar可以分別被猜拆來</li>
 <li>scss code 的東西做成 variable 可以是輸入匡</li>
 <li>中英文字體</li>
@@ -128,3 +128,9 @@ component 組建
 style 變 component 還有飲用ㄉㄛ
 先寫測試
 動畫
+
+UX {
+盡量實現讓設計師看到多張圖
+setting 考慮需不需要一次修改多個，但或許不用先不做,
+組建做成在左列，而不是 dialog，且組建變成用拖拉的，這樣用全局組建也方便
+}
