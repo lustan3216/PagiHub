@@ -1,5 +1,5 @@
 <template>
-  <setting-generator
+  <rules-generator
     :id="id"
     :rules="spec"
   />
@@ -7,7 +7,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import SettingGenerator from './Common/SettingGenerator'
+import RulesGenerator from './Common/RulesGenerator'
 import { select, assignDefaultValue } from './utils/ruleTool'
 import { TYPE as NODE_TYPE } from '@/const'
 
@@ -20,7 +20,7 @@ export const defaultSetting = {
 
 export default {
   name: 'SettingFlexButton',
-  components: { SettingGenerator },
+  components: { RulesGenerator },
   props: {
     id: {
       type: Number,

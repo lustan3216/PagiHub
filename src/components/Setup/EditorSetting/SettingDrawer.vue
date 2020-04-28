@@ -1,5 +1,5 @@
 <template>
-  <setting-generator
+  <rules-generator
     :id="id"
     :rules="spec"
     :key="JSON.stringify(allChildren)"
@@ -8,7 +8,7 @@
 
 <script>
 import { pxPercent } from '@/validator'
-import SettingGenerator from './Common/SettingGenerator'
+import RulesGenerator from './Common/RulesGenerator'
 import { boolean, select, assignDefaultValue, selectUnit } from './utils/ruleTool'
 import { shortTagName, traversalChildrenOf } from '@/utils/node'
 
@@ -22,7 +22,7 @@ export const defaultSetting = {
 
 export default {
   name: 'SettingDrawer',
-  components: { SettingGenerator },
+  components: { RulesGenerator },
   props: {
     id: {
       type: Number,

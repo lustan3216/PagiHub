@@ -1,12 +1,12 @@
 <template>
-  <setting-generator
+  <rules-generator
     :id="id"
     :rules="spec"
   />
 </template>
 
 <script>
-import SettingGenerator from './Common/SettingGenerator'
+import RulesGenerator from './Common/RulesGenerator'
 import { select, string, assignDefaultValue } from './utils/ruleTool'
 
 const SRC = 'src'
@@ -21,7 +21,7 @@ export const defaultSetting = {
 
 export default {
   name: 'SettingFlexImage',
-  components: { SettingGenerator },
+  components: { RulesGenerator },
   props: {
     id: {
       type: Number,

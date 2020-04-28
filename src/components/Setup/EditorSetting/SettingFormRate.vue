@@ -1,7 +1,7 @@
 <script>
 import { colorAlpha, number, boolean, selectCreate } from './utils/ruleTool'
 import { settings, clearable, max, base } from './utils/form'
-import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
+import FormSettingGenerators from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
   ...settings,
@@ -56,5 +56,5 @@ const rules = {
   ]
 }
 
-export default FormSettingGenerator('SettingFormRate', rules, defaultSetting)
+export default FormSettingGenerators('SettingFormRate', rules, defaultSetting)
 </script>

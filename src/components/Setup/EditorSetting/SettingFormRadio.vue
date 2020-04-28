@@ -1,7 +1,7 @@
 <script>
 import { color, boolean, select } from './utils/ruleTool'
 import { settings, options, base } from './utils/form'
-import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
+import FormSettingGenerators from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
   ...settings,
@@ -39,5 +39,5 @@ const rules = {
   ]
 }
 
-export default FormSettingGenerator('SettingFormRadio', rules, defaultSetting)
+export default FormSettingGenerators('SettingFormRadio', rules, defaultSetting)
 </script>

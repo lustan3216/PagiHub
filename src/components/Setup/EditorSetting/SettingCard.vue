@@ -1,6 +1,7 @@
 <script>
 import SettingGenerators from './Common/SettingGenerators'
 import { select } from './utils/ruleTool'
+
 import {
   defaultSetting as gridSetting,
   rules as gridRules
@@ -16,7 +17,9 @@ gridRules.forEach(x => {
 })
 
 const rules = {
-  base: [select('shadow', { path: 'card', options: ['always', 'hover', 'never'] })],
+  base: [
+    select('shadow', { path: 'card', options: ['always', 'hover', 'never'] })
+  ],
   grid: gridRules
 }
 

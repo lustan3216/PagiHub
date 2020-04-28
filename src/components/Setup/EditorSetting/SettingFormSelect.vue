@@ -1,7 +1,7 @@
 <script>
 import { string, number, boolean } from './utils/ruleTool'
 import { settings, base, placeholder, clearable, options } from './utils/form'
-import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
+import FormSettingGenerators from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
   ...settings,
@@ -43,5 +43,5 @@ const rules = {
   ]
 }
 
-export default FormSettingGenerator('SettingFormSelect', rules, defaultSetting)
+export default FormSettingGenerators('SettingFormSelect', rules, defaultSetting)
 </script>

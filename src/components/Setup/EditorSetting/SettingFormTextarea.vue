@@ -1,7 +1,7 @@
 <script>
 import { settings, base, placeholder, readonly } from './utils/form'
 import { select, boolean, number } from './utils/ruleTool'
-import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
+import FormSettingGenerators from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
   ...settings,
@@ -39,7 +39,7 @@ const rules = {
   ]
 }
 
-export default FormSettingGenerator(
+export default FormSettingGenerators(
   'SettingFormTextarea',
   rules,
   defaultSetting

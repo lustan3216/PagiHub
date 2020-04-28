@@ -104,7 +104,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('draft', ['isRootForm', 'theRootForm']),
     ...mapState('example', ['examples']),
     categories() {
       return categories
@@ -123,27 +122,8 @@ export default {
     shortTagName,
     addTemplate(template) {
       template = cloneJson(template)
-      this.cleanFormButtons(template)
       this.$emit('onAdd', template)
       this.visible = false
-    },
-    cleanFormButtons(template) {
-      const rootForm = this.theRootForm(this.id)
-
-      if (rootForm && template.tag === 'form-generator') {
-        const vm = this.vmMap[rootForm.id]
-
-        template.children = template.children.filter(x => {
-          const tag = x.children[0].tag
-          if (tag === 'form-submit') {
-            return !vm.button.submit
-          } else if (tag === 'form-reset') {
-            return !vm.button.reset
-          } else {
-            return true
-          }
-        })
-      }
     }
   }
 }

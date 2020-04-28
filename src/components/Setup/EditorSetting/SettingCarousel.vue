@@ -1,5 +1,5 @@
 <template>
-  <setting-generator
+  <rules-generator
     ref="generator"
     :id="id"
     :rules="spec"
@@ -8,7 +8,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import SettingGenerator from './Common/SettingGenerator'
+import RulesGenerator from './Common/RulesGenerator'
 import { assignDefaultValue, boolean, select, number } from './utils/ruleTool'
 import { SOFT_DELETE, LAYERS } from '@/const'
 
@@ -32,7 +32,7 @@ export const defaultSetting = {
 
 export default {
   name: 'SettingCarousel',
-  components: { SettingGenerator },
+  components: { RulesGenerator },
   props: {
     id: {
       type: Number,

@@ -1,9 +1,9 @@
 <script>
 import { base, settings } from './utils/form'
-import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
+import FormSettingGenerators from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 export const defaultSetting = settings
 
-export default FormSettingGenerator('SettingFormSubmit', {
+export default FormSettingGenerators('SettingFormSubmit', {
   base: base(x => x.field !== 'readonly')
 }, settings)
 </script>

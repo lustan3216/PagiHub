@@ -1,5 +1,8 @@
 <template>
-  <span>
+  <span
+    v-if="id"
+    :key="id"
+  >
     <el-button
       v-shortkey="['q']"
       v-if="parentId && showFamily"
@@ -40,6 +43,7 @@
 import { mapMutations, mapGetters } from 'vuex'
 import { PARENT_ID, SOFT_DELETE } from '@/const'
 import { shortTagName } from '@/utils/node'
+import store from '@/store'
 
 export default {
   name: 'NodeInfo',

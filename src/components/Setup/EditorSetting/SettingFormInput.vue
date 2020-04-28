@@ -1,7 +1,7 @@
 <script>
 import { iconSelect } from './utils/ruleTool'
 import { settings, base, placeholder, clearable, readonly } from './utils/form'
-import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
+import FormSettingGenerators from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
   ...settings,
@@ -23,5 +23,5 @@ const rules = {
   customize: [iconSelect('prefixIcon'), iconSelect('suffixIcon')]
 }
 
-export default FormSettingGenerator('SettingFormInput', rules, defaultSetting)
+export default FormSettingGenerators('SettingFormInput', rules, defaultSetting)
 </script>

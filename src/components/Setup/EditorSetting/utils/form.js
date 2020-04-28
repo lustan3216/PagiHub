@@ -7,6 +7,7 @@ import {
   selectCreate,
   selectUnit
 } from './ruleTool'
+import { CAN_NOT_BE_MULTI_SELECTED } from '@/const'
 
 export const settings = {
   label: 'default',
@@ -21,12 +22,13 @@ export const settings = {
   size: 'mini',
   disabled: false,
   readonly: false,
-  statusIcon: false,
-  hidden: false
+  statusIcon: false
 }
 
 export function editable() {
-  return boolean('editable', { value: false })
+  return boolean('editable', {
+    value: false
+  })
 }
 
 export function clearable() {
@@ -63,8 +65,11 @@ export function readonly() {
 
 export function base(fn) {
   const rules = [
-    // submit and reset in the FormSettingGenerator due to they are reactive
-    string('field', { validate: [required, text] }),
+    // submit and reset in the FormSettingGenerators due to they are reactive
+    string('field', {
+      validate: [required, text],
+      [CAN_NOT_BE_MULTI_SELECTED]: true
+    }),
     select('size', { options: ['large', 'medium', 'small', 'mini'] }),
     select('validate', {
       props: { multiple: true },
@@ -95,6 +100,7 @@ export function base(fn) {
     }),
     select('label', {
       options: ['default', 'custom'],
+      [CAN_NOT_BE_MULTI_SELECTED]: true,
       control: [
         {
           value: 'default',

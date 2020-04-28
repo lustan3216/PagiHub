@@ -14,7 +14,7 @@ import {
   editable,
   readonly
 } from './utils/form'
-import FormSettingGenerator from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
+import FormSettingGenerators from '@/components/Setup/EditorSetting/Common/FormSettingGenerators'
 
 export const defaultSetting = {
   ...settings,
@@ -69,7 +69,7 @@ const rules = {
   ]
 }
 
-export default FormSettingGenerator(
+export default FormSettingGenerators(
   'SettingFormTextarea',
   rules,
   defaultSetting

@@ -1,5 +1,12 @@
 <template>
   <el-form label-position="top">
+    <node-info
+      v-if="theOnlySelectedComponentId"
+      :id="theOnlySelectedComponentId"
+      class="text-center m-b-10 block"
+      show-family
+    />
+
     <!--    <class-state :computed-style="computedStyle" />-->
     <portal-target
       name="PanelStyles"
@@ -57,11 +64,6 @@
         />
       </el-collapse-item>
     </el-collapse>
-
-    <style-block
-      :plan-style="planStyle"
-      @change="assignStyles"
-    />
   </el-form>
 </template>
 
@@ -79,6 +81,7 @@ import BoxShadows from './EditorStyle/BoxShadows'
 import Transition from './EditorStyle/Transition'
 import { mapGetters } from 'vuex'
 import { getComputedStyle, assignStyles, getPlanStyle } from '@/utils/vmMap'
+import NodeInfo from '@/components/TemplateUtils/NodeInfo'
 
 const attributes = [
   'width',
@@ -113,6 +116,7 @@ const attributes = [
 export default {
   name: 'PanelStyles',
   components: {
+    NodeInfo,
     ClassState,
     Border,
     Background,

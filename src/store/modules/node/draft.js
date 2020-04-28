@@ -87,16 +87,6 @@ const getters = {
 
     findPath(_id)
     return path
-  },
-
-  theRootForm: (state, getters) => id => {
-    return getters.parentPath(id).find(x => x.tag === 'form-generator')
-  },
-
-  isRootForm: (state, getters) => id => {
-    return (
-      !getters.theRootForm(id) && state.nodesMap[id].tag === 'form-generator'
-    )
   }
 }
 

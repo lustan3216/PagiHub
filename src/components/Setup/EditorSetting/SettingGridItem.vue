@@ -1,19 +1,20 @@
 <template>
-  <setting-generator
+  <rules-generator
     :id="id"
     :rules="spec"
   />
 </template>
 
 <script>
-import SettingGenerator from './Common/SettingGenerator'
+import RulesGenerator from './Common/RulesGenerator'
 import { select, boolean, assignDefaultValue } from './utils/ruleTool'
 
 export const defaultSetting = {
   isDraggable: true,
   isResizable: true,
   static: false,
-  autoHeight: false
+  autoHeight: false,
+  hidden: {}
 }
 
 const options = [
@@ -24,7 +25,7 @@ const options = [
 
 export default {
   name: 'SettingGridItem',
-  components: { SettingGenerator },
+  components: { RulesGenerator },
   props: {
     id: {
       type: Number,

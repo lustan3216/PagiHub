@@ -22,12 +22,13 @@ export default {
   computed: {
     innerRule2() {
       const rule = cloneJson(this.innerRule[0])
-      const { button } = rule.props
+      const { button, options } = rule.props
       if (button) {
-        rule.props.type = 'button'
-      } else {
-        delete rule.props
+        options.forEach(option => {
+          option.border = true
+        })
       }
+
       return [rule]
     }
   }

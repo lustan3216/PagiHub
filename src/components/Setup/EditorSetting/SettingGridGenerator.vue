@@ -1,20 +1,20 @@
 <template>
   <div>
-    <setting-generator
+    <rules-generator
       :id="id"
       :rules="spec"
     />
 
     <template v-if="responsive">
       <h4>Breakpoints</h4>
-      <setting-generator
+      <rules-generator
         :key="JSON.stringify(breakpoints)"
         :id="id"
         :rules="breakpoints"
       />
 
       <h4>Columns</h4>
-      <setting-generator
+      <rules-generator
         :key="JSON.stringify(cols)"
         :id="id"
         :rules="cols"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import SettingGenerator from './Common/SettingGenerator'
+import RulesGenerator from './Common/RulesGenerator'
 import { boolean, assignDefaultValue, number } from './utils/ruleTool'
 import { deepmerge } from '@/utils/tool'
 
@@ -71,7 +71,7 @@ export const rules = assignDefaultValue(
 
 export default {
   name: 'SettingGridGenerator',
-  components: { SettingGenerator },
+  components: { RulesGenerator },
   props: {
     id: {
       type: Number,

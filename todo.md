@@ -62,6 +62,8 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>time line/ steps/ transfer / cascader / map </li>
 <li>form item 會卡到lazyload 要處理 </li>
 <li>form validator</li>
+<li>fixed container</li>
+<li>試試看能不能解決 drawer的layout</li>
 </ol>
 
 ### Style
@@ -94,6 +96,10 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>button 做成點了可以轉跳 componentSet 或是打開dialog or drawer or popover</li>
 <li>grid item and layout 在不同尺寸要可以控制隱藏</li>
 <li>options看能不能都存成integer</li>
+<li>input 可以控制 grid item顯示</li>
+<li>多選時，可撈出 重複的選項編輯</li>
+<li>video在他自己裡面控制grid tiemㄉㄛ grid item的autohiehgt</li>
+<li>icon 可以上傳svg tag，下載也是直接下載tag，用dangour叉叉叉插入，要過濾script，這樣可以變色條診或是用interact做調整</li>
 </ol>
 
 ### Last
@@ -117,11 +123,8 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>visiblity lock 的時候不要被選到</li>
 </ol>
 
-form 表單
 整合 style
 component 組建
-style 變 component 還有飲用
-
+style 變 component 還有飲用ㄉㄛ
 先寫測試
-
 動畫

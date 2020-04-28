@@ -1,38 +1,28 @@
 <template>
-  <setting-generator
+  <rules-generator
     :id="id"
     :rules="spec"
   />
 </template>
 
 <script>
-import SettingGenerator from './Common/SettingGenerator'
+import SettingGenerators from './Common/SettingGenerators'
 import { select, assignDefaultValue } from './utils/ruleTool'
 
 export const defaultSetting = {
   direction: 'horizontal'
 }
 
-export default {
-  name: 'SettingFlexImage',
-  components: { SettingGenerator },
-  props: {
-    id: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      spec: assignDefaultValue(
-        [
-          select('direction', {
-            options: ['horizontal', 'vertical']
-          })
-        ],
-        defaultSetting
-      )
-    }
-  }
+const rules = {
+  spec: assignDefaultValue(
+    [
+      select('direction', {
+        options: ['horizontal', 'vertical']
+      })
+    ],
+    defaultSetting
+  )
 }
+
+export default SettingGenerators('SettingDivider', rules, defaultSetting)
 </script>

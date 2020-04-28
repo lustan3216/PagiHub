@@ -1,6 +1,6 @@
 <script>
-import FormSettingGenerator from './Common/FormSettingGenerators'
-import { colorAlpha, number, boolean, select } from './utils/ruleTool'
+import FormSettingGenerators from './Common/FormSettingGenerators'
+import { colorAlpha, number, boolean, select, color } from './utils/ruleTool'
 import { base, options, settings } from './utils/form'
 
 export const defaultSetting = {
@@ -18,13 +18,21 @@ export const defaultSetting = {
 const rules = {
   base: [
     ...base(x => x.field !== 'size'),
-    boolean('button', {
+    boolean('type', {
+      props: { activeValue: 'button', inactiveValue: null },
+      title: 'button',
       control: [
         {
-          value: true,
+          value: 'button',
           rule: [
-            select('size', { options: ['large', 'medium', 'small', 'mini'] })
+            select('size', { options: ['large', 'medium', 'small', 'mini'] }),
+            color('textColor'),
+            color('fill')
           ]
+        },
+        {
+          value: null,
+          rule: [boolean('border')]
         }
       ]
     })
@@ -38,7 +46,7 @@ const rules = {
   ]
 }
 
-export default FormSettingGenerator(
+export default FormSettingGenerators(
   'SettingFormCheckbox',
   rules,
   defaultSetting

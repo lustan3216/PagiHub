@@ -5,6 +5,7 @@
     v-model="api"
     :rule="innerRules"
     :option="option"
+    :key="id"
   />
 </template>
 
@@ -26,7 +27,7 @@ formCreate.component('ElTooltip', Tooltip)
 formCreate.component('ElInputNumber', InputNumber)
 
 export default {
-  name: 'SettingGenerator',
+  name: 'RulesGenerator',
   components: {
     FormCreate: formCreate.$form()
   },

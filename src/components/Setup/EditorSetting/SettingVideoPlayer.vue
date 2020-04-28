@@ -1,12 +1,12 @@
 <template>
   <div>
-    <setting-generator
+    <rules-generator
       :id="id"
       :rules="spec"
     />
 
     <h4>Fullscreen</h4>
-    <setting-generator
+    <rules-generator
       :id="id"
       :rules="spec2"
     />
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import SettingGenerator from './Common/SettingGenerator'
+import RulesGenerator from './Common/RulesGenerator'
 import { string, select, assignDefaultValue, boolean } from './utils/ruleTool'
 import { required } from '@/validator'
 
@@ -50,7 +50,7 @@ export const defaultSetting = {
 
 export default {
   name: 'SettingVideoPlayer',
-  components: { SettingGenerator },
+  components: { RulesGenerator },
   props: {
     id: {
       type: Number,

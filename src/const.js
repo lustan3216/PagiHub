@@ -16,6 +16,7 @@ export const CAN_EDIT = 'canEditText'
 export const CAN_DRAG = 'canDrag'
 export const CAN_NOT_DELETE = 'canNotDelete'
 export const CAN_NOT_COPY = 'canNotCopy'
+export const CAN_NOT_BE_MULTI_SELECTED = 'canNotBeMultiSelected'
 export const AUTO_HEIGHT = 'autoHeight'
 export const SOFT_DELETE = 'softDelete'
 // it is used to define some action only happen at the firs time add
