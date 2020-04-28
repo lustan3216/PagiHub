@@ -113,11 +113,9 @@ export default {
         })
         .on(['resizeend'], () => {
           this.$emit('resizeEnd')
-          // this.$bus.$emit('selection-enable', true)
         })
         .on(['resizestart'], () => {
           this.$emit('resizeStart')
-          // this.$bus.$emit('selection-enable', false)
         })
     }
 
@@ -151,11 +149,9 @@ export default {
         })
         .on(['dragstart'], () => {
           this.$emit('dragStart')
-          // this.$bus.$emit('selection-enable', false)
         })
         .on(['dragend'], () => {
           this.$emit('dragEnd')
-          // this.$bus.$emit('selection-enable', true)
         })
     }
   },

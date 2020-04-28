@@ -60,10 +60,6 @@ export default {
           inst.keepSelection()
         })
     })
-
-    /* this.$bus.$on('selection-enable', value => {
-      value ? selection.enable() : selection.disable()
-    })*/
   },
   methods: {
     ...mapMutations('app', ['SET']),
