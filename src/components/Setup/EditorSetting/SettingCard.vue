@@ -1,10 +1,16 @@
-<script>
-import SettingGenerators from './Common/SettingGenerators'
-import { select } from './utils/ruleTool'
+<template>
+  <rules-generator
+    :id="id"
+    :rules="spec"
+  />
+</template>
 
+<script>
+import RulesGenerator from './Common/RulesGenerator'
+import { select, assignDefaultValue } from './utils/ruleTool'
 import {
-  defaultSetting as gridSetting,
-  rules as gridRules
+  rules as gridRules,
+  defaultSetting as gridSetting
 } from './SettingGridGenerator'
 
 export const defaultSetting = {
@@ -16,12 +22,28 @@ gridRules.forEach(x => {
   x.path = 'grid'
 })
 
-const rules = {
-  base: [
-    select('shadow', { path: 'card', options: ['always', 'hover', 'never'] })
-  ],
-  grid: gridRules
+export default {
+  name: 'SettingCard',
+  components: { RulesGenerator },
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
+  data() {
+    return {
+      spec: assignDefaultValue(
+        [
+          select('shadow', {
+            path: 'card',
+            options: ['always', 'hover', 'never']
+          })
+        ],
+        defaultSetting
+      ),
+      grid: assignDefaultValue(gridRules, defaultSetting)
+    }
+  }
 }
-
-export default SettingGenerators('SettingCard', rules, defaultSetting)
 </script>

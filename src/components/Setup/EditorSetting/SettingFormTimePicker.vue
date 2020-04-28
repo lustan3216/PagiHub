@@ -3,7 +3,6 @@ import {
   select,
   boolean,
   string,
-  datepicker,
   iconSelect
 } from './utils/ruleTool'
 import {
