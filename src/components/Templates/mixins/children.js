@@ -1,6 +1,6 @@
 import { mapGetters, mapMutations } from 'vuex'
 import { CHILDREN, GRID_ITEM } from '@/const'
-import { cloneJson, traversal } from '@/utils/tool'
+import { cloneJson, traversal, arrayLast } from '@/utils/tool'
 import { traversalChildrenOf } from '@/utils/node'
 import { componentIds } from '@/utils/keyId'
 
@@ -53,7 +53,7 @@ export default {
       // can new layer-item, grid-item, carousel-item, form-item
       const { tag } = this.node
       // eslint-disable-next-line
-      const emptyItem = Array.last(this.examplesMapByTag[tag][CHILDREN])
+      const emptyItem = arrayLast(this.examplesMapByTag[tag][CHILDREN])
 
       this._addNodesToParentAndRecord(emptyItem)
     },

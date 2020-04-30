@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { arrayLast } from '@/utils/tool'
 export default {
   name: 'ViewPortCover',
   props: {
@@ -23,7 +24,7 @@ export default {
     const { $el } = this.$refs.viewPortCover
 
     this.childListObserver = new MutationObserver(mutations => {
-      const hasChild = Array.last(mutations).target.children.length
+      const hasChild = arrayLast(mutations).target.children.length
       $el.classList[hasChild ? 'add' : 'remove']('z1000')
     })
 
@@ -34,7 +35,7 @@ export default {
     })
 
     this.styleObserver = new MutationObserver(mutations => {
-      const { width, height, transform, webkitTransform } = Array.last(
+      const { width, height, transform, webkitTransform } = arrayLast(
         mutations
       ).target.style
 

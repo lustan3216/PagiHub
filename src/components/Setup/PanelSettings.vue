@@ -76,9 +76,6 @@ const self = {
     },
     componentTag() {
       return `Setting${bigCamelCase(this.selectedComponentNode.tag)}`
-    },
-    asd() {
-      return this.selectedComponentIds
     }
   }
 }
@@ -89,7 +86,7 @@ export default self
 <style scoped lang="scss">
 ::v-deep {
   .el-form-item {
-    margin-bottom: 8px;
+    margin-bottom: 0px;
   }
   h4 {
     margin: 5px 0;

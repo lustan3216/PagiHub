@@ -64,6 +64,12 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>form validator</li>
 <li>fixed container</li>
 <li>試試看能不能解決 drawer的layout</li>
+<li>grid item 要可以控制 xl lg 什麼時候可以hidden</li>
+<li>grid 的地方都換成 layer</li>
+<li>拖拉進去時，考慮要不要設定直接跳到他</li>
+<li>有假死狀態可以做 剪下貼上</li>
+<li>redo undo 設定也要變</li>
+<li>考慮可以把 node controll 拔掉， popover也是</li>
 </ol>
 
 ### Style
@@ -76,12 +82,15 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>style 區塊做個按鈕，可直接選到上一層組建</li>
 <li>class / hover / click</li>  
 <li>svg</li>
-<li>對齊</li>
 <li>text-shadow</li>
 <li>font align</li>
 <li>font family/ 用font picker做但要google帳號</li>
 <li>每個template要定義可以編輯的style，只顯示那些，當多選時只用重疊的</li>
 <li>寬高要disable，逼他們用layout</li>
+<li>改謝color picker，把color format做進去，到時候還要做快捷進去</li>
+<li>background color 用gridant做， 等 color picker在做</li>
+https://bhch.github.io/posts/2019/03/adding-rotation-handles-in-interact-js/
+https://codepen.io/taye/pen/wrrxKb
 </ol>
 
 ### Setting
@@ -100,6 +109,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>多選時，可撈出 重複的選項編輯</li>
 <li>video在他自己裡面控制grid tiemㄉㄛ grid item的autohiehgt</li>
 <li>icon 可以上傳svg tag，下載也是直接下載tag，用dangour叉叉叉插入，要過濾script，這樣可以變色條診或是用interact做調整</li>
+/grid item 考慮要不要都autoHeight, 考慮寬變時，高也要自適應
 </ol>
 
 ### Last
@@ -111,6 +121,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>Sidebar可以分別被猜拆來</li>
 <li>scss code 的東西做成 variable 可以是輸入匡</li>
 <li>中英文字體</li>
+<li>style / color / vlaidtaion / anitmation 這些考慮是不是可以變成componentSet</li>
 </ol>
 
 ### Bug
@@ -121,6 +132,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>touchable and visbilty 有ｂｕｇ</li>
 <li>texteditor 選取壞掉 todolist也不見</li>
 <li>visiblity lock 的時候不要被選到</li>
+<li>放大縮小時，要用滑鼠為準放大，縮放後，item拉動也壞的</li>
 </ol>
 
 整合 style
@@ -132,5 +144,20 @@ style 變 component 還有飲用ㄉㄛ
 UX {
 盡量實現讓設計師看到多張圖
 setting 考慮需不需要一次修改多個，但或許不用先不做,
-組建做成在左列，而不是 dialog，且組建變成用拖拉的，這樣用全局組建也方便
+組建做成在左列，而不是 dialog，且組建變成用拖拉的，這樣用全局組建也方便,
+組建內的 node controller 可以考慮拿掉，在其他地方做得好點優化即可，或快速鍵
+webfontloader
 }
+
+付費功能 {
+embed iframe
+iframe data control
+private project
+anaylistic daily data
+work sync, they can edit together
+host in own domain,
+advance timeline animation
+animation 3D
+}
+
+free style 放在原本的 node 裡面就可以了

@@ -1,11 +1,10 @@
 <template>
   <el-input
-    v-bind="$attrs"
     :disabled="isAuto"
     v-model="number"
-
     type="number"
     clearable
+    v-bind="$attrs"
   >
     <div slot="append">{{ unit || '-' }}</div>
   </el-input>
@@ -48,8 +47,10 @@ export default {
       },
       set(value) {
         if (this.isInvalid(value)) {
+          this.$emit('input', null)
           this.$emit('update:value', null)
         } else {
+          this.$emit('input', value + this.unit)
           this.$emit('update:value', value + this.unit)
         }
       }

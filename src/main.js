@@ -1,4 +1,3 @@
-import '@babel/polyfill'
 import 'normalize.css'
 import './styles/index.scss'
 import 'intersection-observer'
@@ -51,22 +50,16 @@ import {
   TabPane,
   Row,
   Col,
-  Collapse,
-  CollapseItem,
   ColorPicker,
   Loading,
   Tooltip,
   Popover,
   Form,
-  FormItem,
-  Carousel,
-  CarouselItem
+  FormItem
 } from 'element-ui'
 Vue.prototype.$ELEMENT = { size: 'mini' }
 Vue.prototype.$loading = Loading.service
 
-Vue.use(Carousel)
-Vue.use(CarouselItem)
 Vue.use(Dialog)
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)
@@ -86,8 +79,6 @@ Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(Row)
 Vue.use(Col)
-Vue.use(Collapse)
-Vue.use(CollapseItem)
 Vue.use(ColorPicker)
 Vue.use(Tooltip)
 Vue.use(Popover)

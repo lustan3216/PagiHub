@@ -1,40 +1,4 @@
 /* eslint-disabled */
-import { isPlainObject } from './tool'
-import { kebabCase, capitalize } from './string'
-
-Array.uniq = function(e) {
-  return [...new Set(e)]
-}
-
-Array.last = function(e) {
-  return e[e.length - 1]
-}
-
-Array.first = function(e) {
-  return e[0]
-}
-
-Object.firstKey = function(e) {
-  return Object.keys(e)[0]
-}
-
-Object.hasAnyKey = Object.firstKey
-
-Object.firstValue = function(e) {
-  if (isPlainObject(e)) {
-    return Object.values(e)[0]
-  } else {
-    return e
-  }
-}
-
-String.prototype.capitalize = function() {
-  return capitalize(this)
-}
-
-String.prototype.kebabCase = function() {
-  return kebabCase(this)
-}
 
 /**
  * Element.closest() polyfill

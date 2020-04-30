@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_IDS']),
-    ...mapMutations('draft', ['RECORD']),
     hoverCover(hover) {
       const $el =
         this.node.tag === GRID_GENERATOR ? this.$el : this.$el.parentNode
@@ -59,14 +58,6 @@ export default {
         hoverNode.forEach(x => x.remove())
         hoverNode = []
       }
-    },
-    assignStyles(styles) {
-      this.RECORD([
-        {
-          path: `${this.id}.${STYLE}`,
-          value: styles
-        }
-      ])
     }
   }
 }

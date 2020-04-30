@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { SET } from '../index'
 import { TYPE } from '@/const'
 import listToTree from '@/utils/listToTree'
-import { cloneJson, nestedToLinerObject } from '@/utils/tool'
+import { cloneJson, nestedToLinerObject, objectHasAnyKey } from '@/utils/tool'
 import { projectIds } from '@/utils/keyId'
 import localforage from 'localforage'
 
@@ -39,7 +39,7 @@ const actions = {
   async getProjects({ commit, dispatch }) {
     const projectMap = (await localforage.getItem('project')) || {}
 
-    if (Object.hasAnyKey(projectMap)) {
+    if (objectHasAnyKey(projectMap)) {
       projectIds.restoreIds(projectMap)
     } else {
       const initTemplate = _initTemplate()

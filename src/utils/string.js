@@ -15,3 +15,10 @@ export function bigCamelCase(value) {
 
   return capitalize(camelCase(value))
 }
+
+export function humanize(value) {
+  return capitalize(kebabCase(value)).replace(
+    /-(\w)/g,
+    x => ` ${x[1].toUpperCase()}`
+  )
+}

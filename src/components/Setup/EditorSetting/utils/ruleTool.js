@@ -5,7 +5,8 @@ import {
   isUndefined,
   isArray
 } from '@/utils/tool'
-import { urlPath } from '@/validator'
+import { capitalize, humanize } from '@/utils/string'
+import { url as urlPath } from '@/validator'
 
 export function traversalRules(rules, fn) {
   if (rules.isPlainObject) {
@@ -41,7 +42,7 @@ export const assignDefaultValue = (rules, defaultSetting) => {
 
 export const number = (field, extraOptions = {}) => ({
   field,
-  title: readable(extraOptions.title || field),
+  title: humanize(extraOptions.title || field),
   type: 'InputNumber',
   ...extraOptions
 })
@@ -52,12 +53,11 @@ export const select = (field, { options, ...extraOptions } = {}) => {
     type: 'select',
     options: parseOptions(options),
     ...extraOptions,
-    title: readable(extraOptions.title || field)
+    title: humanize(extraOptions.title || field)
   }
 }
 
 export const selectCreate = (field, { options, ...extraOptions } = {}) => {
-
   return {
     field,
     type: 'select',
@@ -70,7 +70,7 @@ export const selectCreate = (field, { options, ...extraOptions } = {}) => {
     },
     options: parseOptions(options),
     ...extraOptions,
-    title: readable(extraOptions.title || field)
+    title: humanize(extraOptions.title || field)
   }
 }
 
@@ -78,7 +78,7 @@ function parseOptions(options) {
   options = cloneJson(options)
   options.forEach((option, index) => {
     if (!isPlainObject(option)) {
-      options[index] = { value: option, label: option.toString().capitalize() }
+      options[index] = { value: option, label: capitalize(option.toString()) }
     }
   })
 
@@ -89,14 +89,14 @@ export const string = (field, extraOptions = {}) => ({
   field,
   type: 'input',
   ...extraOptions,
-  title: readable(extraOptions.title || field)
+  title: humanize(extraOptions.title || field)
 })
 
 export const iconSelect = (field, extraOptions = {}) => ({
   field,
   type: 'input',
   ...extraOptions,
-  title: readable(extraOptions.title || field)
+  title: humanize(extraOptions.title || field)
 })
 
 export const url = (field, extraOptions = {}) => ({
@@ -104,7 +104,7 @@ export const url = (field, extraOptions = {}) => ({
   type: 'input',
   validate: [urlPath],
   ...extraOptions,
-  title: readable(extraOptions.title || field)
+  title: humanize(extraOptions.title || field)
 })
 
 export const slider = (field, extraOptions = {}) => {
@@ -112,7 +112,7 @@ export const slider = (field, extraOptions = {}) => {
     field,
     type: 'slider',
     ...extraOptions,
-    title: readable(extraOptions.title || field)
+    title: humanize(extraOptions.title || field)
   }
 }
 
@@ -120,14 +120,14 @@ export const boolean = (field, extraOptions = {}) => ({
   field,
   type: 'switch',
   ...extraOptions,
-  title: readable(extraOptions.title || field)
+  title: humanize(extraOptions.title || field)
 })
 
 export const color = (field, extraOptions = {}) => ({
   field,
   type: 'ColorPicker',
   ...extraOptions,
-  title: readable(extraOptions.title || field)
+  title: humanize(extraOptions.title || field)
 })
 
 export const colorAlpha = (field, extraOptions = {}) => ({
@@ -137,7 +137,7 @@ export const colorAlpha = (field, extraOptions = {}) => ({
     showAlpha: true
   },
   ...extraOptions,
-  title: readable(extraOptions.title || field)
+  title: humanize(extraOptions.title || field)
 })
 
 export const datepicker = (field, extraOptions = {}) => ({
@@ -147,19 +147,12 @@ export const datepicker = (field, extraOptions = {}) => ({
     type: 'datetime'
   },
   ...extraOptions,
-  title: readable(extraOptions.title || field)
+  title: humanize(extraOptions.title || field)
 })
 
 export const selectUnit = (field, extraOptions = {}) => ({
   field,
-  title: readable(extraOptions.title || field),
+  title: humanize(extraOptions.title || field),
   type: 'SelectUnit',
   ...extraOptions
 })
-
-function readable(value) {
-  return value
-    .kebabCase()
-    .capitalize()
-    .replace(/-(\w)/g, x => ` ${x[1].toUpperCase()}`)
-}

@@ -54,6 +54,7 @@ export default {
         type: this.$options.type,
         props,
         field,
+        style: this.innerStyles,
         value: this.innerValue,
         options: options.map(label => ({
           label,

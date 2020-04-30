@@ -103,6 +103,7 @@ import Layers from './Layers'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, GRID_GENERATOR, LAYERS } from '@/const'
+import { CarouselItem, Carousel } from 'element-ui'
 
 export default {
   defaultSetting,
@@ -110,7 +111,9 @@ export default {
   components: {
     gridGenerator,
     ControllerLayer,
-    Layers
+    Layers,
+    ElCarouselItem: CarouselItem,
+    ElCarousel: Carousel
   },
   directives: {
     ObserveVisibility

@@ -3,7 +3,7 @@ import jsonStorer from '../../jsonStorer'
 import listToTree from '@/utils/listToTree'
 import { SET } from '../../index'
 import { componentIds } from '@/utils/keyId'
-import { nestedToLinerObject } from '@/utils/tool'
+import { nestedToLinerObject, objectHasAnyKey } from '@/utils/tool'
 import { layers } from '../../../templateJson/basic'
 
 const state = {
@@ -50,7 +50,7 @@ const actions = {
 
     const nodesMap = (await localforage.getItem(selectedId.toString())) || {}
 
-    if (Object.hasAnyKey(nodesMap)) {
+    if (objectHasAnyKey(nodesMap)) {
       componentIds.restoreIds(nodesMap)
     } else {
       const initTemplate = layers()

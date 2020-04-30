@@ -1,3 +1,4 @@
+import { arrayFirst, arrayLast } from '@/utils/tool'
 const VALUES_REG = /,(?![^\(]*\))/
 const PARTS_REG = /\s(?![^(]*\))/
 const LENGTH_REG = /^[0-9]+[a-zA-Z%]+?$/
@@ -5,8 +6,8 @@ const LENGTH_REG = /^[0-9]+[a-zA-Z%]+?$/
 const parseValue = str => {
   const parts = str.split(PARTS_REG)
   const inset = parts.includes('inset')
-  const first = Array.first(parts)
-  const last = Array.last(parts)
+  const first = arrayFirst(parts)
+  const last = arrayLast(parts)
   const color = !isLength(first) ? first : !isLength(last) ? last : undefined
 
   const nums = parts

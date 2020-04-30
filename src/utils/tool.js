@@ -1,4 +1,3 @@
-import { cloneJson } from 'json-storer/src/utils'
 import deepmerge from 'deepmerge'
 import { isUndefined, isString } from 'element-ui/src/utils/types'
 import isPlainObject from 'is-plain-object'
@@ -6,7 +5,6 @@ import getValueByPath from 'lodash.get'
 import { on, off } from 'element-ui/src/utils/dom.js'
 
 export {
-  cloneJson,
   isUndefined,
   isPlainObject,
   isString,
@@ -16,12 +14,44 @@ export {
   off
 }
 
+export function cloneJson(e) {
+  return JSON.parse(JSON.stringify(e))
+}
+
 export function onWithOff(a, b, c) {
   on(a, b, c)
   return () => off(a, b, c)
 }
 
 export const isArray = Array.isArray
+
+export function arrayFirst(e) {
+  return e[0]
+}
+
+export function arrayLast(e) {
+  return e[e.length - 1]
+}
+
+export function arrayUniq(e) {
+  return [...new Set(e)]
+}
+
+export function splitAt(string, index) {
+  return [string.slice(0, index), string.slice(index)]
+}
+
+export function firstObjectValue(e) {
+  if (isPlainObject(e)) {
+    return Object.values(e)[0]
+  } else {
+    return e
+  }
+}
+
+export function objectHasAnyKey(e) {
+  return Object.keys(e)[0]
+}
 
 export function allEqual(arr) {
   return arr.every(v => v === arr[0])

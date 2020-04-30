@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="el-dropdown">Background</span>
+    <span class="title">Background</span>
 
     <el-row
       :gutter="5"

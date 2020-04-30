@@ -5,7 +5,9 @@
     :id="id"
     :class="{ selected, 'dash-border': !isAnimating }"
     class="control-layer h-100"
-    @click.exact.stop="!isExample && SET_SELECTED_COMPONENT_ID(id)"
+    @click.exact.stop="
+      canNotEdit && !isExample && SET_SELECTED_COMPONENT_ID(id)
+    "
     @click.ctrl.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
     @click.meta.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
     @dblclick.stop="dblclick"

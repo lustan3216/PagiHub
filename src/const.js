@@ -36,7 +36,19 @@ export const TYPE = {
   COMPONENT_SET: 2
 }
 
+export const STYLE_STATE = {
+  none: 0,
+  hover: 1,
+  click: 2
+}
+
 export const TYPE_STRING = {
+  [TYPE.PROJECT]: 'project',
+  [TYPE.FOLDER]: 'folder',
+  [TYPE.COMPONENT_SET]: 'componentSet'
+}
+
+export const STYLE_TYPE = {
   [TYPE.PROJECT]: 'project',
   [TYPE.FOLDER]: 'folder',
   [TYPE.COMPONENT_SET]: 'componentSet'

@@ -1,7 +1,7 @@
 <template>
   <four-attrs
     :value="value"
-    attr="padding"
+    attr="borderWidth"
     @input="$emit('input', $event)"
   >
     <template #button>
@@ -53,7 +53,7 @@ import SelectUnit from '@/components/Components/SelectUnit'
 import FourAttrs from './Common/FourAttrs'
 
 export default {
-  name: 'Padding',
+  name: 'BorderWidth',
   components: {
     SelectUnit,
     FourAttrs
