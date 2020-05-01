@@ -1,15 +1,5 @@
 <template>
-  <el-form
-    v-if="theOnlySelectedComponentId"
-    :key="theOnlySelectedComponentId"
-    label-position="top"
-  >
-    <node-info
-      :id="theOnlySelectedComponentId"
-      class="text-center m-b-10 block"
-      show-family
-    />
-
+  <el-form label-position="top">
     <portal-target
       name="PanelStyles"
       slim
@@ -96,7 +86,7 @@
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
 import { STYLE } from '@/const'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
 import Dimension from './EditorStyle/Dimension'
@@ -108,7 +98,6 @@ import BorderWidth from './EditorStyle/BorderWidth'
 import BorderStyle from './EditorStyle/BorderStyle'
 import Transform from './EditorStyle/Transform'
 import Transitions from './EditorStyle/Transitions'
-import NodeInfo from '@/components/TemplateUtils/NodeInfo'
 import { RadioGroup, RadioButton, Divider } from 'element-ui'
 import { getComputedStyle } from '@/utils/vmMap'
 
@@ -137,7 +126,6 @@ const attributes = [
 export default {
   name: 'PanelStyles',
   components: {
-    NodeInfo,
     Radius,
     Padding,
     BorderColor,
@@ -153,9 +141,14 @@ export default {
     ElRadioGroup: RadioGroup,
     ElRadioButton: RadioButton
   },
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
-    const id = this.$store.getters['app/theOnlySelectedComponentId']
-    const computedStyle = getComputedStyle(id)
+    const computedStyle = getComputedStyle(this.id)
 
     const styles = attributes.reduce((all, attr) => {
       all[attr] = computedStyle[attr]
@@ -171,16 +164,13 @@ export default {
       styles
     }
   },
-  computed: {
-    ...mapGetters('app', ['theOnlySelectedComponentId'])
-  },
   methods: {
     ...mapMutations('draft', ['RECORD']),
     assignStyles(attr, value) {
       this.styles[attr] = value
       this.RECORD([
         {
-          path: `${this.theOnlySelectedComponentId}.${STYLE}.${this.state}.${attr}`,
+          path: `${this.id}.${STYLE}.${this.state}.${attr}`,
           value
         }
       ])

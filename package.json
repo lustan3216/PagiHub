@@ -24,6 +24,7 @@
     "normalize.css": "^8.0.1",
     "plyr": "^3.5.10",
     "portal-vue": "^2.1.6",
+    "raf-plus": "^0.0.9",
     "smoothscroll-polyfill": "^0.4.4",
     "tiptap": "^1.27.0",
     "tiptap-extensions": "^1.29.0",

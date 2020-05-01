@@ -1,7 +1,8 @@
 <template>
   <four-attrs
-    v-model="innerValue"
+    :value="value"
     attr="borderStyle"
+    @input="$emit('input', $event)"
   >
     <template #button>
       <el-button
@@ -53,7 +54,7 @@ import FourAttrs from './Common/FourAttrs'
 import { capitalize } from '@/utils/string'
 
 const StyleSelect = {
-  name: 'BorderStyle',
+  name: 'StyleSelect',
   functional: true,
   render(h, context) {
     const { data, props } = context
@@ -66,12 +67,12 @@ const StyleSelect = {
         }
       })
     )
-    // debugger
+
     return h(
       'el-select',
       {
         on: {
-          input: e => data.on.input(e.target.value)
+          input: value => data.on['update:value'](value)
         },
         props
       },
@@ -100,16 +101,6 @@ export default {
     value: {
       type: String,
       required: true
-    }
-  },
-  data() {
-    return {
-      innerValue: this.value
-    }
-  },
-  watch: {
-    innerValue(value) {
-      this.$emit('input', value)
     }
   }
 }

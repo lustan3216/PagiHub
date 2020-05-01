@@ -1,5 +1,41 @@
 <template>
   <div class="sidebar-right">
+    <portal-target
+      name="ViewPort"
+      class="inline-block m-l-15"
+    />
+    <node-info
+      v-if="theOnlySelectedComponentId"
+      :id="theOnlySelectedComponentId"
+      class="text-center block"
+      show-family
+    />
+
+    <div class="settings">
+      <el-collapse
+        v-model="activeNames"
+        class="no-border"
+      >
+        <el-collapse-item
+          title="Setting"
+          name="2"
+        >
+          <panel-settings class="panel" />
+        </el-collapse-item>
+        <el-collapse-item
+          title="Style"
+          name="1"
+        >
+          <panel-styles
+            v-if="theOnlySelectedComponentId"
+            :id="theOnlySelectedComponentId"
+            :key="theOnlySelectedComponentId"
+            class="panel"
+          />
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+
     <i
       v-shortkey="['a']"
       @shortkey="activeName = 'Project'"
@@ -16,72 +52,32 @@
       v-shortkey="['f']"
       @shortkey="activeName = 'Style'"
     />
-
-    <el-tabs
-      v-model="activeName"
-      type="card"
-    >
-      <el-tab-pane
-        label="Project"
-        name="Project"
-        lazy
-      >
-        <panel-project class="panel" />
-      </el-tab-pane>
-
-      <el-tab-pane
-        label="Nodes"
-        name="Nodes"
-        lazy
-      >
-        <panel-nodes
-          v-if="activeName === 'Nodes'"
-          class="panel"
-        />
-      </el-tab-pane>
-
-      <el-tab-pane
-        label="Setting"
-        name="Setting"
-        lazy
-      >
-        <panel-settings
-          v-if="activeName === 'Setting'"
-          class="panel"
-        />
-      </el-tab-pane>
-
-      <el-tab-pane
-        label="Style"
-        name="Style"
-        lazy
-      >
-        <panel-styles
-          v-if="activeName === 'Style'"
-          class="panel"
-        />
-      </el-tab-pane>
-    </el-tabs>
   </div>
 </template>
 
 <script>
+import { Collapse, CollapseItem } from 'element-ui'
+import { mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
+import NodeInfo from '../TemplateUtils/NodeInfo'
 
 export default {
   name: 'SidebarRight',
   components: {
+    NodeInfo,
     PanelStyles,
     PanelSettings,
-    PanelNodes: () => import('../Setup/PanelNodes'),
-    PanelProject: () => import('../Setup/PanelProject')
+    ElCollapse: Collapse,
+    ElCollapseItem: CollapseItem
   },
   data() {
     return {
-      isFloat: false,
-      activeName: 'Nodes'
+      activeNames: ['1', '2}']
     }
+  },
+  computed: {
+    ...mapGetters('app', ['theOnlySelectedComponentId'])
   }
 }
 </script>
@@ -90,15 +86,23 @@ export default {
 .sidebar-right {
   padding-right: 10px;
   width: 320px;
-  overflow: hidden;
+  overflow: auto;
   position: fixed;
   top: 0;
-  left: calc(100vw - 320px);
+  left: calc(100vw - 360px);
 }
 
-.panel {
-  @include calc-vh(height, '100vh - 60px');
-  overflow-y: scroll;
-  overflow-x: hidden;
+::v-deep {
+  .el-collapse-item__header {
+    border-bottom: none;
+  }
+  .el-collapse-item__wrap {
+    border-bottom: none;
+  }
+}
+
+.settings {
+  @include calc-vh('height', '100vh - 70px');
+  overflow: scroll;
 }
 </style>

@@ -29,14 +29,11 @@ export default {
     this.$store.dispatch('project/getProjects')
   },
   mounted() {
-    let selection
-
     this.$nextTick(() => {
-      selection = Selection.create({
+      Selection.create({
         class: 'selection',
         selectables: ['.control-layer'],
-        boundaries: ['.panel-draft'],
-        startareas: ['.panel-draft']
+        boundaries: ['.panel-draft']
       })
         .on('start', ({ inst, oe }) => {
           if (!oe.path[0].classList.contains('panel-draft')) {

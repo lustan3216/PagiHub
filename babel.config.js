@@ -1,5 +1,6 @@
+// presets: [['@vue/app', { useBuiltIns: 'usage' }], '@babel/preset-flow'],
 module.exports = {
-  presets: [['@vue/app'], '@babel/preset-flow'],
+  presets: ['@vue/app'],
   plugins: [
     [
       'component',

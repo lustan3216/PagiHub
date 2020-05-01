@@ -1,28 +1,26 @@
 <template>
-  <div>
-    <div v-mousewheel="callback">
-      <view-port-cover
-        v-if="$refs.browser"
-        :view-port-el="$refs.browser.$el"
-        :class="{ interact: isDraftMode }"
-      />
+  <div v-free-view="{ move: false, scaleCallback }">
+    <view-port-cover
+      v-if="$refs.browser"
+      :target="$refs.browser.$el"
+      :class="{ interact: isDraftMode }"
+    />
 
-      <dialog-interacted
-        ref="browser"
-        :scale-ratio="scaleRatio"
-        :class="{ interact: isDraftMode }"
-        :resize-options="{ ignoreFrom: '.vue-grid-item' }"
-        :drag-options="{ ignoreFrom: '.vue-grid-item' }"
-        :draggable="false"
-        @resize="dialogResize"
-        @resizeStart="appSET({ isAnimating: true })"
-        @resizeEnd="appSET({ isAnimating: false })"
-        @dragstart="appSET({ isAnimating: true })"
-        @dragEnd="appSET({ isAnimating: false })"
-      >
-        <slot />
-      </dialog-interacted>
-    </div>
+    <dialog-interacted
+      ref="browser"
+      :scale-ratio="scaleRatio"
+      :class="{ interact: isDraftMode }"
+      :resize-options="{ ignoreFrom: '.vue-grid-item' }"
+      :drag-options="{ ignoreFrom: '.vue-grid-item' }"
+      :draggable="false"
+      @resize="dialogResize"
+      @resizeStart="appSET({ isAnimating: true })"
+      @resizeEnd="appSET({ isAnimating: false })"
+      @dragstart="appSET({ isAnimating: true })"
+      @dragEnd="appSET({ isAnimating: false })"
+    >
+      <slot />
+    </dialog-interacted>
 
     <portal to="ViewPort">
       <el-dropdown
@@ -59,16 +57,16 @@
 import { mapState, mapMutations } from 'vuex'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import ViewPortCover from './ViewPortCover'
-import mousewheel from 'element-ui/lib/directives/mousewheel'
+import { directive } from '@/directive/freeView'
 
 export default {
   name: 'ViewPort',
-  directives: {
-    mousewheel
-  },
   components: {
     DialogInteracted,
     ViewPortCover
+  },
+  directives: {
+    FreeView: directive
   },
   data() {
     const options = [
@@ -84,22 +82,7 @@ export default {
       current: options[0],
       options,
       scaleRatio: 1,
-      canvasWidth: 0,
-      callback: (event, { pixelX, pixelY }) => {
-        if (event.ctrlKey) {
-          event.preventDefault()
-
-          let scaleRatio = this.scaleRatio + pixelY * -0.008
-          scaleRatio = Math.min(Math.max(0.5, scaleRatio), 1.25)
-
-          this.$el.style.webkitTransform = this.$el.style.transform = `scale(${scaleRatio.toFixed(
-            2
-          )})`
-
-          this.appSET({ scaleRatio })
-          this.scaleRatio = scaleRatio
-        }
-      }
+      canvasWidth: 0
     }
   },
   computed: {
@@ -150,6 +133,10 @@ export default {
     canvasWidthRollback() {
       this.$refs.browser.$el.style.width = null
       this.canvasWidthReset()
+    },
+    scaleCallback(event, { scaleRatio }) {
+      this.appSET({ scaleRatio })
+      this.scaleRatio = scaleRatio
     }
   }
 }
@@ -158,12 +145,12 @@ export default {
 <style scoped lang="scss">
 .interact {
   box-shadow: 0 0 15px 0 rgba(32, 48, 60, 0.11);
-  padding: 5px;
   box-sizing: border-box;
   background: transparent;
-  top: 45px;
-  width: calc(100vw - 350px);
-  @include calc-vh(height, '100vh - 70px');
+  top: 15px;
+  left: 15px;
+  width: calc(100vw - 390px);
+  @include calc-vh(height, '100vh - 30px');
   position: absolute;
 }
 </style>

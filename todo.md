@@ -70,6 +70,12 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>有假死狀態可以做 剪下貼上</li>
 <li>redo undo 設定也要變</li>
 <li>考慮可以把 node controll 拔掉， popover也是</li>
+<li>桌布可以用滾軸拉動</li>
+<li>鍵盤也可以控制 上下左右小孩 </li>
+<li>每一次的小更動 都動到整棵樹了，引響很多地方都要渲染</li>
+<li>開個children的 store，key專門存小孩，給component用，直接id當key，且新增刪除直接自己操作，試試看能不能直接把新增刪除修改放進 store</li>
+<li>左邊蘭可以做的跟 XD一樣</li>
+<li>畫布做成外誆9個點，靠近時會出現，只能拉納9點伸縮</li>
 </ol>
 
 ### Style
@@ -133,6 +139,7 @@ https://codepen.io/taye/pen/wrrxKb
 <li>texteditor 選取壞掉 todolist也不見</li>
 <li>visiblity lock 的時候不要被選到</li>
 <li>放大縮小時，要用滑鼠為準放大，縮放後，item拉動也壞的</li>
+<li>viewport controller</li>
 </ol>
 
 整合 style
@@ -159,5 +166,5 @@ host in own domain,
 advance timeline animation
 animation 3D
 }
-
+dragula
 free style 放在原本的 node 裡面就可以了

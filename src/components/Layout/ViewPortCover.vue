@@ -12,7 +12,7 @@ import { arrayLast } from '@/utils/tool'
 export default {
   name: 'ViewPortCover',
   props: {
-    viewPortEl: {
+    target: {
       type: HTMLDivElement,
       required: true
     }
@@ -47,7 +47,7 @@ export default {
       })
     })
 
-    this.styleObserver.observe(this.viewPortEl, {
+    this.styleObserver.observe(this.target, {
       attributeOldValue: false,
       characterData: false,
       attributeFilter: ['style']

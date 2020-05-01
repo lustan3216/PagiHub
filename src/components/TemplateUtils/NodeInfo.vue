@@ -43,7 +43,6 @@
 import { mapMutations, mapGetters } from 'vuex'
 import { PARENT_ID, SOFT_DELETE } from '@/const'
 import { shortTagName } from '@/utils/node'
-import store from '@/store'
 
 export default {
   name: 'NodeInfo',
@@ -66,8 +65,8 @@ export default {
       return this.shortTagName(this.node)
     },
     firstChildNode() {
-      const child = this.childrenOf[this.id][0]
-      return child && !child[SOFT_DELETE] && this.draftNodesMap[child.id]
+      const child = this.childrenOf[this.id].find(node => !node[SOFT_DELETE])
+      return child && this.draftNodesMap[child.id]
     },
     firstChildNodeShortName() {
       return this.shortTagName(this.firstChildNode)

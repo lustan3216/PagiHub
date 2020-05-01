@@ -4,6 +4,23 @@
     :style="{ 'z-index': zIndex }"
     class="fake-transform"
   >
+    <div
+      v-if="resizeEdges.top"
+      class="handler top"
+    />
+    <div
+      v-if="resizeEdges.right"
+      class="handler right"
+    />
+    <div
+      v-if="resizeEdges.bottom"
+      class="handler bottom"
+    />
+    <div
+      v-if="resizeEdges.left"
+      class="handler left"
+    />
+
     <slot />
   </div>
 </template>
@@ -70,6 +87,8 @@ export default {
         .resizable({
           // resize from all edges and corners
           edges: this.resizeEdges,
+          allowFrom:
+            '.handler.top, .handler.bottom, .handler.right, .handler.left',
           listeners: {
             move: event => {
               const target = event.target
@@ -164,3 +183,48 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.handler {
+  position: absolute;
+  border-radius: 7px;
+  opacity: 0;
+  transition: opacity 0.5s;
+  &:hover {
+    opacity: 1;
+    background-color: rgba(169, 172, 179, 0.19);
+  }
+}
+.top {
+  top: -9px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.right {
+  top: 0;
+  bottom: 0;
+  right: -9px;
+  width: 8px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.bottom {
+  left: 0;
+  bottom: -9px;
+  right: 0;
+  height: 8px;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+.left {
+  top: 0;
+  left: -9px;
+  bottom: 0;
+  width: 8px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+</style>

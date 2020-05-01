@@ -12,7 +12,7 @@
     <el-tooltip
       effect="light"
       content="Close Preview"
-      placement="bottom"
+      placement="right"
     >
       <el-button
         v-shortkey="['esc']"
@@ -27,91 +27,133 @@
 
   <nav
     v-else-if="isDraftMode"
-    class="flex-center"
+    class="flex"
+    @mouseleave="mouseLeave"
   >
-    <portal-target
-      name="ViewPort"
-      class="inline-block m-l-15"
+    <panel-nodes
+      v-if="nodesVisible"
+      class="panel"
     />
 
-    <el-tooltip
-      effect="light"
-      content="Preview"
-      placement="bottom"
-    >
+    <panel-project
+      v-if="projectVisible"
+      class="panel"
+    />
+
+    <div class="icons">
+      <el-tooltip
+        ref="1"
+        effect="light"
+        content="Preview"
+        placement="right"
+      />
       <el-button
+        v-popover:1
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
         icon="el-icon-data-analysis"
         type="text"
         @click="SET_PREVIEW_MODE"
         @shortkey.native="SET_PREVIEW_MODE"
       />
-    </el-tooltip>
 
-    <my-space />
+      <my-space />
 
-    <el-tooltip
-      effect="light"
-      content="Undo"
-      placement="bottom"
-    >
+      <el-tooltip
+        ref="2"
+        effect="light"
+        content="Undo"
+        placement="right"
+      />
       <el-button
+        v-popover:2
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
         type="text"
         icon="el-icon-refresh-left"
         @shortkey.native="UNDO"
         @click="UNDO"
       />
-    </el-tooltip>
 
-    <el-tooltip
-      effect="light"
-      content="Redo"
-      placement="bottom"
-    >
+      <el-tooltip
+        ref="3"
+        effect="light"
+        content="Redo"
+        placement="right"
+      />
       <el-button
+        v-popover:3
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
         type="text"
         icon="el-icon-refresh-right"
         @shortkey.native="REDO"
         @click="REDO"
       />
-    </el-tooltip>
 
-    <el-tooltip
-      effect="light"
-      content="Copy"
-      placement="bottom"
-    >
+      <el-tooltip
+        ref="4"
+        effect="light"
+        content="Nodes"
+        placement="right"
+      />
       <el-button
+        v-popover:4
+        v-shortkey="['z']"
+        type="text"
+        icon="el-icon-grape"
+        style="transform: rotate(180deg)"
+        @shortkey.native="nodesIconClick"
+        @click="nodesIconClick"
+      />
+
+      <el-tooltip
+        ref="5"
+        effect="light"
+        content="Project"
+        placement="right"
+      />
+      <el-button
+        v-popover:5
+        v-shortkey="['x']"
+        type="text"
+        icon="el-icon-takeaway-box"
+        @shortkey.native="projectIconClick"
+        @click="projectIconClick"
+      />
+
+      <el-tooltip
+        ref="6"
+        effect="light"
+        content="Copy"
+        placement="right"
+      />
+      <el-button
+        v-popover:6
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
         type="text"
         icon="el-icon-document-copy"
         @shortkey.native="copy"
         @click="copy"
       />
-    </el-tooltip>
 
-    <el-popover
-      effect="light"
-      trigger="hover"
-      placement="bottom"
-      class="m-l-10"
-    >
-      <span>Are u sure to Publish？</span>
+      <el-popover
+        ref="7"
+        effect="light"
+        trigger="hover"
+        placement="right"
+      >
+        <span>Are u sure to Publish？</span>
+        <el-button
+          type="info"
+          icon="el-icon-circle-check"
+          circle
+          @click="publish"
+        />
+      </el-popover>
       <el-button
-        type="info"
-        icon="el-icon-circle-check"
-        circle
-        @click="publish"
-      />
-
-      <el-button
-        slot="reference"
+        v-popover:7
         type="text"
         icon="el-icon-upload"
       />
-    </el-popover>
+    </div>
   </nav>
 </template>
 
@@ -122,13 +164,23 @@ import { Message } from 'element-ui'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import MySpace from './MySpace'
+import PanelNodes from '../Setup/PanelNodes'
+import PanelProject from '../Setup/PanelProject'
 
 export default {
   name: 'NavBar',
   components: {
     MySpace,
+    PanelNodes,
+    PanelProject,
     DialogInteracted,
     DialogComponentSet
+  },
+  data() {
+    return {
+      nodesVisible: false,
+      projectVisible: false
+    }
   },
   computed: {
     ...mapState('app', ['copyComponentIds']),
@@ -146,6 +198,18 @@ export default {
       if (length) {
         Message.info(`Copy ${length} Components`)
       }
+    },
+    mouseLeave() {
+      this.nodesVisible = false
+      this.projectVisible = false
+    },
+    nodesIconClick() {
+      this.nodesVisible = !this.nodesVisible
+      this.projectVisible = false
+    },
+    projectIconClick() {
+      this.nodesVisible = false
+      this.projectVisible = !this.projectVisible
     }
   }
 }
@@ -154,21 +218,32 @@ export default {
 <style scoped lang="scss">
 nav {
   text-align: center;
-  height: 35px;
-  padding: 5px 20px;
-  z-index: 200;
-  position: fixed;
   top: 0;
-  left: 0;
-  right: 320px;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 1000;
+  background-color: #fff;
+  opacity: 0.9;
+  box-shadow: 0 0 15px 0 rgba(32, 48, 60, 0.11);
 }
 .el-button {
   font-size: 16px;
   padding: 7px;
+  margin: 10px 0 0;
 }
 .preview {
   position: fixed;
   left: 35%;
   z-index: 10;
+}
+.icons {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.panel {
+  width: 300px;
+  padding: 5px;
 }
 </style>

@@ -3,15 +3,25 @@
     :style="innerStyles.default"
     class="h-100 border-box"
   >
-    <controller-layer :id="currentNoe.id">
+    <controller-layer
+      v-if="currentNode"
+      :id="currentNode.id"
+    >
       <async-component
-        :tag="currentNoe.tag"
-        :id="currentNoe.id"
+        v-if="firstChild"
+        :tag="currentNode.tag"
+        :id="currentNode.id"
+      />
+
+      <node-info
+        v-else-if="isDraftMode"
+        :id="currentNode.id"
+        class="self-center"
       />
 
       <portal-target
         v-if="isDraftMode"
-        :name="`GridItemChild${currentNoe.id}`"
+        :name="`GridItemChild${currentNode.id}`"
       />
     </controller-layer>
   </div>
@@ -22,13 +32,17 @@ import { mapState } from 'vuex'
 import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
+import NodeController from '../TemplateUtils/NodeController'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
+import NodeInfo from '../TemplateUtils/NodeInfo'
 
 export default {
   name: 'GridItemChild',
   components: {
     ControllerLayer,
-    AsyncComponent
+    NodeController,
+    AsyncComponent,
+    NodeInfo
   },
   mixins: [childrenMixin, nodeMixin],
   data() {
@@ -38,12 +52,15 @@ export default {
   },
   computed: {
     ...mapState('app', ['isAnimating']),
-    currentNoe() {
+    currentNode() {
       return this.firstChild || this.node
     },
     firstChild() {
       return this.innerChildren[0]
     }
+  },
+  mounted() {
+    this.mounted = true
   }
 }
 </script>

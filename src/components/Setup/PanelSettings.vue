@@ -1,30 +1,19 @@
 <template>
-  <div>
-    <node-info
-      v-if="theOnlySelectedComponentId"
-      :id="theOnlySelectedComponentId"
-      class="text-center m-b-10 block"
-      show-family
-    />
-
-    <component
-      v-if="theOnlySelectedComponentId && hasComponent"
-      :is="componentTag"
-      :id="theOnlySelectedComponentId"
-      class="p-r-10"
-    />
-  </div>
+  <component
+    v-if="theOnlySelectedComponentId && hasComponent"
+    :is="componentTag"
+    :id="theOnlySelectedComponentId"
+    class="p-r-10"
+  />
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { bigCamelCase } from '@/utils/string'
-import NodeInfo from '@/components/TemplateUtils/NodeInfo'
 
 const self = {
   name: 'PanelSettings',
   components: {
-    NodeInfo,
     SettingCard: () => import('./EditorSetting/SettingCard'),
     SettingDrawer: () => import('./EditorSetting/SettingDrawer'),
     SettingDivider: () => import('./EditorSetting/SettingDivider'),
@@ -90,6 +79,10 @@ export default self
   }
   h4 {
     margin: 5px 0;
+  }
+  .el-form-item__label {
+    color: #606266;
+    font-size: 12px;
   }
 }
 </style>
