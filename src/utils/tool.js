@@ -41,7 +41,7 @@ export function splitAt(string, index) {
   return [string.slice(0, index), string.slice(index)]
 }
 
-export function firstObjectValue(e) {
+export function objectHasAnyValue(e) {
   if (isPlainObject(e)) {
     return Object.values(e)[0]
   } else {
@@ -125,12 +125,4 @@ export function asyncGetValue(fn, timeout = 2000) {
       }, timeout)
     })
   })
-}
-
-export function cached(fn) {
-  const cache = Object.create(null)
-  return function cachedFn(str) {
-    const hit = cache[str]
-    return hit || (cache[str] = fn(str))
-  }
 }

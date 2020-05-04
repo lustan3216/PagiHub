@@ -1,7 +1,7 @@
 <template>
   <el-image
+    v-style="!isExample"
     v-bind="innerProps"
-    :style="innerStyles"
     class="wh-100"
   >
     <div

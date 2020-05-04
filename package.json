@@ -17,7 +17,7 @@
     "csso": "^4.0.2",
     "element-ui": "^2.11.1",
     "intersection-observer": "^0.7.0",
-    "json-storer": "file:../json-storer",
+    "json-history": "file:../json-history",
     "localforage": "^1.7.3",
     "lodash.get": "^4.4.2",
     "mutationobserver-shim": "^0.3.5",

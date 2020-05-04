@@ -1,9 +1,7 @@
 <template>
   <vue-grid-generator
-    v-free-style="freeStyle"
     ref="gridGenerator"
     v-bind="innerProps"
-    :style="innerStyle"
     :layout="layout"
     :margin="[0, 1]"
     :is-draggable="(innerProps.isDraggable && isDraftMode) || isExample"
@@ -27,12 +25,11 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import VueGridLayout from 'vue-grid-layout'
 import { AUTO_HEIGHT, PROPS } from '@/const'
+import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridItemChild from './GridItemChild'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
-import freeStyle from '@/directive/freeStyle'
 import { getValueByPath } from '@/utils/tool'
 import { debounce } from 'throttle-debounce'
 
@@ -46,9 +43,6 @@ export default {
     VueGridItem: VueGridLayout.GridItem,
     GridItemChild
   },
-  directives: {
-    freeStyle
-  },
   mixins: [childrenMixin],
   inject: {
     isExample: { default: false }
@@ -59,10 +53,6 @@ export default {
       required: true
     },
     innerProps: {
-      type: Object,
-      default: () => ({})
-    },
-    innerStyle: {
       type: Object,
       default: () => ({})
     }

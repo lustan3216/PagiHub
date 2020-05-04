@@ -2,7 +2,7 @@
   <!--  should have observe-visibility here, otherwise some nested layout case, the grid layout will not work right-->
   <div
     v-observe-visibility="options"
-    class="h-100 border-box over-auto"
+    class="h-100 border-box"
   >
     <component
       :is="tag"
@@ -30,7 +30,6 @@ export default {
     Divider: () => import('../Templates/Divider'),
     VideoPlayer: () => import('../Templates/VideoPlayer'),
     Layers: () => import('../Templates/Layers'),
-    Card: () => import('../Templates/Card'),
     Drawer: () => import('../Templates/Drawer'),
 
     FormTextarea: () => import('../Templates/FormTextarea'),

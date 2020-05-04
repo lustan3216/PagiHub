@@ -29,20 +29,21 @@
         >
           <el-option
             v-for="option in selectableOptions"
-            :key="option.name"
-            :label="humanize(option.name)"
-            :value="option.name"
+            :key="option"
+            :label="humanize(option)"
+            :value="option"
           />
         </el-select>
       </el-col>
 
       <el-col :span="10">
-        <input-number
+        <select-unit
           v-if="option.name"
-          v-model="option.value"
+          :value="option.value || options[option.name].default"
           :min="0"
-          :max="100"
-          controls-position="right"
+          :clearable="false"
+          v-bind="options[option.name]"
+          @input="option.value = $event"
         />
       </el-col>
     </el-row>
@@ -50,122 +51,140 @@
 </template>
 
 <script>
-import { InputNumber } from 'element-ui'
+import SelectUnit from '@/components/Components/SelectUnit'
 import { splitAt } from '@/utils/tool'
 import { humanize } from '@/utils/string'
 
 export default {
   name: 'Effect',
   components: {
-    InputNumber
+    SelectUnit
   },
   props: {
     value: {
       type: String,
       required: true
-    },
-    opacity: {
-      type: String,
-      required: true
     }
   },
   data() {
-    const options = [
-      {
+    const options = {
+      opacity: {
         name: 'opacity',
+        min: 0,
         max: 1,
-        unit: ''
+        step: 0.01,
+        default: 1,
+        units: ''
       },
-      {
+      blur: {
         name: 'blur',
+        default: 0,
+        min: -30,
         max: 30,
-        unit: 'px'
+        step: 0.1,
+        units: 'px'
       },
-      {
+      brightness: {
         name: 'brightness',
-        max: 1,
-        unit: ''
+        default: 1,
+        min: 0,
+        max: 4,
+        step: 0.01,
+        units: ''
       },
-      {
+      contrast: {
         name: 'contrast',
-        max: 200,
-        unit: '%'
+        max: 2,
+        default: 1,
+        step: 0.01,
+        units: ''
       },
-      {
+      grayscale: {
         name: 'grayscale',
-        max: 100,
-        unit: '%'
+        default: 0,
+        min: 0,
+        max: 1,
+        step: 0.01,
+        units: ''
       },
-      {
+      hue: {
         name: 'hue-rotate',
         label: 'hue',
+        default: 0,
+        min: 0,
         max: 360,
-        unit: 'deg'
+        step: 0.1,
+        units: 'deg'
       },
-      {
+      saturate: {
         name: 'saturate',
-        max: 200,
-        unit: '%'
+        min: -10,
+        max: 10,
+        step: 0.01,
+        default: 1,
+        units: ''
       },
-      {
+      sepia: {
         name: 'sepia',
-        max: 200,
-        unit: '%'
+        default: 0,
+        min: 0,
+        step: 0.01,
+        max: 1,
+        units: ''
+      },
+      invert: {
+        name: 'invert',
+        default: 0,
+        min: 0,
+        step: 0.01,
+        max: 1,
+        units: ''
       }
-    ]
+    }
 
-    const split = this.value.match(/[^\)|\s]+\)/g) || []
+    const split = this.value.match(/[^)|\s]+\)/g) || []
 
     const values = split.map(data => {
       const [key, value] = splitAt(data, data.indexOf('('))
-      const effect = options.find(x => x.name === key)
+      const effect = options[key]
 
       return {
         ...effect,
-        value: (value / effect.max) * 100
+        value: value.match(/[\d|.]+/)[0]
       }
     })
 
-    if (this.opacity !== '1') {
-      values.push({
-        ...options[0],
-        value: parseInt(this.opacity)
-      })
-    }
-
     return {
       options,
-      values
+      values,
+      filter: null
     }
   },
   computed: {
     selectableOptions() {
-      return this.options.filter(
-        ({ name }) => !this.values.map(x => x.name).includes(name)
+      return Object.keys(this.options).filter(
+        name => !this.values.map(x => x.name).includes(name)
       )
     }
   },
   watch: {
     values: {
       handler(values) {
-        const result = values
-          .filter(x => x.name && x.value && x.name !== 'opacity')
+        const filter = values
+          .filter(x => x.name && x.value)
           .map(x => {
-            const effect = this.options.find(effect => effect.name === x.name)
-            return `${effect.name}(${(effect.max / 100) * x.value}${
-              effect.unit
-            })`
+            const effect = this.options[x.name]
+            return `${effect.name}(${parseFloat(x.value)}${effect.units})`
           })
           .join(' ')
 
-        this.$emit('update:value', result)
-
-        const opacity = values.find(x => x.name === 'opacity')
-        if (opacity) {
-          this.$emit('update:opacity', opacity.value.toString())
-        }
+        this.filter = filter
       },
-      deep: true
+      deep: true,
+      immediate: true
+    },
+    filter(filter) {
+      this.$emit('change', { filter })
     }
   },
   methods: {

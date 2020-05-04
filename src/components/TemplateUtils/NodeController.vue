@@ -72,7 +72,7 @@
 <script>
 import { mapMutations, mapState, mapGetters } from 'vuex'
 import Touchable from './Touchable'
-import jsonStorer from '../../store/jsonStorer'
+import jsonHistory from '../../store/jsonHistory'
 import ExampleAdd from './ExampleAdd'
 import Visibility from './Visible'
 import NodeInfo from './NodeInfo'
@@ -139,12 +139,12 @@ export default {
     vmPasteCopyComponents,
     vmAddNodesToParentAndRecord,
     multiPaste() {
-      jsonStorer.current.recordsMerge(() => {
+      jsonHistory.current.recordsMerge(() => {
         this.selectedNodes.forEach(node => this.vmPasteCopyComponents(node.id))
       })
     },
     multiDelete() {
-      jsonStorer.current.recordsMerge(() => {
+      jsonHistory.current.recordsMerge(() => {
         this.selectedNodes.forEach(node => this.vmRemoveNode(node))
       })
     }

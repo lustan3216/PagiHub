@@ -1,7 +1,9 @@
 <template>
   <vue-plyr
+    v-style="!isExample"
     ref="plyr"
     :options="innerProps"
+    :style="innerStyles.default"
     class="h-100"
     @mouseleave="mouseleave"
   >
@@ -16,7 +18,7 @@
 import nodeMixin from '@/components/Templates/mixins/node'
 import { defaultSetting } from '../Setup/EditorSetting/SettingVideoPlayer'
 import VuePlyr from 'vue-plyr'
-// volume	Number	1
+
 export default {
   defaultSetting,
   name: 'VideoPlayer',

@@ -38,13 +38,14 @@ const stringifyValue = obj => {
   } = obj || {}
 
   return [
-    (inset ? 'inset' : null),
+    inset ? 'inset' : null,
     offsetX,
     offsetY,
     blurRadius,
     spreadRadius,
     color
-  ].filter(v => v !== null && v !== undefined)
+  ]
+    .filter(v => v !== null && v !== undefined)
     .map(toPx)
     .map(s => ('' + s).trim())
     .join(' ')
@@ -56,7 +57,11 @@ const toNum = v => {
   const n = parseFloat(v)
   return !isNaN(n) ? n : v
 }
-const toPx = n => typeof n === 'number' && n !== 0 ? (n + 'px') : n
+const toPx = n => (typeof n === 'number' && n !== 0 ? n + 'px' : n)
 
-export const parse = str => str.split(VALUES_REG).map(s => s.trim()).map(parseValue)
+export const parse = str =>
+  str
+    .split(VALUES_REG)
+    .map(s => s.trim())
+    .map(parseValue)
 export const stringify = arr => arr.map(stringifyValue).join(', ')

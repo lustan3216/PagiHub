@@ -1,9 +1,8 @@
 <template>
   <four-attrs
-    :value="value"
+    v-model="innerValue"
     attr="borderRadius"
     title="radius"
-    @input="$emit('input', $event)"
   >
     <template #button>
       <el-button
@@ -14,36 +13,36 @@
 
     <template #all="{ value }">
       <select-unit
-        :value.sync="value.all"
-        icon="el-icon-full-screen"
+        v-model="value.all"
+        prefix-icon="el-icon-full-screen"
       />
     </template>
 
     <template #first="{ value }">
       <select-unit
-        :value.sync="value.first"
-        icon="el-icon-top-left"
+        v-model="value.first"
+        prefix-icon="el-icon-top-left"
       />
     </template>
 
     <template #second="{ value }">
       <select-unit
-        :value.sync="value.second"
-        icon="el-icon-top-right"
+        v-model="value.second"
+        prefix-icon="el-icon-top-right"
       />
     </template>
 
     <template #third="{ value }">
       <select-unit
-        :value.sync="value.fourth"
-        icon="el-icon-bottom-left"
+        v-model="value.fourth"
+        prefix-icon="el-icon-bottom-left"
       />
     </template>
 
     <template #fourth="{ value }">
       <select-unit
-        :value.sync="value.third"
-        icon="el-icon-bottom-right"
+        v-model="value.third"
+        prefix-icon="el-icon-bottom-right"
       />
     </template>
   </four-attrs>
@@ -63,6 +62,16 @@ export default {
     value: {
       type: String,
       required: true
+    }
+  },
+  data() {
+    return {
+      innerValue: this.value
+    }
+  },
+  watch: {
+    innerValue(borderRadius) {
+      this.$emit('change', { borderRadius })
     }
   }
 }

@@ -9,6 +9,7 @@
       class="v-modal"
     />
     <el-drawer
+      v-style="!isExample"
       v-mousewheel="mousewheel"
       v-bind="innerProps"
       :key="innerProps.modal"
@@ -21,7 +22,7 @@
     >
       <controller-layer
         :id="id"
-        :style="innerStyles"
+        :style="innerStyles.default"
         class="h-100"
       >
         <grid-generator-inner

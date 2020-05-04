@@ -52,7 +52,7 @@ export default {
           boolean('modal'),
           selectUnit('size', {
             validate: [pxPercent],
-            props: { exclude: ['vw', 'vh'] }
+            props: { units: ['px', '%'] }
           }),
           select('buttonCanCloseId', {
             options: this.options,

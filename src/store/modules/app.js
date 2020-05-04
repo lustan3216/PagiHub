@@ -45,6 +45,9 @@ const getters = {
     if (getters.theOnlySelectedComponentId) {
       return rootState.draft.nodesMap[getters.theOnlySelectedComponentId]
     }
+  },
+  selectedComponentNodes(state, getters, rootState) {
+    return state.selectedComponentIds.map(id => rootState.draft.nodesMap[id])
   }
 }
 

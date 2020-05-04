@@ -15,66 +15,72 @@
           Default
         </el-radio-button>
 
-        <el-radio-button label="hover">
+        <el-radio-button label=":hover">
           Hover
         </el-radio-button>
 
-        <el-radio-button label="click">
+        <el-radio-button label=":active">
           Click
         </el-radio-button>
 
-        <el-radio-button label="visible">
-          Visible
-        </el-radio-button>
+        <!--        <el-radio-button label="show">-->
+        <!--          Show-->
+        <!--        </el-radio-button>-->
       </el-radio-group>
     </div>
 
-    <padding
-      :value="styles.padding || '0'"
-      @input="assignStyles('padding', $event)"
-    />
-    <radius
-      :value="styles.borderRadius"
-      @input="assignStyles('borderRadius', $event)"
-    />
-    <border-width
-      :value="styles.borderWidth"
-      @input="assignStyles('borderWidth', $event)"
-    />
-    <border-style
-      :value="styles.borderStyle"
-      @input="assignStyles('borderStyle', $event)"
-    />
-    <border-color
-      :value="styles.borderColor"
-      @input="assignStyles('borderColor', $event)"
-    />
-    <overflow
-      :value="styles.overflow"
-      class="m-b-10"
-      @input="assignStyles('overflow', $event)"
-    />
-    <box-shadow
-      :value="styles.boxShadow"
-      @input="assignStyles('boxShadow', $event)"
-    />
-
-    <effect
-      :value.sync="styles.filter"
-      :opacity.sync="styles.opacity"
-      @input="assignStyles('filter', $event)"
-    />
-    <transform
-      :value.sync="styles.transform"
-      :origin.sync="styles.transformOrigin"
-      @input="assignStyles('opacity', $event)"
-    />
-
-    <!-- avoid transition to VUE's transition-->
-    <transitions
-      :value="styles.transition"
-      @input="assignStyles('transformOrigin', $event)"
-    />
+    <div :key="id + state">
+      <padding
+        v-if="canPadding"
+        :value="styles.padding"
+        @change="assignStyles($event)"
+      />
+      <radius
+        v-if="canRadius"
+        :value="styles.borderRadius"
+        @change="assignStyles($event)"
+      />
+      <border-width
+        v-if="canBorderWidth"
+        :value="styles.borderWidth"
+        @change="assignStyles($event)"
+      />
+      <border-style
+        v-if="canBorderStyle"
+        :value="styles.borderStyle"
+        @change="assignStyles($event)"
+      />
+      <border-color
+        v-if="canBorderColor"
+        :value="styles.borderColor"
+        @change="assignStyles($event)"
+      />
+      <overflow
+        v-if="canOverflow"
+        :value="styles.overflow"
+        class="m-b-10"
+        @change="assignStyles($event)"
+      />
+      <box-shadow
+        :value="styles.boxShadow"
+        @change="assignStyles($event)"
+      />
+      <effect
+        :value="styles.filter"
+        :opacity="styles.opacity"
+        @change="assignStyles($event)"
+      />
+      <transform
+        :value="styles.transform"
+        :origin="styles.transformOrigin"
+        @change="assignStyles($event)"
+      />
+      <transitions
+        v-if="isDefaultState"
+        :value="styles.transition"
+        @change="assignStyles($event)"
+      />
+    </div>
 
     <!--    <dimension-->
     <!--      :computed-style="computedStyle"-->
@@ -86,7 +92,7 @@
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
 import { STYLE } from '@/const'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
 import Dimension from './EditorStyle/Dimension'
@@ -100,8 +106,9 @@ import Transform from './EditorStyle/Transform'
 import Transitions from './EditorStyle/Transitions'
 import { RadioGroup, RadioButton, Divider } from 'element-ui'
 import { getComputedStyle } from '@/utils/vmMap'
+import { getValueByPath } from '@/utils/tool'
 
-const attributes = [
+const computedAttrs = [
   'width',
   'minWidth',
   'maxWidth',
@@ -112,16 +119,15 @@ const attributes = [
   'filter',
   'borderRadius',
   'borderWidth',
-  'borderColor',
   'borderStyle',
   'margin',
   'padding',
-  'opacity',
   'overflow',
-  'transform',
   'transformOrigin',
   'transition'
 ]
+
+const savedAttrs = ['borderColor', 'transform']
 
 export default {
   name: 'PanelStyles',
@@ -148,36 +154,93 @@ export default {
     }
   },
   data() {
-    const computedStyle = getComputedStyle(this.id)
-
-    const styles = attributes.reduce((all, attr) => {
-      all[attr] = computedStyle[attr]
-      return all
-    }, {})
-
-    styles.transformOrigin = this.parseOrigin(styles)
-
     return {
-      klass: '',
-      activeNames: '',
-      state: 'default',
-      styles
+      state: 'default'
+    }
+  },
+  computed: {
+    ...mapState('draft', ['nodesMap']),
+    canRadius() {
+      return !['grid-generator'].includes(this.nodeTag)
+    },
+    canPadding() {
+      return !['grid-generator'].includes(this.nodeTag)
+    },
+    canBorderColor() {
+      return !['grid-generator'].includes(this.nodeTag)
+    },
+    canBorderWidth() {
+      return !['grid-generator'].includes(this.nodeTag)
+    },
+    canBorderStyle() {
+      return !['grid-generator'].includes(this.nodeTag)
+    },
+    canDimension() {
+      return [''].includes(this.nodeTag)
+    },
+    canOverflow() {
+      return ['grid-item'].includes(this.nodeTag)
+    },
+    isDefaultState() {
+      return this.state === 'default'
+    },
+    node() {
+      return this.nodesMap[this.id]
+    },
+    computedStyle() {
+      return getComputedStyle(this.id)
+    },
+    nodeTag() {
+      return this.nodesMap[this.id].tag
+    },
+    styles() {
+      const styles = {}
+
+      if (this.isDefaultState) {
+        computedAttrs.reduce((all, attr) => {
+          all[attr] = this.computedStyle[attr]
+          return all
+        }, styles)
+      }
+
+      const attrs = this.isDefaultState
+        ? savedAttrs
+        : [...computedAttrs, ...savedAttrs]
+
+      attrs.reduce((all, attr) => {
+        all[attr] = getValueByPath(this.node, [STYLE, this.state, attr], '')
+        return all
+      }, styles)
+
+      styles.transformOrigin = this.parseOrigin(styles) || ''
+      return styles
     }
   },
   methods: {
     ...mapMutations('draft', ['RECORD']),
-    assignStyles(attr, value) {
-      this.styles[attr] = value
-      this.RECORD([
-        {
-          path: `${this.id}.${STYLE}.${this.state}.${attr}`,
-          value
+    assignStyles(object) {
+      const records = []
+
+      for (const key in object) {
+        let value = object[key]
+        if (value === '' || value === undefined || value === null) {
+          value = undefined
         }
-      ])
+
+        records.push({
+          path: `${this.id}.${STYLE}.${this.state}.${key}`,
+          value
+        })
+      }
+
+      this.RECORD(records)
     },
     parseOrigin({ width, height, transformOrigin }) {
-      const [x, y] = transformOrigin.split(' ')
+      if (!this.isDefaultState) {
+        return transformOrigin
+      }
 
+      const [x, y] = transformOrigin.split(' ')
       const _x = (parseInt(x) / parseInt(width)).toFixed(2) * 100
       const _y = (parseInt(y) / parseInt(height)).toFixed(2) * 100
       return `${_x}% ${_y}%`
@@ -210,7 +273,7 @@ export default {
   }
 
   .sub-title {
-    padding-bottom: 3px !important;
+    padding-bottom: 0 !important;
     font-size: 12px;
     padding-right: 3px;
     color: #606266;

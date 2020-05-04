@@ -4,7 +4,7 @@
     <el-button
       type="text"
       icon="el-icon-circle-plus-outline"
-      @click="values.push({ value: 0 })"
+      @click="values.push({ value: 0, name: null })"
     />
 
     <el-row
@@ -26,7 +26,7 @@
         <el-select
           v-model="option.name"
           placeholder="Choose effect"
-          @change="delete option.value"
+          @change="option.value = null"
         >
           <el-option
             v-for="option in selectableOptions"
@@ -40,21 +40,11 @@
       <el-col :span="10">
         <template v-if="options[option.name]">
           <select-unit
-            v-if="isArray(options[option.name].unit)"
-            :value.sync="option.value"
-            :exclude="['vh', 'vw']"
+            :value="option.value || options[option.name].default"
+            :clearable="false"
             :key="option.name"
-            allow-negative
-          />
-
-          <input-unit
-            v-else
-            v-model="option.value"
-            :min="options[option.name].min"
-            :max="options[option.name].max"
-            :step="options[option.name].step"
-            :key="option.name"
-            :unit="options[option.name].unit"
+            v-bind="options[option.name]"
+            @input="option.value = $event"
           />
         </template>
       </el-col>
@@ -101,60 +91,77 @@ export default {
       rotate: {
         name: 'rotate',
         max: 360,
+        step: 0.1,
         min: -360,
-        unit: 'deg',
+        units: ['deg'],
         value: rotate[1]
       },
       originX: {
         name: 'originX',
-        unit: '%',
+        step: 0.1,
+        units: ['%'],
+        default: '50%',
         value: originX === '50%' ? null : originX
       },
       originY: {
         name: 'originY',
-        unit: '%',
+        step: 0.1,
+        units: ['%'],
+        default: '50%',
         value: originY === '50%' ? null : originY || originX
       },
       skewX: {
         name: 'skewX',
-        unit: ['px', '%'],
+        max: 360,
+        step: 0.1,
+        min: -360,
+        units: ['deg'],
         value: skewX
       },
       skewY: {
         name: 'skewY',
-        unit: ['px', '%'],
+        step: 0.1,
+        max: 360,
+        min: -360,
+        units: ['deg'],
         value: skewY || skewX
       },
       translateX: {
         name: 'translateX',
-        unit: ['px', '%'],
+        step: 0.1,
+        units: ['px', '%'],
         value: translateX
       },
       translateY: {
         name: 'translateY',
-        unit: ['px', '%'],
+        step: 0.1,
+        units: ['px', '%'],
         value: translateY || translateX
       },
       scaleX: {
         name: 'scaleX',
         step: 0.01,
+        default: 1,
         max: 3,
         min: -3,
-        unit: '',
+        units: [],
         value: scaleX
       },
       scaleY: {
         name: 'scaleY',
         max: 3,
+        default: 1,
         min: -3,
         step: 0.01,
-        unit: '',
+        units: [],
         value: scaleY || scaleX
       }
     }
 
     return {
       options,
+      transform: null,
+      transformOrigin: null,
       values: Object.values(options).reduce((acc, x) => {
         if (x.value) {
           acc.push({ ...x })
@@ -179,35 +186,46 @@ export default {
           rotate,
           translateX,
           translateY,
-          scaleX,
-          scaleY,
+          scaleX = 1,
+          scaleY = 1,
           originX,
           originY
         } = values.reduce((acc, effect) => {
-          acc[effect.name] = effect.value
+          if (effect.value || effect.value === 0) {
+            acc[effect.name] = effect.value
+          }
           return acc
         }, {})
-        const _rotate = rotate && `rotate(${rotate}deg)`
-        const skew = this.bindValue('skew', skewX, skewY)
-        const translate = this.bindValue('translate', translateX, translateY)
-        const scale = this.bindValue('scale', scaleX, scaleY)
+        const _rotate = rotate && `rotate(${rotate})`
+        const skew = this.bindValue(skewX, skewY, 'skew')
+        const translate = this.bindValue(translateX, translateY, 'translate')
+        const scale = this.bindValue(scaleX, scaleY, 'scale')
 
-        this.$emit('update:value', [_rotate, skew, translate, scale].join(' '))
-        this.$emit('update:origin', `${originX} ${originY}`)
+        this.transform = [_rotate, skew, translate, scale].join(' ').trim()
+        this.transformOrigin = this.bindValue(originX, originY)
       },
-      deep: true
+      deep: true,
+      immediate: true
+    },
+    transform(transform) {
+      this.$emit('change', { transform })
+    },
+    transformOrigin(transformOrigin) {
+      this.$emit('change', { transformOrigin })
     }
   },
   methods: {
     isArray,
     humanize,
-    bindValue(attr, a = 0, b = 0) {
+    bindValue(a = 0, b = 0, attr) {
       if (!a && !b) {
         return ''
       } else if (a === b) {
-        return a
-      } else {
+        return `${attr}(${a})`
+      } else if (attr) {
         return `${attr}(${a}, ${b})`
+      } else {
+        return `${a} ${b}`
       }
     }
   }

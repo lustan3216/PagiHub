@@ -1,5 +1,5 @@
 import localforage from 'localforage'
-import jsonStorer from '../../jsonStorer'
+import jsonHistory from '../../jsonHistory'
 import listToTree from '@/utils/listToTree'
 import { SET } from '../../index'
 import { componentIds } from '@/utils/keyId'
@@ -17,13 +17,13 @@ const mutations = {
     state.nodesMap = payLoad
   },
   RECORD(state, payLoad) {
-    jsonStorer.current.record(payLoad)
+    jsonHistory.current.record(payLoad)
   },
   REDO() {
-    jsonStorer.current.redo()
+    jsonHistory.current.redo()
   },
   UNDO() {
-    jsonStorer.current.undo()
+    jsonHistory.current.undo()
   }
 }
 
@@ -60,7 +60,7 @@ const actions = {
     }
 
     commit('INIT_NODES_MAP', nodesMap)
-    jsonStorer.current.tree = nodesMap
+    jsonHistory.current.tree = nodesMap
   }
 }
 
@@ -68,9 +68,13 @@ const getters = {
   rootNode: (state, getters) =>
     getters.tree[0] && state.nodesMap[getters.tree[0].id],
 
-  listToTree: ({ nodesMap }) => listToTree(Object.values(nodesMap)),
+  listToTree: ({ nodesMap }) => {
+    return listToTree(Object.values(nodesMap))
+  },
 
-  childrenOf: (state, getters) => getters.listToTree.childrenOf,
+  childrenOf: (state, getters) => {
+    return getters.listToTree.childrenOf
+  },
 
   tree: (state, getters) => getters.listToTree.tree,
 

@@ -1,9 +1,8 @@
 <template>
   <div>
-    <span class="title p-r-10">Overwrite</span>
+    <span class="title p-r-10">Overflow</span>
     <el-select
-      :value="value"
-      @input="$emit('input', $event)"
+      v-model="innerValue"
     >
       <el-option
         label="visible"
@@ -32,6 +31,16 @@ export default {
     value: {
       type: String,
       required: true
+    }
+  },
+  data() {
+    return {
+      innerValue: this.value
+    }
+  },
+  watch: {
+    innerValue(overflow) {
+      this.$emit('change', { overflow })
     }
   }
 }

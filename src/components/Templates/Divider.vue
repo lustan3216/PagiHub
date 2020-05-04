@@ -1,7 +1,7 @@
 <template>
   <el-divider
     v-bind="innerProps"
-    :style="innerStyles"
+    :style="innerStyles.default"
     class="divider"
   />
 </template>

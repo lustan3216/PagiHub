@@ -1,5 +1,6 @@
 <template>
   <div
+    v-style="!isExample"
     v-observe-visibility="options"
     class="h-100"
   >
@@ -65,7 +66,7 @@
 
     <el-carousel
       :ref="id"
-      :style="innerStyles"
+      :style="innerStyles.default"
       v-bind="innerProps"
       :indicator-position="hasIndicator"
       :class="{ indicatorTop, indicatorLeft }"

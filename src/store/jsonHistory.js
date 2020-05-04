@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import store from './index'
-import JsonStorer from 'json-storer'
+import JsonHistory from 'json-history'
 
 const map = {}
 
@@ -9,7 +9,7 @@ export default {
     const name = store.state.draft.selectedComponentSetId
 
     if (!map[name]) {
-      const jsonStorer = new JsonStorer({
+      const jsonHistory = new JsonHistory({
         name: name,
         setter(tree, key, value) {
           if (tree[key] && tree.__ob__) {
@@ -24,7 +24,7 @@ export default {
         }
       })
 
-      map[name] = jsonStorer
+      map[name] = jsonHistory
     }
 
     return map[name]

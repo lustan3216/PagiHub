@@ -2,9 +2,8 @@
   <el-input
     :disabled="isAuto"
     v-model="number"
+    v-bind="{ clearable: true, ...$attrs, ...$props }"
     type="number"
-    clearable
-    v-bind="$attrs"
   >
     <div slot="append">{{ unit || '-' }}</div>
   </el-input>
@@ -36,22 +35,21 @@ export default {
   computed: {
     match() {
       if (this.isInvalid(this.value)) {
-        return ['', this.unit]
+        return null
       } else {
-        return [parseInt(this.value), this.unit]
+        // eslint-disable-next-line
+        return parseFloat(this.value)
       }
     },
     number: {
       get() {
-        return this.match[0]
+        return this.match
       },
       set(value) {
         if (this.isInvalid(value)) {
           this.$emit('input', null)
-          this.$emit('update:value', null)
         } else {
           this.$emit('input', value + this.unit)
-          this.$emit('update:value', value + this.unit)
         }
       }
     },
@@ -61,7 +59,12 @@ export default {
   },
   methods: {
     isInvalid(value) {
-      return value === null || value === 'none' || value === ''
+      return (
+        value === null ||
+        value === 'none' ||
+        value === '' ||
+        value === undefined
+      )
     }
   }
 }

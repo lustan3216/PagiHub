@@ -2,9 +2,10 @@
   <el-select
     v-if="isAuto"
     v-model="unit"
+    v-bind="{ ...$attrs, ...$props }"
   >
     <el-option
-      v-for="unit in units"
+      v-for="unit in optionUnits"
       :key="unit"
       :value="unit"
     />
@@ -13,33 +14,38 @@
   <el-input
     v-else
     ref="input"
-    :prefix-icon="icon"
     v-model="number"
+    v-bind="{ clearable: true, prefixIcon, ...$attrs, ...$props }"
     type="number"
-    clearable
     class="number"
     @change="$emit('change', innerValue)"
   >
     <el-select
+      v-if="optionUnits.length >= 2"
       slot="append"
       v-model="unit"
       placeholder="-"
     >
       <el-option
-        v-for="unit in units"
+        v-for="unit in optionUnits"
         :key="unit"
         :value="unit"
       />
     </el-select>
+    <span
+      v-else
+      slot="append"
+    >
+      {{ unit || '-' }}
+    </span>
   </el-input>
 </template>
 
 <script>
-import { arraySubtract } from '@/utils/tool'
 export default {
   name: 'SelectUnit',
   props: {
-    icon: {
+    prefixIcon: {
       type: String,
       default: ''
     },
@@ -57,9 +63,9 @@ export default {
       },
       default: null
     },
-    exclude: {
-      type: Array,
-      default: () => []
+    units: {
+      type: [Array, String],
+      default: () => ['px', '%', 'vh', 'vw']
     }
   },
   data() {
@@ -68,25 +74,31 @@ export default {
     }
   },
   computed: {
-    units() {
-      let units = ['px', '%', 'vh', 'vw']
-      if (this.hasAuto) units.push('auto')
-      if (this.exclude.length) {
-        units = arraySubtract(units, this.exclude)
+    isStringUnit() {
+      return typeof this.units === 'string'
+    },
+    optionUnits() {
+      let units
+      if (this.isStringUnit) {
+        units = [this.unit]
+      } else {
+        units = this.units
       }
-      return units
+
+      if (this.hasAuto) {
+        return ['auto', ...units]
+      } else {
+        return units
+      }
     },
     match() {
       if (this.isInvalid(this.innerValue)) {
         return ['', '']
-      } else if (parseInt(this.innerValue) === 0) {
-        return ['0', 'px']
       } else {
         // eslint-disable-next-line
-        const [_, number = '0', unit = 'px'] = this.innerValue
-          .toString()
-          .match(/^(\d+)?([a-z|%]+)?/)
-        return [number, unit]
+        const [_, unit] =
+          this.innerValue.toString().match(/-?[.\d]+(.+)?/) || []
+        return [parseFloat(this.innerValue), unit]
       }
     },
     number: {
@@ -98,26 +110,31 @@ export default {
 
         if (this.isInvalid(number)) {
           result = null
-        } else if (!this.unit) {
-          result = number + 'px'
         } else {
           result = number + this.unit
         }
 
-        this.$emit('update:value', result)
         this.innerValue = result
       }
     },
     unit: {
       get() {
-        return this.match[1]
+        if (this.isStringUnit) {
+          return this.units
+        }
+
+        const { length } = this.units
+        if (length === 1) {
+          return this.units[0]
+        } else if (length === 0) {
+          return ''
+        } else {
+          return this.match[1] || this.units[0]
+        }
       },
       set(unit) {
         const number = unit === 'auto' ? '' : this.number || '0'
-        const result = number + unit
-
-        this.$emit('update:value', result)
-        this.innerValue = result
+        this.innerValue = number + unit
       }
     },
     isAuto() {
@@ -125,13 +142,18 @@ export default {
     }
   },
   watch: {
-    value(newValue) {
-      this.innerValue = newValue
+    innerValue(newValue) {
+      this.$emit('input', newValue)
     }
   },
   methods: {
     isInvalid(value) {
-      return value === null || value === 'none' || value === ''
+      return (
+        value === null ||
+        value === 'none' ||
+        value === '' ||
+        value === undefined
+      )
     },
     focus() {
       this.$refs.input.focus()
@@ -156,7 +178,7 @@ export default {
   }
 
   .el-input-group__append {
-    padding: 0 10px;
+    padding: 0 5px;
 
     .el-input__inner {
       padding-right: 0;

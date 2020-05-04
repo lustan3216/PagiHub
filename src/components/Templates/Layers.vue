@@ -1,12 +1,15 @@
 <template>
-  <div class="relative h-100">
+  <div
+    v-style="!isExample"
+    class="relative h-100"
+  >
     <grid-generator
       v-for="(child, index) in sortChildren"
       :style="{ 'z-index': index }"
       :class="{ absolute: index }"
       :key="child.id"
       :id="child.id"
-      data-layer
+      :data-layer="Boolean(index)"
     />
   </div>
 </template>

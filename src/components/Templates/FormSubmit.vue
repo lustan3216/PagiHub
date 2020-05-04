@@ -2,7 +2,7 @@
   <el-button
     v-if="isDraftMode"
     v-bind="innerProps"
-    :style="innerStyles"
+    :style="innerStyles.default"
     class="wh-100 m-0 button"
   >
     <editor-text-inner
@@ -29,7 +29,7 @@
   <el-button
     v-else
     v-bind="innerProps"
-    :style="innerStyles"
+    :style="innerStyles.default"
     class="wh-100 m-0 button"
     @click="submit"
     v-html="innerValue"
@@ -68,7 +68,6 @@ export default {
       Object.values(this.nodesMap).forEach(node => {
         const validInput =
           node.tag.includes('form') &&
-          !node.tag.includes('reset') &&
           !node.tag.includes('submit')
         if (validInput) {
           const id = node.props && node.props.submitButtonId
@@ -88,7 +87,7 @@ export default {
     }
   },
   mounted() {
-    if (this.isExample || !this.node[INITIATE]) return
+    if (this.isExample || !this.node[INITIATE] || !this.yetSelectedNodes.length) return
 
     MessageBox.confirm(
       'Is that ok make all unselected input under this button control?',

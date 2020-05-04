@@ -1,8 +1,7 @@
 <template>
   <four-attrs
-    :value="value"
+    v-model="innerValue"
     attr="borderStyle"
-    @input="$emit('input', $event)"
   >
     <template #button>
       <el-button
@@ -101,6 +100,16 @@ export default {
     value: {
       type: String,
       required: true
+    }
+  },
+  data() {
+    return {
+      innerValue: this.value
+    }
+  },
+  watch: {
+    innerValue(borderStyle) {
+      this.$emit('change', { borderStyle })
     }
   }
 }

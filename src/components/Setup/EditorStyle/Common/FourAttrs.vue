@@ -74,7 +74,7 @@
 
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
-import { arrayUniq } from '@/utils/tool'
+import { arrayUniq, isArray } from '@/utils/tool'
 import { humanize } from '@/utils/string'
 
 export default {
@@ -92,12 +92,15 @@ export default {
       required: true
     },
     value: {
-      type: String,
+      type: [String, Array],
       required: true
     }
   },
   data() {
-    const [first, second, third, fourth] = this.value.split(' ')
+    const [first, second, third, fourth] = isArray(this.value)
+      ? this.value
+      : this.value.split(' ')
+
     const four = {
       first,
       second: second || first,

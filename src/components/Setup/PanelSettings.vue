@@ -14,7 +14,6 @@ import { bigCamelCase } from '@/utils/string'
 const self = {
   name: 'PanelSettings',
   components: {
-    SettingCard: () => import('./EditorSetting/SettingCard'),
     SettingDrawer: () => import('./EditorSetting/SettingDrawer'),
     SettingDivider: () => import('./EditorSetting/SettingDivider'),
     SettingFlexButton: () => import('./EditorSetting/SettingFlexButton'),

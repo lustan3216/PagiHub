@@ -2,6 +2,7 @@ import { mapMutations } from 'vuex'
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { deepmerge, cloneJson } from '@/utils/tool'
 import { STYLE, PROPS, VALUE, GRID_GENERATOR } from '@/const'
+import style from '@/directive/style'
 
 let hoverNode = []
 
@@ -14,6 +15,9 @@ export default {
   },
   inject: {
     isExample: { default: false }
+  },
+  directives: {
+    style
   },
   computed: {
     node() {

@@ -21,7 +21,18 @@ export function vmRemove(vm) {
 }
 
 export function getComputedStyle(id) {
-  return window.getComputedStyle($element(id))
+  const _vm = vm(id)
+  const isForm = /^form/.test(_vm.$options._componentTag)
+  let el
+
+  if (isForm) {
+    const field = _vm.api.fields()[0]
+    el = _vm.api.el(field).$el
+  } else {
+    el = $element(id)
+  }
+
+  return window.getComputedStyle(el)
 }
 
 export function getPlanStyle(id) {

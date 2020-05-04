@@ -1,28 +1,47 @@
 import { generateStyleBlock } from './parser'
-import { isPlainObject } from '@/utils/tool'
+import { kebabCase } from '@/utils/string'
 
 export const FREE_STYLE = '@@FREE_STYLE'
 window[FREE_STYLE] = window[FREE_STYLE] || {}
 
-const fn = function(element, binding, vnode) {
-  if (binding.value) {
-    vnode.context.$nextTick(function() {
-      generateStyleBlock(vnode.context._uid, element, binding.value.trim())
-    })
-  } else if (isPlainObject(binding.value)) {
-    console.log()
-  } else {
-    const el = window[FREE_STYLE][vnode.context._uid]
+export default function freeStyle(element, binding) {
+  const styleId = getStringId(element, binding)
 
-    if (el) {
-      el.remove()
-    }
+  if (binding.value) {
+    generateStyleBlock(styleId, element, binding.value)
+  } else if (binding.value === false) {
+    clean(styleId)
   }
 }
 
-const directive = {
-  bind: fn,
-  update: fn,
-  unbind: fn
+export const directive = {
+  bind: freeStyle,
+  update: freeStyle,
+  unbind(element, binding) {
+    clean(getStringId(element, binding))
+  }
 }
-export default directive
+
+function clean(styleId) {
+  const el = window[FREE_STYLE][styleId]
+
+  if (el) {
+    el.remove()
+  }
+}
+
+function getStringId(element, binding) {
+  const { id } = binding.value
+
+  if (id !== null && Number.isInteger(id)) {
+    element.dataset.styleId = id
+    return `[data-style-id="${id}"]`
+  } else {
+    const dataVIds = Object.keys(element.dataset).filter(x => x[0] === 'v')
+
+    return dataVIds.reduce((acc, id) => {
+      acc += `[data-${kebabCase(id)}]`
+      return acc
+    }, '')
+  }
+}

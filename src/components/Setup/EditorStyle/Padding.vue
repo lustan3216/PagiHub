@@ -1,8 +1,7 @@
 <template>
   <four-attrs
-    :value="value"
+    v-model="innerValue"
     attr="padding"
-    @input="$emit('input', $event)"
   >
     <template #button>
       <el-button
@@ -13,36 +12,41 @@
 
     <template #all="{ value }">
       <select-unit
-        :value.sync="value.all"
-        icon="el-icon-rank"
+        v-model="value.all"
+        :min="0"
+        prefix-icon="el-icon-rank"
       />
     </template>
 
     <template #first="{ value }">
       <select-unit
-        :value.sync="value.first"
-        icon="el-icon-top"
+        v-model="value.first"
+        :min="0"
+        prefix-icon="el-icon-top"
       />
     </template>
 
     <template #second="{ value }">
       <select-unit
-        :value.sync="value.third"
-        icon="el-icon-bottom"
+        v-model="value.third"
+        :min="0"
+        prefix-icon="el-icon-bottom"
       />
     </template>
 
     <template #third="{ value }">
       <select-unit
-        :value.sync="value.fourth"
-        icon="el-icon-back"
+        v-model="value.fourth"
+        :min="0"
+        prefix-icon="el-icon-back"
       />
     </template>
 
     <template #fourth="{ value }">
       <select-unit
-        :value.sync="value.second"
-        icon="el-icon-bottom-right"
+        v-model="value.second"
+        :min="0"
+        prefix-icon="el-icon-bottom-right"
       />
     </template>
   </four-attrs>
@@ -62,6 +66,16 @@ export default {
     value: {
       type: String,
       required: true
+    }
+  },
+  data() {
+    return {
+      innerValue: this.value
+    }
+  },
+  watch: {
+    innerValue(padding) {
+      this.$emit('change', { padding })
     }
   }
 }

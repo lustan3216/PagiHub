@@ -29,7 +29,6 @@
           <panel-styles
             v-if="theOnlySelectedComponentId"
             :id="theOnlySelectedComponentId"
-            :key="theOnlySelectedComponentId"
             class="panel"
           />
         </el-collapse-item>
@@ -73,7 +72,7 @@ export default {
   },
   data() {
     return {
-      activeNames: ['1', '2}']
+      activeNames: ['1', '2']
     }
   },
   computed: {

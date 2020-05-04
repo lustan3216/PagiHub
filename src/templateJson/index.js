@@ -10,23 +10,16 @@ export const categories = [
     [ID]: 0,
     [NAME]: 'Basic',
     [ICON]: 'el-icon-message'
-  },
-  {
-    [ID]: FORM_ITEM_ID,
-    [NAME]: 'FormItem',
-    [ICON]: 'el-icon-message'
   }
 ]
 
 const assignCategoryId = (array, id) => array.map(x => (x[CATEGORY] = [id]))
 
 export default function() {
-  assignCategoryId(basic, 0)
-  assignCategoryId(formItem, FORM_ITEM_ID)
+  const all = [...basic, ...formItem]
+  assignCategoryId(all, 0)
 
-  const allComponents = [...basic, ...formItem]
+  exampleIds.appendIdNested(all)
 
-  exampleIds.appendIdNested(allComponents)
-
-  return allComponents
+  return all
 }

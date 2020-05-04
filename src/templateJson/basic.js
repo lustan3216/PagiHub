@@ -85,14 +85,6 @@ export const carousel = function() {
   }
 }
 
-export const card = function() {
-  return {
-    [TAG]: 'card',
-    [CAN_NEW_ITEM]: true,
-    [CHILDREN]: gridItems()
-  }
-}
-
 export const editorText = function() {
   return {
     [TAG]: 'editor-text',
@@ -143,7 +135,6 @@ export const drawer = function() {
 
 export default [
   layers(),
-  card(),
   flexButton(),
   flexImage(),
   gridGenerator(),

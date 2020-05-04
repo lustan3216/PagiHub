@@ -1,11 +1,11 @@
 <template>
-  <div
-    :style="innerStyles.default"
-    class="h-100 border-box"
+  <controller-layer
+    v-if="currentNode"
+    :id="currentNode.id"
   >
-    <controller-layer
-      v-if="currentNode"
-      :id="currentNode.id"
+    <div
+      v-style="!isExample"
+      class="h-100 border-box"
     >
       <async-component
         v-if="firstChild"
@@ -13,9 +13,10 @@
         :id="currentNode.id"
       />
 
-      <node-info
+      <node-controller
         v-else-if="isDraftMode"
         :id="currentNode.id"
+        :exclude="['copy', 'delete']"
         class="self-center"
       />
 
@@ -23,8 +24,8 @@
         v-if="isDraftMode"
         :name="`GridItemChild${currentNode.id}`"
       />
-    </controller-layer>
-  </div>
+    </div>
+  </controller-layer>
 </template>
 
 <script>

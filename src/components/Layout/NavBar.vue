@@ -28,7 +28,6 @@
   <nav
     v-else-if="isDraftMode"
     class="flex"
-    @mouseleave="mouseLeave"
   >
     <panel-nodes
       v-if="nodesVisible"
@@ -134,6 +133,36 @@
         @click="copy"
       />
 
+      <el-tooltip
+        v-if="copyComponentIds.length && selected"
+        effect="light"
+        content="Paste Component"
+        placement="bottom"
+      >
+        <el-button
+          v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
+          type="text"
+          icon="el-icon-document-add"
+          size="small"
+          @click="vmPasteCopyComponents(id)"
+          @shortkey.native="multiPaste"
+        />
+      </el-tooltip>
+
+      <el-button
+        type="text"
+        icon="el-icon-copy-document"
+        @click.stop="() => vmCopyNode(node)"
+      />
+
+      <el-button
+        v-shortkey="{ del: ['del'], del: ['backspace'] }"
+        type="text"
+        icon="el-icon-delete"
+        @shortkey.native="multiDelete"
+        @click.stop="() => multiDelete"
+      />
+
       <el-popover
         ref="7"
         effect="light"
@@ -166,6 +195,14 @@ import DialogComponentSet from '../Setup/DialogComponentSet'
 import MySpace from './MySpace'
 import PanelNodes from '../Setup/PanelNodes'
 import PanelProject from '../Setup/PanelProject'
+import {
+  vmAddNodesToParentAndRecord,
+  vmCopyNode,
+  vmCreateItem,
+  vmPasteCopyComponents,
+  vmRemoveNode
+} from '@/utils/vmMap'
+import jsonHistory from '@/store/jsonHistory'
 
 export default {
   name: 'NavBar',
@@ -183,8 +220,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['copyComponentIds']),
-    ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode'])
+    ...mapState('app', ['selectedComponentIds', 'copyComponentIds']),
+    ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
+    selected() {
+      return this.selectedComponentIds.includes(this.id)
+    },
+    selectedNodes() {
+      return this.selectedComponentIds.map(id => this.draftNodesMap[id])
+    }
   },
   methods: {
     ...mapMutations('app', ['SET_COPY_SELECTED_COMPONENT_IDS']),
@@ -199,10 +242,6 @@ export default {
         Message.info(`Copy ${length} Components`)
       }
     },
-    mouseLeave() {
-      this.nodesVisible = false
-      this.projectVisible = false
-    },
     nodesIconClick() {
       this.nodesVisible = !this.nodesVisible
       this.projectVisible = false
@@ -210,6 +249,21 @@ export default {
     projectIconClick() {
       this.nodesVisible = false
       this.projectVisible = !this.projectVisible
+    },
+    vmCreateItem,
+    vmCopyNode,
+    vmRemoveNode,
+    vmPasteCopyComponents,
+    vmAddNodesToParentAndRecord,
+    multiPaste() {
+      jsonHistory.current.recordsMerge(() => {
+        this.selectedNodes.forEach(node => this.vmPasteCopyComponents(node.id))
+      })
+    },
+    multiDelete() {
+      jsonHistory.current.recordsMerge(() => {
+        this.selectedNodes.forEach(node => this.vmRemoveNode(node))
+      })
     }
   }
 }

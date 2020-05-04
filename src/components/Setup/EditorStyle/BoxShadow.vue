@@ -5,7 +5,17 @@
     <el-button
       type="text"
       icon="el-icon-circle-plus-outline"
-      @click="values.push({ id: +new Date() })"
+      @click="
+        values.push({
+          id: +new Date(),
+          color: null,
+          inset: null,
+          offsetX: null,
+          offsetY: null,
+          blurRadius: null,
+          spreadRadius: null
+        })
+      "
     />
 
     <el-row
@@ -128,16 +138,24 @@ export default {
     })
 
     return {
-      values
+      values,
+      boxShadow: null
     }
   },
   watch: {
     values: {
       handler(values) {
-        values.filter(x => x.color && (x.spreadRadius || x.blurRadius))
-        this.$emit('update:value', stringify(values))
+        const filteredValues = values.filter(
+          x => x.color && (x.spreadRadius || x.blurRadius)
+        )
+
+        this.boxShadow = stringify(filteredValues)
       },
-      deep: true
+      deep: true,
+      immediate: true
+    },
+    boxShadow(boxShadow) {
+      this.$emit('change', { boxShadow })
     }
   }
 }
@@ -150,6 +168,9 @@ export default {
   }
   .el-button {
     padding: 7px 5px;
+  }
+  .el-col {
+    padding: 0;
   }
 }
 </style>

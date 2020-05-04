@@ -64,7 +64,7 @@
             : availableProperties"
             :key="property"
             :label="humanize(property)"
-            :value="property"
+            :value="kebabCase(property)"
           />
         </el-select>
       </el-col>
@@ -86,18 +86,22 @@
       </el-col>
 
       <el-col :span="5">
-        <input-unit
-          :value.sync="option.duration"
+        <select-unit
+          v-model="option.duration"
+          :step="0.1"
           :min="0"
-          unit="s"
+          :clearable="false"
+          units="s"
         />
       </el-col>
 
       <el-col :span="5">
-        <input-unit
-          :value.sync="option.delay"
+        <select-unit
+          v-model="option.delay"
+          :clearable="false"
+          :step="0.1"
           :min="0"
-          unit="s"
+          units="s"
         />
       </el-col>
     </el-row>
@@ -105,12 +109,12 @@
 </template>
 
 <script>
-import InputUnit from '@/components/Components/InputUnit'
-import { humanize } from '@/utils/string'
+import SelectUnit from '@/components/Components/SelectUnit'
+import { humanize, kebabCase } from '@/utils/string'
 export default {
   name: 'Transitions',
   components: {
-    InputUnit
+    SelectUnit
   },
   props: {
     value: {
@@ -126,12 +130,12 @@ export default {
 
     return {
       values: transitions.map(value => this.parseTransition(value.trim())),
+      transition: [],
       properties: [
         'all',
         'backgroundColor',
         'width',
         'height',
-        'opacity',
         'transform',
         'borderRadius',
         'boxShadow',
@@ -154,10 +158,11 @@ export default {
     values: {
       handler(values) {
         const result = values.reduce(
-          (acc, { duration, property, timing = '', delay = '' }) => {
+          (acc, { duration, property, timing, delay }) => {
             if (duration && property) {
-              const string = `${property} ${duration} ${timing} ${delay}`.trim()
-              acc.push(string)
+              const string = `${property} ${duration} ${timing || ''} ${delay ||
+                ''}`
+              acc.push(string.trim())
             }
 
             return acc
@@ -165,16 +170,22 @@ export default {
           []
         )
 
-        this.$emit('input', result.join(', '))
+        this.transition = result.join(', ')
       },
-      deep: true
+      deep: true,
+      immediate: true
+    },
+    transition(transition) {
+      this.$emit('change', { transition })
     }
   },
   methods: {
     humanize,
+    kebabCase,
     parseTransition(transition) {
       let property, duration, timing, delay
       const split = transition.split(' ')
+
       if (split.length === 4) {
         [property, duration, timing, delay] = split
       } else {

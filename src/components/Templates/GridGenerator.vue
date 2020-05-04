@@ -1,5 +1,6 @@
 <template>
   <grid-generator-inner
+    v-style="!isExample"
     :id="id"
     :inner-props="innerProps"
   />
