@@ -1,5 +1,5 @@
 <template>
-  <div v-free-view="{ move: false, scaleCallback }">
+  <div v-free-view="{ scaleCallback, movableFunction }">
     <view-port-cover
       v-if="$refs.browser"
       :target="$refs.browser.$el"
@@ -108,13 +108,16 @@ export default {
     ...mapMutations('app', {
       appSET: 'SET'
     }),
-    dialogResize(event) {
-      this.canvasWidth = +event.target.clientWidth.toFixed()
-    },
     scaleRollback() {
       this.$el.style.webkitTransform = this.$el.style.transform = null
       this.scaleRatio = 1
       this.canvasWidthReset()
+    },
+    movableFunction(event) {
+      return event.shiftKey
+    },
+    dialogResize(event) {
+      this.canvasWidth = +event.target.clientWidth.toFixed()
     },
     canvasWidthReset() {
       const browser = this.$refs.browser

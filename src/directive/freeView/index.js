@@ -19,15 +19,20 @@ export default function freeView(baseElement, options) {
   }
 
   const {
-    scale = true,
-    move = true,
     minRatio = 0.3,
     maxRatio = 2,
-    moveCallback = null,
-    scaleCallback = null,
     targetSelector = null,
-    moveIgnoreSelector = null,
+
+    scale = true,
+    scaleCallback = null,
     scaleIgnoreSelector = null,
+    scalableFunction = null,
+
+    move = true,
+    moveCallback = null,
+    moveIgnoreSelector = null,
+    movableFunction = null,
+
     startCallback = null,
     endCallback = null
   } = options
@@ -48,7 +53,9 @@ export default function freeView(baseElement, options) {
     scaleRatio: 1,
     targetSelector,
     moveIgnoreSelector,
-    scaleIgnoreSelector
+    scaleIgnoreSelector,
+    scalableFunction,
+    movableFunction
   }
 
   const self = cached[id]

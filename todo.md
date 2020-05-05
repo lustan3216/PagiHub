@@ -37,48 +37,34 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>node tree, project 編輯時不要關起來 / 可以刪除新增 copy 之後馬上選 select最後一個元素</li>
 </ol>
 
-### Data Base
+### Functionality
 
 <ol>
 <li>每一段時間草稿要儲存到 server, 修改過後 3 秒後送出，要算出跟 server 版本的 diff 在送出，如果途中有出錯就直接送整個 tree 改掉</li>
 <li>component 要用 ulid ?</li>
 <li>debounce 送出更新區塊</li>
-</ol>
-
-### Functionality
-
-<ol>
 <li>考慮拖移的 grid item 可不可以直接 merge 進去 layout</li>
 <li>這裏應該要改成從 object node 裡面，且存在 object node style block 是不是跟 class block 功能合併</li>  
 <li>轉跳要做成局部轉跳/ 轉跳時componentSet時，要考慮tree，如果是一樣的話就只更新不一樣的地方，但如果是一樣的componentSet的話，照理來說vue自己已經幫我處理了，應該不會重新渲染吧？！</li>
 <li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed</li>  
 <li>google map</li>  
-<li>組建</li>
 <li>Grid layout 不用有control layer，style 可以append在自己身上，但heihgt width trnasform等等不能動</li>
 <li>grid layout 在拉的時候案control of shift可以所比例</li>
 <li>time line/ steps/ transfer / cascader / map </li>
-<li>form item 會卡到lazyload 要處理 </li>
+<li>form item 會卡到lazy load 要處理 </li>
 <li>form validator</li>
 <li>fixed container</li>
 <li>試試看能不能解決 drawer的layout</li>
 <li>grid item 要可以控制 xl lg 什麼時候可以hidden</li>
 <li>grid 的地方都換成 layer</li>
-<li>拖拉進去時，考慮要不要設定直接跳到他</li>
 <li>有假死狀態可以做 剪下貼上</li>
-<li>redo undo 設定也要變</li>
-<li>考慮可以把 node controller 拔掉， popover也是</li>
-<li>桌布可以用滾軸拉動</li>
 <li>鍵盤也可以控制 上下左右小孩 </li>
 <li>每一次的小更動 都動到整棵樹了，引響很多地方都要渲染</li>
 <li>開個children的 store，key專門存小孩，給component用，直接id當key，且新增刪除直接自己操作，試試看能不能直接把新增刪除修改放進 store</li>
-<li>左邊蘭可以做的跟 XD一樣</li>
 <li>畫布做成外誆9個點，靠近時會出現，只能拉納9點伸縮</li>
-<li>copy 調整成都是各自服字</li>
 <li>每個component需要設定可以吃的style</li>
 <li>style可以重複select component一次設定</li>
 <li>setting的switch 看能不能換成checkbox</li>
-<li>複製刪除，坐在全欲的地方</li>
-<li>nodes tree的 node controller 操席 XD</li>
 <li>setting style可考慮預設展開</li>
 <li>考慮自動加上transition不然沒人會用</li>
 <li>把grid layout的margin 要換到style上</li>
@@ -87,7 +73,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 ### Style
 
 <ol>
-<li>color 快捷設定, 思考顏色可不可以變成 component, 這樣就也可以分享</li>
+<li>color 快捷設定,思考顏色可不可以變成 component,這樣就也可以分享</li>
 <li>svg</li>
 <li>text-shadow</li>
 <li>font align</li>
@@ -104,43 +90,42 @@ https://codepen.io/taye/pen/wrrxKb
 ### Setting
 
 <ol>
-<li>這裏應該要改成從 object node 裡面，且存在 object node style block 是不是跟 class block 功能合併</li>
-<li>每個 button 都可以點了 連結到 componentSet / tooltip / link</li>
 <li>uploader image / svg / video, consider how to compress</li>
 <li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridGenerator 可以固定寬</li>
-<li>node 可以拖拉到 setting style panel 上就可編輯，也ㄉㄛ可以拖拉到 空的 GridItem 上, 拖到 grid layout 上就新增</li>
+<li>node 可以拖拉到 setting style panel 上就可編輯，也可以拖拉到 空的 GridItem 上, 拖到 grid layout 上就新增</li>
 <li>button 做成點了可以轉跳 componentSet 或是打開dialog or drawer or popover</li>
 <li>grid item and layout 在不同尺寸要可以控制隱藏</li>
 <li>input 可以控制 grid item顯示</li>
 <li>多選時，可撈出 重複的選項編輯</li>
-<li>video在他自己裡面控制grid tiem grid item的autohiehgt</li>
-<li>icon 可以上傳svg tag，下載也是直接下載tag，用dangour叉叉叉插入，要過濾script，這樣可以變色條診或是用interact做調整</li>
-/grid item 考慮要不要都autoHeight, 考慮寬變時，高也要自適應
-</ol>
-
-### Last
-
-<ol>
-<li>iframe 要可以自動 resize，且可內船 data or 外傳，而且是reactive的，可以互動</li>
-<li>每個project都有全局設定，字型包，顏色，自行試試看能不能用functal變成組建</li>
-<li>sidebarRight設定要被記住</li>
-<li>Sidebar可以分別被猜拆來</li>
-<li>scss code 的東西做成 variable 可以是輸入匡</li>
-<li>中英文字體</li>
-<li>style / color / vlaidtaion / anitmation 這些考慮是不是可以變成componentSet</li>
-<li>options看能不能都存成integer</li>
+<li>video在他自己裡面控制grid tiem grid item的 autohiehgt</li>
+<li>icon 可以上傳svg tag，下載也是直接下載tag，用dangurous叉叉叉插入，要過濾script，這樣可以變色條診或是用interact做調整</li>
+<li>grid item 考慮要不要都autoHeight, 考慮寬變時，高也要自適應</li>
 </ol>
 
 ### Bug
 
 <ol>
 <li>邊界拉動的時候，selection要disable</li>
-<li>多個ｃｏｐｙ的時候有問題，且多選複製時</li>
-<li>touchable and visbilty 有ｂｕｇ</li>
+<li>多個copy的時候有問題，且多選複製時</li>
+<li>touchable and visbilty 有bug</li>
 <li>texteditor 選取壞掉 todolist也不見</li>
 <li>visiblity lock 的時候不要被選到</li>
 <li>放大縮小時，要用滑鼠為準放大，縮放後，item拉動也壞的</li>
-<li>viewport controller</li>
+</ol>
+
+### Last
+
+<ol>
+<li>每個 button 都可以點了 連結到 componentSet / tooltip / link</li>
+<li>這裏應該要改成從 object node 裡面，且存在 object node style block 是不是跟 class block 功能合併</li>
+<li>iframe 要可以自動 resize，且可內船 data or 外傳，而且是reactive的，可以互動</li>
+<li>每個project都有全局設定，字型包，顏色，自行試試看能不能用functal變成組建</li>
+<li>sidebarRight設定要被記住</li>
+<li>Sidebar可以分別被猜拆來</li>
+<li>scss code 的東西做成 variable 可以是輸入匡</li>
+<li>中英文字體</li>
+<li>style / color / validation / animation 這些考慮是不是可以變成componentSet</li>
+<li>options看能不能都存成integer</li>
 </ol>
 
 component 組建

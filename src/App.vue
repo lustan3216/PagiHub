@@ -1,12 +1,5 @@
 <template>
-  <div
-    v-free-view="{
-      scale: false,
-      targetSelector: '.main',
-      moveIgnoreSelector: '.panel-draft, form'
-    }"
-    class="app"
-  >
+  <div class="app">
     <nav-bar />
 
     <main class="z-index1 relative main">
@@ -22,7 +15,6 @@
 import NavBar from './components/Layout/NavBar'
 import PanelProduction from './components/Layout/PanelProduction'
 import PanelDraft from './components/Layout/PanelDraft'
-import { directive } from '@/directive/freeView'
 
 export default {
   name: 'App',
@@ -31,9 +23,6 @@ export default {
     SidebarRight: () => import('./components/Layout/SidebarRight'),
     PanelProduction,
     PanelDraft
-  },
-  directives: {
-    FreeView: directive
   }
 }
 </script>

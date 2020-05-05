@@ -25,13 +25,14 @@
         <el-collapse-item
           title="Style"
           name="1"
-        />
+        >
+          <panel-styles
+            v-if="theOnlySelectedComponentId"
+            :id="theOnlySelectedComponentId"
+            class="panel"
+          />
+        </el-collapse-item>
       </el-collapse>
-      <panel-styles
-        v-if="theOnlySelectedComponentId"
-        :id="theOnlySelectedComponentId"
-        class="panel"
-      />
     </div>
 
     <i

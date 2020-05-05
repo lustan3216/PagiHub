@@ -286,6 +286,6 @@ module.exports = {
   'extends': [
     'plugin:vue/recommended',
     'eslint:recommended',
-    'plugin:cypress/recommended',
+    'plugin:cypress/recommended'
   ]
 }

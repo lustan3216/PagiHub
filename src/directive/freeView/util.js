@@ -5,8 +5,11 @@ export function isFirefox() {
   )
 }
 
-export function movable({ move, moveIgnoreSelector }, { target, ctrlKey }) {
-  if (!ctrlKey && move) {
+export function movable({ movableFunction, move, moveIgnoreSelector }, event) {
+  const { target, ctrlKey } = event
+  const allowed = movableFunction ? movableFunction(event) : true
+
+  if (!ctrlKey && move && allowed) {
     if (moveIgnoreSelector) {
       const els = document.querySelectorAll(moveIgnoreSelector)
 
@@ -21,8 +24,11 @@ export function movable({ move, moveIgnoreSelector }, { target, ctrlKey }) {
   }
 }
 
-export function scalable({ scale, scaleIgnoreSelector }, { target, ctrlKey }) {
-  if (ctrlKey && scale) {
+export function scalable({ scalableFunction, scale, scaleIgnoreSelector }, event) {
+  const { target, ctrlKey } = event
+  const allowed = scalableFunction ? scalableFunction(event) : true
+
+  if (ctrlKey && scale && allowed) {
     if (scaleIgnoreSelector) {
       const els = document.querySelectorAll(scaleIgnoreSelector)
       if (els.length) {

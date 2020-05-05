@@ -79,15 +79,10 @@
         :key="child.id"
         :class="`carousel-item-${id}`"
       >
-        <controller-layer
-          :style="child.styles"
+        <layers
           :id="child.id"
-        >
-          <grid-generator
-            :id="child.id"
-            class="h-100"
-          />
-        </controller-layer>
+          class="h-100"
+        />
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -99,7 +94,6 @@ import { mapGetters } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import childrenMixin from '@/components/Templates/mixins/children'
 import nodeMixin from '@/components/Templates/mixins/node'
-import gridGenerator from './GridGenerator'
 import Layers from './Layers'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
@@ -110,7 +104,6 @@ export default {
   defaultSetting,
   name: 'Carousel',
   components: {
-    gridGenerator,
     ControllerLayer,
     Layers,
     ElCarouselItem: CarouselItem,
@@ -180,14 +173,6 @@ export default {
     },
     isEnd() {
       return this.innerChildren.length - 2 === this.carousel.activeIndex
-    },
-    parentEl() {
-      return (
-        this.$parent &&
-        this.$parent.$el &&
-        this.$parent.$el.setAttribute &&
-        this.$parent.$el
-      )
     },
     carousel() {
       return this.$refs[this.id]

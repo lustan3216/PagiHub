@@ -1,5 +1,9 @@
 <template>
-  <span class="justify-between align-center">
+  <span
+    class="justify-between align-center"
+    @mouseenter="mouseIn = true"
+    @mouseleave="mouseIn = false"
+  >
     <node-info
       :id="id"
       class="m-r-10"
@@ -7,20 +11,20 @@
 
     <span>
       <portal-target
-        v-if="!exclude.includes('portal')"
+        v-if="!exclude.includes('portal') && mouseIn"
         :name="`NodeController${id}`"
         slim
       />
 
       <el-button
-        v-if="node.canNewItem"
+        v-if="node.canNewItem && mouseIn"
         type="text"
         icon="el-icon-plus"
         @click.stop="() => vmCreateItem(node)"
       />
 
       <el-tooltip
-        v-if="copyComponentIds.length && selected"
+        v-if="copyComponentIds.length && selected && mouseIn"
         effect="light"
         content="Paste Component"
         placement="bottom"
@@ -34,25 +38,31 @@
       </el-tooltip>
 
       <example-add
-        v-if="isGridItem && hasNotChild"
+        v-if="isGridItem && hasNotChild && mouseIn"
         :id="id"
         style="width: 14px;"
         @onAdd="vmAddNodesToParentAndRecord(id, $event)"
       />
 
-      <visibility :id="id" />
+      <visibility
+        :visible="mouseIn"
+        :id="id"
+      />
 
-      <touchable :id="id" />
+      <touchable
+        :visible="mouseIn"
+        :id="id"
+      />
 
       <el-button
-        v-if="!exclude.includes('paste') && canPaste"
+        v-if="!exclude.includes('paste') && canPaste && mouseIn"
         type="text"
         icon="el-icon-copy-document"
         @click.stop="() => vmCopyNode(node)"
       />
 
       <el-button
-        v-if="!exclude.includes('delete') && canDelete"
+        v-if="!exclude.includes('delete') && canDelete && mouseIn"
         type="text"
         icon="el-icon-delete"
         @click.stop="() => vmRemoveNode(node)"
@@ -94,6 +104,11 @@ export default {
     exclude: {
       type: Array,
       default: () => []
+    }
+  },
+  data() {
+    return {
+      mouseIn: false
     }
   },
   computed: {

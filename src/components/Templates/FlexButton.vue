@@ -1,8 +1,8 @@
 <template>
   <el-button
+    v-style="!isExample"
     v-if="isDraftMode"
     v-bind="innerProps"
-    v-style="!isExample"
     class="wh-100 m-0 button"
   >
     <editor-text-inner
@@ -36,9 +36,9 @@
   </el-button>
 
   <el-button
+    v-style="!isExample"
     v-else
     v-bind="innerProps"
-    v-style="!isExample"
     class="wh-100 m-0 button"
     @click="onClick"
     v-html="innerValue"

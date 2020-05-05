@@ -1,6 +1,7 @@
 <template>
   <el-button
-    :icon="visible ? 'el-icon-view' : 'el-icon-moon'"
+    v-if="visible || !innerVisible"
+    :icon="innerVisible ? 'el-icon-view' : 'el-icon-moon'"
     type="text"
     @click.stop="click"
   />
@@ -17,16 +18,15 @@ export default {
     id: {
       type: Number,
       required: true
+    },
+    visible: {
+      type: Boolean,
+      required: true
     }
   },
   computed: {
     element() {
       return this.selfVm.$el
-      // if (this.isGridItemParent) {
-      //   return this.parentVm.$el.parentNode
-      // } else {
-      //
-      // }
     },
     selfVm() {
       return this.vmMap[this.id]
@@ -40,12 +40,12 @@ export default {
     isGridItemParent() {
       return this.parentVm.$options._componentTag === GRID_ITEM_CHILD
     },
-    visible() {
+    innerVisible() {
       return observable.ids.indexOf(this.id) === -1
     }
   },
   watch: {
-    visible(visible) {
+    innerVisible(visible) {
       if (visible) {
         delete this.element.dataset.invisible
       } else {

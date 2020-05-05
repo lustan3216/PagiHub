@@ -156,7 +156,7 @@ export default {
   data() {
     return {
       state: 'default',
-      styles: {},
+      styles: {}
     }
   },
   computed: {

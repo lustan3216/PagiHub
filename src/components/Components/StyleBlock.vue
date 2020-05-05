@@ -2,7 +2,6 @@
 export default {
   name: 'StyleCreator',
   created() {
-
     debugger
   }
 }

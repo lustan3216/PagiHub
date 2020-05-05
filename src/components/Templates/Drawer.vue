@@ -22,7 +22,7 @@
     >
       <controller-layer
         :id="id"
-        v-style="!isExample"
+        :style="innerStyles.default"
         class="h-100"
       >
         <grid-generator-inner

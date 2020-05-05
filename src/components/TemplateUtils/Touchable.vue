@@ -1,6 +1,7 @@
 <template>
   <el-button
-    :icon="touchable ? 'el-icon-unlock' : 'el-icon-lock'"
+    v-if="visible || !innerTouchable"
+    :icon="innerTouchable ? 'el-icon-unlock' : 'el-icon-lock'"
     type="text"
     @click.stop="click"
   />
@@ -16,6 +17,10 @@ export default {
   props: {
     id: {
       type: Number,
+      required: true
+    },
+    visible: {
+      type: Boolean,
       required: true
     }
   },
@@ -39,12 +44,12 @@ export default {
     isGridItemParent() {
       return this.parentVm.$options._componentTag === GRID_ITEM_CHILD
     },
-    touchable() {
+    innerTouchable() {
       return observable.ids.indexOf(this.id) === -1
     }
   },
   watch: {
-    touchable(canTouch) {
+    innerTouchable(canTouch) {
       if (canTouch) {
         delete this.element.dataset.noAction
       } else {
