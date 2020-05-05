@@ -35,10 +35,11 @@ export default {
         selectables: ['.control-layer'],
         boundaries: ['.panel-draft']
       })
-        .on('start', ({ inst, oe }) => {
-          if (!oe.path[0].classList.contains('panel-draft')) {
-            inst.cancel()
-          }
+        .on('beforestart', ({ oe }) => {
+          return (
+            oe.path[0].classList.contains('panel-draft') ||
+            oe.path[1].classList.contains('panel-draft')
+          )
         })
         .on('move', ({ changed: { removed, added }}) => {
           for (const el of added) {
@@ -62,7 +63,8 @@ export default {
     ...mapMutations('app', ['SET']),
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
-      'TOGGLE_SELECTED_COMPONENT_IN_IDS'
+      'TOGGLE_SELECTED_COMPONENT_IN_IDS',
+      'CLEAN_SELECTED_COMPONENT_IDS'
     ]),
     isMac
   }

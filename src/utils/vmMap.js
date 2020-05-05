@@ -29,7 +29,7 @@ export function getComputedStyle(id) {
     const field = _vm.api.fields()[0]
     el = _vm.api.el(field).$el
   } else {
-    el = $element(id)
+    el = document.querySelector(`[data-style-id="${id}"]`)
   }
 
   return window.getComputedStyle(el)
@@ -75,7 +75,7 @@ export function vmAddNodesToParentAndRecord(id, nodes) {
   vm(id)._addNodesToParentAndRecord(nodes)
 }
 
-export function vmPasteCopyComponents(id) {
+export function vmPasteCopyComponents({ id }) {
   const nodesMap = store.state.draft.nodesMap
   const copyIds = store.state.app.copyComponentIds
   const onlyOneCopyId = copyIds.length === 1 && copyIds[0]
@@ -86,10 +86,11 @@ export function vmPasteCopyComponents(id) {
   } else if (nodesMap[id].tag === GRID_ITEM) {
     if (onlyOneCopyNode && onlyOneCopyNode[TAG] !== GRID_ITEM) {
       vm(id)._addNodesToParentAndRecord(onlyOneCopyNode)
-    } else if (copyIds.length > 1) {
-      const tree = findFirstCommonParentTree(copyIds)
-      vm(id)._addNodesToParentAndRecord(tree)
     }
+    // else if (copyIds.length > 1) {
+    //   const tree = findFirstCommonParentTree(copyIds)
+    //   vm(id)._addNodesToParentAndRecord(tree)
+    // }
   }
 }
 

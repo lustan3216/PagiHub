@@ -70,18 +70,3 @@ const self = {
 
 export default self
 </script>
-
-<style scoped lang="scss">
-::v-deep {
-  .el-form-item {
-    margin-bottom: 0px;
-  }
-  h4 {
-    margin: 5px 0;
-  }
-  .el-form-item__label {
-    color: #606266;
-    font-size: 12px;
-  }
-}
-</style>

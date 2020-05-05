@@ -134,7 +134,6 @@
       />
 
       <el-tooltip
-        v-if="copyComponentIds.length && selected"
         effect="light"
         content="Paste Component"
         placement="bottom"
@@ -144,16 +143,10 @@
           type="text"
           icon="el-icon-document-add"
           size="small"
-          @click="vmPasteCopyComponents(id)"
+          @click="multiPaste"
           @shortkey.native="multiPaste"
         />
       </el-tooltip>
-
-      <el-button
-        type="text"
-        icon="el-icon-copy-document"
-        @click.stop="() => vmCopyNode(node)"
-      />
 
       <el-button
         v-shortkey="{ del: ['del'], del: ['backspace'] }"
@@ -257,7 +250,7 @@ export default {
     vmAddNodesToParentAndRecord,
     multiPaste() {
       jsonHistory.current.recordsMerge(() => {
-        this.selectedNodes.forEach(node => this.vmPasteCopyComponents(node.id))
+        this.selectedNodes.forEach(node => this.vmCopyNode(node))
       })
     },
     multiDelete() {

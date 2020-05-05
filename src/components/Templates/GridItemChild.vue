@@ -5,6 +5,7 @@
   >
     <div
       v-style="!isExample"
+      ref="styledElement"
       class="h-100 border-box"
     >
       <async-component
@@ -16,7 +17,7 @@
       <node-controller
         v-else-if="isDraftMode"
         :id="currentNode.id"
-        :exclude="['copy', 'delete']"
+        :exclude="['paste', 'delete']"
         class="self-center"
       />
 

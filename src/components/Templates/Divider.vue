@@ -1,9 +1,10 @@
 <template>
-  <el-divider
-    v-bind="innerProps"
-    :style="innerStyles.default"
-    class="divider"
-  />
+  <div v-style="!isExample">
+    <el-divider
+      v-bind="innerProps"
+      class="divider"
+    />
+  </div>
 </template>
 
 <script>

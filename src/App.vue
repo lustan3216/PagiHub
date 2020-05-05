@@ -3,7 +3,7 @@
     v-free-view="{
       scale: false,
       targetSelector: '.main',
-      moveIgnoreSelector: '.panel-draft, .el-collapse'
+      moveIgnoreSelector: '.panel-draft, form'
     }"
     class="app"
   >

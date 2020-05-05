@@ -42,7 +42,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <ol>
 <li>每一段時間草稿要儲存到 server, 修改過後 3 秒後送出，要算出跟 server 版本的 diff 在送出，如果途中有出錯就直接送整個 tree 改掉</li>
 <li>component 要用 ulid ?</li>
-<li>debounce 送出更新區塊</li>  
+<li>debounce 送出更新區塊</li>
 </ol>
 
 ### Functionality

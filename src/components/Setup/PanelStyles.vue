@@ -92,7 +92,7 @@
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
 import { STYLE } from '@/const'
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
 import Dimension from './EditorStyle/Dimension'
@@ -155,11 +155,15 @@ export default {
   },
   data() {
     return {
-      state: 'default'
+      state: 'default',
+      styles: {},
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
+    ...mapGetters('app', [
+      'selectedComponentNode',
+      'theOnlySelectedComponentId'
+    ]),
     canRadius() {
       return !['grid-generator'].includes(this.nodeTag)
     },
@@ -185,20 +189,31 @@ export default {
       return this.state === 'default'
     },
     node() {
-      return this.nodesMap[this.id]
-    },
-    computedStyle() {
-      return getComputedStyle(this.id)
+      return this.selectedComponentNode
     },
     nodeTag() {
-      return this.nodesMap[this.id].tag
+      return this.node.tag
+    }
+  },
+  watch: {
+    theOnlySelectedComponentId() {
+      this.calcStyles()
     },
-    styles() {
+    state() {
+      this.calcStyles()
+    }
+  },
+  created() {
+    this.calcStyles()
+  },
+  methods: {
+    ...mapMutations('draft', ['RECORD']),
+    calcStyles() {
       const styles = {}
 
       if (this.isDefaultState) {
         computedAttrs.reduce((all, attr) => {
-          all[attr] = this.computedStyle[attr]
+          all[attr] = getComputedStyle(this.id)[attr]
           return all
         }, styles)
       }
@@ -213,12 +228,11 @@ export default {
       }, styles)
 
       styles.transformOrigin = this.parseOrigin(styles) || ''
-      return styles
-    }
-  },
-  methods: {
-    ...mapMutations('draft', ['RECORD']),
+
+      this.styles = styles
+    },
     assignStyles(object) {
+      Object.assign(this.styles, object)
       const records = []
 
       for (const key in object) {

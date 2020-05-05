@@ -25,14 +25,13 @@
         <el-collapse-item
           title="Style"
           name="1"
-        >
-          <panel-styles
-            v-if="theOnlySelectedComponentId"
-            :id="theOnlySelectedComponentId"
-            class="panel"
-          />
-        </el-collapse-item>
+        />
       </el-collapse>
+      <panel-styles
+        v-if="theOnlySelectedComponentId"
+        :id="theOnlySelectedComponentId"
+        class="panel"
+      />
     </div>
 
     <i
@@ -98,10 +97,22 @@ export default {
   .el-collapse-item__wrap {
     border-bottom: none;
   }
+  .el-form-item {
+    margin-bottom: 0;
+  }
+  h4 {
+    margin: 5px 0;
+  }
+  .el-form-item__label {
+    color: #606266;
+    font-size: 12px;
+    line-height: 18px;
+  }
 }
 
 .settings {
   @include calc-vh('height', '100vh - 70px');
   overflow: scroll;
 }
+
 </style>

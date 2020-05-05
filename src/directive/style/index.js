@@ -14,11 +14,11 @@ const directive = {
 
 function method(name) {
   return function(element, binding, vnode) {
+    const { id } = vnode.context
+
     if (!binding.value) {
       return
     }
-
-    const { id } = vnode.context
 
     // const {
     //   innerStyles: { show: showStyle, ...styles }

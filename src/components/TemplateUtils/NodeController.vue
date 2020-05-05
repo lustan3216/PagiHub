@@ -26,12 +26,10 @@
         placement="bottom"
       >
         <el-button
-          v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
           type="text"
           icon="el-icon-document-add"
           size="small"
           @click="vmPasteCopyComponents(id)"
-          @shortkey.native="multiPaste"
         />
       </el-tooltip>
 
@@ -47,7 +45,7 @@
       <touchable :id="id" />
 
       <el-button
-        v-if="!exclude.includes('copy') && canCopy"
+        v-if="!exclude.includes('paste') && canPaste"
         type="text"
         icon="el-icon-copy-document"
         @click.stop="() => vmCopyNode(node)"
@@ -58,12 +56,6 @@
         type="text"
         icon="el-icon-delete"
         @click.stop="() => vmRemoveNode(node)"
-      />
-
-      <i
-        v-shortkey="{ del: ['del'], del: ['backspace'] }"
-        v-if="selected && !exclude.includes('delete')"
-        @shortkey="multiDelete"
       />
     </span>
   </span>
@@ -113,7 +105,7 @@ export default {
     canDelete() {
       return this.node[CAN_NOT_DELETE] !== true
     },
-    canCopy() {
+    canPaste() {
       return this.node[CAN_NOT_COPY] !== true
     },
     isGridItem() {
@@ -131,7 +123,6 @@ export default {
   },
   methods: {
     ...mapMutations('draft', ['RECORD']),
-    ...mapMutations('app', ['TOGGLE_SELECTED_COMPONENT_IN_IDS']),
     isMac,
     vmCreateItem,
     vmCopyNode,
@@ -140,7 +131,7 @@ export default {
     vmAddNodesToParentAndRecord,
     multiPaste() {
       jsonHistory.current.recordsMerge(() => {
-        this.selectedNodes.forEach(node => this.vmPasteCopyComponents(node.id))
+        this.selectedNodes.forEach(node => this.vmPasteCopyComponents(node))
       })
     },
     multiDelete() {
