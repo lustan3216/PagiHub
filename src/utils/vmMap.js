@@ -50,11 +50,11 @@ export function vmCreateItem({ id }) {
   vm(id)._createEmptyItem()
 }
 
-export function vmCopyNode(node) {
+export function vmCopyNode(_id) {
   // other kind of templates
 
   // the convention is, if the parent is a node can new, then it must be
-  const { id, parentId } = node
+  const { id, parentId } = vm(_id).node
   const parentNode = vmMap[parentId].node
 
   if (parentNode.canNewItem) {

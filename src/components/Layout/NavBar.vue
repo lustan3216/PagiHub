@@ -250,7 +250,7 @@ export default {
     vmAddNodesToParentAndRecord,
     multiPaste() {
       jsonHistory.current.recordsMerge(() => {
-        this.selectedNodes.forEach(node => this.vmCopyNode(node))
+        this.copyComponentIds.forEach(id => this.vmCopyNode(id))
       })
     },
     multiDelete() {

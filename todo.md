@@ -88,7 +88,6 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 
 <ol>
 <li>color 快捷設定, 思考顏色可不可以變成 component, 這樣就也可以分享</li>
-<li>class / hover / click</li>  
 <li>svg</li>
 <li>text-shadow</li>
 <li>font align</li>
@@ -96,7 +95,7 @@ copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複�
 <li>每個template要定義可以編輯的style，只顯示那些，當多選時只用重疊的</li>
 <li>寬高要disable，逼他們用layout</li>
 <li>改謝color picker，把color format做進去，到時候還要做快捷進去</li>
-<li>background color 用gridant做， 等 color picker在做</li>
+<li>background color 用grediant做， 等 color picker在做</li>
 <li>支援對form-item修改</li>
 https://bhch.github.io/posts/2019/03/adding-rotation-handles-in-interact-js/
 https://codepen.io/taye/pen/wrrxKb
@@ -112,10 +111,9 @@ https://codepen.io/taye/pen/wrrxKb
 <li>node 可以拖拉到 setting style panel 上就可編輯，也ㄉㄛ可以拖拉到 空的 GridItem 上, 拖到 grid layout 上就新增</li>
 <li>button 做成點了可以轉跳 componentSet 或是打開dialog or drawer or popover</li>
 <li>grid item and layout 在不同尺寸要可以控制隱藏</li>
-<li>options看能不能都存成integer</li>
 <li>input 可以控制 grid item顯示</li>
 <li>多選時，可撈出 重複的選項編輯</li>
-<li>video在他自己裡面控制grid tiemㄉㄛ grid item的autohiehgt</li>
+<li>video在他自己裡面控制grid tiem grid item的autohiehgt</li>
 <li>icon 可以上傳svg tag，下載也是直接下載tag，用dangour叉叉叉插入，要過濾script，這樣可以變色條診或是用interact做調整</li>
 /grid item 考慮要不要都autoHeight, 考慮寬變時，高也要自適應
 </ol>
@@ -130,6 +128,7 @@ https://codepen.io/taye/pen/wrrxKb
 <li>scss code 的東西做成 variable 可以是輸入匡</li>
 <li>中英文字體</li>
 <li>style / color / vlaidtaion / anitmation 這些考慮是不是可以變成componentSet</li>
+<li>options看能不能都存成integer</li>
 </ol>
 
 ### Bug
@@ -144,7 +143,6 @@ https://codepen.io/taye/pen/wrrxKb
 <li>viewport controller</li>
 </ol>
 
-整合 style
 component 組建
 style 變 component 還有飲用ㄉㄛ
 先寫測試
