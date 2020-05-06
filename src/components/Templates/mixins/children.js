@@ -23,6 +23,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
     ...mapMutations('draft', ['RECORD']),
 
     _addNodesToParentAndRecord(nodes) {
@@ -42,6 +43,9 @@ export default {
       })
 
       this.RECORD(records)
+      this.$nextTick(() => {
+        this.SET_SELECTED_COMPONENT_ID(nodes.id)
+      })
     },
 
     _createEmptyItem() {
@@ -71,6 +75,7 @@ export default {
 
     _remove(theNodeIdGonnaRemove) {
       // should use vmMap method to call to keep consistency
+      let selectedId = null
       const records = [
         {
           path: theNodeIdGonnaRemove,
@@ -90,6 +95,7 @@ export default {
         const { id, tag } = parentNodes[parentNodes.length - 1 - i]
 
         if (tag === GRID_ITEM) {
+          selectedId = id
           break
         }
 
@@ -99,15 +105,16 @@ export default {
             value: undefined
           })
         } else {
+          selectedId = this.childrenOf[id][0].id
           break
         }
       }
 
+      this.SET_SELECTED_COMPONENT_ID(selectedId)
       this.RECORD(records)
-
       // CLEAN_SELECTED_COMPONENT_IDS
-      const allDeletedIds = [this.id, ...records.map(x => x.path)]
-      this.CLEAN_SELECTED_COMPONENT_IDS(allDeletedIds)
+      // const allDeletedIds = [this.id, ...records.map(x => x.path)]
+      // this.CLEAN_SELECTED_COMPONENT_IDS(allDeletedIds)
     }
   }
 }

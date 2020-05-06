@@ -1,42 +1,3 @@
-component name 都才是最後要顯示的，因為會有例外最外層 tag 是 button 但名字是 drawer
-
-componentSet 旁邊可以 選版本號
-
-每個組件都是一串 JSON，且要分版本，引用時給類似 github 名字以及版本號
-該專案的 component 更新時，只會自動更新該專案內的 component
-
-其他專案的不會更新，除非手動選取更新，fork 的版本會等於複製時的版本，fork 版本更新會從當下版本號更新
-
-有更新版本就顯示 icon
-
-一個 project 裡面可以有很多 component
-一個 project 可以有很多 folder
-每個 component 有版本
-
-一個 project 下得 版本會自動更新
-
-跨 project 的話就不行
-
-component 刪除的話，其他 component 的飲用怎麼辦
-
-copy 出去的 component，在樹裡面要怎麼引用，需不需要把樹複製進去，改了的話怎麼跟原本的設定一樣
-樹照理來說也要跟著進去，只是拿設定的時候 先拿組建的再拿自已改的
-每個版本照理來說只是不同的設定
-
-組建只能編輯，不能再新增刪除組建，除非改頭 或在複製一個出去
-
-### Project
-
-<ol>
-<li>自動更新或不自動更新</li>  
-<li>要顯示該 component 引用了哪些 component</li>
-<li>是組建的要變成點兩下進入該 component 編輯</li>
-<li>要做個按鈕 可以選取組建後變成組建</li>  
-<li>組建一改 全部都要改，但有被修過的參數不用改</li>
-<li>nodes tree 裡面可以拖拉</li>
-<li>node tree, project 編輯時不要關起來 / 可以刪除新增 copy 之後馬上選 select最後一個元素</li>
-</ol>
-
 ### Functionality
 
 <ol>
@@ -126,12 +87,10 @@ https://codepen.io/taye/pen/wrrxKb
 <li>中英文字體</li>
 <li>style / color / validation / animation 這些考慮是不是可以變成componentSet</li>
 <li>options看能不能都存成integer</li>
+<li>dragula free style 放在原本的 node 裡面就可以了</li>
 </ol>
 
-component 組建
-style 變 component 還有飲用ㄉㄛ
-先寫測試
-動畫
+
 
 UX {
 盡量實現讓設計師看到多張圖
@@ -151,5 +110,4 @@ host in own domain,
 advance timeline animation
 animation 3D
 }
-dragula
-free style 放在原本的 node 裡面就可以了
+
