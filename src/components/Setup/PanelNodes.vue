@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapGetters('draft', ['tree']),
+    ...mapState('draft', ['tree']),
     innerTree() {
       const cloneTree = cloneJson(this.tree)
       traversal(cloneTree, (node, parentNode) => {

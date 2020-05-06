@@ -1,6 +1,6 @@
 <template>
   <div
-    v-style="!isExample"
+    v-free-style="innerStyles"
     class="relative h-100"
   >
     <grid-generator

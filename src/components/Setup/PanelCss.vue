@@ -67,7 +67,7 @@
 <script>
 import { Tree } from 'element-ui'
 import clone from 'clone'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import { traversal } from '@/utils/tool'
 import { GRID_ITEM } from '@/const'
 import Visibility from '../TemplateUtils/Visible'
@@ -87,7 +87,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('draft', ['tree']),
+    ...mapState('draft', ['tree']),
     ...mapGetters('app', ['theOnlySelectedComponentId']),
     gridItem() {
       return GRID_ITEM

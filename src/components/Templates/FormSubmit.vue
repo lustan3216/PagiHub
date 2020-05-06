@@ -1,8 +1,8 @@
 <template>
   <el-button
+    v-free-style="innerStyles"
     v-if="isDraftMode"
     v-bind="innerProps"
-    :style="innerStyles.default"
     class="wh-100 m-0 button"
   >
     <editor-text-inner
@@ -27,9 +27,9 @@
   </el-button>
 
   <el-button
+    v-free-style="innerStyles"
     v-else
     v-bind="innerProps"
-    :style="innerStyles.default"
     class="wh-100 m-0 button"
     @click="submit"
     v-html="innerValue"

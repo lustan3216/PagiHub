@@ -34,7 +34,7 @@ export const defaultSetting = {
   preventCollision: false,
   verticalCompact: false,
   responsive: true,
-  rowHeight: 3,
+  rowHeight: 5,
   horizontalMargin: 0,
   verticalMargin: 0,
   colNum: 48,

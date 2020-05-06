@@ -1,4 +1,4 @@
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import { CHILDREN, GRID_ITEM } from '@/const'
 import { cloneJson, traversal, arrayLast } from '@/utils/tool'
 import { traversalChildrenOf } from '@/utils/node'
@@ -6,17 +6,18 @@ import { componentIds } from '@/utils/keyId'
 
 export default {
   computed: {
-    ...mapGetters('draft', ['childrenOf', 'parentPath']),
+    ...mapState('draft', ['childrenOf']),
+    ...mapGetters('draft', ['parentPath']),
     ...mapGetters('example', ['examplesMapByTag']),
     node() {
       return this.draftNodesMap[this.id]
     },
     innerChildren() {
-      const getterName = `${this.isExample ? 'example' : 'draft'}/childrenOf`
+      const storeName = `${this.isExample ? 'example' : 'draft'}`
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
       // children 因為每次更新 draftNodesMap，如果innerChildren用computed會所有的component都被更新
-      const children = this.$store.getters[getterName][this.id] || []
+      const children = this.$store.state[storeName].childrenOf[this.id] || []
       return children.map(({ [CHILDREN]: _, moved, parentId, ...node }) => ({
         ...node
       }))

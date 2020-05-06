@@ -1,5 +1,5 @@
 <template>
-  <div v-style="!isExample">
+  <div v-free-style="innerStyles">
     <el-divider
       v-bind="innerProps"
       class="divider"

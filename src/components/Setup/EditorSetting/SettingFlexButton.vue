@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { select, assignDefaultValue } from './utils/ruleTool'
 import { TYPE as NODE_TYPE } from '@/const'
@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     ...mapState('project', ['projectMap']),
-    ...mapGetters('draft', ['childrenOf']),
+    ...mapState('draft', ['childrenOf']),
     linkableComponentSet() {
       return Object.values(this.projectMap).filter(
         node => node.type === NODE_TYPE.COMPONENT_SET

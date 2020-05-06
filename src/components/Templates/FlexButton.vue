@@ -1,6 +1,6 @@
 <template>
   <el-button
-    v-style="!isExample"
+    v-free-style="innerStyles"
     v-if="isDraftMode"
     v-bind="innerProps"
     class="wh-100 m-0 button"
@@ -36,7 +36,7 @@
   </el-button>
 
   <el-button
-    v-style="!isExample"
+    v-free-style="innerStyles"
     v-else
     v-bind="innerProps"
     class="wh-100 m-0 button"

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { assignDefaultValue, boolean, select, number } from './utils/ruleTool'
 import { SOFT_DELETE, LAYERS } from '@/const'
@@ -102,7 +102,7 @@ export default {
     arrow() {
       return this.currentProps.arrow
     },
-    ...mapGetters('draft', ['childrenOf'])
+    ...mapState('draft', ['childrenOf'])
   },
   watch: {
     isHorizontal(value) {

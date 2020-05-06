@@ -1,6 +1,6 @@
 <template>
   <div
-    v-style="!isExample"
+    v-free-style="innerStyles"
     v-observe-visibility="options"
     class="h-100"
   >
@@ -65,8 +65,8 @@
     </template>
 
     <el-carousel
+      v-free-style="innerStyles"
       :ref="id"
-      :style="innerStyles.default"
       v-bind="innerProps"
       :indicator-position="hasIndicator"
       :class="{ indicatorTop, indicatorLeft }"
@@ -90,7 +90,7 @@
 
 <script>
 import interactjs from 'interactjs'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import childrenMixin from '@/components/Templates/mixins/children'
 import nodeMixin from '@/components/Templates/mixins/node'
@@ -126,7 +126,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('draft', ['childrenOf']),
+    ...mapState('draft', ['childrenOf']),
     gridGenerators() {
       return this.innerChildren.filter(x => x.tag === GRID_GENERATOR)
     },

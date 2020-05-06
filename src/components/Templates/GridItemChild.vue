@@ -4,7 +4,7 @@
     :id="currentNode.id"
   >
     <div
-      v-style="!isExample"
+      v-free-style="innerStyles"
       ref="styledElement"
       class="h-100 border-box"
     >
@@ -18,7 +18,7 @@
         v-else-if="isDraftMode"
         :id="currentNode.id"
         :exclude="['paste', 'delete']"
-        class="self-center"
+        class="flex-center wh-100"
       />
 
       <portal-target

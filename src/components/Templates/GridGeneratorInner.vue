@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { AUTO_HEIGHT, PROPS } from '@/const'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -64,8 +64,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
-    ...mapGetters('draft', ['childrenOf']),
+    ...mapState('draft', ['nodesMap', 'childrenOf']),
     freeStyle() {
       return `
        ::v-deep .vue-resizable-handle {

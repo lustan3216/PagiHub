@@ -3,7 +3,6 @@ import Vuex from 'vuex'
 import localforage from 'localforage'
 import draft from './modules/node/draft'
 import app from './modules/app'
-import css from './modules/css'
 import mode from './modules/mode'
 import example from './modules/node/example'
 import project from './modules/project'
@@ -25,7 +24,6 @@ const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   modules: {
     app,
-    css,
     mode,
     draft,
     example,

@@ -1,6 +1,6 @@
 <template>
   <el-image
-    v-style="!isExample"
+    v-free-style="innerStyles"
     v-bind="innerProps"
     class="wh-100"
   >

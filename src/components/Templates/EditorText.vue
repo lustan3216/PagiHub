@@ -1,6 +1,6 @@
 <template>
   <editor-text-inner
-    v-style="!isExample"
+    v-free-style="innerStyles"
     :id="id"
     :value="innerValue"
   />

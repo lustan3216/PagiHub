@@ -1,8 +1,9 @@
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { deepmerge, cloneJson } from '@/utils/tool'
 import { STYLE, PROPS, VALUE, GRID_GENERATOR } from '@/const'
 import style from '@/directive/style'
+import { directive } from '@/directive/freeStyle'
 
 let hoverNode = []
 
@@ -17,22 +18,36 @@ export default {
     isExample: { default: false }
   },
   directives: {
-    style
+    style,
+    freeStyle: directive
+  },
+  data() {
+    return {
+      innerStyles: {},
+      innerProps: {}
+    }
   },
   computed: {
+    ...mapState('draft', ['nodesMap']),
     node() {
-      return this.draftNodesMap[this.id]
+      return this.nodesMap[this.id]
     },
     innerValue() {
       return this.node && this.node[VALUE]
-    },
-    innerStyles() {
-      return (this.node && this.node[STYLE]) || {}
-    },
-    innerProps() {
-      const setting = cloneJson(this.$options.defaultSetting || {})
-      return deepmerge(setting, (this.node && this.node[PROPS]) || {})
     }
+  },
+  created() {
+    this.$watch(`nodesMap.${this.id}.${STYLE}`, value => {
+      this.innerStyles = {
+        id: this.id,
+        ...value
+      }
+    }, { deep: true, immediate: true })
+
+    this.$watch(`nodesMap.${this.id}.${PROPS}`, value => {
+      const setting = cloneJson(this.$options.defaultSetting || {})
+      this.innerProps = deepmerge(setting, value || {})
+    }, { deep: true, immediate: true })
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount

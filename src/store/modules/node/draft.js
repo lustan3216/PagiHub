@@ -1,13 +1,15 @@
 import localforage from 'localforage'
 import jsonHistory from '../../jsonHistory'
-import listToTree from '@/utils/listToTree'
 import { SET } from '../../index'
 import { componentIds } from '@/utils/keyId'
 import { nestedToLinerObject, objectHasAnyKey } from '@/utils/tool'
 import { layers } from '../../../templateJson/basic'
+import { ID, PARENT_ID, CHILDREN } from '@/const'
 
 const state = {
   nodesMap: {},
+  childrenOf: {},
+  tree: [],
   selectedComponentSetId: null
 }
 
@@ -15,6 +17,32 @@ const mutations = {
   SET,
   INIT_NODES_MAP(state, payLoad) {
     state.nodesMap = payLoad
+  },
+  TO_TREE(state) {
+    const data = Object.values(state.nodesMap)
+    const tree = []
+    const childrenOf = {}
+    let item
+    let id
+    let parentId
+
+    for (let i = 0, length = data.length; i < length; i++) {
+      item = data[i]
+      id = item[ID]
+      parentId = item[PARENT_ID] || 0
+      childrenOf[id] = childrenOf[id] || []
+      item[CHILDREN] = childrenOf[id]
+
+      if (parentId !== 0) {
+        childrenOf[parentId] = childrenOf[parentId] || []
+        childrenOf[parentId].push(item)
+      } else {
+        tree.push(item)
+      }
+    }
+
+    state.childrenOf = childrenOf
+    state.tree = tree
   },
   RECORD(state, payLoad) {
     jsonHistory.current.record(payLoad)
@@ -60,23 +88,14 @@ const actions = {
     }
 
     commit('INIT_NODES_MAP', nodesMap)
+    commit('TO_TREE')
+
     jsonHistory.current.tree = nodesMap
   }
 }
 
 const getters = {
-  rootNode: (state, getters) =>
-    getters.tree[0] && state.nodesMap[getters.tree[0].id],
-
-  listToTree: ({ nodesMap }) => {
-    return listToTree(Object.values(nodesMap))
-  },
-
-  childrenOf: (state, getters) => {
-    return getters.listToTree.childrenOf
-  },
-
-  tree: (state, getters) => getters.listToTree.tree,
+  rootNode: state => state.tree[0] && state.nodesMap[state.tree[0].id],
 
   parentPath: state => _id => {
     const map = state.nodesMap

@@ -8,75 +8,82 @@
       :id="id"
       class="m-r-10"
     />
-
-    <span>
-      <portal-target
-        v-if="!exclude.includes('portal') && mouseIn"
-        :name="`NodeController${id}`"
-        slim
-      />
-
-      <el-button
-        v-if="node.canNewItem && mouseIn"
-        type="text"
-        icon="el-icon-plus"
-        @click.stop="() => vmCreateItem(node)"
-      />
-
-      <el-tooltip
-        v-if="copyComponentIds.length && selected && mouseIn"
-        effect="light"
-        content="Paste Component"
-        placement="bottom"
+    <transition-group name="fade" class="flex">
+      <span
+        v-if="mouseIn"
+        class="flex m-r-10"
+        :key="1"
       >
-        <el-button
-          type="text"
-          icon="el-icon-document-add"
-          size="small"
-          @click="vmPasteCopyComponents(id)"
+
+        <portal-target
+          v-if="!exclude.includes('portal')"
+          :name="`NodeController${id}`"
+          slim
         />
-      </el-tooltip>
 
-      <example-add
-        v-if="isGridItem && hasNotChild && mouseIn"
-        :id="id"
-        style="width: 14px;"
-        @onAdd="vmAddNodesToParentAndRecord(id, $event)"
-      />
+        <el-button
+          v-if="node.canNewItem"
+          type="text"
+          icon="el-icon-plus"
+          @click.stop="() => vmCreateItem(node)"
+        />
 
-      <visibility
-        :visible="mouseIn"
-        :id="id"
-      />
+        <el-tooltip
+          v-if="copyComponentIds.length && selected"
+          effect="light"
+          content="Paste Component"
+          placement="bottom"
+        >
+          <el-button
+            type="text"
+            icon="el-icon-document-add"
+            size="small"
+            @click="vmPasteCopyComponents(id)"
+          />
+        </el-tooltip>
 
-      <touchable
-        :visible="mouseIn"
-        :id="id"
-      />
+        <example-add
+          v-if="isGridItem && hasNotChild"
+          :id="id"
+          style="width: 14px;"
+          @onAdd="vmAddNodesToParentAndRecord(id, $event)"
+        />
 
-      <el-button
-        v-if="!exclude.includes('paste') && canPaste && mouseIn"
-        type="text"
-        icon="el-icon-copy-document"
-        @click.stop="() => vmCopyNode(node)"
-      />
+        <el-button
+          v-if="!exclude.includes('paste') && canPaste"
+          type="text"
+          icon="el-icon-copy-document"
+          @click.stop="() => vmCopyNode(node)"
+        />
+        <el-button
+          v-if="!exclude.includes('delete') && canDelete"
+          type="text"
+          icon="el-icon-delete"
+          @click.stop="() => vmRemoveNode(node)"
+        />
+      </span>
 
-      <el-button
-        v-if="!exclude.includes('delete') && canDelete && mouseIn"
-        type="text"
-        icon="el-icon-delete"
-        @click.stop="() => vmRemoveNode(node)"
-      />
-    </span>
+      <span :key="2">
+        <visible
+          :visible="mouseIn"
+          :id="id"
+        />
+
+        <touchable
+          :visible="mouseIn"
+          :id="id"
+        />
+      </span>
+    </transition-group>
   </span>
 </template>
 
 <script>
-import { mapMutations, mapState, mapGetters } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import Touchable from './Touchable'
 import jsonHistory from '../../store/jsonHistory'
 import ExampleAdd from './ExampleAdd'
-import Visibility from './Visible'
+import Visible from './Visible'
 import NodeInfo from './NodeInfo'
 import { CAN_NOT_COPY, CAN_NOT_DELETE, GRID_ITEM } from '@/const'
 import { isMac } from '@/utils/device'
@@ -91,7 +98,7 @@ import {
 export default {
   name: 'NodeController',
   components: {
-    Visibility,
+    Visible,
     Touchable,
     ExampleAdd,
     NodeInfo
@@ -108,12 +115,14 @@ export default {
   },
   data() {
     return {
+      showVisible: false,
+      showTouchable: false,
       mouseIn: false
     }
   },
   computed: {
     ...mapState('app', ['selectedComponentIds', 'copyComponentIds']),
-    ...mapGetters('draft', ['childrenOf']),
+    ...mapState('draft', ['childrenOf']),
     node() {
       return this.draftNodesMap[this.id]
     },

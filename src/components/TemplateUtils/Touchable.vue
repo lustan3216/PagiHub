@@ -1,10 +1,12 @@
 <template>
-  <el-button
-    v-if="visible || !innerTouchable"
-    :icon="innerTouchable ? 'el-icon-unlock' : 'el-icon-lock'"
-    type="text"
-    @click.stop="click"
-  />
+  <transition name="fade">
+    <el-button
+      v-if="visible || !innerTouchable"
+      :icon="innerTouchable ? 'el-icon-unlock' : 'el-icon-lock'"
+      type="text"
+      @click.stop="click"
+    />
+  </transition>
 </template>
 
 <script>

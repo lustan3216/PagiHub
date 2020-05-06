@@ -92,12 +92,12 @@ export default {
       required: true
     },
     value: {
-      type: [String, Array],
+      validator: prop => typeof prop === 'string' || prop === null || isArray(prop),
       required: true
     }
   },
   data() {
-    const [first, second, third, fourth] = isArray(this.value)
+    const [first, second, third, fourth] = isArray(this.value || '')
       ? this.value
       : this.value.split(' ')
 
@@ -108,6 +108,7 @@ export default {
       fourth: fourth || second || first
     }
     const isUniq = this.isAllTheSame(four)
+
     return {
       all: first,
       four,

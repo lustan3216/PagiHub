@@ -1,10 +1,12 @@
 <template>
-  <el-button
-    v-if="visible || !innerVisible"
-    :icon="innerVisible ? 'el-icon-view' : 'el-icon-moon'"
-    type="text"
-    @click.stop="click"
-  />
+  <transition name="fade">
+    <el-button
+      v-show="visible || !innerVisible"
+      :icon="innerVisible ? 'el-icon-view' : 'el-icon-moon'"
+      type="text"
+      @click.stop="click"
+    />
+  </transition>
 </template>
 
 <script>
@@ -46,6 +48,7 @@ export default {
   },
   watch: {
     innerVisible(visible) {
+      console.log(this.id, this.visible, visible)
       if (visible) {
         delete this.element.dataset.invisible
       } else {

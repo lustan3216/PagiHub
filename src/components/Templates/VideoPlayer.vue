@@ -1,9 +1,8 @@
 <template>
   <vue-plyr
-    v-style="!isExample"
+    v-free-style="innerStyles"
     ref="plyr"
     :options="innerProps"
-    :style="innerStyles.default"
     class="h-100"
     @mouseleave="mouseleave"
   >

@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import { PARENT_ID, SOFT_DELETE } from '@/const'
 import { shortTagName } from '@/utils/node'
 
@@ -57,7 +57,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('draft', ['childrenOf']),
+    ...mapState('draft', ['childrenOf']),
     node() {
       return this.draftNodesMap[this.id]
     },

@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import { categories } from '../../templateJson'
 import { CATEGORY, ID, NAME } from '@/const'
@@ -83,7 +83,6 @@ export default {
   name: 'ExampleAdd',
   provide() {
     return {
-      rootForm: {},
       isExample: true
     }
   },

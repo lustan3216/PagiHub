@@ -232,11 +232,14 @@ export default {
       this.styles = styles
     },
     assignStyles(object) {
-      Object.assign(this.styles, object)
+      // Object.assign(this.styles, object)
       const records = []
 
       for (const key in object) {
         let value = object[key]
+
+        this.styles[key] = value || ''
+
         if (value === '' || value === undefined || value === null) {
           value = undefined
         }
