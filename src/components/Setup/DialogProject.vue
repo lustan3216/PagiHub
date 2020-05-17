@@ -39,7 +39,7 @@
 <script>
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import { mapActions, mapState } from 'vuex'
-import { TYPE } from '@/const'
+import { NODE_TYPE } from '@/const'
 
 export default {
   name: 'DialogProject',
@@ -48,7 +48,7 @@ export default {
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },
@@ -60,7 +60,7 @@ export default {
         autoUpdate: true,
         description: '',
         categories: [],
-        type: TYPE.PROJECT
+        type: NODE_TYPE.PROJECT
       },
       categories: [
         { id: 0, label: 'Button' },

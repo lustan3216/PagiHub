@@ -18,7 +18,7 @@ export default {
   name: 'Touchable',
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     },
     visible: {

@@ -32,7 +32,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('draft', ['RECORD'])
+    ...mapMutations('component', ['RECORD'])
   }
 }
 </script>

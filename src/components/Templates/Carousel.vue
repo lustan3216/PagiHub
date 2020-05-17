@@ -126,7 +126,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['childrenOf']),
+    ...mapState('component', ['childrenOf']),
     gridGenerators() {
       return this.innerChildren.filter(x => x.tag === GRID_GENERATOR)
     },

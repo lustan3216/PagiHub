@@ -28,6 +28,8 @@ const gridItems = function() {
 
 export const gridGenerator = function(options) {
   return {
+    w: 18,
+    h: 300,
     [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: gridItems(),
@@ -37,6 +39,8 @@ export const gridGenerator = function(options) {
 
 export const layers = function(options) {
   return {
+    w: 18,
+    h: 300,
     [TAG]: 'layers',
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: [gridGenerator()],
@@ -66,6 +70,8 @@ export const carousel = function() {
     ]
   })
   return {
+    w: 36,
+    h: 300,
     [TAG]: 'carousel',
     [CAN_NEW_ITEM]: false,
     [CAN_DRAG]: true,
@@ -87,6 +93,8 @@ export const carousel = function() {
 
 export const editorText = function() {
   return {
+    w: 18,
+    h: 300,
     [TAG]: 'editor-text',
     [CAN_EDIT]: true
   }
@@ -94,6 +102,8 @@ export const editorText = function() {
 
 export const flexButton = function() {
   return {
+    w: 9,
+    h: 30,
     [TAG]: 'flex-button',
     [CAN_EDIT]: true
   }
@@ -101,18 +111,24 @@ export const flexButton = function() {
 
 export const flexImage = function() {
   return {
+    w: 18,
+    h: 300,
     [TAG]: 'flex-image'
   }
 }
 
 export const divider = function() {
   return {
+    w: 18,
+    h: 30,
     [TAG]: 'divider'
   }
 }
 
 export const videoPlayer = function() {
   return {
+    w: 36,
+    h: 300,
     [TAG]: 'video-player',
     [CAN_DRAG]: true,
     [AUTO_HEIGHT]: true

@@ -9,7 +9,7 @@ export default function(name, rules, defaultSetting) {
     functional: true,
     props: {
       id: {
-        type: Number,
+        type: String,
         required: true
       }
     },
@@ -34,12 +34,12 @@ const submit = {
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
+    ...mapState('component', ['componentsMap']),
     submitButtons() {
       return this.findButtonIds('form-submit')
     },
@@ -54,7 +54,7 @@ const submit = {
   },
   methods: {
     findButtonIds(tagName) {
-      return Object.values(this.nodesMap).reduce((acc, x) => {
+      return Object.values(this.componentsMap).reduce((acc, x) => {
         if (x.tag === tagName) {
           acc.push(x.id)
         }

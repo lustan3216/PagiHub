@@ -9,8 +9,8 @@ export function findFirstCommonParentTree(ids) {
   //   [1,8,9]
   // ]
   let familyPaths = ids.map(id => [
-    ...store.getters['draft/parentPath'](id),
-    store.state.draft.nodesMap[id]
+    ...store.getters['component/parentPath'](id),
+    store.state.component.componentsMap[id]
   ])
 
   familyPaths = cloneJson(familyPaths)
@@ -61,7 +61,7 @@ export function shortTagName(node) {
 }
 
 export function traversalChildrenOf(nodeId, fn) {
-  store.getters['draft/childrenOf'][nodeId].forEach(child => {
+  store.getters['component/childrenOf'][nodeId].forEach(child => {
     fn(child)
     traversalChildrenOf(child.id, fn)
   })

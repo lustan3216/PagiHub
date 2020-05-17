@@ -16,24 +16,26 @@
       node-key="id"
       draggable
       check-strictly
+      @node-click="checkedChange"
       @node-drop="nodeParentChange"
     >
       <span
         slot-scope="{ data }"
-        class="justify-between align-center w-100"
+        :class="{ selected: selectedComponentSetIds.includes(data.id) }"
+        class="justify-between align-center w-100 node"
         @click="() => nodeClick(data)"
       >
         <span class="el-tree-node__label m-r-10">
           <i
-            v-if="TYPE.PROJECT === data.type"
+            v-if="NODE_TYPE.PROJECT === data.type"
             class="el-icon-files"
           />
           <i
-            v-if="TYPE.FOLDER === data.type"
+            v-if="NODE_TYPE.FOLDER === data.type"
             class="el-icon-folder-opened"
           />
           <i
-            v-if="TYPE.COMPONENT_SET === data.type"
+            v-if="NODE_TYPE.COMPONENT_SET === data.type"
             class="el-icon-lollipop"
           />
           {{ data.name }} {{ data.id }}
@@ -60,7 +62,7 @@
           <component
             :id="data.id"
             :parent-id="data.parentId"
-            :is="`dialog-${kebabCase(TYPE_STRING[data.type])}`"
+            :is="`dialog-${kebabCase(NODE_TYPE_STRING[data.type])}`"
             class="m-l-5"
           />
         </span>
@@ -71,13 +73,15 @@
 
 <script>
 import { Tree } from 'element-ui'
-import { mapActions, mapGetters } from 'vuex'
-import { TYPE, TYPE_STRING } from '@/const'
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
+import { NODE_TYPE, NODE_TYPE_STRING } from '@/const'
 import DialogProject from './DialogProject'
 import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
 import { kebabCase } from '@/utils/string'
+import { off, on } from 'element-ui/src/utils/dom'
+import { isMac } from '@/utils/device'
 
 export default {
   name: 'PanelProject',
@@ -91,23 +95,62 @@ export default {
   data() {
     return {
       filterText: '',
-      TYPE,
-      TYPE_STRING,
-      ...TYPE
+      NODE_TYPE,
+      NODE_TYPE_STRING,
+      ...NODE_TYPE,
+      pressCtrl: false
     }
   },
   computed: {
-    ...mapGetters('project', ['tree'])
+    ...mapGetters('project', ['tree']),
+    ...mapState('app', ['selectedComponentSetIds'])
   },
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val)
+    },
+    tree(a,b) {
+      // console.log(JSON.stringify(a), JSON.stringify(b))
     }
+  },
+  mounted() {
+    on(window, 'keydown', this.keydwon)
+    on(window, 'keyup', this.keyup)
+  },
+  beforeDestroy() {
+    off(window, 'keydown', this.keydwon)
+    off(window, 'keyup', this.keyup)
   },
   methods: {
     kebabCase,
     ...mapActions('project', ['modifyProjectNodeParent']),
-    ...mapActions('draft', ['setComponentSet']),
+    ...mapActions('component', ['setComponentSet']),
+    ...mapMutations('app', [
+      'TOGGLE_SELECTED_COMPONENT_SET_IN_IDS',
+      'TOGGLE_SELECTED_COMPONENT_SET_ID'
+    ]),
+    keydwon(e) {
+      if (isMac()) {
+        if (e.metaKey) {
+          this.pressCtrl = true
+        }
+      } else {
+        if (e.ctrlKey) {
+          this.pressCtrl = true
+        }
+      }
+    },
+    keyup(e) {
+      if (isMac()) {
+        if (e.metaKey) {
+          this.pressCtrl = false
+        }
+      } else {
+        if (e.ctrlKey) {
+          this.pressCtrl = false
+        }
+      }
+    },
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {
         this.modifyProjectNodeParent({
@@ -117,25 +160,46 @@ export default {
       }
     },
     nodeClick(node) {
-      if (TYPE.COMPONENT_SET === node.type) {
+      if (NODE_TYPE.COMPONENT_SET === node.type) {
         this.setComponentSet(node.id)
       }
     },
     allowDrop(_, { data: dropData }, action) {
       return (
         action === 'inner' &&
-        [TYPE.FOLDER, TYPE.PROJECT].includes(dropData.type)
+        [NODE_TYPE.FOLDER, NODE_TYPE.PROJECT].includes(dropData.type)
       )
     },
     filterTagBySearching(value, data) {
       value = value.toLowerCase().toString()
       return data.name.toLowerCase().indexOf(value) !== -1
+    },
+    checkedChange({ id, type }) {
+      if (NODE_TYPE.COMPONENT_SET !== type) return
+
+      if (this.pressCtrl) {
+        this.TOGGLE_SELECTED_COMPONENT_SET_IN_IDS(id)
+      } else {
+        this.selectedComponentSetIds.forEach(id => {
+          this.$refs.tree.setChecked(id, false)
+        })
+        this.TOGGLE_SELECTED_COMPONENT_SET_ID(id)
+      }
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+.selected {
+  background: aliceblue;
+  border-radius: 3px;
+}
+
+.node {
+  padding-left: 5px;
+}
+
 .tree {
   background: transparent;
   overflow: scroll;

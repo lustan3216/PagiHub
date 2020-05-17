@@ -19,6 +19,8 @@ export default {
     ObserveVisibility
   },
   components: {
+    ComponentSet: () => import('./ComponentSet'),
+
     FlexImage: () => import('../Templates/FlexImage'),
     FlexButton: () => import('../Templates/FlexButton'),
 
@@ -52,7 +54,7 @@ export default {
       required: true
     },
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },

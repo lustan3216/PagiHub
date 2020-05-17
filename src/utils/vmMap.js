@@ -76,14 +76,14 @@ export function vmAddNodesToParentAndRecord(id, nodes) {
 }
 
 export function vmPasteCopyComponents({ id }) {
-  const nodesMap = store.state.draft.nodesMap
+  const componentsMap = store.state.component.componentsMap
   const copyIds = store.state.app.copyComponentIds
   const onlyOneCopyId = copyIds.length === 1 && copyIds[0]
-  const onlyOneCopyNode = onlyOneCopyId ? nodesMap[onlyOneCopyId] : null
+  const onlyOneCopyNode = onlyOneCopyId ? componentsMap[onlyOneCopyId] : null
 
   if (onlyOneCopyId === id) {
     vmCopyNode(onlyOneCopyNode)
-  } else if (nodesMap[id].tag === GRID_ITEM) {
+  } else if (componentsMap[id].tag === GRID_ITEM) {
     if (onlyOneCopyNode && onlyOneCopyNode[TAG] !== GRID_ITEM) {
       vm(id)._addNodesToParentAndRecord(onlyOneCopyNode)
     }

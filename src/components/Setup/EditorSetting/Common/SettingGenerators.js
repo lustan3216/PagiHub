@@ -9,7 +9,7 @@ export default function(name, rules, defaultSetting) {
     functional: true,
     props: {
       id: {
-        type: Number,
+        type: String,
         required: true
       },
       children: {

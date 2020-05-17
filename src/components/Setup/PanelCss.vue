@@ -87,7 +87,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['tree']),
+    ...mapState('component', ['tree']),
     ...mapGetters('app', ['theOnlySelectedComponentId']),
     gridItem() {
       return GRID_ITEM
@@ -133,7 +133,7 @@ export default {
       if (data.tag === GRID_ITEM) {
         this.vmMap[data.parentId].new(data.id)
       } else {
-        const parentNode = this.draftNodesMap[data.parentId]
+        const parentNode = this.componentsMap[data.parentId]
         this.vmMap[parentNode.parentId].copy(data.parentId)
       }
     },

@@ -18,7 +18,7 @@ export default {
     Layers
   },
   computed: {
-    ...mapGetters('draft', ['rootNode'])
+    ...mapGetters('component', ['rootNode'])
   }
 }
 </script>

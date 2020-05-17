@@ -2,7 +2,7 @@
   <!-- fake-transform 是為了讓裡面的position: fixed 保持一致，不然一開始沒有的話，position: fixed會跑去body底下 -->
   <div
     :style="{ 'z-index': zIndex }"
-    class="fake-transform"
+    class="fake-transform relative"
   >
     <div
       v-if="resizeEdges.top"
@@ -27,6 +27,7 @@
 
 <script>
 import interactjs from 'interactjs'
+import { mapState } from 'vuex'
 
 export default {
   name: 'DialogInteracted',
@@ -60,13 +61,10 @@ export default {
       default() {
         return { left: true, right: true, bottom: true, top: true }
       }
-    },
-    scaleRatio: {
-      type: Number,
-      default: 1
     }
   },
   computed: {
+    ...mapState('app', ['scaleRatio']),
     interact() {
       return interactjs(this.$el)
     }
@@ -92,6 +90,7 @@ export default {
           listeners: {
             move: event => {
               const target = event.target
+
               if (edges.left && edges.right) {
                 target.style.width = event.rect.width / this.scaleRatio + 'px'
               }

@@ -13,7 +13,7 @@ export const directive = {
   }
 }
 
-export default function freeView(baseElement, options) {
+export default function freeView(baseElement, options = {}) {
   if (options === false) {
     return
   }

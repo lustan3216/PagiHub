@@ -1,9 +1,10 @@
 <template>
   <el-button
-    type="text"
+    :type="button ? '' : 'text'"
     icon="el-icon-circle-plus-outline"
     @click.stop="visible = true"
   >
+    <span v-if="button">{{ selectedName || 'Choose Component' }}</span>
     <el-dialog
       ref="dialog"
       :visible.sync="visible"
@@ -91,19 +92,20 @@ export default {
     ElCard: Card
   },
   props: {
-    id: {
-      type: Number,
-      required: true
+    button: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       visible: false,
+      selectedName: null,
       currentCategory: categories[0][NAME]
     }
   },
   computed: {
-    ...mapState('example', ['examples']),
+    ...mapState('example', ['basic']),
     categories() {
       return categories
     },
@@ -113,7 +115,7 @@ export default {
     components() {
       return (
         this.visible &&
-        this.examples.filter(x => x[CATEGORY].includes(this.currentCategoryId))
+        this.basic.filter(x => x[CATEGORY].includes(this.currentCategoryId))
       )
     }
   },
@@ -122,6 +124,7 @@ export default {
     addTemplate(template) {
       template = cloneJson(template)
       this.$emit('onAdd', template)
+      this.selectedName = template.tag
       this.visible = false
     }
   }

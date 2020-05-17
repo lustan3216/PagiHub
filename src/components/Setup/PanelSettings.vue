@@ -41,7 +41,7 @@ const self = {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapState('draft', ['nodesMap']),
+    ...mapState('component', ['componentsMap']),
     ...mapGetters('app', [
       'selectedComponentNode',
       'theOnlySelectedComponentId'
@@ -51,7 +51,7 @@ const self = {
       for (let i = 0; i < this.selectedComponentIds.length - 1; i++) {
         const id = this.selectedComponentIds[i]
         const nextId = this.selectedComponentIds[i + 1]
-        if (this.nodesMap[id].tag !== this.nodesMap[nextId].tag) {
+        if (this.componentsMap[id].tag !== this.componentsMap[nextId].tag) {
           same = false
           break
         }

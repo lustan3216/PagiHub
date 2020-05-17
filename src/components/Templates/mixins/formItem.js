@@ -84,7 +84,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('draft', ['RECORD']),
+    ...mapMutations('component', ['RECORD']),
     updateRecord(value) {
       if (this.isExample) return
       this.RECORD([{ path: `${this.id}.${VALUE}`, value }])

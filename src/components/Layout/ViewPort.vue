@@ -1,55 +1,48 @@
 <template>
-  <div v-free-view="{ scaleCallback, movableFunction }">
-    <view-port-cover
-      v-if="$refs.browser"
-      :target="$refs.browser.$el"
-      :class="{ interact: isDraftMode }"
-    />
+  <div
+    v-free-view="{ scaleCallback, targetSelector: '.viewer', moveIgnoreSelector: '.selected.art-board' }"
+    class="wh-100"
+    style="background-color:#f4f8fb;"
+    @click="SET_EDITING_COMPONENT_SET_ID($event.target.dataset.id)"
+  >
+    <div class="viewer">
+      <!--    <view-port-cover-->
+      <!--      v-if="$refs.browser"-->
+      <!--      :target="$refs.browser.$el"-->
+      <!--      :class="{ interact: isDraftMode }"-->
+      <!--    />-->
 
-    <dialog-interacted
-      ref="browser"
-      :scale-ratio="scaleRatio"
-      :class="{ interact: isDraftMode }"
-      :resize-options="{ ignoreFrom: '.vue-grid-item' }"
-      :drag-options="{ ignoreFrom: '.vue-grid-item' }"
-      :draggable="false"
-      @resize="dialogResize"
-      @resizeStart="appSET({ isAnimating: true })"
-      @resizeEnd="appSET({ isAnimating: false })"
-      @dragstart="appSET({ isAnimating: true })"
-      @dragEnd="appSET({ isAnimating: false })"
-    >
-      <slot />
-    </dialog-interacted>
+      <slot/>
 
-    <portal to="ViewPort">
-      <el-dropdown
-        split-button
-        size="small"
-        @click="canvasWidthRollback"
-        @command="canvasWidthChange"
-      >
-        <!--    need to reduce 4 pixel for border    -->
-        {{ isCustom ? `${canvasWidth - 4} px` : current }}
+      <portal to="ViewPort">
+        <el-dropdown
+          split-button
+          size="small"
+          @click="canvasWidthRollback"
+          @command="canvasWidthChange"
+        >
+          <!--    need to reduce 4 pixel for border    -->
+          {{ isCustom ? `${canvasWidth - 4} px` : current }}
 
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="option in options"
-            :key="option"
-            :command="option"
-          >
-            {{ option }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item
+              v-for="option in options"
+              :key="option"
+              :command="option"
+            >
+              {{ option }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
 
-      <el-button
-        size="small"
-        @click="scaleRollback"
-      >
-        {{ scalePercent }} %
-      </el-button>
-    </portal>
+        <el-button
+          size="small"
+          @click="scaleRollback"
+        >
+          {{ scalePercent }} %
+        </el-button>
+      </portal>
+    </div>
   </div>
 </template>
 
@@ -102,12 +95,13 @@ export default {
     }
   },
   mounted() {
-    this.canvasWidthReset()
+    // this.canvasWidthReset()
   },
   methods: {
     ...mapMutations('app', {
       appSET: 'SET'
     }),
+    ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
     scaleRollback() {
       this.$el.style.webkitTransform = this.$el.style.transform = null
       this.scaleRatio = 1
@@ -115,9 +109,6 @@ export default {
     },
     movableFunction(event) {
       return event.shiftKey
-    },
-    dialogResize(event) {
-      this.canvasWidth = +event.target.clientWidth.toFixed()
     },
     canvasWidthReset() {
       const browser = this.$refs.browser
@@ -144,16 +135,10 @@ export default {
   }
 }
 </script>
-
 <style scoped lang="scss">
-.interact {
-  box-shadow: 0 0 15px 0 rgba(32, 48, 60, 0.11);
-  box-sizing: border-box;
-  background: transparent;
-  top: 15px;
-  left: 15px;
-  width: calc(100vw - 390px);
-  @include calc-vh(height, '100vh - 30px');
-  position: absolute;
-}
+  .viewer {
+    padding: 40px 35px;
+    width: 4000px;
+  }
 </style>
+

@@ -1,4 +1,3 @@
-import { cloneJson } from './tool'
 import { ID, PARENT_ID, CHILDREN } from '../const'
 
 export default function listToTree(data) {
@@ -9,12 +8,7 @@ export default function listToTree(data) {
   let parentId
 
   for (let i = 0, length = data.length; i < length; i++) {
-    if (data[i].__ob__) {
-      item = cloneJson(data[i])
-    } else {
-      item = data[i]
-    }
-
+    item = data[i]
     id = item[ID]
     parentId = item[PARENT_ID] || 0
     // every item may have children

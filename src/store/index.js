@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import localforage from 'localforage'
-import draft from './modules/node/draft'
+import component from './modules/component'
 import app from './modules/app'
 import mode from './modules/mode'
-import example from './modules/node/example'
+import example from './modules/example'
 import project from './modules/project'
 import { isUndefined } from '../utils/tool'
 
@@ -25,41 +24,16 @@ const store = new Vuex.Store({
   modules: {
     app,
     mode,
-    draft,
+    component,
     example,
     project
   }
 })
 
 store.subscribe((mutation, state) => {
-  updateNodesMap(mutation, state)
-  updateProjectMap(mutation, state)
+  app.subscribe.onSelectedComponentSetIds(mutation, state)
+  component.subscribe.updateNodesMap(mutation, state)
+  project.subscribe.updateProjectMap(mutation, state)
 })
 
 export default store
-
-function updateProjectMap(mutation, state) {
-  if (
-    ['project/SET', 'project/APPEND_NODE', 'project/DELETE_NODE'].includes(
-      mutation.type
-    )
-  ) {
-    localforage.setItem('project', state.project.projectMap)
-  }
-}
-
-function updateNodesMap(mutation, state) {
-  if (
-    [
-      'draft/INIT_NODES_MAP',
-      'draft/RECORD',
-      'draft/REDO',
-      'draft/ UNDO'
-    ].includes(mutation.type)
-  ) {
-    localforage.setItem(
-      state.draft.selectedComponentSetId.toString(),
-      state.draft.nodesMap
-    )
-  }
-}

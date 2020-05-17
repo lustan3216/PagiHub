@@ -60,12 +60,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
+    ...mapState('component', ['componentsMap']),
     selection() {
       const yetSelectedNodes = []
       const beSelectedNodes = []
 
-      Object.values(this.nodesMap).forEach(node => {
+      Object.values(this.componentsMap).forEach(node => {
         const validInput =
           node.tag.includes('form') &&
           !node.tag.includes('submit')
@@ -116,7 +116,7 @@ export default {
       .catch(() => {})
   },
   methods: {
-    ...mapMutations('draft', ['RECORD']),
+    ...mapMutations('component', ['RECORD']),
     submit() {
       const data = []
       const invalidFields = []

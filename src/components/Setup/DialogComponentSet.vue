@@ -6,8 +6,8 @@
   >
     <dialog-confirmable
       :visible.sync="visible"
-      title="Component Set"
-      width="30%"
+      title="Component"
+      width="50%"
       @confirm="onSubmit"
       @close="initData"
     >
@@ -58,73 +58,89 @@
           <el-checkbox v-model="form.autoUpdate" />
         </el-form-item>
 
-        <div v-if="selectedComponentIds.length">
-          <p>
-            You have selected {{ selectedComponentIds.length }} components. Do
-            you want to create the component set by these components?
-          </p>
-          <span>Create by Selected</span>
+        <el-form-item label="By Selected">
           <el-checkbox
-            v-model="createBySelected"
+            :disabled="theOnlySelectedComponentId"
+            v-model="form.createBySelected"
             class="m-l-15"
           />
-        </div>
+        </el-form-item>
+
+        <el-form-item label="Component">
+          <el-input
+            v-model="form.exampleComponentId"
+            class="hidden"
+          />
+          <example-add
+            :disabled="form.createBySelected"
+            button
+            @onAdd="form.exampleComponentId = +$event.id"
+          />
+        </el-form-item>
+
       </el-form>
     </dialog-confirmable>
   </el-button>
 </template>
 
 <script>
-import { TYPE } from '@/const'
+import { NODE_TYPE } from '@/const'
 import { mapActions, mapState } from 'vuex'
-import { name, requiredSelect } from '@/validator'
+import { name, required, requiredSelect } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
+import ExampleAdd from '@/components/TemplateUtils/ExampleAdd'
 
 export default {
   name: 'DialogComponentSet',
   components: {
-    DialogConfirmable
+    DialogConfirmable,
+    ExampleAdd
   },
   props: {
     // eslint-disable-next-line
     id: {
-      type: Number
+      type: String
     },
     parentId: {
-      type: Number,
+      type: String,
       required: true
     }
   },
   data() {
     return {
       visible: false,
-      createBySelected: true,
       form: {
         name: '',
+        version: 1,
         autoUpdate: true,
         description: '',
         categories: [],
         parentId: this.parentId,
-        type: TYPE.COMPONENT_SET,
-        version: 1
+        type: NODE_TYPE.COMPONENT_SET,
+        exampleComponentId: null,
+        createBySelected: false
       },
       categories: [
         { id: 0, label: 'Button' },
         { id: 1, label: 'Form' },
         { id: 2, label: 'Layout' },
         { id: 3, label: 'Card' }
-      ],
-      rules: {
-        name,
-        category: [requiredSelect]
-      }
+      ]
     }
   },
   computed: {
     ...mapState('project', ['projectMap']),
-    ...mapState('app', ['selectedComponentIds']),
+    ...mapState('app', ['theOnlySelectedComponentId']),
     isExist() {
       return Boolean(this.id)
+    },
+    rules() {
+      const rule = {
+        name,
+        category: [requiredSelect]
+      }
+
+      return this.form.createBySelected ? rule : { ...rule, exampleComponentId: [required] }
     }
   },
   created() {

@@ -10,7 +10,7 @@ let hoverNode = []
 export default {
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },
@@ -28,23 +28,23 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap']),
+    ...mapState('component', ['componentsMap']),
     node() {
-      return this.nodesMap[this.id]
+      return this.componentsMap[this.id]
     },
     innerValue() {
       return this.node && this.node[VALUE]
     }
   },
   created() {
-    this.$watch(`nodesMap.${this.id}.${STYLE}`, value => {
+    this.$watch(`componentsMap.${this.id}.${STYLE}`, value => {
       this.innerStyles = {
         id: this.id,
         ...value
       }
     }, { deep: true, immediate: true })
 
-    this.$watch(`nodesMap.${this.id}.${PROPS}`, value => {
+    this.$watch(`componentsMap.${this.id}.${PROPS}`, value => {
       const setting = cloneJson(this.$options.defaultSetting || {})
       this.innerProps = deepmerge(setting, value || {})
     }, { deep: true, immediate: true })

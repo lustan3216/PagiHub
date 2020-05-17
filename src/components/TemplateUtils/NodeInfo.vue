@@ -48,7 +48,7 @@ export default {
   name: 'NodeInfo',
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     },
     showFamily: {
@@ -57,16 +57,16 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['childrenOf']),
+    ...mapState('component', ['childrenOf']),
     node() {
-      return this.draftNodesMap[this.id]
+      return this.componentsMap[this.id]
     },
     nodeShortName() {
       return this.shortTagName(this.node)
     },
     firstChildNode() {
       const child = this.childrenOf[this.id].find(node => !node[SOFT_DELETE])
-      return child && this.draftNodesMap[child.id]
+      return child && this.componentsMap[child.id]
     },
     firstChildNodeShortName() {
       return this.shortTagName(this.firstChildNode)
@@ -75,7 +75,7 @@ export default {
       return this.node[PARENT_ID]
     },
     parentNode() {
-      return this.draftNodesMap[this[PARENT_ID]]
+      return this.componentsMap[this[PARENT_ID]]
     },
     parentNodeShortName() {
       return this.shortTagName(this.parentNode)

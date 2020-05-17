@@ -60,7 +60,7 @@ export default {
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },
@@ -72,7 +72,7 @@ export default {
   computed: {
     ...mapState('app', ['isAnimating', 'selectedComponentIds']),
     node() {
-      return this.draftNodesMap[this.id]
+      return this.componentsMap[this.id]
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)
@@ -131,8 +131,7 @@ export default {
   transition: box-shadow 0.6s, border-color 0.6s;
 }
 .selected {
-  border-color: #589ff8ad !important;
-  box-shadow: 1px 3px 10px -5px rgba(38, 71, 110, 0.3) !important;
+  border-color: rgba(81, 117, 199, 0.68) !important;
 }
 ::v-deep.canNotEdit {
   pointer-events: none;
@@ -143,7 +142,6 @@ export default {
 }
 .dash-border {
   border: 1px dashed #dedede;
-  margin-left: -1px;
   margin-top: -1px;
 }
 </style>

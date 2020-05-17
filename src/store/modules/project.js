@@ -1,33 +1,18 @@
 import Vue from 'vue'
 import { SET } from '../index'
-import { TYPE } from '@/const'
+import { CHILDREN, NODE_TYPE } from '@/const'
 import listToTree from '@/utils/listToTree'
-import { cloneJson, nestedToLinerObject, objectHasAnyKey } from '@/utils/tool'
-import { projectIds } from '@/utils/keyId'
+import { cloneJson } from '@/utils/tool'
+import { getProject, createComponentSet, createFolder } from '@/api/project'
 import localforage from 'localforage'
 
-const _initTemplate = () => ({
-  type: TYPE.PROJECT,
-  name: 'Playground',
-  description: 'Playground',
-  children: [
-    {
-      type: TYPE.COMPONENT_SET,
-      version: 1,
-      name: 'Component',
-      autoUpdate: true,
-      description: 'Playground'
-    }
-  ]
-})
-
 const state = {
-  projectMap: []
+  projectMap: {}
 }
 
 const mutations = {
   SET,
-  APPEND_NODE(state, { id, node }) {
+  APPEND_NODE(state, { id, node: { children: _, ...node }}) {
     Vue.set(state.projectMap, id, node)
   },
   DELETE_NODE(state, id) {
@@ -37,36 +22,46 @@ const mutations = {
 
 const actions = {
   async getProjects({ commit, dispatch }) {
-    const projectMap = (await localforage.getItem('project')) || {}
-
-    if (objectHasAnyKey(projectMap)) {
-      projectIds.restoreIds(projectMap)
-    } else {
-      const initTemplate = _initTemplate()
-      initTemplate.parentId = 0
-      projectIds.appendIdNested(initTemplate)
-
-      nestedToLinerObject(projectMap, initTemplate)
-    }
-
-    commit('SET', { projectMap })
-
+    const projectMap = await getProject()
+    commit('SET', { projectMap: projectMap })
     const componentSetId = await localforage.getItem('editingComponentSetId')
-    dispatch('draft/setComponentSet', componentSetId, { root: true })
+    dispatch('component/setComponentSet', componentSetId, { root: true })
   },
 
-  async appendProjectNode({ commit }, _node) {
-    const node = { ..._node }
-    projectIds.appendIdNested(node)
+  async appendProjectNode(
+    { dispatch, commit, state, rootGetters },
+    { createBySelected, exampleComponentId, ...node }
+  ) {
+    switch (node.type) {
+      case NODE_TYPE.COMPONENT_SET:
+        const componentSet = await createComponentSet({
+          ...node,
+          [CHILDREN]: [
+            createBySelected
+              ? rootGetters['app/selectedComponentTree']
+              : rootGetters['example/basicMapById'][exampleComponentId]
+          ]
+        })
 
-    commit('APPEND_NODE', { id: node.id, node })
+        dispatch('component/setComponentSet', componentSet.id, { root: true })
+        commit('APPEND_NODE', { id: componentSet.id, node: componentSet })
+        break
+
+      case NODE_TYPE.FOLDER:
+        const folder = await createFolder(node)
+        commit('APPEND_NODE', { id: folder.id, node: folder })
+        break
+    }
   },
 
   modifyProjectNodeParent({ commit, state }, { parentId, id }) {
-    const node = cloneJson(state.projectMap[id])
-    node.parentId = parentId
-
-    commit('APPEND_NODE', { id, node })
+    commit('APPEND_NODE', {
+      id,
+      node: {
+        ...state.projectMap[id],
+        parentId
+      }
+    })
   },
 
   deleteProjectNode({ commit, getters, dispatch }, id) {
@@ -79,16 +74,15 @@ const actions = {
       })
     }
     grandChildrenRecords(id)
-    dispatch('draft/removeComponentSet', id, { root: true })
+    dispatch('component/removeComponentSet', id, { root: true })
     ids.forEach(id => commit('DELETE_NODE', id))
   }
 }
 
 const getters = {
   listToTree(state) {
-    const value = Object.values(state.projectMap).sort(
-      (a, b) => a.type - b.type
-    )
+    const nodes = Object.values(state.projectMap)
+    const value = nodes.sort((a, b) => a.type - b.type)
 
     return listToTree(cloneJson(value))
   },
@@ -100,10 +94,24 @@ const getters = {
   }
 }
 
+const subscribe = {
+  updateProjectMap(mutation, state) {
+    if (
+      ['project/SET', 'project/APPEND_NODE', 'project/DELETE_NODE'].includes(
+        mutation.type
+      )
+    ) {
+      localforage.setItem('project', state.project.projectMap)
+    }
+  }
+}
+
 export default {
   namespaced: true,
   state,
   mutations,
   actions,
-  getters
+  getters,
+  subscribe
 }
+

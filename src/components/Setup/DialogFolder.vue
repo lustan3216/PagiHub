@@ -39,7 +39,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
-import { TYPE } from '@/const'
+import { NODE_TYPE } from '@/const'
 
 export default {
   name: 'DialogFolder',
@@ -49,11 +49,11 @@ export default {
   props: {
     // eslint-disable-next-line
     id: {
-      type: Number
+      type: String
     },
     // eslint-disable-next-line
     parentId: {
-      type: Number
+      type: String
     }
   },
   data() {
@@ -65,7 +65,7 @@ export default {
         description: '',
         categories: [],
         parentId: this.parentId,
-        type: TYPE.FOLDER
+        type: NODE_TYPE.FOLDER
       },
       categories: [
         { id: 0, label: 'Button' },

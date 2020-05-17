@@ -29,16 +29,6 @@
     v-else-if="isDraftMode"
     class="flex"
   >
-    <panel-nodes
-      v-if="nodesVisible"
-      class="panel"
-    />
-
-    <panel-project
-      v-if="projectVisible"
-      class="panel"
-    />
-
     <div class="icons">
       <el-tooltip
         ref="1"
@@ -176,6 +166,16 @@
         icon="el-icon-upload"
       />
     </div>
+
+    <panel-nodes
+      v-if="nodesVisible"
+      class="panel"
+    />
+
+    <panel-project
+      v-if="projectVisible"
+      class="panel"
+    />
   </nav>
 </template>
 
@@ -219,13 +219,13 @@ export default {
       return this.selectedComponentIds.includes(this.id)
     },
     selectedNodes() {
-      return this.selectedComponentIds.map(id => this.draftNodesMap[id])
+      return this.selectedComponentIds.map(id => this.componentsMap[id])
     }
   },
   methods: {
     ...mapMutations('app', ['SET_COPY_SELECTED_COMPONENT_IDS']),
     ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_DRAFT_MODE']),
-    ...mapMutations('draft', ['REDO', 'UNDO']),
+    ...mapMutations('component', ['REDO', 'UNDO']),
     isMac,
     publish() {},
     copy() {
@@ -265,25 +265,17 @@ export default {
 <style scoped lang="scss">
 nav {
   text-align: center;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  position: fixed;
-  z-index: 1000;
   background-color: #fff;
-  opacity: 0.9;
+  z-index: 200;
   box-shadow: 0 0 15px 0 rgba(32, 48, 60, 0.11);
 }
+
 .el-button {
   font-size: 16px;
   padding: 7px;
-  margin: 10px 0 0;
+  margin: 10px 5px 0;
 }
-.preview {
-  position: fixed;
-  left: 35%;
-  z-index: 10;
-}
+
 .icons {
   display: flex;
   align-items: center;

@@ -49,7 +49,7 @@ export default {
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     },
     innerProps: {
@@ -64,7 +64,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('draft', ['nodesMap', 'childrenOf']),
+    ...mapState('component', ['componentsMap', 'childrenOf']),
     freeStyle() {
       return `
        ::v-deep .vue-resizable-handle {

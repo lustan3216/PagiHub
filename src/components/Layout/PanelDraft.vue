@@ -1,29 +1,77 @@
 <template>
   <view-port>
-    <layers
-      v-if="rootNode"
-      ref="panelDraft"
-      :id="rootNode.id"
-      class="panel-draft"
-    />
+    <vue-grid-generator
+      ref="gridGenerator"
+      :layout="layout"
+      :margin="[0, 0]"
+      :vertical-compact="false"
+      :col-num="288"
+      :row-height="1"
+    >
+      <vue-grid-item
+        v-for="child in layout"
+        :data-id="child.id"
+        :key="child.id"
+        :i="child.i"
+        :x="child.x"
+        :y="child.y"
+        :w="child.w"
+        :h="child.h"
+        :is-draggable="editingComponentSetId !== child.id"
+        class="item"
+      >
+        <art-board :id="child.id" />
+      </vue-grid-item>
+    </vue-grid-generator>
   </view-port>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import ViewPort from './ViewPort'
-import Layers from '../Templates/Layers'
+import ComponentSet from '../TemplateUtils/ComponentSet'
 import { isMac } from '@/utils/device'
 import Selection from '@simonwep/selection-js'
+import ArtBoard from './ArtBoard'
+import VueGridLayout from 'vue-grid-layout'
 
 export default {
   name: 'PanelDraft',
   components: {
+    ArtBoard,
     ViewPort,
-    Layers
+    ComponentSet,
+    VueGridGenerator: VueGridLayout.GridLayout,
+    VueGridItem: VueGridLayout.GridItem
+  },
+  data() {
+    return {
+      layout: []
+    }
   },
   computed: {
-    ...mapGetters('draft', ['rootNode'])
+    ...mapState('component', ['tree', 'editingComponentSetId'])
+  },
+  watch: {
+    tree: {
+      handler(value) {
+        let x = 0
+        this.layout = value.map(node => {
+          const firstChild = node.children[0]
+          const object = {
+            i: parseInt(node.id),
+            id: node.id,
+            h: firstChild.h,
+            w: firstChild.w,
+            x,
+            y: 0
+          }
+          x = firstChild.w + x + 10
+          return object
+        })
+      },
+      immediate: true
+    }
   },
   beforeCreate() {
     this.$store.dispatch('project/getProjects')
@@ -33,7 +81,7 @@ export default {
       Selection.create({
         class: 'selection',
         selectables: ['.control-layer'],
-        boundaries: ['.panel-draft']
+        boundaries: ['.panel-draft.selected']
       })
         .on('beforestart', ({ oe }) => {
           return (
@@ -72,9 +120,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.panel-draft {
-  overflow: auto;
-  box-sizing: border-box;
-  padding: 1px;
-}
+  .item {
+    box-sizing: border-box;
+    border: 1px solid #f3f2f2;
+    background-color: #fff;
+  }
+
+  ::v-deep.item > .vue-resizable-handle {
+    bottom: -10px;
+    right: -10px;
+  }
 </style>

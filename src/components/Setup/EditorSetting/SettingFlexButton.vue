@@ -9,7 +9,7 @@
 import { mapState } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { select, assignDefaultValue } from './utils/ruleTool'
-import { TYPE as NODE_TYPE } from '@/const'
+import { NODE_TYPE } from '@/const'
 
 export const REDIRECT_TO = 'redirectTo'
 
@@ -23,13 +23,13 @@ export default {
   components: { RulesGenerator },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },
   computed: {
     ...mapState('project', ['projectMap']),
-    ...mapState('draft', ['childrenOf']),
+    ...mapState('component', ['childrenOf']),
     linkableComponentSet() {
       return Object.values(this.projectMap).filter(
         node => node.type === NODE_TYPE.COMPONENT_SET

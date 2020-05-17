@@ -8,11 +8,14 @@
       :id="id"
       class="m-r-10"
     />
-    <transition-group name="fade" class="flex">
+    <transition-group
+      name="fade"
+      class="flex"
+    >
       <span
         v-if="mouseIn"
-        class="flex m-r-10"
         :key="1"
+        class="flex m-r-10"
       >
 
         <portal-target
@@ -105,7 +108,7 @@ export default {
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     },
     exclude: {
@@ -122,9 +125,9 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds', 'copyComponentIds']),
-    ...mapState('draft', ['childrenOf']),
+    ...mapState('component', ['childrenOf']),
     node() {
-      return this.draftNodesMap[this.id]
+      return this.componentsMap[this.id]
     },
     canDelete() {
       return this.node[CAN_NOT_DELETE] !== true
@@ -142,11 +145,11 @@ export default {
       return this.selectedComponentIds.includes(this.id)
     },
     selectedNodes() {
-      return this.selectedComponentIds.map(id => this.draftNodesMap[id])
+      return this.selectedComponentIds.map(id => this.componentsMap[id])
     }
   },
   methods: {
-    ...mapMutations('draft', ['RECORD']),
+    ...mapMutations('component', ['RECORD']),
     isMac,
     vmCreateItem,
     vmCopyNode,

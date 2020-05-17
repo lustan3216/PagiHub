@@ -6,7 +6,7 @@ const map = {}
 
 export default {
   get current() {
-    const name = store.state.draft.selectedComponentSetId
+    const name = store.state.component.editingComponentSetId
 
     if (!map[name]) {
       const jsonHistory = new JsonHistory({

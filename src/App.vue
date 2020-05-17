@@ -1,10 +1,9 @@
 <template>
   <div class="app">
-    <nav-bar />
+    <nav-bar v-if="isDraftMode" />
 
-    <main class="z-index1 relative main">
-      <panel-production v-if="isProductionMode" />
-      <panel-draft v-else />
+    <main class="flex1 relative over-hidden">
+      <panel-draft />
     </main>
 
     <sidebar-right v-if="isDraftMode" />
@@ -13,15 +12,13 @@
 
 <script>
 import NavBar from './components/Layout/NavBar'
-import PanelProduction from './components/Layout/PanelProduction'
 import PanelDraft from './components/Layout/PanelDraft'
 
 export default {
   name: 'App',
   components: {
-    NavBar,
     SidebarRight: () => import('./components/Layout/SidebarRight'),
-    PanelProduction,
+    NavBar,
     PanelDraft
   }
 }
@@ -35,5 +32,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   @include calc-vh('height', 100vh);
+  display: flex;
 }
 </style>

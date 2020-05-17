@@ -74,7 +74,7 @@ export default {
   components: { RulesGenerator },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },
@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     currentProps() {
-      return deepmerge({}, defaultSetting, this.draftNodesMap[this.id].props)
+      return deepmerge({}, defaultSetting, this.componentsMap[this.id].props)
     },
     responsive() {
       return this.currentProps.responsive === true

@@ -41,7 +41,7 @@
 <script>
 import { Tree } from 'element-ui'
 import { SORT_INDEX, LAYERS, SOFT_DELETE, PROPS, STYLE } from '@/const'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { cloneJson, traversal, arraySubtract, deleteBy } from '@/utils/tool'
 import { isMac } from '@/utils/device'
 import NodeController from '../TemplateUtils/NodeController'
@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapState('draft', ['tree']),
+    ...mapState('component', ['tree']),
     innerTree() {
       const cloneTree = cloneJson(this.tree)
       traversal(cloneTree, (node, parentNode) => {
@@ -114,7 +114,7 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
       'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
-    ...mapMutations('draft', ['RECORD']),
+    ...mapMutations('component', ['RECORD']),
     keydwon(e) {
       if (isMac()) {
         if (e.metaKey) {

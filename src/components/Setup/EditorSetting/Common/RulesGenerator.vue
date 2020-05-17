@@ -33,7 +33,7 @@ export default {
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     },
     rules: {
@@ -68,7 +68,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('draft', ['RECORD']),
+    ...mapMutations('component', ['RECORD']),
     transformRule(rule) {
       const vmProps = vm(this.id).innerProps
       const path = rule.path ? `${rule.path}.${rule.field}` : `${rule.field}`

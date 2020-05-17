@@ -25,7 +25,7 @@ export default {
   components: { RulesGenerator },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },

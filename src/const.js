@@ -7,6 +7,7 @@ export const PROPS = 'props'
 export const VALIDATE = 'validate'
 export const PARENT_ID = 'parentId'
 export const ID = 'id'
+export const COMPONENT_SET_ID = 'componentSetId'
 export const FIELD = 'field'
 export const VALUE = 'value'
 export const CATEGORY = 'category'
@@ -30,10 +31,11 @@ export const GRID_ITEM_CHILD = 'grid-item-child'
 export const SORT_INDEX = 'sortIndex'
 export const PATH = 'path'
 
-export const TYPE = {
+export const NODE_TYPE = {
   PROJECT: 0,
   FOLDER: 1,
-  COMPONENT_SET: 2
+  COMPONENT_SET: 2,
+  COMPONENT: 3
 }
 
 export const STYLE_STATE = {
@@ -42,14 +44,9 @@ export const STYLE_STATE = {
   click: 2
 }
 
-export const TYPE_STRING = {
-  [TYPE.PROJECT]: 'project',
-  [TYPE.FOLDER]: 'folder',
-  [TYPE.COMPONENT_SET]: 'componentSet'
-}
-
-export const STYLE_TYPE = {
-  [TYPE.PROJECT]: 'project',
-  [TYPE.FOLDER]: 'folder',
-  [TYPE.COMPONENT_SET]: 'componentSet'
+export const NODE_TYPE_STRING = {
+  [NODE_TYPE.PROJECT]: 'project',
+  [NODE_TYPE.FOLDER]: 'folder',
+  [NODE_TYPE.COMPONENT_SET]: 'componentSet',
+  [NODE_TYPE.COMPONENT]: 'component'
 }

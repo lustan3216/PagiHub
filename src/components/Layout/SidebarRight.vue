@@ -83,12 +83,11 @@ export default {
 
 <style scoped lang="scss">
 .sidebar-right {
-  padding-right: 10px;
   width: 320px;
   overflow: auto;
-  position: fixed;
-  top: 0;
-  left: calc(100vw - 360px);
+  background-color: #fff;
+  z-index: 100;
+  box-shadow: 0 0 15px 0 rgba(32, 48, 60, 0.11);
 }
 
 ::v-deep {

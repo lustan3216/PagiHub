@@ -16,12 +16,12 @@ class KeyManagement {
     this.idSet = new Set([ROOT_ID, ...ids])
   }
 
-  appendIdNested(nodes, fn) {
+  appendIdNested(nodes, suffix = '') {
     traversal(nodes, (node, parentNode) => {
       if (node[ID]) {
-        this.idSet.add(node[ID])
+        this.idSet.add(parseInt(node[ID]))
       } else {
-        node[ID] = this.generateId()
+        node[ID] = bindSuffix(this.generateId(), suffix)
       }
 
       if (parentNode) {
@@ -32,11 +32,11 @@ class KeyManagement {
     })
   }
 
-  resetNestedIds(nodes) {
+  resetNestedIds(nodes, suffix = '') {
     traversal(nodes, (node, parentNode) => {
       delete node.i
       // grid-item has this key
-      node[ID] = this.generateId()
+      node[ID] = bindSuffix(this.generateId(), suffix)
 
       this.specialCase(node)
       if (parentNode) {
@@ -45,13 +45,23 @@ class KeyManagement {
     })
   }
 
-  generateId() {
+  generateId(suffix = '') {
     const max = Math.max(...this.idSet)
     const id = max + 1
     this.idSet.add(id)
-    return id
+    return bindSuffix(id, suffix)
   }
 }
+
+function bindSuffix(id, suffix) {
+  if (suffix) {
+    // use a as joiner instead - to prevent function watcher warning
+    return [id, suffix].join('a')
+  } else {
+    return id.toString()
+  }
+}
+
 const componentIds = new KeyManagement()
 const exampleIds = new KeyManagement()
 const projectIds = new KeyManagement()

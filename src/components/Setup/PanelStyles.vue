@@ -149,7 +149,7 @@ export default {
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },
@@ -207,7 +207,7 @@ export default {
     this.calcStyles()
   },
   methods: {
-    ...mapMutations('draft', ['RECORD']),
+    ...mapMutations('component', ['RECORD']),
     calcStyles() {
       const styles = {}
 

@@ -18,7 +18,7 @@ export default {
   name: 'Visible',
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     },
     visible: {
@@ -48,7 +48,6 @@ export default {
   },
   watch: {
     innerVisible(visible) {
-      console.log(this.id, this.visible, visible)
       if (visible) {
         delete this.element.dataset.invisible
       } else {

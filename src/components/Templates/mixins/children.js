@@ -6,18 +6,20 @@ import { componentIds } from '@/utils/keyId'
 
 export default {
   computed: {
-    ...mapState('draft', ['childrenOf']),
-    ...mapGetters('draft', ['parentPath']),
-    ...mapGetters('example', ['examplesMapByTag']),
+    ...mapState('component', ['childrenOf']),
+    ...mapGetters('component', ['parentPath']),
+    ...mapGetters('example', ['basicMapByTag']),
     node() {
-      return this.draftNodesMap[this.id]
+      return this.componentsMap[this.id]
     },
     innerChildren() {
-      const storeName = `${this.isExample ? 'example' : 'draft'}`
+      const childrenOf = this.isExample
+        ? this.$store.getters['example/childrenOf']
+        : this.$store.state.component.childrenOf
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
       // children 因為每次更新 draftNodesMap，如果innerChildren用computed會所有的component都被更新
-      const children = this.$store.state[storeName].childrenOf[this.id] || []
+      const children = childrenOf[this.id] || []
       return children.map(({ [CHILDREN]: _, moved, parentId, ...node }) => ({
         ...node
       }))
@@ -25,7 +27,7 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
-    ...mapMutations('draft', ['RECORD']),
+    ...mapMutations('component', ['RECORD']),
 
     _addNodesToParentAndRecord(nodes) {
       const records = []
@@ -58,7 +60,7 @@ export default {
       // can new layer-item, grid-item, carousel-item, form-item
       const { tag } = this.node
       // eslint-disable-next-line
-      const emptyItem = arrayLast(this.examplesMapByTag[tag][CHILDREN])
+      const emptyItem = arrayLast(this.basicMapByTag[tag][CHILDREN])
 
       this._addNodesToParentAndRecord(emptyItem)
     },

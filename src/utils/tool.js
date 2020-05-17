@@ -79,7 +79,7 @@ export function traversal(nodes, fn, parentNode) {
 }
 
 export function deepFlatten(array) {
-  return array.reduce((all, x) => {
+  return toArray(array).reduce((all, x) => {
     if (x.children) {
       all = all.concat(deepFlatten(x.children))
     }
@@ -100,7 +100,8 @@ export function deleteBy(array, key, value) {
   array.splice(oldIndex, 1)
 }
 
-export function nestedToLinerObject(target, nestedObject, key = 'children') {
+export function nestedToLinerObject(nestedObject, key = 'children') {
+  const target = {}
   traversal(nestedObject, _node => {
     // eslint-disable-next-line
     const { children: _, ...node } = _node

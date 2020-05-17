@@ -35,7 +35,7 @@ export default {
   components: { RulesGenerator },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },
@@ -89,7 +89,7 @@ export default {
       )
     },
     currentProps() {
-      return this.draftNodesMap[this.id].props || {}
+      return this.componentsMap[this.id].props || {}
     },
     isHorizontal() {
       // undefined situation comes from after the second updating
@@ -102,7 +102,7 @@ export default {
     arrow() {
       return this.currentProps.arrow
     },
-    ...mapState('draft', ['childrenOf'])
+    ...mapState('component', ['childrenOf'])
   },
   watch: {
     isHorizontal(value) {
@@ -127,7 +127,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('draft', ['RECORD'])
+    ...mapMutations('component', ['RECORD'])
   }
 }
 </script>

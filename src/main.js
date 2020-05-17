@@ -25,7 +25,7 @@ Vue.mixin({
     isProductionMode: () => store.getters['mode/isProductionMode'],
     isPreviewMode: () => store.getters['mode/isPreviewMode'],
     isDraftMode: () => store.getters['mode/isDraftMode'],
-    draftNodesMap: () => store.state.draft.nodesMap,
+    componentsMap: () => store.state.component.componentsMap,
     vmMap: () => vmMap
   }
 })
