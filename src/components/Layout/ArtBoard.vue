@@ -3,18 +3,18 @@
     v-if="node"
     :class="{ 'no-action': !selected, selected }"
     class="art-board"
-    @click.stop="SET_EDITING_COMPONENT_SET_ID(id)"
   >
     <el-button
       :style="{ fontSize: `${12 / scaleRatio}px`, top: `${-30 / scaleRatio}px` }"
       type="text"
       class="absolute"
     >
-      <i v-if="selected" class="el-icon-edit-outline" /> {{ node.name }}
+      <i
+        v-if="selected"
+        class="el-icon-edit-outline"
+      /> {{ node.name }}
     </el-button>
-    <component-set
-      :id="node.id"
-    />
+    <component-set :id="node.id" />
   </div>
 </template>
 
@@ -29,6 +29,11 @@ export default {
     DialogInteracted,
     ComponentSet
   },
+  provide() {
+    return {
+      rootComponentSetId: this.id
+    }
+  },
   props: {
     id: {
       type: String,
@@ -41,10 +46,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('component', ['tree', 'editingComponentSetId']),
     ...mapState('app', ['scaleRatio']),
+    ...mapState('project', ['projectMap']),
+    ...mapState('component', ['editingComponentSetId']),
     node() {
-      return this.componentsMap[this.id]
+      return this.projectMap[this.id]
     },
     selected() {
       return this.editingComponentSetId === this.id
@@ -53,8 +59,7 @@ export default {
   methods: {
     ...mapMutations('app', {
       appSET: 'SET'
-    }),
-    ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID'])
+    })
   }
 }
 </script>

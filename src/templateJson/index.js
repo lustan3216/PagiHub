@@ -1,25 +1,20 @@
-import { ICON, ID, NAME, CATEGORY } from '../const'
-import { exampleIds } from '../utils/keyId'
+import { exampleIds } from '../utils/nodeId'
 import basic from './basic'
 import formItem from './formItem'
+import { traversal } from '@/utils/tool'
+import { ID } from '@/const'
 
-export const FORM_ITEM_ID = 1
+const all = [...basic, ...formItem]
+exampleIds.appendIdNested(all)
 
-export const categories = [
-  {
-    [ID]: 0,
-    [NAME]: 'Basic',
-    [ICON]: 'el-icon-message'
-  }
-]
+const basicComponentsMap = {}
 
-const assignCategoryId = (array, id) => array.map(x => (x[CATEGORY] = [id]))
+traversal(all, (node) => {
+  const id = node[ID]
+  basicComponentsMap[id] = node
+})
 
-export default function() {
-  const all = [...basic, ...formItem]
-  assignCategoryId(all, 0)
-
-  exampleIds.appendIdNested(all)
-
-  return all
+export {
+  basicComponentsMap,
+  all
 }

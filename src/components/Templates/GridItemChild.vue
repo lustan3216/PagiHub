@@ -14,12 +14,25 @@
         :id="currentNode.id"
       />
 
-      <node-controller
-        v-else-if="isDraftMode"
-        :id="currentNode.id"
-        :exclude="['paste', 'delete']"
-        class="flex-center wh-100"
-      />
+      <div
+        v-else-if="isDraftMode && !isExample"
+        class="h-100"
+        @drop="addComponent"
+        @dragover.prevent
+      >
+        <node-controller
+          :id="currentNode.id"
+          :exclude="['paste', 'delete']"
+          class="flex-center wh-100"
+        >
+          <template v-slot="{ data: { mouseIn } }">
+            <node-info
+              v-show="!mouseIn"
+              :id="currentNode.id"
+            />
+          </template>
+        </node-controller>
+      </div>
 
       <portal-target
         v-if="isDraftMode"
@@ -63,6 +76,12 @@ export default {
   },
   mounted() {
     this.mounted = true
+  },
+  methods: {
+    addComponent(event) {
+      const id = event.dataTransfer.getData('id')
+      this._addNodesToParentAndRecord(this.componentsMap[id])
+    }
   }
 }
 </script>

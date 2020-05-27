@@ -1,4 +1,4 @@
-import store, { SET } from '../index'
+import { SET } from '../index'
 import { arraySubtract } from '@/utils/tool'
 
 const state = {
@@ -14,6 +14,7 @@ const mutations = {
   SET_COPY_SELECTED_COMPONENT_IDS(state) {
     state.copyComponentIds = state.selectedComponentIds
   },
+
   TOGGLE_SELECTED_COMPONENT_SET_IN_IDS(state, id) {
     const isExist = state.selectedComponentSetIds.includes(id)
     if (isExist) {
@@ -26,11 +27,15 @@ const mutations = {
     const isExist = state.selectedComponentSetIds.includes(id)
     state.selectedComponentSetIds = isExist ? [] : [id]
   },
+  CLEAN_SELECTED_COMPONENT_SET_IDS(state, ids) {
+    state.selectedComponentSetIds = arraySubtract(state.selectedComponentSetIds, ids)
+  },
+
   CLEAN_SELECTED_COMPONENT_IDS(state, ids) {
     state.selectedComponentIds = arraySubtract(state.selectedComponentIds, ids)
   },
   SET_SELECTED_COMPONENT_ID(state, id) {
-    state.selectedComponentIds = [+id]
+    state.selectedComponentIds = [id]
   },
   TOGGLE_SELECTED_COMPONENT_ID(state, id) {
     const isExist = state.selectedComponentIds.includes(id)
@@ -49,7 +54,7 @@ const mutations = {
 const getters = {
   theOnlySelectedComponentId(state) {
     if (state.selectedComponentIds.length === 1) {
-      return +state.selectedComponentIds[0]
+      return state.selectedComponentIds[0]
     }
   },
   selectedComponentNode(state, getters, rootState) {
@@ -61,32 +66,25 @@ const getters = {
     if (getters.selectedComponentNode) {
       return {
         ...getters.selectedComponentNode,
-        children: rootState.component.childrenOf[getters.theOnlySelectedComponentId]
+        children: rootState.component.componentsMap[getters.theOnlySelectedComponentId].children
       }
     }
   },
   selectedComponentNodes(state, getters, rootState) {
-    return state.selectedComponentIds.map(id => rootState.component.componentsMap[id])
-  }
-}
-
-const subscribe = {
-  onSelectedComponentSetIds(mutation, state) {
-    if (
-      [
-        'app/TOGGLE_SELECTED_COMPONENT_SET_IN_IDS',
-        'app/TOGGLE_SELECTED_COMPONENT_SET_ID'
-      ].includes(mutation.type)
-    ) {
-      store.dispatch('component/initComponents')
-    }
+    return state.selectedComponentIds
+      .map(id => rootState.component.componentsMap[id])
+      .filter(node => node)
+  },
+  selectedComponentSetNodes(state, getters, rootState) {
+    return state.selectedComponentSetIds
+      .map(id => rootState.project.projectMap[id])
+      .filter(node => node)
   }
 }
 
 export default {
   namespaced: true,
   state,
-  subscribe,
   mutations,
   getters
 }

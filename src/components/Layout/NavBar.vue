@@ -33,28 +33,44 @@
       <el-tooltip
         ref="1"
         effect="light"
-        content="Preview"
+        content="Components"
         placement="right"
       />
       <el-button
         v-popover:1
-        v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
-        icon="el-icon-data-analysis"
+        v-shortkey="['c']"
         type="text"
-        @click="SET_PREVIEW_MODE"
-        @shortkey.native="SET_PREVIEW_MODE"
+        icon="el-icon-circle-plus-outline"
+        @shortkey.native="componentsIconClick"
+        @click="componentsIconClick"
       />
 
-      <my-space />
+      <el-tooltip
+        ref="3"
+        effect="light"
+        content="Project"
+        placement="right"
+      />
+      <el-button
+        v-popover:3
+        v-shortkey="['x']"
+        type="text"
+        icon="el-icon-grape"
+        style="transform: scale(-1);"
+        @shortkey.native="projectIconClick"
+        @click="projectIconClick"
+      />
+
+      <i class="dot" />
 
       <el-tooltip
-        ref="2"
+        ref="4"
         effect="light"
         content="Undo"
         placement="right"
       />
       <el-button
-        v-popover:2
+        v-popover:4
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
         type="text"
         icon="el-icon-refresh-left"
@@ -63,49 +79,18 @@
       />
 
       <el-tooltip
-        ref="3"
+        ref="5"
         effect="light"
         content="Redo"
         placement="right"
       />
       <el-button
-        v-popover:3
+        v-popover:5
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
         type="text"
         icon="el-icon-refresh-right"
         @shortkey.native="REDO"
         @click="REDO"
-      />
-
-      <el-tooltip
-        ref="4"
-        effect="light"
-        content="Nodes"
-        placement="right"
-      />
-      <el-button
-        v-popover:4
-        v-shortkey="['z']"
-        type="text"
-        icon="el-icon-grape"
-        style="transform: rotate(180deg)"
-        @shortkey.native="nodesIconClick"
-        @click="nodesIconClick"
-      />
-
-      <el-tooltip
-        ref="5"
-        effect="light"
-        content="Project"
-        placement="right"
-      />
-      <el-button
-        v-popover:5
-        v-shortkey="['x']"
-        type="text"
-        icon="el-icon-takeaway-box"
-        @shortkey.native="projectIconClick"
-        @click="projectIconClick"
       />
 
       <el-tooltip
@@ -160,20 +145,37 @@
           @click="publish"
         />
       </el-popover>
+
+      <i class="dot"/>
+
+      <el-tooltip
+        ref="8"
+        effect="light"
+        content="Preview"
+        placement="right"
+      />
       <el-button
-        v-popover:7
+        v-popover:8
+        v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
+        icon="el-icon-data-analysis"
+        type="text"
+        @click="SET_PREVIEW_MODE"
+        @shortkey.native="SET_PREVIEW_MODE"
+      />
+
+      <el-button
         type="text"
         icon="el-icon-upload"
       />
     </div>
 
-    <panel-nodes
-      v-if="nodesVisible"
+    <panel-project
+      v-show="projectVisible"
       class="panel"
     />
 
-    <panel-project
-      v-if="projectVisible"
+    <component-tabs
+      v-show="componentsVisible"
       class="panel"
     />
   </nav>
@@ -186,8 +188,8 @@ import { Message } from 'element-ui'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import MySpace from './MySpace'
-import PanelNodes from '../Setup/PanelNodes'
 import PanelProject from '../Setup/PanelProject'
+import ComponentTabs from '../TemplateUtils/ComponentTabs'
 import {
   vmAddNodesToParentAndRecord,
   vmCopyNode,
@@ -201,19 +203,20 @@ export default {
   name: 'NavBar',
   components: {
     MySpace,
-    PanelNodes,
     PanelProject,
+    ComponentTabs,
     DialogInteracted,
     DialogComponentSet
   },
   data() {
     return {
-      nodesVisible: false,
-      projectVisible: false
+      projectVisible: false,
+      componentsVisible: false
     }
   },
   computed: {
     ...mapState('app', ['selectedComponentIds', 'copyComponentIds']),
+    ...mapState('component', ['editingComponentSetId']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
     selected() {
       return this.selectedComponentIds.includes(this.id)
@@ -221,6 +224,12 @@ export default {
     selectedNodes() {
       return this.selectedComponentIds.map(id => this.componentsMap[id])
     }
+  },
+  created() {
+    this.$bus.$on('component-tabs-visible', () => {
+      this.projectVisible = false
+      this.componentsVisible = true
+    })
   },
   methods: {
     ...mapMutations('app', ['SET_COPY_SELECTED_COMPONENT_IDS']),
@@ -235,13 +244,13 @@ export default {
         Message.info(`Copy ${length} Components`)
       }
     },
-    nodesIconClick() {
-      this.nodesVisible = !this.nodesVisible
-      this.projectVisible = false
-    },
     projectIconClick() {
-      this.nodesVisible = false
+      this.componentsVisible = false
       this.projectVisible = !this.projectVisible
+    },
+    componentsIconClick() {
+      this.projectVisible = false
+      this.componentsVisible = !this.componentsVisible
     },
     vmCreateItem,
     vmCopyNode,
@@ -249,12 +258,12 @@ export default {
     vmPasteCopyComponents,
     vmAddNodesToParentAndRecord,
     multiPaste() {
-      jsonHistory.current.recordsMerge(() => {
-        this.copyComponentIds.forEach(id => this.vmCopyNode(id))
+      jsonHistory.recordsMerge(() => {
+        this.copyComponentIds.forEach(id => this.vmCopyNode(this.componentsMap[id]))
       })
     },
     multiDelete() {
-      jsonHistory.current.recordsMerge(() => {
+      jsonHistory.recordsMerge(() => {
         this.selectedNodes.forEach(node => this.vmRemoveNode(node))
       })
     }
@@ -281,8 +290,18 @@ nav {
   align-items: center;
   flex-direction: column;
 }
+
 .panel {
   width: 300px;
   padding: 5px;
+}
+
+.dot {
+  width: 2px;
+  height: 2px;
+  background-color: #b1b1b1;
+  border-radius: 50%;
+  margin-top: 11px;
+  margin-bottom: 3px;
 }
 </style>

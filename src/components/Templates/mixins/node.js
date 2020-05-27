@@ -1,11 +1,13 @@
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapMutations } from 'vuex'
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { deepmerge, cloneJson } from '@/utils/tool'
-import { STYLE, PROPS, VALUE, GRID_GENERATOR } from '@/const'
+import { STYLE, PROPS, VALUE, GRID_GENERATOR, MASTER_ID, ID } from '@/const'
 import style from '@/directive/style'
 import { directive } from '@/directive/freeStyle'
+import { nodeIds } from '@/utils/nodeId'
 
 let hoverNode = []
+const watchOptions = { deep: true, immediate: true }
 
 export default {
   props: {
@@ -15,7 +17,8 @@ export default {
     }
   },
   inject: {
-    isExample: { default: false }
+    isExample: { default: false },
+    rootComponentSetId: { default: null }
   },
   directives: {
     style,
@@ -28,26 +31,37 @@ export default {
     }
   },
   computed: {
-    ...mapState('component', ['componentsMap']),
     node() {
-      return this.componentsMap[this.id]
+      return this.componentsMap[this[ID]]
+    },
+    masterNode() {
+      const masterId = this.node[MASTER_ID]
+      return masterId && this.componentsMap[masterId]
+    },
+    masterNodeProps() {
+      if (this.masterNode) {
+        return this.masterNode[PROPS] || {}
+      } else {
+        return {}
+      }
+    },
+    masterNodeStyle() {
+      if (this.masterNode) {
+        return this.masterNode[STYLE] || {}
+      } else {
+        return {}
+      }
     },
     innerValue() {
       return this.node && this.node[VALUE]
     }
   },
   created() {
-    this.$watch(`componentsMap.${this.id}.${STYLE}`, value => {
-      this.innerStyles = {
-        id: this.id,
-        ...value
-      }
-    }, { deep: true, immediate: true })
-
-    this.$watch(`componentsMap.${this.id}.${PROPS}`, value => {
-      const setting = cloneJson(this.$options.defaultSetting || {})
-      this.innerProps = deepmerge(setting, value || {})
-    }, { deep: true, immediate: true })
+    this.watchStyles()
+    this.watchProps()
+    if (this.isDraftMode && !this.isExample) {
+      nodeIds.restoreIds(this.node)
+    }
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount
@@ -64,6 +78,27 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_IDS']),
+    watchStyles() {
+      const path = `componentsMap.${this.id}.${STYLE}`
+      const fn = (value = {}) => {
+        this.innerStyles = {
+          id: this.id,
+          ...this.masterNodeStyle,
+          ...value
+        }
+      }
+
+      this.$watch(path, fn, watchOptions)
+    },
+    watchProps() {
+      const path = `componentsMap.${this.id}.${PROPS}`
+      const fn = (value = {}) => {
+        const setting = cloneJson(this.$options.defaultSetting || {})
+        this.innerProps = deepmerge(setting, this.masterNodeProps, value)
+      }
+
+      this.$watch(path, fn, watchOptions)
+    },
     hoverCover(hover) {
       const $el =
         this.node.tag === GRID_GENERATOR ? this.$el : this.$el.parentNode

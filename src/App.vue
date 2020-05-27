@@ -2,7 +2,7 @@
   <div class="app">
     <nav-bar v-if="isDraftMode" />
 
-    <main class="flex1 relative over-hidden">
+    <main class="flex1 relative over-hidden" style="background-color:#f4f8fb;">
       <panel-draft />
     </main>
 

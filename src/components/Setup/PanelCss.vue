@@ -69,7 +69,7 @@ import { Tree } from 'element-ui'
 import clone from 'clone'
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import { traversal } from '@/utils/tool'
-import { GRID_ITEM } from '@/const'
+import { CHILDREN, GRID_ITEM } from '@/const'
 import Visibility from '../TemplateUtils/Visible'
 import NodeInfo from '../TemplateUtils/NodeInfo'
 
@@ -96,11 +96,11 @@ export default {
       const cloned = clone(this.tree)
       traversal(cloned, function(node) {
         if (node.tag === GRID_ITEM) {
-          Object.assign(node, node.children[0])
+          Object.assign(node, node[CHILDREN][0])
         }
 
         if (['card', 'drawer', 'form-generator'].includes(node.tag)) {
-          Object.assign(node.children, node.children[0].children)
+          Object.assign(node[CHILDREN], node[CHILDREN][0][CHILDREN])
         }
       })
       return cloned

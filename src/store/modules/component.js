@@ -1,121 +1,171 @@
+import app from '@/main'
 import localforage from 'localforage'
 import jsonHistory from '../jsonHistory'
-import { SET } from '../index'
-import { getComponentSet } from '@/api/project'
-import listToTree from '@/utils/listToTree'
-import { traversal } from '@/utils/tool'
+import store, { SET } from '../index'
+import { getComponentSet } from '@/api/componentSet'
+import { isUndefined, objectHasAnyKey, traversal, deleteBy, cloneJson } from '@/utils/tool'
+import { nodeIds } from '@/utils/nodeId'
+import { Message } from 'element-ui'
+import { all, basicComponentsMap } from '@/templateJson'
+import { CHILDREN, ID, PARENT_ID } from '@/const'
+import Vue from 'vue'
+
+const childrenOf = {}
 
 const state = {
+  basicExamples: all,
   editingComponentSetId: null,
-  componentsMap: {},
-  childrenOf: {},
-  tree: []
+  componentsMap: basicComponentsMap
+}
+
+function rollbackSelectedComponentSet(deltaGroup) {
+  if (!deltaGroup) {
+    return Promise.reject()
+  }
+
+  const id = objectHasAnyKey(deltaGroup[0])
+  const { componentSetId } = nodeIds.departId(id)
+  const { selectedComponentSetIds } = store.state.app
+  const isExist = selectedComponentSetIds.includes(componentSetId)
+
+  if (!isExist) {
+    store.commit('component/SET_EDITING_COMPONENT_SET_ID', componentSetId)
+    store.commit('app/SET', {
+      selectedComponentSetIds: [...selectedComponentSetIds, componentSetId]
+    })
+  }
+
+  return Promise.resolve()
 }
 
 const mutations = {
   SET,
+  VUE_SET({ componentsMap }, { tree, key, value }) {
+    if (isUndefined(value)) {
+      if (tree[key][ID]) {
+        const parentId = componentsMap[key][PARENT_ID]
+        const parentNode = componentsMap[parentId]
+        if (parentNode) {
+          deleteBy(parentNode[CHILDREN], 'id', key)
+        }
+      }
+
+      Vue.delete(tree, key)
+    } else if (tree[key] && tree.__ob__) {
+      tree[key] = value
+    } else {
+      if (value[ID]) {
+        childrenOf[key] = value[CHILDREN] = childrenOf[key] || value[CHILDREN] || []
+
+        const parentId = value[PARENT_ID]
+        childrenOf[parentId] = childrenOf[parentId] || []
+        childrenOf[parentId].push(value)
+
+        defineNodeProperty(value)
+      }
+      Vue.set(tree, key, value)
+    }
+  },
   RECORD(state, payLoad) {
-    jsonHistory.current.record(payLoad)
+    if (state.editingComponentSetId) {
+      jsonHistory.record(payLoad)
+    } else {
+      Message.info('Please select an artboard first')
+    }
   },
   SET_EDITING_COMPONENT_SET_ID(state, id) {
     state.editingComponentSetId = id
   },
-  REDO() {
-    jsonHistory.current.redo()
+  async REDO() {
+    await rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)
+    app.$nextTick(() => {
+      jsonHistory.redo()
+    })
   },
-  UNDO() {
-    jsonHistory.current.undo()
+  async UNDO() {
+    await rollbackSelectedComponentSet(jsonHistory.nextUndoDeltaGroup)
+    app.$nextTick(() => {
+      jsonHistory.undo()
+    })
+  },
+  SET_MAP(state, componentsArray) {
+    const map = {}
+    let id
+    let parentId
+
+    traversal(componentsArray, node => {
+      id = node[ID]
+      parentId = node[PARENT_ID] || 0
+
+      childrenOf[id] = childrenOf[id] || []
+      node[CHILDREN] = childrenOf[id]
+
+      if (parentId !== 0) {
+        childrenOf[parentId] = childrenOf[parentId] || []
+        childrenOf[parentId].push(node)
+      }
+
+      map[id] = node
+    })
+
+    componentsArray.forEach(node => defineNodeProperty(node))
+
+    const componentsMap = { ...state.componentsMap, ...map }
+
+    state.componentsMap = componentsMap
+    jsonHistory.tree = componentsMap
   }
 }
 
 const actions = {
-  setComponentSet({ commit, state, dispatch }, editingComponentSetId) {
-    commit('SET', { editingComponentSetId })
-    localforage.setItem('editingComponentSetId', editingComponentSetId)
-    dispatch('initComponents')
-  },
-
   removeComponentSet({ state: { editingComponentSetId }, commit }, id) {
     if (id === editingComponentSetId) {
-      localforage.setItem('editingComponentSetId', null)
-      commit('SET', {
-        componentsMap: {},
-        editingComponentSetId: null
-      })
+      commit('SET', { editingComponentSetId: null })
     }
   },
 
-  async initComponents({ commit, rootState }) {
-    const selectedIds = rootState.app.selectedComponentSetIds
-    if (!selectedIds.length) return
-    const map = {}
-    const array = []
-
-    const prmoises = selectedIds.map(async id => {
-      const componentSet = await getComponentSet(id)
-
-      traversal(componentSet, node => {
-        map[node.id] = node
-
-        if (id === node.id) {
-          const { parentId, ...newNode } = node
-          array.push(newNode)
-        } else {
-          array.push(node)
-        }
-      })
-    })
-    await Promise.all(prmoises)
-
-    const { childrenOf, tree } = listToTree(array)
-
-    commit('SET', {
-      componentsMap: map,
-      childrenOf,
-      tree
-    })
-
-    jsonHistory.current.tree = map
+  async getComponentSet({ commit, state }, id) {
+    const componentsArray = await getComponentSet(id)
+    commit('SET_MAP', componentsArray)
   }
 }
 
-const getters = {
-  parentPath: state => _id => {
-    const map = state.componentsMap
-    const path = []
-
-    function findPath(id) {
-      const { parentId } = map[id]
-      if (!parentId) return
-      path.unshift(map[parentId])
-      findPath(parentId)
-    }
-
-    findPath(_id)
-    return path
-  }
-}
+const getters = {}
 
 const subscribe = {
   updateNodesMap(mutation, state) {
     if (
       [
-        'component/INIT_NODES_MAP',
         'component/RECORD',
         'component/REDO',
         'component/ UNDO'
       ].includes(mutation.type)
     ) {
+      const nodes = []
+      const { editingComponentSetId } = state.component
+      const tree = state.component.componentsMap[editingComponentSetId]
 
-      localforage.setItem(
-        state.component.editingComponentSetId.toString(),
-        Object.values(state.component.componentsMap).map(node => {
-          const { children, ...newNode } = node
-          return newNode
-        })
-      )
+      traversal(tree, ({ children, ...node }) => {
+        nodes.push(node)
+      })
+      localforage.setItem(editingComponentSetId, nodes)
+    }
+  },
+
+  editingComponentSetId(mutation, state) {
+    if (mutation.type === ['component/SET_EDITING_COMPONENT_SET_ID']) {
+      localforage.setItem('editingComponentSetId', state.component.editingComponentSetId)
     }
   }
+}
+
+function defineNodeProperty(node) {
+  Object.defineProperty(node, 'parentNode', {
+    get() {
+      return store.state.componentsMap[this.parentId]
+    },
+    enumerable: false
+  })
 }
 
 export default {

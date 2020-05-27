@@ -1,11 +1,17 @@
 <template>
   <view-port>
+    <!--    <view-port-cover-->
+    <!--      v-if="$refs.browser"-->
+    <!--      :target="$refs.browser.$el"-->
+    <!--      :class="{ interact: isDraftMode }"-->
+    <!--    />-->
+
     <vue-grid-generator
       ref="gridGenerator"
       :layout="layout"
       :margin="[0, 0]"
       :vertical-compact="false"
-      :col-num="288"
+      :col-num="4000"
       :row-height="1"
     >
       <vue-grid-item
@@ -19,6 +25,9 @@
         :h="child.h"
         :is-draggable="editingComponentSetId !== child.id"
         class="item"
+        @resized="itemResized(child, arguments[1], arguments[2])"
+        @click.native.stop="itemClick(child.id)"
+        @move="touching = true"
       >
         <art-board :id="child.id" />
       </vue-grid-item>
@@ -27,7 +36,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import ViewPort from './ViewPort'
 import ComponentSet from '../TemplateUtils/ComponentSet'
 import { isMac } from '@/utils/device'
@@ -46,27 +55,29 @@ export default {
   },
   data() {
     return {
-      layout: []
+      layout: [],
+      touching: false
     }
   },
   computed: {
-    ...mapState('component', ['tree', 'editingComponentSetId'])
+    ...mapState('project', ['projectMap']),
+    ...mapState('component', ['editingComponentSetId']),
+    ...mapGetters('app', ['selectedComponentSetNodes'])
   },
   watch: {
-    tree: {
-      handler(value) {
+    selectedComponentSetNodes: {
+      handler(nodes) {
         let x = 0
-        this.layout = value.map(node => {
-          const firstChild = node.children[0]
+        this.layout = nodes.map(node => {
           const object = {
             i: parseInt(node.id),
             id: node.id,
-            h: firstChild.h,
-            w: firstChild.w,
+            h: node.h,
+            w: node.w,
             x,
             y: 0
           }
-          x = firstChild.w + x + 10
+          x = node.w + x + 50
           return object
         })
       },
@@ -108,13 +119,34 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('app', ['SET']),
+    ...mapMutations('project', ['VUE_SET']),
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
       'CLEAN_SELECTED_COMPONENT_IDS'
     ]),
-    isMac
+    ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID', 'RECORD']),
+    isMac,
+    itemResized({ id }, h, w) {
+      this.VUE_SET({
+        tree: this.projectMap[id],
+        key: 'h',
+        value: h
+      })
+
+      this.VUE_SET({
+        tree: this.projectMap[id],
+        key: 'w',
+        value: w
+      })
+    },
+    itemClick(id) {
+      if (!this.touching) {
+        this.SET_EDITING_COMPONENT_SET_ID(id)
+      }
+
+      this.touching = false
+    }
   }
 }
 </script>

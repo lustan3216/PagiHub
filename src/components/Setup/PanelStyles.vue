@@ -1,5 +1,8 @@
 <template>
-  <el-form label-position="top">
+  <el-form
+    v-if="valid && node"
+    label-position="top"
+  >
     <portal-target
       name="PanelStyles"
       slim
@@ -29,7 +32,7 @@
       </el-radio-group>
     </div>
 
-    <div :key="id + state">
+    <div :key="theOnlySelectedComponentId + state">
       <padding
         v-if="canPadding"
         :value="styles.padding"
@@ -76,7 +79,7 @@
         @change="assignStyles($event)"
       />
       <transitions
-        v-if="isDefaultState"
+        :disabled="!isDefaultState"
         :value="styles.transition"
         @change="assignStyles($event)"
       />
@@ -105,8 +108,8 @@ import BorderStyle from './EditorStyle/BorderStyle'
 import Transform from './EditorStyle/Transform'
 import Transitions from './EditorStyle/Transitions'
 import { RadioGroup, RadioButton, Divider } from 'element-ui'
-import { getComputedStyle } from '@/utils/vmMap'
-import { getValueByPath } from '@/utils/tool'
+import { vm, getComputedStyle } from '@/utils/vmMap'
+import { getValueByPath, asyncGetValue } from '@/utils/tool'
 
 const computedAttrs = [
   'width',
@@ -147,15 +150,10 @@ export default {
     ElRadioGroup: RadioGroup,
     ElRadioButton: RadioButton
   },
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
   data() {
     return {
       state: 'default',
+      valid: false,
       styles: {}
     }
   },
@@ -179,9 +177,6 @@ export default {
     canBorderStyle() {
       return !['grid-generator'].includes(this.nodeTag)
     },
-    canDimension() {
-      return [''].includes(this.nodeTag)
-    },
     canOverflow() {
       return ['grid-item'].includes(this.nodeTag)
     },
@@ -196,15 +191,26 @@ export default {
     }
   },
   watch: {
-    theOnlySelectedComponentId() {
-      this.calcStyles()
+    theOnlySelectedComponentId(id) {
+      if (!id) {
+        return
+      }
+
+      asyncGetValue(() => vm(id))
+        .then(() => {
+          this.valid = true
+        }).catch(() => {
+          this.valid = false
+        })
+    },
+    valid(value) {
+      if (value) {
+        this.calcStyles()
+      }
     },
     state() {
       this.calcStyles()
     }
-  },
-  created() {
-    this.calcStyles()
   },
   methods: {
     ...mapMutations('component', ['RECORD']),
@@ -212,8 +218,9 @@ export default {
       const styles = {}
 
       if (this.isDefaultState) {
+        const computedStyle = getComputedStyle(this.theOnlySelectedComponentId)
         computedAttrs.reduce((all, attr) => {
-          all[attr] = getComputedStyle(this.id)[attr]
+          all[attr] = computedStyle[attr] || ''
           return all
         }, styles)
       }
@@ -245,7 +252,7 @@ export default {
         }
 
         records.push({
-          path: `${this.id}.${STYLE}.${this.state}.${key}`,
+          path: `${this.theOnlySelectedComponentId}.${STYLE}.${this.state}.${key}`,
           value
         })
       }

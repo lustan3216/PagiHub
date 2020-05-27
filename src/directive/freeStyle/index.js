@@ -33,7 +33,7 @@ function clean(styleId) {
 function getStringId(element, binding) {
   const { id } = binding.value
 
-  if (id !== null && Number.isInteger(id)) {
+  if (id) {
     element.dataset.styleId = id
     return `[data-style-id="${id}"]`
   } else {

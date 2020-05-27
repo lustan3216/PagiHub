@@ -11,85 +11,22 @@
       class="dialog"
       append-to-body
       top="5vh"
-      width="90vw"
+      width="80vw"
       @open="$emit('open')"
       @close="visible = false"
     >
-      <el-tabs
-        v-model="currentCategory"
-        tab-position="left"
-      >
-        <el-tab-pane
-          v-for="category in categories"
-          :key="category.id"
-          :name="category.name"
-          :label="category.name"
-          lazy
-        >
-          <el-row
-            :gutter="15"
-            type="flex"
-            style="flex-wrap: wrap"
-          >
-            <el-col
-              v-for="component in components"
-              :key="component.id"
-              :span="8"
-              class="m-b-15"
-              style="min-height: 200px;"
-            >
-              <el-card shadow="hover">
-                <div
-                  class="relative z-index1"
-                  style="min-height: 200px;"
-                >
-                  <async-component
-                    :tag="component.tag"
-                    :id="component.id"
-                  />
-                </div>
-
-                <div class="p-5">
-                  <div class="el-form-item__label">
-                    {{ shortTagName(component) }}
-                  </div>
-
-                  <el-button
-                    type="text"
-                    class="button"
-                    @click="addTemplate(component)"
-                  >
-                    操作按钮
-                  </el-button>
-                </div>
-              </el-card>
-            </el-col>
-          </el-row>
-        </el-tab-pane>
-      </el-tabs>
+      <component-tabs @choose="addTemplate" />
     </el-dialog>
   </el-button>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { cloneJson } from '@/utils/tool'
-import { categories } from '../../templateJson'
-import { CATEGORY, ID, NAME } from '@/const'
-import { shortTagName } from '@/utils/node'
-import AsyncComponent from './AsyncComponent'
-import { Card } from 'element-ui'
+import ComponentTabs from './ComponentTabs'
 
 export default {
   name: 'ExampleAdd',
-  provide() {
-    return {
-      isExample: true
-    }
-  },
   components: {
-    AsyncComponent,
-    ElCard: Card
+    ComponentTabs
   },
   props: {
     button: {
@@ -100,29 +37,11 @@ export default {
   data() {
     return {
       visible: false,
-      selectedName: null,
-      currentCategory: categories[0][NAME]
-    }
-  },
-  computed: {
-    ...mapState('example', ['basic']),
-    categories() {
-      return categories
-    },
-    currentCategoryId() {
-      return this.categories.find(x => x[NAME] === this.currentCategory)[ID]
-    },
-    components() {
-      return (
-        this.visible &&
-        this.basic.filter(x => x[CATEGORY].includes(this.currentCategoryId))
-      )
+      selectedName: null
     }
   },
   methods: {
-    shortTagName,
     addTemplate(template) {
-      template = cloneJson(template)
       this.$emit('onAdd', template)
       this.selectedName = template.tag
       this.visible = false
@@ -130,3 +49,17 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  ::v-deep.tabs > div > .el-tabs__nav-wrap {
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  ::v-deep.dialog > .el-dialog__header {
+    padding: 0;
+  }
+  .component {
+    height: 200px;
+  }
+</style>

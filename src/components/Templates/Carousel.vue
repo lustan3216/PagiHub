@@ -29,7 +29,7 @@
 
     <template v-if="innerProps.arrow === 'custom'">
       <layers
-        :id="layerId"
+        :id="firstLayerId"
         class="layers"
       />
 
@@ -90,7 +90,6 @@
 
 <script>
 import interactjs from 'interactjs'
-import { mapState } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import childrenMixin from '@/components/Templates/mixins/children'
 import nodeMixin from '@/components/Templates/mixins/node'
@@ -126,18 +125,20 @@ export default {
     }
   },
   computed: {
-    ...mapState('component', ['childrenOf']),
     gridGenerators() {
       return this.innerChildren.filter(x => x.tag === GRID_GENERATOR)
     },
-    layerId() {
+    firstLayerId() {
       return this.innerChildren.filter(x => x.tag === LAYERS)[0].id
     },
+    firstLayerChildren() {
+      return this.componentsMap[this.firstLayerId][CHILDREN]
+    },
     prevGridItemId() {
-      return this.childrenOf[this.layerId][0][CHILDREN][0].id
+      return this.firstLayerChildren[0][CHILDREN][0].id
     },
     nextGridItemId() {
-      return this.childrenOf[this.layerId][0][CHILDREN][1].id
+      return this.firstLayerChildren[0][CHILDREN][1].id
     },
     arrow() {
       return this.innerProps.arrow === 'custom'

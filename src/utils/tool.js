@@ -73,8 +73,11 @@ export function arraySubtract(a, b) {
 
 export function traversal(nodes, fn, parentNode) {
   toArray(nodes).forEach(node => {
-    fn(node, parentNode)
-    node.children && node.children.length && traversal(node.children, fn, node)
+    const stop = fn(node, parentNode)
+
+    if (stop !== false) {
+      node.children && node.children.length && traversal(node.children, fn, node)
+    }
   })
 }
 
@@ -112,7 +115,7 @@ export function nestedToLinerObject(nestedObject, key = 'children') {
 }
 
 export function asyncGetValue(fn, timeout = 2000) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const id = requestAnimationFrame(() => {
       const value = fn()
 
@@ -123,6 +126,7 @@ export function asyncGetValue(fn, timeout = 2000) {
 
       setTimeout(function() {
         cancelAnimationFrame(id)
+        resolve()
       }, timeout)
     })
   })

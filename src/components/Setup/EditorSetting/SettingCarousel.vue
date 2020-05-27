@@ -10,7 +10,7 @@
 import { mapState, mapMutations } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { assignDefaultValue, boolean, select, number } from './utils/ruleTool'
-import { SOFT_DELETE, LAYERS } from '@/const'
+import { SOFT_DELETE, LAYERS, CHILDREN } from '@/const'
 
 // https://gs-shop.github.io/vue-slick-carousel/#/api
 // data-swiper-parallax 在grid item設定
@@ -101,8 +101,7 @@ export default {
     },
     arrow() {
       return this.currentProps.arrow
-    },
-    ...mapState('component', ['childrenOf'])
+    }
   },
   watch: {
     isHorizontal(value) {
@@ -115,7 +114,7 @@ export default {
       api.trigger('indicatorPosition', 'change', value ? 'bottom' : 'right')
     },
     arrow(value) {
-      const layersNode = this.childrenOf[this.id].find(
+      const layersNode = this.componentsMap[this.id][CHILDREN].find(
         x => x.tag === LAYERS
       )
       this.RECORD([

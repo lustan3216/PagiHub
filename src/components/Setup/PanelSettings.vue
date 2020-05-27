@@ -1,6 +1,6 @@
 <template>
   <component
-    v-if="theOnlySelectedComponentId && hasComponent"
+    v-if="hasComponent"
     :is="componentTag"
     :id="theOnlySelectedComponentId"
     class="p-r-10"
@@ -60,7 +60,7 @@ const self = {
       return same && this.selectedComponentIds.length
     },
     hasComponent() {
-      return self.components[this.componentTag]
+      return this.selectedComponentNode && self.components[this.componentTag]
     },
     componentTag() {
       return `Setting${bigCamelCase(this.selectedComponentNode.tag)}`

@@ -1,6 +1,6 @@
 import store from '../store'
 import { GRID_ITEM, TAG } from '../const'
-import { findFirstCommonParentTree } from './node'
+
 const vmMap = {}
 
 export default vmMap
@@ -22,6 +22,9 @@ export function vmRemove(vm) {
 
 export function getComputedStyle(id) {
   const _vm = vm(id)
+  if (!_vm) {
+    return {}
+  }
   const isForm = /^form/.test(_vm.$options._componentTag)
   let el
 
@@ -31,8 +34,8 @@ export function getComputedStyle(id) {
   } else {
     el = document.querySelector(`[data-style-id="${id}"]`)
   }
-
-  return window.getComputedStyle(el)
+  console.log(el)
+  return window.getComputedStyle(el) || {}
 }
 
 export function getPlanStyle(id) {
@@ -50,11 +53,10 @@ export function vmCreateItem({ id }) {
   vm(id)._createEmptyItem()
 }
 
-export function vmCopyNode(_id) {
+export function vmCopyNode({ id, parentId }) {
   // other kind of templates
 
   // the convention is, if the parent is a node can new, then it must be
-  const { id, parentId } = vm(_id).node
   const parentNode = vmMap[parentId].node
 
   if (parentNode.canNewItem) {

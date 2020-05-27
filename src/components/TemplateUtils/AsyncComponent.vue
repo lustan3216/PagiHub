@@ -5,6 +5,7 @@
     class="h-100 border-box"
   >
     <component
+      v-if="vIf"
       :is="tag"
       :id="id"
     />
@@ -13,6 +14,9 @@
 
 <script>
 import { ObserveVisibility } from 'vue-observe-visibility'
+import { isComponentSet } from '@/utils/node'
+import { COMPONENT_SET } from '@/const'
+
 export default {
   name: 'AsyncComponent',
   directives: {
@@ -49,10 +53,6 @@ export default {
     FormTimePicker: () => import('../Templates/FormTimePicker')
   },
   props: {
-    tag: {
-      type: String,
-      required: true
-    },
     id: {
       type: String,
       required: true
@@ -70,8 +70,20 @@ export default {
           }
         },
         intersection: {
-          rootMargin: '100px 0px'
+          rootMargin: '50px 0px'
         }
+      }
+    }
+  },
+  computed: {
+    node() {
+      return this.componentsMap[this.id]
+    },
+    tag() {
+      if (isComponentSet(this.node)) {
+        return COMPONENT_SET
+      } else {
+        return this.node.tag
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <span
-    v-if="id"
+    v-if="node"
     :key="id"
   >
     <el-button
@@ -10,7 +10,7 @@
       @shortkey.native="selectedNode(parentId)"
       @click="selectedNode(parentId)"
     >
-      {{ parentNodeShortName }} {{ parentId }}
+      {{ parentNodeShortName }} {{ parseInt(parentId) }}
     </el-button>
 
     <span
@@ -18,7 +18,7 @@
       class="el-tree-node__label"
     > > </span>
 
-    <el-button type="text"> {{ nodeShortName }} {{ id }} </el-button>
+    <el-button type="text"> {{ nodeShortName }} {{ parseInt(id) }} </el-button>
 
     <span
       v-if="firstChildNode && showFamily"
@@ -34,14 +34,14 @@
       @shortkey.native="selectedNode(firstChildNode.id)"
       @click="selectedNode(firstChildNode.id)"
     >
-      {{ firstChildNodeShortName }} {{ firstChildNode.id }}
+      {{ firstChildNodeShortName }} {{ parseInt(firstChildNode.id) }}
     </el-button>
   </span>
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
-import { PARENT_ID, SOFT_DELETE } from '@/const'
+import { mapMutations } from 'vuex'
+import { CHILDREN, PARENT_ID, SOFT_DELETE } from '@/const'
 import { shortTagName } from '@/utils/node'
 
 export default {
@@ -57,7 +57,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('component', ['childrenOf']),
     node() {
       return this.componentsMap[this.id]
     },
@@ -65,7 +64,7 @@ export default {
       return this.shortTagName(this.node)
     },
     firstChildNode() {
-      const child = this.childrenOf[this.id].find(node => !node[SOFT_DELETE])
+      const child = this.node[CHILDREN].find(node => !node[SOFT_DELETE])
       return child && this.componentsMap[child.id]
     },
     firstChildNodeShortName() {
@@ -75,7 +74,7 @@ export default {
       return this.node[PARENT_ID]
     },
     parentNode() {
-      return this.componentsMap[this[PARENT_ID]]
+      return this.componentsMap[this.parentId]
     },
     parentNodeShortName() {
       return this.shortTagName(this.parentNode)

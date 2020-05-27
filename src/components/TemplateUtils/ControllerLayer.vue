@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import NodeController from './NodeController'
 import clickOutside from '@/utils/clickOutside'
 import { CAN_DRAG, CAN_EDIT, GRID_ITEM } from '@/const'

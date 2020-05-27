@@ -17,20 +17,17 @@
         class="no-border"
       >
         <el-collapse-item
+          title="Style"
+          name="1"
+        >
+          <panel-styles class="panel" />
+        </el-collapse-item>
+
+        <el-collapse-item
           title="Setting"
           name="2"
         >
           <panel-settings class="panel" />
-        </el-collapse-item>
-        <el-collapse-item
-          title="Style"
-          name="1"
-        >
-          <panel-styles
-            v-if="theOnlySelectedComponentId"
-            :id="theOnlySelectedComponentId"
-            class="panel"
-          />
         </el-collapse-item>
       </el-collapse>
     </div>
@@ -113,6 +110,7 @@ export default {
 .settings {
   @include calc-vh('height', '100vh - 70px');
   overflow: scroll;
+  padding: 0 10px;
 }
 
 </style>

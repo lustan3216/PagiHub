@@ -73,7 +73,7 @@ export default {
     theButtonNodeCanClose(node) {
       // the node is deleted
       this.interactWithButton(node)
-      if (!node) {
+      if (!node && !this.isExample) {
         this.RECORD([
           {
             path: `${this.id}.${PROPS}.buttonCanCloseId`,

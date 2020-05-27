@@ -104,3 +104,5 @@ if (
 ) {
   window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = app.constructor
 }
+
+export default app

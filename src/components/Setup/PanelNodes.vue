@@ -55,6 +55,12 @@ export default {
     ElTree: Tree,
     NodeController
   },
+  props: {
+    selectedComponentSetId: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       filterText: '',
@@ -64,9 +70,14 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapState('component', ['tree']),
     innerTree() {
-      const cloneTree = cloneJson(this.tree)
+      const tree = this.componentsMap[this.selectedComponentSetId]
+
+      if (!tree) {
+        return
+      }
+
+      const cloneTree = cloneJson(tree)
       traversal(cloneTree, (node, parentNode) => {
         if (node.tag === LAYERS && node.children) {
           node.children.sort((a, b) => a[SORT_INDEX] - b[SORT_INDEX])
@@ -80,7 +91,7 @@ export default {
         delete node[STYLE]
       })
 
-      return cloneTree
+      return cloneTree.children
     }
   },
   watch: {

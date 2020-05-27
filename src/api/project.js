@@ -1,8 +1,7 @@
 import localforage from 'localforage'
-import { CHILDREN, ID, NODE_TYPE, PARENT_ID } from '@/const'
-import { objectHasAnyKey, cloneJson, nestedToLinerObject, traversal } from '@/utils/tool'
-import listToTree from '@/utils/listToTree'
-import { componentIds, projectIds } from '@/utils/keyId'
+import { ID, NODE_TYPE } from '@/const'
+import { objectHasAnyKey, nestedToLinerObject } from '@/utils/tool'
+import { nodeIds } from '@/utils/nodeId'
 
 const _initTemplate = () => ({
   type: NODE_TYPE.PROJECT,
@@ -16,41 +15,16 @@ export function getProject() {
       return data
     } else {
       const initTemplate = _initTemplate()
-      projectIds.appendIdNested(initTemplate)
+      nodeIds.appendIdNested(initTemplate)
       return nestedToLinerObject(initTemplate)
     }
   })
 }
 
 export function createFolder(node) {
-  return Promise.resolve(() => {
-    const id = projectIds.generateId()
-    node[ID] = id
-    return node
-  })
-}
-
-export function createComponentSet(componentSet) {
-  componentSet = cloneJson(componentSet)
-  const id = projectIds.generateId()
-  const children = componentSet[CHILDREN]
-
-  componentSet[ID] = id
-  componentIds.resetNestedIds(children, id)
-  componentSet.children[0][PARENT_ID] = id
-
-  const array = []
-  traversal(componentSet, node => {
-    const { children, ...newNode } = node
-    array.push(newNode)
-  })
-  localforage.setItem(id, array)
-
-  return Promise.resolve(componentSet)
-}
-
-export function getComponentSet(id) {
-  return localforage.getItem(id)
+  const id = nodeIds.generateProjectId()
+  node[ID] = id
+  return Promise.resolve(node)
 }
 
 export function updateFolder() {

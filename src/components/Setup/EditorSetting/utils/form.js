@@ -12,7 +12,7 @@ import { CAN_NOT_BE_MULTI_SELECTED } from '@/const'
 export const settings = {
   label: 'default',
   form: {
-    labelWidth: '125px',
+    labelWidth: '100px',
     labelPosition: 'right',
     hideRequiredAsterisk: false,
     showMessage: true,

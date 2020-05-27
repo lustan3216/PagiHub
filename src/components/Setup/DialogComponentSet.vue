@@ -54,27 +54,11 @@
           />
         </el-form-item>
 
-        <el-form-item label="Auto Update">
-          <el-checkbox v-model="form.autoUpdate" />
-        </el-form-item>
-
         <el-form-item label="By Selected">
           <el-checkbox
             :disabled="theOnlySelectedComponentId"
             v-model="form.createBySelected"
             class="m-l-15"
-          />
-        </el-form-item>
-
-        <el-form-item label="Component">
-          <el-input
-            v-model="form.exampleComponentId"
-            class="hidden"
-          />
-          <example-add
-            :disabled="form.createBySelected"
-            button
-            @onAdd="form.exampleComponentId = +$event.id"
           />
         </el-form-item>
 
@@ -112,12 +96,10 @@ export default {
       form: {
         name: '',
         version: 1,
-        autoUpdate: true,
         description: '',
         categories: [],
         parentId: this.parentId,
         type: NODE_TYPE.COMPONENT_SET,
-        exampleComponentId: null,
         createBySelected: false
       },
       categories: [
@@ -158,6 +140,7 @@ export default {
         if (valid) {
           this.appendProjectNode(this.form)
           this.visible = false
+          this.$bus.$emit('component-tabs-visible')
         }
       })
     }

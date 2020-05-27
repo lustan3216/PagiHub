@@ -1,42 +1,66 @@
-import { mapGetters, mapMutations, mapState } from 'vuex'
-import { CHILDREN, GRID_ITEM } from '@/const'
+import { mapMutations } from 'vuex'
+import { CHILDREN, GRID_ITEM, TAG } from '@/const'
 import { cloneJson, traversal, arrayLast } from '@/utils/tool'
 import { traversalChildrenOf } from '@/utils/node'
-import { componentIds } from '@/utils/keyId'
+import { nodeIds } from '@/utils/nodeId'
+import basicTemplates from '@/templateJson/basic'
 
 export default {
+  inject: {
+    componentSetId: {
+      // the value is null only happen on componentSet node
+      // other cases should have string id
+      default: null
+    }
+  },
   computed: {
-    ...mapState('component', ['childrenOf']),
-    ...mapGetters('component', ['parentPath']),
-    ...mapGetters('example', ['basicMapByTag']),
     node() {
       return this.componentsMap[this.id]
     },
+    children() {
+      return this.node && this.node.children || []
+    },
     innerChildren() {
-      const childrenOf = this.isExample
-        ? this.$store.getters['example/childrenOf']
-        : this.$store.state.component.childrenOf
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
       // children 因為每次更新 draftNodesMap，如果innerChildren用computed會所有的component都被更新
-      const children = childrenOf[this.id] || []
-      return children.map(({ [CHILDREN]: _, moved, parentId, ...node }) => ({
+      return this.children.map(({ [CHILDREN]: _, moved, parentId, ...node }) => ({
         ...node
       }))
+    },
+    parentNodes() {
+      const path = []
+
+      const findPath = (id) => {
+        const node = this.componentsMap[id]
+
+        if (node && node.parentId) {
+          const parentNode = this.componentsMap[node.parentId]
+          if (!parentNode) {
+            return
+          }
+          path.unshift(parentNode)
+          findPath(node.parentId)
+        }
+      }
+
+      findPath(this.id)
+      return path
     }
   },
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('component', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
 
-    _addNodesToParentAndRecord(nodes) {
+    _addNodesToParentAndRecord(nodeTree = {}) {
       const records = []
 
-      nodes = cloneJson(nodes)
-      componentIds.resetNestedIds(nodes)
-      nodes.parentId = this.id
+      nodeTree = cloneJson(nodeTree)
+      // if node has not componentSetId means self is componentSet
+      nodeIds.appendIdNested(nodeTree, this.componentSetId || this.id)
+      nodeTree.parentId = this.id
 
-      traversal(nodes, (_node, _parentNode) => {
+      traversal(nodeTree, (_node, _parentNode) => {
         // eslint-disable-next-line
         const { [CHILDREN]: _, ...node } = _node
         records.push({
@@ -45,9 +69,11 @@ export default {
         })
       })
 
+      this.SET_EDITING_COMPONENT_SET_ID(this.rootComponentSetId)
       this.RECORD(records)
+
       this.$nextTick(() => {
-        this.SET_SELECTED_COMPONENT_ID(nodes.id)
+        this.SET_SELECTED_COMPONENT_ID(nodeTree.id)
       })
     },
 
@@ -60,7 +86,8 @@ export default {
       // can new layer-item, grid-item, carousel-item, form-item
       const { tag } = this.node
       // eslint-disable-next-line
-      const emptyItem = arrayLast(this.basicMapByTag[tag][CHILDREN])
+      const template = basicTemplates.find(x => x[TAG] === tag)
+      const emptyItem = arrayLast(template[CHILDREN])
 
       this._addNodesToParentAndRecord(emptyItem)
     },
@@ -71,7 +98,7 @@ export default {
         x => x.id === theNodeIdGonnaCopy
       )
 
-      const children = this.childrenOf[theNodeIdGonnaCopy]
+      const children = this.children[theNodeIdGonnaCopy]
       theNodeGonnaCopy[CHILDREN] = children
       this._addNodesToParentAndRecord(theNodeGonnaCopy)
     },
@@ -87,28 +114,27 @@ export default {
       ]
 
       traversalChildrenOf(theNodeIdGonnaRemove, child => {
-        records.push({
+        records.unshift({
           path: child.id,
           value: undefined
         })
       })
 
-      const parentNodes = this.parentPath(theNodeIdGonnaRemove)
-      for (let i = 0; i < parentNodes.length; i++) {
-        const { id, tag } = parentNodes[parentNodes.length - 1 - i]
+      for (let i = 0; i < this.parentNodes.length; i++) {
+        const { id, tag } = this.parentNodes[this.parentNodes.length - 1 - i]
 
         if (tag === GRID_ITEM) {
           selectedId = id
           break
         }
 
-        if (this.childrenOf[id].length === 1) {
-          records.push({
+        if (this.children.length === 1) {
+          records.unshift({
             path: id,
             value: undefined
           })
         } else {
-          selectedId = this.childrenOf[id][0].id
+          selectedId = this.children[0].id
           break
         }
       }

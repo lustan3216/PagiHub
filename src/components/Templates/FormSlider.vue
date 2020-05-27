@@ -21,7 +21,7 @@ export default {
   mixins: [nodeMixin, formItemMixin],
   watch: {
     'innerProps.isRange'(value) {
-      if (value) {
+      if (value && !this.isExample) {
         this.RECORD([
           {
             path: `${this.id}.${PROPS}.showInput`,

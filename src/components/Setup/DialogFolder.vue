@@ -27,10 +27,6 @@
             type="textarea"
           />
         </el-form-item>
-
-        <el-form-item label="Auto Update">
-          <el-checkbox v-model="form.autoUpdate" />
-        </el-form-item>
       </el-form>
     </dialog-confirmable>
   </el-button>
@@ -61,18 +57,10 @@ export default {
       visible: false,
       form: {
         name: '',
-        autoUpdate: true,
         description: '',
-        categories: [],
         parentId: this.parentId,
         type: NODE_TYPE.FOLDER
-      },
-      categories: [
-        { id: 0, label: 'Button' },
-        { id: 1, label: 'Form' },
-        { id: 2, label: 'Layout' },
-        { id: 3, label: 'Card' }
-      ]
+      }
     }
   },
   computed: {

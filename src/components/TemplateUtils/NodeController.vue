@@ -4,10 +4,13 @@
     @mouseenter="mouseIn = true"
     @mouseleave="mouseIn = false"
   >
-    <node-info
-      :id="id"
-      class="m-r-10"
-    />
+    <slot :data="$data">
+      <node-info
+        :id="id"
+        class="m-r-10"
+      />
+    </slot>
+
     <transition-group
       name="fade"
       class="flex"
@@ -45,12 +48,12 @@
           />
         </el-tooltip>
 
-        <example-add
-          v-if="isGridItem && hasNotChild"
-          :id="id"
-          style="width: 14px;"
-          @onAdd="vmAddNodesToParentAndRecord(id, $event)"
-        />
+<!--        <example-add-->
+<!--          v-if="isGridItem && hasNotChild"-->
+<!--          :id="id"-->
+<!--          style="width: 14px;"-->
+<!--          @onAdd="vmAddNodesToParentAndRecord(id, $event)"-->
+<!--        />-->
 
         <el-button
           v-if="!exclude.includes('paste') && canPaste"
@@ -125,9 +128,11 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds', 'copyComponentIds']),
-    ...mapState('component', ['childrenOf']),
     node() {
       return this.componentsMap[this.id]
+    },
+    children() {
+      return this.node.children
     },
     canDelete() {
       return this.node[CAN_NOT_DELETE] !== true
@@ -139,7 +144,7 @@ export default {
       return this.node.tag === GRID_ITEM
     },
     hasNotChild() {
-      return !this.childrenOf[this.id].length
+      return !this.children.length
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)
@@ -157,12 +162,12 @@ export default {
     vmPasteCopyComponents,
     vmAddNodesToParentAndRecord,
     multiPaste() {
-      jsonHistory.current.recordsMerge(() => {
+      jsonHistory.recordsMerge(() => {
         this.selectedNodes.forEach(node => this.vmPasteCopyComponents(node))
       })
     },
     multiDelete() {
-      jsonHistory.current.recordsMerge(() => {
+      jsonHistory.recordsMerge(() => {
         this.selectedNodes.forEach(node => this.vmRemoveNode(node))
       })
     }

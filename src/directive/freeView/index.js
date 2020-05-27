@@ -60,6 +60,12 @@ export default function freeView(baseElement, options = {}) {
 
   const self = cached[id]
 
+  options.freeViewReset = () => {
+    self.x = 0
+    self.y = 0
+    self.scaleRatio = 1
+  }
+
   on(baseElement, eventName, function(event) {
     if (startCallback) {
       startCallback(event, self)

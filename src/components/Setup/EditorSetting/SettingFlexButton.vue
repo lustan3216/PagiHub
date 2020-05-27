@@ -9,7 +9,7 @@
 import { mapState } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { select, assignDefaultValue } from './utils/ruleTool'
-import { NODE_TYPE } from '@/const'
+import { CHILDREN, NODE_TYPE } from '@/const'
 
 export const REDIRECT_TO = 'redirectTo'
 
@@ -29,7 +29,6 @@ export default {
   },
   computed: {
     ...mapState('project', ['projectMap']),
-    ...mapState('component', ['childrenOf']),
     linkableComponentSet() {
       return Object.values(this.projectMap).filter(
         node => node.type === NODE_TYPE.COMPONENT_SET
@@ -42,7 +41,7 @@ export default {
         })
       ]
 
-      if (!this.childrenOf[this.id].length) {
+      if (!this.componentsMap[this.id][CHILDREN].length) {
         const redirectTo = select(REDIRECT_TO, {
           options: this.linkableComponentSet.map(node => ({
             label: `${node.name || node.tag} ${node.id}`,

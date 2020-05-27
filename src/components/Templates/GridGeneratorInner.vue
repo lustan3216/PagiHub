@@ -64,7 +64,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('component', ['componentsMap', 'childrenOf']),
+    ...mapState('component', ['componentsMap']),
     freeStyle() {
       return `
        ::v-deep .vue-resizable-handle {
@@ -127,7 +127,7 @@ export default {
     getCurrentLayout(children) {
       this.layout = children.map((child, index) => ({
         id: child.id,
-        i: child.i,
+        i: child.i || index, // should not happen, but just prevent crash in case
         x: this.findAncestorValue(index, 'x'),
         y: this.findAncestorValue(index, 'y'),
         w: this.findAncestorValue(index, 'w'),
@@ -188,7 +188,7 @@ export default {
       if (!this.layout.length) return
 
       newChildren.forEach(node => {
-        const grandChild = this.childrenOf[node.id][0]
+        const grandChild = this.children[0]
         // 檢查自己、曾祖孫有沒有autosize
         if (grandChild && (grandChild[AUTO_HEIGHT] || node[AUTO_HEIGHT])) {
           this.$nextTick(() => {

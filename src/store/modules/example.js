@@ -1,38 +1,24 @@
 import allExampleComponents from '../../templateJson'
-import { TAG, CHILDREN, ID } from '@/const'
+import { ID, CHILDREN } from '@/const'
 import { traversal } from '@/utils/tool'
 
 const state = {
-  basic: allExampleComponents()
+  basic,
+  basicComponentsMap,
+  basicChildrenOf,
+  componentSetsMap: {},
+  componentSetsChildrenOf: {}
 }
 
-const mutations = {
-  SET_EXAMPLES(state, basic) {
-    state.basic = basic
-  }
-}
+const mutations = {}
 
 const getters = {
-  basicMapByTag: state =>
-    state.basic.reduce((all, example) => {
-      const tag = example[TAG]
-      all[tag] = example
-      return all
-    }, {}),
+  exampleComponentsMap: state => {
+    return { ...state.basicComponentsMap, ...state.componentSetsMap }
+  },
 
-  basicMapById: state =>
-    state.basic.reduce((all, example) => {
-      const id = example[ID]
-      all[id] = example
-      return all
-    }, {}),
-
-  childrenOf(state) {
-    const childrenOf = {}
-    traversal(state.basic, node => {
-      childrenOf[node.id] = node[CHILDREN] || []
-    })
-    return childrenOf
+  exampleChildrenOf(state) {
+    return { ...state.basicChildrenOf, ...state.componentSetsChildrenOf }
   }
 }
 
