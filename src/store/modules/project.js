@@ -5,7 +5,6 @@ import { SET, VUE_SET } from '../index'
 import { CHILDREN, NODE_TYPE } from '@/const'
 import { cloneJson } from '@/utils/tool'
 import { getProject, createFolder } from '@/api/project'
-import { createComponentSet } from '@/api/componentSet'
 import { resetJsonHistory } from '@/store/jsonHistory'
 import { nodeIds } from '@/utils/nodeId'
 
@@ -16,7 +15,15 @@ const state = {
 const mutations = {
   SET,
   VUE_SET,
-  APPEND_NODE(state, { id, node: { children: _, ...node }}) {
+  APPEND_COMPONENT_SET(state, { id, parentId }) {
+    const parentNode = state.projectMap[parentId]
+    parentNode[CHILDREN] = parentNode[CHILDREN] || []
+    parentNode[CHILDREN].push({
+      id,
+      type: NODE_TYPE.COMPONENT_SET
+    })
+  },
+  APPEND_FOLDER(state, { id, node: { children: _, ...node }}) {
     Vue.set(state.projectMap, id, node)
   },
   DELETE_NODE(state, id) {
@@ -34,29 +41,9 @@ const actions = {
     commit('component/SET_EDITING_COMPONENT_SET_ID', componentSetId, { root: true })
   },
 
-  async appendProjectNode(
-    { dispatch, commit, state, rootGetters, rootState },
-    { createBySelected, ...node }
-  ) {
-    switch (node.type) {
-      case NODE_TYPE.COMPONENT_SET:
-        const componentSet = await createComponentSet({
-          ...node,
-          [CHILDREN]: createBySelected
-            ? [rootGetters['app/selectedComponentTree']]
-            : []
-        })
-
-        commit('app/TOGGLE_SELECTED_COMPONENT_SET_IN_IDS', componentSet.id, { root: true })
-        commit('component/SET_EDITING_COMPONENT_SET_ID', componentSet.id, { root: true })
-        commit('APPEND_NODE', { id: componentSet.id, node: componentSet })
-        break
-
-      case NODE_TYPE.FOLDER:
-        const folder = await createFolder(node)
-        commit('APPEND_NODE', { id: folder.id, node: folder })
-        break
-    }
+  async createFolder({ commit }, node) {
+    const folder = await createFolder(node)
+    commit('APPEND_FOLDER', { id: folder.id, node: folder })
   },
 
   modifyProjectNodeParent({ commit, state }, { parentId, id }) {

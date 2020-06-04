@@ -102,6 +102,7 @@
       <el-button
         v-popover:6
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
+        :disabled="!selectedComponentIds.length"
         type="text"
         icon="el-icon-document-copy"
         @shortkey.native="copy"
@@ -115,6 +116,7 @@
       >
         <el-button
           v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
+          :disabled="!copyComponentIds.length"
           type="text"
           icon="el-icon-document-add"
           size="small"
@@ -123,8 +125,25 @@
         />
       </el-tooltip>
 
+      <el-tooltip
+        effect="light"
+        content="Cut Component"
+        placement="bottom"
+      >
+        <el-button
+          v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
+          :disabled="!selectedComponentNode"
+          type="text"
+          icon="el-icon-scissors"
+          size="small"
+          @click="cut"
+          @shortkey.native="cut"
+        />
+      </el-tooltip>
+
       <el-button
         v-shortkey="{ del: ['del'], del: ['backspace'] }"
+        :disabled="!selectedComponentIds.length"
         type="text"
         icon="el-icon-delete"
         @shortkey.native="multiDelete"
@@ -139,6 +158,7 @@
       >
         <span>Are u sure to Publish？</span>
         <el-button
+          :disabled="!editingComponentSetId"
           type="info"
           icon="el-icon-circle-check"
           circle
@@ -157,6 +177,7 @@
       <el-button
         v-popover:8
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
+        :disabled="!editingComponentSetId"
         icon="el-icon-data-analysis"
         type="text"
         @click="SET_PREVIEW_MODE"
@@ -164,6 +185,7 @@
       />
 
       <el-button
+        :disabled="!editingComponentSetId"
         type="text"
         icon="el-icon-upload"
       />
@@ -200,7 +222,7 @@ import {
 import jsonHistory from '@/store/jsonHistory'
 
 export default {
-  name: 'NavBar',
+  name: 'FunctionBar',
   components: {
     MySpace,
     PanelProject,
@@ -215,7 +237,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds', 'copyComponentIds']),
+    ...mapState('app', ['selectedComponentIds', 'copyComponentIds', 'selectedComponentNode']),
     ...mapState('component', ['editingComponentSetId']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
     selected() {
@@ -266,6 +288,9 @@ export default {
       jsonHistory.recordsMerge(() => {
         this.selectedNodes.forEach(node => this.vmRemoveNode(node))
       })
+    },
+    cut() {
+
     }
   }
 }

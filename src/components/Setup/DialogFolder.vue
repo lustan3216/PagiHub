@@ -75,14 +75,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions('project', ['appendProjectNode']),
+    ...mapActions('project', ['createFolder']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.appendProjectNode(this.form)
+          this.createFolder(this.form)
           this.visible = false
         }
       })

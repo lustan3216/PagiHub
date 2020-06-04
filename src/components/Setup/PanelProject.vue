@@ -143,7 +143,6 @@ export default {
     }
   },
   methods: {
-    isComponent,
     isComponentSet,
     isProject,
     isFolder,

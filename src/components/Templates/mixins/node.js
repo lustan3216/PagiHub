@@ -7,7 +7,6 @@ import { directive } from '@/directive/freeStyle'
 import { nodeIds } from '@/utils/nodeId'
 
 let hoverNode = []
-const watchOptions = { deep: true, immediate: true }
 
 export default {
   props: {
@@ -26,39 +25,43 @@ export default {
   },
   data() {
     return {
-      innerStyles: {},
-      innerProps: {}
+      masterStyles: {},
+      selfStyles: {},
+      masterProps: {},
+      selfProps: {}
     }
   },
   computed: {
     node() {
       return this.componentsMap[this[ID]]
     },
-    masterNode() {
-      const masterId = this.node[MASTER_ID]
-      return masterId && this.componentsMap[masterId]
-    },
-    masterNodeProps() {
-      if (this.masterNode) {
-        return this.masterNode[PROPS] || {}
-      } else {
-        return {}
-      }
-    },
-    masterNodeStyle() {
-      if (this.masterNode) {
-        return this.masterNode[STYLE] || {}
-      } else {
-        return {}
-      }
-    },
     innerValue() {
       return this.node && this.node[VALUE]
+    },
+    masterId() {
+      return this.node && this.node[MASTER_ID]
+    },
+    innerStyles() {
+      return {
+        id: this.id,
+        ...this.masterStyles,
+        ...this.selfStyles
+      }
+    },
+    innerProps() {
+      const setting = cloneJson(this.$options.defaultSetting || {})
+      return deepmerge(setting, this.masterProps, this.selfProps)
     }
   },
   created() {
     this.watchStyles()
     this.watchProps()
+
+    if (this.masterId) {
+      this.watchMasterStyles()
+      this.watchMasterProps()
+    }
+
     if (this.isDraftMode && !this.isExample) {
       nodeIds.restoreIds(this.node)
     }
@@ -78,26 +81,28 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_IDS']),
+    watch(path, fn) {
+      this.$watch(path, fn, { deep: true, immediate: true })
+    },
     watchStyles() {
-      const path = `componentsMap.${this.id}.${STYLE}`
-      const fn = (value = {}) => {
-        this.innerStyles = {
-          id: this.id,
-          ...this.masterNodeStyle,
-          ...value
-        }
-      }
-
-      this.$watch(path, fn, watchOptions)
+      this.watch(`componentsMap.${this.id}.${STYLE}`, value => {
+        this.selfStyles = value || {}
+      })
+    },
+    watchMasterStyles() {
+      this.watch(`componentsMap.${this.masterId}.${STYLE}`, value => {
+        this.masterStyles = value || {}
+      })
     },
     watchProps() {
-      const path = `componentsMap.${this.id}.${PROPS}`
-      const fn = (value = {}) => {
-        const setting = cloneJson(this.$options.defaultSetting || {})
-        this.innerProps = deepmerge(setting, this.masterNodeProps, value)
-      }
-
-      this.$watch(path, fn, watchOptions)
+      this.watch(`componentsMap.${this.id}.${PROPS}`, value => {
+        this.selfProps = value || {}
+      })
+    },
+    watchMasterProps() {
+      this.watch(`componentsMap.${this.masterId}.${PROPS}`, value => {
+        this.masterProps = value || {}
+      })
     },
     hoverCover(hover) {
       const $el =

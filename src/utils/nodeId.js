@@ -4,6 +4,14 @@ import IdMap from './idMap'
 
 const CONNECTOR = 'a'
 
+// master
+// component id = 1a2    => component_id, a = connector, 2 => component_set_id
+// component_set_id = 1  => component_set_id
+
+// instance
+// component id = 1a1i    => component_id, a = connector, 1a => component_set_instance_id
+// component_set_id = 1i => component_id, i = connector
+
 class IdManagement {
   idMap = new IdMap()
   projectIdSet = new Set([0]) // to prevent zero as ID

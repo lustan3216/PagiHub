@@ -2,8 +2,8 @@ import app from '@/main'
 import localforage from 'localforage'
 import jsonHistory from '../jsonHistory'
 import store, { SET } from '../index'
-import { getComponentSet } from '@/api/componentSet'
-import { isUndefined, objectHasAnyKey, traversal, deleteBy, cloneJson } from '@/utils/tool'
+import { createComponentSet, getComponentSet } from '@/api/componentSet'
+import { isUndefined, objectHasAnyKey, traversal, deleteBy } from '@/utils/tool'
 import { nodeIds } from '@/utils/nodeId'
 import { Message } from 'element-ui'
 import { all, basicComponentsMap } from '@/templateJson'
@@ -75,6 +75,7 @@ const mutations = {
   },
   SET_EDITING_COMPONENT_SET_ID(state, id) {
     state.editingComponentSetId = id
+    store.commit('app/RESET', null, { root: true })
   },
   async REDO() {
     await rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)
@@ -118,6 +119,22 @@ const mutations = {
 }
 
 const actions = {
+  async createComponentSet(
+    { dispatch, commit, state, rootGetters, rootState },
+    { createBySelected, ...node }
+  ) {
+    const componentSet = await createComponentSet({
+      ...node,
+      [CHILDREN]: createBySelected
+        ? [rootGetters['app/selectedComponentTree']]
+        : []
+    })
+
+    commit('app/TOGGLE_SELECTED_COMPONENT_SET_IN_IDS', componentSet.id, { root: true })
+    commit('SET_EDITING_COMPONENT_SET_ID', componentSet.id)
+    commit('project/APPEND_COMPONENT_SET', componentSet, { root: true })
+  },
+
   removeComponentSet({ state: { editingComponentSetId }, commit }, id) {
     if (id === editingComponentSetId) {
       commit('SET', { editingComponentSetId: null })

@@ -73,6 +73,7 @@ import { mapActions, mapState } from 'vuex'
 import { name, required, requiredSelect } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import ExampleAdd from '@/components/TemplateUtils/ExampleAdd'
+import { createComponentSet } from '@/api/componentSet'
 
 export default {
   name: 'DialogComponentSet',
@@ -131,14 +132,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions('project', ['appendProjectNode']),
+    ...mapActions('component', ['createComponentSet']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.appendProjectNode(this.form)
+          this.createComponentSet(this.form)
           this.visible = false
           this.$bus.$emit('component-tabs-visible')
         }

@@ -11,6 +11,11 @@ const state = {
 
 const mutations = {
   SET,
+  RESET(state) {
+    state.selectedComponentIds = []
+    state.selectedComponentSetIds = []
+    state.copyComponentIds = []
+  },
   SET_COPY_SELECTED_COMPONENT_IDS(state) {
     state.copyComponentIds = state.selectedComponentIds
   },

@@ -1,8 +1,11 @@
 <template>
   <div class="app">
-    <nav-bar v-if="isDraftMode" />
+    <function-bar v-if="isDraftMode" />
 
-    <main class="flex1 relative over-hidden" style="background-color:#f4f8fb;">
+    <main
+      class="flex1 relative over-hidden"
+      style="background-color:#f4f8fb;"
+    >
       <panel-draft />
     </main>
 
@@ -11,14 +14,14 @@
 </template>
 
 <script>
-import NavBar from './components/Layout/NavBar'
+import FunctionBar from './components/Layout/FunctionBar'
 import PanelDraft from './components/Layout/PanelDraft'
 
 export default {
   name: 'App',
   components: {
     SidebarRight: () => import('./components/Layout/SidebarRight'),
-    NavBar,
+    FunctionBar,
     PanelDraft
   }
 }

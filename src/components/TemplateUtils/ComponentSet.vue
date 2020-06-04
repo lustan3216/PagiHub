@@ -53,7 +53,7 @@ export default {
     if (masterID) {
       componentSetInstanceIds.add(this.rootComponentSetId, this[ID])
 
-      if (!this.masterNode) {
+      if (!this.componentsMap[masterID]) {
         this.getComponentSet(masterID)
       }
     }
