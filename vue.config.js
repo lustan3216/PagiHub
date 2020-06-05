@@ -30,6 +30,11 @@ module.exports = {
 
     config.resolve.alias.set('@', path.resolve(__dirname, 'src'))
 
+    config
+      .when(process.env.NODE_ENV === 'development', config => {
+        config.plugin('cache').use(HardSourceWebpackPlugin)
+      })
+
     config.module
       .rule('vue')
       .use('vue-svg-inline-loader')
@@ -37,10 +42,6 @@ module.exports = {
       .options({
         addAttributes: { class: 'svg-inline' }
       })
-
-    config.plugin('analyzer').use(BundleAnalyzerPlugin)
-
-    config.plugin('cache').use(HardSourceWebpackPlugin)
     // config.plugin('circular').use(CircularDependencyPlugin)
 
     // config.optimization.splitChunks({

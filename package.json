@@ -3,18 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --report",
     "test": "cypress open",
     "lint": "vue-cli-service lint --fix",
     "dev": "vue-cli-service serve",
     "purge": "rm -rf ./node_modules/.cache/hard-source"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.8.7",
     "@form-create/element-ui": "^1.0.10",
     "@simonwep/selection-js": "^1.6.0",
     "bezier-easing": "^2.1.0",
-    "csso": "^4.0.2",
     "element-ui": "^2.11.1",
     "intersection-observer": "^0.7.0",
     "json-history": "^0.1.8",
