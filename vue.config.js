@@ -1,7 +1,8 @@
 const path = require('path')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin
+
+// const isDev = process.env.NODE_ENV === 'development'
+// const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
   // transpileDependencies: ['element-ui', 'vue-grid-generator', 'vue'],
@@ -13,6 +14,7 @@ module.exports = {
       }
     }
   },
+
   chainWebpack: config => {
     config.resolve.alias.set(
       'icons',
@@ -30,10 +32,7 @@ module.exports = {
 
     config.resolve.alias.set('@', path.resolve(__dirname, 'src'))
 
-    config
-      .when(process.env.NODE_ENV === 'development', config => {
-        config.plugin('cache').use(HardSourceWebpackPlugin)
-      })
+    config.plugin('cache').use(HardSourceWebpackPlugin)
 
     config.module
       .rule('vue')
@@ -55,5 +54,28 @@ module.exports = {
     //     }
     //   }
     // })
+  },
+
+  pluginOptions: {
+    s3Deploy: {
+      registry: undefined,
+      awsProfile: 'default',
+      overrideEndpoint: false,
+      region: 'ap-southeast-1',
+      bucket: 'asd-frontend',
+      createBucket: true,
+      staticHosting: true,
+      staticIndexPage: 'index.html',
+      staticErrorPage: 'index.html',
+      assetPath: 'dist',
+      assetMatch: '**',
+      deployPath: '/',
+      acl: 'public-read',
+      pwa: false,
+      enableCloudfront: false,
+      pluginVersion: '4.0.0-rc3',
+      uploadConcurrency: 10,
+      gzip: true
+    }
   }
 }
