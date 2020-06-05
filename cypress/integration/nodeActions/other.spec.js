@@ -5,19 +5,11 @@ context('Actions', () => {
     cy.visit('https://example.cypress.io/commands/actions')
   })
 
-  describe('publish', () => {
+  describe('visible', () => {
     it('layersRoot')
   })
 
-  describe('preview', () => {
-    it('layersRoot')
-  })
-
-  describe('project', () => {
-    it('layersRoot')
-  })
-
-  describe('select art board', () => {
+  describe('touchable', () => {
     it('layersRoot')
   })
 })
