@@ -3,9 +3,15 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
 // const isDev = process.env.NODE_ENV === 'development'
 // const isProd = process.env.NODE_ENV === 'production'
+const fs = require('fs')
 
 module.exports = {
   // transpileDependencies: ['element-ui', 'vue-grid-generator', 'vue'],
+  devServer: {
+    https: true,
+    key: fs.readFileSync('./localhost.key'),
+    cert: fs.readFileSync('./localhost.crt')
+  },
   css: {
     extract: false,
     loaderOptions: {
@@ -62,7 +68,7 @@ module.exports = {
       awsProfile: 'default',
       overrideEndpoint: false,
       region: 'ap-southeast-1',
-      bucket: 'asd-frontend',
+      bucket: 'lots.design',
       createBucket: true,
       staticHosting: true,
       staticIndexPage: 'index.html',
@@ -72,10 +78,12 @@ module.exports = {
       deployPath: '/',
       acl: 'public-read',
       pwa: false,
-      enableCloudfront: false,
+      enableCloudfront: true,
+      cloudfrontId: 'E1IP92P63YU7AZ',
       pluginVersion: '4.0.0-rc3',
       uploadConcurrency: 10,
       gzip: true
     }
   }
 }
+

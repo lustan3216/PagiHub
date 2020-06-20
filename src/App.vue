@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <function-bar v-if="isDraftMode" />
-
+    <FacebookLogin/>
     <main
       class="flex1 relative over-hidden"
       style="background-color:#f4f8fb;"
@@ -16,13 +16,15 @@
 <script>
 import FunctionBar from './components/Layout/FunctionBar'
 import PanelDraft from './components/Layout/PanelDraft'
+import FacebookLogin from './components/Layout/FacebookLogin'
 
 export default {
   name: 'App',
   components: {
     SidebarRight: () => import('./components/Layout/SidebarRight'),
     FunctionBar,
-    PanelDraft
+    PanelDraft,
+    FacebookLogin
   }
 }
 </script>

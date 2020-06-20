@@ -2,7 +2,7 @@ import 'normalize.css'
 import './styles/index.scss'
 import 'intersection-observer'
 import './utils/polyfill'
-
+import '@aws-amplify/ui-vue'
 import vhCheck from 'vh-check'
 import Vue from 'vue'
 import App from './App.vue'

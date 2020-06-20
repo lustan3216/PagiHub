@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import component from './modules/component'
 import app from './modules/app'
 import mode from './modules/mode'
+import user from './modules/user'
 import project from './modules/project'
 import { isUndefined } from '../utils/tool'
 
@@ -34,7 +35,8 @@ const store = new Vuex.Store({
     app,
     mode,
     component,
-    project
+    project,
+    user
   }
 })
 

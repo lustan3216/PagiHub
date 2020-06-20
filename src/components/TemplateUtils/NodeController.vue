@@ -48,12 +48,12 @@
           />
         </el-tooltip>
 
-<!--        <example-add-->
-<!--          v-if="isGridItem && hasNotChild"-->
-<!--          :id="id"-->
-<!--          style="width: 14px;"-->
-<!--          @onAdd="vmAddNodesToParentAndRecord(id, $event)"-->
-<!--        />-->
+        <!--        <example-add-->
+        <!--          v-if="isGridItem && hasNotChild"-->
+        <!--          :id="id"-->
+        <!--          style="width: 14px;"-->
+        <!--          @onAdd="vmAddNodesToParentAndRecord(id, $event)"-->
+        <!--        />-->
 
         <el-button
           v-if="!exclude.includes('paste') && canPaste"

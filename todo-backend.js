@@ -1,8 +1,10 @@
 const asd = [
   {
-    id: 'ulid',
-    user_id: '',
+    user_id: '',    // pk
+    id: 'ulid',       // gsi
+    updated_at: '',  // sk
     type: 0,
+    lock_id: '',
     children: [
       {
         id: 'ulid',
@@ -15,25 +17,47 @@ const asd = [
   },
 
   {
-    id: 'ulid',
-    user_id: '',
-    style: {},
-    props: {},
+    user_id: '',    // pk
+    id: 'ulid',       // gsi
+    updatedAt: '',  // sk
     type: 2,
-    children: ['components'],
-    forks: ['component_set_id'],
-    likes: ['user_id'],
-    tags: []
+    lock_id: '',
+    tags: [],
+    name: '',
+    description: '',
+    likeCount: '',
+    forkCount: '',
+    likeUserIds: [],
+    forkUserIds: [],
+    children: []
   }
 ]
 
-const tags = []
+const tags = [
+  {
+    name: 'tag',
+    useCount: ''
+  }
+]
 
-const user = []
-
+const search = [
+  {
+    name: 'tag.tag1', // 'partition_key'
+    likeCount: '',    // gsi
+    forkCount: '',    // gsi
+    updatedAt: '',    // gsi
+    componentSetId: '' // 'sort_key'
+  },
+  {
+    name: 'tag2.tag5.tag7',
+    component_set_id: ''
+  }
+]
 
 // IAM user
 // Root
 // 319924209672
 // AKIAUU7HYBAEHOMSPVER
 // +suj0WAUUANEhKy/P7EmV5J3EaPPfHvQh9U20YRk
+
+// publish / componsent update node / asset / GetUserPicture

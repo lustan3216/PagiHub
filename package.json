@@ -6,13 +6,17 @@
     "build": "vue-cli-service build --report",
     "test": "cypress open",
     "lint": "vue-cli-service lint --fix",
-    "deploy": "yarn build && vue-cli-service s3-deploy",
+    "deploy": "vue-cli-service build && vue-cli-service s3-deploy",
     "dev": "vue-cli-service serve",
     "purge": "rm -rf ./node_modules/.cache/hard-source"
   },
   "dependencies": {
+    "@aws-amplify/ui-vue": "^0.2.7",
     "@form-create/element-ui": "^1.0.10",
     "@simonwep/selection-js": "^1.6.0",
+    "aws-amplify": "^3.0.17",
+    "aws-sdk": "^2.693.0",
+    "axios": "^0.19.2",
     "bezier-easing": "^2.1.0",
     "element-ui": "^2.11.1",
     "intersection-observer": "^0.7.0",

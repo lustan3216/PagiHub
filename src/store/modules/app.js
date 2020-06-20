@@ -2,6 +2,7 @@ import { SET } from '../index'
 import { arraySubtract } from '@/utils/tool'
 
 const state = {
+  userId: null,
   isAnimating: false,
   scaleRatio: 1,
   selectedComponentIds: [],

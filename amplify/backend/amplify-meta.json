@@ -1,0 +1,46 @@
+{
+    "providers": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-web-dev-154852-authRole",
+            "UnauthRoleArn": "arn:aws:iam::319924209672:role/amplify-web-dev-154852-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::319924209672:role/amplify-web-dev-154852-authRole",
+            "Region": "ap-southeast-1",
+            "DeploymentBucketName": "amplify-web-dev-154852-deployment",
+            "UnauthRoleName": "amplify-web-dev-154852-unauthRole",
+            "StackName": "amplify-web-dev-154852",
+            "StackId": "arn:aws:cloudformation:ap-southeast-1:319924209672:stack/amplify-web-dev-154852/0031d760-abb8-11ea-8e86-0a234791d192",
+            "AmplifyAppId": "dv1nv3hs66zxc"
+        },
+        "categories": {
+            "auth": {
+                "weba81970a0": {
+                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"288537955865523\",\"client_secret\":\"655f5b8177f489731d44dd3830cd3ab1\"},{\"ProviderName\":\"Google\",\"client_id\":\"84801854201-g0m8froqlojl3co61pi7gvjkbvq69clk.apps.googleusercontent.com\",\"client_secret\":\"fvTnVruhxUwWOoqFkIya2AKa\"}]"
+                }
+            }
+        }
+    },
+    "auth": {
+        "weba81970a0": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [],
+            "customAuth": false,
+            "output": {
+                "AppClientSecret": "97gubhu7ejj8rpak2lrpdbl1ap6bsd5ktgdr53rk1hg0mob61f4",
+                "UserPoolId": "ap-southeast-1_6fIsyUNrb",
+                "AppClientIDWeb": "7oigfecnhqliqr3jqo86dq6jsd",
+                "AppClientID": "74ut8iuj2k6k1ufaqgn4k1jio3",
+                "HostedUIDomain": "lots-design-dev",
+                "IdentityPoolId": "ap-southeast-1:1847ec0f-d761-4d06-94a2-6828fa3c5daf",
+                "IdentityPoolName": "weba81970a0_identitypool_a81970a0__dev",
+                "OAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://localhost:8080/\"],\"LogoutURLs\":[\"https://localhost:8080/\"]}",
+                "UserPoolName": "weba81970a0_userpool_a81970a0"
+            },
+            "lastPushTimeStamp": "2020-06-11T08:24:00.663Z",
+            "providerMetadata": {
+                "s3TemplateURL": "https://s3.amazonaws.com/amplify-web-dev-154852-deployment/amplify-cfn-templates/auth/weba81970a0-cloudformation-template.yml",
+                "logicalId": "authweba81970a0"
+            }
+        }
+    }
+}

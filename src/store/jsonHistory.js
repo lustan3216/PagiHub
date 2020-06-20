@@ -1,10 +1,8 @@
-import Vue from 'vue'
 import store from './index'
 import JsonHistory from 'json-history'
 import { objectHasAnyKey } from '@/utils/tool'
 import { nodeIds } from '@/utils/nodeId'
 
-const map = {}
 const jsonHistory = new JsonHistory({
   name: name,
   setter(tree, key, value) {

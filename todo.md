@@ -89,6 +89,7 @@ connect to google sheet
 forum
 organiztaion
 broadcast
+可上傳影音
 }
-
+售價 參考 netflex 用多人收錢策略
 user needs to bring some users to open functions
