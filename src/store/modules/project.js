@@ -4,7 +4,7 @@ import listToTree from '@/utils/listToTree'
 import { SET, VUE_SET } from '../index'
 import { CHILDREN, NODE_TYPE } from '@/const'
 import { cloneJson } from '@/utils/tool'
-import { getProject, createFolder } from '@/api/project'
+import { getProject, createFolder } from '@/api/node'
 import { resetJsonHistory } from '@/store/jsonHistory'
 import { nodeIds } from '@/utils/nodeId'
 

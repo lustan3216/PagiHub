@@ -10,7 +10,7 @@
     >
       <slot/>
     </div>
-    <portal to="ViewPort">
+    <portal to="TopNav">
       <el-button
         size="small"
         @click="scaleRollback"

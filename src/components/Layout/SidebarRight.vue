@@ -1,9 +1,5 @@
 <template>
   <div class="sidebar-right">
-    <portal-target
-      name="ViewPort"
-      class="inline-block m-l-15"
-    />
     <node-info
       v-if="theOnlySelectedComponentId"
       :id="theOnlySelectedComponentId"
@@ -81,10 +77,10 @@ export default {
 <style scoped lang="scss">
 .sidebar-right {
   width: 320px;
-  overflow: auto;
-  background-color: #fff;
   z-index: 100;
-  box-shadow: 0 0 15px 0 rgba(32, 48, 60, 0.11);
+  position: absolute;
+  right: 0;
+  padding: 10px 0;
 }
 
 ::v-deep {
@@ -108,9 +104,9 @@ export default {
 }
 
 .settings {
-  @include calc-vh('height', '100vh - 70px');
+  // @include calc-vh('height', '100vh - 70px');
   overflow: scroll;
-  padding: 0 10px;
+  padding: 15px 10px;
 }
 
 </style>

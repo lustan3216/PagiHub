@@ -73,7 +73,7 @@ import { mapActions, mapState } from 'vuex'
 import { name, required, requiredSelect } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import ExampleAdd from '@/components/TemplateUtils/ExampleAdd'
-import { createComponentSet } from '@/api/project'
+import { createComponentSet } from '@/api/node'
 
 export default {
   name: 'DialogComponentSet',

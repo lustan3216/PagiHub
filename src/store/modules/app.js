@@ -7,11 +7,18 @@ const state = {
   scaleRatio: 1,
   selectedComponentIds: [],
   selectedComponentSetIds: [],
-  copyComponentIds: []
+  copyComponentIds: [],
+  dialog: null
 }
 
 const mutations = {
   SET,
+  DIALOG_OPEN(state, name) {
+    state.dialog = `dialog-${name}`
+  },
+  DIALOG_CLOSE(state) {
+    state.dialog = null
+  },
   RESET(state) {
     state.selectedComponentIds = []
     state.selectedComponentSetIds = []

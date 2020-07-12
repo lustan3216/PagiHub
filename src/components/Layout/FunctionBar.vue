@@ -29,7 +29,7 @@
     v-else-if="isDraftMode"
     class="flex"
   >
-    <div class="icons">
+    <div class="icons m-l-10">
       <el-tooltip
         ref="1"
         effect="light"
@@ -55,11 +55,11 @@
         v-popover:3
         v-shortkey="['x']"
         type="text"
-        icon="el-icon-grape"
-        style="transform: scale(-1);"
         @shortkey.native="projectIconClick"
         @click="projectIconClick"
-      />
+      >
+        <i class="el-icon-grape" style="transform: scale(-1);"/>
+      </el-button>
 
       <i class="dot" />
 
@@ -209,7 +209,6 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import { Message } from 'element-ui'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
-import MySpace from './MySpace'
 import PanelProject from '../Setup/PanelProject'
 import ComponentTabs from '../TemplateUtils/ComponentTabs'
 import {
@@ -224,7 +223,6 @@ import jsonHistory from '@/store/jsonHistory'
 export default {
   name: 'FunctionBar',
   components: {
-    MySpace,
     PanelProject,
     ComponentTabs,
     DialogInteracted,
@@ -299,15 +297,13 @@ export default {
 <style scoped lang="scss">
 nav {
   text-align: center;
-  background-color: #fff;
   z-index: 200;
-  box-shadow: 0 0 15px 0 rgba(32, 48, 60, 0.11);
 }
 
 .el-button {
   font-size: 16px;
   padding: 7px;
-  margin: 10px 5px 0;
+  margin: 15px 5px 0;
 }
 
 .icons {
@@ -326,7 +322,7 @@ nav {
   height: 2px;
   background-color: #b1b1b1;
   border-radius: 50%;
-  margin-top: 11px;
+  margin-top: 15px;
   margin-bottom: 3px;
 }
 </style>

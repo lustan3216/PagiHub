@@ -1,38 +1,58 @@
 <template>
-  <div class="flex">
-    <el-dropdown>
-      <span class="el-dropdown-link">
-        <span v-if="isLogin">
-          Logout <i class="el-icon-arrow-down el-icon--right"/>
-        </span>
-        <span v-else>Login</span>
+  <el-dropdown size="medium">
+      <span class="el-dropdown-link vertical-center">
+        <img :src="coverPhoto" style="width: 30px;" class="circle">
+        <i class="el-icon-arrow-down el-icon--right"/>
       </span>
 
-      <el-dropdown-menu
-        v-if="isLogin"
-        slot="dropdown"
+    <el-dropdown-menu slot="dropdown">
+      <el-dropdown-item class="no-action">
+        <h4>Sign in as</h4>
+        <span>
+          {{ username || id.replace('_', ' ') }}
+        </span>
+      </el-dropdown-item>
+
+      <el-dropdown-item
+        divided
+        @click.native="$router.push('/profile')"
       >
-        <el-dropdown-item>Profile</el-dropdown-item>
-        <el-dropdown-item>Projects</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
-  </div>
+        Profile
+      </el-dropdown-item>
+
+      <el-dropdown-item @click.native="$router.push('/projects')">
+        Projects
+      </el-dropdown-item>
+
+      <el-dropdown-item @click.native="$router.push('/help')">
+        Help
+      </el-dropdown-item>
+
+      <el-dropdown-item
+        divided
+        @click.native="logout"
+      >
+        Logout
+      </el-dropdown-item>
+    </el-dropdown-menu>
+  </el-dropdown>
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'DropdownMenu',
+  name: 'DropdownUserMenu',
   computed: {
-    ...mapState('user', ['username', 'coverPhoto']),
+    ...mapState('user', ['id', 'username', 'coverPhoto']),
     ...mapGetters('user', ['isLogin'])
   },
   methods: {
     ...mapMutations('user', {
       userSet: 'SET',
       userInit: 'INIT'
-    })
+    }),
+    ...mapActions('user', ['logout'])
   }
 }
 </script>
@@ -101,5 +121,8 @@ export default {
     box-shadow:
       -3px -3px 10px rgba(255, 255, 255, 0.72),
       3px 3px 10px rgba(174, 174, 192, 0.4);
+  }
+  h4 {
+    margin: 5px 0;
   }
 </style>

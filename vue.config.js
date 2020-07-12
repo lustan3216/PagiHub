@@ -16,16 +16,16 @@ module.exports = {
     extract: false,
     loaderOptions: {
       sass: {
-        data: `@import "~@/styles/mixins.scss";`
+        data: `@import "~@/styles/mixins.scss";@import "~@/styles/variable.scss";`
       }
     }
   },
 
   chainWebpack: config => {
-    config.resolve.alias.set(
-      'icons',
-      path.resolve(__dirname, 'src/assets/icons')
-    )
+    config.resolve.alias
+      .set('icons', path.resolve(__dirname, 'src/assets/icons'))
+      .set('images', path.resolve(__dirname, 'src/assets/images'))
+      .set('svgs', path.resolve(__dirname, 'src/assets/svgs'))
 
     config.resolve.alias.set(
       'shared/util',

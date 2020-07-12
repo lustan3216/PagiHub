@@ -1,42 +1,37 @@
 <template>
-  <div class="app">
-    <function-bar v-if="isDraftMode" />
-    <FacebookLogin/>
-    <main
-      class="flex1 relative over-hidden"
-      style="background-color:#f4f8fb;"
-    >
-      <panel-draft />
-    </main>
+  <div>
+    <top-nav/>
 
-    <sidebar-right v-if="isDraftMode" />
+    <router-view/>
+
+    <transition name="fade">
+      <component :is="dialog" />
+    </transition>
   </div>
 </template>
 
 <script>
-import FunctionBar from './components/Layout/FunctionBar'
-import PanelDraft from './components/Layout/PanelDraft'
-import FacebookLogin from './components/Layout/FacebookLogin'
+import { mapState, mapActions } from "vuex";
+import TopNav from '@/pages/TopNav'
 
 export default {
   name: 'App',
   components: {
-    SidebarRight: () => import('./components/Layout/SidebarRight'),
-    FunctionBar,
-    PanelDraft,
-    FacebookLogin
+    TopNav,
+    DialogLogin: () => import('@/pages/DialogLogin')
+  },
+  computed: {
+    ...mapState('app', ['dialog'])
+  },
+  created() {
+    this.getCurrentUser()
+  },
+  methods: {
+    ...mapActions('user', ['getCurrentUser']),
   }
 }
 </script>
 
 <style lang="scss">
-.app {
-  font-family: Helvetica, Arial, 'PingFang HK', '.PingFang-SC-Regular', PingFang,
-    'Hiragino Sans GB', STHeiti, 'Microsoft JhengHei', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  @include calc-vh('height', 100vh);
-  display: flex;
-}
+
 </style>

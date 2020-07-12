@@ -1,25 +1,28 @@
 import 'normalize.css'
-import './styles/index.scss'
+import '@/styles/index.scss'
+import '@/utils/polyfill'
+import '@/api/request'
 import 'intersection-observer'
-import './utils/polyfill'
-import '@aws-amplify/ui-vue'
-import vhCheck from 'vh-check'
+
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
+import router from './router'
 import VueShortKey from 'vue-shortkey'
+import VueRouter from 'vue-router'
 import PortalVue from 'portal-vue'
 import formCreate from '@form-create/element-ui'
+import vmMap from '@/utils/vmMap'
+import vhCheck from 'vh-check'
 vhCheck()
 
+Vue.use(VueRouter)
 Vue.use(formCreate)
 Vue.use(PortalVue)
 Vue.use(VueShortKey, { prevent: ['input', 'textarea', '.ProseMirror'] })
 if (process.env.NODE_ENV !== 'production') {
   window.store = store
 }
-
-import vmMap from '@/utils/vmMap'
 
 Vue.mixin({
   computed: {
@@ -91,12 +94,18 @@ Vue.use(Loading.directive)
 Vue.prototype.$Log = console.log
 Vue.prototype.$log = console.log
 Vue.prototype.$bus = new Vue()
+Vue.prototype.$dialog = {
+  close: () => store.commit('app/DIALOG_CLOSE'),
+  open: (name) => store.commit('app/DIALOG_OPEN', name),
+}
+
 Vue.config.productionTip = false
 Vue.config.devtools = process.env.NODE_ENV === 'development'
 
 const app = new Vue({
   render: h => h(App),
-  store
+  store,
+  router
 }).$mount('#app')
 
 if (

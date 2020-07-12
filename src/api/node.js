@@ -27,14 +27,6 @@ export function getComponentSet(id) {
   return localforage.getItem(id)
 }
 
-// create
-
-export function creatFolder(node) {
-  const id = nodeIds.generateProjectId()
-  node[ID] = id
-  return Promise.resolve(node)
-}
-
 export function createComponentSet(componentSet) {
   componentSet = cloneJson(componentSet)
   const componentSetId = nodeIds.generateProjectId()
@@ -62,12 +54,6 @@ export function createComponentSet(componentSet) {
 }
 
 // update
-
-export function updateFolder() {
-  return localforage.getItem('project').then((data) => {
-    return data || {}
-  })
-}
 
 export function updateComponentSet() {
   return localforage.getItem('project').then((data) => {
