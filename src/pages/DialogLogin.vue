@@ -7,7 +7,11 @@
       @click="login('Facebook')"
     >
       <div class="vertical-center">
-        <img svg-inline class="icon" src="svgs/facebook.svg" />
+        <img
+          svg-inline
+          class="icon"
+          src="svgs/facebook.svg"
+        >
         <span class="span">Login with Facebook</span>
       </div>
     </el-button>
@@ -18,7 +22,11 @@
       @click="login('Google')"
     >
       <div class="vertical-center">
-        <img svg-inline class="icon" src="svgs/google.svg" />
+        <img
+          svg-inline
+          class="icon"
+          src="svgs/google.svg"
+        >
         <span class="span">Login with Google</span>
       </div>
     </el-button>

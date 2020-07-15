@@ -10,14 +10,14 @@
 </template>
 
 <script>
-  export default {
-    name: 'App',
-    components: {
-      SidebarRight: () => import('@/components/Layout/SidebarRight'),
-      FunctionBar: () => import('@/components/Layout/FunctionBar'),
-      PanelDraft: () => import('@/components/Layout/PanelDraft')
-    }
+export default {
+  name: 'App',
+  components: {
+    SidebarRight: () => import('@/components/Layout/SidebarRight'),
+    FunctionBar: () => import('@/components/Layout/FunctionBar'),
+    PanelDraft: () => import('@/components/Layout/PanelDraft')
   }
+}
 </script>
 
 <style lang="scss">

@@ -1,41 +1,45 @@
 <template>
-    <nav >
-      <el-button size="large" type="text" @click="$router.push('/')">
-        LotsDesign
+  <nav >
+    <el-button
+      size="large"
+      type="text"
+      @click="$router.push('/')"
+    >
+      LotsDesign
+    </el-button>
+
+    <div class="right">
+      <portal-target
+        name="TopNav"
+        class="inline-block m-l-15"
+      />
+
+      <dropdown-user-menu v-if="isLogin" />
+      <el-button
+        v-else
+        type="text"
+        class="p-10"
+        icon="el-icon-s-promotion"
+        @click="$dialog.open('login')"
+      >
+        LOGIN
       </el-button>
-
-      <div class="right">
-        <portal-target
-          name="TopNav"
-          class="inline-block m-l-15"
-        />
-
-        <dropdown-user-menu v-if="isLogin" />
-        <el-button
-          v-else
-          type="text"
-          class="p-10"
-          icon="el-icon-s-promotion"
-          @click="$dialog.open('login')"
-        >
-          LOGIN
-        </el-button>
-      </div>
-    </nav>
+    </div>
+  </nav>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import DropdownUserMenu from './DropdownUserMenu'
-  export default {
-    name: 'TopNav',
-    components: {
-      DropdownUserMenu
-    },
-    computed: {
-      ...mapGetters('user', ['isLogin'])
-    }
+import { mapGetters } from 'vuex'
+import DropdownUserMenu from './DropdownUserMenu'
+export default {
+  name: 'TopNav',
+  components: {
+    DropdownUserMenu
+  },
+  computed: {
+    ...mapGetters('user', ['isLogin'])
   }
+}
 </script>
 
 <style scoped lang="scss">

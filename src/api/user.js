@@ -1,4 +1,4 @@
-import { API } from "aws-amplify";
+import { API } from 'aws-amplify'
 
 export function getCurrentUser() {
   return API.get('staging', '/users/me', {})

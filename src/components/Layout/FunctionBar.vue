@@ -37,9 +37,9 @@
         placement="right"
       />
       <el-button
-        class="shadow-button"
         v-popover:1
         v-shortkey="['c']"
+        class="shadow-button"
         type="text"
         icon="el-icon-circle-plus-outline"
         @shortkey.native="componentsIconClick"
@@ -53,14 +53,17 @@
         placement="right"
       />
       <el-button
-        class="shadow-button"
         v-popover:3
         v-shortkey="['x']"
+        class="shadow-button"
         type="text"
         @shortkey.native="projectIconClick"
         @click="projectIconClick"
       >
-        <i class="el-icon-grape" style="transform: scale(-1);"/>
+        <i
+          class="el-icon-grape"
+          style="transform: scale(-1);"
+        />
       </el-button>
 
       <i class="dot" />
@@ -72,9 +75,9 @@
         placement="right"
       />
       <el-button
-        class="shadow-button"
         v-popover:4
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
+        class="shadow-button"
         type="text"
         icon="el-icon-refresh-left"
         @shortkey.native="UNDO"
@@ -88,9 +91,9 @@
         placement="right"
       />
       <el-button
-        class="shadow-button"
         v-popover:5
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
+        class="shadow-button"
         type="text"
         icon="el-icon-refresh-right"
         @shortkey.native="REDO"
@@ -104,10 +107,10 @@
         placement="right"
       />
       <el-button
-        class="shadow-button"
         v-popover:6
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
         :disabled="!selectedComponentIds.length"
+        class="shadow-button"
         type="text"
         icon="el-icon-document-copy"
         @shortkey.native="copy"
@@ -120,9 +123,9 @@
         placement="bottom"
       >
         <el-button
-          class="shadow-button"
           v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
           :disabled="!copyComponentIds.length"
+          class="shadow-button"
           type="text"
           icon="el-icon-document-add"
           size="small"
@@ -137,9 +140,9 @@
         placement="bottom"
       >
         <el-button
-          class="shadow-button"
           v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
           :disabled="!selectedComponentNode"
+          class="shadow-button"
           type="text"
           icon="el-icon-scissors"
           size="small"
@@ -149,9 +152,9 @@
       </el-tooltip>
 
       <el-button
-        class="shadow-button"
         v-shortkey="{ del: ['del'], del: ['backspace'] }"
         :disabled="!selectedComponentIds.length"
+        class="shadow-button"
         type="text"
         icon="el-icon-delete"
         @shortkey.native="multiDelete"
@@ -166,8 +169,8 @@
       >
         <span>Are u sure to Publish？</span>
         <el-button
-          class="shadow-button"
           :disabled="!editingComponentSetId"
+          class="shadow-button"
           type="info"
           icon="el-icon-circle-check"
           circle
@@ -184,10 +187,10 @@
         placement="right"
       />
       <el-button
-        class="shadow-button"
         v-popover:8
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
         :disabled="!editingComponentSetId"
+        class="shadow-button"
         icon="el-icon-data-analysis"
         type="text"
         @click="SET_PREVIEW_MODE"
@@ -195,8 +198,8 @@
       />
 
       <el-button
-        class="shadow-button"
         :disabled="!editingComponentSetId"
+        class="shadow-button"
         type="text"
         icon="el-icon-upload"
       />

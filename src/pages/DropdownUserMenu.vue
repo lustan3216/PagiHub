@@ -1,9 +1,13 @@
 <template>
   <el-dropdown size="medium">
-      <span class="el-dropdown-link vertical-center">
-        <img :src="coverPhoto" style="width: 30px;" class="circle">
-        <i class="el-icon-arrow-down el-icon--right"/>
-      </span>
+    <span class="el-dropdown-link vertical-center">
+      <img
+        :src="coverPhoto"
+        style="width: 30px;"
+        class="circle"
+      >
+      <i class="el-icon-arrow-down el-icon--right"/>
+    </span>
 
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item class="no-action">

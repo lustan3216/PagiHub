@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 import TopNav from '@/pages/TopNav'
 
 export default {
@@ -29,7 +29,7 @@ export default {
     this.getCurrentUser()
   },
   methods: {
-    ...mapActions('user', ['getCurrentUser']),
+    ...mapActions('user', ['getCurrentUser'])
   }
 }
 </script>

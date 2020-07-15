@@ -1,6 +1,6 @@
 import { SET } from '../index'
 import { getCurrentUser } from '@/api/user'
-import { Auth } from "aws-amplify";
+import { Auth } from 'aws-amplify'
 
 const state = {
   id: null,
@@ -10,7 +10,7 @@ const state = {
   username: null,
   description: null,
   facebookId: null,
-  instagramId: null,
+  instagramId: null
 }
 
 const initData = JSON.parse(JSON.stringify(state))
@@ -18,7 +18,7 @@ const initData = JSON.parse(JSON.stringify(state))
 const mutations = {
   SET,
   INIT(state) {
-    for (let key in initData) {
+    for (const key in initData) {
       state[key] = initData[key]
     }
   }

@@ -1,4 +1,4 @@
-import { API } from "aws-amplify";
+import { API } from 'aws-amplify'
 
 export function getAssets() {
   return API.get('/assets', path, {})

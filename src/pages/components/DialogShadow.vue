@@ -14,15 +14,15 @@
 </template>
 
 <script>
-  export default {
-    name: 'DialogShadow',
-    props: {
-      canClose: {
-        type: Boolean,
-        default: true
-      }
+export default {
+  name: 'DialogShadow',
+  props: {
+    canClose: {
+      type: Boolean,
+      default: true
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

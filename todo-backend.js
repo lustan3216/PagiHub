@@ -1,8 +1,8 @@
 const asd = [
   {
-    user_id: '',    // pk
-    id: 'ulid',       // gsi
-    updated_at: '',  // sk
+    user_id: '', // pk
+    id: 'ulid', // gsi
+    updated_at: '', // sk
     type: 0,
     lock_id: '',
     children: [
@@ -17,9 +17,9 @@ const asd = [
   },
 
   {
-    user_id: '',    // pk
-    id: 'ulid',       // gsi
-    updatedAt: '',  // sk
+    user_id: '', // pk
+    id: 'ulid', // gsi
+    updatedAt: '', // sk
     type: 2,
     lock_id: '',
     tags: [],
@@ -43,9 +43,9 @@ const tags = [
 const search = [
   {
     name: 'tag.tag1', // 'partition_key'
-    likeCount: '',    // gsi
-    forkCount: '',    // gsi
-    updatedAt: '',    // gsi
+    likeCount: '', // gsi
+    forkCount: '', // gsi
+    updatedAt: '', // gsi
     componentSetId: '' // 'sort_key'
   },
   {

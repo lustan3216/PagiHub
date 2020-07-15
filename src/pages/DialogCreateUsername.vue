@@ -3,10 +3,13 @@
     <h1 class="login-title">Choose a username</h1>
 
     <el-input
-      placeholder="Enter your username"
       v-model="input"
+      placeholder="Enter your username"
     >
-      <el-button slot="append" icon="el-icon-s-promotion"/>
+      <el-button
+        slot="append"
+        icon="el-icon-s-promotion"
+      />
     </el-input>
 
     <span class="notice">After signed, which means you have agreed ours "Using Policy" and "Private Policy".</span>
@@ -14,34 +17,34 @@
 </template>
 
 <script>
-  import { mapGetters, mapMutations, mapActions } from 'vuex'
-  import { Auth, Hub } from 'aws-amplify'
-  import DialogShadow from './components/DialogCreateUsername'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { Auth, Hub } from 'aws-amplify'
+import DialogShadow from './components/DialogCreateUsername'
 
-  export default {
-    name: 'DialogLogin',
-    components: {
-      DialogShadow
-    },
-    data() {
-      return {
-        input: null
-      }
-    },
-    computed: {
-      ...mapGetters('user', ['isLogin'])
-    },
-    methods: {
-      ...mapActions('user', ['getCurrentUser']),
-      ...mapMutations('user', {
-        userSet: 'SET',
-        userInit: 'INIT'
-      }),
-      login(provider) {
-        Auth.federatedSignIn({ provider })
-      }
+export default {
+  name: 'DialogLogin',
+  components: {
+    DialogShadow
+  },
+  data() {
+    return {
+      input: null
+    }
+  },
+  computed: {
+    ...mapGetters('user', ['isLogin'])
+  },
+  methods: {
+    ...mapActions('user', ['getCurrentUser']),
+    ...mapMutations('user', {
+      userSet: 'SET',
+      userInit: 'INIT'
+    }),
+    login(provider) {
+      Auth.federatedSignIn({ provider })
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
