@@ -22,12 +22,14 @@
 }
 
 .shadow-4 {
-  box-shadow:
-          inset -10px -10px 30px rgba(255,255,255, 1),
-          inset 10px 10px 30px rgba(174, 174, 192, 0.45);
+  box-shadow: inset -5px -5px 30px white, inset 5px 5px 20px rgba(174, 174, 192, 0.65);
+  border: 1px solid #efeff5;
+  border-radius: 5px;
 }
 
 .shadow-button {
+  border: 1px solid rgba(243,247,250,.05);
+  font-weight: initial;
   transition: box-shadow 0.4s ease;
   box-shadow:
           -3px -3px 10px rgba(255,255,255, 1),
@@ -37,4 +39,17 @@
             -3px -3px 10px rgba(255,255,255,0.7),
             3px 3px 10px rgba(174, 174, 192, 0.2);
   }
+}
+.shadow-buttons {
+  & button {
+    @extend .shadow-button
+  }
+}
+
+.shadow-circle {
+  border-radius: 50%;
+  box-shadow:
+          -20px -20px 20px rgba(255,255,255, 66%),
+          10px 10px 20px rgba(174, 174, 192, 0.4),
+          inset 4px 4px 6px rgba(255,255,255, 66%);
 }

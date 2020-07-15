@@ -2,7 +2,9 @@
   <div>
     <top-nav/>
 
-    <router-view/>
+    <div class="view">
+      <router-view />
+    </div>
 
     <transition name="fade">
       <component :is="dialog" />
@@ -33,5 +35,8 @@ export default {
 </script>
 
 <style lang="scss">
-
+.view {
+  overflow: scroll;
+  @include calc-vh('height', '100vh - 40px');
+}
 </style>

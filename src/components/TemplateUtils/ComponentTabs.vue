@@ -23,7 +23,7 @@
           :xs="24"
           class="m-b-15"
         >
-          <el-card shadow="hover" >
+          <el-card shadow="none" class="transparent shadow-button">
             <el-button type="text">
               {{ shortTagName(component) }}
             </el-button>

@@ -72,22 +72,22 @@
 <li>改寫color picker，把color format做進去，到時候還要做快捷進去</li>
 https://bhch.github.io/posts/2019/03/adding-rotation-handles-in-interact-js/
 https://codepen.io/taye/pen/wrrxKb
+<li>embed iframe,iframe 要可以自動 resize</li>
 </ol>
 
 
 付費功能 {
-embed iframe
-iframe 要可以自動 resize，且可內船 data or 外傳，而且是reactive的，可以互動
-anaylistic daily data
-host in own domain,
-
-擴充字體 / webfontloader
-payment / 下單 可參考wix
-form submit amount 1000, can be deleted,
-connect to google sheet 
-可上傳影音
+    私人專案
+    且可內船 data or 外傳，而且是reactive的，可以互動
+    anaylistic daily data
+    host in own domain,
+    擴充字體 / webfontloader
+    form submit amount 1000, can be deleted,
+    connect to google sheet 
+    可上傳影音
 }
 
+payment / 下單 可參考wix
 售價 參考 netflex 用多人收錢策略
 user needs to bring some users to open functions
 

@@ -34,6 +34,7 @@
     "ulid": "^2.3.0",
     "vh-check": "^2.0.5",
     "vue": "^2.6.10",
+    "vue-clamp": "^0.3.0",
     "vue-grid-layout": "^2.3.6",
     "vue-observe-visibility": "^0.4.6",
     "vue-plyr": "^6.0.4",

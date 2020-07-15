@@ -5,19 +5,22 @@ import { Auth } from "aws-amplify";
 const state = {
   id: null,
   email: null,
-  username: null,
   verified: false,
   coverPhoto: null,
+  username: null,
+  description: null,
+  facebookId: null,
+  instagramId: null,
 }
+
+const initData = JSON.parse(JSON.stringify(state))
 
 const mutations = {
   SET,
   INIT(state) {
-    state.id = null
-    state.email = null
-    state.username = null
-    state.coverPhoto = null
-    state.verified = false
+    for (let key in initData) {
+      state[key] = initData[key]
+    }
   }
 }
 
@@ -25,14 +28,8 @@ const actions = {
   async getCurrentUser({ commit }) {
     try {
       const { data } = await getCurrentUser()
-      const { id, email, username, coverPhoto, verified } = data
-      commit('SET', {
-        id,
-        email,
-        username,
-        coverPhoto,
-        verified
-      })
+      commit('SET', data)
+      return data
     } catch {
       commit('INIT')
     }

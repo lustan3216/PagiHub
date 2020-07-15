@@ -18,7 +18,7 @@
         v-shortkey="['esc']"
         icon="el-icon-close"
         circle
-        class="box-shadow m-l-15"
+        class="shadow-button m-l-15"
         @click="SET_DRAFT_MODE"
         @shortkey.native="SET_DRAFT_MODE"
       />
@@ -37,6 +37,7 @@
         placement="right"
       />
       <el-button
+        class="shadow-button"
         v-popover:1
         v-shortkey="['c']"
         type="text"
@@ -52,6 +53,7 @@
         placement="right"
       />
       <el-button
+        class="shadow-button"
         v-popover:3
         v-shortkey="['x']"
         type="text"
@@ -70,6 +72,7 @@
         placement="right"
       />
       <el-button
+        class="shadow-button"
         v-popover:4
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
         type="text"
@@ -85,6 +88,7 @@
         placement="right"
       />
       <el-button
+        class="shadow-button"
         v-popover:5
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
         type="text"
@@ -100,6 +104,7 @@
         placement="right"
       />
       <el-button
+        class="shadow-button"
         v-popover:6
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
         :disabled="!selectedComponentIds.length"
@@ -115,6 +120,7 @@
         placement="bottom"
       >
         <el-button
+          class="shadow-button"
           v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
           :disabled="!copyComponentIds.length"
           type="text"
@@ -131,6 +137,7 @@
         placement="bottom"
       >
         <el-button
+          class="shadow-button"
           v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
           :disabled="!selectedComponentNode"
           type="text"
@@ -142,6 +149,7 @@
       </el-tooltip>
 
       <el-button
+        class="shadow-button"
         v-shortkey="{ del: ['del'], del: ['backspace'] }"
         :disabled="!selectedComponentIds.length"
         type="text"
@@ -158,6 +166,7 @@
       >
         <span>Are u sure to Publish？</span>
         <el-button
+          class="shadow-button"
           :disabled="!editingComponentSetId"
           type="info"
           icon="el-icon-circle-check"
@@ -175,6 +184,7 @@
         placement="right"
       />
       <el-button
+        class="shadow-button"
         v-popover:8
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
         :disabled="!editingComponentSetId"
@@ -185,6 +195,7 @@
       />
 
       <el-button
+        class="shadow-button"
         :disabled="!editingComponentSetId"
         type="text"
         icon="el-icon-upload"

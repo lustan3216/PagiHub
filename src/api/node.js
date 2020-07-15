@@ -2,6 +2,7 @@ import localforage from 'localforage'
 import { CHILDREN, ID, NODE_TYPE, PARENT_ID } from '@/const'
 import { objectHasAnyKey, nestedToLinerObject, cloneJson, traversal } from '@/utils/tool'
 import { nodeIds } from '@/utils/nodeId'
+import { API } from "aws-amplify";
 
 const _initTemplate = () => ({
   type: NODE_TYPE.PROJECT,
@@ -10,6 +11,10 @@ const _initTemplate = () => ({
 })
 
 // get
+
+export function getProjects() {
+  return API.get('staging', '/projects', {})
+}
 
 export function getProject() {
   return localforage.getItem('project').then((data) => {

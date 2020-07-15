@@ -195,3 +195,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.bg-image {
+  background-position: center;
+  background-size: cover;
+}
+
+.font-spacing {
+  letter-spacing: 1px;
+}
