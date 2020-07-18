@@ -1,7 +1,7 @@
 import store from '../store'
 import { allEqual, cloneJson } from './tool'
 import { capitalize } from './string'
-import { NODE_TYPE, NODE_TYPE_STRING } from '@/const'
+import { NODE_TYPE, NODE_TYPE_STRING, KIND, LABEL } from '@/const'
 
 export function findFirstCommonParentTree(ids) {
   // familyPaths = [
@@ -44,7 +44,7 @@ export function findFirstCommonParentTree(ids) {
 
 const cache = {}
 export function shortTagName(node) {
-  const tag = node.name || node.tag
+  const tag = node[LABEL] || node.tag
   if (cache[tag]) {
     return cache[tag]
   }
@@ -69,21 +69,21 @@ export function traversalChildrenOf(nodeId, fn) {
 }
 
 export function isProject(node) {
-  return node.type === NODE_TYPE.PROJECT
+  return node.kind === NODE_TYPE.PROJECT
 }
 
 export function isComponent(node) {
-  return node.type === NODE_TYPE.COMPONENT
+  return node[KIND] === NODE_TYPE.COMPONENT
 }
 
 export function isFolder(node) {
-  return node.type === NODE_TYPE.FOLDER
+  return node[KIND] === NODE_TYPE.FOLDER
 }
 
 export function isComponentSet(node) {
-  return node.type === NODE_TYPE.COMPONENT_SET
+  return node[KIND] === NODE_TYPE.COMPONENT_SET
 }
 
 export function typeString(node) {
-  return NODE_TYPE_STRING[node.type]
+  return NODE_TYPE_STRING[node[KIND]]
 }

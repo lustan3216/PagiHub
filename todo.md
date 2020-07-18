@@ -1,6 +1,11 @@
+<li>style 能用</li>
+<li>可以連結</li>
+<li>複製分享component set要做好</li>
+
 ### Functionality
 
 <ol>
+<li>description 用 tiptap</li>
 <li>多個copy的時候有問題，且多選複製時</li>
 <li>touchable and visbilty 有bug / 把值做進去 node tree裡面，這樣儲存時也可以存到，下次方便編輯</li>
 <li>text editor 選取壞掉 todo list也不見</li>
@@ -15,6 +20,8 @@
 <li>自己的project有引用的，有修改的都可以直接儲存了，因為不會引響到其他專案</li>
 <li>每個 button 都可以點了 連結到 componentSet / link / 需用state 的結構去做 click hover active 等等切換componentSet，這個要去另一個版操作，向XD的prototype</li>
 <li>瀏覽器資源，手機版只能預覽</li>
+<li>暫時form 先不做</li>
+<li>暫時一次只能操作一個畫板</li>
 </ol>
 
 ### Style
@@ -42,11 +49,10 @@
 <li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridGenerator 可以固定寬</li> ? style 做個設計，要不要固定寬高，要的話，
 </ol>
 
-
-
 ### Last
 
 <ol>
+<li>SEO / sitemap / like一定高分一上才產</li></li>
 <li>like</li>
 <li>fork</li>
 <li>aws 要做安全機制</li>
@@ -75,32 +81,32 @@ https://codepen.io/taye/pen/wrrxKb
 <li>embed iframe,iframe 要可以自動 resize</li>
 </ol>
 
-
 付費功能 {
-    私人專案
-    且可內船 data or 外傳，而且是reactive的，可以互動
-    anaylistic daily data
-    host in own domain,
-    擴充字體 / webfontloader
-    form submit amount 1000, can be deleted,
-    connect to google sheet 
-    可上傳影音
+私人專案
+且可內船 data or 外傳，而且是 reactive 的，可以互動
+anaylistic daily data
+host in own domain,
+擴充字體 / webfontloader
+form submit amount 1000, can be deleted,
+connect to google sheet
+可上傳影音
+多國語言
+可以有預覽版本，分享給別人看，並且可以下 comment
 }
 
-payment / 下單 可參考wix
+payment / 下單 可參考 wix
 售價 參考 netflex 用多人收錢策略
 user needs to bring some users to open functions
 
-
 my advantage
+
 1. can publish as a web, even has a domain
 2. component can be Any design
 3. the components are public to share to anyone, which means users can reuse or restyle any component
 4. great RWD experience
 
-
 step functions
-event bridge 
+event bridge
 sub/pub/
 queue
 sns / sqs

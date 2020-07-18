@@ -1,12 +1,13 @@
 <template>
   <el-button
+    v-bind="$attrs"
     icon="el-icon-delete"
     type="text"
     @click.stop="visible = !visible"
   >
     <dialog-confirmable
       :visible.sync="visible"
-      title="Component"
+      :title="`Delete ${type}`"
       width="30%"
       @confirm="onSubmit"
       @close="initData"
@@ -15,13 +16,14 @@
         ref="form"
         :rules="rules"
         :model="form"
-        label-width="110px"
       >
-        <el-form-item
-          label="Name"
-          prop="name"
-        >
-          <el-input v-model="form.name" />
+        <p>
+          Please enter
+          <b>{{ label }}</b>
+          to confirm the project you want to delete.
+        </p>
+        <el-form-item prop="label">
+          <el-input v-model="form.label" />
         </el-form-item>
       </el-form>
     </dialog-confirmable>
@@ -31,10 +33,12 @@
 <script>
 import { mapActions } from 'vuex'
 import { required } from '@/validator'
+import { capitalize } from '@/utils/string'
+import { NODE_TYPE_STRING, KIND } from '@/const'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 
 export default {
-  name: 'DialogSettingComponent',
+  name: 'DialogDelete',
   components: {
     DialogConfirmable
   },
@@ -45,22 +49,30 @@ export default {
     }
   },
   data() {
-    const name = this.$store.state.project.projectMap[this.id].name
+    const node = this.$store.state.project.projectMap[this.id]
+    const { label } = node
 
     return {
+      node,
+      label,
       visible: false,
       form: {
-        name: ''
+        label: ''
       },
       rules: {
-        name: [
+        label: [
           required,
           {
-            pattern: new RegExp(`^${name}$`),
+            pattern: new RegExp(`^${label}$`),
             message: 'The name is not correct to delete'
           }
         ]
       }
+    }
+  },
+  computed: {
+    type() {
+      return capitalize(NODE_TYPE_STRING[this.node[KIND]])
     }
   },
   methods: {

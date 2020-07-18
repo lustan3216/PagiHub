@@ -31,7 +31,7 @@ export default {
     ...mapState('project', ['projectMap']),
     linkableComponentSet() {
       return Object.values(this.projectMap).filter(
-        node => node.type === NODE_TYPE.COMPONENT_SET
+        node => node.kind === NODE_TYPE.COMPONENT_SET
       )
     },
     spec() {
@@ -44,7 +44,7 @@ export default {
       if (!this.componentsMap[this.id][CHILDREN].length) {
         const redirectTo = select(REDIRECT_TO, {
           options: this.linkableComponentSet.map(node => ({
-            label: `${node.name || node.tag} ${node.id}`,
+            label: `${node.label || node.tag} ${node.id}`,
             value: node.id
           }))
         })

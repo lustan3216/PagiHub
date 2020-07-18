@@ -40,20 +40,6 @@ const tags = [
   }
 ]
 
-const search = [
-  {
-    name: 'tag.tag1', // 'partition_key'
-    likeCount: '', // gsi
-    forkCount: '', // gsi
-    updatedAt: '', // gsi
-    componentSetId: '' // 'sort_key'
-  },
-  {
-    name: 'tag2.tag5.tag7',
-    component_set_id: ''
-  }
-]
-
 // IAM user
 // Root
 // 319924209672

@@ -4,6 +4,7 @@
     type="text"
     @click.stop="visible = !visible"
   >
+    {{ buttonText }}
     <dialog-confirmable
       :visible.sync="visible"
       title="Component"
@@ -19,31 +20,19 @@
       >
         <el-form-item
           label="Name"
-          prop="name"
+          prop="label"
         >
-          <el-input v-model="form.name" />
+          <el-input v-model="form.label" />
         </el-form-item>
 
         <el-form-item
-          label="Category"
-          prop="categories"
+          label="Tag"
+          prop="tag"
         >
-          <el-select
-            v-model="form.categories"
-            multiple
-            filterable
-            allow-create
-            default-first-option
-            placeholder="Maximum can have 5 categories"
+          <select-tag
+            v-model="form.tags"
             class="w-100"
-          >
-            <el-option
-              v-for="category in categories"
-              :key="category.id"
-              :label="category.label"
-              :value="category.id"
-            />
-          </el-select>
+          />
         </el-form-item>
 
         <el-form-item label="Description">
@@ -61,7 +50,6 @@
             class="m-l-15"
           />
         </el-form-item>
-
       </el-form>
     </dialog-confirmable>
   </el-button>
@@ -70,8 +58,9 @@
 <script>
 import { NODE_TYPE } from '@/const'
 import { mapActions, mapState } from 'vuex'
-import { name, required, requiredSelect } from '@/validator'
+import { label, max, min, required } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
+import SelectTag from '@/components/Components/SelectTag'
 import ExampleAdd from '@/components/TemplateUtils/ExampleAdd'
 import { createComponentSet } from '@/api/node'
 
@@ -79,7 +68,8 @@ export default {
   name: 'DialogComponentSet',
   components: {
     DialogConfirmable,
-    ExampleAdd
+    ExampleAdd,
+    SelectTag
   },
   props: {
     // eslint-disable-next-line
@@ -89,13 +79,17 @@ export default {
     parentId: {
       type: String,
       required: true
+    },
+    buttonText: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
       visible: false,
       form: {
-        name: '',
+        label: '',
         version: 1,
         description: '',
         categories: [],
@@ -108,7 +102,12 @@ export default {
         { id: 1, label: 'Form' },
         { id: 2, label: 'Layout' },
         { id: 3, label: 'Card' }
-      ]
+      ],
+      rules: {
+        label,
+        description: [required],
+        tags: [required, min(1), max(5)]
+      }
     }
   },
   computed: {
@@ -117,14 +116,17 @@ export default {
     isExist() {
       return Boolean(this.id)
     },
-    rules() {
-      const rule = {
-        name,
-        category: [requiredSelect]
-      }
-
-      return this.form.createBySelected ? rule : { ...rule, exampleComponentId: [required] }
+    projectId() {
+      return this.$route.params.projectId
     }
+    // rules() {{
+    //   const rule = {
+    //     label,
+    //     category: [requiredSelect]
+    //   }
+    //
+    //   return this.form.createBySelected ? rule : { ...rule, exampleComponentId: [required] }
+    // }
   },
   created() {
     if (this.id) {
@@ -132,14 +134,17 @@ export default {
     }
   },
   methods: {
-    ...mapActions('component', ['createComponentSet']),
+    ...mapActions('project', ['createComponentSet']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.createComponentSet(this.form)
+          this.createComponentSet({
+            projectId: this.projectId,
+            componentSet: this.form
+          })
           this.visible = false
           this.$bus.$emit('component-tabs-visible')
         }

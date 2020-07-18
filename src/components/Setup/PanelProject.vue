@@ -8,6 +8,12 @@
         size="small"
         class="m-b-10 transparent"
       />
+
+      <dialog-component-set
+        :parent-id="projectId"
+        button-text="Create Board"
+      />
+
       <el-tree
         ref="tree"
         :data="innerTree"
@@ -28,20 +34,20 @@
         >
           <el-button
             :class="{ selected: selectedComponentSetIds.includes(node.id) }"
-            :icon="icon[node.type]"
+            :icon="icon[node.kind]"
             type="text"
             class="m-r-10"
           >
-            {{ node.name }} {{ node.id }}
+            {{ node.label }}
           </el-button>
 
           <transition name="fade">
             <span v-if="hoveredId === node.id">
-              <dialog-folder
-                v-if="isProject(node)"
-                :parent-id="node.id"
-                class="m-l-5"
-              />
+              <!--              <dialog-folder-->
+              <!--                v-if="isProject(node)"-->
+              <!--                :parent-id="node.id"-->
+              <!--                class="m-l-5"-->
+              <!--              />-->
 
               <dialog-component-set
                 v-if="isProject(node) || isFolder(node)"
@@ -75,22 +81,27 @@
       >
         {{ name }}
       </el-button>
-      <panel-nodes :selected-component-set-id="selectedComponentSet.id"/>
+      <panel-nodes :selected-component-set-id="selectedComponentSet.id" />
     </template>
-
   </div>
 </template>
 
 <script>
 import { Tree } from 'element-ui'
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
-import { NODE_TYPE, NODE_TYPE_STRING } from '@/const'
+import { NODE_TYPE, NODE_TYPE_STRING, KIND } from '@/const'
 import DialogProject from './DialogProject'
 import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
 import { kebabCase } from '@/utils/string'
-import { shortTagName, isComponent, isComponentSet, isProject, isFolder, typeString } from '@/utils/node'
+import {
+  shortTagName,
+  isComponentSet,
+  isProject,
+  isFolder,
+  typeString
+} from '@/utils/node'
 import PanelNodes from './PanelNodes'
 import { cloneJson, traversal } from '@/utils/tool'
 import dblClick from '@/utils/dblClick'
@@ -117,6 +128,9 @@ export default {
   computed: {
     ...mapGetters('project', ['tree']),
     ...mapState('app', ['selectedComponentSetIds']),
+    projectId() {
+      return this.$route.params.projectId
+    },
     name() {
       return shortTagName(this.selectedComponentSet)
     },
@@ -129,7 +143,7 @@ export default {
     },
     innerTree() {
       const cloneTree = cloneJson(this.tree)
-      traversal(cloneTree, (node) => {
+      traversal(cloneTree, node => {
         delete node.w
         delete node.h
       })
@@ -142,6 +156,7 @@ export default {
       this.$refs.tree.filter(val)
     }
   },
+  created() {},
   methods: {
     isComponentSet,
     isProject,
@@ -163,19 +178,22 @@ export default {
       }
     },
     nodeClick(event, node) {
-      if (NODE_TYPE.COMPONENT_SET === node.type) {
-        dblClick(() => {
-          if (event.ctrlKey || event.metaKey) {
-            this.TOGGLE_SELECTED_COMPONENT_SET_IN_IDS(node.id)
-          } else {
-            this.TOGGLE_SELECTED_COMPONENT_SET_ID(node.id)
+      if (NODE_TYPE.COMPONENT_SET === node[KIND]) {
+        dblClick(
+          () => {
+            if (event.ctrlKey || event.metaKey) {
+              this.TOGGLE_SELECTED_COMPONENT_SET_IN_IDS(node.id)
+            } else {
+              this.TOGGLE_SELECTED_COMPONENT_SET_ID(node.id)
+            }
+          },
+          () => {
+            if (!this.selectedComponentSetIds.includes(node.id)) {
+              this.TOGGLE_SELECTED_COMPONENT_SET_IN_IDS(node.id)
+            }
+            this.selectedComponentSet = node
           }
-        }, () => {
-          if (!this.selectedComponentSetIds.includes(node.id)) {
-            this.TOGGLE_SELECTED_COMPONENT_SET_IN_IDS(node.id)
-          }
-          this.selectedComponentSet = node
-        })
+        )
       }
     },
     allowDrop(_, { data: node }, action) {

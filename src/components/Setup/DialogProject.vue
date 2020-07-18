@@ -1,26 +1,33 @@
 <template>
   <el-button
+    v-bind="$attrs"
+    :icon="`el-icon-${isExist ? 's-tools' : 'plus'}`"
     type="text"
-    icon="el-icon-s-tools"
     @click.stop="visible = !visible"
   >
+    {{ buttonText }}
     <dialog-confirmable
       :visible.sync="visible"
+      :disable-submit="!dirty"
       title="Project"
-      width="30%"
+      width="50vw"
       class="dialog"
       @confirm="onSubmit"
     >
       <el-form
         ref="form"
         :model="form"
+        :rules="rules"
         label-width="110px"
       >
-        <el-form-item label="Name">
-          <el-input v-model="form.name" />
+        <el-form-item label="Name" prop="label">
+          <el-input v-model="form.label" />
         </el-form-item>
 
-        <el-form-item label="Description">
+        <el-form-item
+          label="Description"
+          prop="description"
+        >
           <el-input
             :autosize="{ minRows: 3 }"
             v-model="form.description"
@@ -28,9 +35,17 @@
           />
         </el-form-item>
 
-        <el-form-item label="Auto Update">
-          <el-checkbox v-model="form.autoUpdate" />
+        <el-form-item label="Tag" prop="tag">
+          <select-tag
+            v-model="form.tags"
+            class="w-100"
+          />
         </el-form-item>
+        <span>You can create tag but limitation is 5.</span>
+
+        <!--        <el-form-item label="Auto Update">-->
+        <!--          <el-checkbox v-model="form.autoUpdate" />-->
+        <!--        </el-form-item>-->
       </el-form>
     </dialog-confirmable>
   </el-button>
@@ -38,55 +53,80 @@
 
 <script>
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
-import { mapActions, mapState } from 'vuex'
+import SelectTag from '@/components/Components/SelectTag'
+import { mapActions } from 'vuex'
 import { NODE_TYPE } from '@/const'
+import { label, required, min, max } from '@/validator'
 
 export default {
   name: 'DialogProject',
   components: {
-    DialogConfirmable
+    DialogConfirmable,
+    SelectTag
   },
   props: {
     id: {
       type: String,
-      required: true
+      default: ''
+    },
+    buttonText: {
+      type: String,
+      default: ''
     }
   },
   data() {
+    const { projectMap } = this.$store.state.project
+
+    const form = {
+      label: '',
+      description: '',
+      type: NODE_TYPE.PROJECT,
+      tags: []
+    }
+
+    if (this.id) {
+      Object.assign(form, projectMap[this.id])
+    }
+
     return {
       visible: false,
-      form: {
-        name: '',
-        autoUpdate: true,
-        description: '',
-        categories: [],
-        type: NODE_TYPE.PROJECT
-      },
-      categories: [
-        { id: 0, label: 'Button' },
-        { id: 1, label: 'Form' },
-        { id: 2, label: 'Layout' },
-        { id: 3, label: 'Card' }
-      ]
+      dirty: false,
+      form,
+      rules: {
+        label,
+        description: [required],
+        tags: [required, min(1), max(5)]
+      }
     }
   },
   computed: {
-    ...mapState('project', ['projectMap']),
     isExist() {
       return Boolean(this.id)
     }
   },
-  created() {
-    if (this.id) {
-      Object.assign(this.form, this.projectMap[this.id])
+  watch: {
+    form: {
+      handler() {
+        this.dirty = true
+      },
+      deep: true
     }
   },
   methods: {
-    ...mapActions('project', ['appendProjectNode']),
+    ...mapActions('project', ['createProject', 'patchProject']),
     onSubmit() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.appendProjectNode(this.form)
+      this.$refs.form.validate(async valid => {
+        if (valid && this.dirty) {
+          if (this.isExist) {
+            this.patchProject({
+              id: this.id,
+              ...this.form
+            })
+          } else {
+            const project = await this.createProject(this.form)
+            this.$router.push(`/${project.id}/draft`)
+          }
+
           this.visible = false
           this.$refs.form.resetFields()
         }

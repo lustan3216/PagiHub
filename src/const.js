@@ -8,7 +8,10 @@ export const PARENT_ID = 'parentId'
 export const ID = 'id'
 export const MASTER_ID = 'masterId'
 export const FIELD = 'field'
-export const VALUE = 'value'
+export const VALUE = 'vallue'
+// type and name are the reserved words of dynamoDB, so change to kind and label
+export const LABEL = 'label'
+export const KIND = 'kind'
 
 export const CAN_NEW_ITEM = 'canNewItem'
 export const CAN_EDIT = 'canEditText'
@@ -31,9 +34,9 @@ export const SORT_INDEX = 'sortIndex'
 export const PATH = 'path'
 
 export const NODE_TYPE = {
-  PROJECT: 0,
+  PROJECT: 'p',
   FOLDER: 1,
-  COMPONENT_SET: 2,
+  COMPONENT_SET: 'c',
   COMPONENT: undefined
 }
 

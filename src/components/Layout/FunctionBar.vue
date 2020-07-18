@@ -178,7 +178,7 @@
         />
       </el-popover>
 
-      <i class="dot"/>
+      <i class="dot" />
 
       <el-tooltip
         ref="8"
@@ -244,12 +244,16 @@ export default {
   },
   data() {
     return {
-      projectVisible: false,
+      projectVisible: true,
       componentsVisible: false
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds', 'copyComponentIds', 'selectedComponentNode']),
+    ...mapState('app', [
+      'selectedComponentIds',
+      'copyComponentIds',
+      'selectedComponentNode'
+    ]),
     ...mapState('component', ['editingComponentSetId']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
     selected() {
@@ -293,7 +297,9 @@ export default {
     vmAddNodesToParentAndRecord,
     multiPaste() {
       jsonHistory.recordsMerge(() => {
-        this.copyComponentIds.forEach(id => this.vmCopyNode(this.componentsMap[id]))
+        this.copyComponentIds.forEach(id =>
+          this.vmCopyNode(this.componentsMap[id])
+        )
       })
     },
     multiDelete() {
@@ -301,9 +307,7 @@ export default {
         this.selectedNodes.forEach(node => this.vmRemoveNode(node))
       })
     },
-    cut() {
-
-    }
+    cut() {}
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <nav >
+  <nav>
     <el-button
       size="large"
       type="text"
@@ -13,6 +13,8 @@
         name="TopNav"
         class="inline-block m-l-15"
       />
+
+      <dialog-project button-text="Create Project" />
 
       <dropdown-user-menu v-if="isLogin" />
       <el-button
@@ -30,11 +32,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import DropdownUserMenu from './DropdownUserMenu'
+import DropdownUserMenu from './components/DropdownUserMenu'
+import DialogProject from '@/components/Setup/DialogProject'
+
 export default {
   name: 'TopNav',
   components: {
-    DropdownUserMenu
+    DropdownUserMenu,
+    DialogProject
   },
   computed: {
     ...mapGetters('user', ['isLogin'])
@@ -43,20 +48,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  nav{
-    background-color: $color-white;
-    height: 40px;
-    padding: 5px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+nav {
+  background-color: $color-white;
+  height: 40px;
+  padding: 5px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > div,
+  & > button {
+    margin-left: 10px;
   }
-  .right {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    & > div, & > button{
-      margin-left: 10px;
-    }
-  }
+}
 </style>

@@ -22,7 +22,7 @@ class IdManagement {
 
   restoreIds(nodes) {
     traversal(nodes, node => {
-      if (node.type === NODE_TYPE.COMPONENT) {
+      if (node.kind === NODE_TYPE.COMPONENT) {
         const { componentId, componentSetId } = this.departId(node.id)
         this.idMap.add(componentSetId, componentId)
       } else {
@@ -37,7 +37,7 @@ class IdManagement {
     componentSet[ID] = componentSetInstanceIds.create(componentSet[ID]) + 'i'
 
     traversal(componentSet[CHILDREN], (node, parentNode) => {
-      if (node.type === NODE_TYPE.COMPONENT_SET) {
+      if (node.kind === NODE_TYPE.COMPONENT_SET) {
         this.resetComponentSetTree(node)
         return false
       }
@@ -55,10 +55,10 @@ class IdManagement {
 
   appendIdNested(nodes, componentSetId = '') {
     traversal(nodes, (node, parentNode) => {
-      if (node.type === NODE_TYPE.COMPONENT_SET) {
+      if (node.kind === NODE_TYPE.COMPONENT_SET) {
         this.resetComponentSetTree(node)
         return false
-      } else if (node.type === NODE_TYPE.COMPONENT) {
+      } else if (node.kind === NODE_TYPE.COMPONENT) {
         node[ID] = this.generateComponentId(this.componentSetId || componentSetId)
       } else {
         node[ID] = this.generateProjectId()

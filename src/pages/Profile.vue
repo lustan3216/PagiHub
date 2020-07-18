@@ -203,6 +203,7 @@ export default {
     padding: 5px;
     margin-bottom: 15px;
     margin-top: 5px;
+    border-radius: 5px;
   }
 
   .info {
@@ -223,4 +224,3 @@ export default {
     color: white;
   }
 </style>
-

@@ -68,6 +68,8 @@ export const requiredSelect = Object.assign({}, required, onBlur, array)
 
 export const username = [required, englishAndNumber, min(6), max(50)]
 
+export const label = [required, englishAndNumber, min(6), max(50)]
+
 export const account = [min(6), max(50)]
 
 export const password = [required, englishAndNumber, min(6), max(20)]

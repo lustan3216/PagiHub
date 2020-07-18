@@ -6,7 +6,24 @@ export default new VueRouter({
     {
       path: '/',
       name: 'HomePage',
-      component: () => import('@/pages/HomePage')
+      component: () => import('@/pages/Editor')
+    },
+    {
+      path: '/dashboard',
+      name: 'HomePage',
+      component: () => import('@/pages/Dashboard'),
+      children: [
+        {
+          path: 'profile',
+          name: 'Profile',
+          component: () => import('@/pages/Profile')
+        },
+        {
+          path: 'projects',
+          name: 'Projects',
+          component: () => import('@/pages/Projects')
+        }
+      ]
     },
     {
       path: '/help',
@@ -14,14 +31,14 @@ export default new VueRouter({
       component: () => import('@/pages/Help')
     },
     {
-      path: '/profile',
-      name: 'Profile',
-      component: () => import('@/pages/Profile')
+      path: '/404',
+      name: 'NotFound',
+      component: () => import('@/pages/Projects')
     },
     {
-      path: '/projects',
-      name: 'Projects',
-      component: () => import('@/pages/Projects')
+      path: '/:projectId/draft',
+      name: 'Draft',
+      component: () => import('@/pages/Editor')
     }
   ]
 })

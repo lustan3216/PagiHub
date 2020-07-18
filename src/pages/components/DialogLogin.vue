@@ -38,7 +38,7 @@
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { Auth, Hub } from 'aws-amplify'
-import DialogShadow from './components/DialogShadow'
+import DialogShadow from './DialogShadow'
 
 export default {
   name: 'DialogLogin',

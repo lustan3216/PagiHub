@@ -82,17 +82,18 @@ export default {
         })
       },
       immediate: true
+    },
+    layout: {
+      handler(value) {},
+      deep: true
     }
-  },
-  beforeCreate() {
-    this.$store.dispatch('project/getProjects')
   },
   mounted() {
     this.$nextTick(() => {
       Selection.create({
         class: 'selection',
         selectables: ['.control-layer'],
-        boundaries: ['.panel-draft.selected']
+        boundaries: ['.art-board.selected']
       })
         .on('beforestart', ({ oe }) => {
           return (
@@ -152,14 +153,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .item {
-    box-sizing: border-box;
-    border: 1px solid #f3f2f2;
-    background-color: #fff;
-  }
+.item {
+  box-sizing: border-box;
+  border: 1px solid #f3f2f2;
+  background-color: #fff;
+}
 
-  ::v-deep.item > .vue-resizable-handle {
-    bottom: -10px;
-    right: -10px;
-  }
+::v-deep.item > .vue-resizable-handle {
+  bottom: -10px;
+  right: -10px;
+}
 </style>

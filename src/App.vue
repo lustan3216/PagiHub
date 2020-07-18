@@ -1,6 +1,6 @@
 <template>
   <div>
-    <top-nav/>
+    <top-nav />
 
     <div class="view">
       <router-view />
@@ -20,7 +20,7 @@ export default {
   name: 'App',
   components: {
     TopNav,
-    DialogLogin: () => import('@/pages/DialogLogin')
+    DialogLogin: () => import('@/pages/components/DialogLogin')
   },
   computed: {
     ...mapState('app', ['dialog'])

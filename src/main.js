@@ -1,7 +1,7 @@
 import 'normalize.css'
 import '@/styles/index.scss'
 import '@/utils/polyfill'
-import '@/api/request'
+import '@/amplify'
 import 'intersection-observer'
 
 import Vue from 'vue'
@@ -30,6 +30,7 @@ Vue.mixin({
     isPreviewMode: () => store.getters['mode/isPreviewMode'],
     isDraftMode: () => store.getters['mode/isDraftMode'],
     componentsMap: () => store.state.component.componentsMap,
+    projectMap: () => store.state.project.projectMap,
     vmMap: () => vmMap
   }
 })
@@ -91,12 +92,14 @@ Vue.use(FormItem)
 Vue.use(Loading.directive)
 
 // eslint-disable-next-line
+import i18n from './i18n'
+Vue.prototype.$t = key => i18n[key]
 Vue.prototype.$Log = console.log
 Vue.prototype.$log = console.log
 Vue.prototype.$bus = new Vue()
 Vue.prototype.$dialog = {
   close: () => store.commit('app/DIALOG_CLOSE'),
-  open: (name) => store.commit('app/DIALOG_OPEN', name)
+  open: name => store.commit('app/DIALOG_OPEN', name)
 }
 
 Vue.config.productionTip = false

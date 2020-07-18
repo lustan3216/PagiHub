@@ -7,7 +7,7 @@
     "test": "cypress open",
     "lint": "vue-cli-service lint --fix",
     "deploy": "vue-cli-service build && vue-cli-service s3-deploy",
-    "dev": "vue-cli-service serve",
+    "dev": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js serve --open",
     "purge": "rm -rf ./node_modules/.cache/hard-source"
   },
   "dependencies": {

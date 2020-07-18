@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import AsyncComponent from './AsyncComponent'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -49,18 +49,18 @@ export default {
     }
   },
   created() {
-    const masterID = this.node[MASTER_ID]
+    const masterID = this.projectMap[this.id][MASTER_ID]
     if (masterID) {
       componentSetInstanceIds.add(this.rootComponentSetId, this[ID])
 
-      if (!this.componentsMap[masterID]) {
+      if (!this.projectMap[masterID]) {
         this.getComponentSet(masterID)
       }
     }
   },
   methods: {
     isComponentSet,
-    ...mapActions('component', ['getComponentSet']),
+    ...mapActions('project', ['getComponentSet']),
     addComponent(event) {
       const id = event.dataTransfer.getData('id')
       this._addNodesToParentAndRecord(this.componentsMap[id])

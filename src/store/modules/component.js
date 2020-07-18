@@ -2,7 +2,9 @@ import app from '@/main'
 import localforage from 'localforage'
 import jsonHistory from '../jsonHistory'
 import store, { SET } from '../index'
-import { createComponentSet, getComponentSet } from '@/api/node'
+import {
+  createComponentSet
+} from '@/api/node'
 import { isUndefined, objectHasAnyKey, traversal, deleteBy } from '@/utils/tool'
 import { nodeIds } from '@/utils/nodeId'
 import { Message } from 'element-ui'
@@ -55,7 +57,8 @@ const mutations = {
       tree[key] = value
     } else {
       if (value[ID]) {
-        childrenOf[key] = value[CHILDREN] = childrenOf[key] || value[CHILDREN] || []
+        childrenOf[key] = value[CHILDREN] =
+          childrenOf[key] || value[CHILDREN] || []
 
         const parentId = value[PARENT_ID]
         childrenOf[parentId] = childrenOf[parentId] || []
@@ -75,7 +78,7 @@ const mutations = {
   },
   SET_EDITING_COMPONENT_SET_ID(state, id) {
     state.editingComponentSetId = id
-    store.commit('app/RESET', null, { root: true })
+    // store.commit('app/RESET', null, { root: true })
   },
   async REDO() {
     await rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)
@@ -130,20 +133,11 @@ const actions = {
         : []
     })
 
-    commit('app/TOGGLE_SELECTED_COMPONENT_SET_IN_IDS', componentSet.id, { root: true })
+    commit('app/TOGGLE_SELECTED_COMPONENT_SET_IN_IDS', componentSet.id, {
+      root: true
+    })
     commit('SET_EDITING_COMPONENT_SET_ID', componentSet.id)
     commit('project/APPEND_COMPONENT_SET', componentSet, { root: true })
-  },
-
-  removeComponentSet({ state: { editingComponentSetId }, commit }, id) {
-    if (id === editingComponentSetId) {
-      commit('SET', { editingComponentSetId: null })
-    }
-  },
-
-  async getComponentSet({ commit, state }, id) {
-    const componentsArray = await getComponentSet(id)
-    commit('SET_MAP', componentsArray)
   }
 }
 
@@ -152,11 +146,9 @@ const getters = {}
 const subscribe = {
   updateNodesMap(mutation, state) {
     if (
-      [
-        'component/RECORD',
-        'component/REDO',
-        'component/ UNDO'
-      ].includes(mutation.type)
+      ['component/RECORD', 'component/REDO', 'component/ UNDO'].includes(
+        mutation.type
+      )
     ) {
       const nodes = []
       const { editingComponentSetId } = state.component
@@ -171,7 +163,10 @@ const subscribe = {
 
   editingComponentSetId(mutation, state) {
     if (mutation.type === ['component/SET_EDITING_COMPONENT_SET_ID']) {
-      localforage.setItem('editingComponentSetId', state.component.editingComponentSetId)
+      localforage.setItem(
+        'editingComponentSetId',
+        state.component.editingComponentSetId
+      )
     }
   }
 }

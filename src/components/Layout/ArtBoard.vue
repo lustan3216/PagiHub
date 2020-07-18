@@ -5,14 +5,17 @@
     class="art-board"
   >
     <el-button
-      :style="{ fontSize: `${12 / scaleRatio}px`, top: `${-30 / scaleRatio}px` }"
+      :style="{
+        fontSize: `${12 / scaleRatio}px`,
+        top: `${-30 / scaleRatio}px`
+      }"
       type="text"
       class="absolute"
     >
       <i
         v-if="selected"
         class="el-icon-edit-outline"
-      /> {{ node.name }}
+      /> {{ node.label }}
     </el-button>
     <component-set :id="node.id" />
   </div>
@@ -65,8 +68,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .art-board {
-    overflow: scroll;
-    height: 100%;
-  }
+.art-board {
+  overflow: scroll;
+  height: 100%;
+}
 </style>

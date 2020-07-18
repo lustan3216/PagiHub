@@ -36,7 +36,11 @@
               @dragstart="$event.dataTransfer.setData('id', component.id)"
             >
               <component
-                :is="isComponentSet(component) ? 'component-set' : 'async-component'"
+                :is="
+                  isComponentSet(component)
+                    ? 'component-set'
+                    : 'async-component'
+                "
                 :id="component.id"
                 class="no-action"
               />
@@ -56,7 +60,6 @@ import { shortTagName, isComponentSet } from '@/utils/node'
 import AsyncComponent from './AsyncComponent'
 import ComponentSet from './ComponentSet'
 import { Card } from 'element-ui'
-import { NODE_TYPE } from '@/const'
 
 export default {
   name: 'ComponentTabs',
@@ -89,8 +92,11 @@ export default {
     ...mapState('project', ['projectMap']),
     ...mapState('component', ['basicExamples', 'editingComponentSetId']),
     componentsSets() {
-      return Object.values(this.projectMap)
-        .filter(node => NODE_TYPE.COMPONENT_SET === node.type && node.id !== this.editingComponentSetId)
+      const result = Object.values(this.projectMap).filter(
+        node => isComponentSet(node) && node.id !== this.editingComponentSetId
+      )
+
+      return result
     },
     components() {
       return {
@@ -112,30 +118,30 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  ::v-deep.tabs {
-    & > .el-tabs__content {
-      overflow: scroll;
-      height: calc(100vh - 70px);
-    }
-
-    & > div > .el-tabs__nav-wrap {
-      width: 250px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+::v-deep.tabs {
+  & > .el-tabs__content {
+    overflow: scroll;
+    height: calc(100vh - 70px);
   }
 
-  ::v-deep {
-    .el-card__body {
-      padding: 0 10px 10px;
-    }
+  & > div > .el-tabs__nav-wrap {
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 
-    .el-carousel__container {
-      height: 200px !important;
-    }
+::v-deep {
+  .el-card__body {
+    padding: 0 10px 10px;
   }
 
-  ::v-deep.dialog > .el-dialog__header {
-    padding: 0;
+  .el-carousel__container {
+    height: 200px !important;
   }
+}
+
+::v-deep.dialog > .el-dialog__header {
+  padding: 0;
+}
 </style>
