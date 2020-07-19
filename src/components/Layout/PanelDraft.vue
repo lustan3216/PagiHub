@@ -43,6 +43,8 @@ import { isMac } from '@/utils/device'
 import Selection from '@simonwep/selection-js'
 import ArtBoard from './ArtBoard'
 import VueGridLayout from 'vue-grid-layout'
+import { debounce } from 'throttle-debounce'
+import { getNode } from '@/utils/node'
 
 export default {
   name: 'PanelDraft',
@@ -60,17 +62,17 @@ export default {
     }
   },
   computed: {
-    ...mapState('project', ['projectMap']),
     ...mapState('component', ['editingComponentSetId']),
-    ...mapGetters('app', ['selectedComponentSetNodes'])
+    ...mapState('app', ['selectedComponentSetIds'])
   },
   watch: {
-    selectedComponentSetNodes: {
-      handler(nodes) {
+    selectedComponentSetIds: {
+      handler(ids) {
         let x = 0
-        this.layout = nodes.map(node => {
+        this.layout = ids.map(id => {
+          const node = getNode(id)
           const object = {
-            i: parseInt(node.id),
+            i: parseInt(node.id.replace(/\D/g, '')),
             id: node.id,
             h: node.h,
             w: node.w,
@@ -82,10 +84,6 @@ export default {
         })
       },
       immediate: true
-    },
-    layout: {
-      handler(value) {},
-      deep: true
     }
   },
   mounted() {
@@ -120,27 +118,26 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('project', ['VUE_SET']),
+    ...mapMutations('component', ['VUE_SET']),
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
-      'TOGGLE_SELECTED_COMPONENT_IN_IDS',
-      'CLEAN_SELECTED_COMPONENT_IDS'
+      'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID', 'RECORD']),
     isMac,
-    itemResized({ id }, h, w) {
+    itemResized: debounce(300, function({ id }, h, w) {
       this.VUE_SET({
-        tree: this.projectMap[id],
+        tree: this.componentsMap[id],
         key: 'h',
         value: h
       })
 
       this.VUE_SET({
-        tree: this.projectMap[id],
+        tree: this.componentsMap[id],
         key: 'w',
         value: w
       })
-    },
+    }),
     itemClick(id) {
       if (!this.touching) {
         this.SET_EDITING_COMPONENT_SET_ID(id)

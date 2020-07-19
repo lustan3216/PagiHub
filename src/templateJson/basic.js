@@ -84,9 +84,9 @@ export const carousel = function() {
         [CAN_NEW_ITEM]: false,
         [CHILDREN]: [_gridGenerator]
       }),
-      gridGenerator({ name: 'slider' }),
-      gridGenerator({ name: 'slider' }),
-      gridGenerator({ name: 'slider' })
+      layers({ name: 'slider' }),
+      layers({ name: 'slider' }),
+      layers({ name: 'slider' })
     ]
   }
 }

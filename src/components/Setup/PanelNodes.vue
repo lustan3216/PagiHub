@@ -1,5 +1,6 @@
 <template>
   <div class="p-r-10">
+    <el-button type="text">{{ componentSetName }}</el-button>
     <el-input
       v-model="filterText"
       placeholder="输入关键字进行过滤"
@@ -43,6 +44,7 @@ import { Tree } from 'element-ui'
 import { SORT_INDEX, LAYERS, SOFT_DELETE, PROPS, STYLE } from '@/const'
 import { mapState, mapMutations } from 'vuex'
 import { cloneJson, traversal, arraySubtract, deleteBy } from '@/utils/tool'
+import { shortTagName } from '@/utils/node'
 import { isMac } from '@/utils/device'
 import NodeController from '../TemplateUtils/NodeController'
 import { on, off } from 'element-ui/src/utils/dom'
@@ -55,12 +57,6 @@ export default {
     ElTree: Tree,
     NodeController
   },
-  props: {
-    selectedComponentSetId: {
-      type: String,
-      required: true
-    }
-  },
   data() {
     return {
       filterText: '',
@@ -70,8 +66,15 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
+    ...mapState('component', ['editingComponentSetId']),
+    componentSetNode() {
+      return this.componentsMap[this.editingComponentSetId]
+    },
+    componentSetName() {
+      return this.componentSetNode && shortTagName(this.componentSetNode)
+    },
     innerTree() {
-      const tree = this.componentsMap[this.selectedComponentSetId]
+      const tree = this.componentSetNode
 
       if (!tree) {
         return

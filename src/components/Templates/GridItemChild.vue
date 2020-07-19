@@ -14,11 +14,10 @@
         :id="currentNode.id"
       />
 
-      <div
+      <component-drop-zone
         v-else-if="isDraftMode && !isExample"
+        :id="id"
         class="h-100"
-        @drop="addComponent"
-        @dragover.prevent
       >
         <node-controller
           :id="currentNode.id"
@@ -27,12 +26,12 @@
         >
           <template v-slot="{ data: { mouseIn } }">
             <node-info
-              v-show="!mouseIn"
+              v-if="!mouseIn"
               :id="currentNode.id"
             />
           </template>
         </node-controller>
-      </div>
+      </component-drop-zone>
 
       <portal-target
         v-if="isDraftMode"
@@ -49,6 +48,7 @@ import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import NodeController from '../TemplateUtils/NodeController'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
+import ComponentDropZone from '../TemplateUtils/ComponentDropZone'
 import NodeInfo from '../TemplateUtils/NodeInfo'
 
 export default {
@@ -57,14 +57,10 @@ export default {
     ControllerLayer,
     NodeController,
     AsyncComponent,
-    NodeInfo
+    NodeInfo,
+    ComponentDropZone
   },
   mixins: [childrenMixin, nodeMixin],
-  data() {
-    return {
-      mounted: false
-    }
-  },
   computed: {
     ...mapState('app', ['isAnimating']),
     currentNode() {
@@ -72,15 +68,6 @@ export default {
     },
     firstChild() {
       return this.innerChildren[0]
-    }
-  },
-  mounted() {
-    this.mounted = true
-  },
-  methods: {
-    addComponent(event) {
-      const id = event.dataTransfer.getData('id')
-      this._addNodesToParentAndRecord(this.componentsMap[id])
     }
   }
 }

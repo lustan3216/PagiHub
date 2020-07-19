@@ -51,7 +51,7 @@ const self = {
       for (let i = 0; i < this.selectedComponentIds.length - 1; i++) {
         const id = this.selectedComponentIds[i]
         const nextId = this.selectedComponentIds[i + 1]
-        if (this.componentsMap[id].tag !== this.componentsMap[nextId].tag) {
+        if (getNode(id).tag !== this.componentsMap[nextId].tag) {
           same = false
           break
         }

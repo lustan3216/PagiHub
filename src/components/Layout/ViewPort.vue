@@ -8,7 +8,7 @@
       ref="target"
       class="free-view-target"
     >
-      <slot/>
+      <slot />
     </div>
     <portal to="TopNav">
       <el-button
@@ -41,6 +41,7 @@ export default {
       scaleRatio: 1,
       canvasWidth: 0,
       freeViewOptions: {
+        moveCallback: this.moveCallback,
         scaleCallback: this.scaleCallback,
         targetSelector: '.free-view-target',
         moveIgnoreSelector: '.selected.art-board'
@@ -71,6 +72,9 @@ export default {
       this.appSET({ scaleRatio })
       this.scaleRatio = scaleRatio
     },
+    moveCallback(event) {
+      this.SET_EDITING_COMPONENT_SET_ID(null)
+    },
     cleanEditingComponentSet(event) {
       if (!event.target.dataset.id) {
         this.SET_EDITING_COMPONENT_SET_ID(null)
@@ -81,8 +85,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .free-view-target {
-    padding: 40px 35px;
-    width: 4000px;
-  }
+.free-view-target {
+  padding: 40px 35px;
+  width: 4000px;
+}
 </style>

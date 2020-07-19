@@ -111,7 +111,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('project', ['projectMap']),
     ...mapState('app', ['theOnlySelectedComponentId']),
     isExist() {
       return Boolean(this.id)
@@ -130,11 +129,11 @@ export default {
   },
   created() {
     if (this.id) {
-      Object.assign(this.form, this.projectMap[this.id])
+      Object.assign(this.form, this.componentsMap[this.id])
     }
   },
   methods: {
-    ...mapActions('project', ['createComponentSet']),
+    ...mapActions('component', ['createComponentSet']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },

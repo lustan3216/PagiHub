@@ -1,6 +1,6 @@
 <template>
   <el-button
-    type="text"
+    circle
     icon="el-icon-question"
     @click.stop="visible = true"
   >
@@ -156,3 +156,9 @@ const data = [
   }
 ]
 </script>
+
+<style scoped>
+::v-deep.el-button i {
+  margin-right: -5px;
+}
+</style>

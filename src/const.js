@@ -30,13 +30,18 @@ export const GRID_GENERATOR = 'grid-generator'
 export const GRID_ITEM = 'grid-item'
 export const GRID_ITEM_CHILD = 'grid-item-child'
 
+export const EXAMPLE = 'EXAMPLE' // need to uppercase separate id of different types
+// 01EDEHZQ2M9V8X4VZ7HEFJ1R0A could be project or componentSet
+// 12a01EDEHZQ2M9V8X4VZ7HEFJ1R0A is component
+// 12aEXAMPLE is example
+
 export const SORT_INDEX = 'sortIndex'
 export const PATH = 'path'
 
 export const NODE_TYPE = {
   PROJECT: 'p',
   FOLDER: 1,
-  COMPONENT_SET: 'c',
+  COMPONENT_SET: 's',
   COMPONENT: undefined
 }
 

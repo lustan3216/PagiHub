@@ -3,7 +3,7 @@
     ref="gridGenerator"
     v-bind="innerProps"
     :layout="layout"
-    :margin="[0, 1]"
+    :margin="[0, 0]"
     :is-draggable="(innerProps.isDraggable && isDraftMode) || isExample"
     :is-resizable="(innerProps.isResizable && isDraftMode) || isExample"
     @layout-updated="layoutUpdated($event)"
@@ -14,6 +14,9 @@
       v-bind="{ ...child, ...child.props }"
       :key="child.id"
       :style="itemPadding"
+      :class="{
+        'z-index1': selectedComponentIds.includes(child.id)
+      }"
       drag-ignore-from=".noDrag"
       drag-allow-from="div"
       class="item"
@@ -64,6 +67,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', ['selectedComponentIds']),
     ...mapState('component', ['componentsMap']),
     freeStyle() {
       return `

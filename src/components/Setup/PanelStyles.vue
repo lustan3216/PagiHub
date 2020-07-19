@@ -8,29 +8,29 @@
       slim
     />
 
-    <div class="m-b-10">
-      <span class="title p-r-10">State</span>
-      <el-radio-group
-        v-model="state"
-        size="mini"
-      >
-        <el-radio-button label="default">
-          Default
-        </el-radio-button>
+    <!--    <div class="m-b-10">-->
+    <!--      <span class="title p-r-10">State</span>-->
+    <!--      <el-radio-group-->
+    <!--        v-model="state"-->
+    <!--        size="mini"-->
+    <!--      >-->
+    <!--        <el-radio-button label="default">-->
+    <!--          Default-->
+    <!--        </el-radio-button>-->
 
-        <el-radio-button label=":hover">
-          Hover
-        </el-radio-button>
+    <!--        <el-radio-button label=":hover">-->
+    <!--          Hover-->
+    <!--        </el-radio-button>-->
 
-        <el-radio-button label=":active">
-          Click
-        </el-radio-button>
+    <!--        <el-radio-button label=":active">-->
+    <!--          Click-->
+    <!--        </el-radio-button>-->
 
-        <!--        <el-radio-button label="show">-->
-        <!--          Show-->
-        <!--        </el-radio-button>-->
-      </el-radio-group>
-    </div>
+    <!--        &lt;!&ndash;        <el-radio-button label="show">&ndash;&gt;-->
+    <!--        &lt;!&ndash;          Show&ndash;&gt;-->
+    <!--        &lt;!&ndash;        </el-radio-button>&ndash;&gt;-->
+    <!--      </el-radio-group>-->
+    <!--    </div>-->
 
     <div :key="theOnlySelectedComponentId + state">
       <padding
@@ -199,7 +199,8 @@ export default {
       asyncGetValue(() => vm(id))
         .then(() => {
           this.valid = true
-        }).catch(() => {
+        })
+        .catch(() => {
           this.valid = false
         })
     },

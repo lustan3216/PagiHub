@@ -34,7 +34,7 @@ export function getComputedStyle(id) {
   } else {
     el = document.querySelector(`[data-style-id="${id}"]`)
   }
-  console.log(el)
+
   return window.getComputedStyle(el) || {}
 }
 

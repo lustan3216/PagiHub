@@ -134,6 +134,7 @@ export default {
       },
       set(unit) {
         const number = unit === 'auto' ? '' : this.number || '0'
+
         this.innerValue = number + unit
       }
     },
@@ -144,6 +145,9 @@ export default {
   watch: {
     innerValue(newValue) {
       this.$emit('input', newValue)
+    },
+    value(value) {
+      this.innerValue = value
     }
   },
   methods: {

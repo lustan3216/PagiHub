@@ -80,7 +80,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_IDS']),
     watch(path, fn) {
       this.$watch(path, fn, { deep: true, immediate: true })
     },

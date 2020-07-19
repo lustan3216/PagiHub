@@ -1,38 +1,47 @@
 import { mapMutations } from 'vuex'
 import { CHILDREN, GRID_ITEM, TAG } from '@/const'
 import { cloneJson, traversal, arrayLast } from '@/utils/tool'
-import { traversalChildrenOf } from '@/utils/node'
+import { traversalChildrenOf, getNode } from '@/utils/node'
 import { nodeIds } from '@/utils/nodeId'
 import basicTemplates from '@/templateJson/basic'
 
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   inject: {
     componentSetId: {
       // the value is null only happen on componentSet node
       // other cases should have string id
       default: null
-    }
+    },
+    rootComponentSetId: { default: null }
   },
   computed: {
     node() {
-      return this.componentsMap[this.id]
+      return getNode(this.id)
     },
     children() {
-      return this.node && this.node.children || []
+      return (this.node && this.node.children) || []
     },
     innerChildren() {
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
       // children 因為每次更新 draftNodesMap，如果innerChildren用computed會所有的component都被更新
-      return this.children.map(({ [CHILDREN]: _, moved, parentId, ...node }) => ({
-        ...node
-      }))
+      return this.children.map(
+        ({ [CHILDREN]: _, moved, parentId, ...node }) => ({
+          ...node
+        })
+      )
     },
     parentNodes() {
       const path = []
 
-      const findPath = (id) => {
-        const node = this.componentsMap[id]
+      const findPath = id => {
+        const node = getNode(id)
 
         if (node && node.parentId) {
           const parentNode = this.componentsMap[node.parentId]
@@ -53,6 +62,8 @@ export default {
     ...mapMutations('component', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
 
     _addNodesToParentAndRecord(nodeTree = {}) {
+      // could be triggered by copy, delete
+      this.SET_EDITING_COMPONENT_SET_ID(this.rootComponentSetId)
       const records = []
 
       nodeTree = cloneJson(nodeTree)
@@ -69,12 +80,7 @@ export default {
         })
       })
 
-      this.SET_EDITING_COMPONENT_SET_ID(this.rootComponentSetId)
       this.RECORD(records)
-
-      this.$nextTick(() => {
-        this.SET_SELECTED_COMPONENT_ID(nodeTree.id)
-      })
     },
 
     _createEmptyItem() {
@@ -141,9 +147,6 @@ export default {
 
       this.SET_SELECTED_COMPONENT_ID(selectedId)
       this.RECORD(records)
-      // CLEAN_SELECTED_COMPONENT_IDS
-      // const allDeletedIds = [this.id, ...records.map(x => x.path)]
-      // this.CLEAN_SELECTED_COMPONENT_IDS(allDeletedIds)
     }
   }
 }

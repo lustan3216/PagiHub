@@ -25,6 +25,7 @@
 import { mapMutations, mapState } from 'vuex'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import ComponentSet from '../TemplateUtils/ComponentSet'
+import { getNode } from '@/utils/node'
 
 export default {
   name: 'ArtBoard',
@@ -50,10 +51,9 @@ export default {
   },
   computed: {
     ...mapState('app', ['scaleRatio']),
-    ...mapState('project', ['projectMap']),
     ...mapState('component', ['editingComponentSetId']),
     node() {
-      return this.projectMap[this.id]
+      return getNode(this.id)
     },
     selected() {
       return this.editingComponentSetId === this.id

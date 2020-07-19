@@ -13,6 +13,9 @@ import VueRouter from 'vue-router'
 import PortalVue from 'portal-vue'
 import formCreate from '@form-create/element-ui'
 import vmMap from '@/utils/vmMap'
+import jsonHistory from '@/store/jsonHistory'
+jsonHistory.tree = store.state.component.componentsMap
+
 import vhCheck from 'vh-check'
 vhCheck()
 
@@ -30,7 +33,6 @@ Vue.mixin({
     isPreviewMode: () => store.getters['mode/isPreviewMode'],
     isDraftMode: () => store.getters['mode/isDraftMode'],
     componentsMap: () => store.state.component.componentsMap,
-    projectMap: () => store.state.project.projectMap,
     vmMap: () => vmMap
   }
 })

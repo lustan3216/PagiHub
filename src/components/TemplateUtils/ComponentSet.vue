@@ -1,24 +1,26 @@
 <template>
-  <async-component
+  <controller-layer
     v-if="firstChild"
     :id="firstChild.id"
-  />
-  <div
+  >
+    <async-component :id="firstChild.id" />
+  </controller-layer>
+  <component-drop-zone
     v-else
+    :id="id"
     class="wh-100"
-    @drop.stop="addComponent"
-    @dragover.prevent
   />
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 import AsyncComponent from './AsyncComponent'
+import ComponentDropZone from './ComponentDropZone'
+import ControllerLayer from './ControllerLayer'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { ID, MASTER_ID } from '@/const'
 import { componentSetInstanceIds } from '@/utils/nodeId'
-import { isComponentSet } from '@/utils/node'
 
 export default {
   name: 'ComponentSet',
@@ -28,9 +30,11 @@ export default {
     }
   },
   components: {
-    AsyncComponent
+    AsyncComponent,
+    ComponentDropZone,
+    ControllerLayer
   },
-  mixins: [nodeMixin, childrenMixin],
+  mixins: [nodeMixin, childrenMixin], // nodeMixin needs to deal with vmMap
   computed: {
     firstChild() {
       return this.innerChildren[0]
@@ -49,22 +53,17 @@ export default {
     }
   },
   created() {
-    const masterID = this.projectMap[this.id][MASTER_ID]
+    const masterID = this.componentsMap[this.id][MASTER_ID]
     if (masterID) {
       componentSetInstanceIds.add(this.rootComponentSetId, this[ID])
 
-      if (!this.projectMap[masterID]) {
+      if (!this.componentsMap[masterID]) {
         this.getComponentSet(masterID)
       }
     }
   },
   methods: {
-    isComponentSet,
-    ...mapActions('project', ['getComponentSet']),
-    addComponent(event) {
-      const id = event.dataTransfer.getData('id')
-      this._addNodesToParentAndRecord(this.componentsMap[id])
-    }
+    ...mapActions('component', ['getComponentSet'])
   }
 }
 </script>

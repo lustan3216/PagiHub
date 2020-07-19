@@ -1,6 +1,6 @@
 <template>
   <div class="p-r-10 fake-transform">
-    <div v-show="!selectedComponentSet">
+    <div>
       <el-button type="text">Art Boards</el-button>
       <el-input
         v-model="filterText"
@@ -72,38 +72,25 @@
         </span>
       </el-tree>
     </div>
-
-    <template v-if="selectedComponentSet">
-      <el-button
-        type="text"
-        icon="el-icon-arrow-left"
-        @click="selectedComponentSet = null"
-      >
-        {{ name }}
-      </el-button>
-      <panel-nodes :selected-component-set-id="selectedComponentSet.id" />
-    </template>
   </div>
 </template>
 
 <script>
 import { Tree } from 'element-ui'
-import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
-import { NODE_TYPE, NODE_TYPE_STRING, KIND } from '@/const'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { NODE_TYPE, NODE_TYPE_STRING, KIND, CHILDREN } from '@/const'
 import DialogProject from './DialogProject'
 import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
 import { kebabCase } from '@/utils/string'
 import {
-  shortTagName,
   isComponentSet,
   isProject,
   isFolder,
   typeString
 } from '@/utils/node'
-import PanelNodes from './PanelNodes'
-import { cloneJson, traversal } from '@/utils/tool'
+import { traversal } from '@/utils/tool'
 import dblClick from '@/utils/dblClick'
 
 export default {
@@ -113,26 +100,20 @@ export default {
     DialogComponentSet,
     DialogProject,
     DialogFolder,
-    DialogDelete,
-    PanelNodes
+    DialogDelete
   },
   data() {
     return {
       filterText: '',
       NODE_TYPE_STRING,
       ...NODE_TYPE,
-      hoveredId: null,
-      selectedComponentSet: null
+      hoveredId: null
     }
   },
   computed: {
-    ...mapGetters('project', ['tree']),
     ...mapState('app', ['selectedComponentSetIds']),
     projectId() {
       return this.$route.params.projectId
-    },
-    name() {
-      return shortTagName(this.selectedComponentSet)
     },
     icon() {
       return {
@@ -142,10 +123,16 @@ export default {
       }
     },
     innerTree() {
-      const cloneTree = cloneJson(this.tree)
+      const project = this.componentsMap[this.projectId]
+      if (!project) {
+        return
+      }
+
+      const cloneTree = project[CHILDREN].map(({ children, ...node }) => node)
       traversal(cloneTree, node => {
         delete node.w
         delete node.h
+        // to prevent tree rerender
       })
 
       return cloneTree
@@ -156,19 +143,18 @@ export default {
       this.$refs.tree.filter(val)
     }
   },
-  created() {},
+  created() {
+    this.getProject(this.$route.params.projectId)
+  },
   methods: {
     isComponentSet,
     isProject,
     isFolder,
     typeString,
     kebabCase,
-    ...mapActions('project', ['modifyProjectNodeParent']),
+    ...mapActions('app', ['getProject', 'toggleSelectedComponentSetInIds', 'toggleSelectedComponentSetId']),
+    ...mapActions('component', ['getProject', 'modifyProjectNodeParent']),
     ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
-    ...mapMutations('app', [
-      'TOGGLE_SELECTED_COMPONENT_SET_IN_IDS',
-      'TOGGLE_SELECTED_COMPONENT_SET_ID'
-    ]),
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {
         this.modifyProjectNodeParent({
@@ -182,16 +168,16 @@ export default {
         dblClick(
           () => {
             if (event.ctrlKey || event.metaKey) {
-              this.TOGGLE_SELECTED_COMPONENT_SET_IN_IDS(node.id)
+              this.toggleSelectedComponentSetInIds(node.id)
             } else {
-              this.TOGGLE_SELECTED_COMPONENT_SET_ID(node.id)
+              this.toggleSelectedComponentSetId(node.id)
             }
           },
           () => {
             if (!this.selectedComponentSetIds.includes(node.id)) {
-              this.TOGGLE_SELECTED_COMPONENT_SET_IN_IDS(node.id)
+              this.toggleSelectedComponentSetInIds(node.id)
             }
-            this.selectedComponentSet = node
+            // this.selectedComponentSet = node
           }
         )
       }

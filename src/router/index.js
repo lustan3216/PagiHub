@@ -9,21 +9,14 @@ export default new VueRouter({
       component: () => import('@/pages/Editor')
     },
     {
-      path: '/dashboard',
-      name: 'HomePage',
-      component: () => import('@/pages/Dashboard'),
-      children: [
-        {
-          path: 'profile',
-          name: 'Profile',
-          component: () => import('@/pages/Profile')
-        },
-        {
-          path: 'projects',
-          name: 'Projects',
-          component: () => import('@/pages/Projects')
-        }
-      ]
+      path: '/profile',
+      name: 'Profile',
+      component: () => import('@/pages/Profile')
+    },
+    {
+      path: '/projects',
+      name: 'Projects',
+      component: () => import('@/pages/Projects')
     },
     {
       path: '/help',

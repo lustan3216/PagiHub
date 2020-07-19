@@ -7,7 +7,7 @@
       show-family
     />
 
-    <div class="settings">
+    <div class="sidebar-right-content">
       <el-collapse
         v-model="activeNames"
         class="no-border"
@@ -27,23 +27,6 @@
         </el-collapse-item>
       </el-collapse>
     </div>
-
-    <i
-      v-shortkey="['a']"
-      @shortkey="activeName = 'Project'"
-    />
-    <i
-      v-shortkey="['s']"
-      @shortkey="activeName = 'Nodes'"
-    />
-    <i
-      v-shortkey="['d']"
-      @shortkey="activeName = 'Setting'"
-    />
-    <i
-      v-shortkey="['f']"
-      @shortkey="activeName = 'Style'"
-    />
   </div>
 </template>
 
@@ -52,6 +35,7 @@ import { Collapse, CollapseItem } from 'element-ui'
 import { mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
+import PanelExplain from '../Setup/PanelExplain'
 import NodeInfo from '../TemplateUtils/NodeInfo'
 
 export default {
@@ -60,6 +44,7 @@ export default {
     NodeInfo,
     PanelStyles,
     PanelSettings,
+    PanelExplain,
     ElCollapse: Collapse,
     ElCollapseItem: CollapseItem
   },
@@ -103,10 +88,9 @@ export default {
   }
 }
 
-.settings {
-  // @include calc-vh('height', '100vh - 70px');
+.sidebar-right-content {
+  @include calc-vh('max-height', '100vh - 130px');
   overflow: scroll;
   padding: 15px 10px;
 }
-
 </style>

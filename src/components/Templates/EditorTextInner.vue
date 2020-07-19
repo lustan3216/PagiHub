@@ -1,86 +1,18 @@
 <template>
-  <div v-if="editor">
-    <portal :to="`NodeController${id}`">
-      <editor-text-tutorial />
-    </portal>
+  <div
+    v-if="editor"
+    class="over-hidden"
+  >
+    <template v-if="selected && isDraftMode">
+      <portal
+        v-if="isDraftMode"
+        to="PanelStyles"
+      >
+        <text-editor-style :editor="editor" />
+      </portal>
 
-    <template v-if="selected">
-      <portal to="PanelStyles">
-        <editor-menu-bubble :editor="editor">
-          <div slot-scope="{ commands, getMarkAttrs, isActive }">
-            <el-row
-              :gutter="5"
-              type="flex"
-              class="menubar"
-            >
-              <el-col :span="12">
-                <el-select
-                  ref="fontFamily"
-                  :value="getMarkAttrs('fontFamily').fontFamily"
-                  @change="commands.fontFamily({ fontFamily: $event })"
-                />
-                <span class="el-form-item__label">Font Family</span>
-              </el-col>
-
-              <el-col :span="4">
-                <color-picker
-                  :value="getMarkAttrs('color').color"
-                  show-alpha
-                  @change="commands.color({ color: $event })"
-                />
-                <span class="el-form-item__label">Font Color</span>
-              </el-col>
-
-              <el-col :span="8">
-                <color-picker
-                  :value="getMarkAttrs('backgroundColor').backgroundColor"
-                  show-alpha
-                  @change="
-                    commands.backgroundColor({ backgroundColor: $event })
-                  "
-                />
-                <span class="el-form-item__label">Font Background</span>
-              </el-col>
-            </el-row>
-
-            <el-row
-              :gutter="5"
-              type="flex"
-              class="menubar"
-            >
-              <el-col :span="8">
-                <select-unit
-                  ref="fontSize"
-                  :value="getMarkAttrs('fontSize').fontSize"
-                  @change="$event => setAttribute('fontSize', $event)"
-                />
-                <span class="el-form-item__label">Font Size</span>
-              </el-col>
-
-              <el-col :span="8">
-                <select-unit
-                  ref="letterSpacing"
-                  :value="getMarkAttrs('letterSpacing').letterSpacing"
-                  @change="$event => setAttribute('letterSpacing', $event)"
-                />
-                <span class="el-form-item__label">
-                  Letter Spacing
-                </span>
-              </el-col>
-
-              <el-col :span="8">
-                <select-unit
-                  ref="lineHeight"
-                  :value="getMarkAttrs('lineHeight').lineHeight"
-                  @change="$event => setAttribute('lineHeight', $event)"
-                />
-                <span class="el-form-item__label">
-                  Line Height
-                </span>
-              </el-col>
-            </el-row>
-          </div>
-        </editor-menu-bubble>
+      <portal :to="`ControllerLayerTutorial${id}`">
+        <editor-text-tutorial />
       </portal>
 
       <editor-menu-bubble
@@ -229,9 +161,8 @@
   </div>
 </template>
 <script>
-import { Editor, EditorContent, EditorMenuBubble, EditorMenuBar } from 'tiptap'
-import SelectUnit from '@/components/Components/SelectUnit'
-import ColorPicker from '@/components/Components/ColorPicker'
+import { Editor, EditorContent, EditorMenuBubble } from 'tiptap'
+
 import {
   Blockquote,
   CodeBlock,
@@ -263,17 +194,16 @@ import {
   LetterSpacing,
   LineHeight
 } from '../../vendor/tiptap'
-import EditorTextTutorial from '../TemplateUtils/EditorTextTutorial'
+import EditorTextTutorial from '../Tutorial/EditorTextTutorial'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
   components: {
     EditorContent,
     EditorMenuBubble,
-    EditorMenuBar,
     EditorTextTutorial,
-    SelectUnit,
-    ColorPicker
+    TextEditorStyle: () =>
+      import('@/components/Setup/EditorStyle/TextEditorStyle')
   },
   props: {
     id: {
@@ -315,18 +245,15 @@ export default {
       editable: this.isDraftMode,
       extensions,
       content: this.value,
-      onBlur: instance => {
+      onBlur: () => {
         if (self.isExample) return
         if (self.id) {
-          // 當在別的組建被使用時，不會有ID，所以不用update vuex
           self.RECORD([
             {
               path: `${self.id}.value`,
               value: self.editor.getJSON()
             }
           ])
-        } else {
-          self.$emit('input', instance)
         }
       }
     })
@@ -351,10 +278,6 @@ export default {
       command({ href: url })
       this.hideLinkMenu()
       this.editor.focus()
-    },
-    setAttribute(attr, value) {
-      this.editor.commands[attr]({ [attr]: value })
-      this.$refs[attr].focus()
     }
   }
 }
@@ -483,6 +406,179 @@ $color-grey: #dddddd;
     &.is-active {
       background-color: rgba($color-black, 0.1);
     }
+  }
+}
+
+::v-deep .ProseMirror {
+  position: relative;
+
+  &__content {
+    word-wrap: break-word;
+  }
+
+  * {
+    caret-color: currentColor;
+  }
+
+  pre {
+    padding: 0.7rem 1rem;
+    border-radius: 5px;
+    background: $color-black;
+    color: $color-white;
+    font-size: 0.8rem;
+    overflow-x: auto;
+
+    code {
+      display: block;
+    }
+  }
+
+  p code {
+    display: inline-block;
+    padding: 0 0.4rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background: rgba($color-black, 0.1);
+    color: rgba($color-black, 0.8);
+  }
+
+  ul,
+  ol {
+    padding-left: 1rem;
+  }
+
+  li > p,
+  li > ol,
+  li > ul {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  blockquote {
+    border-left: 3px solid rgba($color-black, 0.1);
+    color: rgba($color-black, 0.8);
+    padding-left: 0.8rem;
+    font-style: italic;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 3px;
+  }
+
+  table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+
+    td,
+    th {
+      min-width: 1em;
+      border: 2px solid $color-grey;
+      padding: 3px 5px;
+      vertical-align: top;
+      box-sizing: border-box;
+      position: relative;
+      > * {
+        margin-bottom: 0;
+      }
+    }
+
+    th {
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .selectedCell:after {
+      z-index: 2;
+      position: absolute;
+      content: '';
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: rgba(200, 200, 255, 0.4);
+      pointer-events: none;
+    }
+
+    .column-resize-handle {
+      position: absolute;
+      right: -2px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      z-index: 20;
+      background-color: #adf;
+      pointer-events: none;
+    }
+  }
+
+  .tableWrapper {
+    margin: 1em 0;
+    overflow-x: auto;
+  }
+
+  &.resize-cursor {
+    cursor: ew-resize;
+    cursor: col-resize;
+  }
+
+  ul[data-type='todo_list'] {
+    padding-left: 0;
+  }
+  li[data-type='todo_item'] {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+  .todo-checkbox {
+    border: 2px solid $color-black;
+    height: 0.9em;
+    width: 0.9em;
+    box-sizing: border-box;
+    margin-right: 10px;
+    margin-top: 0.3rem;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+    border-radius: 0.2em;
+    background-color: transparent;
+    transition: 0.4s background;
+  }
+  .todo-content {
+    flex: 1;
+    p {
+      margin-top: 0;
+    }
+    > p:last-of-type {
+      margin-bottom: 0;
+    }
+    > ul[data-type='todo_list'] {
+      margin: 0.5rem 0;
+    }
+  }
+  li[data-done='true'] {
+    > .todo-content {
+      > p {
+        text-decoration: line-through;
+      }
+    }
+    > .todo-checkbox {
+      background-color: $color-black;
+    }
+  }
+  li[data-done='false'] {
+    text-decoration: none;
   }
 }
 </style>

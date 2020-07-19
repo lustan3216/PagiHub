@@ -10,7 +10,7 @@ const jsonHistory = new JsonHistory({
   },
 
   deleter(tree, key) {
-    store.commit('component/VUE_SET', { tree, key })
+    store.commit('component/VUE_DELETE', { tree, key })
   }
 })
 
@@ -46,7 +46,7 @@ const jsonHistory = new JsonHistory({
 //   }
 // }
 
-export function resetJsonHistory(removeId) {
+export function cleanJsonHistoryById(removeId) {
   const { deltas, currentIndex } = jsonHistory
 
   const leftDeltas = []

@@ -1,8 +1,8 @@
-import { ID, PARENT_ID, NODE_TYPE, MASTER_ID, CHILDREN } from '../const'
+import { ID, PARENT_ID, NODE_TYPE, MASTER_ID, CHILDREN, EXAMPLE } from '../const'
 import { traversal } from './tool'
 import IdMap from './idMap'
 
-const CONNECTOR = 'a'
+const CONNECTOR = 'a' // use 'a' as connector instead '-' to prevent functional watcher warning
 
 // master
 // component id = 1a2    => component_id, a = connector, 2 => component_set_id
@@ -59,7 +59,9 @@ class IdManagement {
         this.resetComponentSetTree(node)
         return false
       } else if (node.kind === NODE_TYPE.COMPONENT) {
-        node[ID] = this.generateComponentId(this.componentSetId || componentSetId)
+        node[ID] = this.generateComponentId(
+          this.componentSetId || componentSetId
+        )
       } else {
         node[ID] = this.generateProjectId()
       }
@@ -71,7 +73,6 @@ class IdManagement {
   }
 
   generateComponentId(componentSetId = '') {
-    // use 'a' as connector instead '-' to prevent functional watcher warning
     if (!componentSetId) {
       console.warn('ComponentId has no componentSetId')
     }
@@ -104,5 +105,5 @@ class IdManagement {
 }
 
 export const nodeIds = new IdManagement()
-export const exampleIds = new IdManagement({ componentSetId: '0' })
+export const exampleIds = new IdManagement({ componentSetId: EXAMPLE })
 export const componentSetInstanceIds = new IdMap()

@@ -28,9 +28,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('project', ['projectMap']),
     linkableComponentSet() {
-      return Object.values(this.projectMap).filter(
+      return Object.values(this.componentsMap).filter(
         node => node.kind === NODE_TYPE.COMPONENT_SET
       )
     },

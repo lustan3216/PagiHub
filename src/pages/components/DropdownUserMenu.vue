@@ -19,9 +19,13 @@
 
       <el-dropdown-item
         divided
-        @click.native="$router.push('/dashboard')"
+        @click.native="$router.push('/profile')"
       >
-        Dashboard
+        Profile
+      </el-dropdown-item>
+
+      <el-dropdown-item @click.native="$router.push('/projects')">
+        Projects
       </el-dropdown-item>
 
       <el-dropdown-item @click.native="$router.push('/help')">

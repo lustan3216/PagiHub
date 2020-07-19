@@ -23,23 +23,24 @@ export default {
     const { projectId } = this.$route.params
     if (projectId) {
       this.getComponentSets(projectId)
-      this.projectSet({
+      this.componentSet({
         editingProjectId: projectId
       })
     }
   },
   methods: {
-    ...mapMutations('project', {
-      projectSet: 'SET'
+    ...mapMutations('component', {
+      componentSet: 'SET'
     }),
-    ...mapActions('project', ['getComponentSets'])
+    ...mapActions('component', ['getComponentSets'])
   }
 }
 </script>
 
 <style lang="scss">
 .app {
-  @include calc-vh('height', '100vh - 40px');
+  @include calc-vh('height', '100vh - 50px');
   display: flex;
+  overflow: hidden;
 }
 </style>

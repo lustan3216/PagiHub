@@ -1,7 +1,7 @@
 <template>
   <el-tabs
     v-model="currentCategory"
-    class="tabs"
+    class="tabs no-select"
     stretch
   >
     <el-tab-pane
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import { humanize } from '@/utils/string'
 import { shortTagName, isComponentSet } from '@/utils/node'
@@ -89,10 +89,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('project', ['projectMap']),
-    ...mapState('component', ['basicExamples', 'editingComponentSetId']),
+    ...mapState('component', ['editingComponentSetId']),
+    ...mapState('example', ['basicExamples']),
     componentsSets() {
-      const result = Object.values(this.projectMap).filter(
+      const result = Object.values(this.componentsMap).filter(
         node => isComponentSet(node) && node.id !== this.editingComponentSetId
       )
 
@@ -106,7 +106,11 @@ export default {
       }
     }
   },
+  created() {
+    this.init()
+  },
   methods: {
+    ...mapActions('example', ['init']),
     humanize,
     isComponentSet,
     shortTagName,
@@ -121,7 +125,7 @@ export default {
 ::v-deep.tabs {
   & > .el-tabs__content {
     overflow: scroll;
-    height: calc(100vh - 70px);
+    height: calc(100vh - 100px);
   }
 
   & > div > .el-tabs__nav-wrap {

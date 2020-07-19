@@ -42,8 +42,24 @@
         class="shadow-button"
         type="text"
         icon="el-icon-circle-plus-outline"
-        @shortkey.native="componentsIconClick"
-        @click="componentsIconClick"
+        @shortkey.native="panelIconClick('component-tabs')"
+        @click="panelIconClick('component-tabs')"
+      />
+
+      <el-tooltip
+        ref="11"
+        effect="light"
+        content="Components"
+        placement="right"
+      />
+      <el-button
+        v-popover:11
+        v-shortkey="['p']"
+        class="shadow-button"
+        type="text"
+        icon="el-icon-cherry"
+        @shortkey.native="panelIconClick('panel-project')"
+        @click="panelIconClick('panel-project')"
       />
 
       <el-tooltip
@@ -54,11 +70,11 @@
       />
       <el-button
         v-popover:3
-        v-shortkey="['x']"
+        v-shortkey="['s']"
         class="shadow-button"
         type="text"
-        @shortkey.native="projectIconClick"
-        @click="projectIconClick"
+        @shortkey.native="panelIconClick('panel-nodes')"
+        @click="panelIconClick('panel-nodes')"
       >
         <i
           class="el-icon-grape"
@@ -205,15 +221,12 @@
       />
     </div>
 
-    <panel-project
-      v-show="projectVisible"
-      class="panel"
-    />
-
-    <component-tabs
-      v-show="componentsVisible"
-      class="panel"
-    />
+    <keep-alive>
+      <component
+        :is="currentPanel"
+        class="panel"
+      />
+    </keep-alive>
   </nav>
 </template>
 
@@ -225,6 +238,9 @@ import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import PanelProject from '../Setup/PanelProject'
 import ComponentTabs from '../TemplateUtils/ComponentTabs'
+import PanelNodes from '@/components/Setup/PanelNodes'
+import { getNode } from '@/utils/node'
+
 import {
   vmAddNodesToParentAndRecord,
   vmCopyNode,
@@ -240,12 +256,14 @@ export default {
     PanelProject,
     ComponentTabs,
     DialogInteracted,
-    DialogComponentSet
+    DialogComponentSet,
+    PanelNodes
   },
   data() {
     return {
       projectVisible: true,
-      componentsVisible: false
+      componentsVisible: false,
+      currentPanel: 'panel-project'
     }
   },
   computed: {
@@ -260,7 +278,7 @@ export default {
       return this.selectedComponentIds.includes(this.id)
     },
     selectedNodes() {
-      return this.selectedComponentIds.map(id => this.componentsMap[id])
+      return this.selectedComponentIds.map(id => getNode(id))
     }
   },
   created() {
@@ -283,12 +301,16 @@ export default {
       }
     },
     projectIconClick() {
-      this.componentsVisible = false
-      this.projectVisible = !this.projectVisible
+      this.currentPanel = 'panel-project'
     },
-    componentsIconClick() {
-      this.projectVisible = false
-      this.componentsVisible = !this.componentsVisible
+    projectIconClick() {
+      this.currentPanel = 'componentIconClick'
+    },
+    exampleIconClick() {
+      this.currentPanel = 'component-tabs'
+    },
+    panelIconClick(name) {
+      this.currentPanel = this.currentPanel === name ? null : name
     },
     vmCreateItem,
     vmCopyNode,
@@ -297,9 +319,7 @@ export default {
     vmAddNodesToParentAndRecord,
     multiPaste() {
       jsonHistory.recordsMerge(() => {
-        this.copyComponentIds.forEach(id =>
-          this.vmCopyNode(this.componentsMap[id])
-        )
+        this.copyComponentIds.forEach(id => this.vmCopyNode(getNode(id)))
       })
     },
     multiDelete() {

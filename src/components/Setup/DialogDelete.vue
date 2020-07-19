@@ -49,7 +49,7 @@ export default {
     }
   },
   data() {
-    const node = this.$store.state.project.projectMap[this.id]
+    const node = this.$store.state.component.componentsMap[this.id]
     const { label } = node
 
     return {
@@ -76,7 +76,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('project', ['deleteProjectNode']),
+    ...mapActions('component', ['deleteProjectNode']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },

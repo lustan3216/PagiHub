@@ -42,7 +42,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import { CHILDREN, PARENT_ID, SOFT_DELETE } from '@/const'
-import { shortTagName } from '@/utils/node'
+import { shortTagName, getNode } from '@/utils/node'
 
 export default {
   name: 'NodeInfo',
@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     node() {
-      return this.componentsMap[this.id]
+      return getNode(this.id)
     },
     nodeShortName() {
       return this.shortTagName(this.node)
@@ -74,7 +74,7 @@ export default {
       return this.node[PARENT_ID]
     },
     parentNode() {
-      return this.componentsMap[this.parentId]
+      return getNode(this.parentId)
     },
     parentNodeShortName() {
       return this.shortTagName(this.parentNode)

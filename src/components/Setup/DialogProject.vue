@@ -75,7 +75,7 @@ export default {
     }
   },
   data() {
-    const { projectMap } = this.$store.state.project
+    const { componentsMap } = this.$store.state.component
 
     const form = {
       label: '',
@@ -85,7 +85,7 @@ export default {
     }
 
     if (this.id) {
-      Object.assign(form, projectMap[this.id])
+      Object.assign(form, componentsMap[this.id])
     }
 
     return {
@@ -113,7 +113,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('project', ['createProject', 'patchProject']),
+    ...mapActions('component', ['createProject', 'patchProject']),
     onSubmit() {
       this.$refs.form.validate(async valid => {
         if (valid && this.dirty) {

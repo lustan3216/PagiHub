@@ -14,7 +14,7 @@
 
 <script>
 import { ObserveVisibility } from 'vue-observe-visibility'
-import { isComponentSet } from '@/utils/node'
+import { isComponentSet, getNode } from '@/utils/node'
 import { COMPONENT_SET } from '@/const'
 
 export default {
@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     node() {
-      return this.componentsMap[this.id]
+      return getNode(this.id)
     },
     tag() {
       if (isComponentSet(this.node)) {

@@ -185,6 +185,10 @@
   pointer-events: none !important;
 }
 
+.no-select {
+  user-select: none !important;
+}
+
 .border-box {
   box-sizing: border-box;
 }

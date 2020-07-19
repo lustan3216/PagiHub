@@ -68,6 +68,7 @@ import { Tag } from 'element-ui'
 import VClamp from 'vue-clamp'
 import DialogDelete from '@/components/Setup/DialogDelete'
 import DialogProject from '@/components/Setup/DialogProject'
+import { isProject } from '@/utils/node'
 
 export default {
   name: 'Projects',
@@ -78,16 +79,15 @@ export default {
     DialogProject
   },
   computed: {
-    ...mapState('project', ['projectMap']),
     projects() {
-      return Object.values(this.projectMap)
+      return Object.values(this.componentsMap).filter(node => isProject(node))
     }
   },
   created() {
     this.getProjects()
   },
   methods: {
-    ...mapActions('project', ['getProjects']),
+    ...mapActions('component', ['getProjects']),
     time(time) {
       const x = new Date(time)
       return `${x.getFullYear()} / ${x.getMonth() + 1} / ${x.getDate()}`

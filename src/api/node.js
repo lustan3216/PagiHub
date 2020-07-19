@@ -19,6 +19,10 @@ export function getProjects() {
   return API.get('staging', '/projects', {})
 }
 
+export function getProject(id) {
+  return API.get('staging', `/projects/${id}`, {})
+}
+
 export function createProject(body) {
   return API.post('staging', `/projects`, { body })
 }

@@ -1,7 +1,7 @@
 import store from '../store'
 import { allEqual, cloneJson } from './tool'
 import { capitalize } from './string'
-import { NODE_TYPE, NODE_TYPE_STRING, KIND, LABEL } from '@/const'
+import { NODE_TYPE, NODE_TYPE_STRING, KIND, LABEL, EXAMPLE } from '@/const'
 
 export function findFirstCommonParentTree(ids) {
   // familyPaths = [
@@ -40,6 +40,18 @@ export function findFirstCommonParentTree(ids) {
   })
 
   return commonTree
+}
+
+export function getNode(id) {
+  // 01EDEHZQ2M9V8X4VZ7HEFJ1R0A could be project or componentSet
+  // 12a01EDEHZQ2M9V8X4VZ7HEFJ1R0A is component
+  // 12aEXAMPLE is example
+
+  if (id.includes(EXAMPLE)) {
+    return store.state.example.basicExamplesMap[id]
+  } else {
+    return store.state.component.componentsMap[id]
+  }
 }
 
 const cache = {}

@@ -21,12 +21,6 @@
         class="flex m-r-10"
       >
 
-        <portal-target
-          v-if="!exclude.includes('portal')"
-          :name="`NodeController${id}`"
-          slim
-        />
-
         <el-button
           v-if="node.canNewItem"
           type="text"
@@ -150,7 +144,7 @@ export default {
       return this.selectedComponentIds.includes(this.id)
     },
     selectedNodes() {
-      return this.selectedComponentIds.map(id => this.componentsMap[id])
+      return this.selectedComponentIds.map(id => getNode(id))
     }
   },
   methods: {

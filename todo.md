@@ -1,15 +1,6 @@
-<li>style 能用</li>
-<li>可以連結</li>
-<li>複製分享component set要做好</li>
-
 ### Functionality
 
 <ol>
-<li>description 用 tiptap</li>
-<li>多個copy的時候有問題，且多選複製時</li>
-<li>touchable and visbilty 有bug / 把值做進去 node tree裡面，這樣儲存時也可以存到，下次方便編輯</li>
-<li>text editor 選取壞掉 todo list也不見</li>
-<li>visiblity lock 的時候不要被選到</li>
 <li>componentSet id 會很長，所有tree 裡面的id改成uniq_id, 用get function 解決</li>
 <li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed / fixed container</li> 
 <li>有假死狀態可以做 剪下貼上</li>
@@ -20,13 +11,12 @@
 <li>自己的project有引用的，有修改的都可以直接儲存了，因為不會引響到其他專案</li>
 <li>每個 button 都可以點了 連結到 componentSet / link / 需用state 的結構去做 click hover active 等等切換componentSet，這個要去另一個版操作，向XD的prototype</li>
 <li>瀏覽器資源，手機版只能預覽</li>
-<li>暫時form 先不做</li>
-<li>暫時一次只能操作一個畫板</li>
 </ol>
 
 ### Style
 
 <ol>
+<li>overflow</li>
 <li>icon 可以上傳svg tag，下載也是直接下載tag，用dangurous叉叉叉插入，要過濾script，這樣可以變色條診或是用interact做調整</li>
 <li>uploader image / svg, consider how to compress</li>
 <li>select-unit可以用拉的</li>
@@ -35,7 +25,6 @@
 <li>svg 可在texteditor選，且用innertexteditor編輯</li>
 <li>font align</li>
 <li>最基礎 10個左右，font family</li>
-<li>form-item 需要指定el編輯</li>
 <li>background color 用grediant做， 等 color picker在做</li>
 </ol>
 
@@ -49,9 +38,18 @@
 <li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridGenerator 可以固定寬</li> ? style 做個設計，要不要固定寬高，要的話，
 </ol>
 
+### ux
+
+<ol>
+<li>怎麼讓使用者更好選上下node</li>
+</ol>
+
 ### Last
 
 <ol>
+<li>description 用 editor</li>
+<li>form-item 需要指定el編輯</li>
+<li>暫時form 先不做</li>
 <li>SEO / sitemap / like一定高分一上才產</li></li>
 <li>like</li>
 <li>fork</li>

@@ -12,10 +12,15 @@
     @click.meta.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
     @dblclick.stop="dblclick"
   >
+    <portal-target
+      :name="`ControllerLayerTutorial${id}`"
+      class="tutorial"
+    />
+
     <div
       v-click-outside="coConfig"
       v-if="canDrag || canEditText"
-      :class="{ noDrag: !canNotEdit, canNotEdit }"
+      :class="{ noDrag: !canNotEdit, 'can-not-edit': canNotEdit }"
       class="h-100"
     >
       <slot />
@@ -38,7 +43,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import NodeController from './NodeController'
 import clickOutside from '@/utils/clickOutside'
 import { CAN_DRAG, CAN_EDIT, GRID_ITEM } from '@/const'
@@ -133,7 +138,7 @@ export default {
 .selected {
   border-color: rgba(81, 117, 199, 0.68) !important;
 }
-::v-deep.canNotEdit {
+::v-deep.can-not-edit {
   pointer-events: none;
 
   & > .swiper-container {
@@ -142,6 +147,11 @@ export default {
 }
 .dash-border {
   border: 1px dashed #dedede;
-  margin-top: -1px;
+  box-sizing: border-box;
 }
+  .tutorial{
+    position: absolute;
+    top: -18px;
+    right: -18px;
+  }
 </style>

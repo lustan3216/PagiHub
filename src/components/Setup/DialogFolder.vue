@@ -64,18 +64,17 @@ export default {
     }
   },
   computed: {
-    ...mapState('project', ['projectMap']),
     isExist() {
       return Boolean(this.id)
     }
   },
   created() {
     if (this.id) {
-      Object.assign(this.form, this.projectMap[this.id])
+      Object.assign(this.form, this.componentsMap[this.id])
     }
   },
   methods: {
-    ...mapActions('project', ['createFolder']),
+    ...mapActions('component', ['createFolder']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },
