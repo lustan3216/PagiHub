@@ -68,7 +68,7 @@ module.exports = {
       registry: undefined,
       awsProfile: 'default',
       overrideEndpoint: false,
-      region: 'ap-southeast-1',
+      region: 'ap-northeast-2',
       bucket: 'lots.design',
       createBucket: true,
       staticHosting: true,
@@ -80,7 +80,7 @@ module.exports = {
       acl: 'public-read',
       pwa: false,
       enableCloudfront: true,
-      cloudfrontId: 'E1IP92P63YU7AZ',
+      cloudfrontId: 'EVKEO76ZHMB01',
       pluginVersion: '4.0.0-rc3',
       uploadConcurrency: 10,
       gzip: true

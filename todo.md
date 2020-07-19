@@ -11,6 +11,7 @@
 <li>自己的project有引用的，有修改的都可以直接儲存了，因為不會引響到其他專案</li>
 <li>每個 button 都可以點了 連結到 componentSet / link / 需用state 的結構去做 click hover active 等等切換componentSet，這個要去另一個版操作，向XD的prototype</li>
 <li>瀏覽器資源，手機版只能預覽</li>
+<li>可以上傳asset 換照片 & svg</li>
 </ol>
 
 ### Style
