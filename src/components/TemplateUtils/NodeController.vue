@@ -122,6 +122,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds', 'copyComponentIds']),
+    ...mapState('component', ['editingComponentSetId']),
     node() {
       return this.componentsMap[this.id]
     },
@@ -144,7 +145,7 @@ export default {
       return this.selectedComponentIds.includes(this.id)
     },
     selectedNodes() {
-      return this.selectedComponentIds.map(id => getNode(id))
+      return this.selectedComponentIds.map(id => this.componentsMap[id])
     }
   },
   methods: {
@@ -154,17 +155,7 @@ export default {
     vmCopyNode,
     vmRemoveNode,
     vmPasteCopyComponents,
-    vmAddNodesToParentAndRecord,
-    multiPaste() {
-      jsonHistory.recordsMerge(() => {
-        this.selectedNodes.forEach(node => this.vmPasteCopyComponents(node))
-      })
-    },
-    multiDelete() {
-      jsonHistory.recordsMerge(() => {
-        this.selectedNodes.forEach(node => this.vmRemoveNode(node))
-      })
-    }
+    vmAddNodesToParentAndRecord
   }
 }
 </script>

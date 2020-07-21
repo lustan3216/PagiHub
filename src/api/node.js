@@ -6,7 +6,6 @@ import {
   cloneJson,
   traversal
 } from '@/utils/tool'
-import { nodeIds } from '@/utils/nodeId'
 import { API } from 'aws-amplify'
 
 // const _initTemplate = () => ({
@@ -54,6 +53,14 @@ export function getComponentSets(projectId) {
 
 export function getComponentSet(id) {
   return localforage.getItem(id)
+}
+
+export function patchComponentSet(id, body) {
+  return API.patch('staging', `/component-sets/${id}`, { body })
+}
+
+export function deleteComponentSet(id) {
+  return API.del('staging', `/component-sets/${id}`, {})
 }
 
 export function createComponentSet(projectId, componentSet) {

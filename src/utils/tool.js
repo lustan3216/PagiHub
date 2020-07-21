@@ -49,8 +49,12 @@ export function objectHasAnyValue(e) {
   }
 }
 
-export function objectHasAnyKey(e) {
+export function objectFirstKey(e) {
   return Object.keys(e)[0]
+}
+
+export function objectHasAnyKey(e) {
+  return Boolean(objectFirstKey(e))
 }
 
 export function allEqual(arr) {

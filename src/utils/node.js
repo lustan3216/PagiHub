@@ -1,7 +1,8 @@
 import store from '../store'
 import { allEqual, cloneJson } from './tool'
+import IdMap from './idMap'
 import { capitalize } from './string'
-import { NODE_TYPE, NODE_TYPE_STRING, KIND, LABEL, EXAMPLE } from '@/const'
+import { NODE_TYPE, NODE_TYPE_STRING, KIND, LABEL } from '@/const'
 
 export function findFirstCommonParentTree(ids) {
   // familyPaths = [
@@ -42,12 +43,8 @@ export function findFirstCommonParentTree(ids) {
   return commonTree
 }
 
-export function getNode(id) {
-  // 01EDEHZQ2M9V8X4VZ7HEFJ1R0A could be project or componentSet
-  // 12a01EDEHZQ2M9V8X4VZ7HEFJ1R0A is component
-  // 12aEXAMPLE is example
-
-  if (id.includes(EXAMPLE)) {
+export function getNode(id, isExample) {
+  if (isExample) {
     return store.state.example.basicExamplesMap[id]
   } else {
     return store.state.component.componentsMap[id]
@@ -98,4 +95,39 @@ export function isComponentSet(node) {
 
 export function typeString(node) {
   return NODE_TYPE_STRING[node[KIND]]
+}
+
+let index = 1
+const indexMap = {}
+export function shortId(id) {
+  if (indexMap[id]) {
+    return indexMap[id]
+  } else {
+    indexMap[id] = index
+    index++
+    return indexMap[id]
+  }
+}
+
+export function defineNodeProperties(node) {
+  const defined = 'parentNode' in node
+  if (!defined) {
+    Object.defineProperty(node, 'parentNode', {
+      get() {
+        return store.state.componentsMap[this.parentId]
+      },
+      enumerable: false
+    })
+
+    Object.defineProperty(node, 'uniqId', {
+      get() {
+        const ids = [node.id]
+        if (isComponent(node) && node.componentSetId) {
+          ids.unshift(node.componentSetId)
+        }
+        return ids.join('-')
+      },
+      enumerable: false
+    })
+  }
 }

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import app from '@/main'
-import jsonHistory, { cleanJsonHistoryById } from '../jsonHistory'
+import jsonHistory from '../jsonHistory'
 import store, { SET } from '../index'
 import {
   createComponentSet,
@@ -10,24 +10,35 @@ import {
   getComponentSets,
   getProjects,
   patchProject,
-  getProject
+  getProject,
+  deleteComponentSet
 } from '@/api/node'
-import { objectHasAnyKey, findBy, forEach, deleteBy, toArray } from '@/utils/tool'
-import { nodeIds } from '@/utils/nodeId'
+import {
+  objectHasAnyKey,
+  findBy,
+  forEach,
+  deleteBy,
+  toArray,
+  objectFirstKey
+} from '@/utils/tool'
 import { Message } from 'element-ui'
-import { CHILDREN, ID, KIND, NODE_TYPE, PARENT_ID } from '@/const'
-import { isComponent, isComponentSet } from '@/utils/node'
+import { CHILDREN, ID, PARENT_ID } from '@/const'
+import { defineNodeProperties, isComponentSet, isProject } from '@/utils/node'
 
-const childrenOf = {}
+let childrenOf = {}
 
 const state = {
   editingProjectId: null,
   editingComponentSetId: null,
-  componentsMap: {}
+  componentsMap: {},
+  projectIds: [],
+  rootComponentSetIds: []
 }
 
 const mutations = {
   SET,
+
+  // only for component or component attrs
   VUE_DELETE({ componentsMap }, { tree, key }) {
     if (tree[key] && tree[key][ID]) {
       const parentId = componentsMap[key][PARENT_ID]
@@ -39,6 +50,7 @@ const mutations = {
 
     Vue.delete(tree, key)
   },
+  // only for component or component attrs
   VUE_SET({ componentsMap }, { tree, key, value }) {
     if (tree[key] && tree[key].__ob__) {
       tree[key] = value
@@ -51,25 +63,26 @@ const mutations = {
         childrenOf[parentId] = childrenOf[parentId] || []
         childrenOf[parentId].push(value)
 
-        defineNodeProperty(value)
+        defineNodeProperties(value)
         Vue.set(componentsMap, key, value)
       } else {
         Vue.set(tree, key, value)
       }
     }
   },
+
+  // only for project and componentSet
   SET_NODES_TO_MAP(state, componentsArray) {
     forEach(componentsArray, node => {
-      const { editingProjectId, editingComponentSetId } = state
+      const { editingProjectId } = state
       const id = node[ID]
       let parentId = node[PARENT_ID]
 
-      if (!parentId) {
-        if (isComponentSet(node)) {
-          parentId = editingProjectId
-        } else if (isComponent(node)) {
-          parentId = editingComponentSetId
-        }
+      if (!parentId && isComponentSet(node)) {
+        parentId = editingProjectId
+        state.rootComponentSetIds.push(node.id)
+      } else if (isProject(node)) {
+        state.projectIds.push(node.id)
       }
 
       childrenOf[id] = childrenOf[id] || []
@@ -85,16 +98,17 @@ const mutations = {
       }
 
       Vue.set(state.componentsMap, id, node)
-      defineNodeProperty(node)
+      defineNodeProperties(node)
     })
   },
-  RECORD(state, payLoad) {
-    if (state.editingComponentSetId) {
-      jsonHistory.record(payLoad)
-    } else {
-      Message.info('Please select an artboard first')
-    }
+  // only for project and componentSet
+  DELETE_NODE(state, id) {
+    // the number of projectIds and rootComponentSetIds are few, so lazy to check componentSet or project
+    deleteBy(state.projectIds, 'id', id)
+    deleteBy(state.rootComponentSetIds, 'id', id)
+    Vue.delete(state.componentsMap, id)
   },
+
   SET_EDITING_COMPONENT_SET_ID(state, id) {
     state.editingComponentSetId = id
     // store.commit('app/RESET', null, { root: true })
@@ -106,7 +120,14 @@ const mutations = {
       }
     })
   },
-  async REDO() {
+  RECORD(state, payLoad) {
+    if (state.editingComponentSetId) {
+      jsonHistory.record(payLoad)
+    } else {
+      Message.info('Please select an artboard first')
+    }
+  },
+  REDO() {
     const done = rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)
     if (done) {
       app.$nextTick(() => {
@@ -121,9 +142,6 @@ const mutations = {
         jsonHistory.undo()
       })
     }
-  },
-  DELETE_NODE(state, id) {
-    Vue.delete(state.componentsMap, id)
   }
 }
 
@@ -132,6 +150,7 @@ const actions = {
     const { data } = await getProjects()
 
     commit('SET_NODES_TO_MAP', data)
+    commit('SET', { projectIds: data.map(x => x[ID]) })
   },
 
   async getProject({ commit }, id) {
@@ -165,7 +184,10 @@ const actions = {
     commit('SET_NODES_TO_MAP', nodes)
   },
 
-  async createComponentSet({ commit, state, dispatch }, { projectId, componentSet }) {
+  async createComponentSet(
+    { commit, state, dispatch },
+    { projectId, componentSet }
+  ) {
     const { data } = await createComponentSet(projectId, componentSet)
 
     // const componentSet = await createComponentSet({
@@ -178,14 +200,6 @@ const actions = {
     dispatch('app/toggleSelectedComponentSetInIds', data.id, { root: true })
     commit('SET_NODES_TO_MAP', data)
   },
-  // async getProject({ commit }) {
-  //   const componentsMap = await getProject()
-  //   commit('SET', { componentsMap })
-  //
-  //   nodeIds.restoreIds(Object.values(componentsMap))
-  //   const componentSetId = await localforage.getItem('editingComponentSetId')
-  //   commit('component/SET_EDITING_COMPONENT_SET_ID', componentSetId, { root: true })
-  // },
 
   modifyProjectNodeParent({ commit, state }, { parentId, id }) {
     commit('APPEND_NODE', {
@@ -199,6 +213,20 @@ const actions = {
 
   async deleteProjectNode({ state, commit, getters, dispatch }, id) {
     await deleteProject(id)
+
+    commit('SET', {
+      editingProjectId: null,
+      editingComponentSetId: null,
+      componentsMap: {}
+    })
+
+    childrenOf = {}
+    jsonHistory.deltas = []
+    jsonHistory.currentIndex = 0
+  },
+
+  async deleteComponentSet({ state, commit, getters, dispatch }, id) {
+    await deleteComponentSet(id)
     const ids = [id]
     const gatherGrandChildrenIds = nodeId => {
       getters.childrenOf[nodeId].forEach(child => {
@@ -213,28 +241,20 @@ const actions = {
     dispatch('app/cleanSelectedComponentSetIds', ids, { root: true })
 
     ids.forEach(id => {
-      if (state.componentsMap[id][KIND] === NODE_TYPE.COMPONENT_SET) {
+      if (isComponentSet(state.componentsMap[id])) {
         commit('CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', id)
-        cleanJsonHistoryById(id)
       }
       commit('DELETE_NODE', id)
+    })
+
+    jsonHistory.cleanDeltas(delta => {
+      const key = objectFirstKey(delta)
+      return ids.includes(key)
     })
   }
 }
 
 const getters = {}
-
-function defineNodeProperty(node) {
-  const defined = 'parentNode' in node
-  if (!defined) {
-    Object.defineProperty(node, 'parentNode', {
-      get() {
-        return store.state.componentsMap[this.parentId]
-      },
-      enumerable: false
-    })
-  }
-}
 
 function rollbackSelectedComponentSet(deltaGroup) {
   if (!deltaGroup) {
@@ -242,15 +262,12 @@ function rollbackSelectedComponentSet(deltaGroup) {
   }
 
   const id = objectHasAnyKey(deltaGroup[0])
-  const { componentSetId } = nodeIds.departId(id)
-  const { selectedComponentSetIds } = store.state.app
-  const isExist = selectedComponentSetIds.includes(componentSetId)
-
-  if (!isExist) {
-    store.commit('component/SET_EDITING_COMPONENT_SET_ID', componentSetId)
-    store.commit('app/SET', {
-      selectedComponentSetIds: [...selectedComponentSetIds, componentSetId]
-    })
+  const { editingProjectId, componentsMap } = store.state.component
+  const node = componentsMap[id]
+  const isTop = node.parentId === editingProjectId
+  // 代表不是巢狀node tree裡面的 componentSet,是最頂層project下的componentSet
+  if (isTop) {
+    store.dispatch('app/addSelectedComponentSetInIds', id, { root: true })
   }
 
   return true

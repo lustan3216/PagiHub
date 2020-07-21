@@ -38,7 +38,7 @@
             type="text"
             class="m-r-10"
           >
-            {{ node.label }}
+            {{ node.label }} - {{ shortId(node.id) }}
           </el-button>
 
           <transition name="fade">
@@ -84,12 +84,9 @@ import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
 import { kebabCase } from '@/utils/string'
-import {
-  isComponentSet,
-  isProject,
-  isFolder,
-  typeString
-} from '@/utils/node'
+import { shortId } from '@/utils/node'
+
+import { isComponentSet, isProject, isFolder, typeString } from '@/utils/node'
 import { traversal } from '@/utils/tool'
 import dblClick from '@/utils/dblClick'
 
@@ -143,17 +140,19 @@ export default {
       this.$refs.tree.filter(val)
     }
   },
-  created() {
-    this.getProject(this.$route.params.projectId)
-  },
   methods: {
     isComponentSet,
     isProject,
     isFolder,
     typeString,
     kebabCase,
-    ...mapActions('app', ['getProject', 'toggleSelectedComponentSetInIds', 'toggleSelectedComponentSetId']),
-    ...mapActions('component', ['getProject', 'modifyProjectNodeParent']),
+    shortId,
+    ...mapActions('app', [
+      'getProject',
+      'toggleSelectedComponentSetInIds',
+      'toggleSelectedComponentSetId'
+    ]),
+    ...mapActions('component', ['modifyProjectNodeParent']),
     ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {

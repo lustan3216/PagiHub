@@ -1,8 +1,8 @@
 import { mapMutations } from 'vuex'
 import { CHILDREN, GRID_ITEM, TAG } from '@/const'
 import { cloneJson, traversal, arrayLast } from '@/utils/tool'
-import { traversalChildrenOf, getNode } from '@/utils/node'
-import { nodeIds } from '@/utils/nodeId'
+import { traversalChildrenOf, isComponentSet, getNode } from '@/utils/node'
+import { appendIdNested } from '@/utils/nodeId'
 import basicTemplates from '@/templateJson/basic'
 
 export default {
@@ -18,11 +18,12 @@ export default {
       // other cases should have string id
       default: null
     },
+    isExample: { default: false },
     rootComponentSetId: { default: null }
   },
   computed: {
     node() {
-      return getNode(this.id)
+      return getNode(this.id, this.isExample)
     },
     children() {
       return (this.node && this.node.children) || []
@@ -41,10 +42,10 @@ export default {
       const path = []
 
       const findPath = id => {
-        const node = getNode(id)
+        const node = getNode(id, this.isExample)
 
         if (node && node.parentId) {
-          const parentNode = this.componentsMap[node.parentId]
+          const parentNode = getNode(node.parentId, this.isExample)
           if (!parentNode) {
             return
           }
@@ -62,14 +63,17 @@ export default {
     ...mapMutations('component', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
 
     _addNodesToParentAndRecord(nodeTree = {}) {
+      // nodeTree should be single node instead of an array
       // could be triggered by copy, delete
       this.SET_EDITING_COMPONENT_SET_ID(this.rootComponentSetId)
       const records = []
 
       nodeTree = cloneJson(nodeTree)
       // if node has not componentSetId means self is componentSet
-      nodeIds.appendIdNested(nodeTree, this.componentSetId || this.id)
-      nodeTree.parentId = this.id
+      appendIdNested(nodeTree, {
+        parentId: this.id,
+        componentSetId: isComponentSet(nodeTree) ? this.id : null
+      })
 
       traversal(nodeTree, (_node, _parentNode) => {
         // eslint-disable-next-line
@@ -104,8 +108,7 @@ export default {
         x => x.id === theNodeIdGonnaCopy
       )
 
-      const children = this.children[theNodeIdGonnaCopy]
-      theNodeGonnaCopy[CHILDREN] = children
+      theNodeGonnaCopy[CHILDREN] = this.componentsMap[theNodeIdGonnaCopy].children
       this._addNodesToParentAndRecord(theNodeGonnaCopy)
     },
 

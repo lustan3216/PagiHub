@@ -6,6 +6,7 @@
     :margin="[0, 0]"
     :is-draggable="(innerProps.isDraggable && isDraftMode) || isExample"
     :is-resizable="(innerProps.isResizable && isDraftMode) || isExample"
+    class="h-100"
     @layout-updated="layoutUpdated($event)"
   >
     <vue-grid-item

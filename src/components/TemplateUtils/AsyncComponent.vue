@@ -22,6 +22,9 @@ export default {
   directives: {
     ObserveVisibility
   },
+  inject: {
+    isExample: { default: false }
+  },
   components: {
     ComponentSet: () => import('./ComponentSet'),
 
@@ -56,6 +59,10 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    onceObserve: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -64,9 +71,13 @@ export default {
       vIf: false,
       options: {
         callback: isVisible => {
-          if (isVisible) {
+          if (this.onceObserve) {
+            if (isVisible) {
+              this.vIf = isVisible
+              this.options = false
+            }
+          } else {
             this.vIf = isVisible
-            this.options = false
           }
         },
         intersection: {
@@ -77,7 +88,7 @@ export default {
   },
   computed: {
     node() {
-      return getNode(this.id)
+      return getNode(this.id, this.isExample)
     },
     tag() {
       if (isComponentSet(this.node)) {

@@ -2,7 +2,7 @@ import { SET } from '../index'
 import { ID } from '@/const'
 import basic from '@/templateJson/basic'
 import formItem from '@/templateJson/formItem'
-import { exampleIds } from '@/utils/nodeId'
+import { appendIdNested } from '@/utils/nodeId'
 import { traversal } from '@/utils/tool'
 
 const state = {
@@ -15,9 +15,9 @@ const mutations = {
 }
 
 const actions = {
-  init({ commit }) {
+  initExamples({ commit }) {
     const basicExamples = basic
-    exampleIds.appendIdNested(basicExamples)
+    appendIdNested(basicExamples)
 
     const basicExamplesMap = {}
 

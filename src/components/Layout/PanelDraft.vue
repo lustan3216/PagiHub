@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import ViewPort from './ViewPort'
 import ComponentSet from '../TemplateUtils/ComponentSet'
 import { isMac } from '@/utils/device'
@@ -44,7 +44,6 @@ import Selection from '@simonwep/selection-js'
 import ArtBoard from './ArtBoard'
 import VueGridLayout from 'vue-grid-layout'
 import { debounce } from 'throttle-debounce'
-import { getNode } from '@/utils/node'
 
 export default {
   name: 'PanelDraft',
@@ -70,7 +69,7 @@ export default {
       handler(ids) {
         let x = 0
         this.layout = ids.map(id => {
-          const node = getNode(id)
+          const node = this.componentsMap[id]
           const object = {
             i: parseInt(node.id.replace(/\D/g, '')),
             id: node.id,
@@ -85,6 +84,10 @@ export default {
       },
       immediate: true
     }
+  },
+  created() {
+    this.getProject(this.$route.params.projectId)
+    this.initExamples()
   },
   mounted() {
     this.$nextTick(() => {
@@ -118,6 +121,8 @@ export default {
     })
   },
   methods: {
+    ...mapActions('component', ['getProject']),
+    ...mapActions('example', ['initExamples']),
     ...mapMutations('component', ['VUE_SET']),
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',

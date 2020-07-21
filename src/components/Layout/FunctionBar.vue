@@ -221,25 +221,22 @@
       />
     </div>
 
-    <keep-alive>
-      <component
-        :is="currentPanel"
-        class="panel"
-      />
-    </keep-alive>
+    <component
+      :is="currentPanel"
+      class="panel"
+    />
   </nav>
 </template>
 
 <script>
 import { isMac } from '@/utils/device'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { Message } from 'element-ui'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import PanelProject from '../Setup/PanelProject'
 import ComponentTabs from '../TemplateUtils/ComponentTabs'
 import PanelNodes from '@/components/Setup/PanelNodes'
-import { getNode } from '@/utils/node'
 
 import {
   vmAddNodesToParentAndRecord,
@@ -268,8 +265,8 @@ export default {
   },
   computed: {
     ...mapState('app', [
-      'selectedComponentIds',
       'copyComponentIds',
+      'selectedComponentIds',
       'selectedComponentNode'
     ]),
     ...mapState('component', ['editingComponentSetId']),
@@ -278,7 +275,7 @@ export default {
       return this.selectedComponentIds.includes(this.id)
     },
     selectedNodes() {
-      return this.selectedComponentIds.map(id => getNode(id))
+      return this.selectedComponentIds.map(id => this.componentsMap[id])
     }
   },
   created() {
@@ -288,26 +285,17 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('app', ['SET_COPY_SELECTED_COMPONENT_IDS']),
+    ...mapActions('app', ['setCopySelectedNodeId']),
     ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_DRAFT_MODE']),
     ...mapMutations('component', ['REDO', 'UNDO']),
     isMac,
     publish() {},
     copy() {
-      this.SET_COPY_SELECTED_COMPONENT_IDS()
+      this.setCopySelectedNodeId()
       const length = this.copyComponentIds.length
       if (length) {
         Message.info(`Copy ${length} Components`)
       }
-    },
-    projectIconClick() {
-      this.currentPanel = 'panel-project'
-    },
-    projectIconClick() {
-      this.currentPanel = 'componentIconClick'
-    },
-    exampleIconClick() {
-      this.currentPanel = 'component-tabs'
     },
     panelIconClick(name) {
       this.currentPanel = this.currentPanel === name ? null : name
@@ -319,7 +307,9 @@ export default {
     vmAddNodesToParentAndRecord,
     multiPaste() {
       jsonHistory.recordsMerge(() => {
-        this.copyComponentIds.forEach(id => this.vmCopyNode(getNode(id)))
+        this.copyComponentIds.forEach(id =>
+          this.vmCopyNode(this.componentsMap[id])
+        )
       })
     },
     multiDelete() {

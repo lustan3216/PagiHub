@@ -1,7 +1,6 @@
 ### Functionality
 
 <ol>
-<li>componentSet id 會很長，所有tree 裡面的id改成uniq_id, 用get function 解決</li>
 <li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed / fixed container</li> 
 <li>有假死狀態可以做 剪下貼上</li>
 <li>grid 的地方都換成 layer，考慮可以直接把grid layout拿掉</li>
@@ -48,6 +47,7 @@
 ### Last
 
 <ol>
+<li>node tree moving</li>
 <li>description 用 editor</li>
 <li>form-item 需要指定el編輯</li>
 <li>暫時form 先不做</li>
@@ -111,3 +111,9 @@ queue
 sns / sqs
 vpn
 kafka
+
+componentID 都一樣不用變
+masterId 記在 componentSet 就好
+每個 component 都要有 componentSetId
+form 裡面的設定的抓 componentSetId +componentId 如果有 master 就抓 masterId + componentId
+masterId 只要記得上一個複製的源頭就可以

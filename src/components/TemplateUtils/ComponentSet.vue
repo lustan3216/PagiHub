@@ -17,10 +17,9 @@ import { mapActions } from 'vuex'
 import AsyncComponent from './AsyncComponent'
 import ComponentDropZone from './ComponentDropZone'
 import ControllerLayer from './ControllerLayer'
-import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { ID, MASTER_ID } from '@/const'
-import { componentSetInstanceIds } from '@/utils/nodeId'
+import { vmAppend } from '@/utils/vmMap'
 
 export default {
   name: 'ComponentSet',
@@ -34,7 +33,7 @@ export default {
     ComponentDropZone,
     ControllerLayer
   },
-  mixins: [nodeMixin, childrenMixin], // nodeMixin needs to deal with vmMap
+  mixins: [childrenMixin],
   computed: {
     firstChild() {
       return this.innerChildren[0]
@@ -55,11 +54,15 @@ export default {
   created() {
     const masterID = this.componentsMap[this.id][MASTER_ID]
     if (masterID) {
-      componentSetInstanceIds.add(this.rootComponentSetId, this[ID])
-
       if (!this.componentsMap[masterID]) {
         this.getComponentSet(masterID)
       }
+    }
+  },
+  mounted() {
+    // Don't put in created to prevent some component fail before mount
+    if (this.isDraftMode && !this.isExample) {
+      vmAppend(this)
     }
   },
   methods: {

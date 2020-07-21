@@ -1,11 +1,9 @@
-<template>
-
-</template>
+<template/>
 
 <script>
-  export default {
-    name: 'PanelExplain'
-  }
+export default {
+  name: 'PanelExplain'
+}
 </script>
 
 <style scoped lang="scss">

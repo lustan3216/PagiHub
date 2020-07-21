@@ -42,6 +42,7 @@
                     : 'async-component'
                 "
                 :id="component.id"
+                :once-observe="false"
                 class="no-action"
               />
             </div>
@@ -53,7 +54,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import { humanize } from '@/utils/string'
 import { shortTagName, isComponentSet } from '@/utils/node'
@@ -92,11 +93,9 @@ export default {
     ...mapState('component', ['editingComponentSetId']),
     ...mapState('example', ['basicExamples']),
     componentsSets() {
-      const result = Object.values(this.componentsMap).filter(
+      return Object.values(this.componentsMap).filter(
         node => isComponentSet(node) && node.id !== this.editingComponentSetId
       )
-
-      return result
     },
     components() {
       return {
@@ -106,11 +105,7 @@ export default {
       }
     }
   },
-  created() {
-    this.init()
-  },
   methods: {
-    ...mapActions('example', ['init']),
     humanize,
     isComponentSet,
     shortTagName,
@@ -142,6 +137,9 @@ export default {
 
   .el-carousel__container {
     height: 200px !important;
+  }
+  .vue-grid-layout {
+    min-height: 150px;
   }
 }
 

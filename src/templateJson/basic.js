@@ -9,7 +9,7 @@ import {
   CAN_NOT_DELETE,
   CAN_NOT_COPY,
   STYLE,
-  NAME,
+  LABEL,
   AUTO_HEIGHT,
   SOFT_DELETE,
   PROPS
@@ -56,14 +56,14 @@ export const carousel = function() {
       {
         [PROPS]: { lg: { x: 0, y: 0, w: 22, h: 71 }},
         [TAG]: GRID_ITEM,
-        [NAME]: 'prev',
+        [LABEL]: 'prev',
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true
       },
       {
         [PROPS]: { lg: { x: 23, y: 0, w: 22, h: 71 }},
         [TAG]: GRID_ITEM,
-        [NAME]: 'next',
+        [LABEL]: 'next',
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true
       }
@@ -77,16 +77,16 @@ export const carousel = function() {
     [CAN_DRAG]: true,
     [CHILDREN]: [
       layers({
-        [NAME]: 'indicators',
+        [LABEL]: 'indicators',
         [SOFT_DELETE]: true,
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true,
         [CAN_NEW_ITEM]: false,
         [CHILDREN]: [_gridGenerator]
       }),
-      layers({ name: 'slider' }),
-      layers({ name: 'slider' }),
-      layers({ name: 'slider' })
+      layers({ [LABEL]: 'slider' }),
+      layers({ [LABEL]: 'slider' }),
+      layers({ [LABEL]: 'slider' })
     ]
   }
 }
@@ -137,7 +137,7 @@ export const videoPlayer = function() {
 
 export const drawer = function() {
   const button = flexButton()
-  button[NAME] = 'drawer'
+  button[LABEL] = 'drawer'
   button[CHILDREN] = [
     {
       [TAG]: 'drawer',

@@ -106,10 +106,11 @@ export default {
         this.$nextTick(() => {
           const { tree } = this.$refs
           const checked = tree.getCheckedKeys()
+          console.log(checked, newValue)
           arraySubtract(checked, newValue).forEach(id =>
             tree.setChecked(id, false)
           )
-          newValue.forEach(x => tree.setChecked(x, true))
+          newValue.forEach(id => tree.setChecked(id, true))
         })
       },
       immediate: true

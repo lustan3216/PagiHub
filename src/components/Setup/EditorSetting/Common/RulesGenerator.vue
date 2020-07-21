@@ -65,7 +65,7 @@ export default {
   computed: {
     canShowSetting() {
       return objectHasAnyKey(this.innerRules)
-    },
+    }
   },
   methods: {
     ...mapMutations('component', ['RECORD']),

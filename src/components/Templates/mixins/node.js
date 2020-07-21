@@ -1,10 +1,9 @@
-import { mapMutations } from 'vuex'
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { deepmerge, cloneJson } from '@/utils/tool'
 import { STYLE, PROPS, VALUE, GRID_GENERATOR, MASTER_ID, ID } from '@/const'
 import style from '@/directive/style'
 import { directive } from '@/directive/freeStyle'
-import { nodeIds } from '@/utils/nodeId'
+import { getNode } from '@/utils/node'
 
 let hoverNode = []
 
@@ -33,7 +32,7 @@ export default {
   },
   computed: {
     node() {
-      return this.componentsMap[this[ID]]
+      return getNode(this[ID], this.isExample)
     },
     innerValue() {
       return this.node && this.node[VALUE]
@@ -60,10 +59,6 @@ export default {
     if (this.masterId) {
       this.watchMasterStyles()
       this.watchMasterProps()
-    }
-
-    if (this.isDraftMode && !this.isExample) {
-      nodeIds.restoreIds(this.node)
     }
   },
   mounted() {

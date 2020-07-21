@@ -1,109 +1,65 @@
-import { ID, PARENT_ID, NODE_TYPE, MASTER_ID, CHILDREN, EXAMPLE } from '../const'
-import { traversal } from './tool'
-import IdMap from './idMap'
+import {
+  ID,
+  PARENT_ID,
+  MASTER_ID,
+  CHILDREN,
+  COMPONENT_SET_ID
+} from '../const'
+import { toArray, traversal } from './tool'
+import { ulid } from 'ulid'
+import { isComponent, isComponentSet } from '@/utils/node'
 
-const CONNECTOR = 'a' // use 'a' as connector instead '-' to prevent functional watcher warning
-
-// master
-// component id = 1a2    => component_id, a = connector, 2 => component_set_id
-// component_set_id = 1  => component_set_id
-
-// instance
-// component id = 1a1i    => component_id, a = connector, 1a => component_set_instance_id
-// component_set_id = 1i => component_id, i = connector
-
-class IdManagement {
-  idMap = new IdMap()
-  projectIdSet = new Set([0]) // to prevent zero as ID
-
-  constructor({ componentSetId = '' } = {}) {
-    this.componentSetId = componentSetId.toString()
+export function appendIdNested(nodes, { parentId, componentSetId } = {}) {
+  if (parentId) {
+    toArray(nodes).forEach(node => (node[PARENT_ID] = parentId))
   }
 
-  restoreIds(nodes) {
-    traversal(nodes, node => {
-      if (node.kind === NODE_TYPE.COMPONENT) {
-        const { componentId, componentSetId } = this.departId(node.id)
-        this.idMap.add(componentSetId, componentId)
-      } else {
-        const id = parseInt(node.id)
-        this.projectIdSet.add(id)
-      }
-    })
-  }
+  traversal(nodes, (node, parentNode) => {
+    if (isComponentSet(node)) {
+      node[MASTER_ID] = node[ID]
+      node[ID] = ulid()
 
-  resetComponentSetTree(componentSet) {
-    componentSet[MASTER_ID] = componentSet[MASTER_ID] || componentSet[ID]
-    componentSet[ID] = componentSetInstanceIds.create(componentSet[ID]) + 'i'
-
-    traversal(componentSet[CHILDREN], (node, parentNode) => {
-      if (node.kind === NODE_TYPE.COMPONENT_SET) {
-        this.resetComponentSetTree(node)
-        return false
-      }
-
-      node[MASTER_ID] = node[MASTER_ID] || node[ID]
-      node[ID] = [parseInt(node[ID]), 'a', componentSet[ID]].join('')
-
-      if (parentNode) {
-        node[PARENT_ID] = parentNode[ID]
-      } else {
-        node[PARENT_ID] = componentSet[ID]
-      }
-    })
-  }
-
-  appendIdNested(nodes, componentSetId = '') {
-    traversal(nodes, (node, parentNode) => {
-      if (node.kind === NODE_TYPE.COMPONENT_SET) {
-        this.resetComponentSetTree(node)
-        return false
-      } else if (node.kind === NODE_TYPE.COMPONENT) {
-        node[ID] = this.generateComponentId(
-          this.componentSetId || componentSetId
-        )
-      } else {
-        node[ID] = this.generateProjectId()
-      }
-
-      if (parentNode) {
-        node[PARENT_ID] = parentNode[ID]
-      }
-    })
-  }
-
-  generateComponentId(componentSetId = '') {
-    if (!componentSetId) {
-      console.warn('ComponentId has no componentSetId')
+      appendIdNested(node[CHILDREN], {
+        parentId: node[ID],
+        componentSetId: node[ID]
+      })
+      return false
     }
-    const id = this.idMap.create(componentSetId)
-    return [id, componentSetId].join(CONNECTOR)
-  }
 
-  generateProjectId() {
-    const max = Math.max(...this.projectIdSet)
-    const id = max + 1
-    this.projectIdSet.add(id)
+    const component = isComponent(node)
+    if (component) {
+      if (componentSetId) {
+        node[COMPONENT_SET_ID] = componentSetId
+      } else {
+        // 代表是沒有componentSet當頭的component
+        node[ID] = ulid()
 
-    return id.toString()
-  }
-
-  departId(id) {
-    const [componentId, componentSetId] = id.split(CONNECTOR)
-    if (componentSetId) {
-      return {
-        componentId,
-        componentSetId
-      }
-    } else {
-      return {
-        componentId: null,
-        componentSetId: componentId
+        if (parentNode) {
+          node[PARENT_ID] = parentNode[ID]
+        }
       }
     }
-  }
+  })
 }
-
-export const nodeIds = new IdManagement()
-export const exampleIds = new IdManagement({ componentSetId: EXAMPLE })
-export const componentSetInstanceIds = new IdMap()
+// 1. example來的，就不要傳componentId,才知道component的id要換掉
+// 2. 複製一般component，就不要傳componentId,才知道component的id要換掉
+// 3. searchPanel引用來的, 可能是自己的可能是別人的
+// 4. 根據 3情況 又複製的
+// 5. style component找masterId
+// 6. id 要考慮componentsMap會不會重複
+// 7. form 裡面或是link做連結，被複製時不可以亂掉
+// example = [
+//   {
+//     kind: 'component',
+//     children: [
+//       {
+//         kind: 'componentSet',
+//         children: [
+//           {
+//             kind: 'component'
+//           }
+//         ]
+//       }
+//     ]
+//   },
+// ]

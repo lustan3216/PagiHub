@@ -96,7 +96,7 @@ import nodeMixin from '@/components/Templates/mixins/node'
 import Layers from './Layers'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
-import { CHILDREN, LAYERS } from '@/const'
+import { CHILDREN, LABEL, LAYERS } from '@/const'
 import { CarouselItem, Carousel } from 'element-ui'
 
 export default {
@@ -126,7 +126,7 @@ export default {
   },
   computed: {
     gridGenerators() {
-      return this.innerChildren.filter(x => x.name === 'slider')
+      return this.innerChildren.filter(x => x[LABEL] === 'slider')
     },
     firstLayerId() {
       return this.innerChildren.filter(x => x.tag === LAYERS)[0].id

@@ -20,7 +20,10 @@
         :rules="rules"
         label-width="110px"
       >
-        <el-form-item label="Name" prop="label">
+        <el-form-item
+          label="Name"
+          prop="label"
+        >
           <el-input v-model="form.label" />
         </el-form-item>
 
@@ -35,7 +38,10 @@
           />
         </el-form-item>
 
-        <el-form-item label="Tag" prop="tag">
+        <el-form-item
+          label="Tag"
+          prop="tag"
+        >
           <select-tag
             v-model="form.tags"
             class="w-100"

@@ -8,18 +8,19 @@
 </template>
 
 <script>
-import { getNode } from '@/utils/node'
-import { mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import childrenMixin from '@/components/Templates/mixins/children'
 
 export default {
   name: 'ComponentDropZone',
   mixins: [childrenMixin],
+  computed: {
+    ...mapState('example', ['basicExamplesMap'])
+  },
   methods: {
-    ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
     addComponent(event) {
       const id = event.dataTransfer.getData('id')
-      this._addNodesToParentAndRecord(getNode(id))
+      this._addNodesToParentAndRecord(this.basicExamplesMap[id])
     }
   }
 }

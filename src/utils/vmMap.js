@@ -54,9 +54,10 @@ export function vmCreateItem({ id }) {
 }
 
 export function vmCopyNode({ id, parentId }) {
-  // other kind of templates
+  if (parentId === store.state.component.editingComponentSetId) {
+    return
+  }
 
-  // the convention is, if the parent is a node can new, then it must be
   const parentNode = vmMap[parentId].node
 
   if (parentNode.canNewItem) {
