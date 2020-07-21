@@ -7,6 +7,7 @@
     {{ buttonText }}
     <dialog-confirmable
       :visible.sync="visible"
+      :disable-submit="!dirty"
       title="Component"
       width="50%"
       @confirm="onSubmit"
@@ -50,19 +51,24 @@
             class="m-l-15"
           />
         </el-form-item>
+        <span>
+          {{
+            selectedNode
+              ? `You select a ${selectedNode.label}. It's able to be created`
+              : 'Can select a node to be created.'
+          }}
+        </span>
       </el-form>
     </dialog-confirmable>
   </el-button>
 </template>
 
 <script>
-import { NODE_TYPE } from '@/const'
 import { mapActions, mapState } from 'vuex'
 import { label, max, min, required } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
 import ExampleAdd from '@/components/TemplateUtils/ExampleAdd'
-import { createComponentSet } from '@/api/node'
 
 export default {
   name: 'DialogComponentSet',
@@ -86,15 +92,18 @@ export default {
     }
   },
   data() {
+    const { componentsMap } = this.$store.state.component
+
+    const node = componentsMap[this.id]
+
     return {
       visible: false,
+      dirty: false,
       form: {
-        label: '',
-        version: 1,
-        description: '',
-        categories: [],
+        label: node ? node.label : '',
+        description: node ? node.description : '',
+        tags: node ? node.tags : [],
         parentId: this.parentId,
-        type: NODE_TYPE.COMPONENT_SET,
         createBySelected: false
       },
       categories: [
@@ -115,35 +124,41 @@ export default {
     isExist() {
       return Boolean(this.id)
     },
+    selectedNode() {
+      return this.componentsMap[this.theOnlySelectedComponentId]
+    },
     projectId() {
       return this.$route.params.projectId
     }
-    // rules() {{
-    //   const rule = {
-    //     label,
-    //     category: [requiredSelect]
-    //   }
-    //
-    //   return this.form.createBySelected ? rule : { ...rule, exampleComponentId: [required] }
-    // }
   },
-  created() {
-    if (this.id) {
-      Object.assign(this.form, this.componentsMap[this.id])
+  watch: {
+    form: {
+      handler() {
+        this.dirty = true
+      },
+      deep: true
     }
   },
   methods: {
-    ...mapActions('component', ['createComponentSet']),
+    ...mapActions('component', ['createComponentSet', 'patchComponentSet']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },
     onSubmit() {
       this.$refs.form.validate(valid => {
-        if (valid) {
-          this.createComponentSet({
-            projectId: this.projectId,
-            componentSet: this.form
-          })
+        if (valid && this.dirty) {
+          if (this.isExist) {
+            this.patchComponentSet({
+              id: this.id,
+              componentSet: this.form
+            })
+          } else {
+            this.createComponentSet({
+              projectId: this.projectId,
+              componentSet: this.form
+            })
+          }
+
           this.visible = false
           this.$bus.$emit('component-tabs-visible')
         }

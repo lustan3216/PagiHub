@@ -53,9 +53,11 @@ const mutations = {
 const actions = {
   setCopySelectedNodeId({ commit, state, rootState }) {
     const { rootComponentSetIds } = rootState.component
-    const copyComponentIds = state.selectedComponentIds.filter(id =>
-      rootComponentSetIds.includes(id)
+    const copyComponentIds = state.selectedComponentIds.filter(
+      id => !rootComponentSetIds.includes(id)
     )
+    // the top component under rootComponentSet should not be copied
+
     commit('SET', { copyComponentIds })
     return copyComponentIds
   },

@@ -9828,10 +9828,10 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
-json-history@^0.1.8:
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/json-history/-/json-history-0.1.8.tgz#5d047f426b9dea7f76adccd7166370d7fb946730"
-  integrity sha512-bmAtCY0UZx8FEwg2uAhkA5WLk0SxlV/Pn/ZOy0nYA7e5eyFuKA3kPwaiaVlipyJfzlF9AbVf4xYn17oKx3iH2g==
+json-history@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/json-history/-/json-history-0.2.1.tgz#29938cd9a9c345b61bf0c6b4f4519564fa9033cd"
+  integrity sha512-Aep9KNHiszisyEABN8eX3jufyBcWW8kT2KhiZLMRxc+DgEB3s76UdBaraqND7zQkHkjz+Rsj1yGDi4aiwbsaRw==
   dependencies:
     diff-match-patch "^1.0.5"
 

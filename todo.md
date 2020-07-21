@@ -3,7 +3,6 @@
 <ol>
 <li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed / fixed container</li> 
 <li>有假死狀態可以做 剪下貼上</li>
-<li>grid 的地方都換成 layer，考慮可以直接把grid layout拿掉</li>
 <li>每個 component set 都可以組建合併得按鈕  / or 選版本 / 跟隨proejct裡面的變動，只是不同project的因為沒有主動更新所以也不會主動變動</li>
 <li>search panel</li>
 <li>試試看能不能解決 drawer的layout</li>

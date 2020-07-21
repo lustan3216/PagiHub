@@ -36,6 +36,7 @@ import { required } from '@/validator'
 import { capitalize } from '@/utils/string'
 import { NODE_TYPE_STRING, KIND } from '@/const'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
+import { isComponentSet } from '@/utils/node'
 
 export default {
   name: 'DialogDelete',
@@ -76,14 +77,18 @@ export default {
     }
   },
   methods: {
-    ...mapActions('component', ['deleteProjectNode']),
+    ...mapActions('component', ['deleteProjectNode', 'deleteComponentSet']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.deleteProjectNode(this.id)
+          if (isComponentSet(this.node)) {
+            this.deleteComponentSet(this.id)
+          } else {
+            this.deleteProjectNode(this.id)
+          }
           this.visible = false
         }
       })

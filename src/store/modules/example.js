@@ -5,6 +5,8 @@ import formItem from '@/templateJson/formItem'
 import { appendIdNested } from '@/utils/nodeId'
 import { traversal } from '@/utils/tool'
 
+let inited = false
+
 const state = {
   basicExamples: [],
   basicExamplesMap: {}
@@ -16,6 +18,11 @@ const mutations = {
 
 const actions = {
   initExamples({ commit }) {
+    if (inited) {
+      return
+    }
+
+    inited = true
     const basicExamples = basic
     appendIdNested(basicExamples)
 

@@ -61,7 +61,6 @@
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
 import { mapActions } from 'vuex'
-import { NODE_TYPE } from '@/const'
 import { label, required, min, max } from '@/validator'
 
 export default {
@@ -82,22 +81,15 @@ export default {
   },
   data() {
     const { componentsMap } = this.$store.state.component
-
-    const form = {
-      label: '',
-      description: '',
-      type: NODE_TYPE.PROJECT,
-      tags: []
-    }
-
-    if (this.id) {
-      Object.assign(form, componentsMap[this.id])
-    }
-
+    const node = componentsMap[this.id]
     return {
       visible: false,
       dirty: false,
-      form,
+      form: {
+        label: node ? node.label : '',
+        description: node ? node.description : '',
+        tags: node ? node.tags : []
+      },
       rules: {
         label,
         description: [required],
@@ -133,8 +125,12 @@ export default {
             this.$router.push(`/${project.id}/draft`)
           }
 
+          this.form = {
+            label: '',
+            description: '',
+            tags: []
+          }
           this.visible = false
-          this.$refs.form.resetFields()
         }
       })
     }

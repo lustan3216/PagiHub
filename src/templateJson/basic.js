@@ -26,7 +26,7 @@ const gridItems = function() {
   ]
 }
 
-export const gridGenerator = function(options) {
+const gridGenerator = function(options) {
   return {
     w: 18,
     h: 300,
@@ -153,7 +153,6 @@ export default [
   layers(),
   flexButton(),
   flexImage(),
-  gridGenerator(),
   carousel(),
   divider(),
   videoPlayer(),

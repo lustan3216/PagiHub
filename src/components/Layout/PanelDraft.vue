@@ -86,7 +86,14 @@ export default {
     }
   },
   created() {
-    this.getProject(this.$route.params.projectId)
+    if (this.$route.params.projectId) {
+      this.getProject(this.$route.params.projectId).then(project => {
+        if (!project) {
+          this.$router.push('/projects')
+        }
+      })
+    }
+
     this.initExamples()
   },
   mounted() {

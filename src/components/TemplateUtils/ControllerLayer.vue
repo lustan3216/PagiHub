@@ -76,8 +76,13 @@ export default {
   },
   computed: {
     ...mapState('app', ['isAnimating', 'selectedComponentIds']),
+    ...mapState('example', ['basicExamplesMap']),
     node() {
-      return this.componentsMap[this.id]
+      if (this.isExample) {
+        return this.basicExamplesMap[this.id]
+      } else {
+        return this.componentsMap[this.id]
+      }
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)
@@ -149,9 +154,9 @@ export default {
   border: 1px dashed #dedede;
   box-sizing: border-box;
 }
-  .tutorial{
-    position: absolute;
-    top: -18px;
-    right: -18px;
-  }
+.tutorial {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+}
 </style>

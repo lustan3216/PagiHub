@@ -10,13 +10,14 @@
       />
 
       <dialog-component-set
+        v-if="projectId"
         :parent-id="projectId"
         button-text="Create Board"
       />
 
       <el-tree
         ref="tree"
-        :data="innerTree"
+        :data="rootComponentSets"
         :filter-node-method="filterTagBySearching"
         :indent="16"
         :allow-drop="allowDrop"
@@ -49,12 +50,6 @@
               <!--                class="m-l-5"-->
               <!--              />-->
 
-              <dialog-component-set
-                v-if="isProject(node) || isFolder(node)"
-                :parent-id="node.id"
-                class="m-l-5"
-              />
-
               <dialog-delete
                 v-if="isComponentSet(node) || isFolder(node)"
                 :id="node.id"
@@ -62,6 +57,7 @@
               />
 
               <component
+                :key="node.updatedAt"
                 :id="node.id"
                 :parent-id="node.parentId"
                 :is="`dialog-${kebabCase(typeString(node))}`"
@@ -78,7 +74,7 @@
 <script>
 import { Tree } from 'element-ui'
 import { mapState, mapActions, mapMutations } from 'vuex'
-import { NODE_TYPE, NODE_TYPE_STRING, KIND, CHILDREN } from '@/const'
+import { NODE_TYPE, NODE_TYPE_STRING, KIND } from '@/const'
 import DialogProject from './DialogProject'
 import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'
@@ -87,7 +83,6 @@ import { kebabCase } from '@/utils/string'
 import { shortId } from '@/utils/node'
 
 import { isComponentSet, isProject, isFolder, typeString } from '@/utils/node'
-import { traversal } from '@/utils/tool'
 import dblClick from '@/utils/dblClick'
 
 export default {
@@ -109,6 +104,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentSetIds']),
+    ...mapState('component', ['rootComponentSetIds']),
     projectId() {
       return this.$route.params.projectId
     },
@@ -119,20 +115,11 @@ export default {
         [NODE_TYPE.COMPONENT_SET]: 'el-icon-lollipop'
       }
     },
-    innerTree() {
-      const project = this.componentsMap[this.projectId]
-      if (!project) {
-        return
-      }
-
-      const cloneTree = project[CHILDREN].map(({ children, ...node }) => node)
-      traversal(cloneTree, node => {
-        delete node.w
-        delete node.h
-        // to prevent tree rerender
+    rootComponentSets() {
+      return this.rootComponentSetIds.map(id => {
+        const { children, ...node } = this.componentsMap[id]
+        return node
       })
-
-      return cloneTree
     }
   },
   watch: {

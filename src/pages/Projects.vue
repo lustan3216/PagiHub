@@ -6,7 +6,7 @@
         :md="8"
         :sm="12"
       >
-        <div class="card pointer">
+        <div class="card pointer shadow-2">
           <h2 class="font-spacing">{{ project.label }}</h2>
 
           <div class="subtitle">
@@ -43,6 +43,7 @@
               />
 
               <dialog-project
+                :key="project.updatedAt"
                 :id="project.id"
                 circle
                 class="shadow-button action-button"

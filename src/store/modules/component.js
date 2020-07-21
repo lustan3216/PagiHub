@@ -11,7 +11,8 @@ import {
   getProjects,
   patchProject,
   getProject,
-  deleteComponentSet
+  deleteComponentSet,
+  patchComponentSet
 } from '@/api/node'
 import {
   objectHasAnyKey,
@@ -73,16 +74,19 @@ const mutations = {
 
   // only for project and componentSet
   SET_NODES_TO_MAP(state, componentsArray) {
-    forEach(componentsArray, node => {
-      const { editingProjectId } = state
-      const id = node[ID]
-      let parentId = node[PARENT_ID]
+    const { rootComponentSetIds, projectIds, componentsMap } = state
 
-      if (!parentId && isComponentSet(node)) {
-        parentId = editingProjectId
-        state.rootComponentSetIds.push(node.id)
-      } else if (isProject(node)) {
-        state.projectIds.push(node.id)
+    forEach(componentsArray, node => {
+      const id = node[ID]
+      const parentId = node[PARENT_ID]
+
+      if (
+        isComponentSet(node) &&
+        !rootComponentSetIds.find(id => id === node.id)
+      ) {
+        rootComponentSetIds.push(node.id)
+      } else if (isProject(node) && !projectIds.find(id => id === node.id)) {
+        projectIds.push(node.id)
       }
 
       childrenOf[id] = childrenOf[id] || []
@@ -97,7 +101,7 @@ const mutations = {
         }
       }
 
-      Vue.set(state.componentsMap, id, node)
+      Vue.set(componentsMap, id, node)
       defineNodeProperties(node)
     })
   },
@@ -154,9 +158,13 @@ const actions = {
   },
 
   async getProject({ commit }, id) {
-    if (!state.componentsMap[id]) {
+    const node = state.componentsMap[id]
+    if (node) {
+      return node
+    } else {
       const { data } = await getProject(id)
       commit('SET_NODES_TO_MAP', data)
+      return data
     }
   },
 
@@ -201,6 +209,11 @@ const actions = {
     commit('SET_NODES_TO_MAP', data)
   },
 
+  async patchComponentSet({ commit, state, dispatch }, { id, componentSet }) {
+    const { data } = await patchComponentSet(id, componentSet)
+    commit('SET_NODES_TO_MAP', data)
+  },
+
   modifyProjectNodeParent({ commit, state }, { parentId, id }) {
     commit('APPEND_NODE', {
       id,
@@ -217,7 +230,9 @@ const actions = {
     commit('SET', {
       editingProjectId: null,
       editingComponentSetId: null,
-      componentsMap: {}
+      componentsMap: {},
+      projectIds: [],
+      rootComponentSetIds: []
     })
 
     childrenOf = {}
@@ -229,7 +244,7 @@ const actions = {
     await deleteComponentSet(id)
     const ids = [id]
     const gatherGrandChildrenIds = nodeId => {
-      getters.childrenOf[nodeId].forEach(child => {
+      childrenOf[nodeId].forEach(child => {
         ids.push(child.id)
 
         gatherGrandChildrenIds(child.id)

@@ -33,7 +33,6 @@ import { AUTO_HEIGHT, PROPS } from '@/const'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridItemChild from './GridItemChild'
-import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import { getValueByPath } from '@/utils/tool'
 import { debounce } from 'throttle-debounce'
 
@@ -42,7 +41,6 @@ const points = ['lg', 'md', 'sm', 'xs', 'xxs']
 export default {
   name: 'GridGeneratorInner',
   components: {
-    ControllerLayer,
     VueGridGenerator: VueGridLayout.GridLayout,
     VueGridItem: VueGridLayout.GridItem,
     GridItemChild
