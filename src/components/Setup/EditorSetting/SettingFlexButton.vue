@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { select, assignDefaultValue } from './utils/ruleTool'
 import { CHILDREN, NODE_TYPE } from '@/const'

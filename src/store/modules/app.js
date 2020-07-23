@@ -69,10 +69,10 @@ const actions = {
     const { selectedComponentSetIds } = state
     const isExist = selectedComponentSetIds.includes(id)
     if (isExist) {
+      commit('component/CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', id, toRoot)
       commit('SET', {
         selectedComponentSetIds: arraySubtract(selectedComponentSetIds, id)
       })
-      commit('component/CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', id, toRoot)
     } else {
       dispatch('addSelectedComponentSetInIds', id)
     }

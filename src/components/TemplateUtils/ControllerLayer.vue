@@ -3,7 +3,7 @@
   <div
     v-if="isDraftMode && node"
     :id="id"
-    :class="{ selected, 'dash-border': !isAnimating }"
+    :class="{ selected, 'dash-border': !isAnimating && border }"
     class="control-layer h-100"
     @click.exact.stop="
       canNotEdit && !isExample && SET_SELECTED_COMPONENT_ID(id)
@@ -67,6 +67,10 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    border: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

@@ -1,6 +1,7 @@
 <template>
   <vue-grid-generator
     ref="gridGenerator"
+    :vertical-compact="isExample"
     v-bind="innerProps"
     :layout="layout"
     :margin="[0, 0]"

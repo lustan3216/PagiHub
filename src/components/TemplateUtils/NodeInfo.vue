@@ -64,7 +64,9 @@ export default {
       return this.shortTagName(this.node)
     },
     firstChildNode() {
-      const child = this.node[CHILDREN].find(node => !node[SOFT_DELETE])
+      const child =
+        this.node[CHILDREN] &&
+        this.node[CHILDREN].find(node => !node[SOFT_DELETE])
       return child && this.componentsMap[child.id]
     },
     firstChildNodeShortName() {

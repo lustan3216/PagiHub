@@ -20,7 +20,9 @@ export default {
   methods: {
     addComponent(event) {
       const id = event.dataTransfer.getData('id')
-      this._addNodesToParentAndRecord(this.basicExamplesMap[id])
+      if (id) {
+        this._addNodesToParentAndRecord(this.basicExamplesMap[id])
+      }
     }
   }
 }

@@ -95,48 +95,57 @@ export default {
     }
 
     this.initExamples()
+    window.addEventListener('resize', this.setProductionIfWindowSmall)
   },
   mounted() {
-    this.$nextTick(() => {
-      Selection.create({
-        class: 'selection',
-        selectables: ['.control-layer'],
-        boundaries: ['.art-board.selected']
-      })
-        .on('beforestart', ({ oe }) => {
-          return (
-            oe.path[0].classList.contains('panel-draft') ||
-            oe.path[1].classList.contains('panel-draft')
-          )
-        })
-        .on('move', ({ changed: { removed, added }}) => {
-          for (const el of added) {
-            el.classList.add('selected')
-          }
-
-          for (const el of removed) {
-            el.classList.remove('selected')
-          }
-        })
-        .on('stop', ({ inst, selected }) => {
-          selected.forEach(({ id }) => {
-            this.TOGGLE_SELECTED_COMPONENT_IN_IDS(+id)
-          })
-          inst.enable()
-          inst.keepSelection()
-        })
-    })
+    // this.$nextTick(() => {
+    //   Selection.create({
+    //     class: 'selection',
+    //     selectables: ['.control-layer'],
+    //     boundaries: ['.art-board.selected']
+    //   })
+    //     .on('beforestart', ({ oe }) => {
+    //       return (
+    //         oe.path[0].classList.contains('panel-draft') ||
+    //         oe.path[1].classList.contains('panel-draft')
+    //       )
+    //     })
+    //     .on('move', ({ changed: { removed, added }}) => {
+    //       for (const el of added) {
+    //         el.classList.add('selected')
+    //       }
+    //
+    //       for (const el of removed) {
+    //         el.classList.remove('selected')
+    //       }
+    //     })
+    //     .on('stop', ({ inst, selected }) => {
+    //       selected.forEach(({ id }) => {
+    //         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(+id)
+    //       })
+    //       inst.enable()
+    //       inst.keepSelection()
+    //     })
+    // })
   },
   methods: {
     ...mapActions('component', ['getProject']),
     ...mapActions('example', ['initExamples']),
     ...mapMutations('component', ['VUE_SET']),
+    ...mapMutations('mode', ['SET_PRODUCTION_MODE', 'SET_DRAFT_MODE']),
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID', 'RECORD']),
     isMac,
+    setProductionIfWindowSmall() {
+      if (window.innerWidth < 992) {
+        this.SET_PRODUCTION_MODE()
+      } else {
+        this.SET_DRAFT_MODE()
+      }
+    },
     itemResized: debounce(300, function({ id }, h, w) {
       this.VUE_SET({
         tree: this.componentsMap[id],

@@ -5,6 +5,7 @@
   >
     <controller-layer
       v-for="(child, index) in sortChildren"
+      :border="false"
       :id="child.id"
       :key="child.id"
     >

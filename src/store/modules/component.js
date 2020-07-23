@@ -6,7 +6,7 @@ import {
   createComponentSet,
   createProject,
   deleteProject,
-  getComponentSet,
+  getComponentSetChildren,
   getComponentSets,
   getProjects,
   patchProject,
@@ -125,11 +125,7 @@ const mutations = {
     })
   },
   RECORD(state, payLoad) {
-    if (state.editingComponentSetId) {
-      jsonHistory.record(payLoad)
-    } else {
-      Message.info('Please select an artboard first')
-    }
+    jsonHistory.record(payLoad)
   },
   REDO() {
     const done = rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)
@@ -180,11 +176,9 @@ const actions = {
     commit('SET_NODES_TO_MAP', data)
   },
 
-  async getComponentSet({ commit, state }, id) {
-    if (!state.componentsMap[id]) {
-      const componentsArray = await getComponentSet(id)
-      commit('SET_NODES_TO_MAP', componentsArray)
-    }
+  async getComponentSetChildren({ commit, state }, id) {
+    const componentsArray = await getComponentSetChildren(id)
+    commit('SET_NODES_TO_MAP', componentsArray)
   },
 
   async getComponentSets({ commit, state }, projectId) {

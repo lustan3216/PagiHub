@@ -1,6 +1,7 @@
 <template>
   <controller-layer
     v-if="firstChild"
+    :border="false"
     :id="firstChild.id"
   >
     <async-component :id="firstChild.id" />
@@ -46,7 +47,7 @@ export default {
           return
         }
 
-        this.getComponentSet(this[ID])
+        this.getComponentSetChildren(this[ID])
       },
       immediate: true
     }
@@ -66,7 +67,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('component', ['getComponentSet'])
+    ...mapActions('component', ['getComponentSetChildren'])
   }
 }
 </script>

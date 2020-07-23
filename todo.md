@@ -1,51 +1,52 @@
+1. style 能用
+2. component 能連結
+3. componentset 引用都正常
+4. 可外連 不用 domain 沒關係
+
 ### Functionality
 
 <ol>
-<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed / fixed container</li> 
-<li>有假死狀態可以做 剪下貼上</li>
-<li>每個 component set 都可以組建合併得按鈕  / or 選版本 / 跟隨proejct裡面的變動，只是不同project的因為沒有主動更新所以也不會主動變動</li>
-<li>search panel</li>
-<li>試試看能不能解決 drawer的layout</li>
-<li>自己的project有引用的，有修改的都可以直接儲存了，因為不會引響到其他專案</li>
-<li>每個 button 都可以點了 連結到 componentSet / link / 需用state 的結構去做 click hover active 等等切換componentSet，這個要去另一個版操作，向XD的prototype</li>
-<li>瀏覽器資源，手機版只能預覽</li>
-<li>可以上傳asset 換照片 & svg</li>
+5<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed / fixed container</li> 
+3<li>有假死狀態可以做 剪下貼上</li>
+5<li>每個 component set 都可以組建合併得按鈕  / or 選版本 / 跟隨proejct裡面的變動，只是不同project的因為沒有主動更新所以也不會主動變動</li>
+2<li>自己的project有引用的，有修改的都可以直接儲存了，因為不會引響到其他專案</li>
+5<li>search panel</li>
+10<li>每個 button 都可以點了 連結到 componentSet / link / 需用state 的結構去做 click hover active 等等切換componentSet，這個要去另一個版操作，向XD的prototype</li>
+5<li>瀏覽器資源，手機版只能預覽，預覽要修正bug</li>
+2<li>componentSet 裡面的compopentSet 分離，不要隨著源頭跟動</li>
+20<li>可瀏覽 production版本</li>
 </ol>
 
 ### Style
 
 <ol>
-<li>overflow</li>
+1<li>overflow</li>
+1<li>font align</li>
+1<li>最基礎 10個左右，font family</li>
 <li>icon 可以上傳svg tag，下載也是直接下載tag，用dangurous叉叉叉插入，要過濾script，這樣可以變色條診或是用interact做調整</li>
-<li>uploader image / svg, consider how to compress</li>
-<li>select-unit可以用拉的</li>
-<li>寬高要disable，逼他們用layout</li>
-<li>需要顯示寬高，跟 max-width / height</li>
-<li>svg 可在texteditor選，且用innertexteditor編輯</li>
-<li>font align</li>
-<li>最基礎 10個左右，font family</li>
-<li>background color 用grediant做， 等 color picker在做</li>
+2<li>uploader image / svg, consider how to compress</li>
+3<li>svg 可在texteditor選，且用innertexteditor編輯</li>
+2<li>select-unit可以用拉的</li>
+3<li>寬高要disable，逼他們用layout / 需要顯示寬高，跟 max-width / height</li>
 </ol>
 
 ### Setting
 
 <ol>
 <li>Grid layout 不用有control layer，style 可以append在自己身上，但heihgt width trnasform等等不能動</li>
-<li>grid item 要可以控制 xl lg 什麼時候可以hidden</li>
-<li>把grid layout的margin 要換到style上</li>
-<li>grid item 考慮要不要都autoHeight, 考慮寬變時，高也要自適應</li>
-<li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridGenerator 可以固定寬</li> ? style 做個設計，要不要固定寬高，要的話，
-</ol>
-
-### ux
-
-<ol>
-<li>怎麼讓使用者更好選上下node</li>
+3<li>grid item 要可以控制 xl lg 什麼時候可以hidden</li>
+5<li>把grid layout的margin 要換到style上</li>
+5<li>grid item 考慮要不要都autoHeight, 考慮寬變時，高也要自適應</li>
+4<li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridGenerator 可以固定寬</li> ? style 做個設計，要不要固定寬高，要的話，
 </ol>
 
 ### Last
 
 <ol>
+<li>SEO首頁</li>
+<li>怎麼讓使用者更好選上下node</li>
+<li>試試看能不能解決 drawer的layout</li>
+<li>background color 用grediant做， 等 color picker在做</li>
 <li>node tree moving</li>
 <li>description 用 editor</li>
 <li>form-item 需要指定el編輯</li>

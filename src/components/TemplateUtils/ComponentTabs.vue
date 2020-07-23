@@ -23,18 +23,18 @@
           :xs="24"
           class="m-b-15"
         >
-          <el-card
-            shadow="none"
-            class="transparent shadow-button"
+          <div
+            class="transparent shadow-button fake-transform card"
+            draggable="true"
+            @dragstart="$event.dataTransfer.setData('id', component.id)"
           >
-            <el-button type="text">
+            <el-button
+              class="grab"
+              type="text"
+            >
               {{ shortTagName(component) }}
             </el-button>
-            <div
-              draggable="true"
-              class="relative z-index1 component"
-              @dragstart="$event.dataTransfer.setData('id', component.id)"
-            >
+            <div class="relative z-index1 component">
               <component
                 :is="
                   isComponentSet(component)
@@ -42,11 +42,9 @@
                     : 'async-component'
                 "
                 :id="component.id"
-                :once-observe="false"
-                class="no-action"
               />
             </div>
-          </el-card>
+          </div>
         </el-col>
       </el-row>
     </el-tab-pane>
@@ -86,7 +84,7 @@ export default {
       currentCategory: 'basic',
       options: [],
       search: '',
-      categories: ['basic', 'currentProject', 'all']
+      categories: ['basic', 'My', 'search']
     }
   },
   computed: {
@@ -100,8 +98,8 @@ export default {
     components() {
       return {
         basic: this.basicExamples,
-        currentProject: this.componentsSets,
-        all: this.basicExamples
+        MyComponent: this.componentsSets,
+        search: []
       }
     }
   },
@@ -131,10 +129,6 @@ export default {
 }
 
 ::v-deep {
-  .el-card__body {
-    padding: 0 10px 10px;
-  }
-
   .el-carousel__container {
     height: 200px !important;
   }
@@ -143,7 +137,7 @@ export default {
   }
 }
 
-::v-deep.dialog > .el-dialog__header {
-  padding: 0;
+.card {
+  padding: 0 10px 10px;
 }
 </style>

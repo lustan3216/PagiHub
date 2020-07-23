@@ -2,7 +2,7 @@
   <component
     v-if="hasComponent"
     :is="componentTag"
-    :id="theOnlySelectedComponentId"
+    :id="selectedComponentId"
     class="p-r-10"
   />
 </template>
@@ -39,6 +39,11 @@ const self = {
     SettingFormTextarea: () => import('./EditorSetting/SettingFormTextarea'),
     SettingFormTimePicker: () => import('./EditorSetting/SettingFormTimePicker')
   },
+  data() {
+    return {
+      selectedComponentId: null
+    }
+  },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     ...mapState('component', ['componentsMap']),
@@ -60,10 +65,22 @@ const self = {
       return same && this.selectedComponentIds.length
     },
     hasComponent() {
-      return this.selectedComponentNode && self.components[this.componentTag]
+      return (
+        this.selectedComponentId &&
+        this.selectedComponentNode &&
+        self.components[this.componentTag]
+      )
     },
     componentTag() {
       return `Setting${bigCamelCase(this.selectedComponentNode.tag)}`
+    }
+  },
+  watch: {
+    theOnlySelectedComponentId(value) {
+      setTimeout(() => {
+        // to solve the performance problem
+        this.selectedComponentId = value
+      })
     }
   }
 }

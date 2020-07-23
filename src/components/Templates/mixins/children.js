@@ -1,4 +1,4 @@
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import { CHILDREN, GRID_ITEM, TAG } from '@/const'
 import { cloneJson, traversal, arrayLast } from '@/utils/tool'
 import { traversalChildrenOf, isComponentSet, getNode } from '@/utils/node'
@@ -22,6 +22,7 @@ export default {
     rootComponentSetId: { default: null }
   },
   computed: {
+    ...mapState('component', ['rootComponentSetIds']),
     node() {
       return getNode(this.id, this.isExample)
     },
@@ -108,13 +109,14 @@ export default {
         x => x.id === theNodeIdGonnaCopy
       )
 
-      theNodeGonnaCopy[CHILDREN] = this.componentsMap[theNodeIdGonnaCopy].children
+      theNodeGonnaCopy[CHILDREN] = this.componentsMap[
+        theNodeIdGonnaCopy
+      ].children
       this._addNodesToParentAndRecord(theNodeGonnaCopy)
     },
 
     _remove(theNodeIdGonnaRemove) {
       // should use vmMap method to call to keep consistency
-      let selectedId = null
       const records = [
         {
           path: theNodeIdGonnaRemove,
@@ -129,26 +131,28 @@ export default {
         })
       })
 
-      for (let i = 0; i < this.parentNodes.length; i++) {
-        const { id, tag } = this.parentNodes[this.parentNodes.length - 1 - i]
+      // for (let i = 0; i < this.parentNodes.length; i++) {
+      //   const { id, tag } = this.parentNodes[this.parentNodes.length - 1 - i]
+      //
+      //   if (tag === GRID_ITEM) {
+      //     selectedId = id
+      //     break
+      //   }
+      //
+      //   if (this.rootComponentSetIds.includes(id)) {
+      //     break
+      //   } else if (this.children.length === 1) {
+      //     // records.unshift({
+      //     //   path: id,
+      //     //   value: undefined
+      //     // })
+      //   } else {
+      //     selectedId = this.children[0].id
+      //     break
+      //   }
+      // }
 
-        if (tag === GRID_ITEM) {
-          selectedId = id
-          break
-        }
-
-        if (this.children.length === 1) {
-          records.unshift({
-            path: id,
-            value: undefined
-          })
-        } else {
-          selectedId = this.children[0].id
-          break
-        }
-      }
-
-      this.SET_SELECTED_COMPONENT_ID(selectedId)
+      this.SET_SELECTED_COMPONENT_ID(theNodeIdGonnaRemove.parentId)
       this.RECORD(records)
     }
   }

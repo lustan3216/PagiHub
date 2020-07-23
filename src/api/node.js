@@ -1,18 +1,7 @@
+import store from '@/store'
 import localforage from 'localforage'
-import { CHILDREN, ID, NODE_TYPE, PARENT_ID } from '@/const'
-import {
-  objectHasAnyKey,
-  nestedToLinerObject,
-  cloneJson,
-  traversal
-} from '@/utils/tool'
+import { cloneJson } from '@/utils/tool'
 import { API } from 'aws-amplify'
-
-// const _initTemplate = () => ({
-//   type: NODE_TYPE.PROJECT,
-//   name: 'Playground',
-//   description: 'Playground'
-// })
 
 export function getProjects() {
   return API.get('staging', '/projects', {})
@@ -34,25 +23,17 @@ export function deleteProject(id) {
   return API.del('staging', `/projects/${id}`, {})
 }
 
-// export function getProject() {
-//   return localforage.getItem('project').then((data) => {
-//     if (data && objectHasAnyKey(data)) {
-//       return data
-//     } else {
-//       const initTemplate = _initTemplate()
-//       nodeIds.appendIdNested(initTemplate)
-//       return nestedToLinerObject(initTemplate)
-//     }
-//   })
-// }
-
 export function getComponentSets(projectId) {
-  // return localforage.getItem(id)
   return API.get('staging', `/projects/${projectId}/component-sets`, {})
 }
 
-export function getComponentSet(id) {
-  return localforage.getItem(id)
+export function getComponentSetChildren(id) {
+  const userId = store.state.user.id.split('_')[1]
+  return fetch(
+    `https://d3uga24p04v3ke.cloudfront.net/${userId}/${id}/draft.json`
+  )
+    .then(x => x.json())
+    .catch(_ => [])
 }
 
 export function patchComponentSet(id, body) {
@@ -63,6 +44,16 @@ export function deleteComponentSet(id) {
   return API.del('staging', `/component-sets/${id}`, {})
 }
 
+export function putComponentSetChildren(deltas, action) {
+  return API.put(
+    'staging',
+    `/projects/${store.state.component.editingProjectId}/children`,
+    {
+      body: { deltas, action }
+    }
+  )
+}
+
 export function createComponentSet(projectId, componentSet) {
   componentSet = cloneJson(componentSet)
   // const componentSetId = nodeIds.generateProjectId()
@@ -70,8 +61,8 @@ export function createComponentSet(projectId, componentSet) {
   // const children = componentSet[CHILDREN]
 
   // componentSet[ID] = componentSetId
-  componentSet.w = 200
-  componentSet.h = 100
+  componentSet.w = 500
+  componentSet.h = 700
 
   return API.post('staging', `/projects/${projectId}/component-sets`, {
     body: componentSet

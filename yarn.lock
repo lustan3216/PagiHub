@@ -9829,9 +9829,9 @@ jsesc@~0.5.0:
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
 json-history@^0.2.0:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/json-history/-/json-history-0.2.1.tgz#29938cd9a9c345b61bf0c6b4f4519564fa9033cd"
-  integrity sha512-Aep9KNHiszisyEABN8eX3jufyBcWW8kT2KhiZLMRxc+DgEB3s76UdBaraqND7zQkHkjz+Rsj1yGDi4aiwbsaRw==
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/json-history/-/json-history-0.2.2.tgz#33b2c4c8664ad95c03d1fc4e8a6c84f6d9309b23"
+  integrity sha512-sGPKFXtpbD1LUaA3sTV5Thk42Fe/JdTkxMYBR4MuD40lNMZsYlp8/ZN08lYhhmWlaMhAJzIQ4OqamThc9rTvIA==
   dependencies:
     diff-match-patch "^1.0.5"
 
@@ -14763,6 +14763,11 @@ whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.3, whatwg-encoding@^1.0.5:
   integrity sha512-b5lim54JOPN9HtzvK9HFXvBma/rnfFeqsic0hSpjtDbVxR3dJKLc+KB4V6GgiGOvl7CY/KNh8rxSo9DKQrnUEw==
   dependencies:
     iconv-lite "0.4.24"
+
+whatwg-fetch@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.2.0.tgz#8e134f701f0a4ab5fda82626f113e2b647fd16dc"
+  integrity sha512-SdGPoQMMnzVYThUbSrEvqTlkvC1Ux27NehaJ/GUHBfNrh5Mjg+1/uRyFMwVnxO2MrikMWvWAqUGgQOfVU4hT7w==
 
 whatwg-mimetype@^2.1.0, whatwg-mimetype@^2.2.0, whatwg-mimetype@^2.3.0:
   version "2.3.0"

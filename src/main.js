@@ -3,7 +3,7 @@ import '@/styles/index.scss'
 import '@/utils/polyfill'
 import '@/amplify'
 import 'intersection-observer'
-
+import 'whatwg-fetch'
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'

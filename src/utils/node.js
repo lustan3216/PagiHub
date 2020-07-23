@@ -1,6 +1,5 @@
 import store from '../store'
 import { allEqual, cloneJson } from './tool'
-import IdMap from './idMap'
 import { capitalize } from './string'
 import { NODE_TYPE, NODE_TYPE_STRING, KIND, LABEL } from '@/const'
 
@@ -110,11 +109,13 @@ export function shortId(id) {
 }
 
 export function defineNodeProperties(node) {
+  const { componentsMap } = store.state.component
   const defined = 'parentNode' in node
+
   if (!defined) {
     Object.defineProperty(node, 'parentNode', {
       get() {
-        return store.state.componentsMap[this.parentId]
+        return componentsMap[this.parentId]
       },
       enumerable: false
     })
@@ -129,5 +130,34 @@ export function defineNodeProperties(node) {
       },
       enumerable: false
     })
+
+    Object.defineProperty(node, 'rootComponentSetId', {
+      get() {
+        return getRootComponentSet(node)
+      },
+      enumerable: false
+    })
+  }
+}
+
+const rootComponentSetIdMap = {}
+let familyTreeIds = []
+export function getRootComponentSetId(nodeId) {
+  familyTreeIds.push(nodeId)
+  const { componentsMap, rootComponentSetIds } = store.state.component
+
+  if (rootComponentSetIdMap[nodeId]) {
+    return rootComponentSetIdMap[nodeId]
+  } else {
+    const { parentId } = componentsMap[nodeId]
+    const parentNode = componentsMap[parentId]
+
+    if (rootComponentSetIds.includes(parentNode.id)) {
+      familyTreeIds.forEach(id => (rootComponentSetIdMap[id] = parentNode.id))
+      familyTreeIds = []
+      return parentNode.id
+    } else {
+      return getRootComponentSetId(parentNode.id)
+    }
   }
 }

@@ -32,6 +32,7 @@ module.exports = {
   // add your custom rules here
   // it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
+    code: 100,
     'vue/html-closing-bracket-newline': [
       2,
       {
@@ -283,7 +284,7 @@ module.exports = {
     'array-bracket-spacing': [2, 'never']
   },
 
-  'extends': [
+  extends: [
     'plugin:vue/recommended',
     'eslint:recommended',
     'plugin:cypress/recommended'

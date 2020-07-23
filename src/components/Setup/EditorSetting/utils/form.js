@@ -10,7 +10,7 @@ import {
 import { CAN_NOT_BE_MULTI_SELECTED } from '@/const'
 
 export const settings = {
-  label: 'default',
+  label: 'custom',
   form: {
     labelWidth: '100px',
     labelPosition: 'right',
@@ -121,4 +121,3 @@ export function base(fn) {
     return rules
   }
 }
-
