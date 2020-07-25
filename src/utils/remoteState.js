@@ -1,5 +1,5 @@
 import { putComponentSetChildren } from '@/api/node'
-import { getRootComponentSetId } from '@/utils/node'
+import { getRootComponentSetId } from '@/utils/rootComponentSetId'
 import { objectFirstKey } from '@/utils/tool'
 import jsonHistory from '@/store/jsonHistory'
 
@@ -56,13 +56,13 @@ export default class RemoteState {
       if (jsonHistory.currentIndex > this.remoteIndex) {
         deltas = this.transformDeltas(
           this.remoteIndex,
-          jsonHistory.currentIndex + 1
+          jsonHistory.currentIndex
         )
         action = 'undo'
       } else if (jsonHistory.currentIndex < this.remoteIndex) {
         deltas = this.transformDeltas(
           jsonHistory.currentIndex,
-          this.remoteIndex + 1
+          this.remoteIndex
         )
         action = 'redo'
       }
@@ -79,12 +79,13 @@ export default class RemoteState {
         })
     } catch (e) {
       this.requesting = false
+      throw e
     }
   }
 
   transformDeltas(index, index2) {
     const deltas = []
-    jsonHistory.deltas.slice(index, index2 + 1).forEach(group => {
+    jsonHistory.deltas.slice(index, index2).forEach(group => {
       const newGroup = []
       group.forEach(delta => {
         newGroup.push({

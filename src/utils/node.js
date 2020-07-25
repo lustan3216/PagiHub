@@ -139,25 +139,3 @@ export function defineNodeProperties(node) {
     })
   }
 }
-
-const rootComponentSetIdMap = {}
-let familyTreeIds = []
-export function getRootComponentSetId(nodeId) {
-  familyTreeIds.push(nodeId)
-  const { componentsMap, rootComponentSetIds } = store.state.component
-
-  if (rootComponentSetIdMap[nodeId]) {
-    return rootComponentSetIdMap[nodeId]
-  } else {
-    const { parentId } = componentsMap[nodeId]
-    const parentNode = componentsMap[parentId]
-
-    if (rootComponentSetIds.includes(parentNode.id)) {
-      familyTreeIds.forEach(id => (rootComponentSetIdMap[id] = parentNode.id))
-      familyTreeIds = []
-      return parentNode.id
-    } else {
-      return getRootComponentSetId(parentNode.id)
-    }
-  }
-}

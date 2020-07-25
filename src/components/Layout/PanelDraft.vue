@@ -129,7 +129,11 @@ export default {
     // })
   },
   methods: {
-    ...mapActions('component', ['getProject']),
+    ...mapActions('component', [
+      'patchComponentSet',
+      'getProject',
+      'setEditingComponentSetId'
+    ]),
     ...mapActions('example', ['initExamples']),
     ...mapMutations('component', ['VUE_SET']),
     ...mapMutations('mode', ['SET_PRODUCTION_MODE', 'SET_DRAFT_MODE']),
@@ -137,7 +141,7 @@ export default {
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
-    ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID', 'RECORD']),
+    ...mapMutations('component', ['RECORD']),
     isMac,
     setProductionIfWindowSmall() {
       if (window.innerWidth < 992) {
@@ -147,6 +151,11 @@ export default {
       }
     },
     itemResized: debounce(300, function({ id }, h, w) {
+      this.patchComponentSet({
+        id,
+        attrs: { h, w }
+      })
+
       this.VUE_SET({
         tree: this.componentsMap[id],
         key: 'h',
@@ -161,7 +170,7 @@ export default {
     }),
     itemClick(id) {
       if (!this.touching) {
-        this.SET_EDITING_COMPONENT_SET_ID(id)
+        this.setEditingComponentSetId(id)
       }
 
       this.touching = false

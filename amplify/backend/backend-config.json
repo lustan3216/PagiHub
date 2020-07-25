@@ -6,6 +6,5 @@
 			"dependsOn": [],
 			"customAuth": false
 		}
-	},
-	"storage": {}
+	}
 }

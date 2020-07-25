@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import ViewPortCover from './ViewPortCover'
 import { directive } from '@/directive/freeView'
@@ -61,7 +61,7 @@ export default {
     ...mapMutations('app', {
       appSET: 'SET'
     }),
-    ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
+    ...mapActions('component', ['setEditingComponentSetId']),
     scaleRollback() {
       this.targetEl.style.webkitTransform = this.targetEl.style.transform = null
       this.scaleRatio = 1
@@ -73,11 +73,11 @@ export default {
       this.scaleRatio = scaleRatio
     },
     moveCallback(event) {
-      this.SET_EDITING_COMPONENT_SET_ID(null)
+      this.setEditingComponentSetId(null)
     },
     cleanEditingComponentSet(event) {
       if (!event.target.dataset.id) {
-        this.SET_EDITING_COMPONENT_SET_ID(null)
+        this.setEditingComponentSetId(null)
       }
     }
   }

@@ -150,12 +150,12 @@ export default {
           if (this.isExist) {
             this.patchComponentSet({
               id: this.id,
-              componentSet: this.form
+              attrs: this.form
             })
           } else {
             this.createComponentSet({
               projectId: this.projectId,
-              componentSet: this.form
+              attrs: this.form
             })
           }
 

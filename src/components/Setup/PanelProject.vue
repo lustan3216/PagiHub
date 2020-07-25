@@ -135,12 +135,10 @@ export default {
     kebabCase,
     shortId,
     ...mapActions('app', [
-      'getProject',
       'toggleSelectedComponentSetInIds',
       'toggleSelectedComponentSetId'
     ]),
     ...mapActions('component', ['modifyProjectNodeParent']),
-    ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {
         this.modifyProjectNodeParent({

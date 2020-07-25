@@ -61,9 +61,9 @@ const actions = {
     commit('SET', { copyComponentIds })
     return copyComponentIds
   },
-  addSelectedComponentSetInIds({ state, commit }, id) {
+  addSelectedComponentSetInIds({ dispatch, commit }, id) {
     commit('PUSH_SELECTED_COMPONENT_SET_IDS', id)
-    commit('component/SET_EDITING_COMPONENT_SET_ID', id, toRoot)
+    dispatch('component/setEditingComponentSetId', id, toRoot)
   },
   toggleSelectedComponentSetInIds({ state, commit, dispatch }, id) {
     const { selectedComponentSetIds } = state
@@ -77,14 +77,14 @@ const actions = {
       dispatch('addSelectedComponentSetInIds', id)
     }
   },
-  toggleSelectedComponentSetId({ state, commit }, id) {
+  toggleSelectedComponentSetId({ dispatch, commit }, id) {
     const isExist = state.selectedComponentSetIds.includes(id)
     if (isExist) {
       commit('SET', { selectedComponentSetIds: [] })
       commit('component/CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', id, toRoot)
     } else {
       commit('SET', { selectedComponentSetIds: [id] })
-      commit('component/SET_EDITING_COMPONENT_SET_ID', id, toRoot)
+      dispatch('component/setEditingComponentSetId', id, toRoot)
     }
   },
   cleanSelectedComponentSetIds({ commit }, ids) {

@@ -22,9 +22,13 @@ import {
   toArray,
   objectFirstKey
 } from '@/utils/tool'
-import { Message } from 'element-ui'
 import { CHILDREN, ID, PARENT_ID } from '@/const'
 import { defineNodeProperties, isComponentSet, isProject } from '@/utils/node'
+import {
+  getRootComponentSetId,
+  recordRootComponentSetId,
+  recordRootComponentSetIdByArray
+} from '@/utils/rootComponentSetId'
 
 let childrenOf = {}
 
@@ -66,6 +70,7 @@ const mutations = {
 
         defineNodeProperties(value)
         Vue.set(componentsMap, key, value)
+        recordRootComponentSetId(value[ID])
       } else {
         Vue.set(tree, key, value)
       }
@@ -113,10 +118,6 @@ const mutations = {
     Vue.delete(state.componentsMap, id)
   },
 
-  SET_EDITING_COMPONENT_SET_ID(state, id) {
-    state.editingComponentSetId = id
-    // store.commit('app/RESET', null, { root: true })
-  },
   CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS(state, ids) {
     toArray(ids).forEach(id => {
       if (id === state.editingComponentSetId) {
@@ -146,6 +147,20 @@ const mutations = {
 }
 
 const actions = {
+  setEditingComponentSetId({ commit, state }, id) {
+    if (state.editingComponentSetId !== id) {
+      commit('SET', { editingComponentSetId: id })
+      commit(
+        'app/SET',
+        {
+          selectedComponentIds: [],
+          copyComponentIds: []
+        },
+        { root: true }
+      )
+    }
+  },
+
   async getProjects({ commit }) {
     const { data } = await getProjects()
 
@@ -179,6 +194,7 @@ const actions = {
   async getComponentSetChildren({ commit, state }, id) {
     const componentsArray = await getComponentSetChildren(id)
     commit('SET_NODES_TO_MAP', componentsArray)
+    recordRootComponentSetIdByArray(id, componentsArray)
   },
 
   async getComponentSets({ commit, state }, projectId) {
@@ -188,9 +204,9 @@ const actions = {
 
   async createComponentSet(
     { commit, state, dispatch },
-    { projectId, componentSet }
+    { projectId, attrs }
   ) {
-    const { data } = await createComponentSet(projectId, componentSet)
+    const { data } = await createComponentSet(projectId, attrs)
 
     // const componentSet = await createComponentSet({
     //   ...node,
@@ -203,8 +219,8 @@ const actions = {
     commit('SET_NODES_TO_MAP', data)
   },
 
-  async patchComponentSet({ commit, state, dispatch }, { id, componentSet }) {
-    const { data } = await patchComponentSet(id, componentSet)
+  async patchComponentSet({ commit, state, dispatch }, { id, attrs }) {
+    const { data } = await patchComponentSet(id, attrs)
     commit('SET_NODES_TO_MAP', data)
   },
 
@@ -271,12 +287,12 @@ function rollbackSelectedComponentSet(deltaGroup) {
   }
 
   const id = objectHasAnyKey(deltaGroup[0])
-  const { editingProjectId, componentsMap } = store.state.component
-  const node = componentsMap[id]
-  const isTop = node.parentId === editingProjectId
-  // 代表不是巢狀node tree裡面的 componentSet,是最頂層project下的componentSet
-  if (isTop) {
-    store.dispatch('app/addSelectedComponentSetInIds', id, { root: true })
+  const { editingProjectId } = store.state.component
+  const rootComponentSetId = getRootComponentSetId(id)
+  if (rootComponentSetId !== editingProjectId) {
+    store.dispatch('app/addSelectedComponentSetInIds', rootComponentSetId, {
+      root: true
+    })
   }
 
   return true

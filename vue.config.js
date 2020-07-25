@@ -6,7 +6,7 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 const fs = require('fs')
 
 module.exports = {
-  // transpileDependencies: ['element-ui', 'vue-grid-generator', 'vue', 'vue-clamp', 'resize-detector'],
+  transpileDependencies: ['element-ui', 'vue-grid-generator', 'vue', 'vue-clamp', 'resize-detector'],
   runtimeCompiler: true,
   devServer: {
     https: true,

@@ -12,7 +12,6 @@
 2<li>自己的project有引用的，有修改的都可以直接儲存了，因為不會引響到其他專案</li>
 5<li>search panel</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用state 的結構去做 click hover active 等等切換componentSet，這個要去另一個版操作，向XD的prototype</li>
-5<li>瀏覽器資源，手機版只能預覽，預覽要修正bug</li>
 2<li>componentSet 裡面的compopentSet 分離，不要隨著源頭跟動</li>
 20<li>可瀏覽 production版本</li>
 </ol>
@@ -43,6 +42,7 @@
 ### Last
 
 <ol>
+<li>can embed iframe</li>
 <li>SEO首頁</li>
 <li>怎麼讓使用者更好選上下node</li>
 <li>試試看能不能解決 drawer的layout</li>

@@ -1,5 +1,5 @@
-import { mapMutations, mapState } from 'vuex'
-import { CHILDREN, GRID_ITEM, TAG } from '@/const'
+import { mapActions, mapMutations, mapState } from 'vuex'
+import { CHILDREN, TAG } from '@/const'
 import { cloneJson, traversal, arrayLast } from '@/utils/tool'
 import { traversalChildrenOf, isComponentSet, getNode } from '@/utils/node'
 import { appendIdNested } from '@/utils/nodeId'
@@ -61,12 +61,13 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
-    ...mapMutations('component', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
+    ...mapMutations('component', ['RECORD']),
+    ...mapActions('component', ['setEditingComponentSetId']),
 
     _addNodesToParentAndRecord(nodeTree = {}) {
       // nodeTree should be single node instead of an array
       // could be triggered by copy, delete
-      this.SET_EDITING_COMPONENT_SET_ID(this.rootComponentSetId)
+      this.setEditingComponentSetId(this.rootComponentSetId)
       const records = []
 
       nodeTree = cloneJson(nodeTree)
