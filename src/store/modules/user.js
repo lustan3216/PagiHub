@@ -3,13 +3,12 @@ import { getCurrentUser } from '@/api/user'
 import { Auth } from 'aws-amplify'
 
 const state = {
-  id: 'Facebook_3189364354449003',
-  email: 'et3216@gmail.com',
+  id: null,
+  email: null,
   verified: false,
-  coverPhoto:
-    'https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=3189364354449003&height=200&width=200&ext=1598172526&hash=AeT17JIS-6xPAW3k',
-  username: 'username',
-  description: 'dewdew',
+  coverPhoto: null,
+  username: null,
+  description: null,
   facebookId: null,
   instagramId: null
 }

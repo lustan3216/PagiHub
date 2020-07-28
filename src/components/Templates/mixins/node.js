@@ -1,5 +1,5 @@
 import { vmAppend, vmRemove } from '@/utils/vmMap'
-import { deepmerge, cloneJson } from '@/utils/tool'
+import { objectAssign, cloneJson } from '@/utils/tool'
 import { STYLE, PROPS, VALUE, GRID_GENERATOR, MASTER_ID, ID } from '@/const'
 import style from '@/directive/style'
 import { directive } from '@/directive/freeStyle'
@@ -49,7 +49,7 @@ export default {
     },
     innerProps() {
       const setting = cloneJson(this.$options.defaultSetting || {})
-      return deepmerge(setting, this.masterProps, this.selfProps)
+      return objectAssign(setting, this.masterProps, this.selfProps)
     }
   },
   created() {
@@ -95,6 +95,7 @@ export default {
     },
     watchMasterProps() {
       this.watch(`componentsMap.${this.masterId}.${PROPS}`, value => {
+        console.log(value)
         this.masterProps = value || {}
       })
     },

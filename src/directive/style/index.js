@@ -1,6 +1,6 @@
 import freeStyle, { directive as freeStyleDirective } from '../freeStyle'
 import { ObserveVisibility } from 'vue-observe-visibility'
-import { objectHasAnyValue, deepmerge } from '@/utils/tool'
+import { objectHasAnyValue, objectAssign } from '@/utils/tool'
 
 const directive = {
   update: method('update'),
@@ -41,7 +41,7 @@ function method(name) {
     //       ...binding,
     //       value(visible) {
     //         if (visible) {
-    //           const mergedStyle = deepmerge.all([
+    //           const mergedStyle = objectAssign.all([
     //             {},
     //             styles,
     //             { default: showStyle, id }

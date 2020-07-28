@@ -1,11 +1,21 @@
-1. style 能用
-2. component 能連結
-3. componentset 引用都正常
-4. 可外連 不用 domain 沒關係
+Pain points
+1. 設計師通點，RWD 溝通困難
+2. 設計師的動畫，以及同時 RWD，工程師 PM 不做，設計師自己乾爽
+3. 目前的套版都很死, 模板數量有限, 設計被定型
+4. 套版都很死的原因是因為 RWD 不好支援
+
+MVP
+1) style 能用
+2) component 能連結
+3) componentset 引用都正常
+4) 可外連 不用 domain 沒關係
 
 ### Functionality
 
 <ol>
+5<li>copy/paste between tabs</li>
+5<li>照片,svg 也要是公開分享的嗎？？？？ 如果想刪除的怎麼辦，偏向不要，但還是會被複製走</li>
+5<li>grid item 要可以比例伸展</li> 
 5<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed / fixed container</li> 
 3<li>有假死狀態可以做 剪下貼上</li>
 5<li>每個 component set 都可以組建合併得按鈕  / or 選版本 / 跟隨proejct裡面的變動，只是不同project的因為沒有主動更新所以也不會主動變動</li>
@@ -42,6 +52,9 @@
 ### Last
 
 <ol>
+<li>import Sketch</li>
+<li>table</li>
+<li>assets folder / component folder</li>
 <li>can embed iframe</li>
 <li>SEO首頁</li>
 <li>怎麼讓使用者更好選上下node</li>
@@ -51,7 +64,7 @@
 <li>description 用 editor</li>
 <li>form-item 需要指定el編輯</li>
 <li>暫時form 先不做</li>
-<li>SEO / sitemap / like一定高分一上才產</li></li>
+<li>SEO / sitemap / like一定高分一上才產</li>
 <li>like</li>
 <li>fork</li>
 <li>aws 要做安全機制</li>
@@ -78,21 +91,35 @@
 https://bhch.github.io/posts/2019/03/adding-rotation-handles-in-interact-js/
 https://codepen.io/taye/pen/wrrxKb
 <li>embed iframe,iframe 要可以自動 resize</li>
+<li>設計師牆</li>
+Better Asset Management https://wishlist.webflow.com/ideas/WEBFLOW-I-1057
+Webflow Desktop / Offline Application https://wishlist.webflow.com/ideas/DESIGNER-I-13
 </ol>
 
+主打做 content 管理的功能，想辦法讓前端工程師最好用最省力，族群一開推設計師和接案者
+
 付費功能 {
-私人專案
+Real-time filtering/sorting on website https://wishlist.webflow.com/ideas/WEBFLOW-I-59
+User login and membership functionality https://wishlist.webflow.com/ideas/DESIGNER-I-11
+Multi-language sites and CMS fields https://wishlist.webflow.com/ideas/WEBFLOW-I-58
+Component Marketplace https://wishlist.webflow.com/ideas/WEBFLOW-I-71
+可讓工程是自己開發 API，跟我們的 component 結合，並顯示資料，一個畫面可打一隻 API，每個 component 選擇 json 裡面巢狀的資料
+user management，每個 component 可根據不同 user 換不同 component
+私人專案 以個數計費
 且可內船 data or 外傳，而且是 reactive 的，可以互動
 anaylistic daily data
 host in own domain,
 擴充字體 / webfontloader
-form submit amount 1000, can be deleted,
-connect to google sheet
+form submit amount 1000, can be deleted, 前 1 萬筆免費，後面開始收錢每多少收一次
+connect to google sheet 跟上面一樣
 可上傳影音
-多國語言
 可以有預覽版本，分享給別人看，並且可以下 comment
+最終還是要做 payment 的...
 }
+上面的功能要跟 aws 一樣有免費制度
 
+新的價格方案，每個需求都拆分，每個項目都是一個價格，他們可以用更便宜的價格挑他們想到即可
+購買幾個以上可以打折～
 payment / 下單 可參考 wix
 售價 參考 netflex 用多人收錢策略
 user needs to bring some users to open functions
@@ -117,3 +144,7 @@ masterId 記在 componentSet 就好
 每個 component 都要有 componentSetId
 form 裡面的設定的抓 componentSetId +componentId 如果有 master 就抓 masterId + componentId
 masterId 只要記得上一個複製的源頭就可以
+page interactions can’t be copied
+
+PM 直接做完，可以設計師接著做
+避風港機制 三振條款

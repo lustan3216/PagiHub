@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "asd57f8dbfa_identitypool_57f8dbfa",
+    "identityPoolName": "asd6d86e773_identitypool_6d86e773",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "asd57f8dbfa",
-    "userPoolName": "asd57f8dbfa_userpool_57f8dbfa",
+    "resourceNameTruncated": "asd6d86e773",
+    "userPoolName": "asd6d86e773_userpool_6d86e773",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "asd57f57f8dbfa_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "asd6d86d86e773_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "57f8dbfa",
-    "resourceName": "asd57f8dbfa",
+    "sharedId": "6d86e773",
+    "resourceName": "asd6d86e773",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -50,13 +50,18 @@
     "usernameAttributes": [
         "email"
     ],
-    "hostedUIDomainName": "asd57f8dbfa-57f8dbfa",
+    "triggers": "{}",
+    "hostedUIDomainName": "staging",
     "authProvidersUserPool": [
         "Facebook",
         "Google"
     ],
     "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://localhost:8080/\"],\"LogoutURLs\":[\"https://localhost:8080/\"]}",
     "userPoolGroupList": [],
-    "dependsOn": []
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "permissions": [],
+    "dependsOn": [],
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://staging.lots.design/\",\"https://localhost:8080/\",\"https://d3krzgs8wl8eha.cloudfront.net/\"],\"LogoutURLs\":[\"https://staging.lots.design/\",\"https://localhost:8080/\",\"https://d3krzgs8wl8eha.cloudfront.net/\"]}"
 }

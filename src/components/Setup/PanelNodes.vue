@@ -11,10 +11,10 @@
       ref="tree"
       :filter-node-method="filterTagBySearching"
       :data="innerTree"
-      :default-expanded-keys="selectedComponentIds"
       :indent="12"
       :allow-drop="allowDrop"
       :expand-on-click-node="false"
+      default-expand-all
       class="tree"
       node-key="id"
       highlight-current

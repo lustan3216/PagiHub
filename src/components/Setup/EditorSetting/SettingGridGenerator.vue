@@ -26,7 +26,7 @@
 <script>
 import RulesGenerator from './Common/RulesGenerator'
 import { boolean, assignDefaultValue, number } from './utils/ruleTool'
-import { deepmerge } from '@/utils/tool'
+import { objectAssign } from '@/utils/tool'
 
 export const defaultSetting = {
   isResizable: true,
@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     currentProps() {
-      return deepmerge({}, defaultSetting, this.componentsMap[this.id].props)
+      return objectAssign({}, defaultSetting, this.componentsMap[this.id].props)
     },
     responsive() {
       return this.currentProps.responsive === true

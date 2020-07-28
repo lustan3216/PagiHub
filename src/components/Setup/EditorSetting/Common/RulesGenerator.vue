@@ -75,7 +75,12 @@ export default {
 
       defaultValueCache[rule.field] = rule.value
       rule.value = getValueByPath(vmProps, path, rule.value)
-      rule.on = { change: value => this.updateRecord(rule, value) }
+      rule.on = {
+        change: value => {
+          console.log(rule, value)
+          this.updateRecord(rule, value)
+        }
+      }
     },
     updateRecord(rule, value) {
       this.api.setValue(rule.field, value)

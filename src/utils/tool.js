@@ -1,4 +1,4 @@
-import deepmerge from 'deepmerge'
+import objectAssign from 'object-assign'
 import { isUndefined, isString } from 'element-ui/src/utils/types'
 import isPlainObject from 'is-plain-object'
 import getValueByPath from 'lodash.get'
@@ -9,7 +9,7 @@ export {
   isPlainObject,
   isString,
   getValueByPath,
-  deepmerge,
+  objectAssign,
   on,
   off
 }

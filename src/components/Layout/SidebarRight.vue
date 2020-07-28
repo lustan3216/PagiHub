@@ -62,10 +62,8 @@ export default {
 <style scoped lang="scss">
 .sidebar-right {
   width: 320px;
-  z-index: 100;
-  position: absolute;
-  right: 0;
   padding: 10px 0;
+  background-color: $color-white;
 }
 
 ::v-deep {

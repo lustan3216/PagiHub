@@ -6,7 +6,7 @@
     "build": "vue-cli-service build --report",
     "test": "cypress open",
     "lint": "vue-cli-service lint --fix",
-    "deploy": "vue-cli-service build && vue-cli-service s3-deploy",
+    "deploy": "yarn purge && vue-cli-service build && vue-cli-service s3-deploy",
     "dev": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js serve --open",
     "purge": "rm -rf ./node_modules/.cache/hard-source"
   },
