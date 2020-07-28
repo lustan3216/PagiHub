@@ -14,6 +14,7 @@ module.exports = {
     'resize-detector'
   ],
   // runtimeCompiler: true,
+  productionSourceMap: false,
   devServer: {
     https: true,
     key: fs.readFileSync('./localhost.key'),

@@ -30,7 +30,7 @@ const mutations = {
     const { selectedComponentSetIds } = state
     const isExist = selectedComponentSetIds.includes(id)
     if (!isExist) {
-      state.copyComponentIds.push(id)
+      state.selectedComponentSetIds.push(id)
     }
   },
   SET_SELECTED_COMPONENT_ID(state, id) {

@@ -30,6 +30,8 @@ import {
   recordRootComponentSetIdByArray
 } from '@/utils/rootComponentSetId'
 
+const root = { root: true }
+
 let childrenOf = {}
 
 const state = {
@@ -197,15 +199,15 @@ const actions = {
     recordRootComponentSetIdByArray(id, componentsArray)
   },
 
-  async getComponentSets({ commit, state }, projectId) {
+  async getComponentSets({ dispatch, commit, state }, projectId) {
     const { data: nodes } = await getComponentSets(projectId)
     commit('SET_NODES_TO_MAP', nodes)
+    if (nodes[0] && nodes[0].id) {
+      dispatch('app/addSelectedComponentSetInIds', nodes[0].id, root)
+    }
   },
 
-  async createComponentSet(
-    { commit, state, dispatch },
-    { projectId, attrs }
-  ) {
+  async createComponentSet({ commit, state, dispatch }, { projectId, attrs }) {
     const { data } = await createComponentSet(projectId, attrs)
 
     // const componentSet = await createComponentSet({
@@ -216,6 +218,7 @@ const actions = {
     // })
 
     dispatch('app/toggleSelectedComponentSetInIds', data.id, { root: true })
+    commit('app/addSelectedComponentSetInIds', data.id, root)
     commit('SET_NODES_TO_MAP', data)
   },
 
