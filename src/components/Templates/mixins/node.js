@@ -95,7 +95,6 @@ export default {
     },
     watchMasterProps() {
       this.watch(`componentsMap.${this.masterId}.${PROPS}`, value => {
-        console.log(value)
         this.masterProps = value || {}
       })
     },
