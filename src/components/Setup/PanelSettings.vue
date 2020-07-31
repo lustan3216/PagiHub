@@ -2,17 +2,24 @@
   <component
     v-if="hasComponent"
     :is="componentTag"
-    :id="selectedComponentId"
+    :id="id"
     class="p-r-10"
   />
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import { bigCamelCase } from '@/utils/string'
+import { getNode } from '@/utils/node'
 
 const self = {
   name: 'PanelSettings',
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     SettingDrawer: () => import('./EditorSetting/SettingDrawer'),
     SettingDivider: () => import('./EditorSetting/SettingDivider'),
@@ -39,48 +46,17 @@ const self = {
     SettingFormTextarea: () => import('./EditorSetting/SettingFormTextarea'),
     SettingFormTimePicker: () => import('./EditorSetting/SettingFormTimePicker')
   },
-  data() {
-    return {
-      selectedComponentId: null
-    }
-  },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     ...mapState('component', ['componentsMap']),
-    ...mapGetters('app', [
-      'selectedComponentNode',
-      'theOnlySelectedComponentId'
-    ]),
-    allSameTag() {
-      let same = true
-      for (let i = 0; i < this.selectedComponentIds.length - 1; i++) {
-        const id = this.selectedComponentIds[i]
-        const nextId = this.selectedComponentIds[i + 1]
-        if (this.componentsMap[id].tag !== this.componentsMap[nextId].tag) {
-          same = false
-          break
-        }
-      }
-
-      return same && this.selectedComponentIds.length
+    node() {
+      return getNode(this.id)
     },
     hasComponent() {
-      return (
-        this.selectedComponentId &&
-        this.selectedComponentNode &&
-        self.components[this.componentTag]
-      )
+      return this.node && self.components[this.componentTag]
     },
     componentTag() {
-      return `Setting${bigCamelCase(this.selectedComponentNode.tag)}`
-    }
-  },
-  watch: {
-    theOnlySelectedComponentId(value) {
-      setTimeout(() => {
-        // to solve the performance problem
-        this.selectedComponentId = value
-      })
+      return `Setting${bigCamelCase(this.node.tag)}`
     }
   }
 }

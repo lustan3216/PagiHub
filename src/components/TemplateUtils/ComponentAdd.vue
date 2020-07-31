@@ -22,13 +22,18 @@
 
 <script>
 import ComponentTabs from './ComponentTabs'
+import { vmAddNodesToParentAndRecord } from '@/utils/vmMap'
 
 export default {
-  name: 'ExampleAdd',
+  name: 'ComponentAdd',
   components: {
     ComponentTabs
   },
   props: {
+    id: {
+      type: String,
+      required: true
+    },
     button: {
       type: Boolean,
       default: false
@@ -42,7 +47,7 @@ export default {
   },
   methods: {
     addTemplate(template) {
-      this.$emit('onAdd', template)
+      vmAddNodesToParentAndRecord(this.id, template)
       this.selectedName = template.tag
       this.visible = false
     }
@@ -51,15 +56,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  ::v-deep.tabs > div > .el-tabs__nav-wrap {
-    width: 250px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  ::v-deep.dialog > .el-dialog__header {
-    padding: 0;
-  }
-  .component {
-    height: 200px;
-  }
+::v-deep.tabs > div > .el-tabs__nav-wrap {
+  margin-left: auto;
+  margin-right: auto;
+}
+::v-deep.dialog > .el-dialog__header {
+  padding: 0;
+}
+.component {
+  height: 200px;
+}
 </style>

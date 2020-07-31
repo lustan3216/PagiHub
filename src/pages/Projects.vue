@@ -1,5 +1,7 @@
 <template>
   <div class="wrapper">
+    <dialog-project button-text="Create Project" />
+
     <el-row :gutter="30">
       <el-col
         v-for="project in projects"
@@ -64,7 +66,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 import { Tag } from 'element-ui'
 import VClamp from 'vue-clamp'
 import DialogDelete from '@/components/Setup/DialogDelete'

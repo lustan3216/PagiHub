@@ -2,7 +2,6 @@
   <div
     v-free-view="freeViewOptions"
     class="wh-100"
-    @click="cleanEditingComponentSet"
   >
     <div
       ref="target"
@@ -22,7 +21,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import ViewPortCover from './ViewPortCover'
 import { directive } from '@/directive/freeView'
@@ -41,10 +40,9 @@ export default {
       scaleRatio: 1,
       canvasWidth: 0,
       freeViewOptions: {
-        moveCallback: this.moveCallback,
+        move: false,
         scaleCallback: this.scaleCallback,
-        targetSelector: '.free-view-target',
-        moveIgnoreSelector: '.selected.art-board'
+        targetSelector: '.free-view-target'
       }
     }
   },
@@ -61,7 +59,6 @@ export default {
     ...mapMutations('app', {
       appSET: 'SET'
     }),
-    ...mapActions('component', ['setEditingComponentSetId']),
     scaleRollback() {
       this.targetEl.style.webkitTransform = this.targetEl.style.transform = null
       this.scaleRatio = 1
@@ -71,14 +68,6 @@ export default {
     scaleCallback(event, { scaleRatio }) {
       this.appSET({ scaleRatio })
       this.scaleRatio = scaleRatio
-    },
-    moveCallback(event) {
-      this.setEditingComponentSetId(null)
-    },
-    cleanEditingComponentSet(event) {
-      if (!event.target.dataset.id) {
-        this.setEditingComponentSetId(null)
-      }
     }
   }
 }
@@ -86,7 +75,6 @@ export default {
 
 <style scoped lang="scss">
 .free-view-target {
-  padding: 40px 35px;
-  width: 4000px;
+  padding: 15px;
 }
 </style>

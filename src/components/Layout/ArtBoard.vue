@@ -1,24 +1,5 @@
 <template>
-  <div
-    v-if="node"
-    :class="{ 'no-action': !selected, selected }"
-    class="art-board"
-  >
-    <el-button
-      :style="{
-        fontSize: `${12 / scaleRatio}px`,
-        top: `${-30 / scaleRatio}px`
-      }"
-      type="text"
-      class="absolute"
-    >
-      <i
-        v-if="selected"
-        class="el-icon-edit-outline"
-      /> {{ node.label }}
-    </el-button>
-    <component-set :id="node.id" />
-  </div>
+  <component-set :id="id" />
 </template>
 
 <script>
@@ -50,12 +31,8 @@ export default {
   },
   computed: {
     ...mapState('app', ['scaleRatio']),
-    ...mapState('component', ['editingComponentSetId']),
     node() {
       return this.componentsMap[this.id]
-    },
-    selected() {
-      return this.editingComponentSetId === this.id
     }
   },
   methods: {
@@ -65,10 +42,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.art-board {
-  overflow: scroll;
-  height: 100%;
-}
-</style>

@@ -23,7 +23,7 @@ const actions = {
     }
 
     inited = true
-    const basicExamples = [...basic, ...formItem]
+    const basicExamples = basic
     appendIdNested(basicExamples)
 
     const basicExamplesMap = {}

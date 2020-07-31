@@ -1,89 +1,72 @@
 <template>
-  <div class="p-r-10 fake-transform">
-    <div>
-      <el-button type="text">Art Boards</el-button>
-      <el-input
-        v-model="filterText"
-        placeholder="输入关键字进行过滤"
-        size="small"
-        class="m-b-10 transparent"
-      />
+  <div>
+    <el-button type="text">Component Set</el-button>
 
-      <dialog-component-set
-        v-if="projectId"
-        :parent-id="projectId"
-        button-text="Create Board"
-      />
+    <dialog-component-set
+      v-if="projectId"
+      :parent-id="projectId"
+      button-text="Create"
+    />
 
-      <el-tree
-        ref="tree"
-        :data="rootComponentSets"
-        :filter-node-method="filterTagBySearching"
-        :indent="16"
-        :allow-drop="allowDrop"
-        class="tree"
-        node-key="id"
-        draggable
-        check-strictly
-        @node-drop="nodeParentChange"
+    <el-tree
+      ref="tree"
+      :data="rootComponentSets"
+      :indent="16"
+      :allow-drop="allowDrop"
+      class="tree"
+      node-key="id"
+      draggable
+      check-strictly
+      @node-drop="nodeParentChange"
+    >
+      <span
+        slot-scope="{ data: node }"
+        class="justify-between align-center w-100 node"
+        @click="nodeClick($event, node)"
+        @mouseenter="hoveredId = node.id"
       >
-        <span
-          slot-scope="{ data: node }"
-          class="justify-between align-center w-100 node"
-          @click="nodeClick($event, node)"
-          @mouseenter="hoveredId = node.id"
+        <el-button
+          :class="{ selected: editingComponentSetId === node.id }"
+          :icon="icon[node.kind]"
+          type="text"
+          class="m-r-10"
         >
-          <el-button
-            :class="{ selected: selectedComponentSetIds.includes(node.id) }"
-            :icon="icon[node.kind]"
-            type="text"
-            class="m-r-10"
-          >
-            {{ node.label }} - {{ shortId(node.id) }}
-          </el-button>
+          {{ node.label }} - {{ shortId(node.id) }}
+        </el-button>
 
-          <transition name="fade">
-            <span v-if="hoveredId === node.id">
-              <!--              <dialog-folder-->
-              <!--                v-if="isProject(node)"-->
-              <!--                :parent-id="node.id"-->
-              <!--                class="m-l-5"-->
-              <!--              />-->
+        <transition name="fade">
+          <span v-if="hoveredId === node.id">
+            <dialog-delete
+              v-if="isComponentSet(node) || isFolder(node)"
+              :id="node.id"
+              class="m-l-5"
+            />
 
-              <dialog-delete
-                v-if="isComponentSet(node) || isFolder(node)"
-                :id="node.id"
-                class="m-l-5"
-              />
-
-              <component
-                :key="node.updatedAt"
-                :id="node.id"
-                :parent-id="node.parentId"
-                :is="`dialog-${kebabCase(typeString(node))}`"
-                class="m-l-5"
-              />
-            </span>
-          </transition>
-        </span>
-      </el-tree>
-    </div>
+            <component
+              :key="node.updatedAt"
+              :id="node.id"
+              :parent-id="node.parentId"
+              :is="`dialog-${kebabCase(typeString(node))}`"
+              class="m-l-5"
+            />
+          </span>
+        </transition>
+      </span>
+    </el-tree>
   </div>
 </template>
 
 <script>
 import { Tree } from 'element-ui'
-import { mapState, mapActions } from 'vuex'
-import { NODE_TYPE, NODE_TYPE_STRING, KIND } from '@/const'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { NODE_TYPE, NODE_TYPE_STRING } from '@/const'
 import DialogProject from './DialogProject'
 import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
 import { kebabCase } from '@/utils/string'
 import { shortId } from '@/utils/node'
-
 import { isComponentSet, isProject, isFolder, typeString } from '@/utils/node'
-import dblClick from '@/utils/dblClick'
 
 export default {
   name: 'PanelProject',
@@ -96,15 +79,13 @@ export default {
   },
   data() {
     return {
-      filterText: '',
       NODE_TYPE_STRING,
       ...NODE_TYPE,
       hoveredId: null
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentSetIds']),
-    ...mapState('component', ['rootComponentSetIds']),
+    ...mapState('component', ['rootComponentSetIds', 'editingComponentSetId']),
     projectId() {
       return this.$route.params.projectId
     },
@@ -122,9 +103,13 @@ export default {
       })
     }
   },
-  watch: {
-    filterText(val) {
-      this.$refs.tree.filter(val)
+  created() {
+    const { projectId } = this.$route.params
+    if (projectId) {
+      this.getComponentSets(projectId)
+      this.componentSet({
+        editingProjectId: projectId
+      })
     }
   },
   methods: {
@@ -134,11 +119,9 @@ export default {
     typeString,
     kebabCase,
     shortId,
-    ...mapActions('app', [
-      'toggleSelectedComponentSetInIds',
-      'toggleSelectedComponentSetId'
-    ]),
-    ...mapActions('component', ['modifyProjectNodeParent']),
+    ...mapMutations('component', { componentSet: 'SET' }),
+    ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
+    ...mapActions('component', ['modifyProjectNodeParent', 'getComponentSets']),
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {
         this.modifyProjectNodeParent({
@@ -148,30 +131,12 @@ export default {
       }
     },
     nodeClick(event, node) {
-      if (NODE_TYPE.COMPONENT_SET === node[KIND]) {
-        dblClick(
-          () => {
-            if (event.ctrlKey || event.metaKey) {
-              this.toggleSelectedComponentSetInIds(node.id)
-            } else {
-              this.toggleSelectedComponentSetId(node.id)
-            }
-          },
-          () => {
-            if (!this.selectedComponentSetIds.includes(node.id)) {
-              this.toggleSelectedComponentSetInIds(node.id)
-            }
-            // this.selectedComponentSet = node
-          }
-        )
+      if (isComponentSet(node)) {
+        this.SET_EDITING_COMPONENT_SET_ID(node.id)
       }
     },
     allowDrop(_, { data: node }, action) {
       return action === 'inner' && (this.isFolder(node) || this.isProject(node))
-    },
-    filterTagBySearching(value, data) {
-      value = value.toLowerCase().toString()
-      return data.name.toLowerCase().indexOf(value) !== -1
     }
   }
 }

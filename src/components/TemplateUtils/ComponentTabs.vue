@@ -2,6 +2,7 @@
   <el-tabs
     v-model="currentCategory"
     class="tabs no-select"
+    tab-position="left"
     stretch
   >
     <el-tab-pane
@@ -13,28 +14,28 @@
       class="p-10"
     >
       <el-row
-        :gutter="15"
+        :gutter="25"
         type="flex"
         style="flex-wrap: wrap"
       >
         <el-col
           v-for="component in components[category]"
           :key="component.id"
-          :xs="24"
-          class="m-b-15"
+          :span="6"
+          style="margin-bottom: 35px;"
         >
-          <div
-            class="transparent shadow-button fake-transform card"
-            draggable="true"
-            @dragstart="$event.dataTransfer.setData('id', component.id)"
-          >
-            <el-button
-              class="grab"
-              type="text"
-            >
-              {{ shortTagName(component) }}
-            </el-button>
-            <div class="relative z-index1 component">
+          <div class="card">
+            <div class="p-10 justify-between">
+              <span>
+                {{ shortTagName(component) }}
+              </span>
+
+              <el-button @click="addTemplate(component)">
+                ADD
+              </el-button>
+            </div>
+
+            <div class="relative z-index1">
               <component
                 :is="
                   isComponentSet(component)
@@ -122,7 +123,6 @@ export default {
   }
 
   & > div > .el-tabs__nav-wrap {
-    width: 250px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -138,6 +138,9 @@ export default {
 }
 
 .card {
+  border: 1px solid $color-grey;
+  border-radius: 5px;
+  height: 100%;
   padding: 0 10px 10px;
 }
 </style>

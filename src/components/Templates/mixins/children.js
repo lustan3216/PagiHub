@@ -1,5 +1,5 @@
-import { mapActions, mapMutations, mapState } from 'vuex'
-import { CHILDREN, TAG } from '@/const'
+import { mapMutations, mapState } from 'vuex'
+import { CHILDREN, GRID_ITEM, TAG } from '@/const'
 import { cloneJson, traversal, arrayLast } from '@/utils/tool'
 import { traversalChildrenOf, isComponentSet, getNode } from '@/utils/node'
 import { appendIdNested } from '@/utils/nodeId'
@@ -61,13 +61,12 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
-    ...mapMutations('component', ['RECORD']),
-    ...mapActions('component', ['setEditingComponentSetId']),
+    ...mapMutations('component', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
 
     _addNodesToParentAndRecord(nodeTree = {}) {
       // nodeTree should be single node instead of an array
       // could be triggered by copy, delete
-      this.setEditingComponentSetId(this.rootComponentSetId)
+      this.SET_EDITING_COMPONENT_SET_ID(this.rootComponentSetId)
       const records = []
 
       nodeTree = cloneJson(nodeTree)
@@ -132,28 +131,19 @@ export default {
         })
       })
 
-      // for (let i = 0; i < this.parentNodes.length; i++) {
-      //   const { id, tag } = this.parentNodes[this.parentNodes.length - 1 - i]
-      //
-      //   if (tag === GRID_ITEM) {
-      //     selectedId = id
-      //     break
-      //   }
-      //
-      //   if (this.rootComponentSetIds.includes(id)) {
-      //     break
-      //   } else if (this.children.length === 1) {
-      //     // records.unshift({
-      //     //   path: id,
-      //     //   value: undefined
-      //     // })
-      //   } else {
-      //     selectedId = this.children[0].id
-      //     break
-      //   }
-      // }
+      for (let i = 0; i < this.parentNodes.length; i++) {
+        const { id, tag } = this.parentNodes[this.parentNodes.length - 1 - i]
 
-      this.SET_SELECTED_COMPONENT_ID(theNodeIdGonnaRemove.parentId)
+        if (tag === GRID_ITEM || this.rootComponentSetIds.includes(id)) {
+          break
+        } else if (this.children.length === 1) {
+          records.unshift({
+            path: id,
+            value: undefined
+          })
+        }
+      }
+
       this.RECORD(records)
     }
   }

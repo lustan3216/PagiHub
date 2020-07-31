@@ -44,6 +44,7 @@ export const number = (field, extraOptions = {}) => ({
   field,
   title: humanize(extraOptions.title || field),
   type: 'InputNumber',
+  controlsPosition: 'right',
   ...extraOptions
 })
 

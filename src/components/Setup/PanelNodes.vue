@@ -1,6 +1,5 @@
 <template>
-  <div class="p-r-10">
-    <el-button type="text">{{ componentSetName }}</el-button>
+  <div>
     <el-input
       v-model="filterText"
       placeholder="输入关键字进行过滤"
@@ -18,11 +17,10 @@
       class="tree"
       node-key="id"
       highlight-current
-      show-checkbox
       draggable
       check-strictly
       @node-drop="layerIndexChange"
-      @check="checkedChange"
+      @node-click="nodeClick"
     >
       <template v-slot="{ data }">
         <node-controller
@@ -30,7 +28,6 @@
           :id="data.id"
           :exclude="['copy', 'portal']"
           class="w-100"
-          @dblclick.native.stop="scrollIntoView(data.id)"
           @mouseenter.native.stop="hoverNode(data.id)"
           @mouseleave.native.stop="hoverLeaveNode(data.id)"
         />
@@ -83,7 +80,7 @@ export default {
       const cloneTree = cloneJson(tree)
       traversal(cloneTree, (node, parentNode) => {
         if (node.tag === LAYERS && node.children) {
-          node.children.sort((a, b) => a[SORT_INDEX] - b[SORT_INDEX])
+          node.children.sort((a, b) => b[SORT_INDEX] - a[SORT_INDEX])
         }
 
         if (node[SOFT_DELETE]) {
@@ -170,7 +167,7 @@ export default {
       value = value.toLowerCase().toString()
       return data.name.toLowerCase().indexOf(value) !== -1
     },
-    checkedChange({ id }) {
+    nodeClick({ id }) {
       if (this.pressCtrl) {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(id)
       } else {
@@ -178,6 +175,8 @@ export default {
           this.$refs.tree.setChecked(id, false)
         })
         this.TOGGLE_SELECTED_COMPONENT_ID(id)
+
+        this.scrollIntoView(id)
       }
     },
     hoverNode(id) {

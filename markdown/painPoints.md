@@ -1,3 +1,25 @@
+自己要先開發很多基礎有設計感的模板
+第一個打得族群，高客製化的 設計師和接案者，優先解決 RWD, 和 timeline 動畫
+第二個打得族群，工程師，他們可以直接使用 iframe 坎入，或坎入 iframe，且工程師可控制 iframe 內 json，控制顯示的字
+第三個打得族群，平民，已經有夠多厲害的設計，他們可以自由拉
+
+我的優勢
+速度超級快，體積很小，
+
+Pain points
+
+1. 設計師通點，RWD 溝通困難
+2. 設計師的動畫，以及同時 RWD，工程師 PM 不做，設計師自己乾爽
+3. 目前的套版都很死, 模板數量有限, 設計被定型
+4. 套版都很死的原因是因為 RWD 不好支援
+
+my advantage
+
+1. can publish as a web, even has a domain
+2. component can be Any design
+3. the components are public to share to anyone, which means users can reuse or restyle any component
+4. great RWD experience
+
 webflow disadvantages
 
 1. Not enough components

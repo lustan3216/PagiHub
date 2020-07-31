@@ -13,7 +13,7 @@ module.exports = {
     'vue-clamp',
     'resize-detector'
   ],
-  // runtimeCompiler: true,
+  runtimeCompiler: true,
   productionSourceMap: false,
   devServer: {
     https: true,

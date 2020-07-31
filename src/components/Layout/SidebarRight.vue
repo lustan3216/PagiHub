@@ -1,37 +1,28 @@
 <template>
   <div class="sidebar-right">
-    <node-info
-      v-if="theOnlySelectedComponentId"
-      :id="theOnlySelectedComponentId"
-      class="text-center block"
-      show-family
-    />
+    <el-button-group>
+      <el-button
+        icon="el-icon-s-operation"
+        @click="activePanel = 'PanelStyles'"
+      />
+      <el-button
+        icon="el-icon-setting"
+        @click="activePanel = 'PanelSettings'"
+      />
+    </el-button-group>
 
     <div class="sidebar-right-content">
-      <el-collapse
-        v-model="activeNames"
-        class="no-border"
-      >
-        <el-collapse-item
-          title="Style"
-          name="1"
-        >
-          <panel-styles class="panel" />
-        </el-collapse-item>
-
-        <el-collapse-item
-          title="Setting"
-          name="2"
-        >
-          <panel-settings class="panel" />
-        </el-collapse-item>
-      </el-collapse>
+      <component
+        v-if="theOnlySelectedComponentId"
+        :is="activePanel"
+        :id="theOnlySelectedComponentId"
+        class="panel"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { Collapse, CollapseItem } from 'element-ui'
 import { mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
@@ -44,13 +35,11 @@ export default {
     NodeInfo,
     PanelStyles,
     PanelSettings,
-    PanelExplain,
-    ElCollapse: Collapse,
-    ElCollapseItem: CollapseItem
+    PanelExplain
   },
   data() {
     return {
-      activeNames: ['1', '2']
+      activePanel: 'PanelStyles'
     }
   },
   computed: {
@@ -63,7 +52,8 @@ export default {
 .sidebar-right {
   width: 320px;
   padding: 10px 0;
-  background-color: $color-white;
+  background-color: white;
+  border-left: 1px solid $color-grey;
 }
 
 ::v-deep {

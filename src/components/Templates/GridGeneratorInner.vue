@@ -80,7 +80,7 @@ export default {
       return `padding:${this.innerProps.verticalMargin}px ${this.innerProps.horizontalMargin}px`
     },
     currentBreakPoint() {
-      if (this.innerProps.responsive || this.isExample) {
+      if (!this.innerProps.responsive || this.isExample) {
         return 'lg'
       } else {
         return points.find(
@@ -94,7 +94,7 @@ export default {
       handler(newChildren) {
         this.$nextTick(() => {
           this.itemAutoHeight(newChildren)
-          this.getCurrentLayout(newChildren)
+          this.getCurrentLayout(newChildren, this.currentBreakPoint)
         })
       },
       deep: true,
@@ -112,45 +112,45 @@ export default {
     'innerProps.horizontalMargin'() {
       this.childrenResize()
     },
-    currentBreakPoint() {
-      this.getCurrentLayout(this.innerChildren)
+    currentBreakPoint(value) {
+      this.getCurrentLayout(this.innerChildren, value)
     }
   },
   mounted() {
     this.width = this.$el.clientWidth
     this.$refs.gridGenerator.eventBus.$on(
       'updateWidth',
-      debounce(700, width => {
-        if (width) {
-          this.width = this.$el.clientWidth
+      debounce(380, width => {
+        const { clientWidth } = this.$el
+        if (width && this.width !== clientWidth) {
+          this.width = clientWidth
         }
       })
     )
   },
   methods: {
-    getCurrentLayout(children) {
-      this.layout = children.map((child, index) => ({
-        id: child.id,
-        i: child.i || index, // should not happen, but just prevent crash in case
-        x: this.findAncestorValue(index, 'x'),
-        y: this.findAncestorValue(index, 'y'),
-        w: this.findAncestorValue(index, 'w'),
-        h: this.findAncestorValue(index, 'h')
-      }))
+    getCurrentLayout(children, breakPoint) {
+      const layout = children.map((child, index) => {
+        return {
+          id: child.id,
+          i: child.id || index, // should not happen, but just prevent crash in case
+          x: this.findAncestorValue(children, breakPoint, index, 'x'),
+          y: this.findAncestorValue(children, breakPoint, index, 'y'),
+          w: this.findAncestorValue(children, breakPoint, index, 'w'),
+          h: this.findAncestorValue(children, breakPoint, index, 'h')
+        }
+      })
+
+      this.layout = layout
     },
-    findAncestorValue(childIndex, key) {
+    findAncestorValue(children, currentBreakPoint, childIndex, key) {
       // to avoid breakpoints data too large in the future
       // find value self first, once can't find it, here will try to find the closest value from parent
       let value
       // const points = ['lg', 'md', 'sm', 'xs', 'xxs']
-      const length = points.indexOf(this.currentBreakPoint)
+      const length = points.indexOf(currentBreakPoint)
       for (let i = length; i >= 0; i--) {
-        value = getValueByPath(this.innerChildren, [
-          childIndex,
-          PROPS,
-          points[i],
-          key
-        ])
+        value = getValueByPath(children, [childIndex, PROPS, points[i], key])
         if (Number.isInteger(value)) {
           break
         }
@@ -184,7 +184,7 @@ export default {
           })
         })
       })
-
+      console.log(records)
       this.RECORD(records)
     },
     itemAutoHeight(newChildren) {

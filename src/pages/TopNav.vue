@@ -8,15 +8,26 @@
       LotsDesign
     </el-button>
 
+    <div>
+      <portal-target name="nav-middle" />
+    </div>
+
     <div class="right">
-      <portal-target
-        name="TopNav"
-        class="inline-block m-l-15"
-      />
+      <el-button
+        type="text"
+        @click="$router.push('/help')"
+      >
+        Help
+      </el-button>
 
-      <dialog-project button-text="Create Project" />
+      <el-button
+        v-if="isLogin"
+        type="text"
+        @click="$router.push({ name: 'Projects' })"
+      >
+        Dashboard
+      </el-button>
 
-      <dropdown-user-menu v-if="isLogin" />
       <el-button
         v-else
         type="text"
@@ -32,15 +43,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import DropdownUserMenu from './components/DropdownUserMenu'
-import DialogProject from '@/components/Setup/DialogProject'
 
 export default {
   name: 'TopNav',
-  components: {
-    DropdownUserMenu,
-    DialogProject
-  },
   computed: {
     ...mapGetters('user', ['isLogin'])
   }
@@ -49,13 +54,19 @@ export default {
 
 <style scoped lang="scss">
 nav {
-  background-color: $color-white;
+  background-color: white;
+  border-bottom: 1px solid $color-grey;
   height: 40px;
   padding: 5px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
+
 .right {
   display: flex;
   justify-content: space-between;

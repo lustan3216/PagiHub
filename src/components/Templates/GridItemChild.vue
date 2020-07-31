@@ -14,24 +14,12 @@
         :id="currentNode.id"
       />
 
-      <component-drop-zone
-        v-else-if="isDraftMode && !isExample"
-        :id="id"
-        class="h-100"
+      <div
+        v-else-if="isDraftMode && !isExample && selected"
+        class="flex-center wh-100"
       >
-        <node-controller
-          :id="currentNode.id"
-          :exclude="['paste', 'delete']"
-          class="flex-center wh-100"
-        >
-          <template v-slot="{ data: { mouseIn } }">
-            <node-info
-              v-if="!mouseIn"
-              :id="currentNode.id"
-            />
-          </template>
-        </node-controller>
-      </component-drop-zone>
+        <component-add :id="id" size="large"/>
+      </div>
 
       <portal-target
         v-if="isDraftMode"
@@ -54,6 +42,7 @@ import NodeInfo from '../TemplateUtils/NodeInfo'
 export default {
   name: 'GridItemChild',
   components: {
+    ComponentAdd: () => import('../TemplateUtils/ComponentAdd'),
     ControllerLayer,
     NodeController,
     AsyncComponent,
@@ -62,12 +51,15 @@ export default {
   },
   mixins: [childrenMixin, nodeMixin],
   computed: {
-    ...mapState('app', ['isAnimating']),
+    ...mapState('app', ['isAnimating', 'selectedComponentIds']),
     currentNode() {
       return this.firstChild || this.node
     },
     firstChild() {
       return this.innerChildren[0]
+    },
+    selected() {
+      return this.selectedComponentIds.includes(this.id)
     }
   }
 }

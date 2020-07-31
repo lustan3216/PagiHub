@@ -4,12 +4,10 @@
     @mouseenter="mouseIn = true"
     @mouseleave="mouseIn = false"
   >
-    <slot :data="$data">
-      <node-info
-        :id="id"
-        class="m-r-10"
-      />
-    </slot>
+    <node-info
+      :id="id"
+      class="m-r-10"
+    />
 
     <transition-group
       name="fade"
@@ -20,7 +18,6 @@
         :key="1"
         class="flex m-r-10"
       >
-
         <el-button
           v-if="node.canNewItem"
           type="text"
@@ -42,21 +39,12 @@
           />
         </el-tooltip>
 
-        <!--        <example-add-->
-        <!--          v-if="isGridItem && hasNotChild"-->
-        <!--          :id="id"-->
-        <!--          style="width: 14px;"-->
-        <!--          @onAdd="vmAddNodesToParentAndRecord(id, $event)"-->
-        <!--        />-->
-
         <el-button
-          v-if="!exclude.includes('paste') && canPaste"
           type="text"
           icon="el-icon-copy-document"
           @click.stop="() => vmCopyNode(node)"
         />
         <el-button
-          v-if="!exclude.includes('delete') && canDelete"
           type="text"
           icon="el-icon-delete"
           @click.stop="() => vmRemoveNode(node)"
@@ -81,8 +69,6 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 import Touchable from './Touchable'
-import jsonHistory from '../../store/jsonHistory'
-import ExampleAdd from './ExampleAdd'
 import Visible from './Visible'
 import NodeInfo from './NodeInfo'
 import { CAN_NOT_COPY, CAN_NOT_DELETE, GRID_ITEM } from '@/const'
@@ -100,23 +86,16 @@ export default {
   components: {
     Visible,
     Touchable,
-    ExampleAdd,
     NodeInfo
   },
   props: {
     id: {
       type: String,
       required: true
-    },
-    exclude: {
-      type: Array,
-      default: () => []
     }
   },
   data() {
     return {
-      showVisible: false,
-      showTouchable: false,
       mouseIn: false
     }
   },

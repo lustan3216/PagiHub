@@ -31,7 +31,7 @@ import { objectAssign } from '@/utils/tool'
 export const defaultSetting = {
   isResizable: true,
   isDraggable: true,
-  preventCollision: false,
+  preventCollision: true,
   verticalCompact: false,
   responsive: true,
   rowHeight: 5,

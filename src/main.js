@@ -59,8 +59,6 @@ import {
   Col,
   ColorPicker,
   Loading,
-  Tooltip,
-  Popover,
   Form,
   FormItem
 } from 'element-ui'
@@ -87,8 +85,6 @@ Vue.use(TabPane)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(ColorPicker)
-Vue.use(Tooltip)
-Vue.use(Popover)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Loading.directive)

@@ -6,12 +6,9 @@ const state = {
   isAnimating: false,
   scaleRatio: 1,
   selectedComponentIds: [],
-  selectedComponentSetIds: [],
   copyComponentIds: [],
   dialog: null
 }
-
-const toRoot = { root: true }
 
 const mutations = {
   SET,
@@ -23,15 +20,7 @@ const mutations = {
   },
   RESET(state) {
     state.selectedComponentIds = []
-    state.selectedComponentSetIds = []
     state.copyComponentIds = []
-  },
-  PUSH_SELECTED_COMPONENT_SET_IDS(state, id) {
-    const { selectedComponentSetIds } = state
-    const isExist = selectedComponentSetIds.includes(id)
-    if (!isExist) {
-      state.selectedComponentSetIds.push(id)
-    }
   },
   SET_SELECTED_COMPONENT_ID(state, id) {
     state.selectedComponentIds = [id].filter(x => x)
@@ -60,39 +49,6 @@ const actions = {
 
     commit('SET', { copyComponentIds })
     return copyComponentIds
-  },
-  addSelectedComponentSetInIds({ dispatch, commit }, id) {
-    commit('PUSH_SELECTED_COMPONENT_SET_IDS', id)
-    dispatch('component/setEditingComponentSetId', id, toRoot)
-  },
-  toggleSelectedComponentSetInIds({ state, commit, dispatch }, id) {
-    const { selectedComponentSetIds } = state
-    const isExist = selectedComponentSetIds.includes(id)
-    if (isExist) {
-      commit('component/CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', id, toRoot)
-      commit('SET', {
-        selectedComponentSetIds: arraySubtract(selectedComponentSetIds, id)
-      })
-    } else {
-      dispatch('addSelectedComponentSetInIds', id)
-    }
-  },
-  toggleSelectedComponentSetId({ dispatch, commit }, id) {
-    const isExist = state.selectedComponentSetIds.includes(id)
-    if (isExist) {
-      commit('SET', { selectedComponentSetIds: [] })
-      commit('component/CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', id, toRoot)
-    } else {
-      commit('SET', { selectedComponentSetIds: [id] })
-      dispatch('component/setEditingComponentSetId', id, toRoot)
-    }
-  },
-  cleanSelectedComponentSetIds({ commit }, ids) {
-    const { selectedComponentSetIds } = state
-    commit('SET', {
-      selectedComponentSetIds: arraySubtract(selectedComponentSetIds, ids)
-    })
-    commit('component/CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', ids, toRoot)
   }
 }
 

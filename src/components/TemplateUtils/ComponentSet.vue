@@ -1,25 +1,27 @@
 <template>
   <controller-layer
     v-if="firstChild"
-    :border="false"
     :id="firstChild.id"
+    :border="false"
   >
     <async-component :id="firstChild.id" />
   </controller-layer>
-  <component-drop-zone
+  <div
     v-else
     :id="id"
-    class="wh-100"
-  />
+    class="wh-100 flex-center"
+  >
+    <component-add :id="id" />
+  </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import { ID, MASTER_ID } from '@/const'
 import AsyncComponent from './AsyncComponent'
 import ComponentDropZone from './ComponentDropZone'
 import ControllerLayer from './ControllerLayer'
 import childrenMixin from '@/components/Templates/mixins/children'
-import { ID, MASTER_ID } from '@/const'
 import { vmAppend } from '@/utils/vmMap'
 
 export default {
@@ -30,6 +32,7 @@ export default {
     }
   },
   components: {
+    ComponentAdd: () => import('./ComponentAdd'),
     AsyncComponent,
     ComponentDropZone,
     ControllerLayer

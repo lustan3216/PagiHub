@@ -10,9 +10,10 @@
     />
 
     <el-tooltip
+      v-if="isPreviewMode"
       effect="light"
       content="Close Preview"
-      placement="right"
+      placement="bottom"
     >
       <el-button
         v-shortkey="['esc']"
@@ -25,205 +26,110 @@
     </el-tooltip>
   </dialog-interacted>
 
-  <nav
-    v-else-if="isDraftMode"
-    class="flex"
-  >
-    <div class="icons m-l-10">
-      <el-tooltip
-        ref="1"
-        effect="light"
-        content="Components"
-        placement="right"
-      />
+  <nav v-else-if="isDraftMode">
+    <el-tooltip
+      effect="light"
+      content="Undo"
+      placement="bottom"
+    >
       <el-button
-        v-popover:1
-        v-shortkey="['c']"
-        class="shadow-button"
-        type="text"
-        icon="el-icon-circle-plus-outline"
-        @shortkey.native="panelIconClick('component-tabs')"
-        @click="panelIconClick('component-tabs')"
-      />
-
-      <el-tooltip
-        ref="11"
-        effect="light"
-        content="Components"
-        placement="right"
-      />
-      <el-button
-        v-popover:11
-        v-shortkey="['p']"
-        class="shadow-button"
-        type="text"
-        icon="el-icon-cherry"
-        @shortkey.native="panelIconClick('panel-project')"
-        @click="panelIconClick('panel-project')"
-      />
-
-      <el-tooltip
-        ref="3"
-        effect="light"
-        content="Project"
-        placement="right"
-      />
-      <el-button
-        v-popover:3
-        v-shortkey="['s']"
-        class="shadow-button"
-        type="text"
-        @shortkey.native="panelIconClick('panel-nodes')"
-        @click="panelIconClick('panel-nodes')"
-      >
-        <i
-          class="el-icon-grape"
-          style="transform: scale(-1);"
-        />
-      </el-button>
-
-      <i class="dot" />
-
-      <el-tooltip
-        ref="4"
-        effect="light"
-        content="Undo"
-        placement="right"
-      />
-      <el-button
-        v-popover:4
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
-        class="shadow-button"
         type="text"
         icon="el-icon-refresh-left"
         @shortkey.native="UNDO"
         @click="UNDO"
       />
+    </el-tooltip>
 
-      <el-tooltip
-        ref="5"
-        effect="light"
-        content="Redo"
-        placement="right"
-      />
+    <el-tooltip
+      effect="light"
+      content="Redo"
+      placement="bottom"
+    >
       <el-button
-        v-popover:5
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
-        class="shadow-button"
         type="text"
         icon="el-icon-refresh-right"
         @shortkey.native="REDO"
         @click="REDO"
       />
+    </el-tooltip>
 
-      <el-tooltip
-        ref="6"
-        effect="light"
-        content="Copy"
-        placement="right"
-      />
+    <el-tooltip
+      effect="light"
+      content="Copy"
+      placement="bottom"
+    >
       <el-button
-        v-popover:6
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
         :disabled="!selectedComponentIds.length"
-        class="shadow-button"
         type="text"
         icon="el-icon-document-copy"
         @shortkey.native="copy"
         @click="copy"
       />
+    </el-tooltip>
 
-      <el-tooltip
-        effect="light"
-        content="Paste Component"
-        placement="bottom"
-      >
-        <el-button
-          v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
-          :disabled="!copyComponentIds.length"
-          class="shadow-button"
-          type="text"
-          icon="el-icon-document-add"
-          size="small"
-          @click="multiPaste"
-          @shortkey.native="multiPaste"
-        />
-      </el-tooltip>
-
-      <el-tooltip
-        effect="light"
-        content="Cut Component"
-        placement="bottom"
-      >
-        <el-button
-          v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
-          :disabled="!selectedComponentNode"
-          class="shadow-button"
-          type="text"
-          icon="el-icon-scissors"
-          size="small"
-          @click="cut"
-          @shortkey.native="cut"
-        />
-      </el-tooltip>
-
+    <el-tooltip
+      effect="light"
+      content="Paste Component"
+      placement="bottom"
+    >
       <el-button
-        v-shortkey="{ del: ['del'], del: ['backspace'] }"
-        :disabled="!selectedComponentIds.length"
-        class="shadow-button"
+        v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
+        :disabled="!copyComponentIds.length"
         type="text"
-        icon="el-icon-delete"
-        @shortkey.native="multiDelete"
-        @click.stop="() => multiDelete"
+        icon="el-icon-document-add"
+        size="small"
+        @click="multiPaste"
+        @shortkey.native="multiPaste"
       />
+    </el-tooltip>
 
-      <el-popover
-        ref="7"
-        effect="light"
-        trigger="hover"
-        placement="right"
-      >
-        <span>Are u sure to Publish？</span>
-        <el-button
-          :disabled="!editingComponentSetId"
-          class="shadow-button"
-          type="info"
-          icon="el-icon-circle-check"
-          circle
-          @click="publish"
-        />
-      </el-popover>
-
-      <i class="dot" />
-
-      <el-tooltip
-        ref="8"
-        effect="light"
-        content="Preview"
-        placement="right"
-      />
+    <el-tooltip
+      effect="light"
+      content="Cut Component"
+      placement="bottom"
+    >
       <el-button
-        v-popover:8
+        v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
+        :disabled="!selectedComponentNode"
+        type="text"
+        icon="el-icon-scissors"
+        size="small"
+        @click="cut"
+        @shortkey.native="cut"
+      />
+    </el-tooltip>
+
+    <el-button
+      v-shortkey="{ del: ['del'], del: ['backspace'] }"
+      :disabled="!selectedComponentIds.length"
+      type="text"
+      icon="el-icon-delete"
+      @shortkey.native="multiDelete"
+      @click.stop="() => multiDelete"
+    />
+
+    <el-tooltip
+      effect="light"
+      content="Preview"
+      placement="bottom"
+    >
+      <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
         :disabled="!editingComponentSetId"
-        class="shadow-button"
         icon="el-icon-data-analysis"
         type="text"
         @click="SET_PREVIEW_MODE"
         @shortkey.native="SET_PREVIEW_MODE"
       />
+    </el-tooltip>
 
-      <el-button
-        :disabled="!editingComponentSetId"
-        class="shadow-button"
-        type="text"
-        icon="el-icon-upload"
-      />
-    </div>
-
-    <component
-      :is="currentPanel"
-      class="panel"
+    <el-button
+      :disabled="!editingComponentSetId"
+      type="text"
+      icon="el-icon-upload"
     />
   </nav>
 </template>
@@ -234,9 +140,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { Message } from 'element-ui'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
-import PanelProject from '../Setup/PanelProject'
-import ComponentTabs from '../TemplateUtils/ComponentTabs'
-import PanelNodes from '@/components/Setup/PanelNodes'
+import { Tooltip } from 'element-ui'
 
 import {
   vmAddNodesToParentAndRecord,
@@ -250,18 +154,9 @@ import jsonHistory from '@/store/jsonHistory'
 export default {
   name: 'FunctionBar',
   components: {
-    PanelProject,
-    ComponentTabs,
     DialogInteracted,
     DialogComponentSet,
-    PanelNodes
-  },
-  data() {
-    return {
-      projectVisible: true,
-      componentsVisible: false,
-      currentPanel: 'panel-project'
-    }
+    ElTooltip: Tooltip
   },
   computed: {
     ...mapState('app', [
@@ -278,12 +173,6 @@ export default {
       return this.selectedComponentIds.map(id => this.componentsMap[id])
     }
   },
-  created() {
-    this.$bus.$on('component-tabs-visible', () => {
-      this.projectVisible = false
-      this.componentsVisible = true
-    })
-  },
   methods: {
     ...mapActions('app', ['setCopySelectedNodeId']),
     ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_DRAFT_MODE']),
@@ -296,9 +185,6 @@ export default {
       if (length) {
         Message.info(`Copy ${length} Components`)
       }
-    },
-    panelIconClick(name) {
-      this.currentPanel = this.currentPanel === name ? null : name
     },
     vmCreateItem,
     vmCopyNode,
@@ -331,26 +217,6 @@ nav {
 .el-button {
   font-size: 16px;
   padding: 7px;
-  margin: 15px 5px 0;
-}
-
-.icons {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
-.panel {
-  width: 300px;
-  padding: 5px;
-}
-
-.dot {
-  width: 2px;
-  height: 2px;
-  background-color: #b1b1b1;
-  border-radius: 50%;
-  margin-top: 15px;
-  margin-bottom: 3px;
+  margin: 5px 10px;
 }
 </style>

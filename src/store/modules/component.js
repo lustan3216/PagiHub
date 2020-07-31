@@ -30,8 +30,6 @@ import {
   recordRootComponentSetIdByArray
 } from '@/utils/rootComponentSetId'
 
-const root = { root: true }
-
 let childrenOf = {}
 
 const state = {
@@ -145,24 +143,13 @@ const mutations = {
         jsonHistory.undo()
       })
     }
+  },
+  SET_EDITING_COMPONENT_SET_ID(state, id) {
+    state.editingComponentSetId = id
   }
 }
 
 const actions = {
-  setEditingComponentSetId({ commit, state }, id) {
-    if (state.editingComponentSetId !== id) {
-      commit('SET', { editingComponentSetId: id })
-      commit(
-        'app/SET',
-        {
-          selectedComponentIds: [],
-          copyComponentIds: []
-        },
-        { root: true }
-      )
-    }
-  },
-
   async getProjects({ commit }) {
     const { data } = await getProjects()
 
@@ -199,11 +186,11 @@ const actions = {
     recordRootComponentSetIdByArray(id, componentsArray)
   },
 
-  async getComponentSets({ dispatch, commit, state }, projectId) {
+  async getComponentSets({ commit, state }, projectId) {
     const { data: nodes } = await getComponentSets(projectId)
     commit('SET_NODES_TO_MAP', nodes)
     if (nodes[0] && nodes[0].id) {
-      dispatch('app/addSelectedComponentSetInIds', nodes[0].id, root)
+      commit('SET_EDITING_COMPONENT_SET_ID', nodes[0].id)
     }
   },
 
@@ -217,8 +204,7 @@ const actions = {
     //     : []
     // })
 
-    dispatch('app/toggleSelectedComponentSetInIds', data.id, { root: true })
-    commit('app/addSelectedComponentSetInIds', data.id, root)
+    commit('SET_EDITING_COMPONENT_SET_ID', data.id)
     commit('SET_NODES_TO_MAP', data)
   },
 
@@ -266,7 +252,7 @@ const actions = {
 
     gatherGrandChildrenIds(id)
 
-    dispatch('app/cleanSelectedComponentSetIds', ids, { root: true })
+    commit('CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', ids)
 
     ids.forEach(id => {
       if (isComponentSet(state.componentsMap[id])) {
@@ -293,7 +279,7 @@ function rollbackSelectedComponentSet(deltaGroup) {
   const { editingProjectId } = store.state.component
   const rootComponentSetId = getRootComponentSetId(id)
   if (rootComponentSetId !== editingProjectId) {
-    store.dispatch('app/addSelectedComponentSetInIds', rootComponentSetId, {
+    store.commit('component/SET_EDITING_COMPONENT_SET_ID', rootComponentSetId, {
       root: true
     })
   }

@@ -99,8 +99,13 @@ export default {
       })
     },
     hoverCover(hover) {
-      const $el =
-        this.node.tag === GRID_GENERATOR ? this.$el : this.$el.parentNode
+      if (!this.node) {
+        return
+      }
+
+      const $el = this.node.tag === GRID_GENERATOR
+        ? this.$el
+        : this.$el.parentNode
 
       if (hover) {
         const node = document.createElement('DIV')

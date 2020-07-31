@@ -68,13 +68,11 @@ import { mapActions, mapState } from 'vuex'
 import { label, max, min, required } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
-import ExampleAdd from '@/components/TemplateUtils/ExampleAdd'
 
 export default {
   name: 'DialogComponentSet',
   components: {
     DialogConfirmable,
-    ExampleAdd,
     SelectTag
   },
   props: {

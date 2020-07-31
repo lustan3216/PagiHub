@@ -32,7 +32,7 @@
     <!--      </el-radio-group>-->
     <!--    </div>-->
 
-    <div :key="theOnlySelectedComponentId + state">
+    <div :key="id + state">
       <padding
         v-if="canPadding"
         :value="styles.padding"
@@ -95,7 +95,7 @@
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
 import { STYLE } from '@/const'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
 import Dimension from './EditorStyle/Dimension'
@@ -110,6 +110,7 @@ import Transitions from './EditorStyle/Transitions'
 import { RadioGroup, RadioButton, Divider } from 'element-ui'
 import { vm, getComputedStyle } from '@/utils/vmMap'
 import { getValueByPath, asyncGetValue } from '@/utils/tool'
+import { getNode } from '@/utils/node'
 
 const computedAttrs = [
   'width',
@@ -150,6 +151,12 @@ export default {
     ElRadioGroup: RadioGroup,
     ElRadioButton: RadioButton
   },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       state: 'default',
@@ -158,10 +165,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('app', [
-      'selectedComponentNode',
-      'theOnlySelectedComponentId'
-    ]),
+    node() {
+      return getNode(this.id)
+    },
+    nodeTag() {
+      return this.node.tag
+    },
     canRadius() {
       return !['grid-generator'].includes(this.nodeTag)
     },
@@ -182,28 +191,9 @@ export default {
     },
     isDefaultState() {
       return this.state === 'default'
-    },
-    node() {
-      return this.selectedComponentNode
-    },
-    nodeTag() {
-      return this.node.tag
     }
   },
   watch: {
-    theOnlySelectedComponentId(id) {
-      if (!id) {
-        return
-      }
-
-      asyncGetValue(() => vm(id))
-        .then(() => {
-          this.valid = true
-        })
-        .catch(() => {
-          this.valid = false
-        })
-    },
     valid(value) {
       if (value) {
         this.calcStyles()
@@ -212,6 +202,15 @@ export default {
     state() {
       this.calcStyles()
     }
+  },
+  created() {
+    asyncGetValue(() => vm(this.id))
+      .then(() => {
+        this.valid = true
+      })
+      .catch(() => {
+        this.valid = false
+      })
   },
   methods: {
     ...mapMutations('component', ['RECORD']),
@@ -240,7 +239,6 @@ export default {
       this.styles = styles
     },
     assignStyles(object) {
-      // Object.assign(this.styles, object)
       const records = []
 
       for (const key in object) {

@@ -2,7 +2,7 @@
   <div>
     <top-nav />
 
-    <router-view />
+    <router-view style="padding-top: 50px;" />
 
     <transition name="fade">
       <component :is="dialog" />

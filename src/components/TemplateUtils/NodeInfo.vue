@@ -18,7 +18,7 @@
       class="el-tree-node__label"
     > > </span>
 
-    <el-button type="text"> {{ nodeShortName }} {{ shortId(id) }} </el-button>
+    <el-button type="text"> {{ nodeShortName }} - {{ shortId(id) }} </el-button>
 
     <span
       v-if="firstChildNode && showFamily"

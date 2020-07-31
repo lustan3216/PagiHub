@@ -151,11 +151,10 @@ export const drawer = function() {
 
 export default [
   layers(),
-  flexButton(),
+  editorText(),
   flexImage(),
   carousel(),
   divider(),
   videoPlayer(),
-  editorText(),
-  drawer()
+  flexButton()
 ]
