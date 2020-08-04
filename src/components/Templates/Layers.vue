@@ -12,7 +12,6 @@
       <grid-generator
         :style="{ 'z-index': index }"
         :class="{ absolute: index }"
-        :key="child.id"
         :id="child.id"
         :data-layer="Boolean(index)"
       />
@@ -37,7 +36,7 @@ export default {
   computed: {
     sortChildren() {
       return Array.from(this.innerChildren).sort(
-        (a, b) => a[SORT_INDEX] - b[SORT_INDEX]
+        (a, b) => b[SORT_INDEX] - a[SORT_INDEX]
       )
     }
   }

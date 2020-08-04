@@ -11,10 +11,6 @@
         <text-editor-style :editor="editor" />
       </portal>
 
-      <portal :to="`ControllerLayerTutorial${id}`">
-        <editor-text-tutorial />
-      </portal>
-
       <editor-menu-bubble
         :editor="editor"
         class="menububble"
@@ -194,14 +190,12 @@ import {
   LetterSpacing,
   LineHeight
 } from '../../vendor/tiptap'
-import EditorTextTutorial from '../Tutorial/EditorTextTutorial'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
   components: {
     EditorContent,
     EditorMenuBubble,
-    EditorTextTutorial,
     TextEditorStyle: () =>
       import('@/components/Setup/EditorStyle/TextEditorStyle')
   },

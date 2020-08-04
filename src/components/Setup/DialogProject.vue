@@ -38,20 +38,18 @@
           />
         </el-form-item>
 
-        <el-form-item
-          label="Tag"
-          prop="tag"
-        >
-          <select-tag
-            v-model="form.tags"
-            class="w-100"
-          />
-        </el-form-item>
-        <span>You can create tag but limitation is 5.</span>
-
-        <!--        <el-form-item label="Auto Update">-->
-        <!--          <el-checkbox v-model="form.autoUpdate" />-->
-        <!--        </el-form-item>-->
+        <template v-if="!isExist">
+          <el-form-item
+            label="Tag"
+            prop="tag"
+          >
+            <select-tag
+              v-model="form.tags"
+              class="w-100"
+            />
+          </el-form-item>
+          <span>You can create tag but limitation is 5.</span>
+        </template>
       </el-form>
     </dialog-confirmable>
   </el-button>

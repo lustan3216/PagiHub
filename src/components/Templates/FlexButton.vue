@@ -12,7 +12,7 @@
 
     <portal
       v-if="availableEvents.length"
-      :to="`GridItemChild${id}`"
+      :to="`QuickFunctions${id}`"
     >
       <el-tooltip
         effect="light"

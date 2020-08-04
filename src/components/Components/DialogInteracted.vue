@@ -117,7 +117,7 @@ export default {
           modifiers: [
             // keep the edges inside the parent
             interactjs.modifiers.restrictEdges({
-              // outer: 'parent'
+              outer: 'parent'
             }),
 
             // minimum size
@@ -159,7 +159,7 @@ export default {
           inertia: true,
           modifiers: [
             interactjs.modifiers.restrictRect({
-              // restriction: 'parent',
+              restriction: 'parent',
               endOnly: true
             })
           ],

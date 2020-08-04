@@ -45,8 +45,9 @@ export default {
   },
   watch: {
     firstChild: {
-      handler(node) {
-        if (node) {
+      handler(node, oldNode) {
+        if (node || (!node && oldNode)) {
+          // !node && oldNode 的情景是正在編輯時刪除
           return
         }
 

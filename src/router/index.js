@@ -38,7 +38,7 @@ export default new VueRouter({
     {
       path: '/:projectId/draft',
       name: 'Draft',
-      component: () => import('@/pages/Editor')
+      component: () => import('@/components/Layout/Interface')
     }
   ]
 })

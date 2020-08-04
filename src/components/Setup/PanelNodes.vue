@@ -1,50 +1,62 @@
 <template>
-  <div>
-    <el-input
-      v-model="filterText"
-      placeholder="输入关键字进行过滤"
-      size="small"
-      class="m-b-10 transparent"
-    />
-    <el-tree
-      ref="tree"
-      :filter-node-method="filterTagBySearching"
-      :data="innerTree"
-      :indent="12"
-      :allow-drop="allowDrop"
-      :expand-on-click-node="false"
-      default-expand-all
-      class="tree"
-      node-key="id"
-      highlight-current
-      draggable
-      check-strictly
-      @node-drop="layerIndexChange"
-      @node-click="nodeClick"
-    >
-      <template v-slot="{ data }">
-        <node-controller
-          v-if="data && data.id"
+  <el-tree
+    ref="tree"
+    :filter-node-method="filterTagBySearching"
+    :data="innerTree"
+    :indent="12"
+    :allow-drop="allowDrop"
+    :expand-on-click-node="false"
+    default-expand-all
+    class="tree"
+    node-key="id"
+    draggable
+    @node-drop="layerIndexChange"
+  >
+    <template v-slot="{ data }">
+      <div
+        v-if="data && data.id"
+        class="relative w-100 over-hidden"
+        @mouseenter.stop="hoverNode(data.id)"
+        @mouseleave.stop="hoverLeaveNode(data.id)"
+      >
+        <node-name
           :id="data.id"
-          :exclude="['copy', 'portal']"
-          class="w-100"
-          @mouseenter.native.stop="hoverNode(data.id)"
-          @mouseleave.native.stop="hoverLeaveNode(data.id)"
+          :class="{ active: selectedComponentIds.includes(data.id) }"
+          class="p-5 text-left"
+          editable
+          @click="nodeClick($event, data.id)"
         />
-      </template>
-    </el-tree>
-  </div>
+
+        <transition name="fade">
+          <node-controller
+            v-if="data.id === hoverId"
+            :id="data.id"
+            class="controller hover-color"
+          />
+        </transition>
+
+        <div
+          v-if="data.id !== hoverId"
+          class="controller"
+        >
+          <visible :id="data.id" />
+          <touchable :id="data.id" />
+        </div>
+      </div>
+    </template>
+  </el-tree>
 </template>
 
 <script>
 import { Tree } from 'element-ui'
 import { SORT_INDEX, LAYERS, SOFT_DELETE, PROPS, STYLE } from '@/const'
-import { mapState, mapMutations } from 'vuex'
-import { cloneJson, traversal, arraySubtract, deleteBy } from '@/utils/tool'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { cloneJson, traversal, deleteBy } from '@/utils/tool'
 import { shortTagName } from '@/utils/node'
-import { isMac } from '@/utils/device'
 import NodeController from '../TemplateUtils/NodeController'
-import { on, off } from 'element-ui/src/utils/dom'
+import NodeName from '../TemplateUtils/NodeName'
+import Touchable from '../TemplateUtils/Touchable'
+import Visible from '../TemplateUtils/Visible'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -52,13 +64,20 @@ export default {
   name: 'PanelNodes',
   components: {
     ElTree: Tree,
-    NodeController
+    NodeController,
+    NodeName,
+    Touchable,
+    Visible
+  },
+  props: {
+    filterText: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
-      filterText: '',
-      selected: null,
-      pressCtrl: false
+      hoverId: null
     }
   },
   computed: {
@@ -97,58 +116,15 @@ export default {
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val)
-    },
-    selectedComponentIds: {
-      handler(newValue) {
-        this.$nextTick(() => {
-          const { tree } = this.$refs
-          const checked = tree.getCheckedKeys()
-
-          arraySubtract(checked, newValue).forEach(id =>
-            tree.setChecked(id, false)
-          )
-          newValue.forEach(id => tree.setChecked(id, true))
-        })
-      },
-      immediate: true
     }
   },
-  mounted() {
-    on(window, 'keydown', this.keydwon)
-    on(window, 'keyup', this.keyup)
-  },
-  beforeDestroy() {
-    off(window, 'keydown', this.keydwon)
-    off(window, 'keyup', this.keyup)
-  },
   methods: {
+    ...mapActions('app', ['resizeNodeQuickFn']),
     ...mapMutations('app', [
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
       'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
     ...mapMutations('component', ['RECORD']),
-    keydwon(e) {
-      if (isMac()) {
-        if (e.metaKey) {
-          this.pressCtrl = true
-        }
-      } else {
-        if (e.ctrlKey) {
-          this.pressCtrl = true
-        }
-      }
-    },
-    keyup(e) {
-      if (isMac()) {
-        if (e.metaKey) {
-          this.pressCtrl = false
-        }
-      } else {
-        if (e.ctrlKey) {
-          this.pressCtrl = false
-        }
-      }
-    },
     allowDrop(drag, drop, action) {
       const sameLayer = drag.parent === drop.parent
       return sameLayer && ['prev', 'next'].includes(action)
@@ -163,26 +139,25 @@ export default {
 
       this.RECORD(records)
     },
-    filterTagBySearching(value, data) {
+    filterTagBySearching(value, { label, tag }) {
       value = value.toLowerCase().toString()
-      return data.name.toLowerCase().indexOf(value) !== -1
+      return (label || tag).toLowerCase().indexOf(value) !== -1
     },
-    nodeClick({ id }) {
-      if (this.pressCtrl) {
+    nodeClick(event, id) {
+      if (event.metaKey || event.ctrlKey) {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(id)
       } else {
-        this.selectedComponentIds.forEach(id => {
-          this.$refs.tree.setChecked(id, false)
-        })
         this.TOGGLE_SELECTED_COMPONENT_ID(id)
-
-        this.scrollIntoView(id)
       }
+      this.resizeNodeQuickFn()
+      this.scrollIntoView(id)
     },
     hoverNode(id) {
+      this.hoverId = id
       this.$bus.$emit(`hover-${id}`, true)
     },
     hoverLeaveNode(id) {
+      this.hoverId = null
       this.$bus.$emit(`hover-${id}`, false)
     },
     scrollIntoView(id) {
@@ -195,6 +170,19 @@ export default {
 <style scoped lang="scss">
 .tree {
   background: transparent;
-  overflow: scroll;
+}
+.controller {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: -1px;
+  text-align: right;
+  padding: 0 5px;
+}
+.hover-color {
+  background: #f5f7fa;
+}
+.active {
+  background-color: #f0f7ff;
 }
 </style>

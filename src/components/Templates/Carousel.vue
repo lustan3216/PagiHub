@@ -33,7 +33,7 @@
         class="layers"
       />
 
-      <portal :to="`GridItemChild${prevGridItemId}`">
+      <portal :to="`QuickFunctions${prevGridItemId}`">
         <el-tooltip
           effect="light"
           content="Replace Prev action in this button for nicer editing UX. It only shows in Draft mode."
@@ -48,7 +48,7 @@
         </el-tooltip>
       </portal>
 
-      <portal :to="`GridItemChild${nextGridItemId}`">
+      <portal :to="`QuickFunctions${nextGridItemId}`">
         <el-tooltip
           effect="light"
           content="Replace Next action in this button for nicer editing UX. It only shows in Draft mode."
@@ -73,6 +73,7 @@
       :arrow="arrow"
       draggable="false"
       class="wh-100"
+      @change="checkSelectedComponent"
     >
       <el-carousel-item
         v-for="child in gridGenerators"
@@ -89,6 +90,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 import interactjs from 'interactjs'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -98,6 +100,7 @@ import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, LABEL, LAYERS } from '@/const'
 import { CarouselItem, Carousel } from 'element-ui'
+import { traversal } from '@/utils/tool'
 
 export default {
   defaultSetting,
@@ -125,6 +128,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', ['selectedComponentIds']),
     gridGenerators() {
       return this.innerChildren.filter(x => x[LABEL] === 'slider')
     },
@@ -220,6 +224,18 @@ export default {
         }
       }
     })
+  },
+  methods: {
+    ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_ID']),
+    checkSelectedComponent(index, oldIndex) {
+      const { id } = this.gridGenerators[oldIndex]
+      const node = this.componentsMap[id]
+      const ids = []
+
+      traversal(node, ({ id }) => ids.push(id))
+
+      this.CLEAN_SELECTED_COMPONENT_ID(ids)
+    }
   }
 }
 </script>
@@ -235,11 +251,7 @@ export default {
   margin: 0;
 }
 
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
-
-.el-carousel__item:nth-child(2n + 1) {
+.el-carousel__item {
   background-color: #bbbec1;
 }
 .layers {

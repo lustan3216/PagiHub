@@ -1,15 +1,18 @@
 <template>
   <!--  should have observe-visibility here, otherwise some nested layout case, the grid layout will not work right-->
-  <div
+  <component
     v-observe-visibility="options"
-    class="h-100 border-box"
+    :is="isDraftMode && !isExample ? 'controller-layer' : 'div'"
+    :id="id"
+    :border="false"
+    class="h-100"
   >
     <component
       v-if="vIf"
       :is="tag"
       :id="id"
     />
-  </div>
+  </component>
 </template>
 
 <script>
@@ -26,6 +29,7 @@ export default {
     isExample: { default: false }
   },
   components: {
+    ControllerLayer: () => import('./ControllerLayer'),
     ComponentSet: () => import('./ComponentSet'),
 
     FlexImage: () => import('../Templates/FlexImage'),

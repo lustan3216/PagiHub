@@ -1,12 +1,9 @@
 <template>
   <div
     v-free-view="freeViewOptions"
-    class="wh-100"
+    class="p-15"
   >
-    <div
-      ref="target"
-      class="free-view-target"
-    >
+    <div ref="target">
       <slot />
     </div>
     <portal to="TopNav">
@@ -72,9 +69,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.free-view-target {
-  padding: 15px;
-}
-</style>

@@ -14,17 +14,26 @@
     </main>
 
     <sidebar-right v-if="isDraftMode" />
+
+    <portal-target
+      v-for="id in selectedComponentIds"
+      :name="`Interface-${id}`"
+    />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  name: 'Editor',
+  name: 'Interface',
   components: {
     SidebarRight: () => import('@/components/Layout/SidebarRight'),
     SidebarLeft: () => import('@/components/Layout/SidebarLeft'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
     PanelDraft: () => import('@/components/Layout/PanelDraft')
+  },
+  computed: {
+    ...mapState('app', ['selectedComponentIds'])
   }
 }
 </script>

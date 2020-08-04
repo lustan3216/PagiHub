@@ -1,59 +1,50 @@
 <template>
-  <div>
-    <el-button type="text">Component Set</el-button>
-
-    <dialog-component-set
-      v-if="projectId"
-      :parent-id="projectId"
-      button-text="Create"
-    />
-
-    <el-tree
-      ref="tree"
-      :data="rootComponentSets"
-      :indent="16"
-      :allow-drop="allowDrop"
-      class="tree"
-      node-key="id"
-      draggable
-      check-strictly
-      @node-drop="nodeParentChange"
-    >
-      <span
-        slot-scope="{ data: node }"
-        class="justify-between align-center w-100 node"
-        @click="nodeClick($event, node)"
-        @mouseenter="hoveredId = node.id"
+  <el-tree
+    ref="tree"
+    :data="rootComponentSets"
+    :indent="16"
+    :allow-drop="allowDrop"
+    class="tree"
+    node-key="id"
+    draggable
+    check-strictly
+    @node-drop="nodeParentChange"
+  >
+    <template v-slot="{ data }">
+      <div
+        v-if="data && data.id"
+        class="relative w-100 over-hidden"
+        @click="nodeClick($event, data)"
+        @mouseenter="hoverId = data.id"
+        @mouseleave="hoverId = null"
       >
-        <el-button
-          :class="{ selected: editingComponentSetId === node.id }"
-          :icon="icon[node.kind]"
-          type="text"
-          class="m-r-10"
-        >
-          {{ node.label }} - {{ shortId(node.id) }}
-        </el-button>
+        <node-name
+          :id="data.id"
+          :icon="icon[data.kind]"
+          class="w-100 text-left"
+        />
 
         <transition name="fade">
-          <span v-if="hoveredId === node.id">
+          <div
+            v-if="data.id === hoverId"
+            class="controller"
+          >
             <dialog-delete
-              v-if="isComponentSet(node) || isFolder(node)"
-              :id="node.id"
-              class="m-l-5"
+              v-if="isComponentSet(data) || isFolder(data)"
+              :id="data.id"
             />
 
             <component
-              :key="node.updatedAt"
-              :id="node.id"
-              :parent-id="node.parentId"
-              :is="`dialog-${kebabCase(typeString(node))}`"
-              class="m-l-5"
+              :key="data.updatedAt"
+              :id="data.id"
+              :parent-id="data.parentId"
+              :is="`dialog-${kebabCase(typeString(data))}`"
             />
-          </span>
+          </div>
         </transition>
-      </span>
-    </el-tree>
-  </div>
+      </div>
+    </template>
+  </el-tree>
 </template>
 
 <script>
@@ -64,6 +55,7 @@ import DialogProject from './DialogProject'
 import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
+import NodeName from '../TemplateUtils/NodeName'
 import { kebabCase } from '@/utils/string'
 import { shortId } from '@/utils/node'
 import { isComponentSet, isProject, isFolder, typeString } from '@/utils/node'
@@ -75,13 +67,14 @@ export default {
     DialogComponentSet,
     DialogProject,
     DialogFolder,
-    DialogDelete
+    DialogDelete,
+    NodeName
   },
   data() {
     return {
       NODE_TYPE_STRING,
       ...NODE_TYPE,
-      hoveredId: null
+      hoverId: null
     }
   },
   computed: {
@@ -103,15 +96,6 @@ export default {
       })
     }
   },
-  created() {
-    const { projectId } = this.$route.params
-    if (projectId) {
-      this.getComponentSets(projectId)
-      this.componentSet({
-        editingProjectId: projectId
-      })
-    }
-  },
   methods: {
     isComponentSet,
     isProject,
@@ -119,9 +103,8 @@ export default {
     typeString,
     kebabCase,
     shortId,
-    ...mapMutations('component', { componentSet: 'SET' }),
     ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
-    ...mapActions('component', ['modifyProjectNodeParent', 'getComponentSets']),
+    ...mapActions('component', ['modifyProjectNodeParent']),
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {
         this.modifyProjectNodeParent({
@@ -154,12 +137,21 @@ export default {
 
 .tree {
   background: transparent;
-  overflow: scroll;
 }
 
 ::v-deep.el-input.is-disabled .el-input__inner {
   background-color: transparent;
   border-color: transparent;
   color: #c0c4cc;
+}
+.controller {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 1px;
+  text-align: right;
+  background: #f5f7fa;
+  padding: 0 5px;
+  height: 26px;
 }
 </style>

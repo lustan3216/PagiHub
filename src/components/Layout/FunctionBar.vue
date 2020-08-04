@@ -55,60 +55,28 @@
       />
     </el-tooltip>
 
-    <el-tooltip
-      effect="light"
-      content="Copy"
-      placement="bottom"
-    >
-      <el-button
-        v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
-        :disabled="!selectedComponentIds.length"
-        type="text"
-        icon="el-icon-document-copy"
-        @shortkey.native="copy"
-        @click="copy"
-      />
-    </el-tooltip>
+    <i
+      v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
+      :disabled="!selectedComponentIds.length"
+      @shortkey="setCopySelectedNodeId"
+    />
 
-    <el-tooltip
-      effect="light"
-      content="Paste Component"
-      placement="bottom"
-    >
-      <el-button
-        v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
-        :disabled="!copyComponentIds.length"
-        type="text"
-        icon="el-icon-document-add"
-        size="small"
-        @click="multiPaste"
-        @shortkey.native="multiPaste"
-      />
-    </el-tooltip>
+    <i
+      v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
+      :disabled="!copyComponentIds.length"
+      @shortkey="vmPasteNodes"
+    />
 
-    <el-tooltip
-      effect="light"
-      content="Cut Component"
-      placement="bottom"
-    >
-      <el-button
-        v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
-        :disabled="!selectedComponentNode"
-        type="text"
-        icon="el-icon-scissors"
-        size="small"
-        @click="cut"
-        @shortkey.native="cut"
-      />
-    </el-tooltip>
+    <i
+      v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
+      :disabled="!selectedComponentNode"
+      @shortkey="cut"
+    />
 
-    <el-button
+    <i
       v-shortkey="{ del: ['del'], del: ['backspace'] }"
       :disabled="!selectedComponentIds.length"
-      type="text"
-      icon="el-icon-delete"
-      @shortkey.native="multiDelete"
-      @click.stop="() => multiDelete"
+      @shortkey="multiDelete"
     />
 
     <el-tooltip
@@ -137,18 +105,10 @@
 <script>
 import { isMac } from '@/utils/device'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { Message } from 'element-ui'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import { Tooltip } from 'element-ui'
-
-import {
-  vmAddNodesToParentAndRecord,
-  vmCopyNode,
-  vmCreateItem,
-  vmPasteCopyComponents,
-  vmRemoveNode
-} from '@/utils/vmMap'
+import { vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
 import jsonHistory from '@/store/jsonHistory'
 
 export default {
@@ -179,28 +139,10 @@ export default {
     ...mapMutations('component', ['REDO', 'UNDO']),
     isMac,
     publish() {},
-    copy() {
-      this.setCopySelectedNodeId()
-      const length = this.copyComponentIds.length
-      if (length) {
-        Message.info(`Copy ${length} Components`)
-      }
-    },
-    vmCreateItem,
-    vmCopyNode,
-    vmRemoveNode,
-    vmPasteCopyComponents,
-    vmAddNodesToParentAndRecord,
-    multiPaste() {
-      jsonHistory.recordsMerge(() => {
-        this.copyComponentIds.forEach(id =>
-          this.vmCopyNode(this.componentsMap[id])
-        )
-      })
-    },
+    vmPasteNodes,
     multiDelete() {
       jsonHistory.recordsMerge(() => {
-        this.selectedNodes.forEach(node => this.vmRemoveNode(node))
+        this.selectedNodes.forEach(node => vmRemoveNode(node))
       })
     },
     cut() {}

@@ -1,5 +1,9 @@
 .text-center {
-  text-align: center;
+  text-align: center !important;
+}
+
+.text-left {
+  text-align: left !important;
 }
 
 .bold {
@@ -187,10 +191,14 @@
   box-shadow: 0 5px 20px 0 rgba(32, 48, 60, 0.11);
 }
 
-[data-no-action],
 .no-action {
   touch-action: none !important;
   pointer-events: none !important;
+}
+
+[data-lock] {
+  @extend .no-action;
+  cursor: not-allowed !important;
 }
 
 .no-select {

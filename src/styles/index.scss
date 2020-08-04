@@ -1,5 +1,4 @@
 @import './variable';
-@import './shodow.scss';
 @import './transition.scss';
 @import './tool.scss';
 @import './space.scss';
@@ -50,12 +49,10 @@ input[type='number'] {
   padding-left: 5px;
 }
 
-.selection {
-  background: rgba(46, 115, 252, 0.11);
-  border-radius: 0.1em;
-  border: 2px solid rgba(98, 155, 255, 0.81);
-}
-
 .vue-resizable-handle {
   z-index: 100;
+}
+
+.vue-grid-item {
+  transition: all 0.08s ease;
 }

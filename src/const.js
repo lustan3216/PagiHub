@@ -25,6 +25,7 @@ export const SOFT_DELETE = 'softDelete'
 // it is used to define some action only happen at the firs time add
 export const INITIATE = 'initiate'
 
+export const CAROUSEL = 'carousel'
 export const LAYERS = 'layers'
 export const COMPONENT_SET = 'component-set'
 export const GRID_GENERATOR = 'grid-generator'

@@ -1,12 +1,14 @@
 <template>
-  <transition name="fade">
-    <el-button
-      v-show="visible || !innerVisible"
-      :icon="innerVisible ? 'el-icon-view' : 'el-icon-moon'"
-      type="text"
-      @click.stop="click"
-    />
-  </transition>
+  <el-button
+    v-if="visible || !innerVisible"
+    :icon="innerVisible ? 'el-icon-view' : 'el-icon-moon'"
+    type="text"
+    @click.stop="click"
+  />
+  <!--  <i-->
+  <!--    v-else-if="!visible && innerVisible"-->
+  <!--    class="dot"-->
+  <!--  />-->
 </template>
 
 <script>
@@ -23,7 +25,7 @@ export default {
     },
     visible: {
       type: Boolean,
-      required: true
+      default: false
     }
   },
   computed: {
@@ -32,15 +34,6 @@ export default {
     },
     selfVm() {
       return this.vmMap[this.id]
-    },
-    parentId() {
-      return this.selfVm.node.parentId
-    },
-    parentVm() {
-      return this.vmMap[this.parentId]
-    },
-    isGridItemParent() {
-      return this.parentVm.$options._componentTag === GRID_ITEM_CHILD
     },
     innerVisible() {
       return observable.ids.indexOf(this.id) === -1
@@ -67,3 +60,14 @@ export default {
   }
 }
 </script>
+
+<!--<style scoped>-->
+<!--.dot {-->
+<!--  width: 2px;-->
+<!--  height: 2px;-->
+<!--  background-color: #b1b1b1;-->
+<!--  border-radius: 50%;-->
+<!--  margin-top: 15px;-->
+<!--  margin-bottom: 3px;-->
+<!--}-->
+<!--</style>-->

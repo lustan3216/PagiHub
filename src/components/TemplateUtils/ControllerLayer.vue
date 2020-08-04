@@ -4,21 +4,17 @@
     v-if="isDraftMode && node"
     :id="id"
     :class="{ selected, 'dash-border': !isAnimating && border }"
-    class="control-layer h-100"
-    @click.exact.stop="
-      canNotEdit && !isExample && SET_SELECTED_COMPONENT_ID(id)
-    "
-    @click.ctrl.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
-    @click.meta.exact.stop="!isExample && TOGGLE_SELECTED_COMPONENT_IN_IDS(id)"
+    class="control-layer"
+    @click.stop="singleClick"
     @dblclick.stop="dblclick"
   >
-    <portal-target
-      :name="`ControllerLayerTutorial${id}`"
-      class="tutorial"
+    <node-quick-functions
+      v-if="selected"
+      :id="id"
     />
 
     <div
-      v-click-outside="coConfig"
+      v-click-outside="clickOutside"
       v-if="canDrag || canEditText"
       :class="{ noDrag: !canNotEdit, 'can-not-edit': canNotEdit }"
       class="h-100"
@@ -28,7 +24,7 @@
 
     <div
       v-else
-      class="h-100 pointer"
+      class="h-100"
     >
       <slot />
     </div>
@@ -36,7 +32,7 @@
 
   <div
     v-else-if="node"
-    class="control-layer h-100"
+    class="h-100"
   >
     <slot />
   </div>
@@ -44,7 +40,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import NodeController from './NodeController'
+import NodeQuickFunctions from './NodeQuickFunctions'
 import clickOutside from '@/utils/clickOutside'
 import { CAN_DRAG, CAN_EDIT, GRID_ITEM } from '@/const'
 import { isMac } from '@/utils/device'
@@ -58,7 +54,7 @@ export default {
   name: 'ControllerLayer',
   inject: { isExample: { default: false }},
   components: {
-    NodeController
+    NodeQuickFunctions
   },
   directives: {
     clickOutside
@@ -75,7 +71,8 @@ export default {
   },
   data() {
     return {
-      canNotEdit: true
+      canNotEdit: true,
+      mounted: true
     }
   },
   computed: {
@@ -97,9 +94,6 @@ export default {
     canDrag() {
       return this.node && this.node.canDrag
     },
-    coConfig() {
-      return !this.canNotEdit && this.clickOutside
-    },
     isGridItem() {
       return this.node.tag === GRID_ITEM
     }
@@ -108,6 +102,9 @@ export default {
     if (this.isDraftMode && !this.isExample) {
       controllerVmMap[this.id] = this
     }
+  },
+  mounted() {
+    this.mounted = true
   },
   beforeDestroy() {
     if (this.isDraftMode && !this.isExample) {
@@ -135,6 +132,22 @@ export default {
       if (!inSideBar) {
         this.canNotEdit = true
       }
+    },
+    singleClick(event) {
+      // don't change selected component ids when dragging item,
+      // otherwise vue-resizable-handle will cause a bug here
+      if (
+        this.isExample ||
+        event.target.classList.contains('vue-resizable-handle')
+      ) {
+        return
+      }
+
+      if (event.metaKey || event.ctrlKey) {
+        this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)
+      } else if (this.canNotEdit) {
+        this.SET_SELECTED_COMPONENT_ID(this.id)
+      }
     }
   }
 }
@@ -143,9 +156,10 @@ export default {
 <style scoped lang="scss">
 .control-layer {
   transition: box-shadow 0.6s, border-color 0.6s;
+  height: 100%;
 }
 .selected {
-  border-color: rgba(81, 117, 199, 0.68) !important;
+  /*border-color: rgba(81, 117, 199, 0.68) !important;*/
 }
 ::v-deep.can-not-edit {
   pointer-events: none;
@@ -156,11 +170,6 @@ export default {
 }
 .dash-border {
   border: 1px dashed #dedede;
-  box-sizing: border-box;
-}
-.tutorial {
-  position: absolute;
-  top: -18px;
-  right: -18px;
+  margin: -1px;
 }
 </style>

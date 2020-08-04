@@ -15,15 +15,16 @@ import {
   patchComponentSet
 } from '@/api/node'
 import {
-  objectHasAnyKey,
   findBy,
   forEach,
   deleteBy,
   toArray,
-  objectFirstKey
+  objectFirstKey,
+  cloneJson
 } from '@/utils/tool'
 import { CHILDREN, ID, PARENT_ID } from '@/const'
-import { defineNodeProperties, isComponentSet, isProject } from '@/utils/node'
+import { isComponentSet, isProject } from '@/utils/node'
+import { defineNodeProperties } from '@/utils/nodeProperties'
 import {
   getRootComponentSetId,
   recordRootComponentSetId,
@@ -57,6 +58,8 @@ const mutations = {
   },
   // only for component or component attrs
   VUE_SET({ componentsMap }, { tree, key, value }) {
+    value = cloneJson(value)
+
     if (tree[key] && tree[key].__ob__) {
       tree[key] = value
     } else {
@@ -157,15 +160,21 @@ const actions = {
     commit('SET', { projectIds: data.map(x => x[ID]) })
   },
 
-  async getProject({ commit }, id) {
-    const node = state.componentsMap[id]
-    if (node) {
-      return node
-    } else {
+  async getProject({ commit, dispatch }, id) {
+    let node = state.componentsMap[id]
+
+    if (!node) {
       const { data } = await getProject(id)
       commit('SET_NODES_TO_MAP', data)
-      return data
+      node = data
     }
+
+    commit('SET', {
+      rootComponentSetIds: [],
+      editingProjectId: id
+    })
+    dispatch('getComponentSets', id)
+    return node
   },
 
   async createProject({ commit }, form) {
@@ -203,7 +212,7 @@ const actions = {
     //     ? [rootGetters['app/selectedComponentTree']]
     //     : []
     // })
-
+    // commit('RECORD', {})
     commit('SET_EDITING_COMPONENT_SET_ID', data.id)
     commit('SET_NODES_TO_MAP', data)
   },
@@ -275,7 +284,7 @@ function rollbackSelectedComponentSet(deltaGroup) {
     return false
   }
 
-  const id = objectHasAnyKey(deltaGroup[0])
+  const id = objectFirstKey(deltaGroup[0])
   const { editingProjectId } = store.state.component
   const rootComponentSetId = getRootComponentSetId(id)
   if (rootComponentSetId !== editingProjectId) {

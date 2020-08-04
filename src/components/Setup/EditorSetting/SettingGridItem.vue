@@ -11,8 +11,8 @@ import { select, boolean, assignDefaultValue } from './utils/ruleTool'
 
 export const defaultSetting = {
   isDraggable: true,
-  isResizable: true,
-  static: false,
+  // isResizable: true,
+  // static: false,
   autoHeight: false,
   hidden: {}
 }
@@ -36,9 +36,9 @@ export default {
     return {
       spec: assignDefaultValue(
         [
-          select('isDraggable', { options }),
-          select('isResizable', { options }),
-          select('static', { options }),
+          // select('isDraggable', { options }),
+          // select('isResizable', { options }),
+          // select('static', { options }),
           boolean('autoHeight')
         ],
         defaultSetting

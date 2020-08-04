@@ -1,19 +1,17 @@
 <template>
   <vue-grid-generator
     ref="gridGenerator"
-    :vertical-compact="isExample"
     v-bind="innerProps"
     :layout="layout"
     :margin="[0, 0]"
-    :is-draggable="(innerProps.isDraggable && isDraftMode) || isExample"
-    :is-resizable="(innerProps.isResizable && isDraftMode) || isExample"
-    class="h-100"
+    :is-draggable="isDraftMode || isExample"
+    :is-resizable="isDraftMode || isExample"
     @layout-updated="layoutUpdated($event)"
   >
     <vue-grid-item
       v-for="child in layout"
       :ref="child.id"
-      v-bind="{ ...child, ...child.props }"
+      v-bind="child"
       :key="child.id"
       :style="itemPadding"
       :class="{
@@ -29,13 +27,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { AUTO_HEIGHT, PROPS } from '@/const'
+import { deleteBy, getValueByPath } from '@/utils/tool'
+import { debounce } from 'throttle-debounce'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridItemChild from './GridItemChild'
-import { getValueByPath } from '@/utils/tool'
-import { debounce } from 'throttle-debounce'
 
 const points = ['lg', 'md', 'sm', 'xs', 'xxs']
 
@@ -63,6 +61,7 @@ export default {
   data() {
     return {
       layout: [],
+      lockIds: [], // touchable will use it
       width: 0
     }
   },
@@ -95,25 +94,17 @@ export default {
         this.$nextTick(() => {
           this.itemAutoHeight(newChildren)
           this.getCurrentLayout(newChildren, this.currentBreakPoint)
+          this.resizeNodeQuickFn()
         })
       },
       deep: true,
       immediate: true
     },
-    'innerProps.breakpoints': {
-      handler() {
-        this.$refs.gridGenerator.responsiveGridLayout()
-      },
-      deep: true
-    },
-    'innerProps.verticalMargin'() {
-      this.childrenResize()
-    },
-    'innerProps.horizontalMargin'() {
-      this.childrenResize()
-    },
     currentBreakPoint(value) {
       this.getCurrentLayout(this.innerChildren, value)
+    },
+    lockIds() {
+      this.getCurrentLayout(this.innerChildren, this.currentBreakPoint)
     }
   },
   mounted() {
@@ -129,9 +120,17 @@ export default {
     )
   },
   methods: {
+    ...mapActions('app', ['resizeNodeQuickFn']),
+    lock(id) {
+      this.lockIds.push(id)
+    },
+    unlock(id) {
+      deleteBy(this.lockIds, id)
+    },
     getCurrentLayout(children, breakPoint) {
       const layout = children.map((child, index) => {
         return {
+          static: this.lockIds.includes(child.id),
           id: child.id,
           i: child.id || index, // should not happen, but just prevent crash in case
           x: this.findAncestorValue(children, breakPoint, index, 'x'),
@@ -158,33 +157,23 @@ export default {
 
       return value
     },
-    childrenResize() {
-      this.layout.forEach((child, index) => {
-        this.layout[index].h =
-          this.layout[index].h + this.innerProps.verticalMargin
-      })
-    },
     layoutUpdated(newChildren) {
       if (this.isExample) return
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
       const records = []
 
-      newChildren.forEach((child, index) => {
-        const attrs = ['x', 'y', 'w', 'h']
-        attrs.forEach(attr => {
-          const ancestorValue = this.findAncestorValue(index, attr)
-
-          if (ancestorValue === child[attr]) {
-            return
+      newChildren.forEach(child => {
+        records.push({
+          path: `${child.id}.${PROPS}.${this.currentBreakPoint}`,
+          value: {
+            x: child.x,
+            y: child.y,
+            h: child.h,
+            w: child.w
           }
-
-          records.push({
-            path: `${child.id}.${PROPS}.${this.currentBreakPoint}.${attr}`,
-            value: child[attr]
-          })
         })
       })
-      console.log(records)
+
       this.RECORD(records)
     },
     itemAutoHeight(newChildren) {
@@ -210,9 +199,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.item {
-  box-sizing: border-box;
-}
-</style>

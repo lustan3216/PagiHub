@@ -1,9 +1,15 @@
 import { mapMutations, mapState } from 'vuex'
 import { CHILDREN, GRID_ITEM, TAG } from '@/const'
 import { cloneJson, traversal, arrayLast } from '@/utils/tool'
-import { traversalChildrenOf, isComponentSet, getNode } from '@/utils/node'
+import {
+  traversalChildren,
+  isComponentSet,
+  getNode,
+  traversalAncestorAndSelf
+} from '@/utils/node'
 import { appendIdNested } from '@/utils/nodeId'
-import basicTemplates from '@/templateJson/basic'
+import * as basicTemplates from '@/templateJson/basic'
+import { camelCase } from '@/utils/string'
 
 export default {
   props: {
@@ -38,29 +44,13 @@ export default {
           ...node
         })
       )
-    },
-    parentNodes() {
-      const path = []
-
-      const findPath = id => {
-        const node = getNode(id, this.isExample)
-
-        if (node && node.parentId) {
-          const parentNode = getNode(node.parentId, this.isExample)
-          if (!parentNode) {
-            return
-          }
-          path.unshift(parentNode)
-          findPath(node.parentId)
-        }
-      }
-
-      findPath(this.id)
-      return path
     }
   },
   methods: {
-    ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
+    ...mapMutations('app', [
+      'SET_SELECTED_COMPONENT_ID',
+      'CLEAN_SELECTED_COMPONENT_ID'
+    ]),
     ...mapMutations('component', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
 
     _addNodesToParentAndRecord(nodeTree = {}) {
@@ -97,7 +87,7 @@ export default {
       // can new layer-item, grid-item, carousel-item, form-item
       const { tag } = this.node
       // eslint-disable-next-line
-      const template = basicTemplates.find(x => x[TAG] === tag)
+      const template = basicTemplates[camelCase(tag)]()
       const emptyItem = arrayLast(template[CHILDREN])
 
       this._addNodesToParentAndRecord(emptyItem)
@@ -116,6 +106,9 @@ export default {
     },
 
     _remove(theNodeIdGonnaRemove) {
+      if (this.isExample) {
+        return
+      }
       // should use vmMap method to call to keep consistency
       const records = [
         {
@@ -124,27 +117,34 @@ export default {
         }
       ]
 
-      traversalChildrenOf(theNodeIdGonnaRemove, child => {
+      traversalChildren(theNodeIdGonnaRemove, child => {
         records.unshift({
           path: child.id,
           value: undefined
         })
       })
 
-      for (let i = 0; i < this.parentNodes.length; i++) {
-        const { id, tag } = this.parentNodes[this.parentNodes.length - 1 - i]
-
-        if (tag === GRID_ITEM || this.rootComponentSetIds.includes(id)) {
-          break
-        } else if (this.children.length === 1) {
+      let stopNodeId
+      traversalAncestorAndSelf(this.node, ({ id, tag, children }) => {
+        stopNodeId = id
+        if (
+          tag === GRID_ITEM ||
+          this.rootComponentSetIds.includes(id) ||
+          children.length > 1
+        ) {
+          return 'stop'
+        } else if (children.length === 1) {
           records.unshift({
             path: id,
             value: undefined
           })
         }
-      }
+      })
 
+      const ids = records.map(x => x.path)
+      this.CLEAN_SELECTED_COMPONENT_ID(ids)
       this.RECORD(records)
+      return stopNodeId
     }
   }
 }

@@ -1,5 +1,7 @@
 <template>
-  <component-set :id="id" />
+  <div class="art-board">
+    <component-set :id="id" />
+  </div>
 </template>
 
 <script>
@@ -42,3 +44,11 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  .art-board {
+    overflow: scroll;
+    background-color: #fff;
+    @include calc-vh('height', '100vh - 80px');
+  }
+</style>

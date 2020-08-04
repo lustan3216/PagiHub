@@ -71,7 +71,7 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 import { traversal } from '@/utils/tool'
 import { CHILDREN, GRID_ITEM } from '@/const'
 import Visibility from '../TemplateUtils/Visible'
-import NodeInfo from '../TemplateUtils/NodeInfo'
+import NodeInfo from '../TemplateUtils/NodeName'
 
 export default {
   name: 'PanelCss',

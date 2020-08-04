@@ -1,7 +1,14 @@
 import store from '../store'
 import { allEqual, cloneJson } from './tool'
 import { capitalize } from './string'
-import { NODE_TYPE, NODE_TYPE_STRING, KIND, LABEL } from '@/const'
+import {
+  NODE_TYPE,
+  NODE_TYPE_STRING,
+  KIND,
+  LABEL,
+  LAYERS,
+  GRID_ITEM
+} from '@/const'
 
 export function findFirstCommonParentTree(ids) {
   // familyPaths = [
@@ -50,6 +57,25 @@ export function getNode(id, isExample) {
   }
 }
 
+export function traversalAncestorAndSelf(_node, fn = () => {}) {
+  const findPath = node => {
+    const { parentNode } = node
+    if (!parentNode) {
+      return
+    }
+
+    const stop = fn(parentNode)
+    if (!stop) {
+      findPath(node)
+    }
+  }
+
+  const stop = fn(_node)
+  if (!stop) {
+    findPath(_node)
+  }
+}
+
 const cache = {}
 export function shortTagName(node) {
   const tag = node[LABEL] || node.tag
@@ -69,11 +95,20 @@ export function shortTagName(node) {
   return cache[tag]
 }
 
-export function traversalChildrenOf(nodeId, fn) {
-  store.state.component.componentsMap[nodeId].children.forEach(child => {
+export function traversalChildren(nodeId, fn) {
+  const { children = [] } = store.state.component.componentsMap[nodeId]
+  children.forEach(child => {
     fn(child)
-    traversalChildrenOf(child.id, fn)
+    traversalChildren(child.id, fn)
   })
+}
+
+export function isLayers(node) {
+  return node.tag === LAYERS
+}
+
+export function isGridItem(node) {
+  return node.tag === GRID_ITEM
 }
 
 export function isProject(node) {
@@ -105,37 +140,5 @@ export function shortId(id) {
     indexMap[id] = index
     index++
     return indexMap[id]
-  }
-}
-
-export function defineNodeProperties(node) {
-  const { componentsMap } = store.state.component
-  const defined = 'parentNode' in node
-
-  if (!defined) {
-    Object.defineProperty(node, 'parentNode', {
-      get() {
-        return componentsMap[this.parentId]
-      },
-      enumerable: false
-    })
-
-    Object.defineProperty(node, 'uniqId', {
-      get() {
-        const ids = [node.id]
-        if (isComponent(node) && node.componentSetId) {
-          ids.unshift(node.componentSetId)
-        }
-        return ids.join('-')
-      },
-      enumerable: false
-    })
-
-    Object.defineProperty(node, 'rootComponentSetId', {
-      get() {
-        return getRootComponentSet(node)
-      },
-      enumerable: false
-    })
   }
 }

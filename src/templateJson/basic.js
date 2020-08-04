@@ -1,6 +1,8 @@
 import {
   GRID_GENERATOR,
   GRID_ITEM,
+  LAYERS,
+  CAROUSEL,
   CAN_NEW_ITEM,
   TAG,
   CHILDREN,
@@ -15,7 +17,7 @@ import {
   PROPS
 } from '../const'
 
-const gridItems = function() {
+export const gridItems = function() {
   return [
     {
       [TAG]: GRID_ITEM,
@@ -26,7 +28,7 @@ const gridItems = function() {
   ]
 }
 
-const gridGenerator = function(options) {
+export const gridGenerator = function(options) {
   return {
     w: 18,
     h: 300,
@@ -41,7 +43,7 @@ export const layers = function(options) {
   return {
     w: 18,
     h: 300,
-    [TAG]: 'layers',
+    [TAG]: LAYERS,
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: [gridGenerator()],
     ...options
@@ -72,7 +74,7 @@ export const carousel = function() {
   return {
     w: 36,
     h: 300,
-    [TAG]: 'carousel',
+    [TAG]: CAROUSEL,
     [CAN_NEW_ITEM]: false,
     [CAN_DRAG]: true,
     [CHILDREN]: [

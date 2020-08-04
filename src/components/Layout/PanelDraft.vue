@@ -2,12 +2,14 @@
   <view-port>
     <dialog-interacted
       :draggable="false"
-      class="interact-board"
+      @resizeEnd="resizeNodeQuickFn"
     >
       <art-board
         v-if="editingComponentSetId"
+        ref="artBoard"
         :id="editingComponentSetId"
         :key="editingComponentSetId"
+        @scroll.native="onScroll"
       />
     </dialog-interacted>
   </view-port>
@@ -20,6 +22,8 @@ import ArtBoard from './ArtBoard'
 import { isMac } from '@/utils/device'
 import ComponentSet from '../TemplateUtils/ComponentSet'
 import DialogInteracted from '@/components/Components/DialogInteracted'
+
+let timer = null
 
 export default {
   name: 'PanelDraft',
@@ -45,6 +49,7 @@ export default {
     window.addEventListener('resize', this.setProductionIfWindowSmall)
   },
   methods: {
+    ...mapActions('app', ['resizeNodeQuickFn']),
     ...mapActions('example', ['initExamples']),
     ...mapActions('component', ['patchComponentSet', 'getProject']),
     ...mapMutations('mode', ['SET_PRODUCTION_MODE', 'SET_DRAFT_MODE']),
@@ -55,6 +60,15 @@ export default {
       } else {
         this.SET_DRAFT_MODE()
       }
+      this.resizeNodeQuickFn()
+    },
+    onScroll() {
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(() => {
+        this.resizeNodeQuickFn()
+      }, 50)
     }
   }
 }
@@ -66,7 +80,8 @@ export default {
   right: -10px;
 }
 .interact-board {
+  overflow: scroll;
   background-color: #fff;
-  @include calc-vh('min-height', '100vh - 80px');
+  @include calc-vh('height', '100vh - 80px');
 }
 </style>

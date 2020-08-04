@@ -10,7 +10,7 @@
 import { pxPercent } from '@/validator'
 import RulesGenerator from './Common/RulesGenerator'
 import { boolean, select, assignDefaultValue, selectUnit } from './utils/ruleTool'
-import { shortTagName, traversalChildrenOf } from '@/utils/node'
+import { shortTagName, traversalChildren } from '@/utils/node'
 
 export const defaultSetting = {
   modal: true,
@@ -32,7 +32,7 @@ export default {
   computed: {
     allChildren() {
       const allChildren = []
-      traversalChildrenOf(this.id, child => {
+      traversalChildren(this.id, child => {
         if (child.tag.includes('button')) {
           allChildren.push(child)
         }

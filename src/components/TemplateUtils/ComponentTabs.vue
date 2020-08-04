@@ -21,7 +21,7 @@
         <el-col
           v-for="component in components[category]"
           :key="component.id"
-          :span="6"
+          :span="8"
           style="margin-bottom: 35px;"
         >
           <div class="card">

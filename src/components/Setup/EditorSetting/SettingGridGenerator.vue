@@ -5,21 +5,12 @@
       :rules="spec"
     />
 
-    <template v-if="responsive">
-      <h4>Breakpoints</h4>
-      <rules-generator
-        :key="JSON.stringify(breakpoints)"
-        :id="id"
-        :rules="breakpoints"
-      />
-
-      <h4>Columns</h4>
-      <rules-generator
-        :key="JSON.stringify(cols)"
-        :id="id"
-        :rules="cols"
-      />
-    </template>
+    <h4>Columns</h4>
+    <rules-generator
+      :key="JSON.stringify(cols)"
+      :id="id"
+      :rules="cols"
+    />
   </div>
 </template>
 
@@ -31,7 +22,7 @@ import { objectAssign } from '@/utils/tool'
 export const defaultSetting = {
   isResizable: true,
   isDraggable: true,
-  preventCollision: true,
+  preventCollision: false,
   verticalCompact: false,
   responsive: true,
   rowHeight: 5,
@@ -50,21 +41,21 @@ export const defaultSetting = {
 
 export const rules = assignDefaultValue(
   [
-    boolean('isResizable'),
-    boolean('isDraggable'),
-    boolean('preventCollision'),
-    boolean('verticalCompact'),
-    boolean('responsive', {
-      control: [
-        {
-          value: false,
-          rule: [number('colNum', { title: 'Column Number' })]
-        }
-      ]
-    }),
-    number('rowHeight'),
-    number('horizontalMargin', { title: 'Horizontal Interval' }),
-    number('verticalMargin', { title: 'Vertical Interval' })
+    // boolean('isResizable'),
+    // boolean('isDraggable'),
+    // boolean('preventCollision'),
+    boolean('verticalCompact')
+    // boolean('responsive', {
+    //   control: [
+    //     {
+    //       value: false,
+    //       rule: [number('colNum', { title: 'Column Number' })]
+    //     }
+    //   ]
+    // }),
+    // number('rowHeight'),
+    // number('horizontalMargin', { title: 'Horizontal Interval' }),
+    // number('verticalMargin', { title: 'Vertical Interval' })
   ],
   defaultSetting
 )
@@ -90,43 +81,43 @@ export default {
     responsive() {
       return this.currentProps.responsive === true
     },
-    breakpoints() {
-      return assignDefaultValue(
-        [
-          number('lg', {
-            path: 'breakpoints',
-            props: { min: this.currentProps.breakpoints.md },
-            title: 'Large Desktop',
-            info: this.info('lg')
-          }),
-          number('md', {
-            path: 'breakpoints',
-            title: 'Desktop',
-            props: { min: this.currentProps.breakpoints.sm },
-            info: this.info('md')
-          }),
-          number('sm', {
-            path: 'breakpoints',
-            title: 'Tablet',
-            props: { min: this.currentProps.breakpoints.xs },
-            info: this.info('sm')
-          }),
-          number('xs', {
-            path: 'breakpoints',
-            title: 'Mobile',
-            props: { min: this.currentProps.breakpoints.xxs },
-            info: this.info('xs')
-          }),
-          number('xxs', {
-            path: 'breakpoints',
-            title: 'Tiny Mobile',
-            props: { disabled: true },
-            info: this.info('xxs')
-          })
-        ],
-        defaultSetting
-      )
-    },
+    // breakpoints() {
+    //   return assignDefaultValue(
+    //     [
+    //       number('lg', {
+    //         path: 'breakpoints',
+    //         props: { min: this.currentProps.breakpoints.md },
+    //         title: 'Large Desktop',
+    //         info: this.info('lg')
+    //       }),
+    //       number('md', {
+    //         path: 'breakpoints',
+    //         title: 'Desktop',
+    //         props: { min: this.currentProps.breakpoints.sm },
+    //         info: this.info('md')
+    //       }),
+    //       number('sm', {
+    //         path: 'breakpoints',
+    //         title: 'Tablet',
+    //         props: { min: this.currentProps.breakpoints.xs },
+    //         info: this.info('sm')
+    //       }),
+    //       number('xs', {
+    //         path: 'breakpoints',
+    //         title: 'Mobile',
+    //         props: { min: this.currentProps.breakpoints.xxs },
+    //         info: this.info('xs')
+    //       }),
+    //       number('xxs', {
+    //         path: 'breakpoints',
+    //         title: 'Tiny Mobile',
+    //         props: { disabled: true },
+    //         info: this.info('xxs')
+    //       })
+    //     ],
+    //     defaultSetting
+    //   )
+    // },
 
     cols() {
       return assignDefaultValue(

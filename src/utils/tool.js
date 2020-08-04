@@ -18,9 +18,9 @@ export function cloneJson(e) {
   return JSON.parse(JSON.stringify(e))
 }
 
-export function onWithOff(a, b, c) {
-  on(a, b, c)
-  return () => off(a, b, c)
+export function onWithOff(element, event, handler) {
+  on(element, event, handler)
+  return () => off(element, event, handler)
 }
 
 export const isArray = Array.isArray
@@ -101,15 +101,33 @@ export function deepFlatten(array) {
 }
 
 export function findBy(array, key, value) {
-  return array.find(x => x[key] === value)
+  if (isUndefined(value)) {
+    value = key
+    return array.find(x => x === value)
+  } else {
+    return array.find(x => x[key] === value)
+  }
 }
 
 export function findIndexBy(array, key, value) {
-  return array.findIndex(x => x[key] === value)
+  if (isUndefined(value)) {
+    value = key
+    return array.findIndex(x => x === value)
+  } else {
+    return array.findIndex(x => x[key] === value)
+  }
 }
 
 export function deleteBy(array, key, value) {
-  const oldIndex = findIndexBy(array, key, value)
+  let oldIndex
+
+  if (isUndefined(value)) {
+    value = key
+    oldIndex = findIndexBy(array, value)
+  } else {
+    oldIndex = findIndexBy(array, key, value)
+  }
+
   array.splice(oldIndex, 1)
 }
 

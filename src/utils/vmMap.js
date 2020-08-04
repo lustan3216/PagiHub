@@ -1,5 +1,7 @@
 import store from '../store'
-import { GRID_ITEM, TAG } from '../const'
+import { CAN_NEW_ITEM, GRID_ITEM, TAG } from '../const'
+import { isGridItem } from '@/utils/node'
+import jsonHistory from '@/store/jsonHistory'
 
 const vmMap = {}
 
@@ -47,20 +49,55 @@ export function $element(id) {
   return _vm && _vm.$el
 }
 
-export function vmCreateItem({ id }) {
+export function vmCreateEmptyItem({ id }) {
   // layers, grid-generator, carousel, form-generator
   // can new layer-item, grid-item, carousel-item, form-item
   vm(id)._createEmptyItem()
 }
 
-export function vmCopyNode({ id, parentId }) {
+export function vmPasteNodes() {
+  const { componentsMap } = store.state.component
+  const { copyComponentIds } = store.state.app
+
+  jsonHistory.recordsMerge(() => {
+    if (copyComponentIds.length === 1) {
+      const node = componentsMap[copyComponentIds[0]]
+      if (!isGridItem(node)) {
+        vmPasteInside(node)
+      }
+    } else {
+      copyComponentIds.forEach(id => vmPasteNode(componentsMap[id]))
+    }
+  })
+}
+
+export function vmPasteInside(theOneCopyNode) {
+  const { componentsMap } = store.state.component
+  const { selectedComponentIds } = store.state.app
+
+  selectedComponentIds.forEach(selectedId => {
+    const selectedNode = componentsMap[selectedId]
+    if (theOneCopyNode.id === selectedId) {
+      vmPasteNode(theOneCopyNode)
+    } else if (theOneCopyNode && !isGridItem(theOneCopyNode)) {
+      if (isGridItem(selectedNode)) {
+        vm(selectedId)._addNodesToParentAndRecord(theOneCopyNode)
+      } else {
+        const stopNodeId = vmRemoveNode(selectedNode)
+        vm(stopNodeId)._addNodesToParentAndRecord(theOneCopyNode)
+      }
+    }
+  })
+}
+
+export function vmPasteNode({ id, parentId }) {
   if (parentId === store.state.component.editingComponentSetId) {
     return
   }
 
   const parentNode = vmMap[parentId].node
 
-  if (parentNode.canNewItem) {
+  if (parentNode[CAN_NEW_ITEM]) {
     // if parentNode can new item, it means the node is one of layer-item, grid-item, carousel-item, form-item
     vm(parentId)._copy(id)
   } else {
@@ -71,32 +108,10 @@ export function vmCopyNode({ id, parentId }) {
 }
 
 export function vmRemoveNode({ id, parentId }) {
-  vm(parentId)._remove(id)
+  const stopNodeId = vm(parentId)._remove(id)
+  return stopNodeId
 }
 
 export function vmAddNodesToParentAndRecord(id, nodes) {
   vm(id)._addNodesToParentAndRecord(nodes)
-}
-
-export function vmPasteCopyComponents({ id }) {
-  const componentsMap = store.state.component.componentsMap
-  const copyIds = store.state.app.copyComponentIds
-  const onlyOneCopyId = copyIds.length === 1 && copyIds[0]
-  const onlyOneCopyNode = onlyOneCopyId ? componentsMap[onlyOneCopyId] : null
-
-  if (onlyOneCopyId === id) {
-    vmCopyNode(onlyOneCopyNode)
-  } else if (componentsMap[id].tag === GRID_ITEM) {
-    if (onlyOneCopyNode && onlyOneCopyNode[TAG] !== GRID_ITEM) {
-      vm(id)._addNodesToParentAndRecord(onlyOneCopyNode)
-    }
-    // else if (copyIds.length > 1) {
-    //   const tree = findFirstCommonParentTree(copyIds)
-    //   vm(id)._addNodesToParentAndRecord(tree)
-    // }
-  }
-}
-
-export function isThisTag(id, tag) {
-  return vm(id).$options._componentTag === tag
 }

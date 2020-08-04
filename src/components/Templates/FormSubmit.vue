@@ -10,7 +10,7 @@
       :value="innerValue || 'Submit'"
     />
 
-    <portal :to="`GridItemChild${id}`">
+    <portal :to="`QuickFunctions${id}`">
       <el-tooltip
         effect="light"
         content="Replace all actions in this button for nicer editing UX. It only shows in Draft mode."

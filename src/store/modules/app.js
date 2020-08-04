@@ -22,6 +22,9 @@ const mutations = {
     state.selectedComponentIds = []
     state.copyComponentIds = []
   },
+  CLEAN_SELECTED_COMPONENT_ID(state, ids) {
+    state.selectedComponentIds = arraySubtract(state.selectedComponentIds, ids)
+  },
   SET_SELECTED_COMPONENT_ID(state, id) {
     state.selectedComponentIds = [id].filter(x => x)
   },
@@ -49,6 +52,11 @@ const actions = {
 
     commit('SET', { copyComponentIds })
     return copyComponentIds
+  },
+  resizeNodeQuickFn({ state }) {
+    state.selectedComponentIds.forEach(id => {
+      this._vm.$bus.$emit(`quick-functions-transforming-${id}`)
+    })
   }
 }
 

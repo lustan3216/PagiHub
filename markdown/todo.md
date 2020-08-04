@@ -8,12 +8,19 @@ MVP
 ### Functionality
 
 <ol>
+5<li>優惠style setting 渲染</li>
+5<li>grid item, auto hieght 有 bug</li>
+5<li>style sketch 一模一樣</li>
+5<li>bring to front, bring forward, send to back, 至前，至後, style 永遠再layer最底層</li>
+5<li>texteditor 操作方式 跟notion一樣 </li>
+5<li>image 可以直接拉近畫面裡面</li>
+5<li>project's favicon and SEO can be edited in the project modal</li>
+5<li>多選修改</li>
 5<li>sreen size changer</li>
-5<li>grid item 的比例放大 要放哪</li>
 5<li>grid layout could choose Full view height</li>
 5<li>copy/paste between tabs</li>
 5<li>照片,svg 也要是公開分享的嗎？？？？ 如果想刪除的怎麼辦，偏向不要，但還是會被複製走</li>
-5<li>grid item 要可以比例伸展</li> 
+5<li>grid item 要可以比例伸展, grid item 的比例放大 要放哪</li> 
 5<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed / fixed container</li> 
 3<li>有假死狀態可以做 剪下貼上</li>
 5<li>每個 component set 都可以組建合併得按鈕  / or 選版本 / 跟隨proejct裡面的變動，只是不同project的因為沒有主動更新所以也不會主動變動</li>
@@ -49,6 +56,7 @@ MVP
 ### Last
 
 <ol>
+5<li>carousel 可以用 鍵盤控制，動畫的出現</li>
 <li>import Sketch</li>
 <li>table</li>
 <li>assets folder / component folder</li>
