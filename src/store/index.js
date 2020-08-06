@@ -19,6 +19,26 @@ export function SET(state, data) {
   }
 }
 
+window.addEventListener('storage', function(event) {
+  switch (event.key) {
+    case 'copyComponentIds':
+      return getCopyComponentIds()
+    case 'tmpComponentsArray':
+      return getTmpComponentsArray()
+  }
+});
+
+export function getCopyComponentIds() {
+  const ids = localStorage.getItem('copyComponentIds')
+  store.commit('app/SET', { copyComponentIds: JSON.parse(ids) || [] }, { root: true })
+}
+
+export function getTmpComponentsArray() {
+  const array = localStorage.getItem('tmpComponentsArray')
+  store.commit('component/SET_NODES_TO_TMP_MAP', JSON.parse(array) || [], { root: true })
+}
+
+
 const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   modules: {

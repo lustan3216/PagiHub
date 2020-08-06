@@ -1,5 +1,6 @@
-import { SET } from '../index'
-import { arraySubtract } from '@/utils/tool'
+import store, { SET } from '../index'
+import { arraySubtract, cloneJson, toArray } from '@/utils/tool'
+import { isComponent, isProject, traversalAncestorAndSelf, traversalChildren } from '@/utils/node'
 
 const state = {
   userId: null,
@@ -43,14 +44,35 @@ const mutations = {
 }
 
 const actions = {
-  setCopySelectedNodeId({ commit, state, rootState }) {
-    const { rootComponentSetIds } = rootState.component
-    const copyComponentIds = state.selectedComponentIds.filter(
-      id => !rootComponentSetIds.includes(id)
-    )
-    // the top component under rootComponentSet should not be copied
+  setCopySelectedNodeId({ commit, state, rootState }, ids) {
+    const { rootComponentSetIds, componentsMap } = rootState.component
+    const copyComponentIds = ids
+      ? toArray(ids)
+      : state.selectedComponentIds.filter(
+        id => !rootComponentSetIds.includes(id)
+      )
 
+    // the top component under rootComponentSet should not be copied
+    const copyNodeArray = []
+    copyComponentIds
+      .forEach(id => {
+        const node = componentsMap[id]
+        traversalAncestorAndSelf(node, node => {
+          // don't return, otherwise it will stop
+          if (isComponent(node)) {
+            copyNodeArray.push(node)
+          }
+        })
+        traversalChildren(node, node => {
+          // don't return, otherwise it will stop
+          copyNodeArray.push(node)
+        })
+      })
+
+    localStorage.setItem('copyComponentIds', JSON.stringify(copyComponentIds))
+    localStorage.setItem('tmpComponentsArray', JSON.stringify(copyNodeArray))
     commit('SET', { copyComponentIds })
+    commit('component/SET_NODES_TO_TMP_MAP', cloneJson(copyNodeArray) , { root: true })
     return copyComponentIds
   },
   resizeNodeQuickFn({ state }) {

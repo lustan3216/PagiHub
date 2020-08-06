@@ -10,7 +10,6 @@
 <script>
 import { mapState } from 'vuex'
 import { bigCamelCase } from '@/utils/string'
-import { getNode } from '@/utils/node'
 
 const self = {
   name: 'PanelSettings',
@@ -50,7 +49,7 @@ const self = {
     ...mapState('app', ['selectedComponentIds']),
     ...mapState('component', ['componentsMap']),
     node() {
-      return getNode(this.id)
+      return this.componentsMap[this.id]
     },
     hasComponent() {
       return this.node && self.components[this.componentTag]

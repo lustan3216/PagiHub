@@ -1,7 +1,9 @@
 import store from '../store'
-import { CAN_NEW_ITEM, GRID_ITEM, TAG } from '../const'
+import { CAN_NEW_ITEM, CHILDREN, GRID_ITEM, TAG } from '../const'
 import { isGridItem } from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
+import localforage from 'localforage'
+import { twoArrayEqual } from '@/utils/tool'
 
 const vmMap = {}
 
@@ -55,18 +57,22 @@ export function vmCreateEmptyItem({ id }) {
   vm(id)._createEmptyItem()
 }
 
-export function vmPasteNodes() {
-  const { componentsMap } = store.state.component
+export async function vmPasteNodes() {
+  // the component should get from tmpComponentsMap to prevent data modified after copy or cross browser
+  const { tmpComponentsMap } = store.state.component
   const { copyComponentIds } = store.state.app
 
   jsonHistory.recordsMerge(() => {
     if (copyComponentIds.length === 1) {
-      const node = componentsMap[copyComponentIds[0]]
-      if (!isGridItem(node)) {
+      const node = tmpComponentsMap[copyComponentIds[0]]
+
+      if (isGridItem(node)) {
+        vmPasteNode(node)
+      } else {
         vmPasteInside(node)
       }
-    } else {
-      copyComponentIds.forEach(id => vmPasteNode(componentsMap[id]))
+    } else if (copyComponentIds.length > 1) {
+      copyComponentIds.forEach(id => vmPasteNode(tmpComponentsMap[id]))
     }
   })
 }
@@ -81,34 +87,30 @@ export function vmPasteInside(theOneCopyNode) {
       vmPasteNode(theOneCopyNode)
     } else if (theOneCopyNode && !isGridItem(theOneCopyNode)) {
       if (isGridItem(selectedNode)) {
-        vm(selectedId)._addNodesToParentAndRecord(theOneCopyNode)
+        vmAddNodesToParentAndRecord(selectedId, theOneCopyNode)
       } else {
         const stopNodeId = vmRemoveNode(selectedNode)
-        vm(stopNodeId)._addNodesToParentAndRecord(theOneCopyNode)
+        vmAddNodesToParentAndRecord(stopNodeId, theOneCopyNode)
       }
     }
   })
 }
 
-export function vmPasteNode({ id, parentId }) {
-  if (parentId === store.state.component.editingComponentSetId) {
-    return
-  }
-
-  const parentNode = vmMap[parentId].node
+export function vmPasteNode(node) {
+  const { parentId, parentNode } = node
 
   if (parentNode[CAN_NEW_ITEM]) {
     // if parentNode can new item, it means the node is one of layer-item, grid-item, carousel-item, form-item
-    vm(parentId)._copy(id)
+    vmAddNodesToParentAndRecord(parentId, node)
   } else {
     // if parentNode can not new item, it means the node is a child of layer-item, grid-item, carousel-item, form-item
     const grandParentId = parentNode.parentId
-    vm(grandParentId)._copy(parentId)
+    vmAddNodesToParentAndRecord(grandParentId, node.parentNode)
   }
 }
 
-export function vmRemoveNode({ id, parentId }) {
-  const stopNodeId = vm(parentId)._remove(id)
+export function vmRemoveNode(node) {
+  const stopNodeId = vm(node.parentId)._remove(node)
   return stopNodeId
 }
 

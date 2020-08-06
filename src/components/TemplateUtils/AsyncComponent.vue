@@ -7,10 +7,12 @@
     :border="false"
     class="h-100"
   >
+    <!--  it will has a bug here if component without key like, editorText -->
     <component
       v-if="vIf"
       :is="tag"
       :id="id"
+      :key="id"
     />
   </component>
 </template>

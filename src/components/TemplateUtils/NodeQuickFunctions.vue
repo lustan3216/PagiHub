@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import NodeName from './NodeName'
 import { Popover, Tooltip } from 'element-ui'
 import { debounce } from 'throttle-debounce'
@@ -136,10 +136,10 @@ export default {
       return this.componentsMap[this.id]
     },
     vm() {
-      return this.node && this.node.$vm
+      return this.node.$vm
     },
     element() {
-      return this.vm && this.vm.$el
+      return this.vm.$el
     },
     isGridItem() {
       return isGridItem(this.node)
@@ -175,7 +175,8 @@ export default {
         },
         {
           name: 'Cut',
-          shortKey: [this.metaKey, 'X']
+          shortKey: [this.metaKey, 'X'],
+          disabled: this.selectedComponentIds.length !== 1
         },
         { name: 'Duplicate' },
         {
@@ -195,9 +196,7 @@ export default {
     this.assignRect(this.element)
   },
   methods: {
-    ...mapMutations('app', {
-      APP_SET: 'SET'
-    }),
+    ...mapActions('app', ['setCopySelectedNodeId']),
     assignRect() {
       if (!this.element) {
         return
@@ -231,7 +230,7 @@ export default {
           }
           break
         case 'Copy':
-          this.APP_SET({ copyComponentIds: [this.id] })
+          this.setCopySelectedNodeId(this.id)
           break
         case 'Paste Inside':
           vmPasteNodes()
@@ -240,6 +239,8 @@ export default {
           vmPasteNodes()
           break
         case 'Cut':
+          this.setCopySelectedNodeId(this.id)
+          vmRemoveNode(this.node)
           break
         case 'Duplicate':
           this.APP_SET({ copyComponentIds: [this.id] })
@@ -260,7 +261,8 @@ $activeColor: rgba(81, 117, 199, 0.68);
   position: fixed;
   pointer-events: none;
   border: 1px dashed $activeColor !important;
-  transition: width 0.38s, height 0.38s, top 0.38s, left 0.38s;
+  transition: all 0.3s;
+  will-change: width, height, top, left;
   z-index: 999;
 }
 .wrapper {

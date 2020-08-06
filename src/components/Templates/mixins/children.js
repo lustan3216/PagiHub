@@ -93,31 +93,19 @@ export default {
       this._addNodesToParentAndRecord(emptyItem)
     },
 
-    _copy(theNodeIdGonnaCopy) {
-      // should use vmMap method to call to keep consistency
-      const theNodeGonnaCopy = this.innerChildren.find(
-        x => x.id === theNodeIdGonnaCopy
-      )
-
-      theNodeGonnaCopy[CHILDREN] = this.componentsMap[
-        theNodeIdGonnaCopy
-      ].children
-      this._addNodesToParentAndRecord(theNodeGonnaCopy)
-    },
-
-    _remove(theNodeIdGonnaRemove) {
+    _remove(theNodeGonnaRemove) {
       if (this.isExample) {
         return
       }
       // should use vmMap method to call to keep consistency
       const records = [
         {
-          path: theNodeIdGonnaRemove,
+          path: theNodeGonnaRemove.id,
           value: undefined
         }
       ]
 
-      traversalChildren(theNodeIdGonnaRemove, child => {
+      traversalChildren(theNodeGonnaRemove, child => {
         records.unshift({
           path: child.id,
           value: undefined

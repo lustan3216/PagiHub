@@ -166,7 +166,7 @@ export default {
   },
   computed: {
     node() {
-      return getNode(this.id)
+      return this.componentsMap[this.id]
     },
     nodeTag() {
       return this.node.tag

@@ -36,7 +36,7 @@ export const defaultSetting = {
     xs: 480,
     xxs: 0
   },
-  cols: { lg: 48, md: 40, sm: 24, xs: 16, xxs: 8 }
+  cols: { lg: 48, md: 48, sm: 48, xs: 48, xxs: 48 }
 }
 
 export const rules = assignDefaultValue(

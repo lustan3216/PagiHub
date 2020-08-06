@@ -16,7 +16,6 @@
         class="relative w-100 over-hidden"
         @click="nodeClick($event, data)"
         @mouseenter="hoverId = data.id"
-        @mouseleave="hoverId = null"
       >
         <node-name
           :id="data.id"

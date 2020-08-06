@@ -43,8 +43,7 @@ import { isLayers } from '@/utils/node'
 import {
   vmCreateEmptyItem,
   vmPasteNode,
-  vmRemoveNode,
-  vmAddNodesToParentAndRecord
+  vmRemoveNode
 } from '@/utils/vmMap'
 
 export default {
@@ -84,8 +83,7 @@ export default {
     isLayers,
     vmCreateEmptyItem,
     vmPasteNode,
-    vmRemoveNode,
-    vmAddNodesToParentAndRecord
+    vmRemoveNode
   }
 }
 </script>

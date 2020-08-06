@@ -17,13 +17,18 @@ import {
   PROPS
 } from '../const'
 
+const points = ['lg', 'md', 'sm', 'xs', 'xxs']
+const mapPoints = object =>
+  points.reduce((all, point) => {
+    all[point] = object
+    return all
+  }, {})
+
 export const gridItems = function() {
   return [
     {
       [TAG]: GRID_ITEM,
-      [PROPS]: {
-        lg: { x: 0, y: 0, w: 22, h: 30 }
-      }
+      [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 30 })
     }
   ]
 }
@@ -56,14 +61,14 @@ export const carousel = function() {
     [CAN_NOT_DELETE]: true,
     [CHILDREN]: [
       {
-        [PROPS]: { lg: { x: 0, y: 0, w: 22, h: 71 }},
+        [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }),
         [TAG]: GRID_ITEM,
         [LABEL]: 'prev',
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true
       },
       {
-        [PROPS]: { lg: { x: 23, y: 0, w: 22, h: 71 }},
+        [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }),
         [TAG]: GRID_ITEM,
         [LABEL]: 'next',
         [CAN_NOT_COPY]: true,

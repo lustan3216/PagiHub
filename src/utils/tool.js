@@ -75,10 +75,6 @@ export function arraySubtract(a, b) {
   return a.filter(n => !toArray(b).includes(n))
 }
 
-export function forEach(nodes, fn, parentNode) {
-  toArray(nodes).forEach(node => fn(node, parentNode))
-}
-
 export function traversal(nodes, fn, parentNode) {
   toArray(nodes).forEach(node => {
     const stop = fn(node, parentNode)

@@ -58,7 +58,7 @@
     <i
       v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
       :disabled="!selectedComponentIds.length"
-      @shortkey="setCopySelectedNodeId"
+      @shortkey="setCopySelectedNodeId(null)"
     />
 
     <i
@@ -69,7 +69,7 @@
 
     <i
       v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
-      :disabled="!selectedComponentNode"
+      :disabled="selectedComponentIds.length !== 1"
       @shortkey="cut"
     />
 
@@ -121,10 +121,9 @@ export default {
   computed: {
     ...mapState('app', [
       'copyComponentIds',
-      'selectedComponentIds',
-      'selectedComponentNode'
+      'selectedComponentIds'
     ]),
-    ...mapState('component', ['editingComponentSetId']),
+    ...mapState('component', ['editingComponentSetId', 'selectedComponentNode']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
     selected() {
       return this.selectedComponentIds.includes(this.id)
@@ -145,7 +144,10 @@ export default {
         this.selectedNodes.forEach(node => vmRemoveNode(node))
       })
     },
-    cut() {}
+    cut() {
+      this.setCopySelectedNodeId(this.selectedComponentNode.id)
+      vmRemoveNode(this.selectedComponentNode)
+    }
   }
 }
 </script>

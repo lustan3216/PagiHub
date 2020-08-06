@@ -29,7 +29,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { AUTO_HEIGHT, PROPS } from '@/const'
-import { deleteBy, getValueByPath } from '@/utils/tool'
+import { deleteBy } from '@/utils/tool'
 import { debounce } from 'throttle-debounce'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -128,34 +128,24 @@ export default {
       deleteBy(this.lockIds, id)
     },
     getCurrentLayout(children, breakPoint) {
-      const layout = children.map((child, index) => {
-        return {
+      const layout = []
+      children.forEach((child, index) => {
+        if (!child.props) {
+          return
+        }
+
+        layout.push({
           static: this.lockIds.includes(child.id),
           id: child.id,
           i: child.id || index, // should not happen, but just prevent crash in case
-          x: this.findAncestorValue(children, breakPoint, index, 'x'),
-          y: this.findAncestorValue(children, breakPoint, index, 'y'),
-          w: this.findAncestorValue(children, breakPoint, index, 'w'),
-          h: this.findAncestorValue(children, breakPoint, index, 'h')
-        }
+          x: child.props[breakPoint].x || 0,
+          y: child.props[breakPoint].y || 0,
+          w: child.props[breakPoint].w || 0,
+          h: child.props[breakPoint].h || 0
+        })
       })
 
       this.layout = layout
-    },
-    findAncestorValue(children, currentBreakPoint, childIndex, key) {
-      // to avoid breakpoints data too large in the future
-      // find value self first, once can't find it, here will try to find the closest value from parent
-      let value
-      // const points = ['lg', 'md', 'sm', 'xs', 'xxs']
-      const length = points.indexOf(currentBreakPoint)
-      for (let i = length; i >= 0; i--) {
-        value = getValueByPath(children, [childIndex, PROPS, points[i], key])
-        if (Number.isInteger(value)) {
-          break
-        }
-      }
-
-      return value
     },
     layoutUpdated(newChildren) {
       if (this.isExample) return

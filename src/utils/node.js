@@ -57,23 +57,31 @@ export function getNode(id, isExample) {
   }
 }
 
-export function traversalAncestorAndSelf(_node, fn = () => {}) {
-  const findPath = node => {
-    const { parentNode } = node
+export function traversalAncestorAndSelf(node, fn = () => {}) {
+  const findPath = parent => {
+    const { parentNode } = parent
     if (!parentNode) {
       return
     }
 
     const stop = fn(parentNode)
     if (!stop) {
-      findPath(node)
+      findPath(parentNode)
     }
   }
 
-  const stop = fn(_node)
+  const stop = fn(node)
   if (!stop) {
-    findPath(_node)
+    findPath(node)
   }
+}
+
+export function traversalChildren(node, fn) {
+  const { children = [] } = node
+  children.forEach(child => {
+    fn(child)
+    traversalChildren(child, fn)
+  })
 }
 
 const cache = {}
@@ -93,14 +101,6 @@ export function shortTagName(node) {
   }
   cache[tag] = capitalize(cache[tag]).replace('-', '')
   return cache[tag]
-}
-
-export function traversalChildren(nodeId, fn) {
-  const { children = [] } = store.state.component.componentsMap[nodeId]
-  children.forEach(child => {
-    fn(child)
-    traversalChildren(child.id, fn)
-  })
 }
 
 export function isLayers(node) {

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import app from '@/main'
 import jsonHistory from '../jsonHistory'
-import store, { SET } from '../index'
+import store, { SET, getCopyComponentIds, getTmpComponentsArray } from '../index'
 import {
   createComponentSet,
   createProject,
@@ -16,14 +16,13 @@ import {
 } from '@/api/node'
 import {
   findBy,
-  forEach,
   deleteBy,
   toArray,
   objectFirstKey,
   cloneJson
 } from '@/utils/tool'
 import { CHILDREN, ID, PARENT_ID } from '@/const'
-import { isComponentSet, isProject } from '@/utils/node'
+import { isProject, isComponentSet } from '@/utils/node'
 import { defineNodeProperties } from '@/utils/nodeProperties'
 import {
   getRootComponentSetId,
@@ -32,11 +31,13 @@ import {
 } from '@/utils/rootComponentSetId'
 
 let childrenOf = {}
+let tmpChildrenOf = {}
 
 const state = {
   editingProjectId: null,
   editingComponentSetId: null,
   componentsMap: {},
+  tmpComponentsMap: {},
   projectIds: [],
   rootComponentSetIds: []
 }
@@ -80,11 +81,34 @@ const mutations = {
     }
   },
 
+  // only for component used to be paste
+  SET_NODES_TO_TMP_MAP(state, componentsArray) {
+    toArray(componentsArray).forEach(node => {
+      const id = node[ID]
+      const parentId = node[PARENT_ID]
+
+      tmpChildrenOf[id] = tmpChildrenOf[id] || []
+      node[CHILDREN] = tmpChildrenOf[id]
+
+      if (parentId) {
+        tmpChildrenOf[parentId] = tmpChildrenOf[parentId] || []
+        const isExist = findBy(tmpChildrenOf[parentId], 'id', node.id)
+        // this context only happens when hot reload
+        if (!isExist) {
+          tmpChildrenOf[parentId].push(node)
+        }
+      }
+
+      Vue.set(state.tmpComponentsMap, id, node)
+      defineNodeProperties(node)
+    })
+  },
+
   // only for project and componentSet
   SET_NODES_TO_MAP(state, componentsArray) {
     const { rootComponentSetIds, projectIds, componentsMap } = state
 
-    forEach(componentsArray, node => {
+    toArray(componentsArray).forEach(node => {
       const id = node[ID]
       const parentId = node[PARENT_ID]
 
@@ -193,6 +217,8 @@ const actions = {
     const componentsArray = await getComponentSetChildren(id)
     commit('SET_NODES_TO_MAP', componentsArray)
     recordRootComponentSetIdByArray(id, componentsArray)
+    getCopyComponentIds()
+    getTmpComponentsArray()
   },
 
   async getComponentSets({ commit, state }, projectId) {
@@ -206,13 +232,6 @@ const actions = {
   async createComponentSet({ commit, state, dispatch }, { projectId, attrs }) {
     const { data } = await createComponentSet(projectId, attrs)
 
-    // const componentSet = await createComponentSet({
-    //   ...node,
-    //   [CHILDREN]: createBySelected
-    //     ? [rootGetters['app/selectedComponentTree']]
-    //     : []
-    // })
-    // commit('RECORD', {})
     commit('SET_EDITING_COMPONENT_SET_ID', data.id)
     commit('SET_NODES_TO_MAP', data)
   },
