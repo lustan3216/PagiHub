@@ -18,6 +18,7 @@
 import RulesGenerator from './Common/RulesGenerator'
 import { boolean, assignDefaultValue, number } from './utils/ruleTool'
 import { objectAssign } from '@/utils/tool'
+import { BREAK_POINTS } from '@/const'
 
 export const defaultSetting = {
   isResizable: true,
@@ -29,13 +30,7 @@ export const defaultSetting = {
   horizontalMargin: 0,
   verticalMargin: 0,
   colNum: 48,
-  breakpoints: {
-    lg: 1200,
-    md: 996,
-    sm: 768,
-    xs: 480,
-    xxs: 0
-  },
+  breakpoints: BREAK_POINTS,
   cols: { lg: 48, md: 48, sm: 48, xs: 48, xxs: 48 }
 }
 

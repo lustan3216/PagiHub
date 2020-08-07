@@ -86,9 +86,6 @@ export default {
     componentSetNode() {
       return this.componentsMap[this.editingComponentSetId]
     },
-    componentSetName() {
-      return this.componentSetNode && shortTagName(this.componentSetNode)
-    },
     innerTree() {
       const tree = this.componentSetNode
 
@@ -161,7 +158,10 @@ export default {
       this.$bus.$emit(`hover-${id}`, false)
     },
     scrollIntoView(id) {
-      this.vmMap[id].$el.scrollIntoView({ behavior: 'smooth' })
+      if (this.vmMap[id]) {
+        // 可能被device hidden 所以map找不到
+        this.vmMap[id].$el.scrollIntoView({ behavior: 'smooth' })
+      }
     }
   }
 }

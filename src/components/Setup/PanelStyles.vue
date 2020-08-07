@@ -288,18 +288,5 @@ export default {
   .el-form-item {
     text-align: center;
   }
-  .title {
-    display: inline-block;
-    position: relative;
-    color: #606266;
-    font-size: 12px;
-  }
-
-  .sub-title {
-    padding-bottom: 0 !important;
-    font-size: 12px;
-    padding-right: 3px;
-    color: #606266;
-  }
 }
 </style>

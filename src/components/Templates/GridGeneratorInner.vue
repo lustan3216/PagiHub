@@ -13,11 +13,10 @@
       :ref="child.id"
       v-bind="child"
       :key="child.id"
-      :style="itemPadding"
       :class="{
         'z-index1': selectedComponentIds.includes(child.id)
       }"
-      drag-ignore-from=".noDrag"
+      drag-ignore-from=".drag-fix"
       drag-allow-from="div"
     >
       <grid-item-child :id="child.id" />
@@ -28,13 +27,11 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { AUTO_HEIGHT, PROPS } from '@/const'
-import { deleteBy, findBy } from '@/utils/tool'
+import { deleteBy } from '@/utils/tool'
 import { debounce } from 'throttle-debounce'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridItemChild from './GridItemChild'
-
-const points = ['lg', 'md', 'sm', 'xs', 'xxs']
 
 export default {
   name: 'GridGeneratorInner',
@@ -60,31 +57,24 @@ export default {
   data() {
     return {
       layout: [],
-      lockIds: [], // touchable will use it
-      width: 0
+      lockIds: [] // touchable will use it
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
+    ...mapState('app', ['selectedComponentIds', 'breakpoint']),
     ...mapState('component', ['componentsMap']),
-    freeStyle() {
-      return `
-       ::v-deep .vue-resizable-handle {
-          margin-bottom:${this.innerProps.verticalMargin}px;
-          margin-right:${this.innerProps.horizontalMargin}px
-      }`
-    },
-    itemPadding() {
-      return `padding:${this.innerProps.verticalMargin}px ${this.innerProps.horizontalMargin}px`
-    },
+    // freeStyle() {
+    //   return `
+    //    ::v-deep .vue-resizable-handle {
+    //       margin-bottom:${this.innerProps.verticalMargin}px;
+    //       margin-right:${this.innerProps.horizontalMargin}px
+    //   }`
+    // },
+    // itemPadding() {
+    //   return `padding:${this.innerProps.verticalMargin}px ${this.innerProps.horizontalMargin}px`
+    // },
     currentBreakPoint() {
-      if (!this.innerProps.responsive || this.isExample) {
-        return 'lg'
-      } else {
-        return points.find(
-          key => this.width >= this.innerProps.breakpoints[key]
-        )
-      }
+      return this.isExample ? 'lg' : this.breakpoint
     }
   },
   watch: {
@@ -106,18 +96,6 @@ export default {
       this.getCurrentLayout(this.innerChildren, this.currentBreakPoint)
     }
   },
-  mounted() {
-    this.width = this.$el.clientWidth
-    this.$refs.gridGenerator.eventBus.$on(
-      'updateWidth',
-      debounce(150, width => {
-        const { clientWidth } = this.$el
-        if (width && this.width !== clientWidth) {
-          this.width = clientWidth
-        }
-      })
-    )
-  },
   methods: {
     ...mapActions('app', ['resizeNodeQuickFn']),
     lock(id) {
@@ -129,7 +107,7 @@ export default {
     getCurrentLayout(children, breakPoint) {
       const layout = []
       children.forEach((child, index) => {
-        if (!child.props) {
+        if (!child.props || child.props[breakPoint].hidden) {
           return
         }
 
@@ -151,32 +129,46 @@ export default {
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
       const records = []
 
-      newChildren.forEach(child => {
-        records.push({
-          path: `${child.id}.${PROPS}.${this.currentBreakPoint}`,
-          value: {
-            x: child.x,
-            y: child.y,
-            h: child.h,
-            w: child.w
-          }
-        })
+      newChildren.forEach((child, index) => {
+        const oldChild = this.innerChildren[index].props[this.breakpoint]
+        const oldValue = {
+          x: oldChild.x,
+          y: oldChild.y,
+          h: oldChild.h,
+          w: oldChild.w
+        }
+
+        const newValue = {
+          x: child.x,
+          y: child.y,
+          h: child.h,
+          w: child.w
+        }
+        if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
+          records.push({
+            path: `${child.id}.${PROPS}.${this.currentBreakPoint}`,
+            value: newValue
+          })
+        }
       })
 
-      this.RECORD(records)
+      if (records.length) {
+        this.RECORD(records)
+      }
     },
     itemAutoHeight(newChildren) {
       // 第一次加載不執行
       if (!this.layout.length) return
 
       newChildren.forEach(node => {
-        const grandChild = this.children[0]
-        // 檢查自己、曾祖孫有沒有autosize
-        if (grandChild && (grandChild[AUTO_HEIGHT] || node[AUTO_HEIGHT])) {
+        const gridItem = this.componentsMap[node.id]
+        const autoHeightItem = gridItem.children[0]
+
+        if (autoHeightItem && autoHeightItem[AUTO_HEIGHT]) {
+          const child = this.$refs[node.id][0]
           this.$nextTick(() => {
-            const child = this.$refs[node.id][0]
             // 新增組建的時候，有可能組建還沒渲染就autosize，會造成零空間
-            if (!this.vmMap[grandChild.id]) return
+            if (!this.vmMap[autoHeightItem.id]) return
 
             child.$el.classList.add('disable-h-100')
             child.autoSize()

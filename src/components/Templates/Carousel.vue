@@ -83,11 +83,11 @@
 </template>
 
 <script>
-  import interactjs from 'interactjs'
-  import { mapState, mapMutations } from 'vuex'
+import interactjs from 'interactjs'
+import { mapState, mapMutations } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
-  import nodeMixin from '@/components/Templates/mixins/node'
-  import childrenMixin from '@/components/Templates/mixins/children'
+import nodeMixin from '@/components/Templates/mixins/node'
+import childrenMixin from '@/components/Templates/mixins/children'
 import GridGenerator from '../Templates/GridGenerator'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, LABEL, LAYERS } from '@/const'

@@ -2,6 +2,7 @@
   <view-port>
     <dialog-interacted
       :draggable="false"
+      @resize="checkBreakpoint"
       @resizeEnd="resizeNodeQuickFn"
     >
       <art-board
@@ -22,6 +23,7 @@ import ArtBoard from './ArtBoard'
 import { isMac } from '@/utils/device'
 import ComponentSet from '../TemplateUtils/ComponentSet'
 import DialogInteracted from '@/components/Components/DialogInteracted'
+import { BREAK_POINTS } from '@/const'
 
 let timer = null
 
@@ -36,6 +38,15 @@ export default {
   computed: {
     ...mapState('component', ['editingComponentSetId'])
   },
+  watch: {
+    editingComponentSetId(value) {
+      if (value) {
+        this.$nextTick(() => {
+          this.checkBreakpoint()
+        })
+      }
+    }
+  },
   created() {
     if (this.$route.params.projectId) {
       this.getProject(this.$route.params.projectId).then(project => {
@@ -46,13 +57,19 @@ export default {
     }
 
     this.initExamples()
-    window.addEventListener('resize', this.setProductionIfWindowSmall)
+    window.addEventListener('resize', () => {
+      this.checkBreakpoint()
+      this.setProductionIfWindowSmall()
+    })
   },
   methods: {
     ...mapActions('app', ['resizeNodeQuickFn']),
     ...mapActions('example', ['initExamples']),
     ...mapActions('component', ['patchComponentSet', 'getProject']),
     ...mapMutations('mode', ['SET_PRODUCTION_MODE', 'SET_DRAFT_MODE']),
+    ...mapMutations('app', {
+      APP_SET: 'SET'
+    }),
     isMac,
     setProductionIfWindowSmall() {
       if (window.innerWidth < 992) {
@@ -69,6 +86,14 @@ export default {
       timer = setTimeout(() => {
         this.resizeNodeQuickFn()
       }, 50)
+    },
+    checkBreakpoint() {
+      const { clientWidth } = this.$refs.artBoard.$el
+      const points = ['lg', 'md', 'sm', 'xs', 'xxs']
+
+      this.APP_SET({
+        breakpoint: points.find(key => clientWidth >= BREAK_POINTS[key])
+      })
     }
   }
 }

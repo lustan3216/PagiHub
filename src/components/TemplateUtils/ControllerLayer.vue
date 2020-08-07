@@ -2,9 +2,8 @@
   <!-- id here is for selection using, can not delete -->
   <div
     v-if="isDraftMode && node"
-    :id="id"
-    :class="{ selected, 'dash-border': !isAnimating && border }"
-    class="control-layer"
+    :class="{ selected, 'dash-border': border }"
+    class="h-100"
     @click.stop="singleClick"
     @dblclick.stop="dblclick"
   >
@@ -13,21 +12,7 @@
       :id="id"
     />
 
-    <div
-      v-click-outside="clickOutside"
-      v-if="canDrag || canEditText"
-      :class="{ noDrag: !canNotEdit, 'can-not-edit': canNotEdit }"
-      class="h-100"
-    >
-      <slot />
-    </div>
-
-    <div
-      v-else
-      class="h-100"
-    >
-      <slot />
-    </div>
+    <slot :can-not-edit="!canOperate" />
   </div>
 
   <div
@@ -39,25 +24,19 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapState, mapMutations } from 'vuex'
 import NodeQuickFunctions from './NodeQuickFunctions'
-import clickOutside from '@/utils/clickOutside'
-import { CAN_DRAG, CAN_EDIT, GRID_ITEM } from '@/const'
+import { CAN_DRAG, CAN_EDIT } from '@/const'
 import { isMac } from '@/utils/device'
 
-const controllerVmMap = {}
-if (process.env.NODE_ENV !== 'production') {
-  window.controller = controllerVmMap
-}
+const store = Vue.observable({ currentCancanOperateId: null })
 
 export default {
   name: 'ControllerLayer',
   inject: { isExample: { default: false }},
   components: {
     NodeQuickFunctions
-  },
-  directives: {
-    clickOutside
   },
   props: {
     id: {
@@ -71,12 +50,11 @@ export default {
   },
   data() {
     return {
-      canNotEdit: true,
-      mounted: true
+      canOperate: true
     }
   },
   computed: {
-    ...mapState('app', ['isAnimating', 'selectedComponentIds']),
+    ...mapState('app', ['selectedComponentIds']),
     ...mapState('example', ['basicExamplesMap']),
     node() {
       if (this.isExample) {
@@ -88,27 +66,23 @@ export default {
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },
-    canEditText() {
-      return this.node && this.node.canEditText
+    canEdit() {
+      return this.node && (this.node[CAN_DRAG] || this.node[CAN_EDIT])
     },
-    canDrag() {
-      return this.node && this.node.canDrag
-    },
-    isGridItem() {
-      return this.node.tag === GRID_ITEM
+    currentCancanOperateId() {
+      return store.currentCancanOperateId
+    }
+  },
+  watch: {
+    currentCancanOperateId(id) {
+      if (this.canEdit && this.id !== id) {
+        this.canOperate = false
+      }
     }
   },
   created() {
-    if (this.isDraftMode && !this.isExample) {
-      controllerVmMap[this.id] = this
-    }
-  },
-  mounted() {
-    this.mounted = true
-  },
-  beforeDestroy() {
-    if (this.isDraftMode && !this.isExample) {
-      delete controllerVmMap[this.id]
+    if (this.canEdit) {
+      this.canOperate = false
     }
   },
   methods: {
@@ -119,23 +93,14 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     dblclick() {
-      if (this.node[CAN_DRAG] || this.node[CAN_EDIT]) {
-        this.canNotEdit = false
-        this.SET_SELECTED_COMPONENT_ID(this.id)
-      }
-    },
-    clickOutside(event) {
-      const inSideBar = document
-        .querySelector('.sidebar-right')
-        .contains(event.target)
-
-      if (!inSideBar) {
-        this.canNotEdit = true
+      if (this.canEdit) {
+        this.canOperate = true
       }
     },
     singleClick(event) {
       // don't change selected component ids when dragging item,
       // otherwise vue-resizable-handle will cause a bug here
+      store.currentCancanOperateId = this.id
       if (
         this.isExample ||
         event.target.classList.contains('vue-resizable-handle')
@@ -145,7 +110,7 @@ export default {
 
       if (event.metaKey || event.ctrlKey) {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)
-      } else if (this.canNotEdit) {
+      } else {
         this.SET_SELECTED_COMPONENT_ID(this.id)
       }
     }
@@ -154,20 +119,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.control-layer {
-  transition: box-shadow 0.6s, border-color 0.6s;
-  height: 100%;
-}
-.selected {
-  /*border-color: rgba(81, 117, 199, 0.68) !important;*/
-}
-::v-deep.can-not-edit {
-  pointer-events: none;
-
-  & > .swiper-container {
-    cursor: unset !important;
-  }
-}
 .dash-border {
   border: 1px dashed #dedede;
   margin: -1px;

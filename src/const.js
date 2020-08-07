@@ -33,6 +33,14 @@ export const GRID_GENERATOR = 'grid-generator'
 export const GRID_ITEM = 'grid-item'
 export const GRID_ITEM_CHILD = 'grid-item-child'
 
+export const BREAK_POINTS = {
+  lg: 1200,
+  md: 996,
+  sm: 768,
+  xs: 480,
+  xxs: 0
+}
+
 export const EXAMPLE = 'EXAMPLE' // need to uppercase separate id of different types
 // 01EDEHZQ2M9V8X4VZ7HEFJ1R0A could be project or componentSet
 // 12a01EDEHZQ2M9V8X4VZ7HEFJ1R0A is component

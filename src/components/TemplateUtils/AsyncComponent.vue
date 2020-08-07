@@ -1,20 +1,35 @@
 <template>
-  <!--  should have observe-visibility here, otherwise some nested layout case, the grid layout will not work right-->
-  <component
+  <div
     v-observe-visibility="options"
-    :is="isDraftMode && !isExample ? 'controller-layer' : 'div'"
-    :id="id"
-    :border="false"
-    class="h-100"
+    v-if="isExample"
   >
-    <!--  it will has a bug here if component without key like, editorText -->
     <component
       v-if="vIf"
       :is="tag"
       :id="id"
       :key="id"
     />
-  </component>
+  </div>
+
+  <!--  should have observe-visibility here, otherwise some nested layout case, the grid layout will not work right-->
+  <controller-layer
+    v-observe-visibility="options"
+    v-else
+    :id="id"
+    :border="false"
+  >
+    <!--  it will has a bug here if component without key like, editorText -->
+    <template v-slot="{ canNotEdit }">
+      <!--  it will has a bug here if component without key like, editorText -->
+      <component
+        v-if="vIf"
+        :is="tag"
+        :id="id"
+        :key="id"
+        :class="{ 'no-action': canNotEdit, 'drag-fix': !canNotEdit }"
+      />
+    </template>
+  </controller-layer>
 </template>
 
 <script>

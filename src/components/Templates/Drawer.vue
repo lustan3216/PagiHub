@@ -24,10 +24,14 @@
         :id="id"
         class="h-100"
       >
-        <grid-generator-inner
-          :id="id"
-          :inner-props="innerProps"
-        />
+        <template v-slot="{ canNotEdit }">
+          <grid-generator-inner
+            :id="id"
+            :inner-props="innerProps"
+            :class="{ 'no-action': canNotEdit }"
+          />
+        </template>
+
       </controller-layer>
     </el-drawer>
   </portal>

@@ -31,7 +31,7 @@ import {
 } from '@/utils/rootComponentSetId'
 
 let childrenOf = {}
-let tmpChildrenOf = {}
+const tmpChildrenOf = {}
 
 const state = {
   editingProjectId: null,

@@ -1,23 +1,20 @@
 <template>
+  <!-- this controller-layer here only for grid-item -->
   <controller-layer :id="id">
-    <div
+    <async-component
       v-free-style="innerStyles"
-      class="h-100"
-    >
-      <async-component
-        v-if="firstChild"
-        :id="firstChild.id"
-      />
+      v-if="firstChild"
+      :id="firstChild.id"
+    />
 
-      <div
-        v-else-if="isDraftMode && !isExample && selected"
-        class="flex-center wh-100"
-      >
-        <component-add
-          :id="id"
-          size="large"
-        />
-      </div>
+    <div
+      v-else-if="isDraftMode && !isExample && selected"
+      class="flex-center wh-100"
+    >
+      <component-add
+        :id="id"
+        size="large"
+      />
     </div>
   </controller-layer>
 </template>
@@ -40,7 +37,7 @@ export default {
   },
   mixins: [childrenMixin, nodeMixin],
   computed: {
-    ...mapState('app', ['isAnimating', 'selectedComponentIds']),
+    ...mapState('app', ['selectedComponentIds']),
     firstChild() {
       return this.innerChildren[0]
     },

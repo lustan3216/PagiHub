@@ -11,6 +11,10 @@
       />
     </el-button-group>
 
+    <br>
+
+    <item-hidden-controller />
+
     <div class="sidebar-right-content">
       <component
         v-if="theOnlySelectedComponentId"
@@ -26,6 +30,7 @@
 import { mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
+import ItemHiddenController from '../Setup/ItemHiddenController'
 import PanelExplain from '../Setup/PanelExplain'
 import NodeInfo from '../TemplateUtils/NodeName'
 
@@ -35,7 +40,8 @@ export default {
     NodeInfo,
     PanelStyles,
     PanelSettings,
-    PanelExplain
+    PanelExplain,
+    ItemHiddenController
   },
   data() {
     return {
@@ -57,17 +63,24 @@ export default {
 }
 
 ::v-deep {
-  .el-collapse-item__header {
-    border-bottom: none;
-  }
-  .el-collapse-item__wrap {
-    border-bottom: none;
-  }
   .el-form-item {
     margin-bottom: 0;
   }
   h4 {
     margin: 5px 0;
+  }
+  .title {
+    display: inline-block;
+    position: relative;
+    color: #606266;
+    font-size: 12px;
+  }
+
+  .sub-title {
+    padding-bottom: 0 !important;
+    font-size: 12px;
+    padding-right: 3px;
+    color: #606266;
   }
   .el-form-item__label {
     color: #606266;
@@ -81,4 +94,5 @@ export default {
   overflow: scroll;
   padding: 15px 10px;
 }
+
 </style>

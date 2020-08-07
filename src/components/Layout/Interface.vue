@@ -35,24 +35,7 @@ export default {
     PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
-    fadeTransition() {
-      return {
-        functional: true,
-        render(h, context) {
-          return h('transition', { props: { name: 'fade', mode: 'out-in' }, on: {
-              enter(el, done) {
-
-                setTimeout(() => {
-                  let { top, left, width, height } = context.children[0].data.attrs.data
-                  console.log(top, left, width, height)
-
-                }, 510)
-              }
-            } }, context.children)
-        }
-      }
-    }
+    ...mapState('app', ['selectedComponentIds'])
   }
 }
 </script>

@@ -1,10 +1,11 @@
-import store, { SET } from '../index'
+import { SET } from '../index'
 import { arraySubtract, cloneJson, toArray } from '@/utils/tool'
-import { isComponent, isProject, traversalAncestorAndSelf, traversalChildren } from '@/utils/node'
+import { isComponent, traversalAncestorAndSelf, traversalChildren } from '@/utils/node'
+import { quickFnMap } from '@/components/TemplateUtils/NodeQuickFunctions'
+import { debounce } from 'throttle-debounce'
 
 const state = {
-  userId: null,
-  isAnimating: false,
+  breakpoint: 'lg',
   scaleRatio: 1,
   selectedComponentIds: [],
   copyComponentIds: [],
@@ -72,14 +73,14 @@ const actions = {
     localStorage.setItem('copyComponentIds', JSON.stringify(copyComponentIds))
     localStorage.setItem('tmpComponentsArray', JSON.stringify(copyNodeArray))
     commit('SET', { copyComponentIds })
-    commit('component/SET_NODES_TO_TMP_MAP', cloneJson(copyNodeArray) , { root: true })
+    commit('component/SET_NODES_TO_TMP_MAP', cloneJson(copyNodeArray), { root: true })
     return copyComponentIds
   },
-  resizeNodeQuickFn({ state }) {
+  resizeNodeQuickFn: debounce(300, function({ state }) {
     state.selectedComponentIds.forEach(id => {
-      this._vm.$bus.$emit(`quick-functions-transforming-${id}`)
+      quickFnMap[id].resize()
     })
-  }
+  })
 }
 
 const getters = {

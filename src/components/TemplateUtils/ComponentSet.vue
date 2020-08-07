@@ -4,7 +4,12 @@
     :id="firstChild.id"
     :border="false"
   >
-    <async-component :id="firstChild.id" />
+    <template v-slot="{ canNotEdit }">
+      <async-component
+        :id="firstChild.id"
+        :class="{ 'no-action': canNotEdit }"
+      />
+    </template>
   </controller-layer>
   <div
     v-else

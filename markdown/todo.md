@@ -35,13 +35,10 @@ MVP
 ### Setting
 
 <ol>
-5<li>grid item, auto hieght 有 bug</li>
 5<li>grid layout could choose Full view height</li>
 5<li>grid item 要可以比例伸展, grid item 的比例放大 要放哪</li>
 3<li>寬高要disable，逼他們用layout / 需要顯示寬高，跟 max-width / height</li>
-5<li>把grid layout的margin 要換到style上</li>
 <li>Grid layout 不用有control layer，style 可以append在自己身上，但heihgt width trnasform等等不能動</li>
-3<li>grid item 要可以控制 xl lg 什麼時候可以hidden</li>
 5<li>grid item 考慮要不要都autoHeight, 考慮寬變時，高也要自適應</li>
 4<li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridGenerator 可以固定寬</li> ? style 做個設計，要不要固定寬高，要的話，
 </ol>

@@ -1,6 +1,7 @@
 <template>
   <div
     v-show="node.visible"
+    ref="node"
     :class="{
       'is-expanded': expanded,
       'is-current': node.isCurrent,
@@ -10,12 +11,11 @@
     }"
     :aria-expanded="expanded"
     :aria-disabled="node.disabled"
-    class="el-tree-node"
     :aria-checked="node.checked"
-    role="treeitem"
     :draggable="tree.draggable"
+    class="el-tree-node"
+    role="treeitem"
     tabindex="-1"
-    ref="node"
     @click.stop="handleClick"
     @contextmenu="($event) => this.handleContextMenu($event)"
     @dragstart.stop="handleDragStart"

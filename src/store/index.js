@@ -26,7 +26,7 @@ window.addEventListener('storage', function(event) {
     case 'tmpComponentsArray':
       return getTmpComponentsArray()
   }
-});
+})
 
 export function getCopyComponentIds() {
   const ids = localStorage.getItem('copyComponentIds')
@@ -37,7 +37,6 @@ export function getTmpComponentsArray() {
   const array = localStorage.getItem('tmpComponentsArray')
   store.commit('component/SET_NODES_TO_TMP_MAP', JSON.parse(array) || [], { root: true })
 }
-
 
 const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',

@@ -194,6 +194,10 @@
 .no-action {
   touch-action: none !important;
   pointer-events: none !important;
+
+  & > .swiper-container {
+    cursor: unset !important;
+  }
 }
 
 [data-lock] {
