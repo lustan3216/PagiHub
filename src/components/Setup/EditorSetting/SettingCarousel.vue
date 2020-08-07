@@ -10,7 +10,7 @@
 import { mapState, mapMutations } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { assignDefaultValue, boolean, select, number } from './utils/ruleTool'
-import { SOFT_DELETE, LAYERS, CHILDREN } from '@/const'
+import { SOFT_DELETE, LAYERS, CHILDREN, LABEL } from '@/const'
 
 // https://gs-shop.github.io/vue-slick-carousel/#/api
 // data-swiper-parallax 在grid item設定
@@ -54,7 +54,7 @@ export default {
             info: '',
             control: [
               {
-                handle: x => x !== 'none',
+                handle: x => x,
                 rule: [number('interval', { info: '', step: 100 })]
               }
             ]
@@ -79,10 +79,10 @@ export default {
             info: '',
             options: ['always', 'hover', 'never', 'custom']
           }),
-          select('type', {
-            info: '',
-            options: [{ label: 'General', value: '' }, 'card']
-          }),
+          // select('type', {
+          //   info: '',
+          //   options: [{ label: 'General', value: '' }, 'card']
+          // }),
           select('direction', { info: '', options: ['horizontal', 'vertical'] })
         ],
         defaultSetting
@@ -114,12 +114,12 @@ export default {
       api.trigger('indicatorPosition', 'change', value ? 'bottom' : 'right')
     },
     arrow(value) {
-      const layersNode = this.componentsMap[this.id][CHILDREN].find(
-        x => x.tag === LAYERS
+      const IndicatorGrid = this.componentsMap[this.id][CHILDREN].find(
+        x => x[LABEL] === 'indicators'
       )
       this.RECORD([
         {
-          path: `${layersNode.id}.${SOFT_DELETE}`,
+          path: `${IndicatorGrid.id}.${SOFT_DELETE}`,
           value: value !== 'custom'
         }
       ])

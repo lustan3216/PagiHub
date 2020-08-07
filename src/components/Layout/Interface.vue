@@ -18,6 +18,8 @@
     <portal-target
       v-for="id in selectedComponentIds"
       :name="`Interface-${id}`"
+      :key="`Interface-${id}`"
+      slim
     />
   </div>
 </template>
@@ -33,7 +35,24 @@ export default {
     PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds'])
+    ...mapState('app', ['selectedComponentIds']),
+    fadeTransition() {
+      return {
+        functional: true,
+        render(h, context) {
+          return h('transition', { props: { name: 'fade', mode: 'out-in' }, on: {
+              enter(el, done) {
+
+                setTimeout(() => {
+                  let { top, left, width, height } = context.children[0].data.attrs.data
+                  console.log(top, left, width, height)
+
+                }, 510)
+              }
+            } }, context.children)
+        }
+      }
+    }
   }
 }
 </script>
@@ -44,5 +63,14 @@ export default {
   display: flex;
   overflow: hidden;
   background-color: $color-grey;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -28,9 +28,9 @@
     </template>
 
     <template v-if="innerProps.arrow === 'custom'">
-      <layers
-        :id="firstLayerId"
-        class="layers"
+      <grid-generator
+        :id="customerIndicator.id"
+        class="customer-indicator"
       />
 
       <portal :to="`QuickFunctions${prevGridItemId}`">
@@ -40,9 +40,7 @@
           placement="top"
         >
           <el-button
-            class="prev"
             icon="el-icon-thumb"
-            circle
             @click="carousel.prev()"
           />
         </el-tooltip>
@@ -55,9 +53,7 @@
           placement="top"
         >
           <el-button
-            class="next"
             icon="el-icon-thumb"
-            circle
             @click="carousel.next()"
           />
         </el-tooltip>
@@ -80,36 +76,34 @@
         :key="child.id"
         :class="`carousel-item-${id}`"
       >
-        <layers
-          :id="child.id"
-          class="h-100"
-        />
+        <async-component :id="child.id" />
       </el-carousel-item>
     </el-carousel>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import interactjs from 'interactjs'
+  import interactjs from 'interactjs'
+  import { mapState, mapMutations } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
-import childrenMixin from '@/components/Templates/mixins/children'
-import nodeMixin from '@/components/Templates/mixins/node'
-import Layers from './Layers'
-import ControllerLayer from '../TemplateUtils/ControllerLayer'
+  import nodeMixin from '@/components/Templates/mixins/node'
+  import childrenMixin from '@/components/Templates/mixins/children'
+import GridGenerator from '../Templates/GridGenerator'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, LABEL, LAYERS } from '@/const'
-import { CarouselItem, Carousel } from 'element-ui'
+import { CarouselItem, Carousel, Tooltip } from 'element-ui'
 import { traversal } from '@/utils/tool'
+import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
 
 export default {
   defaultSetting,
   name: 'Carousel',
   components: {
-    ControllerLayer,
-    Layers,
+    AsyncComponent,
+    GridGenerator,
     ElCarouselItem: CarouselItem,
-    ElCarousel: Carousel
+    ElCarousel: Carousel,
+    ElTooltip: Tooltip
   },
   directives: {
     ObserveVisibility
@@ -132,17 +126,17 @@ export default {
     gridGenerators() {
       return this.innerChildren.filter(x => x[LABEL] === 'slider')
     },
-    firstLayerId() {
-      return this.innerChildren.filter(x => x.tag === LAYERS)[0].id
+    customerIndicator() {
+      return this.innerChildren.find(x => x[LABEL] === 'indicators')
     },
-    firstLayerChildren() {
-      return this.componentsMap[this.firstLayerId][CHILDREN]
+    customerIndicatorNode() {
+      return this.componentsMap[this.customerIndicator.id]
     },
     prevGridItemId() {
-      return this.firstLayerChildren[0][CHILDREN][0].id
+      return this.customerIndicatorNode[CHILDREN][0].id
     },
     nextGridItemId() {
-      return this.firstLayerChildren[0][CHILDREN][1].id
+      return this.customerIndicatorNode[CHILDREN][1].id
     },
     arrow() {
       return this.innerProps.arrow === 'custom'
@@ -254,10 +248,6 @@ export default {
 .el-carousel__item {
   background-color: #bbbec1;
 }
-.layers {
-  z-index: 10;
-  height: 0;
-}
 
 ::v-deep {
   .el-carousel__indicators {
@@ -273,11 +263,15 @@ export default {
     left: 0;
   }
 }
-.prev,
-.next {
-  right: -5px;
-  top: -5px;
+
+::v-deep .vue-grid-item {
+  pointer-events: all;
+}
+
+.customer-indicator{
   position: absolute;
-  padding: 5px;
+  width: 100%;
+  z-index: 10;
+  pointer-events: none;
 }
 </style>

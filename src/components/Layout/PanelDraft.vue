@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-::v-deep.item > .vue-resizable-handle {
+::v-deep.vue-grid-item > .vue-resizable-handle {
   bottom: -10px;
   right: -10px;
 }

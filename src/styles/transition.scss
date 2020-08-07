@@ -1,27 +1,6 @@
-.shadow-enter-active,
-.shadow-leave-active {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.shadow-enter,
-.shadow-leave-to {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0);
-}
-
-.fade-left-enter-active,
-.fade-left-leave-active {
-  transition: all 0.5s;
-}
-
-.fade-left-enter,
-.fade-left-leave-to {
-  opacity: 0;
-  transform: translateX(-50px);
-}
-
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s;
+  transition: all 1s;
 }
 
 .fade-enter,

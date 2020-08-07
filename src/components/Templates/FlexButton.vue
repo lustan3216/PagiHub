@@ -20,9 +20,7 @@
         placement="top"
       >
         <el-button
-          class="action"
           icon="el-icon-thumb"
-          circle
           @click.stop="onClick"
         />
       </el-tooltip>
@@ -123,11 +121,5 @@ export default {
     padding: 0;
     min-height: inherit;
   }
-}
-.action {
-  right: -5px;
-  top: -5px;
-  position: absolute;
-  padding: 5px;
 }
 </style>

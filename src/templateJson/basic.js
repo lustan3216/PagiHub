@@ -13,8 +13,8 @@ import {
   STYLE,
   LABEL,
   AUTO_HEIGHT,
-  SOFT_DELETE,
-  PROPS
+  CAN_NOT_RENAME,
+  PROPS, SOFT_DELETE
 } from '../const'
 
 const points = ['lg', 'md', 'sm', 'xs', 'xxs']
@@ -56,26 +56,6 @@ export const layers = function(options) {
 }
 
 export const carousel = function() {
-  const _gridGenerator = gridGenerator({
-    [CAN_NOT_COPY]: true,
-    [CAN_NOT_DELETE]: true,
-    [CHILDREN]: [
-      {
-        [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }),
-        [TAG]: GRID_ITEM,
-        [LABEL]: 'prev',
-        [CAN_NOT_COPY]: true,
-        [CAN_NOT_DELETE]: true
-      },
-      {
-        [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }),
-        [TAG]: GRID_ITEM,
-        [LABEL]: 'next',
-        [CAN_NOT_COPY]: true,
-        [CAN_NOT_DELETE]: true
-      }
-    ]
-  })
   return {
     w: 36,
     h: 300,
@@ -83,17 +63,35 @@ export const carousel = function() {
     [CAN_NEW_ITEM]: false,
     [CAN_DRAG]: true,
     [CHILDREN]: [
-      layers({
+      gridGenerator({
         [LABEL]: 'indicators',
-        [SOFT_DELETE]: true,
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true,
+        [SOFT_DELETE]: true,
+        [CAN_NOT_RENAME]: true,
         [CAN_NEW_ITEM]: false,
-        [CHILDREN]: [_gridGenerator]
+        [CHILDREN]: [
+          {
+            [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }),
+            [TAG]: GRID_ITEM,
+            [LABEL]: 'prev',
+            [CAN_NOT_COPY]: true,
+            [CAN_NOT_RENAME]: true,
+            [CAN_NOT_DELETE]: true
+          },
+          {
+            [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }),
+            [TAG]: GRID_ITEM,
+            [LABEL]: 'next',
+            [CAN_NOT_COPY]: true,
+            [CAN_NOT_DELETE]: true,
+            [CAN_NOT_RENAME]: true
+          }
+        ]
       }),
-      layers({ [LABEL]: 'slider' }),
-      layers({ [LABEL]: 'slider' }),
-      layers({ [LABEL]: 'slider' })
+      gridGenerator({ [LABEL]: 'slider' }),
+      gridGenerator({ [LABEL]: 'slider' }),
+      gridGenerator({ [LABEL]: 'slider' })
     ]
   }
 }
@@ -112,6 +110,7 @@ export const flexButton = function() {
     w: 9,
     h: 30,
     [TAG]: 'flex-button',
+    [LABEL]: 'link',
     [CAN_EDIT]: true
   }
 }

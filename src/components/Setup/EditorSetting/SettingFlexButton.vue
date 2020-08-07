@@ -35,7 +35,7 @@ export default {
     spec() {
       const specArray = [
         select('type', {
-          options: [{ label: 'Button', value: null }, 'text']
+          options: [{ label: 'Button', value: 'primary' }, 'text']
         })
       ]
 

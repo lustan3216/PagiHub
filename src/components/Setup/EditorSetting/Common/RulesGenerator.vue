@@ -12,7 +12,7 @@
 <script>
 import formCreate from '@form-create/element-ui'
 import { Switch, Tooltip, InputNumber } from 'element-ui'
-import { cloneJson, getValueByPath, objectHasAnyKey } from '@/utils/tool'
+import { cloneObject, getValueByPath, objectHasAnyKey } from '@/utils/tool'
 import { vm } from '@/utils/vmMap'
 import { mapMutations } from 'vuex'
 import { PROPS } from '@/const'
@@ -48,7 +48,7 @@ export default {
     ]
 
     if (selectedComponentNode) {
-      innerRules = cloneJson(this.rules)
+      innerRules = cloneObject(this.rules)
       traversalRules(innerRules, this.transformRule)
     }
 

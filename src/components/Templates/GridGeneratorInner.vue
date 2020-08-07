@@ -19,7 +19,6 @@
       }"
       drag-ignore-from=".noDrag"
       drag-allow-from="div"
-      class="item"
     >
       <grid-item-child :id="child.id" />
     </vue-grid-item>
@@ -29,7 +28,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { AUTO_HEIGHT, PROPS } from '@/const'
-import { deleteBy } from '@/utils/tool'
+import { deleteBy, findBy } from '@/utils/tool'
 import { debounce } from 'throttle-debounce'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -111,7 +110,7 @@ export default {
     this.width = this.$el.clientWidth
     this.$refs.gridGenerator.eventBus.$on(
       'updateWidth',
-      debounce(380, width => {
+      debounce(150, width => {
         const { clientWidth } = this.$el
         if (width && this.width !== clientWidth) {
           this.width = clientWidth

@@ -4,30 +4,30 @@
     :to="`Interface-${id}`"
   >
     <div
-      :style="{
-        top: top + 'px',
-        width: width - 2 + 'px',
-        height: height - 2 + 'px',
-        left: left + 'px'
-      }"
+      ref="framer"
       class="quick-functions"
     >
       <div
-        :class="[top > 100 ? 'top' : 'bottom']"
-        class="wrapper"
+        class="wrapper flex top"
       >
         <node-name
           :id="id"
           class="title"
         />
+
+        <portal-target
+          v-if="isDraftMode"
+          :name="`QuickFunctions${id}`"
+          class="button-group"
+        />
       </div>
 
       <div
-        :class="[top > 100 ? 'left' : 'right']"
-        class="wrapper"
+        class="left wrapper"
       >
         <el-tooltip
-          :placement="top > 100 ? 'left' : 'right'"
+          effect="light"
+          placement="left"
           :content="newItemToolTip"
         >
           <el-button
@@ -66,11 +66,6 @@
           </el-dropdown-menu>
         </el-dropdown>
 
-        <portal-target
-          v-if="isDraftMode"
-          :name="`QuickFunctions${id}`"
-          slim
-        />
       </div>
     </div>
   </portal>
@@ -91,6 +86,11 @@ import {
 } from '@/utils/vmMap'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
 
+let topShared = window.innerHeight / 2
+let leftShared = window.innerWidth / 2
+let widthShared = 0
+let heightShared = 0
+
 export default {
   name: 'NodeQuickFunctions',
   components: {
@@ -106,10 +106,11 @@ export default {
   },
   data() {
     return {
-      top: null,
-      left: null,
-      width: null,
-      height: null
+      top:topShared ,
+      left: leftShared,
+      width: widthShared,
+      height: heightShared,
+      animationId: null
     }
   },
   computed: {
@@ -187,27 +188,62 @@ export default {
     }
   },
   created() {
-    this.$bus.$on(
-      `quick-functions-transforming-${this.id}`,
-      debounce(250, () => {
-        this.assignRect()
-      })
-    )
-    this.assignRect(this.element)
+    this.$bus.$on(`quick-functions-transforming-${this.id}`, () => {
+      debounce(380, this.resize.bind(this))()
+    })
+    this.resize()
   },
   methods: {
     ...mapActions('app', ['setCopySelectedNodeId']),
-    assignRect() {
+    resize() {
       if (!this.element) {
         return
       }
       this.$nextTick(() => {
-        const { x, y, width, height } = this.element.getBoundingClientRect()
-        this.width = width
-        this.height = height
-        this.top = y
-        this.left = x
+        const { x: left, y: top, width, height } = this.element.getBoundingClientRect()
+        if (top && left && width && height) {
+
+          this.animationId && cancelAnimationFrame(this.animationId)
+          let opacity = 0
+          const alpha = 0.1
+          const { framer } = this.$refs
+          const animate = () => {
+            this.top = topShared = this.lerp(this.top, top, alpha)
+            this.left = leftShared = this.lerp(this.left, left, alpha)
+            this.width = widthShared = this.lerp(this.width, width, alpha)
+            this.height = heightShared = this.lerp(this.height, height, alpha)
+            opacity = this.lerp(opacity, 1, alpha)
+
+            if (framer) {
+              framer.style.width = this.width - 2 + 'px'
+              framer.style.height = this.height - 2 + 'px'
+              framer.style.top = this.top + 'px'
+              framer.style.left = this.left + 'px'
+              framer.style.opacity = opacity
+            }
+
+            if (Math.abs(top - this.top) > 1 || Math.abs(left - this.left) > 1 || Math.abs(width - this.width) > 1 || Math.abs(height - this.height) > 1) {
+              this.animationId = requestAnimationFrame(animate.bind(this))
+            } else {
+              this.animationId = null
+              if (framer) {
+                framer.style.width = width -2 + 'px'
+                framer.style.height = height -2 + 'px'
+                framer.style.top = top + 'px'
+                framer.style.left = left + 'px'
+                framer.style.opacity = '1'
+              }
+            }
+          }
+
+          requestAnimationFrame(animate.bind(this))
+        }
       })
+    },
+    lerp(value1, value2, amount) {
+      amount = amount < 0 ? 0 : amount;
+      amount = amount > 1 ? 1 : amount;
+      return value1 + (value2 - value1) * amount;
     },
     handleCommand(command) {
       switch (command) {
@@ -261,10 +297,10 @@ $activeColor: rgba(81, 117, 199, 0.68);
   position: fixed;
   pointer-events: none;
   border: 1px dashed $activeColor !important;
-  transition: all 0.3s;
-  will-change: width, height, top, left;
+  /*will-change: width, height, top, left;*/
   z-index: 999;
 }
+
 .wrapper {
   pointer-events: all;
   position: absolute;
@@ -322,6 +358,35 @@ $activeColor: rgba(81, 117, 199, 0.68);
 
   & > *:last-child {
     border-radius: 0 0 5px 5px;
+  }
+}
+
+::v-deep.button-group {
+  margin-left: 5px;
+  display: flex;
+  & > * {
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid $activeColor;
+    margin-left: -1px;
+  }
+
+  button {
+    padding: 5px;
+  }
+
+  i {
+    color: $activeColor !important;
+  }
+
+  & > *:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  & > *:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 }
 </style>

@@ -1,16 +1,8 @@
 <template>
-  <div>
-    <rules-generator
-      :id="id"
-      :rules="spec"
-    />
-
-    <h4>Fullscreen</h4>
-    <rules-generator
-      :id="id"
-      :rules="spec2"
-    />
-  </div>
+  <rules-generator
+    :id="id"
+    :rules="spec"
+  />
 </template>
 
 <script>
@@ -45,7 +37,7 @@ export const defaultSetting = {
   hideControls: true,
   resetOnEnd: false,
   displayDuration: false,
-  fullscreen: { enabled: true, fallback: true, iosNative: false }
+  fullscreen: { enabled: true, fallback: true, iosNative: true }
 }
 
 export default {
@@ -88,16 +80,6 @@ export default {
           boolean('hideControls'),
           boolean('resetOnEnd'),
           boolean('displayDuration')
-        ],
-        defaultSetting
-      ),
-      spec2: assignDefaultValue(
-        [
-          boolean('enabled', { path: 'fullscreen', title: 'Enable' }),
-          boolean('iosNative', {
-            path: 'fullscreen',
-            title: 'iOS support'
-          })
         ],
         defaultSetting
       )

@@ -26,7 +26,7 @@
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import { shortTagName, shortId } from '@/utils/node'
-import { LABEL } from '@/const'
+import { CAN_NOT_RENAME, LABEL } from '@/const'
 
 const observable = Vue.observable({ editingId: null })
 
@@ -58,7 +58,7 @@ export default {
       return shortId(this.id)
     },
     editing() {
-      return observable.editingId === this.id && this.editable
+      return observable.editingId === this.id && this.editable && !this.node[CAN_NOT_RENAME]
     }
   },
   methods: {

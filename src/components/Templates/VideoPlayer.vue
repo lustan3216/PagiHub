@@ -3,6 +3,7 @@
     v-free-style="innerStyles"
     ref="plyr"
     :options="innerProps"
+    :key="JSON.stringify(innerProps)"
     class="h-100"
     @mouseleave="mouseleave"
   >
