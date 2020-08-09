@@ -28,7 +28,6 @@
 import { mapState, mapActions } from 'vuex'
 import { AUTO_HEIGHT, PROPS } from '@/const'
 import { deleteBy } from '@/utils/tool'
-import { debounce } from 'throttle-debounce'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridItemChild from './GridItemChild'
@@ -157,7 +156,7 @@ export default {
       }
     },
     itemAutoHeight(newChildren) {
-      // 第一次加載不執行
+      // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto hieght的高了
       if (!this.layout.length) return
 
       newChildren.forEach(node => {

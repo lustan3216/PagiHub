@@ -1,9 +1,11 @@
 <template>
   <view-port>
     <dialog-interacted
+      :min-height="567"
+      :min-width="320"
       :draggable="false"
-      @resize="checkBreakpoint"
-      @resizeEnd="resizeNodeQuickFn"
+      @resize="resizing"
+      @resizeEnd="resized"
     >
       <art-board
         v-if="editingComponentSetId"
@@ -77,15 +79,35 @@ export default {
       } else {
         this.SET_DRAFT_MODE()
       }
-      this.resizeNodeQuickFn()
+
+      this.APP_SET({ windowResizing: true })
+
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+
+      timer = setTimeout(() => {
+        this.APP_SET({ windowResizing: false })
+        this.resizeNodeQuickFn()
+      }, 100)
     },
     onScroll() {
+      this.APP_SET({ windowResizing: true })
       if (timer !== null) {
         clearTimeout(timer)
       }
       timer = setTimeout(() => {
+        this.APP_SET({ windowResizing: false })
         this.resizeNodeQuickFn()
-      }, 50)
+      }, 100)
+    },
+    resizing() {
+      this.APP_SET({ windowResizing: true })
+      this.checkBreakpoint()
+    },
+    resized() {
+      this.APP_SET({ windowResizing: false })
+      this.resizeNodeQuickFn()
     },
     checkBreakpoint() {
       const { clientWidth } = this.$refs.artBoard.$el

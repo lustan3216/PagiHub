@@ -1,27 +1,31 @@
 <template>
-  <div>
-    <span class="title p-r-10">Overflow</span>
-    <el-select
-      v-model="innerValue"
-    >
-      <el-option
-        label="visible"
-        value="visible"
-      />
-      <el-option
-        label="auto"
-        value="auto"
-      />
-      <el-option
-        label="hidden"
-        value="hidden"
-      />
-      <el-option
-        label="scroll"
-        value="scroll"
-      />
-    </el-select>
-  </div>
+  <el-row
+    type="flex"
+    align="middle"
+  >
+    <el-col :span="8">
+      <span class="title p-r-10">Overflow</span>
+    </el-col>
+
+    <el-col :span="16">
+      <el-select
+        v-model="innerValue"
+      >
+        <el-option
+          label="Visible"
+          value="auto"
+        />
+        <el-option
+          label="Hidden"
+          value="hidden"
+        />
+        <el-option
+          label="Scroll"
+          value="scroll"
+        />
+      </el-select>
+    </el-col>
+  </el-row>
 </template>
 
 <script>

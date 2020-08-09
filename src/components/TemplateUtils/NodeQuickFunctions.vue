@@ -4,10 +4,13 @@
     :to="`Interface-${id}`"
   >
     <div
-      ref="framer"
+      :id="`quick-fn-${id}`"
       class="quick-functions"
     >
-      <div class="wrapper flex top">
+      <div
+        :class="[top > 100 ? 'top' : 'bottom' ]"
+        class="wrapper flex"
+      >
         <node-name
           :id="id"
           class="title"
@@ -115,7 +118,8 @@ export default {
     ...mapState('app', [
       'copyComponentIds',
       'selectedComponentIds',
-      'selectedComponentNode'
+      'selectedComponentNode',
+      'windowResizing'
     ]),
     newItemToolTip() {
       if (!this.node[CAN_NEW_ITEM]) {
@@ -183,6 +187,17 @@ export default {
           shortKey: ['&#9003;']
         }
       ]
+    },
+    framer() {
+      // 如果有refs=framer, 在拉動window時不知為什麼會找不到element
+      return document.getElementById(`quick-fn-${this.id}`)
+    }
+  },
+  watch: {
+    windowResizing(value) {
+      if (value) {
+        this.framer.style.opacity = 0
+      }
     }
   },
   created() {
@@ -198,47 +213,46 @@ export default {
       this.$nextTick(() => {
         const { x: left, y: top, width, height } = this.element.getBoundingClientRect()
 
-        if (top && left && width && height) {
-          this.animationId && cancelAnimationFrame(this.animationId)
-          const alpha = 0.1
-          const { framer } = this.$refs
-          let opacity = 0
+        const alpha = 0.15
+        let opacity = 0
+        this.animationId && cancelAnimationFrame(this.animationId)
 
-          const animate = () => {
-            this.top = topShared = lerp(this.top, top, alpha)
-            this.left = leftShared = lerp(this.left, left, alpha)
-            this.width = widthShared = lerp(this.width, width, alpha)
-            this.height = heightShared = lerp(this.height, height, alpha)
-            opacity = lerp(opacity, 1, alpha)
+        const animate = () => {
+          this.top = topShared = lerp(this.top, top, alpha)
+          this.left = leftShared = lerp(this.left, left, alpha)
+          this.width = widthShared = lerp(this.width, width, alpha)
+          this.height = heightShared = lerp(this.height, height, alpha)
+          opacity = lerp(opacity, 1, alpha / 2)
 
-            if (framer) {
-              framer.style.width = this.width - 2 + 'px'
-              framer.style.height = this.height - 2 + 'px'
-              framer.style.top = this.top + 'px'
-              framer.style.left = this.left + 'px'
-              framer.style.opacity = opacity
-            }
+          Object.assign(this.framer.style, {
+            width: this.width - 2 + 'px',
+            height: this.height - 2 + 'px',
+            top: this.top + 'px',
+            left: this.left + 'px',
+            opacity
+          })
 
-            if (
-              Math.abs(top - this.top) > 1 ||
-              Math.abs(left - this.left) > 1 ||
-              Math.abs(width - this.width) > 1 ||
-              Math.abs(height - this.height) > 1) {
-              this.animationId = requestAnimationFrame(animate)
-            } else {
-              this.animationId = null
-              if (framer) {
-                framer.style.width = width - 2 + 'px'
-                framer.style.height = height - 2 + 'px'
-                framer.style.top = top + 'px'
-                framer.style.left = left + 'px'
-                framer.style.opacity = '1'
-              }
-            }
+          if (
+            Math.abs(top - this.top) > 1 ||
+            Math.abs(left - this.left) > 1 ||
+            Math.abs(width - this.width) > 1 ||
+            Math.abs(height - this.height) > 1
+          )
+          {
+            this.animationId = requestAnimationFrame(animate)
+          } else {
+            cancelAnimationFrame(this.animationId)
+            Object.assign(this.framer.style, {
+              width: width - 2 + 'px',
+              height: height - 2 + 'px',
+              top: top + 'px',
+              left: left + 'px',
+              opacity: '1'
+            })
           }
-
-          requestAnimationFrame(animate)
         }
+
+        this.animationId = requestAnimationFrame(animate)
       })
     },
     handleCommand(command) {
@@ -292,7 +306,8 @@ $activeColor: rgba(81, 117, 199, 0.68);
 .quick-functions {
   position: absolute;
   pointer-events: none;
-  border: 1px dashed $activeColor !important;
+  border: 1px dashed $activeColor;
+  will-change: opacity, height, width, top, left ;
   z-index: 999;
 }
 
@@ -312,7 +327,7 @@ $activeColor: rgba(81, 117, 199, 0.68);
 }
 
 .bottom {
-  right: 0;
+  left: 0;
   bottom: -30px;
 }
 

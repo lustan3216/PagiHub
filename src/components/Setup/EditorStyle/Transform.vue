@@ -1,59 +1,81 @@
 <template>
-  <div>
-    <span class="title p-r-10">Transform</span>
-    <el-button
-      type="text"
-      icon="el-icon-circle-plus-outline"
-      @click="values.push({ value: 0, name: null })"
-    />
+  <div style="padding-top: 1px;">
+    <el-divider content-position="left">
+
+      <el-dropdown @command="values.push({ name: $event, value: 0, visible: true })" size="small">
+          <span class="el-dropdown-link">
+            <el-button icon="el-icon-plus"/>
+          </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item
+            v-for="option in selectableOptions"
+            :key="option.name"
+            :command="option"
+          >
+            {{ humanize(option.name) }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <el-button
+        v-if="values.find(x => !x.visible)"
+        icon="el-icon-delete"
+      />
+
+      TRANSFORM
+    </el-divider>
+
+<!--    <el-row-->
+<!--      type="flex"-->
+<!--      align="middle"-->
+<!--    >-->
+<!--      <el-col :span="8">-->
+<!--        <span class="title p-r-10">Transform</span>-->
+<!--      </el-col>-->
+
+<!--      <el-col :span="3" :offset="10" >-->
+
+<!--      </el-col>-->
+
+<!--      <el-col v-else :span="13"/>-->
+
+<!--      <el-col :span="3">-->
+
+
+<!--      </el-col>-->
+<!--    </el-row>-->
 
     <el-row
-      v-for="(option, index) in values"
+      v-for="option in values"
       :key="option.name"
-      :gutter="10"
       class="w-100"
       type="flex"
+      align="middle"
     >
-      <el-col :span="2">
-        <el-button
-          type="text"
-          icon="el-icon-remove-outline"
-          @click="values.splice(index, 1)"
-        />
+      <el-col :span="2" :offset="2">
+        <el-checkbox v-model="option.visible" style="margin-top: 7px;"/>
+      </el-col>
+
+      <el-col :span="8">
+        <span class="title">{{ humanize(option.name) }}</span>
       </el-col>
 
       <el-col :span="12">
-        <el-select
-          v-model="option.name"
-          placeholder="Choose effect"
-          @change="option.value = null"
-        >
-          <el-option
-            v-for="option in selectableOptions"
-            :key="option.name"
-            :label="humanize(option.name)"
-            :value="option.name"
-          />
-        </el-select>
-      </el-col>
-
-      <el-col :span="10">
-        <template v-if="options[option.name]">
-          <select-unit
-            :value="option.value || options[option.name].default"
-            :clearable="false"
-            :key="option.name"
-            v-bind="options[option.name]"
-            @input="option.value = $event"
-          />
-        </template>
+        <select-unit
+          v-if="options[option.name]"
+          :value="option.value || options[option.name].default"
+          :clearable="false"
+          :key="option.name"
+          v-bind="options[option.name]"
+          @input="option.value = $event"
+        />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import { InputNumber } from 'element-ui'
+import { InputNumber, Divider } from 'element-ui'
 import SelectUnit from '@/components/Components/SelectUnit'
 import InputUnit from '@/components/Components/InputUnit'
 import { humanize } from '@/utils/string'
@@ -64,7 +86,8 @@ export default {
   components: {
     ElInputNumber: InputNumber,
     SelectUnit,
-    InputUnit
+    InputUnit,
+    ElDivider: Divider
   },
   props: {
     value: {
@@ -88,27 +111,21 @@ export default {
     const [originX, originY] = this.origin.split(' ')
 
     const options = {
-      rotate: {
-        name: 'rotate',
-        max: 360,
-        step: 0.1,
-        min: -360,
-        units: ['deg'],
-        value: rotate[1]
-      },
       originX: {
         name: 'originX',
         step: 0.1,
         units: ['%'],
         default: '50%',
-        value: originX === '50%' ? null : originX
+        value: originX === '50%' ? null : originX,
+        visible: true
       },
       originY: {
         name: 'originY',
         step: 0.1,
         units: ['%'],
         default: '50%',
-        value: originY === '50%' ? null : originY || originX
+        value: originY === '50%' ? null : originY || originX,
+        visible: true
       },
       skewX: {
         name: 'skewX',
@@ -116,7 +133,8 @@ export default {
         step: 0.1,
         min: -360,
         units: ['deg'],
-        value: skewX
+        value: skewX,
+        visible: true
       },
       skewY: {
         name: 'skewY',
@@ -124,19 +142,22 @@ export default {
         max: 360,
         min: -360,
         units: ['deg'],
-        value: skewY || skewX
+        value: skewY || skewX,
+        visible: true
       },
       translateX: {
         name: 'translateX',
         step: 0.1,
         units: ['px', '%'],
-        value: translateX
+        value: translateX,
+        visible: true
       },
       translateY: {
         name: 'translateY',
         step: 0.1,
         units: ['px', '%'],
-        value: translateY || translateX
+        value: translateY || translateX,
+        visible: true
       },
       scaleX: {
         name: 'scaleX',
@@ -145,7 +166,8 @@ export default {
         max: 3,
         min: -3,
         units: [],
-        value: scaleX
+        value: scaleX,
+        visible: true
       },
       scaleY: {
         name: 'scaleY',
@@ -154,7 +176,8 @@ export default {
         min: -3,
         step: 0.01,
         units: [],
-        value: scaleY || scaleX
+        value: scaleY || scaleX,
+        visible: true
       }
     }
 

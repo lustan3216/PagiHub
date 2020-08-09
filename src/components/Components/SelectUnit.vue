@@ -15,29 +15,38 @@
     v-else
     ref="input"
     v-model="number"
-    v-bind="{ clearable: true, prefixIcon, ...$attrs, ...$props }"
+    :class="{ 'ns-resize': resizeCursor }"
     type="number"
     class="number"
+    clearable
+    :prefix-icon="prefixIcon"
+    @mousedown.native="clicking = true"
+    @focus="resizeCursor= false"
+    @blur="resizeCursor = true"
     @change="$emit('change', innerValue)"
   >
-    <el-select
-      v-if="optionUnits.length >= 2"
+    <el-dropdown
       slot="append"
-      v-model="unit"
-      placeholder="-"
+      :style="{
+        cursor: optionUnits.length >= 2 ? 'pointer' : 'none'
+      }"
+      size="small"
+      @command="unit = $event"
     >
-      <el-option
-        v-for="unit in optionUnits"
-        :key="unit"
-        :value="unit"
-      />
-    </el-select>
-    <span
-      v-else
-      slot="append"
-    >
-      {{ unit || '-' }}
-    </span>
+      <span class="title">
+        {{ unit.toUpperCase() || '-' }}
+      </span>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item
+          v-for="unit in optionUnits"
+          :key="unit"
+          :command="unit"
+          class="sub-title"
+        >
+          {{ unit.toUpperCase() }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
   </el-input>
 </template>
 
@@ -57,6 +66,14 @@ export default {
       type: Boolean,
       default: false
     },
+    min: {
+      type: Number,
+      default: Infinity
+    },
+    max: {
+      type: Number,
+      default: Infinity
+    },
     value: {
       validator() {
         return true
@@ -70,6 +87,9 @@ export default {
   },
   data() {
     return {
+      resizeCursor: true,
+      clicking: false,
+      lastPosition: null,
       innerValue: this.value
     }
   },
@@ -150,7 +170,40 @@ export default {
       this.innerValue = value
     }
   },
+  created() {
+    document.addEventListener('mousemove', this.handleMousemove)
+    document.addEventListener('mouseup', this.releaseClick)
+  },
+  beforeDestroy() {
+    document.removeEventListener('mousemove', this.handleMousemove)
+    document.removeEventListener('mouseup', this.releaseClick)
+  },
   methods: {
+    releaseClick() {
+      this.clicking = false
+    },
+    handleMousemove(e) {
+      if (!this.clicking) {
+        return
+      }
+      const viewportOffset = this.$el.getBoundingClientRect()
+      let value
+      if (!this.lastPosition) {
+        value = e.clientY <= viewportOffset.top ? 1 : -1
+      } else {
+        value = this.lastPosition >= e.clientY ? 1 : -1
+      }
+
+      if (
+        this.number + value < this.min ||
+        this.number + value > this.max
+      ) {
+        return
+      }
+
+      this.number += value
+      this.lastPosition = e.clientY
+    },
     isInvalid(value) {
       return (
         value === null ||
@@ -173,6 +226,9 @@ export default {
     padding-left: 8px;
   }
 
+  .el-input__icon{
+    width: 25px;
+  }
   .el-input-group__append,
   .el-input-group__prepend {
     width: 30px;
@@ -182,16 +238,21 @@ export default {
   }
 
   .el-input-group__append {
-    padding: 0 5px;
+    padding: 0;
+  }
+  .el-input__inner {
+    padding-right: 0 !important;
+    padding-left: 25px !important;
+  }
+  .el-input__prefix {
+    left: 0;
+  }
 
-    .el-input__inner {
-      padding-right: 0;
-      padding-left: 12px;
+  &.ns-resize {
+    & input {
+      cursor: ns-resize;
     }
   }
-
-  .el-select {
-    width: 56px;
-  }
 }
+
 </style>

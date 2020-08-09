@@ -8,39 +8,36 @@ MVP
 ### Functionality
 
 <ol>
-5<li>優化style setting 渲染</li>
-5<li>style sketch 一模一樣</li>
-1<li>font align</li>
-1<li>最基礎 10個左右，font family</li>
-2<li>select-unit可以用拉的</li>
+font align / text editor
+padding
+size 
+position fixed (might be a checkbox)
+position fixed (might be a checkbox)
+font breaking 
+background
+border
+effect
+filter
+
+2<li>style 要做 寬高, min max, 固定寬，固定高，要不要都autoHeight</li>
 
 5<li>bring to front, bring forward, send to back, 至前，至後, style 永遠再layer最底層</li>
 5<li>texteditor 操作方式 跟notion一樣 </li>
 5<li>project's favicon and SEO can be edited in the project modal</li>
 5<li>多選修改</li>
 5<li>sreen size changer</li>
-5<li>照片,svg 也要是公開分享的嗎？？？？ 如果想刪除的怎麼辦，偏向不要，但還是會被複製走</li>
-5<li>rootlayer 可以新增一個Fix層，可以向navbar一樣position fixed / fixed container</li> 
+ 
+<li>canTo caDelete 這些東西不要記錄在 json上，不然以後有更動的話，沒辦法改道s3裡面所有東西</li> 
 5<li>每個 component set 都可以組建合併得按鈕  / or 選版本 / 跟隨proejct裡面的變動，只是不同project的因為沒有主動更新所以也不會主動變動</li>
-2<li>自己的project有引用的，有修改的都可以直接儲存了，因為不會引響到其他專案</li>
 5<li>search panel</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用state 的結構去做 click hover active 等等切換componentSet，這個要去另一個版操作，向XD的prototype</li>
 2<li>componentSet 裡面的compopentSet 分離，不要隨著源頭跟動</li>
 20<li>可瀏覽 production版本</li>
+
+5<li>照片,svg 也要是公開分享的嗎？？？？ 如果想刪除的怎麼辦，偏向不要，但還是會被複製走</li>
 <li>icon 可以上傳svg tag，下載也是直接下載tag，用dangurous叉叉叉插入，要過濾script，這樣可以變色條診或是用interact做調整</li>
 2<li>uploader image / svg, consider how to compress</li>
 3<li>svg 可在texteditor選，且用innertexteditor編輯</li>
-</ol>
-
-### Setting
-
-<ol>
-5<li>grid layout could choose Full view height</li>
-5<li>grid item 要可以比例伸展, grid item 的比例放大 要放哪</li>
-3<li>寬高要disable，逼他們用layout / 需要顯示寬高，跟 max-width / height</li>
-<li>Grid layout 不用有control layer，style 可以append在自己身上，但heihgt width trnasform等等不能動</li>
-5<li>grid item 考慮要不要都autoHeight, 考慮寬變時，高也要自適應</li>
-4<li>grid item 不能調寬，layout 可以, 要思考怎麼讓 gridGenerator 可以固定寬</li> ? style 做個設計，要不要固定寬高，要的話，
 </ol>
 
 ### Last

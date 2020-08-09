@@ -5,7 +5,6 @@ import {
   TAG,
   VALIDATE,
   FIELD,
-  CAN_DRAG,
   CAN_EDIT
 } from '../const'
 
@@ -69,7 +68,7 @@ export const formRate = () => ({
 
 export const formSlider = () => ({
   [TAG]: 'form-slider',
-  [CAN_DRAG]: true
+  [CAN_EDIT]: true
 })
 
 export default [

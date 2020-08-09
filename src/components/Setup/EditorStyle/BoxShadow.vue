@@ -1,11 +1,9 @@
 <template>
   <div>
-    <span class="title p-r-10">Box Shadow</span>
-
-    <el-button
-      type="text"
-      icon="el-icon-circle-plus-outline"
-      @click="
+    <el-divider content-position="left">
+      <el-button
+        icon="el-icon-plus"
+        @click="
         values.push({
           id: +new Date(),
           color: null,
@@ -13,57 +11,36 @@
           offsetX: null,
           offsetY: null,
           blurRadius: null,
-          spreadRadius: null
+          spreadRadius: null,
+          visible: true
         })
       "
-    />
+      />
+
+      <el-button
+        v-if="values.find(x => !x.visible)"
+        icon="el-icon-delete"
+      />
+
+      SHADOW
+    </el-divider>
 
     <el-row
-      v-if="values.length"
-      :gutter="2"
-    >
-      <el-col
-        :offset="6"
-        :span="3"
-        class="sub-title"
-      >
-        X
-      </el-col>
-      <el-col
-        :span="3"
-        class="sub-title"
-      >
-        Y
-      </el-col>
-      <el-col
-        :span="3"
-        class="sub-title"
-      >
-        Blur
-      </el-col>
-      <el-col
-        :span="3"
-        class="sub-title"
-      >
-        Spread
-      </el-col>
-    </el-row>
-
-    <el-row
-      v-for="(boxShadow, index) in values"
+      v-for="boxShadow in values"
       :key="boxShadow.id"
       :gutter="2"
       class="flex inputs"
+      draggable="true"
     >
       <el-col :span="2">
-        <el-button
-          type="text"
-          icon="el-icon-remove-outline"
-          @click="values.splice(index, 1)"
-        />
+        <i class="el-icon-d-caret" style="margin-top: 7px;"/>
       </el-col>
 
-      <el-col :span="4">
+      <el-col :span="2">
+        <el-checkbox v-model="boxShadow.visible" style="margin-top: 7px;"/>
+      </el-col>
+
+      <el-col :span="5">
         <el-button
           :type="boxShadow.inset ? 'primary' : ''"
           class="w-100"
@@ -108,11 +85,43 @@
         />
       </el-col>
     </el-row>
+
+    <el-row
+      v-if="values.length"
+      :gutter="2"
+    >
+      <el-col
+        :offset="10"
+        :span="3"
+        class="sub-title"
+      >
+        X
+      </el-col>
+      <el-col
+        :span="3"
+        class="sub-title"
+      >
+        Y
+      </el-col>
+      <el-col
+        :span="3"
+        class="sub-title"
+      >
+        B
+      </el-col>
+      <el-col
+        :span="3"
+        class="sub-title"
+      >
+        S
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
+import { Divider } from 'element-ui'
 import {
   parse,
   stringify
@@ -121,7 +130,8 @@ import {
 export default {
   name: 'BoxShadows',
   components: {
-    SelectUnit
+    SelectUnit,
+    ElDivider: Divider
   },
   props: {
     value: {
@@ -135,6 +145,7 @@ export default {
     const id = +new Date()
     values.forEach((boxShadow, index) => {
       boxShadow.id = id + index
+      boxShadow.visible = true
     })
 
     return {
@@ -173,4 +184,9 @@ export default {
     padding: 0;
   }
 }
+  .el-icon-d-caret{
+    margin-top: 7px;
+    cursor: ns-resize;
+    color: #606266;
+  }
 </style>

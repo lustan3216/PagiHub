@@ -1,42 +1,46 @@
 <template>
-  <div>
-    <span class="title p-r-10">Effect</span>
-    <el-button
-      type="text"
-      icon="el-icon-circle-plus-outline"
-      @click="values.push({ value: 0 })"
-    />
+  <div class="m-t-20">
+    <el-divider content-position="left">
+      <el-dropdown @command="values.push({ name: $event, value: 0, visible: true })" size="small">
+          <span class="el-dropdown-link">
+            <el-button icon="el-icon-plus"/>
+          </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item
+            v-for="option in selectableOptions"
+            :key="option.name"
+            :command="option"
+          >
+            {{ humanize(option) }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <el-button
+        v-if="values.find(x => !x.visible)"
+        icon="el-icon-delete"
+      />
+
+      EFFECT
+    </el-divider>
 
     <el-row
-      v-for="(option, index) in values"
+      v-for="option in values"
       :key="option.name"
       :gutter="10"
       class="w-100"
       type="flex"
+      align="middle"
     >
-      <el-col :span="2">
-        <el-button
-          type="text"
-          icon="el-icon-remove-outline"
-          @click="values.splice(index, 1)"
-        />
+      <el-col :span="2" :offset="2">
+        <el-checkbox v-model="option.visible" style="margin-top: 7px;"/>
       </el-col>
 
-      <el-col :span="12">
-        <el-select
-          v-model="option.name"
-          placeholder="Choose effect"
-        >
-          <el-option
-            v-for="option in selectableOptions"
-            :key="option"
-            :label="humanize(option)"
-            :value="option"
-          />
-        </el-select>
+      <el-col :span="9">
+        <span class="title">{{ humanize(option.name) }}</span>
       </el-col>
 
-      <el-col :span="10">
+      <el-col :span="15">
         <select-unit
           v-if="option.name"
           :value="option.value || options[option.name].default"
@@ -52,13 +56,15 @@
 
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
+import { Divider } from 'element-ui'
 import { splitAt } from '@/utils/tool'
 import { humanize } from '@/utils/string'
 
 export default {
   name: 'Effect',
   components: {
-    SelectUnit
+    SelectUnit,
+    ElDivider: Divider
   },
   props: {
     value: {
@@ -68,21 +74,14 @@ export default {
   },
   data() {
     const options = {
-      opacity: {
-        name: 'opacity',
-        min: 0,
-        max: 1,
-        step: 0.01,
-        default: 1,
-        units: ''
-      },
       blur: {
         name: 'blur',
         default: 0,
         min: -30,
         max: 30,
         step: 0.1,
-        units: 'px'
+        units: 'px',
+        visible: true
       },
       brightness: {
         name: 'brightness',
@@ -90,14 +89,16 @@ export default {
         min: 0,
         max: 4,
         step: 0.01,
-        units: ''
+        units: '',
+        visible: true
       },
       contrast: {
         name: 'contrast',
         max: 2,
         default: 1,
         step: 0.01,
-        units: ''
+        units: '',
+        visible: true
       },
       grayscale: {
         name: 'grayscale',
@@ -105,7 +106,8 @@ export default {
         min: 0,
         max: 1,
         step: 0.01,
-        units: ''
+        units: '',
+        visible: true
       },
       hue: {
         name: 'hue-rotate',
@@ -122,7 +124,8 @@ export default {
         max: 10,
         step: 0.01,
         default: 1,
-        units: ''
+        units: '',
+        visible: true
       },
       sepia: {
         name: 'sepia',
@@ -130,7 +133,8 @@ export default {
         min: 0,
         step: 0.01,
         max: 1,
-        units: ''
+        units: '',
+        visible: true
       },
       invert: {
         name: 'invert',
@@ -138,7 +142,8 @@ export default {
         min: 0,
         step: 0.01,
         max: 1,
-        units: ''
+        units: '',
+        visible: true
       }
     }
 

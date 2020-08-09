@@ -1,57 +1,42 @@
 <template>
-  <four-attrs
-    v-model="innerValue"
-    attr="borderStyle"
+  <el-row
+    :gutter="5"
+    type="flex"
+    align="middle"
+    style="margin-top: -5px;"
   >
-    <template #button>
-      <el-button
-        circle
-        icon="el-icon-rank"
+    <el-col :span="11">
+      <select-unit
+        :prefix-icon="icon"
+        v-model="innerValue[0]"
+        :min="0"
       />
-    </template>
+    </el-col>
 
-    <template #all="{ value }">
+    <el-col :span="10">
       <style-select
-        :value.sync="value.all"
-        icon="el-icon-rank"
+        :value.sync="innerValue[1]"
       />
-    </template>
+    </el-col>
 
-    <template #first="{ value }">
-      <style-select
-        :value.sync="value.first"
-        icon="el-icon-top"
+    <el-col :span="3">
+      <el-color-picker
+        v-model="innerValue[2]"
+        show-alpha
+        style="margin-top: 1px;"
       />
-    </template>
+    </el-col>
 
-    <template #second="{ value }">
-      <style-select
-        :value.sync="value.third"
-        icon="el-icon-bottom"
-      />
-    </template>
-
-    <template #third="{ value }">
-      <style-select
-        :value.sync="value.fourth"
-        icon="el-icon-back"
-      />
-    </template>
-
-    <template #fourth="{ value }">
-      <style-select
-        :value.sync="value.second"
-        icon="el-icon-right"
-      />
-    </template>
-  </four-attrs>
+  </el-row>
 </template>
 
 <script>
+import { ColorPicker } from 'element-ui'
 import SelectUnit from '@/components/Components/SelectUnit'
 import FourAttrs from './Common/FourAttrs'
 import { capitalize } from '@/utils/string'
 
+const REGEX = /(?<!,) /
 const StyleSelect = {
   name: 'StyleSelect',
   functional: true,
@@ -71,7 +56,7 @@ const StyleSelect = {
       'el-select',
       {
         on: {
-          input: value => data.on['update:value'](value)
+          input: value => data.on['input'](value)
         },
         props
       },
@@ -90,27 +75,40 @@ const StyleSelect = {
 }
 
 export default {
-  name: 'BorderStyle',
+  name: 'Border',
   components: {
     SelectUnit,
     FourAttrs,
+    ElColorPicker: ColorPicker,
     StyleSelect
   },
   props: {
     value: {
       type: String,
       required: true
+    },
+    icon: {
+      type: String,
+      required: true
     }
   },
   data() {
     return {
-      innerValue: this.value
+      isUniq: true,
+      innerValue: this.value.split(REGEX)
     }
   },
+  computed :{
+
+  },
   watch: {
-    innerValue(borderStyle) {
-      this.$emit('change', { borderStyle })
+    innerValue(border) {
+      console.log(border)
+      this.$emit('change', border)
     }
+  },
+  methods: {
+
   }
 }
 </script>

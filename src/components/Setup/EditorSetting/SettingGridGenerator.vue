@@ -26,12 +26,11 @@ export const defaultSetting = {
   preventCollision: false,
   verticalCompact: false,
   responsive: true,
-  rowHeight: 5,
+  rowHeight: 1,
   horizontalMargin: 0,
   verticalMargin: 0,
-  colNum: 48,
   breakpoints: BREAK_POINTS,
-  cols: { lg: 48, md: 48, sm: 48, xs: 48, xxs: 48 }
+  cols: { lg: 96, md: 96, sm: 96, xs: 96, xxs: 96 }
 }
 
 export const rules = assignDefaultValue(

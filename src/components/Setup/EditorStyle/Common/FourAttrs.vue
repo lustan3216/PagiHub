@@ -1,11 +1,15 @@
 <template>
   <div>
-    <span class="title">{{ humanize(title || attr) }}</span>
-
     <el-row
-      :gutter="5"
-      class="m-t-10"
+      type="flex"
+      align="middle"
     >
+      <el-col
+        :span="8"
+      >
+        <span class="title">{{ humanize(title || attr) }}</span>
+      </el-col>
+
       <el-col
         :span="3"
         @click.native="isUniq = !isUniq"
@@ -13,21 +17,24 @@
         <slot name="button" />
       </el-col>
 
-      <slot :value="$data">
-        <el-col
-          v-if="isUniq"
-          :span="10"
-          class="flex"
-        >
-          <slot
-            :value="$data"
-            name="all"
-          />
-        </el-col>
+      <el-col
+        :offset="1"
+        :span="12"
+        class="flex"
+      >
+        <slot
+          :value="$data"
+          name="all"
+        />
+      </el-col>
 
-        <template v-else>
+    </el-row>
+
+    <el-row :gutter="10">
+      <slot :value="$data">
+        <template v-if="!isUniq">
           <el-col
-            :span="10"
+            :span="12"
             class="flex"
           >
             <slot
@@ -37,7 +44,7 @@
           </el-col>
 
           <el-col
-            :span="10"
+            :span="12"
             class="flex"
           >
             <slot
@@ -47,8 +54,7 @@
           </el-col>
 
           <el-col
-            :span="10"
-            :offset="3"
+            :span="12"
             class="flex"
           >
             <slot
@@ -58,7 +64,7 @@
           </el-col>
 
           <el-col
-            :span="10"
+            :span="12"
             class="flex"
           >
             <slot
@@ -121,6 +127,7 @@ export default {
         let result
         const values = Object.values(value)
         const isUniq = this.isAllTheSame(value)
+        this.isUniq = isUniq
 
         if (isUniq) {
           result = values[0]
@@ -135,7 +142,6 @@ export default {
         }
 
         this.all = result
-        this.$emit('input', result)
       },
       deep: true
     },

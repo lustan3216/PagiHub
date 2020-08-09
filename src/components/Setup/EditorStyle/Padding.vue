@@ -5,7 +5,6 @@
   >
     <template #button>
       <el-button
-        circle
         icon="el-icon-rank"
       />
     </template>
@@ -46,7 +45,7 @@
       <select-unit
         v-model="value.second"
         :min="0"
-        prefix-icon="el-icon-bottom-right"
+        prefix-icon="el-icon-right"
       />
     </template>
   </four-attrs>

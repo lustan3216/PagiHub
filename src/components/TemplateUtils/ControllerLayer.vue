@@ -27,7 +27,7 @@
 import Vue from 'vue'
 import { mapState, mapMutations } from 'vuex'
 import NodeQuickFunctions from './NodeQuickFunctions'
-import { CAN_DRAG, CAN_EDIT } from '@/const'
+import { CAN_EDIT } from '@/const'
 import { isMac } from '@/utils/device'
 
 const store = Vue.observable({ currentCancanOperateId: null })
@@ -67,7 +67,7 @@ export default {
       return this.selectedComponentIds.includes(this.id)
     },
     canEdit() {
-      return this.node && (this.node[CAN_DRAG] || this.node[CAN_EDIT])
+      return this.node && this.node[CAN_EDIT]
     },
     currentCancanOperateId() {
       return store.currentCancanOperateId

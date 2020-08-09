@@ -6,7 +6,6 @@
   >
     <template #button>
       <el-button
-        circle
         icon="el-icon-full-screen"
       />
     </template>

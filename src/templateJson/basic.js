@@ -7,7 +7,6 @@ import {
   TAG,
   CHILDREN,
   CAN_EDIT,
-  CAN_DRAG,
   CAN_NOT_DELETE,
   CAN_NOT_COPY,
   STYLE,
@@ -29,6 +28,10 @@ export const gridItems = function() {
     {
       [TAG]: GRID_ITEM,
       [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 30 })
+    },
+    {
+      [TAG]: GRID_ITEM,
+      [PROPS]: mapPoints({ x: 22, y: 0, w: 20, h: 15 })
     }
   ]
 }
@@ -60,8 +63,8 @@ export const carousel = function() {
     w: 36,
     h: 300,
     [TAG]: CAROUSEL,
-    [CAN_NEW_ITEM]: false,
-    [CAN_DRAG]: true,
+    [CAN_NEW_ITEM]: true,
+    [CAN_EDIT]: true,
     [CHILDREN]: [
       gridGenerator({
         [LABEL]: 'indicators',
@@ -136,7 +139,7 @@ export const videoPlayer = function() {
     w: 36,
     h: 300,
     [TAG]: 'video-player',
-    [CAN_DRAG]: true,
+    [CAN_EDIT]: true,
     [AUTO_HEIGHT]: true
   }
 }

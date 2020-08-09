@@ -1,80 +1,104 @@
 <template>
   <editor-menu-bubble :editor="editor">
     <div slot-scope="{ commands, getMarkAttrs }">
+
+      <el-divider content-position="left">FONT</el-divider>
+
       <el-row
-        :gutter="5"
         type="flex"
-        class="menubar"
+        align="middle"
       >
-        <el-col :span="12">
+        <el-col :span="8">
+          <span class="title">Family</span>
+        </el-col>
+        <el-col :span="16">
           <el-select
             ref="fontFamily"
             :value="getMarkAttrs('fontFamily').fontFamily"
             @change="commands.fontFamily({ fontFamily: $event })"
           />
-          <span class="el-form-item__label">Font Family</span>
         </el-col>
+      </el-row>
 
-        <el-col :span="4">
-          <color-picker
-            :value="getMarkAttrs('color').color"
-            show-alpha
-            @change="commands.color({ color: $event })"
-          />
-          <span class="el-form-item__label">Font Color</span>
-        </el-col>
+<!--      <el-row-->
+<!--        type="flex"-->
+<!--        align="middle"-->
+<!--      >-->
+<!--        <el-col :span="8">-->
+<!--          <span class="el-form-item__label">Color</span>-->
+<!--        </el-col>-->
 
-        <el-col :span="8">
-          <color-picker
-            :value="getMarkAttrs('backgroundColor').backgroundColor"
-            show-alpha
-            @change="commands.backgroundColor({ backgroundColor: $event })"
+<!--        <el-col :span="8">-->
+<!--          <color-picker-->
+<!--            :value="getMarkAttrs('color').color"-->
+<!--            show-alpha-->
+<!--            @change="commands.color({ color: $event })"-->
+<!--          />-->
+<!--        </el-col>-->
+<!--        <el-col :span="8">-->
+<!--          <span class="el-form-item__label">Background</span>-->
+<!--        </el-col>-->
+
+<!--        <el-col :span="8">-->
+<!--          <color-picker-->
+<!--            :value="getMarkAttrs('backgroundColor').backgroundColor"-->
+<!--            show-alpha-->
+<!--            @change="commands.backgroundColor({ backgroundColor: $event })"-->
+<!--          />-->
+<!--        </el-col>-->
+<!--      </el-row>-->
+
+      <el-row
+        :gutter="5"
+        type="flex"
+        align="middle"
+      >
+        <el-col :span="8"><span class="title">Size</span></el-col>
+        <el-col :span="16">
+          <select-unit
+            ref="fontSize"
+            :value="getMarkAttrs('fontSize').fontSize"
+            @change="$event => setAttribute('fontSize', $event)"
           />
-          <span class="el-form-item__label">Font Background</span>
         </el-col>
       </el-row>
 
       <el-row
         :gutter="5"
         type="flex"
-        class="menubar"
+        align="middle"
       >
-        <el-col :span="8">
-          <select-unit
-            ref="fontSize"
-            :value="getMarkAttrs('fontSize').fontSize"
-            @change="$event => setAttribute('fontSize', $event)"
-          />
-          <span class="el-form-item__label">Font Size</span>
-        </el-col>
-
-        <el-col :span="8">
+        <el-col :span="8"><span class="title">Spacing</span></el-col>
+        <el-col :span="16">
           <select-unit
             ref="letterSpacing"
             :value="getMarkAttrs('letterSpacing').letterSpacing"
             @change="$event => setAttribute('letterSpacing', $event)"
           />
-          <span class="el-form-item__label">
-            Letter Spacing
-          </span>
         </el-col>
+      </el-row>
 
-        <el-col :span="8">
+      <el-row
+        :gutter="5"
+        type="flex"
+        align="middle"
+      >
+        <el-col :span="8"><span class="title">Height</span></el-col>
+        <el-col :span="16">
           <select-unit
             ref="lineHeight"
             :value="getMarkAttrs('lineHeight').lineHeight"
             @change="$event => setAttribute('lineHeight', $event)"
           />
-          <span class="el-form-item__label">
-            Line Height
-          </span>
         </el-col>
       </el-row>
+
     </div>
   </editor-menu-bubble>
 </template>
 
 <script>
+import { Divider } from 'element-ui'
 import { EditorMenuBubble } from 'tiptap'
 import SelectUnit from '@/components/Components/SelectUnit'
 import ColorPicker from '@/components/Components/ColorPicker'
@@ -84,7 +108,8 @@ export default {
   components: {
     EditorMenuBubble,
     SelectUnit,
-    ColorPicker
+    ColorPicker,
+    ElDivider: Divider
   },
   props: {
     editor: {

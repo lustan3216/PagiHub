@@ -1,27 +1,25 @@
 <template>
   <div class="sidebar-right">
-    <el-button-group>
+    <el-button-group class="flex">
       <el-button
         icon="el-icon-s-operation"
+        class="flex1"
         @click="activePanel = 'PanelStyles'"
       />
       <el-button
         icon="el-icon-setting"
+        class="flex1"
         @click="activePanel = 'PanelSettings'"
       />
     </el-button-group>
 
-    <br>
-
-    <item-hidden-controller />
-
     <div class="sidebar-right-content">
-      <component
-        v-if="theOnlySelectedComponentId"
-        :is="activePanel"
+      <panel-styles v-if="activePanel === 'PanelStyles'"/>
+      <panel-settings
+        v-else-if="activePanel === 'PanelSettings' && theOnlySelectedComponentId"
         :id="theOnlySelectedComponentId"
-        class="panel"
       />
+
     </div>
   </div>
 </template>
@@ -30,7 +28,6 @@
 import { mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
-import ItemHiddenController from '../Setup/ItemHiddenController'
 import PanelExplain from '../Setup/PanelExplain'
 import NodeInfo from '../TemplateUtils/NodeName'
 
@@ -40,8 +37,7 @@ export default {
     NodeInfo,
     PanelStyles,
     PanelSettings,
-    PanelExplain,
-    ItemHiddenController
+    PanelExplain
   },
   data() {
     return {
@@ -56,8 +52,7 @@ export default {
 
 <style scoped lang="scss">
 .sidebar-right {
-  width: 320px;
-  padding: 10px 0;
+  width: 260px;
   background-color: white;
   border-left: 1px solid $color-grey;
 }
@@ -87,12 +82,22 @@ export default {
     font-size: 12px;
     line-height: 18px;
   }
-}
+  &.el-button-group{
+    margin-left: -1px;
+    & > button {
+      border-color: $color-grey;
+    }
+  }
 
-.sidebar-right-content {
-  @include calc-vh('max-height', '100vh - 130px');
-  overflow: scroll;
-  padding: 15px 10px;
+  &.sidebar-right-content {
+    padding: 0 10px 10px;
+    @include calc-vh('max-height', '100vh - 100px');
+    overflow: scroll;
+
+    .el-button--mini, .el-button--mini.is-round{
+      padding: 7px;
+    }
+  }
 }
 
 </style>

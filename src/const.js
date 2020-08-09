@@ -16,7 +16,6 @@ export const KIND = 'kind'
 
 export const CAN_NEW_ITEM = 'canNewItem'
 export const CAN_EDIT = 'canEditText'
-export const CAN_DRAG = 'canDrag'
 export const CAN_NOT_RENAME = 'canNotRename'
 export const CAN_NOT_DELETE = 'canNotDelete'
 export const CAN_NOT_COPY = 'canNotCopy'

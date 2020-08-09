@@ -5,6 +5,7 @@ import { quickFnMap } from '@/components/TemplateUtils/NodeQuickFunctions'
 import { debounce } from 'throttle-debounce'
 
 const state = {
+  windowResizing: false,
   breakpoint: 'lg',
   scaleRatio: 1,
   selectedComponentIds: [],
@@ -78,7 +79,9 @@ const actions = {
   },
   resizeNodeQuickFn: debounce(300, function({ state }) {
     state.selectedComponentIds.forEach(id => {
-      quickFnMap[id].resize()
+      if (quickFnMap[id]) {
+        quickFnMap[id].resize()
+      }
     })
   })
 }

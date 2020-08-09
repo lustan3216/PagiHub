@@ -1,6 +1,8 @@
 <template>
-  <div class="justify-between vertical-center p-10">
-    <span class="title">Device Show</span>
+  <div>
+    <el-divider content-position="left">
+      DISPLAY WHEN
+    </el-divider>
 
     <el-button-group class="group">
       <el-tooltip
@@ -12,10 +14,11 @@
         <el-button
           :disabled="!parentNodes.length"
           :type="button.hidden === true ? '' : 'primary'"
-          :icon="button.icon"
           plain
           @click="click(button.name, !Boolean(button.hidden))"
-        />
+        >
+          <i :class="[button.icon, button.class]"/>
+        </el-button>
       </el-tooltip>
 
     </el-button-group>
@@ -25,12 +28,13 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import { isGridItem } from '@/utils/node'
-import { Tooltip } from 'element-ui'
+import { Tooltip, Divider } from 'element-ui'
 
 export default {
   name: 'ItemHiddenController',
   components: {
-    ElTooltip: Tooltip
+    ElTooltip: Tooltip,
+    ElDivider: Divider
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
@@ -64,7 +68,7 @@ export default {
         { name: 'lg', content: 'For Large Monitor, Only display when screen larger than 1200px', icon: 'el-icon-data-line', hidden: lgHidden },
         { name: 'md', content: 'For Computer, Only display when screen larger than 996px', icon: 'el-icon-monitor', hidden: mdHidden },
         { name: 'sm', content: 'For Tablet, Only display when screen larger than 768px', icon: 'el-icon-mobile', hidden: smHidden },
-        { name: 'xs', content: 'For Phone, Only display when screen larger than 480px', icon: 'el-icon-mobile-phone', hidden: xsHidden },
+        { name: 'xs', content: 'For Phone, Only display when screen larger than 480px', icon: 'el-icon-mobile-phone', hidden: xsHidden, class: 'rotate90' },
         { name: 'xxs', content: 'For Small Phone, Only display when screen larger than 0px', icon: 'el-icon-mobile-phone', hidden: xxsHidden }
       ]
     }
@@ -88,5 +92,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+.el-button--mini, .el-button--mini.is-round{
+  padding: 7px 17px !important;
+}
 </style>

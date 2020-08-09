@@ -1,7 +1,7 @@
 <template>
   <div
     v-observe-visibility="options"
-    v-if="isExample"
+    v-if="isExample || isLayers"
   >
     <component
       v-if="vIf"
@@ -34,7 +34,7 @@
 
 <script>
 import { ObserveVisibility } from 'vue-observe-visibility'
-import { isComponentSet, getNode } from '@/utils/node'
+import { isComponentSet, getNode, isLayers } from '@/utils/node'
 import { COMPONENT_SET } from '@/const'
 
 export default {
@@ -117,6 +117,9 @@ export default {
       } else {
         return this.node.tag
       }
+    },
+    isLayers() {
+      return isLayers(this.node)
     }
   }
 }

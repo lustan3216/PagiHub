@@ -17,6 +17,9 @@ export function bigCamelCase(value) {
 }
 
 export function humanize(value) {
+  if (!value) {
+    return value
+  }
   return capitalize(kebabCase(value)).replace(
     /-(\w)/g,
     x => ` ${x[1].toUpperCase()}`

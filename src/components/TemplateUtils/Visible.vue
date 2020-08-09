@@ -1,7 +1,7 @@
 <template>
   <el-button
     v-if="visible || !innerVisible"
-    :icon="innerVisible ? 'el-icon-view' : 'el-icon-moon'"
+    :icon="innerVisible ? 'el-icon-sunny' : 'el-icon-moon'"
     type="text"
     @click.stop="click"
   />

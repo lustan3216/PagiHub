@@ -6,7 +6,7 @@
     <template v-if="selected && isDraftMode">
       <portal
         v-if="isDraftMode"
-        to="PanelStyles"
+        to="FontStyles"
       >
         <text-editor-style :editor="editor" />
       </portal>
@@ -58,97 +58,6 @@
               >
             </button>
           </template>
-
-          <button
-            class="menubar__button"
-            @click="
-              commands.createTable({
-                rowsCount: 3,
-                colsCount: 3,
-                withHeaderRow: false
-              })
-            "
-          >
-            <img
-              svg-inline
-              src="icons/table.svg"
-            >
-          </button>
-
-          <template v-if="isActive.table()">
-            <button
-              class="menubar__button"
-              @click="commands.deleteTable"
-            >
-              <img
-                svg-inline
-                src="icons/delete_table.svg"
-              >
-            </button>
-            <button
-              class="menubar__button"
-              @click="commands.addColumnBefore"
-            >
-              <img
-                svg-inline
-                src="icons/add_col_before.svg"
-              >
-            </button>
-            <button
-              class="menubar__button"
-              @click="commands.addColumnAfter"
-            >
-              <img
-                svg-inline
-                src="icons/add_col_after.svg"
-              >
-            </button>
-            <button
-              class="menubar__button"
-              @click="commands.deleteColumn"
-            >
-              <img
-                svg-inline
-                src="icons/delete_col.svg"
-              >
-            </button>
-            <button
-              class="menubar__button"
-              @click="commands.addRowBefore"
-            >
-              <img
-                svg-inline
-                src="icons/add_row_before.svg"
-              >
-            </button>
-            <button
-              class="menubar__button"
-              @click="commands.addRowAfter"
-            >
-              <img
-                svg-inline
-                src="icons/add_row_after.svg"
-              >
-            </button>
-            <button
-              class="menubar__button"
-              @click="commands.deleteRow"
-            >
-              <img
-                svg-inline
-                src="icons/delete_row.svg"
-              >
-            </button>
-            <button
-              class="menubar__button"
-              @click="commands.toggleCellMerge"
-            >
-              <img
-                svg-inline
-                src="icons/combine_cells.svg"
-              >
-            </button>
-          </template>
         </div>
       </editor-menu-bubble>
     </template>
@@ -176,11 +85,7 @@ import {
   Link,
   Strike,
   Underline,
-  History,
-  Table,
-  TableHeader,
-  TableCell,
-  TableRow
+  History
 } from 'tiptap-extensions'
 import {
   Color,
@@ -293,10 +198,6 @@ const extensions = [
   new Italic(),
   new Strike(),
   new Underline(),
-  new Table({ resizable: true }),
-  new TableHeader(),
-  new TableCell(),
-  new TableRow(),
   new History(),
   new Color(),
   new BackgroundColor(),

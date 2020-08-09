@@ -32,6 +32,14 @@ import { mapState } from 'vuex'
 export default {
   name: 'DialogInteracted',
   props: {
+    minWidth: {
+      type: Number,
+      default: 100
+    },
+    minHeight: {
+      type: Number,
+      default: 100
+    },
     zIndex: {
       type: Number,
       default: 100
@@ -122,7 +130,7 @@ export default {
 
             // minimum size
             interactjs.modifiers.restrictSize({
-              min: { width: 100, height: 50 }
+              min: { width: this.minWidth, height: this.minHeight }
             })
           ],
 
