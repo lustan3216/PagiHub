@@ -19,10 +19,14 @@
         @mouseenter.stop="hoverNode(data.id)"
         @mouseleave.stop="hoverLeaveNode(data.id)"
       >
+        <hidden
+          v-if="checkHidden(data)"
+          :id="data.parentId"
+        />
         <node-name
           :id="data.id"
           :class="{ active: selectedComponentIds.includes(data.id) }"
-          class="p-5 text-left"
+          class="text-left"
           editable
           @click="nodeClick($event, data.id)"
         />
@@ -49,14 +53,15 @@
 
 <script>
 import { Tree } from 'element-ui'
-import { SORT_INDEX, LAYERS, SOFT_DELETE, PROPS, STYLE } from '@/const'
+import { SORT_INDEX, LAYERS, SOFT_DELETE, STYLE } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { cloneJson, traversal, deleteBy } from '@/utils/tool'
-import { shortTagName } from '@/utils/node'
 import NodeController from '../TemplateUtils/NodeController'
 import NodeName from '../TemplateUtils/NodeName'
 import Touchable from '../TemplateUtils/Touchable'
 import Visible from '../TemplateUtils/Visible'
+import Hidden from '../TemplateUtils/Hidden'
+import { isGridItem } from '@/utils/node'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -67,7 +72,8 @@ export default {
     NodeController,
     NodeName,
     Touchable,
-    Visible
+    Visible,
+    Hidden
   },
   props: {
     filterText: {
@@ -81,7 +87,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
+    ...mapState('app', ['selectedComponentIds', 'breakpoint']),
     ...mapState('component', ['editingComponentSetId']),
     componentSetNode() {
       return this.componentsMap[this.editingComponentSetId]
@@ -103,7 +109,6 @@ export default {
           deleteBy(parentNode.children, 'id', node.id)
         }
 
-        delete node[PROPS]
         delete node[STYLE]
       })
 
@@ -122,6 +127,13 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
     ...mapMutations('component', ['RECORD']),
+    checkHidden(node) {
+      const parentNode = this.componentsMap[node.parentId]
+      if (isGridItem(parentNode)) {
+        const { props } = parentNode
+        return props && props[this.breakpoint] && props[this.breakpoint].hidden
+      }
+    },
     allowDrop(drag, drop, action) {
       const sameLayer = drag.parent === drop.parent
       return sameLayer && ['prev', 'next'].includes(action)

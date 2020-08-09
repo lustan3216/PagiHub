@@ -44,7 +44,7 @@ import { MessageBox } from 'element-ui'
 import { isUndefined } from '@/utils/tool'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSubmit'
 import nodeMixin from '@/components/Templates/mixins/node'
-import EditorTextInner from '@/components/Templates/EditorTextInner'
+import EditorTextInner from '@/components/Templates/TextEditorInner'
 
 export default {
   defaultSetting,

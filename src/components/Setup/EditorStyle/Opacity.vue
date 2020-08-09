@@ -8,33 +8,39 @@
     </el-col>
 
     <el-col :span="16">
-      <select-unit prefix-icon="el-icon-sunset" :units="[]" v-model="innerValue" :min="0" :max="1"/>
+      <select-unit
+        :units="[]"
+        v-model="innerValue"
+        :min="0"
+        :max="1"
+        prefix-icon="el-icon-sunset"
+      />
     </el-col>
   </el-row>
 </template>
 
 <script>
-  import SelectUnit from '@/components/Components/SelectUnit'
-  export default {
-    name: 'Opacity',
-    props: {
-      value: {
-        type: String,
-        required: true
-      }
-    },
-    components: {
-      SelectUnit
-    },
-    data() {
-      return {
-        innerValue: this.value
-      }
-    },
-    watch: {
-      innerValue(opacity) {
-        this.$emit('change', { opacity })
-      }
+import SelectUnit from '@/components/Components/SelectUnit'
+export default {
+  name: 'Opacity',
+  components: {
+    SelectUnit
+  },
+  props: {
+    value: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {
+      innerValue: this.value
+    }
+  },
+  watch: {
+    innerValue(opacity) {
+      this.$emit('change', { opacity })
     }
   }
+}
 </script>

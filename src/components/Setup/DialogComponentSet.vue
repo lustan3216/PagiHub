@@ -1,7 +1,7 @@
 <template>
   <el-button
     :icon="`el-icon-${isExist ? 's-tools' : 'circle-plus-outline'}`"
-    type="text"
+    :type="buttonType"
     @click.stop="visible = !visible"
   >
     {{ buttonText }}
@@ -83,6 +83,10 @@ export default {
     parentId: {
       type: String,
       required: true
+    },
+    buttonType: {
+      type: String,
+      default: 'text'
     },
     buttonText: {
       type: String,

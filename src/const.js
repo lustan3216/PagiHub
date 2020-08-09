@@ -15,7 +15,7 @@ export const LABEL = 'label'
 export const KIND = 'kind'
 
 export const CAN_NEW_ITEM = 'canNewItem'
-export const CAN_EDIT = 'canEditText'
+export const CAN_BE_EDITED = 'canBeEdited'
 export const CAN_NOT_RENAME = 'canNotRename'
 export const CAN_NOT_DELETE = 'canNotDelete'
 export const CAN_NOT_COPY = 'canNotCopy'
@@ -37,7 +37,7 @@ export const BREAK_POINTS = {
   md: 996,
   sm: 768,
   xs: 480,
-  xxs: 0
+  xxs: 320
 }
 
 export const EXAMPLE = 'EXAMPLE' // need to uppercase separate id of different types

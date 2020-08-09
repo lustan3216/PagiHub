@@ -173,19 +173,24 @@ export function nestedToLinerObject(nestedObject, key = 'children') {
 }
 
 export function asyncGetValue(fn, timeout = 2000) {
+  let id
   return new Promise((resolve, reject) => {
-    const id = requestAnimationFrame(() => {
+    setTimeout(function() {
+      cancelAnimationFrame(id)
+    }, timeout)
+
+    const getValue = () => {
+      console.log(1)
       const value = fn()
 
-      if (!isUndefined(value)) {
+      if (isUndefined(value)) {
+        id = requestAnimationFrame(getValue)
+      } else {
         cancelAnimationFrame(id)
         resolve(value)
       }
+    }
 
-      setTimeout(function() {
-        cancelAnimationFrame(id)
-        resolve()
-      }, timeout)
-    })
+    id = requestAnimationFrame(getValue)
   })
 }

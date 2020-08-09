@@ -77,7 +77,7 @@ const actions = {
     commit('component/SET_NODES_TO_TMP_MAP', cloneJson(copyNodeArray), { root: true })
     return copyComponentIds
   },
-  resizeNodeQuickFn: debounce(300, function({ state }) {
+  resizeNodeQuickFn: debounce(250, function({ state }) {
     state.selectedComponentIds.forEach(id => {
       if (quickFnMap[id]) {
         quickFnMap[id].resize()

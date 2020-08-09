@@ -1,8 +1,8 @@
 <template>
   <div>
-    <top-nav />
+    <top-nav v-if="!inDashboard"/>
 
-    <router-view style="padding-top: 50px;" />
+    <router-view :style="{ paddingTop: inDashboard ? '0' : '50px' }"/>
 
     <transition name="fade">
       <component :is="dialog" />
@@ -21,7 +21,10 @@ export default {
     DialogLogin: () => import('@/pages/components/DialogLogin')
   },
   computed: {
-    ...mapState('app', ['dialog'])
+    ...mapState('app', ['dialog']),
+    inDashboard() {
+      return this.$route.path.indexOf('/dashboard/') === 0
+    }
   },
   created() {
     this.getCurrentUser()

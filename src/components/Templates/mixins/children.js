@@ -109,13 +109,12 @@ export default {
       })
 
       let stopNodeId
-      traversalAncestorAndSelf(this.node, ({ id, tag, children }) => {
+      console.log(this.node)
+      traversalAncestorAndSelf(this.node, ({ id, tag, children, parentNode }) => {
         stopNodeId = id
-        if (
-          tag === GRID_ITEM ||
-          this.rootComponentSetIds.includes(id) ||
-          children.length > 1
-        ) {
+        if (isComponentSet(parentNode.parentNode) && children.length === 1) {
+          return 'stop'
+        } else if (tag === GRID_ITEM || children.length > 1) {
           return 'stop'
         } else if (children.length === 1) {
           records.unshift({

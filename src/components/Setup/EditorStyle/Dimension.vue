@@ -1,48 +1,47 @@
 <template>
   <div>
+    <el-divider content-position="left" >
+      DIMENSION
+    </el-divider>
+
     <el-row
-      :gutter="5"
-      class="m-t-10"
+      :gutter="10"
+      type="flex"
+      align="middle"
     >
-      <el-col :span="8">
-
-        <select-unit v-model="computedStyle.height" />
-        <span class="el-form-item__label">Height</span>
+      <el-col :span="4">
+        <span class="title">Min H</span>
+      </el-col>
+      <el-col :span="12">
+        <select-unit v-model="asd" />
       </el-col>
 
-      <el-col :span="8">
-
-        <select-unit v-model="computedStyle.minHeight" />
-        <span class="el-form-item__label">Min Height</span>
+      <el-col :span="4">
+        <span class="title">Max H</span>
       </el-col>
-
-      <el-col :span="8">
-
-        <select-unit v-model="computedStyle.maxHeight" />
-        <span class="el-form-item__label">Max Height</span>
+      <el-col :span="12">
+        <select-unit v-model="asd" />
       </el-col>
     </el-row>
 
     <el-row
-      :gutter="5"
-      class="m-t-10"
+      :gutter="10"
+      type="flex"
+      align="middle"
     >
-      <el-col :span="8">
-
-        <select-unit v-model="computedStyle.width" />
-        <span class="el-form-item__label">Width</span>
+      <el-col :span="4">
+        <span class="title">Min W</span>
+      </el-col>
+      <el-col :span="12">
+        <select-unit v-model="asd" />
       </el-col>
 
-      <el-col :span="8">
-
-        <select-unit v-model="computedStyle.minWidth" />
-        <span class="el-form-item__label">Min Width</span>
+      <el-col :span="4">
+        <span class="title">Max W</span>
       </el-col>
+      <el-col :span="12">
 
-      <el-col :span="8">
-
-        <select-unit v-model="computedStyle.maxWidth" />
-        <span class="el-form-item__label">Max Width</span>
+        <select-unit v-model="asd" />
       </el-col>
     </el-row>
   </div>
@@ -50,16 +49,16 @@
 
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
-
+import { Divider } from 'element-ui'
 export default {
   name: 'Dimension',
   components: {
-    SelectUnit
+    SelectUnit,
+    ElDivider: Divider
   },
-  props: {
-    computedStyle: {
-      type: Object,
-      required: true
+  data() {
+    return {
+      asd: ''
     }
   }
 }

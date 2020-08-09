@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-divider content-position="left">
-      DISPLAY WHEN
+      HIDDEN WHEN
     </el-divider>
 
     <el-button-group class="group">
@@ -13,7 +13,7 @@
       >
         <el-button
           :disabled="!parentNodes.length"
-          :type="button.hidden === true ? '' : 'primary'"
+          :type="button.hidden === true ? 'primary' : ''"
           plain
           @click="click(button.name, !Boolean(button.hidden))"
         >
@@ -29,6 +29,7 @@
 import { mapState, mapMutations } from 'vuex'
 import { isGridItem } from '@/utils/node'
 import { Tooltip, Divider } from 'element-ui'
+import { BREAK_POINTS } from '@/const'
 
 export default {
   name: 'ItemHiddenController',
@@ -65,11 +66,11 @@ export default {
       }
 
       return [
-        { name: 'lg', content: 'For Large Monitor, Only display when screen larger than 1200px', icon: 'el-icon-data-line', hidden: lgHidden },
-        { name: 'md', content: 'For Computer, Only display when screen larger than 996px', icon: 'el-icon-monitor', hidden: mdHidden },
-        { name: 'sm', content: 'For Tablet, Only display when screen larger than 768px', icon: 'el-icon-mobile', hidden: smHidden },
-        { name: 'xs', content: 'For Phone, Only display when screen larger than 480px', icon: 'el-icon-mobile-phone', hidden: xsHidden, class: 'rotate90' },
-        { name: 'xxs', content: 'For Small Phone, Only display when screen larger than 0px', icon: 'el-icon-mobile-phone', hidden: xxsHidden }
+        { name: 'lg', content: `For Large Monitor, Only display when screen larger than ${BREAK_POINTS.lg}px`, icon: 'el-icon-data-line', hidden: lgHidden },
+        { name: 'md', content: `For Computer, Only display when screen larger than ${BREAK_POINTS.md}px`, icon: 'el-icon-monitor', hidden: mdHidden },
+        { name: 'sm', content: `For Tablet, Only display when screen larger than ${BREAK_POINTS.sm}px`, icon: 'el-icon-mobile', hidden: smHidden },
+        { name: 'xs', content: `For Phone, Only display when screen larger than ${BREAK_POINTS.xs}px`, icon: 'el-icon-mobile-phone', hidden: xsHidden, class: 'rotate90' },
+        { name: 'xxs', content: `For Small Phone, Only display when screen larger than ${BREAK_POINTS.xxs}px`, icon: 'el-icon-mobile-phone', hidden: xxsHidden }
       ]
     }
   },

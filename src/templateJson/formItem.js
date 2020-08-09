@@ -5,12 +5,12 @@ import {
   TAG,
   VALIDATE,
   FIELD,
-  CAN_EDIT
+  CAN_BE_EDITED
 } from '../const'
 
 export const formSubmit = () => ({
   [TAG]: 'form-submit',
-  [CAN_EDIT]: true,
+  [CAN_BE_EDITED]: true,
   [INITIATE]: true
 })
 
@@ -18,7 +18,7 @@ export const formInput = () => ({
   [TAG]: 'form-input',
   [FIELD]: '商品名称',
   [VALUE]: 'iphone 7',
-  [CAN_EDIT]: true,
+  [CAN_BE_EDITED]: true,
   [PROPS]: {
     type: 'text'
   },
@@ -27,7 +27,7 @@ export const formInput = () => ({
 
 export const formTextarea = () => ({
   [TAG]: 'form-textarea',
-  [CAN_EDIT]: true
+  [CAN_BE_EDITED]: true
 })
 
 export const formInputNumber = () => ({
@@ -68,7 +68,7 @@ export const formRate = () => ({
 
 export const formSlider = () => ({
   [TAG]: 'form-slider',
-  [CAN_EDIT]: true
+  [CAN_BE_EDITED]: true
 })
 
 export default [

@@ -264,10 +264,6 @@ export default {
   }
 }
 
-::v-deep .vue-grid-item {
-  pointer-events: all;
-}
-
 .customer-indicator{
   position: absolute;
   width: 100%;

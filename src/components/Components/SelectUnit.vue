@@ -16,10 +16,10 @@
     ref="input"
     v-model="number"
     :class="{ 'ns-resize': resizeCursor }"
+    :prefix-icon="prefixIcon"
     type="number"
     class="number"
     clearable
-    :prefix-icon="prefixIcon"
     @mousedown.native="clicking = true"
     @focus="resizeCursor= false"
     @blur="resizeCursor = true"
@@ -221,14 +221,6 @@ export default {
 
 <style scoped lang="scss">
 ::v-deep {
-  &:not(.el-input--prefix) > .el-input__inner[type='number'] {
-    padding-right: 8px;
-    padding-left: 8px;
-  }
-
-  .el-input__icon{
-    width: 25px;
-  }
   .el-input-group__append,
   .el-input-group__prepend {
     width: 30px;
@@ -239,13 +231,6 @@ export default {
 
   .el-input-group__append {
     padding: 0;
-  }
-  .el-input__inner {
-    padding-right: 0 !important;
-    padding-left: 25px !important;
-  }
-  .el-input__prefix {
-    left: 0;
   }
 
   &.ns-resize {

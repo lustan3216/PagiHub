@@ -10,9 +10,10 @@
     <node-quick-functions
       v-if="selected"
       :id="id"
+      :item-editing="itemEditing"
     />
 
-    <slot :can-not-edit="!canOperate" />
+    <slot :item-editing="itemEditing" />
   </div>
 
   <div
@@ -27,10 +28,10 @@
 import Vue from 'vue'
 import { mapState, mapMutations } from 'vuex'
 import NodeQuickFunctions from './NodeQuickFunctions'
-import { CAN_EDIT } from '@/const'
+import { CAN_BE_EDITED } from '@/const'
 import { isMac } from '@/utils/device'
 
-const store = Vue.observable({ currentCancanOperateId: null })
+const store = Vue.observable({ currentItemEditingId: null })
 
 export default {
   name: 'ControllerLayer',
@@ -49,8 +50,9 @@ export default {
     }
   },
   data() {
+    // 有些component像是 textedit or video, 裡面有拖拉多種互動，需要用 itemEditing 判定需不需要鎖住，經由點兩下就可操作
     return {
-      canOperate: true
+      itemEditing: false
     }
   },
   computed: {
@@ -66,23 +68,18 @@ export default {
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },
-    canEdit() {
-      return this.node && this.node[CAN_EDIT]
+    canBeEdited() {
+      return this.node && this.node[CAN_BE_EDITED]
     },
-    currentCancanOperateId() {
-      return store.currentCancanOperateId
+    currentItemEditingId() {
+      return store.currentItemEditingId
     }
   },
   watch: {
-    currentCancanOperateId(id) {
-      if (this.canEdit && this.id !== id) {
-        this.canOperate = false
+    currentItemEditingId(id) {
+      if (this.canBeEdited && this.id !== id) {
+        this.itemEditing = false
       }
-    }
-  },
-  created() {
-    if (this.canEdit) {
-      this.canOperate = false
     }
   },
   methods: {
@@ -93,14 +90,14 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     dblclick() {
-      if (this.canEdit) {
-        this.canOperate = true
+      if (this.canBeEdited) {
+        this.itemEditing = true
       }
     },
     singleClick(event) {
       // don't change selected component ids when dragging item,
       // otherwise vue-resizable-handle will cause a bug here
-      store.currentCancanOperateId = this.id
+      store.currentItemEditingId = this.id
       if (
         this.isExample ||
         event.target.classList.contains('vue-resizable-handle')

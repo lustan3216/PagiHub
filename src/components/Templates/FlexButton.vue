@@ -5,8 +5,9 @@
     v-bind="innerProps"
     class="wh-100 m-0 button"
   >
-    <editor-text-inner
+    <text-editor-inner
       :id="id"
+      :editing="editing"
       :value="innerValue || 'Edit Me'"
     />
 
@@ -47,7 +48,7 @@
 import { Message } from 'element-ui'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
-import EditorTextInner from './EditorTextInner'
+import TextEditorInner from './TextEditorInner'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { REDIRECT_TO } from '../Setup/EditorSetting/SettingFlexButton'
@@ -57,10 +58,16 @@ export default {
   defaultSetting,
   name: 'FlexButton',
   components: {
-    EditorTextInner,
+    TextEditorInner,
     AsyncComponent
   },
   mixins: [nodeMixin, childrenMixin],
+  props: {
+    editing: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       clickEvents: []

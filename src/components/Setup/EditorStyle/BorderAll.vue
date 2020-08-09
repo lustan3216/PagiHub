@@ -1,36 +1,43 @@
 <template>
   <div>
-    <el-divider content-position="left" class="pointer m-b-20">
-      <el-button icon="el-icon-plus" @click="isUniq = !isUniq"/>
-      {{ isUniq ? 'BORDERS' : 'EACH BORDER' }}
+    <el-divider
+      content-position="left"
+      class="m-b-20"
+    >
+      <el-button
+        icon="el-icon-plus"
+        @click="isUniq = !isUniq"
+      />
+      {{ isUniq ? 'BORDERS / PADDING' : 'EACH BORDER / PADDING' }}
     </el-divider>
 
-<!--    <el-row-->
-<!--      type="flex"-->
-<!--      align="middle"-->
-<!--    >-->
-<!--      <el-col :span="8">-->
-<!--        <span class="title">Border</span>-->
-<!--      </el-col>-->
-
-<!--      <el-col-->
-<!--        :offset="13"-->
-<!--        :span="3"-->
-<!--        -->
-<!--      >-->
-<!--        -->
-<!--      </el-col>-->
-<!--    </el-row>-->
-
-    <div v-if="isUniq" class="flex">
-      <border v-model="uniqValue" icon="el-icon-rank" />
+    <div
+      v-if="isUniq"
+      class="flex"
+    >
+      <border
+        v-model="uniqValue"
+        icon="el-icon-rank"
+      />
     </div>
 
     <div v-else>
-      <border v-model="value.borderTop" icon="el-icon-top"/>
-      <border v-model="value.borderRight" icon="el-icon-right"/>
-      <border v-model="value.borderBottom" icon="el-icon-bottom"/>
-      <border v-model="value.borderLeft" icon="el-icon-back"/>
+      <border
+        v-model="value.borderTop"
+        icon="el-icon-top"
+      />
+      <border
+        v-model="value.borderRight"
+        icon="el-icon-right"
+      />
+      <border
+        v-model="value.borderBottom"
+        icon="el-icon-bottom"
+      />
+      <border
+        v-model="value.borderLeft"
+        icon="el-icon-back"
+      />
     </div>
   </div>
 </template>

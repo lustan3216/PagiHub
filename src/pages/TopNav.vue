@@ -23,7 +23,7 @@
       <el-button
         v-if="isLogin"
         type="text"
-        @click="$router.push({ name: 'Projects' })"
+        @click="$router.push({ name: 'Design' })"
       >
         Dashboard
       </el-button>

@@ -14,7 +14,9 @@
         <node-name
           :id="id"
           class="title"
-        />
+        >
+          <i :class="[itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank']" />
+        </node-name>
 
         <portal-target
           v-if="isDraftMode"
@@ -103,6 +105,10 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    itemEditing: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -237,8 +243,7 @@ export default {
             Math.abs(left - this.left) > 1 ||
             Math.abs(width - this.width) > 1 ||
             Math.abs(height - this.height) > 1
-          )
-          {
+          ) {
             this.animationId = requestAnimationFrame(animate)
           } else {
             cancelAnimationFrame(this.animationId)
@@ -308,7 +313,7 @@ $activeColor: rgba(81, 117, 199, 0.68);
   pointer-events: none;
   border: 1px dashed $activeColor;
   will-change: opacity, height, width, top, left ;
-  z-index: 999;
+  z-index: 800;
 }
 
 .wrapper {

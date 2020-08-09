@@ -4,17 +4,17 @@
       <el-button
         icon="el-icon-plus"
         @click="
-        values.push({
-          id: +new Date(),
-          color: null,
-          inset: null,
-          offsetX: null,
-          offsetY: null,
-          blurRadius: null,
-          spreadRadius: null,
-          visible: true
-        })
-      "
+          values.push({
+            id: +new Date(),
+            color: null,
+            inset: null,
+            offsetX: null,
+            offsetY: null,
+            blurRadius: null,
+            spreadRadius: null,
+            visible: true
+          })
+        "
       />
 
       <el-button
@@ -33,11 +33,17 @@
       draggable="true"
     >
       <el-col :span="2">
-        <i class="el-icon-d-caret" style="margin-top: 7px;"/>
+        <i
+          class="el-icon-d-caret"
+          style="margin-top: 7px;"
+        />
       </el-col>
 
       <el-col :span="2">
-        <el-checkbox v-model="boxShadow.visible" style="margin-top: 7px;"/>
+        <el-checkbox
+          v-model="boxShadow.visible"
+          style="margin-top: 7px;"
+        />
       </el-col>
 
       <el-col :span="5">

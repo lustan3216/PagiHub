@@ -16,7 +16,7 @@
       :class="{
         'z-index1': selectedComponentIds.includes(child.id)
       }"
-      drag-ignore-from=".drag-fix"
+      drag-ignore-from=".grid-item-fix"
       drag-allow-from="div"
     >
       <grid-item-child :id="child.id" />
@@ -129,6 +129,9 @@ export default {
       const records = []
 
       newChildren.forEach((child, index) => {
+        if (!this.innerChildren[index] || !this.innerChildren[index].props) {
+          return
+        }
         const oldChild = this.innerChildren[index].props[this.breakpoint]
         const oldValue = {
           x: oldChild.x,

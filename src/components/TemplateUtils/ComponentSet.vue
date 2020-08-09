@@ -1,23 +1,15 @@
 <template>
-  <controller-layer
+  <async-component
     v-if="firstChild"
     :id="firstChild.id"
-    :border="false"
-  >
-    <template v-slot="{ canNotEdit }">
-      <async-component
-        :id="firstChild.id"
-        :class="{ 'no-action': canNotEdit }"
-      />
-    </template>
-  </controller-layer>
-  <div
-    v-else
-    :id="id"
-    class="wh-100 flex-center"
-  >
-    <component-add :id="id" />
-  </div>
+  />
+<!--  <div-->
+<!--    v-else-->
+<!--    :id="id"-->
+<!--    class="wh-100 flex-center"-->
+<!--  >-->
+<!--    <component-add :id="id" />-->
+<!--  </div>-->
 </template>
 
 <script>

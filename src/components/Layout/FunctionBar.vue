@@ -27,6 +27,30 @@
   </dialog-interacted>
 
   <nav v-else-if="isDraftMode">
+    <i
+      v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
+      :disabled="!selectedComponentIds.length"
+      @shortkey="setCopySelectedNodeId(null)"
+    />
+
+    <i
+      v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
+      :disabled="!copyComponentIds.length"
+      @shortkey="vmPasteNodes"
+    />
+
+    <i
+      v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
+      :disabled="selectedComponentIds.length !== 1"
+      @shortkey="cut"
+    />
+
+    <i
+      v-shortkey="{ del: ['del'], del: ['backspace'] }"
+      :disabled="!selectedComponentIds.length"
+      @shortkey="multiDelete"
+    />
+
     <el-tooltip
       effect="light"
       content="Undo"
@@ -55,29 +79,70 @@
       />
     </el-tooltip>
 
-    <i
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
-      :disabled="!selectedComponentIds.length"
-      @shortkey="setCopySelectedNodeId(null)"
-    />
+    <i class="dot"/>
 
-    <i
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
-      :disabled="!copyComponentIds.length"
-      @shortkey="vmPasteNodes"
-    />
+    <el-tooltip
+      :content="`Set the viewport to ${breakpoints.lg}px`"
+      effect="light"
+      placement="bottom"
+    >
+      <el-button
+        icon="el-icon-data-line"
+        type="text"
+        @click="SET_PREVIEW_MODE"
+      />
+    </el-tooltip>
 
-    <i
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
-      :disabled="selectedComponentIds.length !== 1"
-      @shortkey="cut"
-    />
+    <el-tooltip
+      :content="`Set the viewport to ${breakpoints.md}px`"
+      effect="light"
+      placement="bottom"
+    >
+      <el-button
+        icon="el-icon-monitor"
+        type="text"
+        @click="SET_PREVIEW_MODE"
+      />
+    </el-tooltip>
 
-    <i
-      v-shortkey="{ del: ['del'], del: ['backspace'] }"
-      :disabled="!selectedComponentIds.length"
-      @shortkey="multiDelete"
-    />
+    <el-tooltip
+      :content="`Set the viewport to ${breakpoints.sm}px`"
+      effect="light"
+      placement="bottom"
+    >
+      <el-button
+        icon="el-icon-mobile"
+        type="text"
+        @click="SET_PREVIEW_MODE"
+      />
+    </el-tooltip>
+
+    <el-tooltip
+      :content="`Set the viewport to ${breakpoints.xs}px`"
+      effect="light"
+      placement="bottom"
+    >
+      <el-button
+        class="rotate90"
+        icon="el-icon-mobile-phone"
+        type="text"
+        @click="SET_PREVIEW_MODE"
+      />
+    </el-tooltip>
+
+    <el-tooltip
+      :content="`Set the viewport to ${breakpoints.xxs}px`"
+      effect="light"
+      placement="bottom"
+    >
+      <el-button
+        icon="el-icon-mobile-phone"
+        type="text"
+        @click="SET_PREVIEW_MODE"
+      />
+    </el-tooltip>
+
+    <i class="dot"/>
 
     <el-tooltip
       effect="light"
@@ -87,7 +152,7 @@
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
         :disabled="!editingComponentSetId"
-        icon="el-icon-data-analysis"
+        icon="el-icon-picture-outline"
         type="text"
         @click="SET_PREVIEW_MODE"
         @shortkey.native="SET_PREVIEW_MODE"
@@ -109,6 +174,7 @@ import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import { Tooltip } from 'element-ui'
 import { vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
+import { BREAK_POINTS } from '@/const'
 import jsonHistory from '@/store/jsonHistory'
 
 export default {
@@ -125,6 +191,9 @@ export default {
     ]),
     ...mapState('component', ['editingComponentSetId', 'selectedComponentNode']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
+    breakpoints() {
+      return BREAK_POINTS
+    },
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },
@@ -162,5 +231,14 @@ nav {
   font-size: 16px;
   padding: 7px;
   margin: 5px 10px;
+}
+
+.dot {
+  width: 2px;
+  height: 2px;
+  background-color: #b1b1b1;
+  border-radius: 50%;
+  margin: 4px 8px;
+  display: inline-block;
 }
 </style>

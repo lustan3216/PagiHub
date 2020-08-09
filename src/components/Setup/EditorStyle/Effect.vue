@@ -1,10 +1,13 @@
 <template>
   <div class="m-t-20">
     <el-divider content-position="left">
-      <el-dropdown @command="values.push({ name: $event, value: 0, visible: true })" size="small">
-          <span class="el-dropdown-link">
-            <el-button icon="el-icon-plus"/>
-          </span>
+      <el-dropdown
+        size="small"
+        @command="values.push({ name: $event, value: 0, visible: true })"
+      >
+        <span class="el-dropdown-link">
+          <el-button icon="el-icon-plus"/>
+        </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item
             v-for="option in selectableOptions"
@@ -32,8 +35,14 @@
       type="flex"
       align="middle"
     >
-      <el-col :span="2" :offset="2">
-        <el-checkbox v-model="option.visible" style="margin-top: 7px;"/>
+      <el-col
+        :span="2"
+        :offset="2"
+      >
+        <el-checkbox
+          v-model="option.visible"
+          style="margin-top: 7px;"
+        />
       </el-col>
 
       <el-col :span="9">

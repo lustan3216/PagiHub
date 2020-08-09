@@ -8,33 +8,39 @@
     </el-col>
 
     <el-col :span="16">
-      <select-unit prefix-icon="el-icon-refresh" :units="[]" v-model="innerValue" :min="0" :max="360"/>
+      <select-unit
+        :units="[]"
+        v-model="innerValue"
+        :min="0"
+        :max="360"
+        prefix-icon="el-icon-refresh"
+      />
     </el-col>
   </el-row>
 </template>
 
 <script>
-  import SelectUnit from '@/components/Components/SelectUnit'
-  export default {
-    name: 'Rotate',
-    props: {
-      value: {
-        type: String,
-        required: true
-      }
-    },
-    components: {
-      SelectUnit
-    },
-    data() {
-      return {
-        innerValue: this.value
-      }
-    },
-    watch: {
-      innerValue(opacity) {
-        this.$emit('change', { opacity })
-      }
+import SelectUnit from '@/components/Components/SelectUnit'
+export default {
+  name: 'Rotate',
+  components: {
+    SelectUnit
+  },
+  props: {
+    value: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {
+      innerValue: this.value
+    }
+  },
+  watch: {
+    innerValue(opacity) {
+      this.$emit('change', { opacity })
     }
   }
+}
 </script>

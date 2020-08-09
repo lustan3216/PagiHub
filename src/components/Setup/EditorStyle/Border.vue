@@ -98,7 +98,7 @@ export default {
       innerValue: this.value.split(REGEX)
     }
   },
-  computed :{
+  computed: {
 
   },
   watch: {

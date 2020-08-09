@@ -20,33 +20,33 @@
         </el-col>
       </el-row>
 
-<!--      <el-row-->
-<!--        type="flex"-->
-<!--        align="middle"-->
-<!--      >-->
-<!--        <el-col :span="8">-->
-<!--          <span class="el-form-item__label">Color</span>-->
-<!--        </el-col>-->
+      <!--      <el-row-->
+      <!--        type="flex"-->
+      <!--        align="middle"-->
+      <!--      >-->
+      <!--        <el-col :span="8">-->
+      <!--          <span class="el-form-item__label">Color</span>-->
+      <!--        </el-col>-->
 
-<!--        <el-col :span="8">-->
-<!--          <color-picker-->
-<!--            :value="getMarkAttrs('color').color"-->
-<!--            show-alpha-->
-<!--            @change="commands.color({ color: $event })"-->
-<!--          />-->
-<!--        </el-col>-->
-<!--        <el-col :span="8">-->
-<!--          <span class="el-form-item__label">Background</span>-->
-<!--        </el-col>-->
+      <!--        <el-col :span="8">-->
+      <!--          <color-picker-->
+      <!--            :value="getMarkAttrs('color').color"-->
+      <!--            show-alpha-->
+      <!--            @change="commands.color({ color: $event })"-->
+      <!--          />-->
+      <!--        </el-col>-->
+      <!--        <el-col :span="8">-->
+      <!--          <span class="el-form-item__label">Background</span>-->
+      <!--        </el-col>-->
 
-<!--        <el-col :span="8">-->
-<!--          <color-picker-->
-<!--            :value="getMarkAttrs('backgroundColor').backgroundColor"-->
-<!--            show-alpha-->
-<!--            @change="commands.backgroundColor({ backgroundColor: $event })"-->
-<!--          />-->
-<!--        </el-col>-->
-<!--      </el-row>-->
+      <!--        <el-col :span="8">-->
+      <!--          <color-picker-->
+      <!--            :value="getMarkAttrs('backgroundColor').backgroundColor"-->
+      <!--            show-alpha-->
+      <!--            @change="commands.backgroundColor({ backgroundColor: $event })"-->
+      <!--          />-->
+      <!--        </el-col>-->
+      <!--      </el-row>-->
 
       <el-row
         :gutter="5"

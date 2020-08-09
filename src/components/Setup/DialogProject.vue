@@ -1,8 +1,7 @@
 <template>
   <el-button
-    v-bind="$attrs"
     :icon="`el-icon-${isExist ? 's-tools' : 'plus'}`"
-    type="text"
+    v-bind="$attrs"
     @click.stop="visible = !visible"
   >
     {{ buttonText }}

@@ -19,10 +19,13 @@ import {
   deleteBy,
   toArray,
   objectFirstKey,
-  cloneJson
+  cloneJson,
+  asyncGetValue
 } from '@/utils/tool'
 import { CHILDREN, ID, PARENT_ID } from '@/const'
 import { isProject, isComponentSet } from '@/utils/node'
+import { layers } from '@/templateJson/basic'
+import { vm, vmAddNodesToParentAndRecord } from '@/utils/vmMap'
 import { defineNodeProperties } from '@/utils/nodeProperties'
 import {
   getRootComponentSetId,
@@ -232,6 +235,9 @@ const actions = {
   async createComponentSet({ commit, state, dispatch }, { projectId, attrs }) {
     const { data } = await createComponentSet(projectId, attrs)
 
+    asyncGetValue(() => vm(data.id)).then(() => {
+      vmAddNodesToParentAndRecord(data.id, layers())
+    })
     commit('SET_EDITING_COMPONENT_SET_ID', data.id)
     commit('SET_NODES_TO_MAP', data)
   },

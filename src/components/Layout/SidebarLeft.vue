@@ -3,13 +3,14 @@
     class="sidebar-left"
     layout="horizontal"
   >
-    <div class="extra">
+    <div class="extra justify-between">
       <el-button type="text">Component Set</el-button>
 
       <dialog-component-set
         v-if="projectId"
         :parent-id="projectId"
         button-text="Create"
+        button-type="primary"
       />
     </div>
 

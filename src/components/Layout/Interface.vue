@@ -16,6 +16,10 @@
     <sidebar-right v-if="isDraftMode" />
 
     <portal-target
+      name="TextEditorMenu"
+      slim
+    />
+    <portal-target
       v-for="id in selectedComponentIds"
       :name="`Interface-${id}`"
       :key="`Interface-${id}`"
@@ -40,20 +44,11 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .editor {
   @include calc-vh('height', '100vh - 50px');
   display: flex;
   overflow: hidden;
   background-color: $color-grey;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.3s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>

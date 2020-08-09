@@ -18,6 +18,8 @@
     @click="click"
     @dblclick.native="dblclick"
   >
+    <slot/>
+
     {{ nodeShortName }} - {{ shortId }}
   </el-button>
 </template>

@@ -1,20 +1,5 @@
 <template>
-  <div
-    style="width: 50vw;"
-    class="m-t-20 m-a"
-  >
-    <div class="horizontal-center">
-      <div class="special-radius shadow-3">
-        <div class="special-radius shadow-3">
-          <div class="special-radius shadow-3">
-            <div
-              :style="`background-image: url(${coverPhoto}); height: 150px; width: 150px`"
-              class="special-radius bg-image "
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="profile">
 
     <el-alert
       v-if="!verified || !username"
@@ -34,7 +19,7 @@
       <el-form-item label="EMAIL">
         <el-input
           :value="email"
-          class="no-action shadow-button"
+          class="no-action"
         >
           <template v-if="!verified">
             <el-button
@@ -59,8 +44,8 @@
         <el-input
           v-model="data.username"
           :class="{ 'no-action': username }"
-          class="shadow-button"
           placeholder="lotsDesign123"
+          @focus="submitForm"
         />
       </el-form-item>
 
@@ -70,8 +55,8 @@
       >
         <el-input
           v-model="data.facebookId"
-          class="shadow-button"
           placeholder="lots-design"
+          @focus="submitForm"
         >
           <template slot="prepend">Https://www.facebook.com/</template>
         </el-input>
@@ -83,8 +68,8 @@
       >
         <el-input
           v-model="data.instagramId"
-          class="shadow-button"
           placeholder="lulala"
+          @focus="submitForm"
         >
           <template slot="prepend">@</template>
         </el-input>
@@ -96,18 +81,9 @@
           v-model="data.description"
           show-word-limit
           type="textarea"
-          class="shadow-button"
+          @focus="submitForm"
         />
       </el-form-item>
-
-      <el-button
-        :disabled="!dirty"
-        class="shadow-button submit"
-        size="large"
-        @click="submitForm"
-      >
-        SUBMIT
-      </el-button>
     </el-form>
   </div>
 </template>
@@ -194,33 +170,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .special-radius {
-    padding: 15px;
-    border-radius: 63% 37% 30% 70%/50% 45% 55% 50%;
-  }
+  .profile {
+    padding: 30px;
+    margin: 10vh auto;
 
-  .shadow-button {
-    padding: 5px;
-    margin-bottom: 15px;
-    margin-top: 5px;
-    border-radius: 5px;
-  }
-
-  .info {
-    text-align: left;
-    margin: 30px auto;
-    min-width: 300px;
-  }
-
-  .label {
-    margin-top: 5px;
-  }
-
-  .submit {
-    margin: 0 auto;
-    display: block;
-    padding: 10px 15px;
-    background: #323233;
-    color: white;
+    width: 50vw;
   }
 </style>

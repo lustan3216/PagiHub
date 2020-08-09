@@ -1,29 +1,33 @@
 <template>
-  <div
-    v-free-style="innerStyles"
-    class="relative h-100"
-  >
-    <grid-generator
+  <div class="relative h-100">
+    <controller-layer
       v-for="(child, index) in sortChildren"
-      :style="{ 'z-index': index }"
-      :class="{ absolute: index }"
+      :border="false"
       :id="child.id"
       :key="child.id"
-      :data-layer="Boolean(index)"
-    />
+    >
+      <grid-generator
+        :style="{ 'z-index': index }"
+        :class="{ absolute: index }"
+        :id="child.id"
+        :data-layer="Boolean(index)"
+      />
+    </controller-layer>
   </div>
 </template>
 
 <script>
-import gridGenerator from './GridGenerator'
+import GridGenerator from './GridGenerator'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { SORT_INDEX } from '@/const'
+import ControllerLayer from '../TemplateUtils/ControllerLayer'
 
 export default {
   name: 'Layers',
   components: {
-    gridGenerator
+    GridGenerator,
+    ControllerLayer
   },
   mixins: [nodeMixin, childrenMixin],
   computed: {

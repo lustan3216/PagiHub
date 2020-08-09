@@ -13,7 +13,7 @@
     >
       <component-add
         :id="id"
-        size="large"
+        style="font-size: 16px; padding: 10px;"
       />
     </div>
   </controller-layer>

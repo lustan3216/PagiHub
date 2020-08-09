@@ -14,7 +14,7 @@
 
 <script>
 import { isMac } from '@/utils/device'
-import EditorText from '../Templates/EditorText'
+import EditorText from '../Templates/TextEditor'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 export default {
   name: 'EditorCss',

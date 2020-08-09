@@ -6,7 +6,7 @@ import {
   CAN_NEW_ITEM,
   TAG,
   CHILDREN,
-  CAN_EDIT,
+  CAN_BE_EDITED,
   CAN_NOT_DELETE,
   CAN_NOT_COPY,
   STYLE,
@@ -64,7 +64,7 @@ export const carousel = function() {
     h: 300,
     [TAG]: CAROUSEL,
     [CAN_NEW_ITEM]: true,
-    [CAN_EDIT]: true,
+    [CAN_BE_EDITED]: true,
     [CHILDREN]: [
       gridGenerator({
         [LABEL]: 'indicators',
@@ -99,12 +99,12 @@ export const carousel = function() {
   }
 }
 
-export const editorText = function() {
+export const textEditor = function() {
   return {
     w: 18,
     h: 300,
-    [TAG]: 'editor-text',
-    [CAN_EDIT]: true
+    [TAG]: 'text-editor',
+    [CAN_BE_EDITED]: true
   }
 }
 
@@ -114,7 +114,7 @@ export const flexButton = function() {
     h: 30,
     [TAG]: 'flex-button',
     [LABEL]: 'link',
-    [CAN_EDIT]: true
+    [CAN_BE_EDITED]: true
   }
 }
 
@@ -139,7 +139,7 @@ export const videoPlayer = function() {
     w: 36,
     h: 300,
     [TAG]: 'video-player',
-    [CAN_EDIT]: true,
+    [CAN_BE_EDITED]: true,
     [AUTO_HEIGHT]: true
   }
 }
@@ -160,7 +160,7 @@ export const drawer = function() {
 
 export default [
   layers(),
-  editorText(),
+  textEditor(),
   flexImage(),
   carousel(),
   divider(),

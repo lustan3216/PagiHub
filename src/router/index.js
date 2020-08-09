@@ -1,5 +1,18 @@
 import VueRouter from 'vue-router'
 
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => {
+    if (
+      err.name !== 'NavigationDuplicated' &&
+      !err.message.includes('Avoided redundant navigation to current location')
+    ) {
+      // But print any other errors to the console
+      throw (err)
+    }
+  })
+}
+
 export default new VueRouter({
   mode: 'history',
   routes: [
@@ -19,9 +32,14 @@ export default new VueRouter({
           component: () => import('@/pages/Profile')
         },
         {
-          path: 'projects',
-          name: 'Projects',
-          component: () => import('@/pages/Projects')
+          path: 'design',
+          name: 'Design',
+          component: () => import('@/pages/Design')
+        },
+        {
+          path: 'pages',
+          name: 'Pages',
+          component: () => import('@/pages/Pages')
         }
       ]
     },
@@ -33,7 +51,7 @@ export default new VueRouter({
     {
       path: '/404',
       name: 'NotFound',
-      component: () => import('@/pages/Projects')
+      component: () => import('@/pages/Design')
     },
     {
       path: '/:projectId/draft',

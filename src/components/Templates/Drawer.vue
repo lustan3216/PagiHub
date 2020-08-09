@@ -24,11 +24,11 @@
         :id="id"
         class="h-100"
       >
-        <template v-slot="{ canNotEdit }">
+        <template v-slot="{ itemEditing }">
           <grid-generator-inner
             :id="id"
             :inner-props="innerProps"
-            :class="{ 'no-action': canNotEdit }"
+            :class="{ 'no-action': !itemEditing }"
           />
         </template>
 

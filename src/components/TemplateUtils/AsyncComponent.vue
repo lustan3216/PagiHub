@@ -19,14 +19,16 @@
     :border="false"
   >
     <!--  it will has a bug here if component without key like, editorText -->
-    <template v-slot="{ canNotEdit }">
+    <template v-slot="{ itemEditing }">
       <!--  it will has a bug here if component without key like, editorText -->
+      <!--  editing 給 texteditor 用的  -->
       <component
         v-if="vIf"
+        :editing="itemEditing"
         :is="tag"
         :id="id"
         :key="id"
-        :class="{ 'no-action': canNotEdit, 'drag-fix': !canNotEdit }"
+        :class="{ 'no-action': !itemEditing, 'grid-item-fix': itemEditing }"
       />
     </template>
   </controller-layer>
@@ -53,9 +55,9 @@ export default {
     FlexButton: () => import('../Templates/FlexButton'),
 
     Carousel: () => import('../Templates/Carousel'),
-    EditorText: () => import('../Templates/EditorText'),
-    gridGenerator: () => import('../Templates/GridGenerator'),
-    gridGeneratorInner: () => import('../Templates/GridGeneratorInner'),
+    TextEditor: () => import('../Templates/TextEditor'),
+    GridGenerator: () => import('../Templates/GridGenerator'),
+    GridGeneratorInner: () => import('../Templates/GridGeneratorInner'),
 
     Divider: () => import('../Templates/Divider'),
     VideoPlayer: () => import('../Templates/VideoPlayer'),
