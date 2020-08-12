@@ -128,9 +128,7 @@ export default {
       'windowResizing'
     ]),
     newItemToolTip() {
-      if (!this.node[CAN_NEW_ITEM]) {
-        return 'Copy An Empty Grid Item From It'
-      } else {
+      if (this.node[CAN_NEW_ITEM]) {
         switch (this.node.tag) {
           case LAYERS:
             return 'Create An New Layer'
@@ -139,6 +137,8 @@ export default {
           case CAROUSEL:
             return 'Create An Empty Slider'
         }
+      } else {
+        return 'Copy An Empty Grid Item From It'
       }
     },
     node() {
@@ -368,11 +368,13 @@ $activeColor: rgba(81, 117, 199, 0.68);
   }
 
   & > *:first-child {
-    border-radius: 5px 5px 0 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
   }
 
   & > *:last-child {
-    border-radius: 0 0 5px 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
   }
 }
 
