@@ -11,6 +11,7 @@
     />
   </el-select>
 
+<!--  @change="$emit('change', innerValue)" for font style, but try to use @input instead of @change-->
   <el-input
     v-else
     ref="input"
@@ -20,21 +21,23 @@
     type="number"
     class="number"
     clearable
+    :step="step"
+    :min="allowNegative ? Infinity : min"
+    :max="max"
     @mousedown.native="clicking = true"
     @focus="resizeCursor= false"
     @blur="resizeCursor = true"
     @change="$emit('change', innerValue)"
   >
     <el-dropdown
+      v-if="optionUnits.length > 1"
       slot="append"
-      :style="{
-        cursor: optionUnits.length >= 2 ? 'pointer' : 'none'
-      }"
       size="small"
+      class="pointer"
       @command="unit = $event"
     >
       <span class="title">
-        {{ unit.toUpperCase() || '-' }}
+        {{ unit }}
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item
@@ -43,14 +46,19 @@
           :command="unit"
           class="sub-title"
         >
-          {{ unit.toUpperCase() }}
+          {{ unit }}
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
+
+    <span v-else slot="append" class="no-action">
+      {{ optionUnits.length ? unit : ' - ' }}
+    </span>
   </el-input>
 </template>
 
 <script>
+import { toPrecision } from '@/utils/number'
 export default {
   name: 'SelectUnit',
   props: {
@@ -68,11 +76,15 @@ export default {
     },
     min: {
       type: Number,
-      default: Infinity
+      default: 0
     },
     max: {
       type: Number,
       default: Infinity
+    },
+    step: {
+      type: Number,
+      default: 1
     },
     value: {
       validator() {
@@ -86,7 +98,10 @@ export default {
     }
   },
   data() {
+    const precision = this.step.toString().replace(/\d*\.?/, '').length
+
     return {
+      precision,
       resizeCursor: true,
       clicking: false,
       lastPosition: null,
@@ -123,7 +138,7 @@ export default {
     },
     number: {
       get() {
-        return this.match[0]
+        return toPrecision(this.match[0], this.precision)
       },
       set(number) {
         let result
@@ -131,7 +146,7 @@ export default {
         if (this.isInvalid(number)) {
           result = null
         } else {
-          result = number + this.unit
+          result = toPrecision(number, this.precision) + this.unit
         }
 
         this.innerValue = result
@@ -154,7 +169,6 @@ export default {
       },
       set(unit) {
         const number = unit === 'auto' ? '' : this.number || '0'
-
         this.innerValue = number + unit
       }
     },
@@ -189,9 +203,9 @@ export default {
       const viewportOffset = this.$el.getBoundingClientRect()
       let value
       if (!this.lastPosition) {
-        value = e.clientY <= viewportOffset.top ? 1 : -1
+        value = e.clientY <= viewportOffset.top ? this.step : -1 * this.step
       } else {
-        value = this.lastPosition >= e.clientY ? 1 : -1
+        value = this.lastPosition >= e.clientY ? this.step : -1 * this.step
       }
 
       if (

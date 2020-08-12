@@ -12,7 +12,7 @@
         placement="top"
       >
         <el-button
-          :disabled="!parentNodes.length"
+          :disabled="!nodes.length"
           :type="button.hidden === true ? 'primary' : ''"
           plain
           @click="click(button.name, !Boolean(button.hidden))"
@@ -42,14 +42,6 @@ export default {
     nodes() {
       return this.selectedComponentIds.map(id => this.componentsMap[id])
     },
-    parentNodes() {
-      return this.nodes.reduce((all, node) => {
-        if (!isGridItem(node) && isGridItem(node.parentNode)) {
-          all.push(node.parentNode)
-        }
-        return all
-      }, [])
-    },
     buttons() {
       let lgHidden = false
       let mdHidden = false
@@ -57,12 +49,13 @@ export default {
       let xsHidden = false
       let xxsHidden = false
 
-      if (this.parentNodes.length === 1) {
-        lgHidden = this.parentNodes[0].props.lg.hidden
-        mdHidden = this.parentNodes[0].props.md.hidden
-        smHidden = this.parentNodes[0].props.sm.hidden
-        xsHidden = this.parentNodes[0].props.xs.hidden
-        xxsHidden = this.parentNodes[0].props.xxs.hidden
+      if (this.nodes.length === 1) {
+        const { hidden } = this.nodes[0]
+        lgHidden = hidden && hidden.lg
+        mdHidden = hidden && hidden.md
+        smHidden = hidden && hidden.sm
+        xsHidden = hidden && hidden.xs
+        xxsHidden = hidden && hidden.xxs
       }
 
       return [
@@ -79,9 +72,9 @@ export default {
     click(name, hidden) {
       const records = []
 
-      this.parentNodes.forEach(node => {
+      this.nodes.forEach(node => {
         records.push({
-          path: `${node.id}.props.${name}.hidden`,
+          path: `${node.id}.hidden.${name}`,
           value: hidden || undefined
         })
       })

@@ -3,13 +3,13 @@
     v-if="firstChild"
     :id="firstChild.id"
   />
-<!--  <div-->
-<!--    v-else-->
-<!--    :id="id"-->
-<!--    class="wh-100 flex-center"-->
-<!--  >-->
-<!--    <component-add :id="id" />-->
-<!--  </div>-->
+  <div
+    v-else
+    :id="id"
+    class="wh-100 flex-center"
+  >
+    <component-add :id="id" />
+  </div>
 </template>
 
 <script>

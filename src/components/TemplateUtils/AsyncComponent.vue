@@ -1,8 +1,6 @@
 <template>
-  <div
-    v-observe-visibility="options"
-    v-if="isExample || isLayers"
-  >
+<!-- v-observe-visibility 跟vIf 一定要不同層，不然v-if false 的話沒辦法observer -->
+  <div class="h-100" v-observe-visibility="options" v-if="!hidden && isExample || isLayers">
     <component
       v-if="vIf"
       :is="tag"
@@ -14,21 +12,19 @@
   <!--  should have observe-visibility here, otherwise some nested layout case, the grid layout will not work right-->
   <controller-layer
     v-observe-visibility="options"
-    v-else
+    v-else-if="!hidden"
     :id="id"
-    :border="false"
+    class="h-100"
   >
-    <!--  it will has a bug here if component without key like, editorText -->
     <template v-slot="{ itemEditing }">
       <!--  it will has a bug here if component without key like, editorText -->
       <!--  editing 給 texteditor 用的  -->
       <component
-        v-if="vIf"
+        ref="component"
         :editing="itemEditing"
         :is="tag"
         :id="id"
         :key="id"
-        :class="{ 'no-action': !itemEditing, 'grid-item-fix': itemEditing }"
       />
     </template>
   </controller-layer>
@@ -36,8 +32,9 @@
 
 <script>
 import { ObserveVisibility } from 'vue-observe-visibility'
-import { isComponentSet, getNode, isLayers } from '@/utils/node'
-import { COMPONENT_SET } from '@/const'
+import { isComponentSet, getNode, isLayers, isGridItem } from '@/utils/node'
+import { CAN_BE_EDITED, COMPONENT_SET } from '@/const'
+import { mapState } from 'vuex'
 
 export default {
   name: 'AsyncComponent',
@@ -56,8 +53,8 @@ export default {
 
     Carousel: () => import('../Templates/Carousel'),
     TextEditor: () => import('../Templates/TextEditor'),
-    GridGenerator: () => import('../Templates/GridGenerator'),
-    GridGeneratorInner: () => import('../Templates/GridGeneratorInner'),
+    Grid: () => import('../Templates/Grid'),
+    GridItem: () => import('../Templates/GridItem'),
 
     Divider: () => import('../Templates/Divider'),
     VideoPlayer: () => import('../Templates/VideoPlayer'),
@@ -110,8 +107,15 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', ['breakpoint']),
+    hidden() {
+      return this.node.hidden && this.node.hidden[this.breakpoint]
+    },
     node() {
       return getNode(this.id, this.isExample)
+    },
+    canBeEdited() {
+      return this.node[CAN_BE_EDITED]
     },
     tag() {
       if (isComponentSet(this.node)) {
@@ -122,6 +126,9 @@ export default {
     },
     isLayers() {
       return isLayers(this.node)
+    },
+    isGridItem() {
+      return isGridItem(this.node)
     }
   }
 }

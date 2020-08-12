@@ -12,7 +12,8 @@
         :units="[]"
         v-model="innerValue"
         :min="0"
-        :max="1"
+        :max="100"
+        :step="1"
         prefix-icon="el-icon-sunset"
       />
     </el-col>
@@ -34,12 +35,17 @@ export default {
   },
   data() {
     return {
-      innerValue: this.value
+      innerValue: this.value * 100
     }
   },
   watch: {
     innerValue(opacity) {
-      this.$emit('change', { opacity })
+      // Number() here to make share 1.00 => 1
+      this.$emit('change', { opacity: Number(opacity / 100).toString()  })
+    },
+    value() {
+      const { data } = this.$options
+      return Object.assign(this, data.call(this))
     }
   }
 }

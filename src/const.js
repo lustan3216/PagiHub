@@ -28,9 +28,8 @@ export const INITIATE = 'initiate'
 export const CAROUSEL = 'carousel'
 export const LAYERS = 'layers'
 export const COMPONENT_SET = 'component-set'
-export const GRID_GENERATOR = 'grid-generator'
+export const GRID = 'grid'
 export const GRID_ITEM = 'grid-item'
-export const GRID_ITEM_CHILD = 'grid-item-child'
 
 export const BREAK_POINTS = {
   lg: 1200,

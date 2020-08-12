@@ -27,7 +27,7 @@
     <!--      </el-radio-group>-->
     <!--    </div>-->
 
-    <div>
+    <div :key="state + selectedComponentIds.join()">
       <item-hidden-controller />
 
       <portal-target
@@ -67,10 +67,11 @@
       <border-all
         v-if="canBorder"
         :value="{
+          border: styles.border,
           borderTop: styles.borderTop,
           borderRight: styles.borderRight,
           borderBottom: styles.borderBottom,
-          borderLeft: styles.borderLeft
+          borderLeft: styles.borderLeft,
         }"
         @change="assignStyles($event)"
       />
@@ -102,10 +103,11 @@
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
-import { GRID_GENERATOR, GRID_ITEM, LAYERS, STYLE } from '@/const'
+import { GRID, GRID_ITEM, LAYERS, STYLE } from '@/const'
 import { mapMutations, mapState } from 'vuex'
 import Radius from './EditorStyle/Radius'
 // import Padding from './EditorStyle/Padding'
+import Background from './EditorStyle/Background'
 import Dimension from './EditorStyle/Dimension'
 import Effect from './EditorStyle/Effect'
 import Overflow from './EditorStyle/Overflow'
@@ -117,16 +119,15 @@ import Opacity from './EditorStyle/Opacity'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
 import { RadioGroup, RadioButton, Divider } from 'element-ui'
-import { getComputedStyle } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
 
 export default {
   name: 'PanelStyles',
   components: {
+    Background,
     Radius,
     Rotate,
     Opacity,
-    // Padding,
     BorderAll,
     Dimension,
     Effect,
@@ -143,22 +144,19 @@ export default {
     return {
       state: 'default',
       styles: {
-        opacity: '',
-        width: '',
+        opacity: '1',
+        // width: '',
         minWidth: '',
         maxWidth: '',
-        height: '',
+        // height: '',
         minHeight: '',
         maxHeight: '',
         boxShadow: '',
         filter: '',
+        border: '',
         borderRadius: '',
-        borderTop: '',
-        borderLeft: '',
-        borderRight: '',
-        borderBottom: '',
-        margin: '',
-        padding: '',
+        // margin: '',
+        // padding: '',
         overflow: '',
         transformOrigin: '',
         transition: '',
@@ -175,13 +173,13 @@ export default {
       return this.nodes.every(node => ['editor-text'].includes(node.tag))
     },
     canRadius() {
-      return this.nodes.every(node => ![GRID_GENERATOR, LAYERS].includes(node.tag))
+      return this.nodes.every(node => ![GRID, LAYERS].includes(node.tag))
     },
     canPadding() {
-      return this.nodes.every(node => ![GRID_GENERATOR, LAYERS].includes(node.tag))
+      return this.nodes.every(node => ![GRID, LAYERS].includes(node.tag))
     },
     canBorder() {
-      return this.nodes.every(node => ![GRID_GENERATOR, LAYERS].includes(node.tag))
+      return this.nodes.every(node => ![GRID, LAYERS].includes(node.tag))
     },
     canOverflow() {
       return this.nodes.every(node => [GRID_ITEM].includes(node.tag))
@@ -201,6 +199,9 @@ export default {
       this.calcStyles()
     }
   },
+  created() {
+    this.calcStyles()
+  },
   methods: {
     ...mapMutations('component', ['RECORD']),
     calcStyles() {
@@ -208,14 +209,31 @@ export default {
         return
       }
 
+      // 大多從getComputedStyle裡面拿到的跟實際存的會不一樣，所以都直接從style拿就好
+      // 譬如 transform ComputedStyle 裡面拿到的是matrix, 這樣js無法轉換成rotate等等
+      // borer是因為color, ComputedStyle拿出來的都是rgba, 但使用者存的不一定是rgba
+      // 可能button, formItem 原本就有style，從computedStyle比較好?
+      // 可能直接把有border的元素，都直接拿掉自己寫
+
       if (this.selectedComponentIds.length === 1) {
-        const computedStyle = getComputedStyle(this.theOnlySelectedComponentId)
+        // const id = this.selectedComponentIds[0]
+
         for (const attr in this.styles) {
-          const propsAttr = getValueByPath(this.node, [STYLE, this.state, attr])
-          this.styles[attr] = propsAttr || computedStyle[attr] || ''
+          this.styles[attr] = getValueByPath(this.nodes[0], [STYLE, this.state, attr], '')
+
+          // if (this.styles[attr]) {
+          //     return
+          // }
+          //
+          // if (attr === 'width') {
+          //   this.styles[attr] = this.vmMap[id].$el.offsetWidth
+          // }
+          // if (attr === 'height') {
+          //   this.styles[attr] = this.vmMap[id].$el.offsetHeight
+          // }
         }
 
-        this.styles.transformOrigin = this.parseOrigin(this.styles) || ''
+        // this.styles.transformOrigin = this.parseOrigin(this.styles) || ''
       }
 
       // let attrs = ['transform']
@@ -246,7 +264,9 @@ export default {
         })
       }
 
-      this.RECORD(records)
+      if (records.length) {
+        this.RECORD(records)
+      }
     },
     parseOrigin({ width, height, transformOrigin }) {
       if (!this.isDefaultState) {

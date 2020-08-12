@@ -7,14 +7,14 @@
       <el-col
         :span="8"
       >
-        <span class="title">{{ humanize(title || attr) }}</span>
+        <span class="title">{{ humanize(title) }}</span>
       </el-col>
 
       <el-col
         :span="3"
         @click.native="isUniq = !isUniq"
       >
-        <slot name="button" />
+        <slot name="button" :value="$data"/>
       </el-col>
 
       <el-col
@@ -23,6 +23,7 @@
         class="flex"
       >
         <slot
+          v-if="isUniq"
           :value="$data"
           name="all"
         />
@@ -93,10 +94,6 @@ export default {
       type: String,
       default: ''
     },
-    attr: {
-      type: String,
-      required: true
-    },
     value: {
       validator: prop => typeof prop === 'string' || prop === null || isArray(prop),
       required: true
@@ -127,7 +124,6 @@ export default {
         let result
         const values = Object.values(value)
         const isUniq = this.isAllTheSame(value)
-        this.isUniq = isUniq
 
         if (isUniq) {
           result = values[0]
@@ -141,7 +137,7 @@ export default {
           result = values.join(' ')
         }
 
-        this.all = result
+        this.$emit('input', result)
       },
       deep: true
     },

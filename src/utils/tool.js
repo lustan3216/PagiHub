@@ -180,9 +180,8 @@ export function asyncGetValue(fn, timeout = 2000) {
     }, timeout)
 
     const getValue = () => {
-      console.log(1)
       const value = fn()
-
+      console.log(value)
       if (isUndefined(value)) {
         id = requestAnimationFrame(getValue)
       } else {

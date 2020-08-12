@@ -24,13 +24,10 @@
         :id="id"
         class="h-100"
       >
-        <template v-slot="{ itemEditing }">
-          <grid-generator-inner
-            :id="id"
-            :inner-props="innerProps"
-            :class="{ 'no-action': !itemEditing }"
-          />
-        </template>
+        <grid-inner
+          :id="id"
+          :inner-props="innerProps"
+        />
 
       </controller-layer>
     </el-drawer>
@@ -40,7 +37,7 @@
 <script>
 import { Drawer } from 'element-ui'
 import nodeMixin from '@/components/Templates/mixins/node'
-import gridGeneratorInner from './GridGeneratorInner'
+import GridInner from './GridInner'
 import mousewheel from 'element-ui/lib/directives/mousewheel'
 import { defaultSetting } from '../Setup/EditorSetting/SettingDrawer'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
@@ -53,7 +50,7 @@ export default {
   components: {
     ElDrawer: Drawer,
     ControllerLayer,
-    gridGeneratorInner
+    GridInner
   },
   directives: {
     mousewheel

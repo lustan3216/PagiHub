@@ -235,9 +235,9 @@ const actions = {
   async createComponentSet({ commit, state, dispatch }, { projectId, attrs }) {
     const { data } = await createComponentSet(projectId, attrs)
 
-    asyncGetValue(() => vm(data.id)).then(() => {
-      vmAddNodesToParentAndRecord(data.id, layers())
-    })
+    // asyncGetValue(() => vm(data.id)).then(() => {
+    //   vmAddNodesToParentAndRecord(data.id, layers())
+    // })
     commit('SET_EDITING_COMPONENT_SET_ID', data.id)
     commit('SET_NODES_TO_MAP', data)
   },

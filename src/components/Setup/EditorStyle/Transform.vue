@@ -1,10 +1,10 @@
 <template>
-  <div style="padding-top: 1px;">
+  <div>
     <el-divider content-position="left">
 
       <el-dropdown
         size="small"
-        @command="values.push({ name: $event, value: 0, visible: true })"
+        @command="add"
       >
         <span class="el-dropdown-link">
           <el-button icon="el-icon-plus"/>
@@ -13,7 +13,7 @@
           <el-dropdown-item
             v-for="option in selectableOptions"
             :key="option.name"
-            :command="option"
+            :command="option.name"
           >
             {{ humanize(option.name) }}
           </el-dropdown-item>
@@ -23,6 +23,8 @@
       <el-button
         v-if="values.find(x => !x.visible)"
         icon="el-icon-delete"
+        class="m-l-0"
+        @click="clean"
       />
 
       TRANSFORM
@@ -67,7 +69,7 @@ import { InputNumber, Divider } from 'element-ui'
 import SelectUnit from '@/components/Components/SelectUnit'
 import InputUnit from '@/components/Components/InputUnit'
 import { humanize } from '@/utils/string'
-import { isArray } from '@/utils/tool'
+import { isArray, cloneJson } from '@/utils/tool'
 
 export default {
   name: 'Transform',
@@ -88,37 +90,33 @@ export default {
     }
   },
   data() {
-    const rotate = this.value.match(/rotate\(([^(]+)\)/) || []
-    const skew = this.value.match(/skew\(([^(]+)\)/) || []
-    const scale = this.value.match(/scale\(([^(]+)\)/) || []
-    const translate = this.value.match(/translate\(([^(]+)\)/) || []
-
-    const [skewX, skewY] = (skew[1] || '').split(',')
-    const [scaleX, scaleY] = (scale[1] || '').split(',')
-    const [translateX, translateY] = (translate[1] || '').split(',')
-    const [originX, originY] = this.origin.split(' ')
+    const rotate = this.getValue(this.value, 'rotate')[0]
+    const [skewX, skewY] = this.getValue(this.value, 'skew')
+    const [scaleX, scaleY] = this.getValue(this.value, 'scale')
+    const [translateX, translateY] = this.getValue(this.value, 'translate')
+    const [originX, originY] = this.getValue(this.origin, 'origin')
 
     const options = {
       originX: {
         name: 'originX',
-        step: 0.1,
+        step: 1,
         units: ['%'],
         default: '50%',
-        value: originX === '50%' ? null : originX,
+        value: originX,
         visible: true
       },
       originY: {
         name: 'originY',
-        step: 0.1,
+        step: 1,
         units: ['%'],
         default: '50%',
-        value: originY === '50%' ? null : originY || originX,
+        value: originY || originX,
         visible: true
       },
       skewX: {
         name: 'skewX',
         max: 360,
-        step: 0.1,
+        step: 1,
         min: -360,
         units: ['deg'],
         value: skewX,
@@ -126,7 +124,7 @@ export default {
       },
       skewY: {
         name: 'skewY',
-        step: 0.1,
+        step: 1,
         max: 360,
         min: -360,
         units: ['deg'],
@@ -135,14 +133,16 @@ export default {
       },
       translateX: {
         name: 'translateX',
-        step: 0.1,
+        step: 1,
+        allowNegative: true,
         units: ['px', '%'],
         value: translateX,
         visible: true
       },
       translateY: {
         name: 'translateY',
-        step: 0.1,
+        step: 1,
+        allowNegative: true,
         units: ['px', '%'],
         value: translateY || translateX,
         visible: true
@@ -171,11 +171,12 @@ export default {
 
     return {
       options,
+      rotate,
       transform: null,
       transformOrigin: null,
       values: Object.values(options).reduce((acc, x) => {
         if (x.value) {
-          acc.push({ ...x })
+          acc.push(cloneJson(x))
         }
         return acc
       }, [])
@@ -189,34 +190,40 @@ export default {
     }
   },
   watch: {
+    value(value) {
+      console.log(this.getValue(value, 'rotate')[0])
+      this.rotate = this.getValue(value, 'rotate')[0]
+    },
     values: {
       handler(values) {
         const {
           skewX,
           skewY,
-          rotate,
           translateX,
           translateY,
           scaleX = 1,
           scaleY = 1,
-          originX,
-          originY
+          originX = '50%',
+          originY = '50%'
         } = values.reduce((acc, effect) => {
           if (effect.value || effect.value === 0) {
             acc[effect.name] = effect.value
           }
           return acc
         }, {})
-        const _rotate = rotate && `rotate(${rotate})`
+        const rotate = this.rotate && `rotate(${this.rotate})`
         const skew = this.bindValue(skewX, skewY, 'skew')
         const translate = this.bindValue(translateX, translateY, 'translate')
-        const scale = this.bindValue(scaleX, scaleY, 'scale')
+        const scale = scaleX === scaleY && scaleX === 1
+          ? ''
+          : this.bindValue(scaleX, scaleY, 'scale')
 
-        this.transform = [_rotate, skew, translate, scale].join(' ').trim()
-        this.transformOrigin = this.bindValue(originX, originY)
+        this.transform = [rotate, skew, translate, scale].filter(x => x).join(' ').trim()
+        this.transformOrigin = originX === originY && originY === '50%'
+          ? ''
+          : `${originX} ${originY}`
       },
-      deep: true,
-      immediate: true
+      deep: true
     },
     transform(transform) {
       this.$emit('change', { transform })
@@ -226,6 +233,16 @@ export default {
     }
   },
   methods: {
+    getValue(value, key) {
+      const regex = new RegExp(`${key}\\(([^(]+)\\)`)
+      const match = value.match(regex) || []
+        if (match[1]) {
+          const [a, b = ''] = match[1].split(',')
+          return [a, b]
+        } else {
+         return ['', '']
+        }
+    },
     isArray,
     humanize,
     bindValue(a = 0, b = 0, attr) {
@@ -234,10 +251,14 @@ export default {
       } else if (a === b) {
         return `${attr}(${a})`
       } else if (attr) {
-        return `${attr}(${a}, ${b})`
-      } else {
-        return `${a} ${b}`
+        return `${attr}(${a},${b})`
       }
+    },
+    clean() {
+      this.values = this.values.filter(x => x.visible)
+    },
+    add(name) {
+      this.values.push({ name, value: this.options[name].default, visible: true })
     }
   }
 }

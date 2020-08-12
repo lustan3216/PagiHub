@@ -13,7 +13,7 @@
       >
         <el-option
           label="Visible"
-          value="auto"
+          value="visible"
         />
         <el-option
           label="Hidden"

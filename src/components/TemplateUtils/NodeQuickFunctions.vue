@@ -85,7 +85,7 @@ import {
   vmRemoveNode,
   vmPasteNode
 } from '@/utils/vmMap'
-import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
+import { CAN_NEW_ITEM, CAROUSEL, GRID, LAYERS } from '@/const'
 
 let topShared = window.innerHeight / 2
 let leftShared = window.innerWidth / 2
@@ -134,7 +134,7 @@ export default {
         switch (this.node.tag) {
           case LAYERS:
             return 'Create An New Layer'
-          case GRID_GENERATOR:
+          case GRID:
             return 'Create An Empty Grid Item'
           case CAROUSEL:
             return 'Create An Empty Slider'
@@ -145,7 +145,7 @@ export default {
       return this.componentsMap[this.id]
     },
     vm() {
-      return this.node.$vm
+      return this.node && this.node.$vm
     },
     element() {
       return this.vm && this.vm.$el

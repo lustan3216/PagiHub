@@ -40,8 +40,7 @@ export default {
       return this.componentsMap[this.id]
     },
     hidden() {
-      const { props } = this.node
-      return props[this.breakpoint].hidden
+      return this.node.hidden && this.node.hidden[this.breakpoint]
     }
   },
   methods: {
@@ -49,7 +48,7 @@ export default {
     record() {
       if (this.hidden) {
         this.RECORD({
-          path: `${this.id}.props.${this.breakpoint}.hidden`,
+          path: `${this.id}.hidden.${this.breakpoint}`,
           value: undefined
         })
       }

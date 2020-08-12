@@ -1,13 +1,11 @@
 <template>
   <four-attrs
-    v-model="innerValue"
-    attr="borderRadius"
+    :value="innerValue"
     title="radius"
+    @input="$emit('change', { borderRadius: $event })"
   >
     <template #button>
-      <el-button
-        icon="el-icon-full-screen"
-      />
+      <el-button icon="el-icon-full-screen" />
     </template>
 
     <template #all="{ value }">
@@ -66,11 +64,6 @@ export default {
   data() {
     return {
       innerValue: this.value
-    }
-  },
-  watch: {
-    innerValue(borderRadius) {
-      this.$emit('change', { borderRadius })
     }
   }
 }

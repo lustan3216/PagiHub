@@ -63,3 +63,11 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  ::v-deep.el-input {
+    .el-input__inner {
+      padding: 0 10px !important;
+    }
+  }
+</style>

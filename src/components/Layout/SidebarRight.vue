@@ -1,8 +1,8 @@
 <template>
-  <div class="sidebar-right">
+  <div id="sidebar-right">
     <el-button-group class="flex">
       <el-button
-        icon="el-icon-s-operation"
+        icon="el-icon-brush"
         class="flex1"
         @click="activePanel = 'PanelStyles'"
       />
@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.sidebar-right {
+#sidebar-right {
   width: 260px;
   background-color: white;
   border-left: 1px solid $color-grey;

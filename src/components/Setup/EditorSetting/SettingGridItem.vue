@@ -1,8 +1,8 @@
 <template>
-  <rules-generator
-    :id="id"
-    :rules="spec"
-  />
+<!--  <rules-generator-->
+<!--    :id="id"-->
+<!--    :rules="spec"-->
+<!--  />-->
 </template>
 
 <script>
@@ -10,11 +10,10 @@ import RulesGenerator from './Common/RulesGenerator'
 import { select, boolean, assignDefaultValue } from './utils/ruleTool'
 
 export const defaultSetting = {
-  isDraggable: true,
+  // isDraggable: true,
   // isResizable: true,
   // static: false,
-  autoHeight: false,
-  hidden: {}
+  // autoHeight: false,
 }
 
 const options = [
@@ -39,7 +38,7 @@ export default {
           // select('isDraggable', { options }),
           // select('isResizable', { options }),
           // select('static', { options }),
-          boolean('autoHeight')
+          // boolean('autoHeight')
         ],
         defaultSetting
       )

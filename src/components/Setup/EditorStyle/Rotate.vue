@@ -9,9 +9,10 @@
 
     <el-col :span="16">
       <select-unit
-        :units="[]"
+        :units="['deg']"
         v-model="innerValue"
-        :min="0"
+        allow-negative
+        :min="-360"
         :max="360"
         prefix-icon="el-icon-refresh"
       />
@@ -32,14 +33,28 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      innerValue: this.value
-    }
-  },
-  watch: {
-    innerValue(opacity) {
-      this.$emit('change', { opacity })
+  computed: {
+    innerValue: {
+      get() {
+        const rotate = this.value.match(/rotate\(([^(]+)\)/) || []
+        return rotate[1]
+      },
+      set(newRotate) {
+        const rotate = this.value.match(/rotate\(([^(]+)\)/) || []
+        const oldRotate = rotate[1]
+        let transform
+
+        if (newRotate) {
+          transform = oldRotate
+            ? this.value.replace(oldRotate, newRotate)
+            : this.value
+              ? this.value + ` rotate(${newRotate})`
+              :`rotate(${newRotate})`
+        } else {
+          transform = this.value.replace(rotate[0], '').trim()
+        }
+        this.$emit('change', { transform })
+      },
     }
   }
 }

@@ -2,7 +2,6 @@
   <div class="relative h-100">
     <controller-layer
       v-for="(child, index) in sortChildren"
-      :border="false"
       :id="child.id"
       :key="child.id"
     >
@@ -17,7 +16,7 @@
 </template>
 
 <script>
-import GridGenerator from './GridGenerator'
+import GridGenerator from './Grid'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { SORT_INDEX } from '@/const'

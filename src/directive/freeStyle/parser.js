@@ -14,59 +14,56 @@ export function generateStyleBlock(styleId, element, style) {
   if (isPlainObject(style)) {
     // style: object
     // {
-    //   display: 'block',
-    //   color: 'black',
+    //   default: {
+    //     display: 'block',
+    //     color: 'black',
+    //   }
     //   ':active': {
     //     display: 'block',
     //     color: 'black',
     //   }
     // }
-    const defaultStyles = style.default
-    if (objectHasValue(defaultStyles)) {
-      const prefixedStyles = prefixAttributes(defaultStyles)
-      const parsedClass = mixClassesAndIds('', styleId)
-      parsedCssBlocks += parsedClass + ' {\n' + prefixedStyles + '}\n'
-    }
+    ['default', ':hover', ':active'].forEach(effect => {
+      const styleObject = style[effect]
 
-    const pseudos = Object.keys(style).filter(key => key[0] === ':')
-    pseudos.forEach(key => {
-      if (style[key] && objectHasValue(style[key])) {
-        const prefixedStyles = prefixAttributes(style[key])
-        const parsedClass = mixClassesAndIds('', styleId) + key
+      if (objectHasValue(styleObject)) {
+        const prefixedStyles = prefixAttributes(styleObject)
+        const parsedClass = mixClassesAndIds('', styleId)
         parsedCssBlocks += parsedClass + ' {\n' + prefixedStyles + '}\n'
       }
     })
-  } else {
-    // style: string
-    // .class {
-    //   display: block;
-    //   color: black;
-    // }
-    // .class1 .class2:active{
-    //   display: block;
-    //   color: black;
-    // }
-    const cssBlocks = style.trim().match(/[^}]+{[^}|.]+}/g)
-    parsedCssBlocks = cssBlocks.reduce(function(acc, cssBlock) {
-      const stylesString = cssBlock.match(/{([^{}]+)}/g)[0].replace(/[{}]/g, '')
-      const stylesObject = parseStyleText(stylesString)
-      const prefixedStyles = prefixAttributes(stylesObject)
-
-      const parsedClass = mixClassesAndIds(cssBlock, styleId)
-      acc += parsedClass + ' {\n' + prefixedStyles + '}\n'
-      return acc
-    }, '')
   }
+  // else {
+  //   // style: string
+  //   // .class {
+  //   //   display: block;
+  //   //   color: black;
+  //   // }
+  //   // .class1 .class2:active{
+  //   //   display: block;
+  //   //   color: black;
+  //   // }
+  //   const cssBlocks = style.trim().match(/[^}]+{[^}|.]+}/g)
+  //   parsedCssBlocks = cssBlocks.reduce(function(acc, cssBlock) {
+  //     const stylesString = cssBlock.match(/{([^{}]+)}/g)[0].replace(/[{}]/g, '')
+  //     const stylesObject = parseStyleText(stylesString)
+  //     const prefixedStyles = prefixAttributes(stylesObject)
+  //
+  //     const parsedClass = mixClassesAndIds(cssBlock, styleId)
+  //     acc += parsedClass + ' {\n' + prefixedStyles + '}\n'
+  //     return acc
+  //   }, '')
+  // }
 
   const tree = window[FREE_STYLE]
 
-  if (!parsedCssBlocks.trim().length) {
-    return
+  // 不知道為什麼有時css node 會不見，乾脆每次都刪掉重建
+  if (tree[styleId]) {
+    tree[styleId].remove()
+    delete tree[styleId]
   }
 
-  if (tree[styleId]) {
-    tree[styleId].textContent = parsedCssBlocks
-  } else {
+  if (parsedCssBlocks.trim().length) {
     tree[styleId] = createTextNode(parsedCssBlocks)
   }
 }

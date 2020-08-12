@@ -1,6 +1,6 @@
 <template>
   <el-input
-    v-if="editing"
+    v-if="editing && node"
     v-model.trim.lazy="name"
     class="input"
     @keydown.enter.native="enter"
@@ -12,7 +12,7 @@
     />
   </el-input>
   <el-button
-    v-else
+    v-else-if="node"
     v-bind="{ ...$props, ...$attrs }"
     type="text"
     @click="click"

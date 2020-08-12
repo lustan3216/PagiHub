@@ -8,22 +8,25 @@
     <el-col :span="11">
       <select-unit
         :prefix-icon="icon"
-        v-model="innerValue[0]"
+        :value="innerValue[0]"
         :min="0"
+        @input="emit({ unit: $event })"
       />
     </el-col>
 
     <el-col :span="10">
       <style-select
-        :value.sync="innerValue[1]"
+        :value="innerValue[1]"
+        @input="emit({ style: $event })"
       />
     </el-col>
 
     <el-col :span="3">
       <el-color-picker
-        v-model="innerValue[2]"
+        :value="innerValue[2]"
         show-alpha
         style="margin-top: 1px;"
+        @input="emit({ color: $event })"
       />
     </el-col>
 
@@ -32,9 +35,8 @@
 
 <script>
 import { ColorPicker } from 'element-ui'
-import SelectUnit from '@/components/Components/SelectUnit'
-import FourAttrs from './Common/FourAttrs'
 import { capitalize } from '@/utils/string'
+import SelectUnit from '@/components/Components/SelectUnit'
 
 const REGEX = /(?<!,) /
 const StyleSelect = {
@@ -42,7 +44,7 @@ const StyleSelect = {
   functional: true,
   render(h, context) {
     const { data, props } = context
-    const options = ['none', 'dashed', 'dotted', 'solid'].map((option, index) =>
+    const options = ['dashed', 'dotted', 'solid'].map((option, index) =>
       h('el-option', {
         key: index,
         props: {
@@ -60,16 +62,7 @@ const StyleSelect = {
         },
         props
       },
-      [
-        ...options,
-        h('el-button', {
-          props: {
-            icon: props.icon,
-            type: 'text'
-          },
-          slot: 'prefix'
-        })
-      ]
+      options
     )
   }
 }
@@ -78,9 +71,8 @@ export default {
   name: 'Border',
   components: {
     SelectUnit,
-    FourAttrs,
-    ElColorPicker: ColorPicker,
-    StyleSelect
+    StyleSelect,
+    ElColorPicker: ColorPicker
   },
   props: {
     value: {
@@ -94,21 +86,24 @@ export default {
   },
   data() {
     return {
-      isUniq: true,
       innerValue: this.value.split(REGEX)
     }
   },
-  computed: {
-
-  },
   watch: {
-    innerValue(border) {
-      console.log(border)
-      this.$emit('change', border)
+    innerValue(value) {
+      this.innerValue = value
     }
   },
   methods: {
-
+    emit({ unit, style = 'solid', color = '#000' }) {
+      if (unit && parseInt(unit)) {
+        this.innerValue = [unit, style, color]
+        this.$emit('input', [unit, style, color].join(' '))
+      } else {
+        this.innerValue = []
+        this.$emit('input', '')
+      }
+    }
   }
 }
 </script>

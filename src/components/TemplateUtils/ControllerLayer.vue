@@ -1,9 +1,7 @@
 <template>
   <!-- id here is for selection using, can not delete -->
   <div
-    v-if="isDraftMode && node"
-    :class="{ selected, 'dash-border': border }"
-    class="h-100"
+    v-if="isDraftMode && node && !isExample"
     @click.stop="singleClick"
     @dblclick.stop="dblclick"
   >
@@ -13,25 +11,29 @@
       :item-editing="itemEditing"
     />
 
-    <slot :item-editing="itemEditing" />
+    <div
+      v-click-outside="clickOutside"
+      v-if="canBeEdited"
+      :class="{ 'grid-item-fix': itemEditing, 'no-action': !itemEditing }"
+      class="h-100"
+    >
+      <slot :item-editing="itemEditing" />
+    </div>
+
+    <slot v-else/>
   </div>
 
-  <div
-    v-else-if="node"
-    class="h-100"
-  >
+  <div v-else-if="node">
     <slot />
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
 import { mapState, mapMutations } from 'vuex'
 import NodeQuickFunctions from './NodeQuickFunctions'
 import { CAN_BE_EDITED } from '@/const'
 import { isMac } from '@/utils/device'
-
-const store = Vue.observable({ currentItemEditingId: null })
+import clickOutside from '@/utils/clickOutside'
 
 export default {
   name: 'ControllerLayer',
@@ -39,20 +41,19 @@ export default {
   components: {
     NodeQuickFunctions
   },
+  directives: {
+    clickOutside
+  },
   props: {
     id: {
       type: String,
       required: true
-    },
-    border: {
-      type: Boolean,
-      default: true
     }
   },
   data() {
     // 有些component像是 textedit or video, 裡面有拖拉多種互動，需要用 itemEditing 判定需不需要鎖住，經由點兩下就可操作
     return {
-      itemEditing: false
+      itemEditing: false,
     }
   },
   computed: {
@@ -70,16 +71,6 @@ export default {
     },
     canBeEdited() {
       return this.node && this.node[CAN_BE_EDITED]
-    },
-    currentItemEditingId() {
-      return store.currentItemEditingId
-    }
-  },
-  watch: {
-    currentItemEditingId(id) {
-      if (this.canBeEdited && this.id !== id) {
-        this.itemEditing = false
-      }
     }
   },
   methods: {
@@ -89,15 +80,25 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
+    clickOutside(event) {
+      const inSideBar = document
+        .getElementById('sidebar-right')
+        .contains(event.target)
+
+      if (!inSideBar) {
+        this.itemEditing = false
+      }
+    },
     dblclick() {
       if (this.canBeEdited) {
         this.itemEditing = true
+        this.SET_SELECTED_COMPONENT_ID(this.id)
       }
     },
     singleClick(event) {
       // don't change selected component ids when dragging item,
       // otherwise vue-resizable-handle will cause a bug here
-      store.currentItemEditingId = this.id
+
       if (
         this.isExample ||
         event.target.classList.contains('vue-resizable-handle')
@@ -114,10 +115,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.dash-border {
-  border: 1px dashed #dedede;
-  margin: -1px;
-}
-</style>

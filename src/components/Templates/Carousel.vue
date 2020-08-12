@@ -28,7 +28,7 @@
     </template>
 
     <template v-if="innerProps.arrow === 'custom'">
-      <grid-generator
+      <grid
         :id="customerIndicator.id"
         class="customer-indicator"
       />
@@ -61,7 +61,6 @@
     </template>
 
     <el-carousel
-      v-free-style="innerStyles"
       :ref="id"
       v-bind="innerProps"
       :indicator-position="hasIndicator"
@@ -88,7 +87,7 @@ import { mapState, mapMutations } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
-import GridGenerator from '../Templates/GridGenerator'
+import Grid from './Grid'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, LABEL, LAYERS } from '@/const'
 import { CarouselItem, Carousel, Tooltip } from 'element-ui'
@@ -100,7 +99,7 @@ export default {
   name: 'Carousel',
   components: {
     AsyncComponent,
-    GridGenerator,
+    Grid,
     ElCarouselItem: CarouselItem,
     ElCarousel: Carousel,
     ElTooltip: Tooltip

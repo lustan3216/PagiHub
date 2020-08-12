@@ -15,6 +15,7 @@
     <div class="right">
       <el-button
         type="text"
+        icon="el-icon-help"
         @click="$router.push('/help')"
       >
         Help
@@ -23,20 +24,21 @@
       <el-button
         v-if="isLogin"
         type="text"
+        icon="el-icon-files"
         @click="$router.push({ name: 'Design' })"
       >
         Dashboard
       </el-button>
 
-      <el-button
-        v-else
-        type="text"
-        class="p-10"
-        icon="el-icon-s-promotion"
-        @click="$dialog.open('login')"
-      >
-        LOGIN
-      </el-button>
+<!--      <el-button-->
+<!--        v-else-->
+<!--        type="text"-->
+<!--        class="p-10"-->
+<!--        icon="el-icon-s-promotion"-->
+<!--        @click="$dialog.open('login')"-->
+<!--      >-->
+<!--        LOGIN-->
+<!--      </el-button>-->
     </div>
   </nav>
 </template>

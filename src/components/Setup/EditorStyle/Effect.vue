@@ -1,5 +1,5 @@
 <template>
-  <div class="m-t-20">
+  <div>
     <el-divider content-position="left">
       <el-dropdown
         size="small"
@@ -22,6 +22,8 @@
       <el-button
         v-if="values.find(x => !x.visible)"
         icon="el-icon-delete"
+        class="m-l-0"
+        @click="clean"
       />
 
       EFFECT
@@ -118,7 +120,7 @@ export default {
         units: '',
         visible: true
       },
-      hue: {
+      'hue-rotate': {
         name: 'hue-rotate',
         label: 'hue',
         default: 0,
@@ -194,15 +196,17 @@ export default {
 
         this.filter = filter
       },
-      deep: true,
-      immediate: true
+      deep: true
     },
     filter(filter) {
       this.$emit('change', { filter })
     }
   },
   methods: {
-    humanize
+    humanize,
+    clean() {
+      this.values = this.values.filter(x => x.visible)
+    }
   }
 }
 </script>

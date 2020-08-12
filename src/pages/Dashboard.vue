@@ -37,7 +37,7 @@
         >Pages</el-button>
         <el-button
           type="text"
-          icon="el-icon-picture-outline-round"
+          icon="el-icon-help"
           size="medium"
           class="link"
           @click="$router.push({ name: 'Help' })"

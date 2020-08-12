@@ -1,6 +1,6 @@
 import store from '../store'
 import { allEqual, cloneJson } from './tool'
-import { capitalize } from './string'
+import { humanize } from './string'
 import {
   NODE_TYPE,
   NODE_TYPE_STRING,
@@ -99,7 +99,7 @@ export function shortTagName(node) {
   } else {
     cache[tag] = tag
   }
-  cache[tag] = capitalize(cache[tag]).replace('-', '')
+  cache[tag] = humanize(cache[tag]).replace('-', '')
   return cache[tag]
 }
 

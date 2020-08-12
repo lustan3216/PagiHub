@@ -4,7 +4,7 @@
       <el-button
         icon="el-icon-plus"
         @click="
-          values.push({
+          boxShadows.push({
             id: +new Date(),
             color: null,
             inset: null,
@@ -18,15 +18,17 @@
       />
 
       <el-button
-        v-if="values.find(x => !x.visible)"
+        v-if="boxShadows.find(x => !x.visible)"
         icon="el-icon-delete"
+        class="m-l-0"
+        @click="clean"
       />
 
       SHADOW
     </el-divider>
 
     <el-row
-      v-for="boxShadow in values"
+      v-for="boxShadow in boxShadows"
       :key="boxShadow.id"
       :gutter="2"
       class="flex inputs"
@@ -93,7 +95,7 @@
     </el-row>
 
     <el-row
-      v-if="values.length"
+      v-if="boxShadows.length"
       :gutter="2"
     >
       <el-col
@@ -146,33 +148,37 @@ export default {
     }
   },
   data() {
-    const values = this.value === 'none' ? [] : parse(this.value)
+    const boxShadows = this.value === 'none' ? [] : parse(this.value)
 
     const id = +new Date()
-    values.forEach((boxShadow, index) => {
+    boxShadows.forEach((boxShadow, index) => {
       boxShadow.id = id + index
       boxShadow.visible = true
     })
 
     return {
-      values,
-      boxShadow: null
+      boxShadows,
+      innerValue: null
     }
   },
   watch: {
-    values: {
-      handler(values) {
-        const filteredValues = values.filter(
+    boxShadows: {
+      handler(boxShadows) {
+        const filteredValues = boxShadows.filter(
           x => x.color && (x.spreadRadius || x.blurRadius)
         )
 
-        this.boxShadow = stringify(filteredValues)
+        this.innerValue = stringify(filteredValues)
       },
-      deep: true,
-      immediate: true
+      deep: true
     },
-    boxShadow(boxShadow) {
-      this.$emit('change', { boxShadow })
+    innerValue(innerValue) {
+      this.$emit('change', { boxShadow: innerValue })
+    }
+  },
+  methods: {
+    clean() {
+      this.boxShadows = this.boxShadows.filter(x => x.visible)
     }
   }
 }

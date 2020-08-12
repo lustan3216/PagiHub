@@ -56,3 +56,7 @@ input[type='number'] {
 .vue-grid-placeholder {
   display: none!important;
 }
+
+[data-style-id] {
+  box-sizing: border-box;
+}

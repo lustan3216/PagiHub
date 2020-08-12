@@ -8,38 +8,34 @@ MVP
 ### Functionality
 
 <ol>
-font align / text editor
+font align
 padding
-size 
-position fixed (might be a checkbox)
-position fixed (might be a checkbox)
-font breaking 
+size
+position fixed (might be a checkbox) 
 background
-border
-effect
-filter
+
 
 2<li>style 要做 寬高, min max, 固定寬，固定高，要不要都autoHeight</li>
 
+5<li>layer grid 想辦法在project node拿掉</li>
 5<li>bring to front, bring forward, send to back, 至前，至後, style 永遠再layer最底層</li>
-5<li>texteditor 操作方式 跟notion一樣 </li>
 5<li>project's favicon and SEO can be edited in the project modal</li>
 5<li>多選修改</li>
 5<li>sreen size changer</li>
- 
 <li>canTo caDelete 這些東西不要記錄在 json上，不然以後有更動的話，沒辦法改道s3裡面所有東西</li> 
-5<li>每個 component set 都可以組建合併得按鈕  / or 選版本 / 跟隨proejct裡面的變動，只是不同project的因為沒有主動更新所以也不會主動變動</li>
+5<li>每個 component set 都可以組建合併得按鈕  / or 選版本</li>
 5<li>search panel</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用state 的結構去做 click hover active 等等切換componentSet，這個要去另一個版操作，向XD的prototype</li>
-2<li>componentSet 裡面的compopentSet 分離，不要隨著源頭跟動</li>
 20<li>可瀏覽 production版本</li>
-
-5<li>照片,svg 也要是公開分享的嗎？？？？ 如果想刪除的怎麼辦，偏向不要，但還是會被複製走</li>
 <li>icon 可以上傳svg tag，下載也是直接下載tag，用dangurous叉叉叉插入，要過濾script，這樣可以變色條診或是用interact做調整</li>
 2<li>uploader image / svg, consider how to compress</li>
 3<li>svg 可在texteditor選，且用innertexteditor編輯</li>
+5<li>避風港跟三振條款</li>
 </ol>
 
+
+真的有這麼想知道寬高嗎，還是版面ｏｋ看起來就ok
+會有需要設計的版本管理嗎
 ### Last
 
 <ol>
@@ -56,7 +52,6 @@ filter
 <li>node tree moving</li>
 <li>description 用 editor</li>
 <li>form-item 需要指定el編輯</li>
-<li>暫時form 先不做</li>
 <li>SEO / sitemap / like一定高分一上才產</li>
 <li>like</li>
 <li>fork</li>
@@ -65,12 +60,8 @@ filter
 <li>only one device can login</li>
 <li>grid layout 在拉的時候案control of shift可以所比例</li>
 <li>time line/ steps/ transfer / cascader / map </li>
-<li>sidebarRight設定要被記住</li>
-<li>Sidebar可以分別被猜拆來</li>
 <li>text-shadow</li>
 <li>font family/ 用font picker做但要google帳號</li>
-<li>input 可以控制 grid item顯示</li>
-<li>options看能不能都存成integer</li>
 <li>need login when publishing </li>
 <li>road map</li>
 <li>can create their own vue component</li>

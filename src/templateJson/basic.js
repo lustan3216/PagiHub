@@ -1,5 +1,5 @@
 import {
-  GRID_GENERATOR,
+  GRID,
   GRID_ITEM,
   LAYERS,
   CAROUSEL,
@@ -36,11 +36,11 @@ export const gridItems = function() {
   ]
 }
 
-export const gridGenerator = function(options) {
+export const grid = function(options) {
   return {
     w: 18,
     h: 300,
-    [TAG]: GRID_GENERATOR,
+    [TAG]: GRID,
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: gridItems(),
     ...options
@@ -53,7 +53,8 @@ export const layers = function(options) {
     h: 300,
     [TAG]: LAYERS,
     [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [gridGenerator()],
+    [CHILDREN]: [grid()],
+    [LABEL]: 'magic-layout',
     ...options
   }
 }
@@ -66,7 +67,7 @@ export const carousel = function() {
     [CAN_NEW_ITEM]: true,
     [CAN_BE_EDITED]: true,
     [CHILDREN]: [
-      gridGenerator({
+      grid({
         [LABEL]: 'indicators',
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true,
@@ -92,9 +93,9 @@ export const carousel = function() {
           }
         ]
       }),
-      gridGenerator({ [LABEL]: 'slider' }),
-      gridGenerator({ [LABEL]: 'slider' }),
-      gridGenerator({ [LABEL]: 'slider' })
+      grid({ [LABEL]: 'slider' }),
+      grid({ [LABEL]: 'slider' }),
+      grid({ [LABEL]: 'slider' })
     ]
   }
 }

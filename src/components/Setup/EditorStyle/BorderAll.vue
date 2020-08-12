@@ -8,7 +8,7 @@
         icon="el-icon-plus"
         @click="isUniq = !isUniq"
       />
-      {{ isUniq ? 'BORDERS / PADDING' : 'EACH BORDER / PADDING' }}
+      {{ isUniq ? 'BORDERS' : 'EACH BORDER' }}
     </el-divider>
 
     <div
@@ -16,26 +16,26 @@
       class="flex"
     >
       <border
-        v-model="uniqValue"
+        v-model="all"
         icon="el-icon-rank"
       />
     </div>
 
     <div v-else>
       <border
-        v-model="value.borderTop"
+        v-model="borders.borderTop"
         icon="el-icon-top"
       />
       <border
-        v-model="value.borderRight"
+        v-model="borders.borderRight"
         icon="el-icon-right"
       />
       <border
-        v-model="value.borderBottom"
+        v-model="borders.borderBottom"
         icon="el-icon-bottom"
       />
       <border
-        v-model="value.borderLeft"
+        v-model="borders.borderLeft"
         icon="el-icon-back"
       />
     </div>
@@ -43,45 +43,72 @@
 </template>
 
 <script>
-import { ColorPicker, Divider } from 'element-ui'
-import SelectUnit from '@/components/Components/SelectUnit'
-import FourAttrs from './Common/FourAttrs'
+import { Divider } from 'element-ui'
 import Border from './Border'
+import { arrayUniq, isArray } from '@/utils/tool'
 
 export default {
   name: 'BorderAll',
   components: {
-    SelectUnit,
-    FourAttrs,
-    ElColorPicker: ColorPicker,
     Border,
     ElDivider: Divider
   },
   props: {
     value: {
       type: Object,
-      required: true
+      default: ''
     }
   },
   data() {
-    let uniqValue = ''
-    if (this.value.borderTop === this.value.borderRight && this.value.borderBottom === this.value.borderLeft) {
-      uniqValue = this.value.borderTop
-    }
+    const { border, ...borders }  = this.value
+    const isUniq = this.isAllTheSame(borders)
 
     return {
-      isUniq: true,
-      innerValue: this.value,
-      uniqValue
+      all: border,
+      borders,
+      isUniq
     }
   },
   watch: {
-    innerValue(borderWidth) {
-      this.$emit('change', { borderWidth })
+    borders: {
+      handler(value) {
+        let result
+        const values = Object.values(value)
+        const isUniq = this.isAllTheSame(value)
+
+        if (isUniq) {
+          result = values[0]
+          this.$emit('change', { border: result })
+        } else {
+          this.$emit('change', {
+            border: '',
+            borderTop: values[0],
+            borderRight: values[1],
+            borderBottom: values[2],
+            borderLeft: values[3]
+          })
+        }
+      },
+      deep: true
+    },
+    all(value) {
+      this.$emit('change', { border: value })
+    },
+    isUniq(value) {
+      if (value) {
+        this.all = this.borders.borderTop
+      } else {
+        this.borders.borderTop = this.all
+        this.borders.borderRight = this.all
+        this.borders.borderBottom = this.all
+        this.borders.borderLeft = this.all
+      }
     }
   },
   methods: {
-
+    isAllTheSame(four) {
+      return arrayUniq(Object.values(four)).length === 1
+    }
   }
 }
 </script>

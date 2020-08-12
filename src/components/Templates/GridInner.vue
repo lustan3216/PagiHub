@@ -10,8 +10,8 @@
   >
     <vue-grid-item
       v-for="child in layout"
-      :ref="child.id"
       v-bind="child"
+      :ref="child.id"
       :key="child.id"
       :class="{
         'z-index1': selectedComponentIds.includes(child.id)
@@ -19,25 +19,25 @@
       drag-ignore-from=".grid-item-fix"
       drag-allow-from="div"
     >
-      <grid-item-child :id="child.id" />
+      <async-component :key="child.id" :id="child.id" />
     </vue-grid-item>
   </vue-grid-generator>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { AUTO_HEIGHT, PROPS } from '@/const'
+import { AUTO_HEIGHT, CHILDREN, PROPS } from '@/const'
 import { deleteBy } from '@/utils/tool'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
-import GridItemChild from './GridItemChild'
+import AsyncComponent from '../TemplateUtils/AsyncComponent'
 
 export default {
-  name: 'GridGeneratorInner',
+  name: 'GridInner',
   components: {
     VueGridGenerator: VueGridLayout.GridLayout,
     VueGridItem: VueGridLayout.GridItem,
-    GridItemChild
+    AsyncComponent
   },
   mixins: [childrenMixin],
   inject: {
@@ -74,14 +74,19 @@ export default {
     // },
     currentBreakPoint() {
       return this.isExample ? 'lg' : this.breakpoint
+    },
+    innerChildren() {
+      // 拿掉 style, props, 不然因為watch deep, 每次都會有多餘的更新
+      // style 這裡完全不需要，因為gridItem component處理掉了
+      return this.children.map(({ [CHILDREN]: _, style, ...node }) => node)
     }
   },
   watch: {
     innerChildren: {
       handler(newChildren) {
         this.$nextTick(() => {
-          this.itemAutoHeight(newChildren)
           this.getCurrentLayout(newChildren, this.currentBreakPoint)
+          this.itemAutoHeight(newChildren)
           this.resizeNodeQuickFn()
         })
       },
@@ -91,8 +96,10 @@ export default {
     currentBreakPoint(value) {
       this.getCurrentLayout(this.innerChildren, value)
     },
-    lockIds() {
-      this.getCurrentLayout(this.innerChildren, this.currentBreakPoint)
+    lockIds(ids) {
+      this.layout.forEach(layout => {
+        layout.static = ids.includes(layout.id)
+      })
     }
   },
   methods: {
@@ -106,7 +113,7 @@ export default {
     getCurrentLayout(children, breakPoint) {
       const layout = []
       children.forEach((child, index) => {
-        if (!child.props || child.props[breakPoint].hidden) {
+        if (!child.props || child.hidden && child.hidden[breakPoint]) {
           return
         }
 
@@ -159,8 +166,10 @@ export default {
       }
     },
     itemAutoHeight(newChildren) {
-      // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto hieght的高了
-      if (!this.layout.length) return
+      // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto height的高了
+      if (!this.layout.length || this.isExample) {
+        return
+      }
 
       newChildren.forEach(node => {
         const gridItem = this.componentsMap[node.id]

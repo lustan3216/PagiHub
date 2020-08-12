@@ -21,7 +21,7 @@
       >
         <hidden
           v-if="checkHidden(data)"
-          :id="data.parentId"
+          :id="data.id"
         />
         <node-name
           :id="data.id"
@@ -128,11 +128,7 @@ export default {
     ]),
     ...mapMutations('component', ['RECORD']),
     checkHidden(node) {
-      const parentNode = this.componentsMap[node.parentId]
-      if (isGridItem(parentNode)) {
-        const { props } = parentNode
-        return props && props[this.breakpoint] && props[this.breakpoint].hidden
-      }
+      return node.hidden && node.hidden[this.breakpoint]
     },
     allowDrop(drag, drop, action) {
       const sameLayer = drag.parent === drop.parent

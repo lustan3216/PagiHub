@@ -73,7 +73,7 @@ module.exports = {
   pluginOptions: {
     s3Deploy: {
       registry: undefined,
-      awsProfile: 'default',
+      awsProfile: 'northeast-2',
       overrideEndpoint: false,
       region: 'ap-northeast-2',
       bucket: 'lots.design',

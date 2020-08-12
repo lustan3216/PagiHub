@@ -1,8 +1,7 @@
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { objectAssign, cloneJson } from '@/utils/tool'
-import { STYLE, PROPS, VALUE, GRID_GENERATOR, MASTER_ID, ID } from '@/const'
-import style from '@/directive/style'
-import { directive } from '@/directive/freeStyle'
+import { PROPS, VALUE, GRID, MASTER_ID, ID, STYLE } from '@/const'
+import FreeStyle from '@/directive/freeStyle'
 import { getNode } from '@/utils/node'
 
 let hoverNode = []
@@ -19,8 +18,7 @@ export default {
     rootComponentSetId: { default: null }
   },
   directives: {
-    style,
-    freeStyle: directive
+    FreeStyle
   },
   data() {
     return {
@@ -43,8 +41,7 @@ export default {
     innerStyles() {
       return {
         id: this.id,
-        ...this.masterStyles,
-        ...this.selfStyles
+        ...objectAssign(this.masterStyles, this.selfStyles)
       }
     },
     innerProps() {
@@ -103,7 +100,7 @@ export default {
         return
       }
 
-      const $el = this.node.tag === GRID_GENERATOR
+      const $el = this.node.tag === GRID
         ? this.$el
         : this.$el.parentNode
 

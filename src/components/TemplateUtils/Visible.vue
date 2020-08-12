@@ -13,7 +13,6 @@
 
 <script>
 import Vue from 'vue'
-import { GRID_ITEM_CHILD } from '@/const'
 const observable = Vue.observable({ ids: [] })
 
 export default {

@@ -4,33 +4,35 @@ import { kebabCase } from '@/utils/string'
 export const FREE_STYLE = '@@FREE_STYLE'
 window[FREE_STYLE] = window[FREE_STYLE] || {}
 
-export default function freeStyle(element, binding) {
-  const styleId = getStringId(element, binding)
+// 做這個是為了要改3th party component裡面的style, 考慮需不需要用
+// 還有hover click active, 有sudo的css, 用style做不出來
 
-  if (binding.value) {
-    generateStyleBlock(styleId, element, binding.value)
-  } else if (binding.value === false) {
-    clean(styleId)
-  }
-}
-
-export const directive = {
-  bind: freeStyle,
-  update: freeStyle,
+export default {
+  bind(element, binding) {
+    if (binding.value) {
+      const styleId = getDataStyleId(element, binding)
+      generateStyleBlock(styleId, element, binding.value)
+    }
+  },
+  update(element, binding) {
+    if (binding.value) {
+      const styleId = getDataStyleId(element, binding)
+      generateStyleBlock(styleId, element, binding.value)
+    }
+  },
   unbind(element, binding) {
-    clean(getStringId(element, binding))
+    if (binding.value) {
+      const styleId = getDataStyleId(element, binding)
+      const el = window[FREE_STYLE][styleId]
+
+      if (el) {
+        el.remove()
+      }
+    }
   }
 }
 
-function clean(styleId) {
-  const el = window[FREE_STYLE][styleId]
-
-  if (el) {
-    el.remove()
-  }
-}
-
-function getStringId(element, binding) {
+function getDataStyleId(element, binding) {
   const { id } = binding.value
 
   if (id) {

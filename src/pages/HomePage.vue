@@ -1,4 +1,8 @@
-<template/>
+<template>
+  <div class="flex-center">
+    <h1>Yet to do homepage. Please login or go dashboard first then create <span @click="$dialog.open('login')">a</span>  project.</h1>
+  </div>
+</template>
 
 <script>
 export default {

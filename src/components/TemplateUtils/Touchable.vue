@@ -10,7 +10,7 @@
 <script>
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import { GRID_ITEM_CHILD } from '@/const'
+import { GRID_ITEM } from '@/const'
 const observable = Vue.observable({ ids: [] })
 
 export default {
@@ -40,8 +40,7 @@ export default {
       return this.componentsMap[this.id]
     },
     isGridItem() {
-      // GRID_ITEM_CHILD === GRID_ITEM
-      return this.vm.$options._componentTag === GRID_ITEM_CHILD
+      return this.vm.$options._componentTag === GRID_ITEM
     },
     innerTouchable() {
       return observable.ids.indexOf(this.id) === -1

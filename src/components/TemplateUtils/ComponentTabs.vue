@@ -56,7 +56,7 @@
 import { mapState } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import { humanize } from '@/utils/string'
-import { shortTagName, isComponentSet } from '@/utils/node'
+import { isComponentSet, shortTagName } from '@/utils/node'
 import AsyncComponent from './AsyncComponent'
 import ComponentSet from './ComponentSet'
 import { Card } from 'element-ui'
@@ -106,8 +106,8 @@ export default {
   },
   methods: {
     humanize,
-    isComponentSet,
     shortTagName,
+    isComponentSet,
     addTemplate(template) {
       this.$emit('choose', cloneJson(template))
     }
