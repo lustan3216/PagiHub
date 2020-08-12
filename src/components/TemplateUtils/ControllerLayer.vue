@@ -85,7 +85,11 @@ export default {
         .getElementById('sidebar-right')
         .contains(event.target)
 
-      if (!inSideBar) {
+      const inComponentTabs = document
+        .getElementById('component-tabs')
+        .contains(event.target)
+
+      if (!inSideBar && !inComponentTabs) {
         this.itemEditing = false
       }
     },

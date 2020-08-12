@@ -1,5 +1,6 @@
 <template>
   <el-tabs
+    id="component-tabs"
     v-model="currentCategory"
     class="tabs no-select"
     tab-position="left"

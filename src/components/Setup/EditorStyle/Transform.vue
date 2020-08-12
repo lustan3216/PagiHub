@@ -191,7 +191,6 @@ export default {
   },
   watch: {
     value(value) {
-      console.log(this.getValue(value, 'rotate')[0])
       this.rotate = this.getValue(value, 'rotate')[0]
     },
     values: {

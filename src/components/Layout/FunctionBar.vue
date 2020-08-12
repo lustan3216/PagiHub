@@ -81,66 +81,7 @@
 
     <i class="dot"/>
 
-    <el-tooltip
-      :content="`Set the viewport to ${breakpoints.lg}px`"
-      effect="light"
-      placement="bottom"
-    >
-      <el-button
-        icon="el-icon-data-line"
-        type="text"
-        @click="SET_PREVIEW_MODE"
-      />
-    </el-tooltip>
-
-    <el-tooltip
-      :content="`Set the viewport to ${breakpoints.md}px`"
-      effect="light"
-      placement="bottom"
-    >
-      <el-button
-        icon="el-icon-monitor"
-        type="text"
-        @click="SET_PREVIEW_MODE"
-      />
-    </el-tooltip>
-
-    <el-tooltip
-      :content="`Set the viewport to ${breakpoints.sm}px`"
-      effect="light"
-      placement="bottom"
-    >
-      <el-button
-        icon="el-icon-mobile"
-        type="text"
-        @click="SET_PREVIEW_MODE"
-      />
-    </el-tooltip>
-
-    <el-tooltip
-      :content="`Set the viewport to ${breakpoints.xs}px`"
-      effect="light"
-      placement="bottom"
-    >
-      <el-button
-        class="rotate90"
-        icon="el-icon-mobile-phone"
-        type="text"
-        @click="SET_PREVIEW_MODE"
-      />
-    </el-tooltip>
-
-    <el-tooltip
-      :content="`Set the viewport to ${breakpoints.xxs}px`"
-      effect="light"
-      placement="bottom"
-    >
-      <el-button
-        icon="el-icon-mobile-phone"
-        type="text"
-        @click="SET_PREVIEW_MODE"
-      />
-    </el-tooltip>
+    <view-port-controller />
 
     <i class="dot"/>
 
@@ -172,14 +113,15 @@ import { isMac } from '@/utils/device'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
+import ViewPortController from '../TemplateUtils/ViewPortController'
 import { Tooltip } from 'element-ui'
 import { vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
-import { BREAK_POINTS } from '@/const'
 import jsonHistory from '@/store/jsonHistory'
 
 export default {
   name: 'FunctionBar',
   components: {
+    ViewPortController,
     DialogInteracted,
     DialogComponentSet,
     ElTooltip: Tooltip
@@ -191,9 +133,6 @@ export default {
     ]),
     ...mapState('component', ['editingComponentSetId', 'selectedComponentNode']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
-    breakpoints() {
-      return BREAK_POINTS
-    },
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },
@@ -203,7 +142,7 @@ export default {
   },
   methods: {
     ...mapActions('app', ['setCopySelectedNodeId']),
-    ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_DRAFT_MODE']),
+    ...mapMutations('mode', ['SET_DRAFT_MODE']),
     ...mapMutations('component', ['REDO', 'UNDO']),
     isMac,
     publish() {},

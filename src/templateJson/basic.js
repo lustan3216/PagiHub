@@ -27,11 +27,11 @@ export const gridItems = function() {
   return [
     {
       [TAG]: GRID_ITEM,
-      [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 30 })
+      [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 100 })
     },
     {
       [TAG]: GRID_ITEM,
-      [PROPS]: mapPoints({ x: 22, y: 0, w: 20, h: 15 })
+      [PROPS]: mapPoints({ x: 22, y: 0, w: 44, h: 130 })
     }
   ]
 }

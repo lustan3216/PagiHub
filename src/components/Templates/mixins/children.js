@@ -109,7 +109,7 @@ export default {
       })
 
       let stopNodeId
-      console.log(this.node)
+
       traversalAncestorAndSelf(this.node, ({ id, tag, children, parentNode }) => {
         stopNodeId = id
         if (isComponentSet(parentNode.parentNode) && children.length === 1) {
