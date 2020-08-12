@@ -40,11 +40,11 @@
       <!--width / height 要再考慮，且可以用grid item做, grid item的margin 要搬來style-->
 
       <el-divider content-position="left">STACK</el-divider>
-      <!--      <padding-->
-      <!--        v-if="canPadding"-->
-      <!--        :value="styles.padding"-->
-      <!--        @change="assignStyles($event)"-->
-      <!--      />-->
+            <padding
+              v-if="canPadding"
+              :value="styles.padding"
+              @change="assignStyles($event)"
+            />
       <radius
         v-if="canRadius"
         :value="styles.borderRadius"
@@ -103,10 +103,10 @@
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
-import { GRID, GRID_ITEM, LAYERS, STYLE } from '@/const'
+import { GRID, GRID_ITEM, LAYERS, STYLE, TEXT_EDITOR } from '@/const'
 import { mapMutations, mapState } from 'vuex'
 import Radius from './EditorStyle/Radius'
-// import Padding from './EditorStyle/Padding'
+import Padding from './EditorStyle/Padding'
 import Background from './EditorStyle/Background'
 import Dimension from './EditorStyle/Dimension'
 import Effect from './EditorStyle/Effect'
@@ -125,6 +125,7 @@ export default {
   name: 'PanelStyles',
   components: {
     Background,
+    Padding,
     Radius,
     Rotate,
     Opacity,
@@ -156,7 +157,7 @@ export default {
         border: '',
         borderRadius: '',
         // margin: '',
-        // padding: '',
+        padding: '',
         overflow: '',
         transformOrigin: '',
         transition: '',
@@ -170,18 +171,18 @@ export default {
       return this.selectedComponentIds.map(id => this.componentsMap[id])
     },
     canFont() {
-      return this.nodes.every(node => ['editor-text'].includes(node.tag))
+      return this.nodes.every(node => [TEXT_EDITOR].includes(node.tag))
     },
     canRadius() {
-      return this.nodes.every(node => ![GRID, LAYERS].includes(node.tag))
-    },
-    canPadding() {
       return this.nodes.every(node => ![GRID, LAYERS].includes(node.tag))
     },
     canBorder() {
       return this.nodes.every(node => ![GRID, LAYERS].includes(node.tag))
     },
     canOverflow() {
+      return this.nodes.every(node => [GRID_ITEM].includes(node.tag))
+    },
+    canPadding() {
       return this.nodes.every(node => [GRID_ITEM].includes(node.tag))
     },
     canDimension() {

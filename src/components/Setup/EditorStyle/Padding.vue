@@ -1,7 +1,7 @@
 <template>
   <four-attrs
     v-model="innerValue"
-    attr="padding"
+    title="padding"
   >
     <template #button>
       <el-button

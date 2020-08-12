@@ -13,7 +13,7 @@ import {
   LABEL,
   AUTO_HEIGHT,
   CAN_NOT_RENAME,
-  PROPS, SOFT_DELETE
+  PROPS, SOFT_DELETE, TEXT_EDITOR
 } from '../const'
 
 const points = ['lg', 'md', 'sm', 'xs', 'xxs']
@@ -104,7 +104,7 @@ export const textEditor = function() {
   return {
     w: 18,
     h: 300,
-    [TAG]: 'text-editor',
+    [TAG]: TEXT_EDITOR,
     [CAN_BE_EDITED]: true
   }
 }
