@@ -142,7 +142,7 @@ export default {
   },
   methods: {
     ...mapActions('app', ['setCopySelectedNodeId']),
-    ...mapMutations('mode', ['SET_DRAFT_MODE']),
+    ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_DRAFT_MODE']),
     ...mapMutations('component', ['REDO', 'UNDO']),
     isMac,
     publish() {},

@@ -85,9 +85,8 @@ export default {
         .getElementById('sidebar-right')
         .contains(event.target)
 
-      const inComponentTabs = document
-        .getElementById('component-tabs')
-        .contains(event.target)
+      const componentTabs = document.getElementById('component-tabs')
+      const inComponentTabs = componentTabs && componentTabs.contains(event.target)
 
       if (!inSideBar && !inComponentTabs) {
         this.itemEditing = false

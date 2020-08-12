@@ -9,7 +9,6 @@
         plain
         icon="el-icon-data-line"
         :type="breakpoint === 'lg' ? 'primary' : 'text'"
-        @click="SET_PREVIEW_MODE"
       />
     </el-tooltip>
 
@@ -22,7 +21,6 @@
         plain
         icon="el-icon-monitor"
         :type="breakpoint === 'md' ? 'primary' : 'text'"
-        @click="SET_PREVIEW_MODE"
       />
     </el-tooltip>
 
@@ -35,7 +33,6 @@
         plain
         icon="el-icon-mobile"
         :type="breakpoint === 'sm' ? 'primary' : 'text'"
-        @click="SET_PREVIEW_MODE"
       />
     </el-tooltip>
 
@@ -49,7 +46,6 @@
         class="rotate90"
         icon="el-icon-mobile-phone"
         :type="breakpoint === 'xs' ? 'primary' : 'text'"
-        @click="SET_PREVIEW_MODE"
       />
     </el-tooltip>
 
@@ -62,7 +58,6 @@
         plain
         icon="el-icon-mobile-phone"
         :type="breakpoint === 'xxs' ? 'primary' : 'text'"
-        @click="SET_PREVIEW_MODE"
       />
     </el-tooltip>
   </span>
@@ -71,9 +66,13 @@
 <script>
   import { mapMutations, mapState } from 'vuex'
   import { BREAK_POINTS } from '@/const'
+  import { Tooltip } from 'element-ui'
 
   export default {
     name: 'ViewPortController',
+    components: {
+      ElTooltip: Tooltip
+    },
     computed: {
       ...mapState('app', ['breakpoint']),
       breakpoints() {
@@ -81,7 +80,6 @@
       }
     },
     methods: {
-      ...mapMutations('mode', ['SET_PREVIEW_MODE']),
     }
   }
 </script>
