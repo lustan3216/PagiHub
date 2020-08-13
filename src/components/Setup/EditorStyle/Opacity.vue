@@ -41,7 +41,7 @@ export default {
   watch: {
     innerValue(opacity) {
       // Number() here to make share 1.00 => 1
-      this.$emit('change', { opacity: Number(opacity / 100).toString()  })
+      this.$emit('change', { opacity: Number(opacity / 100).toString() })
     },
     value() {
       const { data } = this.$options

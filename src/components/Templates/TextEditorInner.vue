@@ -16,7 +16,8 @@
           @hide="hideLinkMenu"
         >
           <div
-            :class="{ 'is-active': menu.isActive }"
+            id="menu-bubble"
+            :class="{ 'is-active': true }"
             :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
             class="menububble"
           >
@@ -276,7 +277,7 @@ import {
   Link,
   History,
   Strike,
-  Underline,
+  Underline
 } from 'tiptap-extensions'
 import {
   Color,
@@ -306,7 +307,7 @@ export default {
       value: {
       default: `
           <h2>Hi there,</h2>
-          <p>this is a very <em>basic</em> example of tiptap.</p>
+          <p>this is a very <em>basic</em> example.</p>
           <pre><code>body { display: none; }</code></pre>
           <ul>
             <li>A regular list</li>
@@ -474,7 +475,7 @@ const extensions = [
       font: inherit;
       border: none;
       background: transparent;
-      color: $color-white;
+      color: $color-black;
     }
   }
 

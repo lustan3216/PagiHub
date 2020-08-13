@@ -3,6 +3,7 @@
     v-free-style="innerStyles"
     v-if="isDraftMode"
     v-bind="innerProps"
+    type
     class="wh-100 m-0 button"
   >
     <text-editor-inner
@@ -38,6 +39,7 @@
     v-free-style="innerStyles"
     v-else
     v-bind="innerProps"
+    type
     class="wh-100 m-0 button"
     @click="onClick"
     v-html="innerValue"

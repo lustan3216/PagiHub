@@ -1,7 +1,7 @@
 import objectAssign from 'object-assign'
-import { isUndefined, isString } from 'element-ui/src/utils/types'
 import isPlainObject from 'is-plain-object'
 import getValueByPath from 'lodash.get'
+import { isUndefined, isString } from 'element-ui/src/utils/types'
 import { on, off } from 'element-ui/src/utils/dom.js'
 
 export {
@@ -17,6 +17,18 @@ export {
 export function cloneJson(e) {
   return JSON.parse(JSON.stringify(e))
 }
+
+export function arrayMove(arr, old_index, new_index) {
+  if (new_index >= arr.length) {
+    const k = new_index - arr.length + 1;
+    while (k--) {
+      arr.push(undefined);
+    }
+  }
+  arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+  return arr; // for testing
+};
+
 
 export function cloneObject(obj) {
   let copy

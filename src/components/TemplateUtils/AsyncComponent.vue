@@ -1,6 +1,10 @@
 <template>
-<!-- v-observe-visibility 跟vIf 一定要不同層，不然v-if false 的話沒辦法observer -->
-  <div class="h-100" v-observe-visibility="options" v-if="!hidden && isExample || isLayers">
+  <!-- v-observe-visibility 跟vIf 一定要不同層，不然v-if false 的話沒辦法observer -->
+  <div
+    v-observe-visibility="options"
+    v-if="!hidden && isExample || isLayers"
+    class="h-100"
+  >
     <component
       v-if="vIf"
       :is="tag"
@@ -109,7 +113,7 @@ export default {
   computed: {
     ...mapState('app', ['breakpoint']),
     hidden() {
-      return this.node.hidden && this.node.hidden[this.breakpoint]
+      return this.node && this.node.hidden && this.node.hidden[this.breakpoint]
     },
     node() {
       return getNode(this.id, this.isExample)

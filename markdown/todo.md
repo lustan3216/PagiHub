@@ -4,8 +4,11 @@ MVP
 2. component 能連結
 3. componentset 引用都正常
 4. 可外連 不用 domain 沒關係
-
+https://www.hostinger.com/tutorials/best-html-web-fonts
 ### Functionality
+
+
+layer 往後移，如果下一層沒東西就直接往後下移層，如果有東西就間隔一個跳下一層
 
 <ol>
 font align
@@ -13,10 +16,16 @@ padding
 size
 position fixed (might be a checkbox) 
 background
+ratio
 
+asset magement 要可以拖folder
+seo sitemap page要可以挑選
+layer的操作用右鍵取代
+form 先不要做
+
+https://github.com/probil/vue-moveable
 
 2<li>style 要做 寬高, min max, 固定寬，固定高，要不要都autoHeight</li>
-
 5<li>layer grid 想辦法在project node拿掉</li>
 5<li>bring to front, bring forward, send to back, 至前，至後, style 永遠再layer最底層</li>
 5<li>project's favicon and SEO can be edited in the project modal</li>

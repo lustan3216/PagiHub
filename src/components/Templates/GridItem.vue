@@ -1,21 +1,24 @@
 <template>
-<!--  dash-border 不要跟 async-component 合併，不然async-component hidden 時 border會不見-->
-  <div v-if="firstChild" class="h-100" :class="{ 'dash-border': dashBorder }">
-    <div class="h-100" v-free-style="innerStyles">
-      <async-component :id="firstChild.id" />
-    </div>
-  </div>
-
   <div
-    v-else
     v-free-style="innerStyles"
     class="h-100"
   >
-    <div :class="{ 'dash-border': dashBorder }" class="flex-center h-100">
+    <async-component
+      v-if="firstChild"
+      :id="firstChild.id"
+      :class="{ 'dash-border': dashBorder }"
+    />
+
+    <div
+      v-else
+      :class="{ 'dash-border': dashBorder }"
+      class="flex-center h-100"
+    >
       <component-add
         v-if="!isExample && selected"
         :id="id"
-        style="font-size: 16px; padding: 10px;"
+        style="font-size: 16px;"
+        class="p-10"
       />
     </div>
   </div>

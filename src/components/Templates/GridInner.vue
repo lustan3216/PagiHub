@@ -19,7 +19,10 @@
       drag-ignore-from=".grid-item-fix"
       drag-allow-from="div"
     >
-      <async-component :key="child.id" :id="child.id" />
+      <async-component
+        :key="child.id"
+        :id="child.id"
+      />
     </vue-grid-item>
   </vue-grid-generator>
 </template>

@@ -30,15 +30,15 @@
         Dashboard
       </el-button>
 
-<!--      <el-button-->
-<!--        v-else-->
-<!--        type="text"-->
-<!--        class="p-10"-->
-<!--        icon="el-icon-s-promotion"-->
-<!--        @click="$dialog.open('login')"-->
-<!--      >-->
-<!--        LOGIN-->
-<!--      </el-button>-->
+      <!--      <el-button-->
+      <!--        v-else-->
+      <!--        type="text"-->
+      <!--        class="p-10"-->
+      <!--        icon="el-icon-s-promotion"-->
+      <!--        @click="$dialog.open('login')"-->
+      <!--      >-->
+      <!--        LOGIN-->
+      <!--      </el-button>-->
     </div>
   </nav>
 </template>

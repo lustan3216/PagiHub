@@ -1,8 +1,8 @@
 <template>
-<!--  <rules-generator-->
-<!--    :id="id"-->
-<!--    :rules="spec"-->
-<!--  />-->
+  <!--  <rules-generator-->
+  <!--    :id="id"-->
+  <!--    :rules="spec"-->
+  <!--  />-->
 </template>
 
 <script>

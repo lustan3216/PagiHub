@@ -53,7 +53,7 @@ export default {
   data() {
     // 有些component像是 textedit or video, 裡面有拖拉多種互動，需要用 itemEditing 判定需不需要鎖住，經由點兩下就可操作
     return {
-      itemEditing: false,
+      itemEditing: false
     }
   },
   computed: {
@@ -88,7 +88,10 @@ export default {
       const componentTabs = document.getElementById('component-tabs')
       const inComponentTabs = componentTabs && componentTabs.contains(event.target)
 
-      if (!inSideBar && !inComponentTabs) {
+      const menuBubble = document.getElementById('menu-bubble')
+      const inMenuBubble = menuBubble && menuBubble.contains(event.target)
+
+      if (!inSideBar && !inComponentTabs && !inMenuBubble) {
         this.itemEditing = false
       }
     },

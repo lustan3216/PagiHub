@@ -14,7 +14,10 @@
         :span="3"
         @click.native="isUniq = !isUniq"
       >
-        <slot name="button" :value="$data"/>
+        <slot
+          :value="$data"
+          name="button"
+        />
       </el-col>
 
       <el-col

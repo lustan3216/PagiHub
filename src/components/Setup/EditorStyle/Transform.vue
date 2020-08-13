@@ -235,12 +235,12 @@ export default {
     getValue(value, key) {
       const regex = new RegExp(`${key}\\(([^(]+)\\)`)
       const match = value.match(regex) || []
-        if (match[1]) {
-          const [a, b = ''] = match[1].split(',')
-          return [a, b]
-        } else {
-         return ['', '']
-        }
+      if (match[1]) {
+        const [a, b = ''] = match[1].split(',')
+        return [a, b]
+      } else {
+        return ['', '']
+      }
     },
     isArray,
     humanize,

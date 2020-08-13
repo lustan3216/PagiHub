@@ -60,7 +60,7 @@ export default {
     }
   },
   data() {
-    const { border, ...borders }  = this.value
+    const { border, ...borders } = this.value
     const isUniq = this.isAllTheSame(borders)
 
     return {

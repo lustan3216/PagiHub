@@ -6,9 +6,9 @@
       placement="bottom"
     >
       <el-button
+        :type="breakpoint === 'lg' ? 'primary' : 'text'"
         plain
         icon="el-icon-data-line"
-        :type="breakpoint === 'lg' ? 'primary' : 'text'"
       />
     </el-tooltip>
 
@@ -18,9 +18,9 @@
       placement="bottom"
     >
       <el-button
+        :type="breakpoint === 'md' ? 'primary' : 'text'"
         plain
         icon="el-icon-monitor"
-        :type="breakpoint === 'md' ? 'primary' : 'text'"
       />
     </el-tooltip>
 
@@ -30,9 +30,9 @@
       placement="bottom"
     >
       <el-button
+        :type="breakpoint === 'sm' ? 'primary' : 'text'"
         plain
         icon="el-icon-mobile"
-        :type="breakpoint === 'sm' ? 'primary' : 'text'"
       />
     </el-tooltip>
 
@@ -42,10 +42,10 @@
       placement="bottom"
     >
       <el-button
+        :type="breakpoint === 'xs' ? 'primary' : 'text'"
         plain
         class="rotate90"
         icon="el-icon-mobile-phone"
-        :type="breakpoint === 'xs' ? 'primary' : 'text'"
       />
     </el-tooltip>
 
@@ -55,33 +55,33 @@
       placement="bottom"
     >
       <el-button
+        :type="breakpoint === 'xxs' ? 'primary' : 'text'"
         plain
         icon="el-icon-mobile-phone"
-        :type="breakpoint === 'xxs' ? 'primary' : 'text'"
       />
     </el-tooltip>
   </span>
 </template>
 
 <script>
-  import { mapMutations, mapState } from 'vuex'
-  import { BREAK_POINTS } from '@/const'
-  import { Tooltip } from 'element-ui'
+import { mapMutations, mapState } from 'vuex'
+import { BREAK_POINTS } from '@/const'
+import { Tooltip } from 'element-ui'
 
-  export default {
-    name: 'ViewPortController',
-    components: {
-      ElTooltip: Tooltip
-    },
-    computed: {
-      ...mapState('app', ['breakpoint']),
-      breakpoints() {
-        return BREAK_POINTS
-      }
-    },
-    methods: {
+export default {
+  name: 'ViewPortController',
+  components: {
+    ElTooltip: Tooltip
+  },
+  computed: {
+    ...mapState('app', ['breakpoint']),
+    breakpoints() {
+      return BREAK_POINTS
     }
+  },
+  methods: {
   }
+}
 </script>
 
 <style scoped lang="scss">

@@ -11,9 +11,9 @@
       <select-unit
         :units="['deg']"
         v-model="innerValue"
-        allow-negative
         :min="-360"
         :max="360"
+        allow-negative
         prefix-icon="el-icon-refresh"
       />
     </el-col>
@@ -49,12 +49,12 @@ export default {
             ? this.value.replace(oldRotate, newRotate)
             : this.value
               ? this.value + ` rotate(${newRotate})`
-              :`rotate(${newRotate})`
+              : `rotate(${newRotate})`
         } else {
           transform = this.value.replace(rotate[0], '').trim()
         }
         this.$emit('change', { transform })
-      },
+      }
     }
   }
 }

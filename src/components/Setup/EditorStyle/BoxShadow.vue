@@ -27,72 +27,87 @@
       SHADOW
     </el-divider>
 
-    <el-row
-      v-for="boxShadow in boxShadows"
-      :key="boxShadow.id"
-      :gutter="2"
-      class="flex inputs"
-      draggable="true"
-    >
-      <el-col :span="2">
-        <i
-          class="el-icon-d-caret"
-          style="margin-top: 7px;"
-        />
-      </el-col>
+    <div
+      v-drag-and-drop:options="{
+      dropzoneSelector: 'ul',
+      draggableSelector: 'li',
+      handlerSelector: '.el-icon-d-caret',
+      showDropzoneAreas: true
+    }">
 
-      <el-col :span="2">
-        <el-checkbox
-          v-model="boxShadow.visible"
-          style="margin-top: 7px;"
-        />
-      </el-col>
 
-      <el-col :span="5">
-        <el-button
-          :type="boxShadow.inset ? 'primary' : ''"
-          class="w-100"
-          type="number"
-          @click="boxShadow.inset = !boxShadow.inset"
+      <ul @reordered="itemMove">
+        <li
+          v-for="boxShadow in boxShadows"
+          :key="boxShadow.id"
+          :data-id="boxShadow.id"
         >
-          Inset
-        </el-button>
-      </el-col>
+          <el-row
+            :gutter="2"
+            class="flex inputs"
+          >
+            <el-col :span="2">
+              <i
+                class="el-icon-d-caret"
+                style="margin-top: 7px;"
+              />
+            </el-col>
 
-      <el-col :span="3">
-        <el-input
-          v-model.number="boxShadow.offsetX"
-          type="number"
-        />
-      </el-col>
+            <el-col :span="2">
+              <el-checkbox
+                v-model="boxShadow.visible"
+                style="margin-top: 7px;"
+              />
+            </el-col>
 
-      <el-col :span="3">
-        <el-input
-          v-model.number="boxShadow.offsetY"
-          type="number"
-        />
-      </el-col>
+            <el-col :span="5">
+              <el-button
+                :type="boxShadow.inset ? 'primary' : ''"
+                class="w-100"
+                type="number"
+                @click="boxShadow.inset = !boxShadow.inset"
+              >
+                Inset
+              </el-button>
+            </el-col>
 
-      <el-col :span="3">
-        <el-input
-          v-model.number="boxShadow.blurRadius"
-          type="number"
-        />
-      </el-col>
-      <el-col :span="3">
-        <el-input
-          v-model.number="boxShadow.spreadRadius"
-          type="number"
-        />
-      </el-col>
-      <el-col :span="3">
-        <el-color-picker
-          :value="boxShadow.color === 'none' ? null : boxShadow.color"
-          show-alpha
-          @input="boxShadow.color = $event"
-        />
-      </el-col>
-    </el-row>
+            <el-col :span="3">
+              <el-input
+                v-model.number="boxShadow.offsetX"
+                type="number"
+              />
+            </el-col>
+
+            <el-col :span="3">
+              <el-input
+                v-model.number="boxShadow.offsetY"
+                type="number"
+              />
+            </el-col>
+
+            <el-col :span="3">
+              <el-input
+                v-model.number="boxShadow.blurRadius"
+                type="number"
+              />
+            </el-col>
+            <el-col :span="3">
+              <el-input
+                v-model.number="boxShadow.spreadRadius"
+                type="number"
+              />
+            </el-col>
+            <el-col :span="3">
+              <el-color-picker
+                :value="boxShadow.color === 'none' ? null : boxShadow.color"
+                show-alpha
+                @input="boxShadow.color = $event"
+              />
+            </el-col>
+          </el-row>
+        </li>
+      </ul>
+    </div>
 
     <el-row
       v-if="boxShadows.length"
@@ -129,17 +144,22 @@
 
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
+import { VueDraggableDirective } from 'vue-draggable'
 import { Divider } from 'element-ui'
 import {
   parse,
   stringify
 } from '@/components/Setup/EditorStyle/utils/boxShadow'
+import { findIndexBy, arrayMove } from '../../../utils/tool'
 
 export default {
   name: 'BoxShadows',
   components: {
     SelectUnit,
     ElDivider: Divider
+  },
+  directives: {
+    dragAndDrop: VueDraggableDirective
   },
   props: {
     value: {
@@ -179,6 +199,11 @@ export default {
   methods: {
     clean() {
       this.boxShadows = this.boxShadows.filter(x => x.visible)
+    },
+    itemMove({ detail }) {
+      const id = detail.ids[0]
+      const originalIndex = findIndexBy(this.boxShadows, 'id', +id)
+      arrayMove(this.boxShadows, originalIndex, detail.index)
     }
   }
 }

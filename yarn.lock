@@ -4895,11 +4895,6 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bezier-easing@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/bezier-easing/-/bezier-easing-2.1.0.tgz#c04dfe8b926d6ecaca1813d69ff179b7c2025d86"
-  integrity sha1-wE3+i5JtbsrKGBPWn/F5t8ICXYY=
-
 bfj@^6.1.1:
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/bfj/-/bfj-6.1.2.tgz#325c861a822bcb358a41c78a33b8e6e2086dde7f"
@@ -7800,6 +7795,11 @@ fs.realpath@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
 
+fs@^0.0.1-security:
+  version "0.0.1-security"
+  resolved "https://registry.yarnpkg.com/fs/-/fs-0.0.1-security.tgz#8a7bd37186b6dddf3813f23858b57ecaaf5e41d4"
+  integrity sha1-invTcYa23d84E/I4WLV+yq9eQdQ=
+
 fsevents@^1.2.7:
   version "1.2.12"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.2.12.tgz#db7e0d8ec3b0b45724fd4d83d43554a8f1f0de5c"
@@ -9960,21 +9960,6 @@ loadjs@^4.2.0:
   resolved "https://registry.yarnpkg.com/loadjs/-/loadjs-4.2.0.tgz#2a0336376397a6a43edf98c9ec3229ddd5abb6f6"
   integrity sha512-AgQGZisAlTPbTEzrHPb6q+NYBMD+DP9uvGSIjSUM5uG+0jG15cb8axWpxuOIqrmQjn6scaaH8JwloiP27b2KXA==
 
-localforage-observable@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/localforage-observable/-/localforage-observable-2.0.1.tgz#f4228b623e7ece92ffab6c6a1abfb168e24a253f"
-  integrity sha512-Eligo5K58GMLtDJ9No6CgfAbGUv+069Zr5EDNOJKOcNCtljZ3Wqic7ZGtOT7ZC1F002acUQ5LAviieATqScwXg==
-  dependencies:
-    localforage "^1.5.0"
-    zen-observable "^0.2.1"
-
-localforage@^1.5.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.9.0.tgz#f3e4d32a8300b362b4634cc4e066d9d00d2f09d1"
-  integrity sha512-rR1oyNrKulpe+VM9cYmcFn6tsHuokyVHFaCM3+osEmxaHTbEk8oQu6eGDfS6DQLWi/N67XRmB8ECG37OES368g==
-  dependencies:
-    lie "3.1.1"
-
 localforage@^1.7.3:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/localforage/-/localforage-1.7.3.tgz#0082b3ca9734679e1bd534995bdd3b24cf10f204"
@@ -11037,6 +11022,11 @@ os-tmpdir@^1.0.0, os-tmpdir@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
+
+os@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/os/-/os-0.1.1.tgz#208845e89e193ad4d971474b93947736a56d13f3"
+  integrity sha1-IIhF6J4ZOtTZcUdLk5R3NqVtE/M=
 
 osenv@0, osenv@^0.1.4:
   version "0.1.5"
@@ -14269,6 +14259,21 @@ vue-cli-plugin-s3-deploy@^4.0.0-rc3:
     lodash "^4.17.11"
     mime-types "^2.1.18"
 
+vue-cli-plugin-webfontloader@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-webfontloader/-/vue-cli-plugin-webfontloader-0.1.1.tgz#546c80c788b1c52ca74e1f4810fb0b582fa4beb0"
+  integrity sha512-zO0Rpbar4AG8MAYoHZskQpuSd01P4t1/34gKfZcudqDk6v0DJPbRB3z20CW2m2uD9qUvusW5poei1QnsXmIKtA==
+  dependencies:
+    fs "^0.0.1-security"
+    os "^0.1.1"
+    prettier "^1.18.2"
+    webfontloader "^1.6.28"
+
+vue-draggable@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/vue-draggable/-/vue-draggable-2.0.6.tgz#8ab4c1e90576e19c5676de812cf802b243beb2cb"
+  integrity sha512-/FHtAwrhy6a4duF/zr5Sf3oowf3BMHdcEfi1v8SsYYFCNqbKvBFUaiMs7Lw1ZQq2/2j6yvBoAHPKVmuLFSSiJw==
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
@@ -14452,6 +14457,11 @@ wcwidth@^1.0.1:
   integrity sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g=
   dependencies:
     defaults "^1.0.3"
+
+webfontloader@^1.6.28:
+  version "1.6.28"
+  resolved "https://registry.yarnpkg.com/webfontloader/-/webfontloader-1.6.28.tgz#db786129253cb6e8eae54c2fb05f870af6675bae"
+  integrity sha1-23hhKSU8tujq5UwvsF+HCvZnW64=
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
@@ -14972,11 +14982,6 @@ zen-observable-ts@0.8.19:
   dependencies:
     tslib "^1.9.3"
     zen-observable "^0.8.0"
-
-zen-observable@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/zen-observable/-/zen-observable-0.2.1.tgz#c47676a64132b8475a61aa49e514755b5b9663f3"
-  integrity sha1-xHZ2pkEyuEdaYapJ5RR1W1uWY/M=
 
 zen-observable@^0.7.0:
   version "0.7.1"

@@ -11,19 +11,19 @@
     />
   </el-select>
 
-<!--  @change="$emit('change', innerValue)" for font style, but try to use @input instead of @change-->
+  <!--  @change="$emit('change', innerValue)" for font style, but try to use @input instead of @change-->
   <el-input
     v-else
     ref="input"
     v-model="number"
     :class="{ 'ns-resize': resizeCursor }"
     :prefix-icon="prefixIcon"
-    type="number"
-    class="number"
-    clearable
     :step="step"
     :min="allowNegative ? Infinity : min"
     :max="max"
+    type="number"
+    class="number"
+    clearable
     @mousedown.native="clicking = true"
     @focus="resizeCursor= false"
     @blur="resizeCursor = true"
@@ -51,7 +51,11 @@
       </el-dropdown-menu>
     </el-dropdown>
 
-    <span v-else slot="append" class="no-action">
+    <span
+      v-else
+      slot="append"
+      class="no-action"
+    >
       {{ optionUnits.length ? unit : ' - ' }}
     </span>
   </el-input>

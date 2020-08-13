@@ -40,11 +40,11 @@
       <!--width / height 要再考慮，且可以用grid item做, grid item的margin 要搬來style-->
 
       <el-divider content-position="left">STACK</el-divider>
-            <padding
-              v-if="canPadding"
-              :value="styles.padding"
-              @change="assignStyles($event)"
-            />
+      <padding
+        v-if="canPadding"
+        :value="styles.padding"
+        @change="assignStyles($event)"
+      />
       <radius
         v-if="canRadius"
         :value="styles.borderRadius"

@@ -4,7 +4,7 @@
     layout="horizontal"
   >
     <div class="extra justify-between">
-      <el-button type="text">Component Set</el-button>
+      <el-button type="text">Components</el-button>
 
       <dialog-component-set
         v-if="projectId"
