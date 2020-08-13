@@ -38,8 +38,6 @@ export const gridItems = function() {
 
 export const grid = function(options) {
   return {
-    w: 18,
-    h: 300,
     [TAG]: GRID,
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: gridItems(),
@@ -49,8 +47,6 @@ export const grid = function(options) {
 
 export const layers = function(options) {
   return {
-    w: 18,
-    h: 300,
     [TAG]: LAYERS,
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: [grid()],
@@ -59,10 +55,16 @@ export const layers = function(options) {
   }
 }
 
+export const iframer = function(options) {
+  return {
+    [TAG]: 'iframer',
+    [CAN_BE_EDITED]: true,
+    ...options
+  }
+}
+
 export const carousel = function() {
   return {
-    w: 36,
-    h: 300,
     [TAG]: CAROUSEL,
     [CAN_NEW_ITEM]: true,
     [CAN_BE_EDITED]: true,
@@ -102,8 +104,6 @@ export const carousel = function() {
 
 export const textEditor = function() {
   return {
-    w: 18,
-    h: 300,
     [TAG]: TEXT_EDITOR,
     [CAN_BE_EDITED]: true
   }
@@ -111,8 +111,6 @@ export const textEditor = function() {
 
 export const flexButton = function() {
   return {
-    w: 9,
-    h: 30,
     [TAG]: 'flex-button',
     [LABEL]: 'link',
     [CAN_BE_EDITED]: true
@@ -121,24 +119,18 @@ export const flexButton = function() {
 
 export const flexImage = function() {
   return {
-    w: 18,
-    h: 300,
     [TAG]: 'flex-image'
   }
 }
 
 export const divider = function() {
   return {
-    w: 18,
-    h: 30,
     [TAG]: 'divider'
   }
 }
 
 export const videoPlayer = function() {
   return {
-    w: 36,
-    h: 300,
     [TAG]: 'video-player',
     [CAN_BE_EDITED]: true,
     [AUTO_HEIGHT]: true
@@ -166,5 +158,6 @@ export default [
   carousel(),
   divider(),
   videoPlayer(),
-  flexButton()
+  flexButton(),
+  iframer()
 ]

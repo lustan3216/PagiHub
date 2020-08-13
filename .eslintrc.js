@@ -282,11 +282,5 @@ module.exports = {
       }
     ],
     'array-bracket-spacing': [2, 'never']
-  },
-
-  extends: [
-    'plugin:vue/recommended',
-    'eslint:recommended',
-    'plugin:cypress/recommended'
-  ]
+  }
 }

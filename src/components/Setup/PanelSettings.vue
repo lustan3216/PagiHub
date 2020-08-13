@@ -28,6 +28,7 @@ const self = {
     SettingGridItem: () => import('./EditorSetting/SettingGridItem'),
     SettingVideoPlayer: () => import('./EditorSetting/SettingVideoPlayer'),
     SettingCarousel: () => import('./EditorSetting/SettingCarousel'),
+    SettingIframer: () => import('./EditorSetting/SettingIframer'),
 
     SettingFormSubmit: () => import('./EditorSetting/SettingFormSubmit'),
     SettingFormCheckbox: () => import('./EditorSetting/SettingFormCheckbox'),

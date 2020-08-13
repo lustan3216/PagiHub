@@ -226,4 +226,9 @@ export default {
     cursor: ns-resize;
     color: #606266;
   }
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
 </style>

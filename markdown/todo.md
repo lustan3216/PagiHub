@@ -4,24 +4,24 @@ MVP
 2. component 能連結
 3. componentset 引用都正常
 4. 可外連 不用 domain 沒關係
-https://www.hostinger.com/tutorials/best-html-web-fonts
+
 ### Functionality
 
 
 layer 往後移，如果下一層沒東西就直接往後下移層，如果有東西就間隔一個跳下一層
 
 <ol>
-font align
-padding
+
 size
 position fixed (might be a checkbox) 
 background
 ratio
 
 asset magement 要可以拖folder
-seo sitemap page要可以挑選
+
 layer的操作用右鍵取代
 form 先不要做
+embed iframe support
 
 https://github.com/probil/vue-moveable
 
@@ -48,6 +48,7 @@ https://github.com/probil/vue-moveable
 ### Last
 
 <ol>
+5<li>seo sitemap page要可以挑選</li>
 5<li>image 可以直接拉近畫面裡面</li>
 5<li>carousel 可以用 鍵盤控制，動畫的出現</li>
 <li>import Sketch</li>
@@ -70,7 +71,6 @@ https://github.com/probil/vue-moveable
 <li>grid layout 在拉的時候案control of shift可以所比例</li>
 <li>time line/ steps/ transfer / cascader / map </li>
 <li>text-shadow</li>
-<li>font family/ 用font picker做但要google帳號</li>
 <li>need login when publishing </li>
 <li>road map</li>
 <li>can create their own vue component</li>

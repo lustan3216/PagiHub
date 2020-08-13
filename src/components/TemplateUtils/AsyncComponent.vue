@@ -64,6 +64,7 @@ export default {
     VideoPlayer: () => import('../Templates/VideoPlayer'),
     Layers: () => import('../Templates/Layers'),
     Drawer: () => import('../Templates/Drawer'),
+    Iframer: () => import('../Templates/Iframer'),
 
     FormTextarea: () => import('../Templates/FormTextarea'),
     FormColorPicker: () => import('../Templates/FormColorPicker'),

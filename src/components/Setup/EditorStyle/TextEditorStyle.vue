@@ -1,6 +1,6 @@
 <template>
   <editor-menu-bubble :editor="editor">
-    <div slot-scope="{ commands, getMarkAttrs }">
+    <div slot-scope="{ getMarkAttrs }">
 
       <el-divider content-position="left">FONT</el-divider>
 
@@ -9,13 +9,56 @@
         align="middle"
       >
         <el-col :span="8">
-          <span class="title">Family</span>
+          <span class="title">
+            Align
+          </span>
         </el-col>
         <el-col :span="16">
-          <el-select
+          <el-button-group class="flex">
+            <el-button
+              class="flex1"
+              plain
+              icon="el-icon-s-fold"
+              :type="getMarkAttrs('textAlign').textAlign === 'left' ? 'primary' : ''"
+              @click="setAttribute('textAlign', 'left')"
+            />
+            <el-button
+              class="flex1"
+              plain
+              icon="el-icon-s-unfold"
+              :type="getMarkAttrs('textAlign').textAlign === 'center' ? 'primary' : ''"
+              @click="setAttribute('textAlign', 'center')"
+            />
+            <el-button
+              class="flex1"
+              plain
+              icon="el-icon-s-unfold"
+              :type="getMarkAttrs('textAlign').textAlign === 'right' ? 'primary' : ''"
+              @click="setAttribute('textAlign', 'right')"
+            />
+          </el-button-group>
+        </el-col>
+      </el-row>
+
+      <el-row
+        type="flex"
+        align="middle"
+      >
+        <el-col :span="8">
+          <span class="title">
+            Family
+            <tip>
+              You can enter the font name you like. Check more from
+              <span class="link" @click="openGoogleFont">Google font</span>.
+              For example, You found a name "Open Sans", then just type it in.
+            </tip>
+          </span>
+        </el-col>
+        <el-col :span="16">
+          <font-selector
             ref="fontFamily"
             :value="getMarkAttrs('fontFamily').fontFamily"
-            @change="commands.fontFamily({ fontFamily: $event })"
+            @change="setAttribute('fontFamily', $event)"
           />
         </el-col>
       </el-row>
@@ -58,7 +101,7 @@
           <select-unit
             ref="fontSize"
             :value="getMarkAttrs('fontSize').fontSize"
-            @change="$event => setAttribute('fontSize', $event)"
+            @change="setAttribute('fontSize', $event)"
           />
         </el-col>
       </el-row>
@@ -73,7 +116,7 @@
           <select-unit
             ref="letterSpacing"
             :value="getMarkAttrs('letterSpacing').letterSpacing"
-            @change="$event => setAttribute('letterSpacing', $event)"
+            @change="setAttribute('letterSpacing', $event)"
           />
         </el-col>
       </el-row>
@@ -88,7 +131,7 @@
           <select-unit
             ref="lineHeight"
             :value="getMarkAttrs('lineHeight').lineHeight"
-            @change="$event => setAttribute('lineHeight', $event)"
+            @change="setAttribute('lineHeight', $event)"
           />
         </el-col>
       </el-row>
@@ -98,29 +141,43 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import { Divider } from 'element-ui'
 import { EditorMenuBubble } from 'tiptap'
 import SelectUnit from '@/components/Components/SelectUnit'
+import FontSelector from '@/components/Components/FontSelector'
 import ColorPicker from '@/components/Components/ColorPicker'
+import Tip from '@/components/Tutorial/Tip'
 
 export default {
   name: 'TextEditorStyle',
   components: {
     EditorMenuBubble,
     SelectUnit,
+    FontSelector,
     ColorPicker,
+    Tip,
     ElDivider: Divider
   },
   props: {
+    id: {
+      type: String,
+      required: true
+    },
     editor: {
       type: Object,
       required: true
     }
   },
   methods: {
+    ...mapMutations('component', ['RECORD']),
     setAttribute(attr, value) {
       this.editor.commands[attr]({ [attr]: value })
-      this.$refs[attr].focus()
+      this.$refs[attr] && this.$refs[attr].focus && this.$refs[attr].focus()
+    },
+    openGoogleFont() {
+      const win = window.open('https://fonts.google.com/', '_blank');
+      win.focus();
     }
   }
 }

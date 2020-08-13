@@ -81,17 +81,37 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     clickOutside(event) {
-      const inSideBar = document
-        .getElementById('sidebar-right')
-        .contains(event.target)
+      const insideArea = ['#sidebar-right', '.el-select-dropdown__item', '#component-tabs', '#menu-bubble', '.el-tooltip__popper']
+      let clickInside = false
 
-      const componentTabs = document.getElementById('component-tabs')
-      const inComponentTabs = componentTabs && componentTabs.contains(event.target)
+      loop1:
+      for (let i = 0; i< event.path.length; i++) {
+        const element = event.path[i]
 
-      const menuBubble = document.getElementById('menu-bubble')
-      const inMenuBubble = menuBubble && menuBubble.contains(event.target)
+        if (element.id === 'art-board' || element.tagName === 'BODY') {
+          clickInside = false
+          break
+        }
+        loop2:
+        for (let ii = 0; ii < insideArea.length; ii++) {
+          const areaSelector = insideArea[ii]
 
-      if (!inSideBar && !inComponentTabs && !inMenuBubble) {
+          if (areaSelector[0] === '.') {
+            if (element.classList.contains(areaSelector.replace('.',''))) {
+              clickInside = true
+              break loop1
+            }
+          } else if (areaSelector[0] === '#') {
+            if (element.id === areaSelector.replace('#','')) {
+              clickInside = true
+              break loop1
+            }
+          }
+        }
+      }
+
+
+      if (!clickInside) {
         this.itemEditing = false
       }
     },

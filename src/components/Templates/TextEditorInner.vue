@@ -5,7 +5,7 @@
   >
     <template v-if="isDraftMode && editing">
       <portal to="FontStyles">
-        <text-editor-style :editor="editor" />
+        <text-editor-style :id="id" :editor="editor" />
       </portal>
 
       <portal to="TextEditorMenu">
@@ -17,7 +17,7 @@
         >
           <div
             id="menu-bubble"
-            :class="{ 'is-active': true }"
+            :class="{ 'is-active': menu.isActive }"
             :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
             class="menububble"
           >
@@ -124,30 +124,6 @@
               </button>
 
               <button
-                :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-                class="menububble__button"
-                @click="commands.heading({ level: 1 })"
-              >
-                H1
-              </button>
-
-              <button
-                :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-                class="menububble__button"
-                @click="commands.heading({ level: 2 })"
-              >
-                H2
-              </button>
-
-              <button
-                :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-                class="menububble__button"
-                @click="commands.heading({ level: 3 })"
-              >
-                H3
-              </button>
-
-              <button
                 :class="{ 'is-active': isActive.blockquote() }"
                 class="menububble__button"
                 @click="commands.blockquote"
@@ -158,16 +134,6 @@
                 >
               </button>
 
-              <button
-                :class="{ 'is-active': isActive.code() }"
-                class="menububble__button"
-                @click="commands.code"
-              >
-                <img
-                  svg-inline
-                  src="icons/code.svg"
-                >
-              </button>
             </template>
           </div>
 
@@ -229,6 +195,30 @@
           </button>
 
           <button
+            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+            class="menububble__button"
+            @click="commands.heading({ level: 1 })"
+          >
+            H1
+          </button>
+
+          <button
+            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+            class="menububble__button"
+            @click="commands.heading({ level: 2 })"
+          >
+            H2
+          </button>
+
+          <button
+            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+            class="menububble__button"
+            @click="commands.heading({ level: 3 })"
+          >
+            H3
+          </button>
+
+          <button
             :class="{ 'is-active': isActive.heading({ level: 4 }) }"
             class="menububble__button"
             @click="commands.heading({ level: 4 })"
@@ -260,7 +250,6 @@
 </template>
 <script>
 import { Editor, EditorContent, EditorMenuBubble, EditorFloatingMenu } from 'tiptap'
-
 import {
   Blockquote,
   CodeBlock,
@@ -285,9 +274,12 @@ import {
   FontFamily,
   FontSize,
   LetterSpacing,
-  LineHeight
+  LineHeight,
+  TextAlign
 } from '../../vendor/tiptap'
 import { mapState, mapMutations } from 'vuex'
+import { arrayUniq } from '../../utils/tool'
+import WebFont from 'webfontloader'
 
 export default {
   name: 'TextEditorInner',
@@ -338,19 +330,39 @@ export default {
   },
   created() {
     const self = this
+    const families = this.findFontNames(this.value)
+
+    if (families.length) {
+      WebFont.load({
+        classes: false,
+        events: false,
+        google: {
+          families
+        }
+      })
+    }
+
     this.editor = new Editor({
       editable: this.isDraftMode,
       extensions,
       content: this.value,
       onBlur: () => {
-        if (self.isExample) return
-        if (self.id) {
-          self.RECORD([
-            {
-              path: `${self.id}.value`,
-              value: self.editor.getJSON()
-            }
-          ])
+        if (!self.isExample && self.id) {
+          const json = self.editor.getJSON()
+          const fonts = this.findFontNames(json)
+          const records = [{
+            path: `${self.id}.value`,
+            value: json
+          }]
+
+          if (fonts && fonts.length) {
+            records.push({
+              path: `${self.id}.fonts`,
+              value: fonts
+            })
+          }
+
+          self.RECORD(records)
         }
       }
     })
@@ -360,6 +372,14 @@ export default {
   },
   methods: {
     ...mapMutations('component', ['RECORD']),
+    findFontNames(string) {
+      if (typeof string === 'object') {
+        string = JSON.stringify(string)
+      }
+
+      const fonts = string.match(/(?<=fontFamily":")[\w|\s]*/g)
+      return arrayUniq(fonts)
+    },
     showLinkMenu(attrs) {
       this.linkUrl = attrs.href
       this.linkMenuIsActive = true
@@ -371,8 +391,8 @@ export default {
       this.linkUrl = null
       this.linkMenuIsActive = false
     },
-    setLinkUrl(command, url) {
-      command({ href: url })
+    setLinkUrl(command, href) {
+      command({ href })
       this.hideLinkMenu()
       this.editor.focus()
     }
@@ -401,7 +421,8 @@ const extensions = [
   new FontFamily(),
   new FontSize(),
   new LetterSpacing(),
-  new LineHeight()
+  new LineHeight(),
+  new TextAlign()
 ]
 </script>
 

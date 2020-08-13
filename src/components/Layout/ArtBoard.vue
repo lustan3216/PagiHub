@@ -1,5 +1,5 @@
 <template>
-  <div class="art-board">
+  <div id="art-board" class="art-board">
     <component-set :id="id" />
   </div>
 </template>
