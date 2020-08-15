@@ -175,7 +175,7 @@ export default {
       const records = []
 
       for (const key in object) {
-        const value = object[key]
+        const value = object[key] === '' ? undefined : object[key]
 
         this.selectedComponentNodes.forEach(node => {
           records.push({

@@ -29,7 +29,7 @@
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import { shortTagName, shortId, isComponent } from '@/utils/node'
-import { CAN_NOT_RENAME, LABEL } from '@/const'
+import { LABEL } from '@/const'
 
 const observable = Vue.observable({ editingId: null })
 
@@ -64,11 +64,7 @@ export default {
       return this.isComponent && shortId(this.id)
     },
     editing() {
-      return (
-        observable.editingId === this.id &&
-        this.editable &&
-        !this.node[CAN_NOT_RENAME]
-      )
+      return observable.editingId === this.id && this.editable
     }
   },
   methods: {
@@ -98,6 +94,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-button {
+  padding-left: 5px;
+  padding-right: 5px;
+}
 .input {
   z-index: 2;
 }

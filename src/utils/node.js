@@ -7,7 +7,7 @@ import {
   KIND,
   LABEL,
   LAYERS,
-  GRID_ITEM
+  GRID_ITEM, KEY
 } from '@/const'
 
 export function findFirstCommonParentTree(ids) {
@@ -86,7 +86,7 @@ export function traversalChildren(node, fn) {
 
 const cache = {}
 export function shortTagName(node) {
-  const tag = node[LABEL] || node.tag
+  const tag = node[LABEL] || node[KEY] || node.tag
   if (cache[tag]) {
     return cache[tag]
   }

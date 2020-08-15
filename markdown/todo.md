@@ -7,47 +7,32 @@ MVP
 
 ### Functionality
 
+https://github.com/pqina/vue-filepond
+https://github.com/antonreshetov/vue-unicons
+
 <ol>
 layer 往後移，如果下一層沒東西就直接往後下移層，如果有東西就間隔一個跳下一層
-position fixed (might be a checkbox)
-// 如果是這個可能多出 top left
-
-variable vw vh, to fix arboard size
-background font color
-size / ratio
-可以 copy 進去 gridlayout
-數字大量改變時合成一個 hisotry
-
-asset magement 要可以拖 folder / 可以選定 global default is local
-每個 componentSet 要記錄一個 tools 的 version 不然怕以後更新互有衝突
-form 先不要做
-embed iframe support
-
-https://github.com/probil/vue-moveable
-
-2<li>style 要做 寬高, min max, 固定寬，固定高，要不要都 autoHeight</li>
-5<li>layer grid 想辦法在 project node 拿掉</li>
 5<li>bring to front, bring forward, send to back, 至前，至後, style 永遠再 layer 最底層</li>
-5<li>多選修改</li>
+style 的checkbox 暫時刪除
+position fixed (might be a checkbox) // 如果是這個可能多出 top left
+variable vw vh, to fix arboard size
+數字大量改變時合成一個 hisotry
+5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li>
 5<li>sreen size changer</li>
-
-<li>canTo caDelete 這些東西不要記錄在 json上，不然以後有更動的話，沒辦法改道s3裡面所有東西</li>
-// 每個 example 下特殊的key e.x.'sdew' 然後配對設定，寫在單獨檔案裡，類似nodeProperties
-
 5<li>每個 component set 都可以組建合併得按鈕 / or 選版本</li>
 5<li>search panel</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
 20<li>可瀏覽 production 版本</li>
-
-<li>icon 可以上傳svg tag，下載也是直接下載tag，用dangurous叉叉叉插入，要過濾script，這樣可以變色條診或是用interact做調整</li>
-2<li>uploader image / svg, consider how to compress</li>
-3<li>svg 可在texteditor選，且用innertexteditor編輯</li>
-5<li>避風港跟三振條款</li>
+2<li>uploader image, consider how to compress</li>
 </ol>
 
 ### Last
 
 <ol>
+可以 copy 進去 gridlayout
+<li>canTo caDelete 這些東西不要記錄在 json上，不然以後有更動的話，沒辦法改道s3裡面所有東西 每個 example 下特殊的key e.x.'sdew' 然後配對設定，寫在單獨檔案裡，類似nodeProperties</li>
+5<li>避風港跟三振條款</li>
+每個 componentSet 要記錄一個 tools 的 version 不然怕以後更新互有衝突
 5<li>會有需要設計的版本管理嗎 ?</li>
 5<li>project's favicon and SEO can be edited in the project modal</li>
 5<li>seo sitemap page要可以挑選</li>
@@ -90,3 +75,4 @@ https://codepen.io/taye/pen/wrrxKb
 Better Asset Management https://wishlist.webflow.com/ideas/WEBFLOW-I-1057
 Webflow Desktop / Offline Application https://wishlist.webflow.com/ideas/DESIGNER-I-13
 </ol>
+https://github.com/probil/vue-moveable

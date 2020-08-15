@@ -337,10 +337,6 @@ $activeColor: rgba(81, 117, 199, 0.68);
   z-index: 800;
 }
 
-.can-action {
-  pointer-events: all;
-}
-
 .wrapper {
   pointer-events: all;
   position: absolute;

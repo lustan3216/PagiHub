@@ -6,12 +6,12 @@
     >
       <el-col
         :span="8"
-        :offset="4"
+        :offset="2"
       >
         <span class="title">Origin X</span>
       </el-col>
 
-      <el-col :span="12">
+      <el-col :span="14">
         <select-unit
           :units="['%', 'px']"
           v-model="originArray[0]"
@@ -28,12 +28,12 @@
     >
       <el-col
         :span="8"
-        :offset="4"
+        :offset="2"
       >
         <span class="title">Origin Y</span>
       </el-col>
 
-      <el-col :span="12">
+      <el-col :span="14">
         <select-unit
           :units="['%', 'px']"
           v-model="originArray[1]"

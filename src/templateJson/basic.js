@@ -1,5 +1,6 @@
 import {
   GRID,
+  KEY,
   GRID_ITEM,
   LAYERS,
   CAROUSEL,
@@ -12,10 +13,10 @@ import {
   STYLE,
   LABEL,
   AUTO_HEIGHT,
-  CAN_NOT_RENAME,
   PROPS,
   SOFT_DELETE,
-  TEXT_EDITOR
+  TEXT_EDITOR,
+  SORT_INDEX
 } from '../const'
 
 const points = ['lg', 'md', 'sm', 'xs', 'xxs']
@@ -42,6 +43,7 @@ export const grid = function(options) {
   return {
     [TAG]: GRID,
     [CAN_NEW_ITEM]: true,
+    [SORT_INDEX]: 0,
     [CHILDREN]: gridItems(),
     ...options
   }
@@ -60,6 +62,7 @@ export const layers = function(options) {
 export const artBoard = function() {
   return {
     [TAG]: LAYERS,
+    [KEY]: 'artBoard',
     [LABEL]: 'artBoard',
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: [grid()]
@@ -81,34 +84,31 @@ export const carousel = function() {
     [CAN_BE_EDITED]: true,
     [CHILDREN]: [
       grid({
-        [LABEL]: 'indicators',
+        [KEY]: 'indicators',
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true,
         [SOFT_DELETE]: true,
-        [CAN_NOT_RENAME]: true,
         [CAN_NEW_ITEM]: false,
         [CHILDREN]: [
           {
             [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }),
             [TAG]: GRID_ITEM,
-            [LABEL]: 'prev',
+            [KEY]: 'prev',
             [CAN_NOT_COPY]: true,
-            [CAN_NOT_RENAME]: true,
             [CAN_NOT_DELETE]: true
           },
           {
             [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }),
             [TAG]: GRID_ITEM,
-            [LABEL]: 'next',
+            [KEY]: 'next',
             [CAN_NOT_COPY]: true,
             [CAN_NOT_DELETE]: true,
-            [CAN_NOT_RENAME]: true
           }
         ]
       }),
-      grid({ [LABEL]: 'slider' }),
-      grid({ [LABEL]: 'slider' }),
-      grid({ [LABEL]: 'slider' })
+      layers({ [KEY]: 'slider' }),
+      layers({ [KEY]: 'slider' }),
+      layers({ [KEY]: 'slider' })
     ]
   }
 }
@@ -116,7 +116,8 @@ export const carousel = function() {
 export const textEditor = function() {
   return {
     [TAG]: TEXT_EDITOR,
-    [CAN_BE_EDITED]: true
+    [CAN_BE_EDITED]: true,
+    [AUTO_HEIGHT]: true
   }
 }
 

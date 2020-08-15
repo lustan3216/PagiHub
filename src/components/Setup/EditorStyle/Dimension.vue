@@ -4,13 +4,18 @@
       DIMENSION
     </el-divider>
 
+    <auto-height />
+
     <el-row
       :gutter="10"
       type="flex"
       align="middle"
     >
       <el-col :span="5">
-        <span class="title flex">
+        <span
+          class="title flex"
+          style="align-items: baseline;"
+        >
           W
           <tip class="m-l-5">
             Use column to build the Responsive Web Design layout is the most
@@ -47,41 +52,46 @@
         />
       </el-col>
     </el-row>
+
+    <ratio />
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
 import { Divider } from 'element-ui'
 import { COLUMNS } from '@/const'
 import { isGridItem } from '@/utils/node'
 import { arrayUniq } from '@/utils/tool'
+import AutoHeight from './AutoHeight'
+import Ratio from './Ratio'
 
 export default {
   name: 'Dimension',
   components: {
+    AutoHeight,
     SelectUnit,
     Tip,
+    Ratio,
     ElDivider: Divider
   },
   computed: {
     cols() {
       return COLUMNS
     },
-    ...mapState('app', ['breakpoint', 'selectedComponentIds']),
+    ...mapState('app', ['breakpoint']),
+    ...mapGetters('app', ['selectedComponentNodes']),
     gridItemNodes() {
       const nodes = []
-      this.selectedComponentIds
-        .map(id => this.componentsMap[id])
-        .filter(node => {
-          if (isGridItem(node)) {
-            nodes.push(node)
-          } else if (isGridItem(node.parentNode)) {
-            nodes.push(node.parentNode)
-          }
-        })
+      this.selectedComponentNodes.filter(node => {
+        if (isGridItem(node)) {
+          nodes.push(node)
+        } else if (isGridItem(node.parentNode)) {
+          nodes.push(node.parentNode)
+        }
+      })
 
       return nodes
     },

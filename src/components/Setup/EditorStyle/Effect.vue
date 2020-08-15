@@ -32,26 +32,22 @@
     <el-row
       v-for="(option, index) in filterArray"
       :key="option.name"
-      :gutter="10"
       class="w-100"
       type="flex"
       align="middle"
     >
-      <el-col
-        :span="2"
-        :offset="2"
-      >
+      <el-col :span="2">
         <el-checkbox
           v-model="option.visible"
           style="margin-top: 7px;"
         />
       </el-col>
 
-      <el-col :span="9">
+      <el-col :span="8">
         <span class="title">{{ humanize(option.name) }}</span>
       </el-col>
 
-      <el-col :span="15">
+      <el-col :span="14">
         <select-unit
           v-if="option.name"
           :value="option.value || options[option.name].default"

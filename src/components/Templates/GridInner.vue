@@ -34,6 +34,7 @@ import { deleteBy } from '@/utils/tool'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
+import { debounce } from 'throttle-debounce'
 
 export default {
   name: 'GridInner',
@@ -63,18 +64,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds', 'breakpoint']),
+    ...mapState('app', ['selectedComponentIds', 'breakpoint', 'artBoardWidth']),
     ...mapState('component', ['componentsMap']),
-    // freeStyle() {
-    //   return `
-    //    ::v-deep .vue-resizable-handle {
-    //       margin-bottom:${this.innerProps.verticalMargin}px;
-    //       margin-right:${this.innerProps.horizontalMargin}px
-    //   }`
-    // },
-    // itemPadding() {
-    //   return `padding:${this.innerProps.verticalMargin}px ${this.innerProps.horizontalMargin}px`
-    // },
     currentBreakPoint() {
       return this.isExample ? 'lg' : this.breakpoint
     },
@@ -88,17 +79,17 @@ export default {
     innerChildren: {
       handler(newChildren) {
         this.$nextTick(() => {
-          this.getCurrentLayout(newChildren, this.currentBreakPoint)
           this.itemAutoHeight(newChildren)
+          this.getCurrentLayout(newChildren)
           this.resizeNodeQuickFn()
         })
       },
       deep: true,
       immediate: true
     },
-    currentBreakPoint(value) {
-      this.getCurrentLayout(this.innerChildren, value)
-    },
+    artBoardWidth: debounce(100, function() {
+      this.getCurrentLayout(this.innerChildren)
+    }),
     lockIds(ids) {
       this.layout.forEach(layout => {
         layout.static = ids.includes(layout.id)
@@ -113,11 +104,23 @@ export default {
     unlock(id) {
       deleteBy(this.lockIds, id)
     },
-    getCurrentLayout(children, breakPoint) {
+    getCurrentLayout(children, breakPoint = this.currentBreakPoint) {
       const layout = []
+      let layoutW
+
       children.forEach((child, index) => {
         if (!child.props || (child.hidden && child.hidden[breakPoint])) {
           return
+        }
+
+        const w = child.props[breakPoint].w || 0
+        let h = child.props[breakPoint].h || 0
+        const { ratio } = child.props
+
+        if (ratio && ratio.h && ratio.w) {
+          layoutW = layoutW || this.$refs.gridGenerator.$el.clientWidth
+          const itemWidth = (parseInt(layoutW) / 96) * w
+          h = (itemWidth / ratio.w) * ratio.h
         }
 
         layout.push({
@@ -126,8 +129,8 @@ export default {
           i: child.id || index, // should not happen, but just prevent crash in case
           x: child.props[breakPoint].x || 0,
           y: child.props[breakPoint].y || 0,
-          w: child.props[breakPoint].w || 0,
-          h: child.props[breakPoint].h || 0
+          w,
+          h
         })
       })
 
@@ -165,7 +168,6 @@ export default {
       })
 
       if (records.length) {
-
         this.RECORD(records)
       }
     },

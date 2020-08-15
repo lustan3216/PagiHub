@@ -89,7 +89,7 @@ import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import Grid from './Grid'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
-import { CHILDREN, LABEL, LAYERS } from '@/const'
+import { CHILDREN, KEY } from '@/const'
 import { CarouselItem, Carousel, Tooltip } from 'element-ui'
 import { traversal } from '@/utils/tool'
 import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
@@ -123,10 +123,10 @@ export default {
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     gridGenerators() {
-      return this.innerChildren.filter(x => x[LABEL] === 'slider')
+      return this.innerChildren.filter(x => x[KEY] === 'slider')
     },
     customerIndicator() {
-      return this.innerChildren.find(x => x[LABEL] === 'indicators')
+      return this.innerChildren.find(x => x[KEY] === 'indicators')
     },
     customerIndicatorNode() {
       return this.componentsMap[this.customerIndicator.id]

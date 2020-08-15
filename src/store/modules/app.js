@@ -11,6 +11,7 @@ import { debounce } from 'throttle-debounce'
 const state = {
   windowResizing: false,
   breakpoint: 'lg',
+  artBoardWidth: 1200,
   scaleRatio: 1,
   selectedComponentIds: [],
   copyComponentIds: [],

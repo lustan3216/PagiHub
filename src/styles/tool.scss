@@ -180,6 +180,16 @@
   }
 }
 
+.can-action {
+  //touch-action: !important;
+  touch-action: auto;
+  pointer-events: all !important;
+
+  & > .swiper-container {
+    cursor: auto !important;
+  }
+}
+
 [data-lock] {
   @extend .no-action;
   cursor: not-allowed !important;

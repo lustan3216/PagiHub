@@ -1,5 +1,5 @@
 export const STYLE = 'style'
-export const TAG = 'tag'
+
 export const CHILDREN = 'children'
 export const NAME = 'name'
 export const PROPS = 'props'
@@ -11,12 +11,15 @@ export const MASTER_ID = 'masterId'
 export const FIELD = 'field'
 export const VALUE = 'value'
 // type and name are the reserved words of dynamoDB, so change to kind and label
-export const LABEL = 'label'
 export const KIND = 'kind'
+
+export const TAG = 'tag' // 拿來找vueComponent用的
+export const KEY = 'key' // 有些vueComponent會被當曾別的應用，像是layer會被當曾artBoard, or grid 變成carousel indicator, 拿來特別辦事用
+export const LABEL = 'label' // 前端顯示且可被修改的
+
 
 export const CAN_NEW_ITEM = 'canNewItem'
 export const CAN_BE_EDITED = 'canBeEdited'
-export const CAN_NOT_RENAME = 'canNotRename'
 export const CAN_NOT_DELETE = 'canNotDelete'
 export const CAN_NOT_COPY = 'canNotCopy'
 export const CAN_NOT_BE_MULTI_SELECTED = 'canNotBeMultiSelected'

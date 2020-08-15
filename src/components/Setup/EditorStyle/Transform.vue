@@ -63,10 +63,7 @@
         type="flex"
         align="middle"
       >
-        <el-col
-          :span="2"
-          :offset="2"
-        >
+        <el-col :span="2">
           <el-checkbox
             v-model="option.visible"
             style="margin-top: 7px;"
@@ -77,7 +74,7 @@
           <span class="title">{{ humanize(option.name) }}</span>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :span="14">
           <select-unit
             v-if="options[option.name]"
             :value="option.value || options[option.name].default"

@@ -113,7 +113,8 @@ export default {
         const points = ['lg', 'md', 'sm', 'xs', 'xxs']
 
         this.APP_SET({
-          breakpoint: points.find(key => clientWidth >= BREAK_POINTS[key])
+          breakpoint: points.find(key => clientWidth >= BREAK_POINTS[key]),
+          artBoardWidth: parseInt(clientWidth)
         })
       })
     }

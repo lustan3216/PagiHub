@@ -1,5 +1,5 @@
 import { mapMutations, mapState } from 'vuex'
-import { CHILDREN, GRID_ITEM, TAG } from '@/const'
+import { CHILDREN, GRID_ITEM, SORT_INDEX, TAG } from '@/const'
 import { cloneJson, traversal, arrayLast } from '@/utils/tool'
 import {
   traversalChildren,
@@ -85,6 +85,13 @@ export default {
       // eslint-disable-next-line
       const template = basicTemplates[camelCase(tag)]()
       const emptyItem = arrayLast(template[CHILDREN])
+
+      if (SORT_INDEX in emptyItem) {
+        // for layers, 新增加的item index 都比較高, 0是最底
+        const indexArray = this.innerChildren.map(node => node[SORT_INDEX])
+        const currentMaxIndex = Math.max(indexArray)
+        emptyItem[SORT_INDEX] = currentMaxIndex + 1
+      }
 
       this._addNodesToParentAndRecord(emptyItem)
     },

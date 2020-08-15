@@ -20,7 +20,7 @@
       <slot :item-editing="itemEditing" />
     </div>
 
-    <slot v-else/>
+    <slot v-else />
   </div>
 
   <div v-else-if="node">
@@ -81,35 +81,39 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     clickOutside(event) {
-      const insideArea = ['#sidebar-right', '.el-select-dropdown__item', '#component-tabs', '#menu-bubble', '.el-tooltip__popper']
+      const insideArea = [
+        '#sidebar-right',
+        '.el-select-dropdown__item',
+        '#component-tabs',
+        '#menu-bubble',
+        '.el-tooltip__popper',
+        '.el-color-dropdown'
+      ]
       let clickInside = false
 
-      loop1:
-      for (let i = 0; i< event.path.length; i++) {
+      loop1: for (let i = 0; i < event.path.length; i++) {
         const element = event.path[i]
 
         if (element.id === 'art-board' || element.tagName === 'BODY') {
           clickInside = false
           break
         }
-        loop2:
         for (let ii = 0; ii < insideArea.length; ii++) {
           const areaSelector = insideArea[ii]
 
           if (areaSelector[0] === '.') {
-            if (element.classList.contains(areaSelector.replace('.',''))) {
+            if (element.classList.contains(areaSelector.replace('.', ''))) {
               clickInside = true
               break loop1
             }
           } else if (areaSelector[0] === '#') {
-            if (element.id === areaSelector.replace('#','')) {
+            if (element.id === areaSelector.replace('#', '')) {
               clickInside = true
               break loop1
             }
           }
         }
       }
-
 
       if (!clickInside) {
         this.itemEditing = false

@@ -5,7 +5,10 @@
   >
     <template v-if="isDraftMode && editing">
       <portal to="FontStyles">
-        <text-editor-style :id="id" :editor="editor" />
+        <text-editor-style
+          :id="id"
+          :editor="editor"
+        />
       </portal>
 
       <portal to="TextEditorMenu">
@@ -134,11 +137,37 @@
                 >
               </button>
 
+              <button class="menububble__button">
+                <span
+                  :style="{
+                    color: getMarkAttrs('color').color
+                  }"
+                  style="margin-left: 2px;margin-top: -2px;font-size: 16px;"
+                >A</span>
+                <color-picker
+                  :value="getMarkAttrs('color').color"
+                  show-alpha
+                  @change="setAttribute('color', $event)"
+                />
+              </button>
+
+              <button class="menububble__button">
+                <i
+                  :style="{
+                    color: getMarkAttrs('backgroundColor').backgroundColor
+                  }"
+                  style="font-size: 14px;"
+                  class="el-icon-s-opportunity"
+                />
+                <color-picker
+                  :value="getMarkAttrs('backgroundColor').backgroundColor"
+                  show-alpha
+                  @change="setAttribute('backgroundColor', $event)"
+                />
+              </button>
             </template>
           </div>
-
         </editor-menu-bubble>
-
       </portal>
 
       <editor-floating-menu
@@ -249,7 +278,12 @@
   </div>
 </template>
 <script>
-import { Editor, EditorContent, EditorMenuBubble, EditorFloatingMenu } from 'tiptap'
+import {
+  Editor,
+  EditorContent,
+  EditorMenuBubble,
+  EditorFloatingMenu
+} from 'tiptap'
 import {
   Blockquote,
   CodeBlock,
@@ -280,15 +314,17 @@ import {
 import { mapState, mapMutations } from 'vuex'
 import { arrayUniq } from '../../utils/tool'
 import WebFont from 'webfontloader'
+import ColorPicker from '@/components/Components/ColorPicker'
 
 export default {
   name: 'TextEditorInner',
   components: {
+    ColorPicker,
     EditorContent,
     EditorMenuBubble,
     EditorFloatingMenu,
     TextEditorStyle: () =>
-        import('@/components/Setup/EditorStyle/TextEditorStyle')
+      import('@/components/Setup/EditorStyle/TextEditorStyle')
   },
   props: {
     id: {
@@ -296,7 +332,7 @@ export default {
       required: true
     },
     // eslint-disable-next-line
-      value: {
+    value: {
       default: `
           <h2>Hi there,</h2>
           <p>this is a very <em>basic</em> example.</p>
@@ -350,10 +386,12 @@ export default {
         if (!self.isExample && self.id) {
           const json = self.editor.getJSON()
           const fonts = this.findFontNames(json)
-          const records = [{
-            path: `${self.id}.value`,
-            value: json
-          }]
+          const records = [
+            {
+              path: `${self.id}.value`,
+              value: json
+            }
+          ]
 
           if (fonts && fonts.length) {
             records.push({
@@ -395,6 +433,9 @@ export default {
       command({ href })
       this.hideLinkMenu()
       this.editor.focus()
+    },
+    setAttribute(attr, value) {
+      this.editor.commands[attr]({ [attr]: value })
     }
   }
 }
@@ -427,208 +468,219 @@ const extensions = [
 </script>
 
 <style lang="scss" scoped>
-  $color-white: #FFFFFF;
-  $color-grey: #F0F0F0;
+$color-white: #ffffff;
+$color-grey: #f0f0f0;
 
-  ::v-deep .svg-inline {
-    width: 14px;
-    fill: $color-black;
-    padding-left: 0;
-  }
-  .menububble{
-    transform: translateX(-50%);
-    border: 1px solid $color-grey;
-    padding: 0.3rem;
-    margin-bottom: 0.5rem;
+::v-deep .svg-inline {
+  width: 14px;
+  fill: $color-black;
+  padding-left: 0;
+}
+.menububble {
+  transform: translateX(-50%);
+  border: 1px solid $color-grey;
+  padding: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.editor__floating-menu {
+  margin-left: 15px;
+}
+
+.el-color-picker {
+  margin-left: -18px;
+  margin-top: -7px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+::v-deep.menububble,
+::v-deep.editor__floating-menu {
+  font-size: 12px;
+  position: absolute;
+  display: flex;
+  z-index: 900;
+  background: white;
+  border-radius: 5px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s;
+
+  &.is-active {
+    opacity: 1;
+    visibility: visible;
   }
 
-  .editor__floating-menu{
-    margin-left: 15px;
-  }
+  &__button {
+    display: inline-flex;
+    background: transparent;
+    border: 0;
+    color: $color-black;
+    font-weight: bold;
+    padding: 0.2rem 0.5rem;
+    margin-right: 0.2rem;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 30px;
+    height: 20px;
+    overflow: hidden;
 
-  ::v-deep.menububble, ::v-deep.editor__floating-menu {
-    font-size: 12px;
-    position: absolute;
-    display: flex;
-    z-index: 900;
-    background: white;
-    border-radius: 5px;
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.3s;
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:hover {
+      background-color: rgba($color-grey, 0.4);
+    }
 
     &.is-active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    &__button {
-      display: inline-flex;
-      background: transparent;
-      border: 0;
-      color: $color-black;
-      font-weight: bold;
-      padding: 0.2rem 0.5rem;
-      margin-right: 0.2rem;
-      border-radius: 3px;
-      cursor: pointer;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      &:hover {
-        background-color: rgba($color-grey, 0.4);
-      }
-
-      &.is-active {
-        background-color: rgba($color-grey, 0.7);
-      }
-    }
-
-    &__form {
-      display: flex;
-      align-items: center;
-    }
-
-    &__input,
-    svg {
-      font: inherit;
-      border: none;
-      background: transparent;
-      color: $color-black;
+      background-color: rgba($color-grey, 0.7);
     }
   }
 
-  .editor {
-    position: relative;
-    overflow: hidden;
-    padding: 0 10px;
+  &__form {
+    display: flex;
+    align-items: center;
   }
 
-  ::v-deep .ProseMirror {
-    &__content {
-      word-wrap: break-word;
+  &__input,
+  svg {
+    font: inherit;
+    border: none;
+    background: transparent;
+    color: $color-black;
+  }
+}
+
+.editor {
+  position: relative;
+  overflow: hidden;
+  padding: 0 10px;
+}
+
+::v-deep .ProseMirror {
+  &__content {
+    word-wrap: break-word;
+  }
+
+  * {
+    caret-color: currentColor;
+  }
+
+  pre {
+    padding: 10px;
+    border-radius: 5px;
+    background: $color-black;
+    color: $color-white;
+    font-size: 14px;
+    overflow-x: auto;
+
+    code {
+      display: block;
     }
+  }
 
-    * {
-      caret-color: currentColor;
-    }
+  p code {
+    display: inline-block;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    background: rgba($color-black, 0.1);
+    color: rgba($color-black, 0.8);
+  }
 
-    pre {
-      padding: 10px;
-      border-radius: 5px;
-      background: $color-black;
-      color: $color-white;
-      font-size: 14px;
-      overflow-x: auto;
+  ul,
+  ol {
+    padding-left: 1rem;
+  }
 
-      code {
-        display: block;
-      }
-    }
+  li > p,
+  li > ol,
+  li > ul {
+    margin: 0;
+  }
 
-    p code {
-      display: inline-block;
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 14px;
-      font-weight: bold;
-      background: rgba($color-black, 0.1);
-      color: rgba($color-black, 0.8);
-    }
+  a {
+    color: inherit;
+  }
 
-    ul,
-    ol {
-      padding-left: 1rem;
-    }
+  blockquote {
+    border-left: 3px solid rgba($color-black, 0.1);
+    color: rgba($color-black, 0.8);
+    padding-left: 0.8rem;
+    font-style: italic;
 
-    li > p,
-    li > ol,
-    li > ul {
+    p {
       margin: 0;
     }
+  }
 
-    a {
-      color: inherit;
+  img {
+    max-width: 100%;
+    border-radius: 3px;
+  }
+
+  &.resize-cursor {
+    cursor: ew-resize;
+    cursor: col-resize;
+  }
+
+  ul[data-type='todo_list'] {
+    padding-left: 0;
+  }
+
+  li[data-type='todo_item'] {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .todo-checkbox {
+    border: 2px solid $color-black;
+    height: 0.9em;
+    width: 0.9em;
+    box-sizing: border-box;
+    margin-right: 10px;
+    margin-top: 0.3rem;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+    border-radius: 0.2em;
+    background-color: transparent;
+    transition: 0.4s background;
+  }
+
+  .todo-content {
+    flex: 1;
+
+    p {
+      margin-top: 0;
     }
 
-    blockquote {
-      border-left: 3px solid rgba($color-black, 0.1);
-      color: rgba($color-black, 0.8);
-      padding-left: 0.8rem;
-      font-style: italic;
-
-      p {
-        margin: 0;
-      }
+    > p:last-of-type {
+      margin-bottom: 0;
     }
 
-    img {
-      max-width: 100%;
-      border-radius: 3px;
-    }
-
-    &.resize-cursor {
-      cursor: ew-resize;
-      cursor: col-resize;
-    }
-
-    ul[data-type='todo_list'] {
-      padding-left: 0;
-    }
-
-    li[data-type='todo_item'] {
-      display: flex;
-      align-items: center;
-      flex-direction: row;
-    }
-
-    .todo-checkbox {
-      border: 2px solid $color-black;
-      height: 0.9em;
-      width: 0.9em;
-      box-sizing: border-box;
-      margin-right: 10px;
-      margin-top: 0.3rem;
-      user-select: none;
-      -webkit-user-select: none;
-      cursor: pointer;
-      border-radius: 0.2em;
-      background-color: transparent;
-      transition: 0.4s background;
-    }
-
-    .todo-content {
-      flex: 1;
-
-      p {
-        margin-top: 0;
-      }
-
-      > p:last-of-type {
-        margin-bottom: 0;
-      }
-
-      > ul[data-type='todo_list'] {
-        margin: 0.5rem 0;
-      }
-    }
-
-    li[data-done='true'] {
-      > .todo-content {
-        > p {
-          text-decoration: line-through;
-        }
-      }
-
-      > .todo-checkbox {
-        background-color: $color-black;
-      }
-    }
-
-    li[data-done='false'] {
-      text-decoration: none;
+    > ul[data-type='todo_list'] {
+      margin: 0.5rem 0;
     }
   }
+
+  li[data-done='true'] {
+    > .todo-content {
+      > p {
+        text-decoration: line-through;
+      }
+    }
+
+    > .todo-checkbox {
+      background-color: $color-black;
+    }
+  }
+
+  li[data-done='false'] {
+    text-decoration: none;
+  }
+}
 </style>

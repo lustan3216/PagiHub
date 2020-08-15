@@ -1,17 +1,22 @@
 <template>
   <div class="relative h-100">
-    <controller-layer
-      v-for="(child, index) in sortChildren"
-      :id="child.id"
-      :key="child.id"
-    >
+    <template v-for="(child, index) in innerChildren">
+      <controller-layer
+        v-if="index === 0"
+        :id="child.id"
+        :key="child.id"
+      >
+        <grid-generator :id="child.id" />
+      </controller-layer>
+
       <grid-generator
+        v-else
+        :id="child.id"
         :style="{ 'z-index': index }"
         :class="{ absolute: index }"
-        :id="child.id"
         :data-layer="Boolean(index)"
       />
-    </controller-layer>
+    </template>
   </div>
 </template>
 
@@ -28,14 +33,7 @@ export default {
     GridGenerator,
     ControllerLayer
   },
-  mixins: [nodeMixin, childrenMixin],
-  computed: {
-    sortChildren() {
-      return Array.from(this.innerChildren).sort(
-        (a, b) => b[SORT_INDEX] - a[SORT_INDEX]
-      )
-    }
-  }
+  mixins: [nodeMixin, childrenMixin]
 }
 </script>
 

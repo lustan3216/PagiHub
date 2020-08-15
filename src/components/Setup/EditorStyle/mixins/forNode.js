@@ -12,11 +12,8 @@ export default function(attr) {
     },
     computed: {
       ...mapGetters('app', ['selectedComponentNodes']),
-      nodes() {
-        return this.selectedComponentNodes
-      },
       allValues() {
-        return this.nodes.map(node =>
+        return this.selectedComponentNodes.map(node =>
           getValueByPath(node, ['style', this.state, attr], '')
         )
       },
@@ -37,7 +34,7 @@ export default function(attr) {
         for (const key in object) {
           const value = object[key]
 
-          this.nodes.forEach(node => {
+          this.selectedComponentNodes.forEach(node => {
             records.push({
               path: `${node.id}.${STYLE}.${this.state}.${key}`,
               value

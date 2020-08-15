@@ -38,13 +38,6 @@
             class="flex inputs"
           >
             <el-col :span="2">
-              <i
-                class="el-icon-d-caret"
-                style="margin-top: 7px;"
-              />
-            </el-col>
-
-            <el-col :span="2">
               <el-checkbox
                 v-model="boxShadow.visible"
                 style="margin-top: 7px;"
@@ -99,6 +92,12 @@
                 :value="boxShadow.color"
                 show-alpha
                 @input="onChange(index, 'color', $event)"
+              />
+            </el-col>
+            <el-col :span="2">
+              <i
+                class="el-icon-d-caret"
+                style="margin-top: 7px;"
               />
             </el-col>
           </el-row>
