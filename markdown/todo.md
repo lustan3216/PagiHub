@@ -8,17 +8,22 @@ MVP
 ### Functionality
 
 
-layer 往後移，如果下一層沒東西就直接往後下移層，如果有東西就間隔一個跳下一層
+
 
 <ol>
+layer 往後移，如果下一層沒東西就直接往後下移層，如果有東西就間隔一個跳下一層
+position fixed (might be a checkbox)
+// 如果是這個可能多出 top left 
 
-size
-position fixed (might be a checkbox) 
-background
-ratio
+variable vw vh, to fix arboard size
+background font color
+size / ratio
+可以copy進去 gridlayout
+數字大量改變時合成一個 hisotry
+家component 搬到quickfunction上
 
-asset magement 要可以拖folder
-
+asset magement 要可以拖folder / 可以選定global default is local
+每個componentSet要記錄一個 tools 的version 不然怕以後更新互有衝突
 layer的操作用右鍵取代
 form 先不要做
 embed iframe support
@@ -28,10 +33,11 @@ https://github.com/probil/vue-moveable
 2<li>style 要做 寬高, min max, 固定寬，固定高，要不要都autoHeight</li>
 5<li>layer grid 想辦法在project node拿掉</li>
 5<li>bring to front, bring forward, send to back, 至前，至後, style 永遠再layer最底層</li>
-5<li>project's favicon and SEO can be edited in the project modal</li>
 5<li>多選修改</li>
 5<li>sreen size changer</li>
-<li>canTo caDelete 這些東西不要記錄在 json上，不然以後有更動的話，沒辦法改道s3裡面所有東西</li> 
+<li>canTo caDelete 這些東西不要記錄在 json上，不然以後有更動的話，沒辦法改道s3裡面所有東西</li>
+// 每個 example 下特殊的key e.x.'sdew' 然後配對設定，寫在單獨檔案裡，類似nodeProperties 
+
 5<li>每個 component set 都可以組建合併得按鈕  / or 選版本</li>
 5<li>search panel</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用state 的結構去做 click hover active 等等切換componentSet，這個要去另一個版操作，向XD的prototype</li>
@@ -42,12 +48,11 @@ https://github.com/probil/vue-moveable
 5<li>避風港跟三振條款</li>
 </ol>
 
-
-真的有這麼想知道寬高嗎，還是版面ｏｋ看起來就ok
-會有需要設計的版本管理嗎
 ### Last
 
 <ol>
+5<li>會有需要設計的版本管理嗎 ?</li>
+5<li>project's favicon and SEO can be edited in the project modal</li>
 5<li>seo sitemap page要可以挑選</li>
 5<li>image 可以直接拉近畫面裡面</li>
 5<li>carousel 可以用 鍵盤控制，動畫的出現</li>

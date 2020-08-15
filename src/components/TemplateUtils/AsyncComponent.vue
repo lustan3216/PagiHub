@@ -2,7 +2,7 @@
   <!-- v-observe-visibility 跟vIf 一定要不同層，不然v-if false 的話沒辦法observer -->
   <div
     v-observe-visibility="options"
-    v-if="!hidden && isExample || isLayers"
+    v-if="(!hidden && isExample) || isLayers"
     class="h-100"
   >
     <component
@@ -104,9 +104,6 @@ export default {
           } else {
             this.vIf = isVisible
           }
-        },
-        intersection: {
-          rootMargin: '50px 0px'
         }
       }
     }

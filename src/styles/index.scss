@@ -3,6 +3,7 @@
 @import './tool.scss';
 @import './space.scss';
 @import './color.scss';
+@import 'text';
 @import './element.scss';
 
 body {
@@ -51,10 +52,14 @@ input[type='number'] {
 
 .vue-resizable-handle {
   z-index: 100;
+  background-color: white !important;
+  border-radius: 10px 10px 0;
+  opacity: 0.8;
+  bottom: 2px !important;
 }
 
 .vue-grid-placeholder {
-  display: none!important;
+  display: none !important;
 }
 
 [data-style-id] {

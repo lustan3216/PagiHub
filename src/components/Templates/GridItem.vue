@@ -1,17 +1,16 @@
 <template>
   <div
+    :class="{ 'dash-border': dashBorder }"
     v-free-style="innerStyles"
     class="h-100"
   >
     <async-component
       v-if="firstChild"
       :id="firstChild.id"
-      :class="{ 'dash-border': dashBorder }"
     />
 
     <div
       v-else
-      :class="{ 'dash-border': dashBorder }"
       class="flex-center h-100"
     >
       <component-add
@@ -64,13 +63,23 @@ export default {
     },
     'node.style.default': {
       handler(value = {}) {
-        this.dashBorder = !value.border && !value.borderTop && !value.borderRight && !value.borderBottom && !value.borderLeft
+        this.dashBorder =
+          !value.border &&
+          !value.borderTop &&
+          !value.borderRight &&
+          !value.borderBottom &&
+          !value.borderLeft
       },
       immediate: true
     },
     'firstChild.style.default': {
       handler(value = {}) {
-        this.dashBorder = !value.border && !value.borderTop && !value.borderRight && !value.borderBottom && !value.borderLeft
+        this.dashBorder =
+          !value.border &&
+          !value.borderTop &&
+          !value.borderRight &&
+          !value.borderBottom &&
+          !value.borderLeft
       },
       immediate: true
     }

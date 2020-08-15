@@ -1,45 +1,50 @@
 <template>
   <four-attrs
-    :value="innerValue"
+    v-model="borderRadius"
     title="radius"
-    @input="$emit('change', { borderRadius: $event })"
+    empty-value="0"
   >
     <template #button>
       <el-button icon="el-icon-full-screen" />
     </template>
 
-    <template #all="{ value }">
+    <template #all="{ all, emitAll }">
       <select-unit
-        v-model="value.all"
+        :value="all"
         prefix-icon="el-icon-full-screen"
+        @input="emitAll($event)"
       />
     </template>
 
-    <template #first="{ value }">
+    <template #first="{ four, emitFour }">
       <select-unit
-        v-model="value.first"
+        :value="four.first"
         prefix-icon="el-icon-top-left"
+        @input="emitFour({ ...four, first: $event })"
       />
     </template>
 
-    <template #second="{ value }">
+    <template #second="{ four, emitFour }">
       <select-unit
-        v-model="value.second"
+        :value="four.second"
         prefix-icon="el-icon-top-right"
+        @input="emitFour({ ...four, second: $event })"
       />
     </template>
 
-    <template #third="{ value }">
+    <template #third="{ four, emitFour }">
       <select-unit
-        v-model="value.fourth"
+        :value="four.fourth"
         prefix-icon="el-icon-bottom-left"
+        @input="emitFour({ ...four, fourth: $event })"
       />
     </template>
 
-    <template #fourth="{ value }">
+    <template #fourth="{ four, emitFour }">
       <select-unit
-        v-model="value.third"
+        :value="four.third"
         prefix-icon="el-icon-bottom-right"
+        @input="emitFour({ ...four, third: $event })"
       />
     </template>
   </four-attrs>
@@ -48,23 +53,14 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import FourAttrs from './Common/FourAttrs'
+import forNodeMixin from './mixins/forNode'
 
 export default {
   name: 'Radius',
+  mixins: [forNodeMixin('borderRadius')],
   components: {
     SelectUnit,
     FourAttrs
-  },
-  props: {
-    value: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      innerValue: this.value
-    }
   }
 }
 </script>

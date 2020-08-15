@@ -1,51 +1,55 @@
 <template>
   <four-attrs
-    v-model="innerValue"
+    v-model="padding"
     title="padding"
+    empty-value="0"
   >
     <template #button>
-      <el-button
-        icon="el-icon-rank"
-      />
+      <el-button icon="el-icon-rank" />
     </template>
 
-    <template #all="{ value }">
+    <template #all="{ all, emitAll }">
       <select-unit
-        v-model="value.all"
+        :value="all"
         :min="0"
         prefix-icon="el-icon-rank"
+        @input="emitAll($event)"
       />
     </template>
 
-    <template #first="{ value }">
+    <template #first="{ four, emitFour }">
       <select-unit
-        v-model="value.first"
+        :value="four.first"
         :min="0"
         prefix-icon="el-icon-top"
+        @input="emitFour({ ...four, first: $event })"
       />
     </template>
 
-    <template #second="{ value }">
+    <template #second="{ four, emitFour }">
       <select-unit
-        v-model="value.third"
+        :value="four.third"
         :min="0"
         prefix-icon="el-icon-bottom"
+        @input="emitFour({ ...four, third: $event })"
       />
     </template>
 
-    <template #third="{ value }">
+    <template #third="{ four, emitFour }">
       <select-unit
-        v-model="value.fourth"
+        :value="four.fourth"
         :min="0"
         prefix-icon="el-icon-back"
+        @input="emitFour({ ...four, fourth: $event })"
       />
     </template>
 
-    <template #fourth="{ value }">
+    <template #fourth="{ four, emitFour }">
       <select-unit
-        v-model="value.second"
+        :value="four.second"
         :min="0"
         prefix-icon="el-icon-right"
+        @input="emitFour({ ...four, second: $event })"
       />
     </template>
   </four-attrs>
@@ -54,6 +58,7 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import FourAttrs from './Common/FourAttrs'
+import forGridItem from './mixins/forGridItem'
 
 export default {
   name: 'Padding',
@@ -61,21 +66,6 @@ export default {
     SelectUnit,
     FourAttrs
   },
-  props: {
-    value: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      innerValue: this.value
-    }
-  },
-  watch: {
-    innerValue(padding) {
-      this.$emit('change', { padding })
-    }
-  }
+  mixins: [forGridItem('padding')]
 }
 </script>

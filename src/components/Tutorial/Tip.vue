@@ -1,33 +1,34 @@
 <template>
-  <el-tooltip effect="light" :content="content" :placement="placement">
+  <el-tooltip
+    :content="content"
+    :placement="placement"
+    effect="light"
+    popper-class="tip"
+  >
     <template #content>
-      <slot/>
+      <slot />
     </template>
 
-    <i class="el-icon-info"/>
+    <i class="el-icon-info" />
   </el-tooltip>
 </template>
 
 <script>
-  import { Tooltip } from 'element-ui'
-  export default {
-    name: 'Tip',
-    props: {
-      content: {
-        type: String,
-        default: ''
-      },
-      placement: {
-        type: String,
-        default: 'left'
-      },
+import { Tooltip } from 'element-ui'
+export default {
+  name: 'Tip',
+  components: {
+    ElTooltip: Tooltip
+  },
+  props: {
+    content: {
+      type: String,
+      default: ''
     },
-    components: {
-      ElTooltip:  Tooltip
+    placement: {
+      type: String,
+      default: 'left'
     }
   }
+}
 </script>
-
-<style scoped lang="scss">
-
-</style>

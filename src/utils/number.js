@@ -1,4 +1,3 @@
-export function toPrecision(number, precision) {
-  const pow = Math.pow(10, precision)
-  return Math.floor(number * pow) / pow
+export function toPrecision(num, precision) {
+  return parseFloat(Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision))
 }

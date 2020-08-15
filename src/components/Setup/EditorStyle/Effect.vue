@@ -3,10 +3,10 @@
     <el-divider content-position="left">
       <el-dropdown
         size="small"
-        @command="values.push({ name: $event, value: 0, visible: true })"
+        @command="filterArray.push({ name: $event, value: 0, visible: true })"
       >
         <span class="el-dropdown-link">
-          <el-button icon="el-icon-plus"/>
+          <el-button icon="el-icon-plus" />
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item
@@ -20,7 +20,7 @@
       </el-dropdown>
 
       <el-button
-        v-if="values.find(x => !x.visible)"
+        v-if="filterArray.find(x => !x.visible)"
         icon="el-icon-delete"
         class="m-l-0"
         @click="clean"
@@ -30,7 +30,7 @@
     </el-divider>
 
     <el-row
-      v-for="option in values"
+      v-for="(option, index) in filterArray"
       :key="option.name"
       :gutter="10"
       class="w-100"
@@ -58,7 +58,7 @@
           :min="0"
           :clearable="false"
           v-bind="options[option.name]"
-          @input="option.value = $event"
+          @input="onChange(index, $event)"
         />
       </el-col>
     </el-row>
@@ -67,145 +67,149 @@
 
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
+import forNodeMixin from './mixins/forNode'
 import { Divider } from 'element-ui'
-import { splitAt } from '@/utils/tool'
+import { arrayLast, splitAt } from '@/utils/tool'
 import { humanize } from '@/utils/string'
+import { stringify } from '@/components/Setup/EditorStyle/utils/boxShadow'
 
 export default {
   name: 'Effect',
+  mixins: [forNodeMixin('filter')],
   components: {
     SelectUnit,
     ElDivider: Divider
   },
-  props: {
-    value: {
-      type: String,
-      required: true
-    }
-  },
   data() {
-    const options = {
-      blur: {
-        name: 'blur',
-        default: 0,
-        min: -30,
-        max: 30,
-        step: 0.1,
-        units: 'px',
-        visible: true
-      },
-      brightness: {
-        name: 'brightness',
-        default: 1,
-        min: 0,
-        max: 4,
-        step: 0.01,
-        units: '',
-        visible: true
-      },
-      contrast: {
-        name: 'contrast',
-        max: 2,
-        default: 1,
-        step: 0.01,
-        units: '',
-        visible: true
-      },
-      grayscale: {
-        name: 'grayscale',
-        default: 0,
-        min: 0,
-        max: 1,
-        step: 0.01,
-        units: '',
-        visible: true
-      },
-      'hue-rotate': {
-        name: 'hue-rotate',
-        label: 'hue',
-        default: 0,
-        min: 0,
-        max: 360,
-        step: 0.1,
-        units: 'deg'
-      },
-      saturate: {
-        name: 'saturate',
-        min: -10,
-        max: 10,
-        step: 0.01,
-        default: 1,
-        units: '',
-        visible: true
-      },
-      sepia: {
-        name: 'sepia',
-        default: 0,
-        min: 0,
-        step: 0.01,
-        max: 1,
-        units: '',
-        visible: true
-      },
-      invert: {
-        name: 'invert',
-        default: 0,
-        min: 0,
-        step: 0.01,
-        max: 1,
-        units: '',
-        visible: true
-      }
-    }
-
-    const split = this.value.match(/[^)|\s]+\)/g) || []
-
-    const values = split.map(data => {
-      const [key, value] = splitAt(data, data.indexOf('('))
-      const effect = options[key]
-
-      return {
-        ...effect,
-        value: value.match(/[\d|.]+/)[0]
-      }
-    })
-
     return {
-      options,
-      values,
-      filter: null
+      filterArray: []
     }
   },
   computed: {
+    options() {
+      return {
+        blur: {
+          name: 'blur',
+          default: 0,
+          min: -30,
+          max: 30,
+          step: 0.1,
+          units: 'px',
+          visible: true
+        },
+        brightness: {
+          name: 'brightness',
+          default: 1,
+          min: 0,
+          max: 4,
+          step: 0.01,
+          units: '',
+          visible: true
+        },
+        contrast: {
+          name: 'contrast',
+          max: 2,
+          default: 1,
+          step: 0.01,
+          units: '',
+          visible: true
+        },
+        grayscale: {
+          name: 'grayscale',
+          default: 0,
+          min: 0,
+          max: 1,
+          step: 0.01,
+          units: '',
+          visible: true
+        },
+        'hue-rotate': {
+          name: 'hue-rotate',
+          label: 'hue',
+          default: 0,
+          min: 0,
+          max: 360,
+          step: 0.1,
+          units: 'deg'
+        },
+        saturate: {
+          name: 'saturate',
+          min: -10,
+          max: 10,
+          step: 0.01,
+          default: 1,
+          units: '',
+          visible: true
+        },
+        sepia: {
+          name: 'sepia',
+          default: 0,
+          min: 0,
+          step: 0.01,
+          max: 1,
+          units: '',
+          visible: true
+        },
+        invert: {
+          name: 'invert',
+          default: 0,
+          min: 0,
+          step: 0.01,
+          max: 1,
+          units: '',
+          visible: true
+        }
+      }
+    },
     selectableOptions() {
       return Object.keys(this.options).filter(
-        name => !this.values.map(x => x.name).includes(name)
+        name => !this.filterArray.map(x => x.name).includes(name)
       )
+    },
+    filter() {
+      return arrayLast(this.allValues) || ''
     }
   },
   watch: {
-    values: {
-      handler(values) {
-        const filter = values
-          .filter(x => x.name && x.value)
-          .map(x => {
-            const effect = this.options[x.name]
-            return `${effect.name}(${parseFloat(x.value)}${effect.units})`
-          })
-          .join(' ')
-
-        this.filter = filter
+    selectedComponentNodes: {
+      handler() {
+        this.departFilterToArray()
       },
-      deep: true
-    },
-    filter(filter) {
-      this.$emit('change', { filter })
+      immediate: true
     }
   },
   methods: {
     humanize,
+    onChange(index, value) {
+      console.log(value)
+      this.filterArray[index].value = value
+
+      const filter = this.filterArray
+        .filter(effect => effect.name && effect.value)
+        .map(effect => {
+          const options = this.options[effect.name]
+          return `${options.name}(${parseFloat(effect.value)}${options.units})`
+        })
+        .join(' ')
+
+      this.assignStyles({ filter })
+    },
+    departFilterToArray() {
+      const split = this.filter.match(/[^)|\s]+\)/g) || []
+
+      this.filterArray = split.map(data => {
+        const [key, value] = splitAt(data, data.indexOf('('))
+        const effect = this.options[key]
+
+        return {
+          ...effect,
+          value: value.match(/[\d|.]+/)[0]
+        }
+      })
+    },
     clean() {
-      this.values = this.values.filter(x => x.visible)
+      this.filterArray = this.filterArray.filter(x => x.visible)
+      this.assignStyles({ filter: this.filterArray })
     }
   }
 }

@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import app from '@/main'
 import jsonHistory from '../jsonHistory'
-import store, { SET, getCopyComponentIds, getTmpComponentsArray } from '../index'
+import store, {
+  SET,
+  getCopyComponentIds,
+  getTmpComponentsArray
+} from '../index'
 import {
   createComponentSet,
   createProject,
@@ -20,7 +24,8 @@ import {
   toArray,
   objectFirstKey,
   cloneJson,
-  asyncGetValue
+  asyncGetValue,
+  isPlainObject
 } from '@/utils/tool'
 import { CHILDREN, ID, PARENT_ID } from '@/const'
 import { isProject, isComponentSet } from '@/utils/node'
@@ -63,7 +68,6 @@ const mutations = {
   // only for component or component attrs
   VUE_SET({ componentsMap }, { tree, key, value }) {
     value = cloneJson(value)
-
     if (tree[key] && tree[key].__ob__) {
       tree[key] = value
     } else {
@@ -156,7 +160,11 @@ const mutations = {
     })
   },
   RECORD(state, payLoad) {
-    jsonHistory.record(payLoad)
+    if (Array.isArray(payLoad) && payLoad.length) {
+      jsonHistory.record(payLoad)
+    } else if (isPlainObject(payLoad)) {
+      jsonHistory.record(payLoad)
+    }
   },
   REDO() {
     const done = rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)

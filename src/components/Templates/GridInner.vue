@@ -116,7 +116,7 @@ export default {
     getCurrentLayout(children, breakPoint) {
       const layout = []
       children.forEach((child, index) => {
-        if (!child.props || child.hidden && child.hidden[breakPoint]) {
+        if (!child.props || (child.hidden && child.hidden[breakPoint])) {
           return
         }
 
@@ -165,6 +165,7 @@ export default {
       })
 
       if (records.length) {
+
         this.RECORD(records)
       }
     },

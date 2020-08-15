@@ -55,6 +55,14 @@ export const layers = function(options) {
   }
 }
 
+export const body = function() {
+  return {
+    [TAG]: 'body',
+    [CAN_NEW_ITEM]: true,
+    [CHILDREN]: [grid()]
+  }
+}
+
 export const iframer = function(options) {
   return {
     [TAG]: 'iframer',

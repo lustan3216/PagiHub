@@ -24,9 +24,3 @@ export default {
   mixins: [nodeMixin, childrenMixin]
 }
 </script>
-
-<style lang="scss" scoped>
-::v-deep.editable .vue-resizable-handle {
-  z-index: 10;
-}
-</style>

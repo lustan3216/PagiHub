@@ -107,6 +107,18 @@ export function isLayers(node) {
   return node.tag === LAYERS
 }
 
+export function closestGridItem(node) {
+  function find(node) {
+    if (isGridItem(node)) {
+      return node
+    } else {
+      return find(node.parentNode)
+    }
+  }
+
+  return find(node)
+}
+
 export function isGridItem(node) {
   return node.tag === GRID_ITEM
 }

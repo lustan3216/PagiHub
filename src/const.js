@@ -32,6 +32,7 @@ export const COMPONENT_SET = 'component-set'
 export const GRID = 'grid'
 export const GRID_ITEM = 'grid-item'
 
+export const COLUMNS = 96
 export const BREAK_POINTS = {
   lg: 1200,
   md: 996,

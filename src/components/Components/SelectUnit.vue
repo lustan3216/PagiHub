@@ -25,7 +25,7 @@
     class="number"
     clearable
     @mousedown.native="clicking = true"
-    @focus="resizeCursor= false"
+    @focus="resizeCursor = false"
     @blur="resizeCursor = true"
     @change="$emit('change', innerValue)"
   >
@@ -153,7 +153,7 @@ export default {
           result = toPrecision(number, this.precision) + this.unit
         }
 
-        this.innerValue = result
+        this.$emit('input', result)
       }
     },
     unit: {
@@ -173,7 +173,7 @@ export default {
       },
       set(unit) {
         const number = unit === 'auto' ? '' : this.number || '0'
-        this.innerValue = number + unit
+        this.$emit('input', number + unit)
       }
     },
     isAuto() {
@@ -181,9 +181,6 @@ export default {
     }
   },
   watch: {
-    innerValue(newValue) {
-      this.$emit('input', newValue)
-    },
     value(value) {
       this.innerValue = value
     }
@@ -212,10 +209,7 @@ export default {
         value = this.lastPosition >= e.clientY ? this.step : -1 * this.step
       }
 
-      if (
-        this.number + value < this.min ||
-        this.number + value > this.max
-      ) {
+      if (this.number + value < this.min || this.number + value > this.max) {
         return
       }
 
@@ -257,5 +251,4 @@ export default {
     }
   }
 }
-
 </style>

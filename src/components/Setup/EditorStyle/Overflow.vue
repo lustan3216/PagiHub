@@ -9,7 +9,8 @@
 
     <el-col :span="16">
       <el-select
-        v-model="innerValue"
+        :value="overflow || 'visible'"
+        @input="overflow = $event"
       >
         <el-option
           label="Visible"
@@ -29,24 +30,10 @@
 </template>
 
 <script>
+import forGridItem from './mixins/forGridItem'
 export default {
   name: 'Overflow',
-  props: {
-    value: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      innerValue: this.value
-    }
-  },
-  watch: {
-    innerValue(overflow) {
-      this.$emit('change', { overflow })
-    }
-  }
+  mixins: [forGridItem('overflow')]
 }
 </script>
 

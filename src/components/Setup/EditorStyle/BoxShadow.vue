@@ -3,22 +3,11 @@
     <el-divider content-position="left">
       <el-button
         icon="el-icon-plus"
-        @click="
-          boxShadows.push({
-            id: +new Date(),
-            color: null,
-            inset: null,
-            offsetX: null,
-            offsetY: null,
-            blurRadius: null,
-            spreadRadius: null,
-            visible: true
-          })
-        "
+        @click="addNew"
       />
 
       <el-button
-        v-if="boxShadows.find(x => !x.visible)"
+        v-if="boxShadowArray.find(x => !x.visible)"
         icon="el-icon-delete"
         class="m-l-0"
         @click="clean"
@@ -29,16 +18,18 @@
 
     <div
       v-drag-and-drop:options="{
-      dropzoneSelector: 'ul',
-      draggableSelector: 'li',
-      handlerSelector: '.el-icon-d-caret',
-      showDropzoneAreas: true
-    }">
-
-
-      <ul @reordered="itemMove">
+        dropzoneSelector: 'ul',
+        draggableSelector: 'li',
+        handlerSelector: '.el-icon-d-caret',
+        showDropzoneAreas: true
+      }"
+    >
+      <ul
+        style="margin-bottom: 0;"
+        @reordered="itemMove"
+      >
         <li
-          v-for="boxShadow in boxShadows"
+          v-for="(boxShadow, index) in boxShadowArray"
           :key="boxShadow.id"
           :data-id="boxShadow.id"
         >
@@ -65,7 +56,7 @@
                 :type="boxShadow.inset ? 'primary' : ''"
                 class="w-100"
                 type="number"
-                @click="boxShadow.inset = !boxShadow.inset"
+                @click="onChange(index, 'inset', !boxShadow.inset)"
               >
                 Inset
               </el-button>
@@ -73,35 +64,41 @@
 
             <el-col :span="3">
               <el-input
-                v-model.number="boxShadow.offsetX"
+                :value="boxShadow.offsetX"
                 type="number"
+                @input="onChange(index, 'offsetX', parseInt($event))"
               />
             </el-col>
 
             <el-col :span="3">
               <el-input
-                v-model.number="boxShadow.offsetY"
+                :value="boxShadow.offsetY"
                 type="number"
+                @input="onChange(index, 'offsetY', parseInt($event))"
               />
             </el-col>
 
             <el-col :span="3">
               <el-input
-                v-model.number="boxShadow.blurRadius"
+                :value="boxShadow.blurRadius"
+                :min="0"
                 type="number"
+                @input="onChange(index, 'blurRadius', parseInt($event))"
               />
             </el-col>
             <el-col :span="3">
               <el-input
-                v-model.number="boxShadow.spreadRadius"
+                :value="boxShadow.spreadRadius"
+                :min="0"
                 type="number"
+                @input="onChange(index, 'spreadRadius', parseInt($event))"
               />
             </el-col>
             <el-col :span="3">
               <el-color-picker
-                :value="boxShadow.color === 'none' ? null : boxShadow.color"
+                :value="boxShadow.color"
                 show-alpha
-                @input="boxShadow.color = $event"
+                @input="onChange(index, 'color', $event)"
               />
             </el-col>
           </el-row>
@@ -110,7 +107,7 @@
     </div>
 
     <el-row
-      v-if="boxShadows.length"
+      v-if="boxShadowArray.length"
       :gutter="2"
     >
       <el-col
@@ -146,11 +143,13 @@
 import SelectUnit from '@/components/Components/SelectUnit'
 import { VueDraggableDirective } from 'vue-draggable'
 import { Divider } from 'element-ui'
+
 import {
   parse,
   stringify
 } from '@/components/Setup/EditorStyle/utils/boxShadow'
 import { findIndexBy, arrayMove } from '../../../utils/tool'
+import forNodeMixin from './mixins/forNode'
 
 export default {
   name: 'BoxShadows',
@@ -158,52 +157,69 @@ export default {
     SelectUnit,
     ElDivider: Divider
   },
+  mixins: [forNodeMixin('boxShadow')],
   directives: {
     dragAndDrop: VueDraggableDirective
   },
-  props: {
-    value: {
-      type: String,
-      required: true
-    }
-  },
   data() {
-    const boxShadows = this.value === 'none' ? [] : parse(this.value)
-
-    const id = +new Date()
-    boxShadows.forEach((boxShadow, index) => {
-      boxShadow.id = id + index
-      boxShadow.visible = true
-    })
-
     return {
-      boxShadows,
-      innerValue: null
+      boxShadowArray: []
     }
   },
   watch: {
-    boxShadows: {
-      handler(boxShadows) {
-        const filteredValues = boxShadows.filter(
-          x => x.color && (x.spreadRadius || x.blurRadius)
-        )
-
-        this.innerValue = stringify(filteredValues)
+    selectedComponentNodes: {
+      handler() {
+        this.departShadowToArray()
       },
-      deep: true
-    },
-    innerValue(innerValue) {
-      this.$emit('change', { boxShadow: innerValue })
+      immediate: true
     }
   },
   methods: {
+    parseInt(v) {
+      return parseInt(v)
+    },
+    onChange(index, key, value) {
+      this.boxShadowArray[index][key] = value
+      this.assignStyles({
+        boxShadow: stringify(this.boxShadowArray) || undefined
+      })
+    },
+    departShadowToArray() {
+      let boxShadowArray = []
+      if (this.boxShadow) {
+        boxShadowArray = parse(this.boxShadow)
+      }
+
+      const id = +new Date()
+      boxShadowArray.forEach((boxShadow, index) => {
+        boxShadow.id = id + index
+        boxShadow.visible = true
+      })
+
+      this.boxShadowArray = boxShadowArray
+    },
     clean() {
-      this.boxShadows = this.boxShadows.filter(x => x.visible)
+      this.boxShadowArray = this.boxShadowArray.filter(x => x.visible)
+      this.assignStyles({ boxShadow: stringify(this.boxShadowArray) })
     },
     itemMove({ detail }) {
       const id = detail.ids[0]
-      const originalIndex = findIndexBy(this.boxShadows, 'id', +id)
-      arrayMove(this.boxShadows, originalIndex, detail.index)
+      const originalIndex = findIndexBy(this.boxShadowArray, 'id', +id)
+      arrayMove(this.boxShadowArray, originalIndex, detail.index)
+      this.assignStyles({ boxShadow: stringify(this.boxShadowArray) })
+    },
+    addNew() {
+      this.boxShadowArray.push({
+        id: +new Date(),
+        color: 'rgba(0,0,0,0.1)',
+        inset: null,
+        offsetX: 0,
+        offsetY: 0,
+        blurRadius: 5,
+        spreadRadius: 5,
+        visible: true
+      })
+      this.assignStyles({ boxShadow: stringify(this.boxShadowArray) })
     }
   }
 }
@@ -221,14 +237,13 @@ export default {
     padding: 0;
   }
 }
-  .el-icon-d-caret{
-    margin-top: 7px;
-    cursor: ns-resize;
-    color: #606266;
-  }
+.el-icon-d-caret {
+  margin-top: 7px;
+  cursor: ns-resize;
+  color: #606266;
+}
 ul {
   list-style-type: none;
   padding: 0;
 }
-
 </style>

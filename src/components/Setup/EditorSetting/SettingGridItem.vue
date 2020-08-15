@@ -13,7 +13,7 @@ export const defaultSetting = {
   // isDraggable: true,
   // isResizable: true,
   // static: false,
-  // autoHeight: false,
+  autoHeight: false,
 }
 
 const options = [
@@ -38,7 +38,7 @@ export default {
           // select('isDraggable', { options }),
           // select('isResizable', { options }),
           // select('static', { options }),
-          // boolean('autoHeight')
+          boolean('autoHeight')
         ],
         defaultSetting
       )

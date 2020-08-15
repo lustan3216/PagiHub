@@ -10,7 +10,7 @@
     <el-col :span="16">
       <select-unit
         :units="[]"
-        v-model="innerValue"
+        v-model="opacity"
         :min="0"
         :max="100"
         :step="1"
@@ -22,30 +22,28 @@
 
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
+import forNode from './mixins/forNode'
+import { arrayLast } from '@/utils/tool'
+
 export default {
   name: 'Opacity',
+  mixins: [forNode('opacity')],
   components: {
     SelectUnit
   },
-  props: {
-    value: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      innerValue: this.value * 100
-    }
-  },
-  watch: {
-    innerValue(opacity) {
-      // Number() here to make share 1.00 => 1
-      this.$emit('change', { opacity: Number(opacity / 100).toString() })
-    },
-    value() {
-      const { data } = this.$options
-      return Object.assign(this, data.call(this))
+  computed: {
+    opacity: {
+      get() {
+        const value = arrayLast(this.allValues)
+        if (value === '') {
+          return 100
+        } else {
+          return value * 100
+        }
+      },
+      set(opacity) {
+        this.assignStyles({ opacity: Number(opacity / 100).toString() })
+      }
     }
   }
 }

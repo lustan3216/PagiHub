@@ -1,6 +1,10 @@
 import { SET } from '../index'
 import { arraySubtract, cloneJson, toArray } from '@/utils/tool'
-import { isComponent, traversalAncestorAndSelf, traversalChildren } from '@/utils/node'
+import {
+  isComponent,
+  traversalAncestorAndSelf,
+  traversalChildren
+} from '@/utils/node'
 import { quickFnMap } from '@/components/TemplateUtils/NodeQuickFunctions'
 import { debounce } from 'throttle-debounce'
 
@@ -29,7 +33,9 @@ const mutations = {
     state.selectedComponentIds = arraySubtract(state.selectedComponentIds, ids)
   },
   SET_SELECTED_COMPONENT_ID(state, id) {
-    state.selectedComponentIds = [id].filter(x => x)
+    if (state.selectedComponentIds !== [id]) {
+      state.selectedComponentIds = [id]
+    }
   },
   TOGGLE_SELECTED_COMPONENT_ID(state, id) {
     const isExist = state.selectedComponentIds.includes(id)
@@ -56,25 +62,26 @@ const actions = {
 
     // the top component under rootComponentSet should not be copied
     const copyNodeArray = []
-    copyComponentIds
-      .forEach(id => {
-        const node = componentsMap[id]
-        traversalAncestorAndSelf(node, node => {
-          // don't return, otherwise it will stop
-          if (isComponent(node)) {
-            copyNodeArray.push(node)
-          }
-        })
-        traversalChildren(node, node => {
-          // don't return, otherwise it will stop
+    copyComponentIds.forEach(id => {
+      const node = componentsMap[id]
+      traversalAncestorAndSelf(node, node => {
+        // don't return, otherwise it will stop
+        if (isComponent(node)) {
           copyNodeArray.push(node)
-        })
+        }
       })
+      traversalChildren(node, node => {
+        // don't return, otherwise it will stop
+        copyNodeArray.push(node)
+      })
+    })
 
     localStorage.setItem('copyComponentIds', JSON.stringify(copyComponentIds))
     localStorage.setItem('tmpComponentsArray', JSON.stringify(copyNodeArray))
     commit('SET', { copyComponentIds })
-    commit('component/SET_NODES_TO_TMP_MAP', cloneJson(copyNodeArray), { root: true })
+    commit('component/SET_NODES_TO_TMP_MAP', cloneJson(copyNodeArray), {
+      root: true
+    })
     return copyComponentIds
   },
   resizeNodeQuickFn: debounce(250, function({ state }) {

@@ -29,7 +29,6 @@
         @input="emit({ color: $event })"
       />
     </el-col>
-
   </el-row>
 </template>
 
@@ -84,23 +83,16 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      innerValue: this.value.split(REGEX)
-    }
-  },
-  watch: {
-    innerValue(value) {
-      this.innerValue = value
+  computed: {
+    innerValue() {
+      return this.value.split(REGEX)
     }
   },
   methods: {
     emit({ unit, style = 'solid', color = '#000' }) {
       if (unit && parseInt(unit)) {
-        this.innerValue = [unit, style, color]
         this.$emit('input', [unit, style, color].join(' '))
       } else {
-        this.innerValue = []
         this.$emit('input', '')
       }
     }

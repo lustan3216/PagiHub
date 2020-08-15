@@ -71,6 +71,10 @@ export function onWithOff(element, event, handler) {
 
 export const isArray = Array.isArray
 
+export function arrayValuesAreSame(e) {
+  return arrayUniq(e).length === 1
+}
+
 export function arrayFirst(e) {
   return e[0]
 }

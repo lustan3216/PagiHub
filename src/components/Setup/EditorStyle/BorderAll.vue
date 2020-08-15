@@ -6,7 +6,7 @@
     >
       <el-button
         icon="el-icon-plus"
-        @click="isUniq = !isUniq"
+        @click="changeUniq(!isUniq)"
       />
       {{ isUniq ? 'BORDERS' : 'EACH BORDER' }}
     </el-divider>
@@ -16,36 +16,43 @@
       class="flex"
     >
       <border
-        v-model="all"
+        :value="border"
         icon="el-icon-rank"
+        @input="onChange({ border: $event })"
       />
     </div>
 
     <div v-else>
       <border
-        v-model="borders.borderTop"
+        :value="borderTop"
         icon="el-icon-top"
+        @input="onChange({ borderTop: $event })"
       />
       <border
-        v-model="borders.borderRight"
+        :value="borderRight"
         icon="el-icon-right"
+        @input="onChange({ borderRight: $event })"
       />
       <border
-        v-model="borders.borderBottom"
+        :value="borderBottom"
         icon="el-icon-bottom"
+        @input="onChange({ borderBottom: $event })"
       />
       <border
-        v-model="borders.borderLeft"
+        :value="borderLeft"
         icon="el-icon-back"
+        @input="onChange({ borderLeft: $event })"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { Divider } from 'element-ui'
 import Border from './Border'
-import { arrayUniq, isArray } from '@/utils/tool'
+import { Divider } from 'element-ui'
+import { arrayLast, arrayUniq, getValueByPath } from '@/utils/tool'
+import { mapMutations, mapGetters } from 'vuex'
+import { STYLE } from '@/const'
 
 export default {
   name: 'BorderAll',
@@ -54,60 +61,131 @@ export default {
     ElDivider: Divider
   },
   props: {
-    value: {
-      type: Object,
-      default: ''
+    state: {
+      type: String,
+      default: 'default'
     }
   },
   data() {
-    const { border, ...borders } = this.value
-    const isUniq = this.isAllTheSame(borders)
-
     return {
-      all: border,
-      borders,
-      isUniq
+      isUniq: true
     }
   },
-  watch: {
-    borders: {
-      handler(value) {
-        let result
-        const values = Object.values(value)
-        const isUniq = this.isAllTheSame(value)
-
-        if (isUniq) {
-          result = values[0]
-          this.$emit('change', { border: result })
-        } else {
-          this.$emit('change', {
-            border: '',
-            borderTop: values[0],
-            borderRight: values[1],
-            borderBottom: values[2],
-            borderLeft: values[3]
-          })
-        }
-      },
-      deep: true
+  computed: {
+    ...mapGetters('app', ['selectedComponentNodes']),
+    border() {
+      return this.getValue('border')
     },
-    all(value) {
-      this.$emit('change', { border: value })
+    borderTop() {
+      return this.getValue('borderTop')
     },
-    isUniq(value) {
-      if (value) {
-        this.all = this.borders.borderTop
-      } else {
-        this.borders.borderTop = this.all
-        this.borders.borderRight = this.all
-        this.borders.borderBottom = this.all
-        this.borders.borderLeft = this.all
+    borderRight() {
+      return this.getValue('borderRight')
+    },
+    borderBottom() {
+      return this.getValue('borderBottom')
+    },
+    borderLeft() {
+      return this.getValue('borderLeft')
+    },
+    borders() {
+      return {
+        borderTop: this.borderTop,
+        borderRight: this.borderRight,
+        borderBottom: this.borderBottom,
+        borderLeft: this.borderLeft
       }
     }
   },
+  watch: {
+    selectedComponentNodes() {
+      this.isUniq = this.checkIsUniq()
+    }
+  },
+  created() {
+    this.isUniq = this.checkIsUniq()
+  },
   methods: {
-    isAllTheSame(four) {
-      return arrayUniq(Object.values(four)).length === 1
+    ...mapMutations('component', ['RECORD']),
+    changeUniq(uniq) {
+      this.isUniq = uniq
+      if (uniq) {
+        this.assignStyles({
+          border: this.borderTop,
+          borderTop: undefined,
+          borderRight: undefined,
+          borderBottom: undefined,
+          borderLeft: undefined
+        })
+      } else {
+        this.assignStyles({
+          border: undefined,
+          borderTop: this.border,
+          borderRight: this.border,
+          borderBottom: this.border,
+          borderLeft: this.border
+        })
+      }
+    },
+    onChange(value) {
+      const {
+        border = this.border,
+        borderTop = this.borderTop,
+        borderRight = this.borderRight,
+        borderBottom = this.borderBottom,
+        borderLeft = this.borderLeft
+      } = value
+
+      const isUniq = this.checkIsUniq({
+        borderTop,
+        borderRight,
+        borderBottom,
+        borderLeft
+      })
+
+      if (isUniq) {
+        this.assignStyles({
+          border,
+          borderTop: undefined,
+          borderRight: undefined,
+          borderBottom: undefined,
+          borderLeft: undefined
+        })
+      } else {
+        this.assignStyles({
+          border: undefined,
+          borderTop,
+          borderRight,
+          borderBottom,
+          borderLeft
+        })
+      }
+    },
+    getValue(attr) {
+      const values = this.selectedComponentNodes.map(node =>
+        getValueByPath(node, ['style', this.state, attr])
+      )
+
+      return arrayLast(values) || ''
+    },
+    checkIsUniq(borders = this.borders) {
+      return arrayUniq(Object.values(borders)).length === 1
+    },
+    assignStyles(object) {
+      const records = []
+
+      for (const key in object) {
+        const value = object[key]
+
+        this.selectedComponentNodes.forEach(node => {
+          records.push({
+            path: `${node.id}.${STYLE}.${this.state}.${key}`,
+            value
+          })
+        })
+      }
+
+      this.RECORD(records)
     }
   }
 }
