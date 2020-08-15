@@ -1,19 +1,5 @@
 <template>
-  <el-select
-    v-if="isAuto"
-    v-model="unit"
-    v-bind="{ ...$attrs, ...$props }"
-  >
-    <el-option
-      v-for="unit in optionUnits"
-      :key="unit"
-      :value="unit"
-    />
-  </el-select>
-
-  <!--  @change="$emit('change', innerValue)" for font style, but try to use @input instead of @change-->
   <el-input
-    v-else
     ref="input"
     v-model="number"
     :class="{ 'ns-resize': resizeCursor }"
@@ -21,6 +7,7 @@
     :step="step"
     :min="allowNegative ? Infinity : min"
     :max="max"
+    :disabled="disabled"
     type="number"
     class="number"
     clearable
@@ -32,6 +19,7 @@
     <el-dropdown
       v-if="optionUnits.length > 1"
       slot="append"
+      :disabled="disabled"
       size="small"
       class="pointer"
       @command="unit = $event"
@@ -66,6 +54,10 @@ import { toPrecision } from '@/utils/number'
 export default {
   name: 'SelectUnit',
   props: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     prefixIcon: {
       type: String,
       default: ''

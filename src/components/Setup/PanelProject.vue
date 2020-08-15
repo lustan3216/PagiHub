@@ -56,7 +56,6 @@ import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
 import NodeName from '../TemplateUtils/NodeName'
 import { kebabCase } from '@/utils/string'
-import { shortId } from '@/utils/node'
 import { isComponentSet, isProject, isFolder, typeString } from '@/utils/node'
 
 export default {
@@ -101,7 +100,6 @@ export default {
     isFolder,
     typeString,
     kebabCase,
-    shortId,
     ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
     ...mapActions('component', ['modifyProjectNodeParent']),
     nodeParentChange({ data: childData }, { data: parentData }, action) {

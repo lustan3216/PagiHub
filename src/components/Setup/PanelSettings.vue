@@ -1,24 +1,19 @@
 <template>
   <component
-    v-if="hasComponent"
-    :is="componentTag"
-    :id="id"
+    v-if="canSetUp"
+    :is="vueComponentTag"
+    :id="lastNode.id"
     class="p-r-10"
   />
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { bigCamelCase } from '@/utils/string'
+import { arrayLast, arrayUniq } from '@/utils/tool'
 
 const self = {
   name: 'PanelSettings',
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
   components: {
     SettingDrawer: () => import('./EditorSetting/SettingDrawer'),
     SettingDivider: () => import('./EditorSetting/SettingDivider'),
@@ -47,16 +42,24 @@ const self = {
     SettingFormTimePicker: () => import('./EditorSetting/SettingFormTimePicker')
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
-    ...mapState('component', ['componentsMap']),
-    node() {
-      return this.componentsMap[this.id]
+    ...mapGetters('app', ['selectedComponentNodes']),
+    lastNode() {
+      return arrayLast(this.selectedComponentNodes)
     },
-    hasComponent() {
-      return this.node && self.components[this.componentTag]
+    hasVueComponent() {
+      // 有些component沒有設定，就不做vue component了，所以這裡要檢查
+      return this.lastNode && Boolean(self.components[this.vueComponentTag])
     },
-    componentTag() {
-      return `Setting${bigCamelCase(this.node.tag)}`
+    vueComponentTag() {
+      return `Setting${bigCamelCase(this.lastNode.tag)}`
+    },
+    areSameTag() {
+      const tags = this.selectedComponentNodes.map(node => node.tag)
+      return arrayUniq(tags).length === 1
+    },
+    canSetUp() {
+      console.log(this.areSameTag && this.hasVueComponent)
+      return this.areSameTag && this.hasVueComponent
     }
   }
 }

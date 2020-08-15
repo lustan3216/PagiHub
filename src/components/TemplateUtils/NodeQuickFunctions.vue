@@ -5,10 +5,17 @@
   >
     <div
       :id="`quick-fn-${id}`"
-      class="quick-functions"
+      class="quick-functions flex-center"
     >
+      <component-add
+        v-if="canAddComponent"
+        :id="id"
+        style="font-size: 16px;"
+        class="can-action"
+      />
+
       <div
-        :class="[top > 100 ? 'top' : 'bottom' ]"
+        :class="[top > 100 ? 'top' : 'bottom']"
         class="wrapper flex"
       >
         <node-name
@@ -66,7 +73,6 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-
       </div>
     </div>
   </portal>
@@ -99,7 +105,11 @@ export default {
   components: {
     NodeName,
     ElPopover: Popover,
-    ElTooltip: Tooltip
+    ElTooltip: Tooltip,
+    ComponentAdd: () => import('../TemplateUtils/ComponentAdd')
+  },
+  inject: {
+    isExample: { default: false }
   },
   props: {
     id: {
@@ -152,6 +162,12 @@ export default {
     },
     isGridItem() {
       return isGridItem(this.node)
+    },
+    canAddComponent() {
+      if (!this.isExample && this.isGridItem) {
+        const { children = [] } = this.node
+        return !children.length
+      }
     },
     metaKey() {
       return isMac() ? '&#8984;' : '&#8963;'
@@ -217,7 +233,12 @@ export default {
     ...mapActions('app', ['setCopySelectedNodeId']),
     resize() {
       this.$nextTick(() => {
-        const { x: left, y: top, width, height } = this.element.getBoundingClientRect()
+        const {
+          x: left,
+          y: top,
+          width,
+          height
+        } = this.element.getBoundingClientRect()
 
         const alpha = 0.15
         let opacity = 0
@@ -312,8 +333,12 @@ $activeColor: rgba(81, 117, 199, 0.68);
   position: absolute;
   pointer-events: none;
   border: 1px dashed $activeColor;
-  will-change: opacity, height, width, top, left ;
+  will-change: opacity, height, width, top, left;
   z-index: 800;
+}
+
+.can-action {
+  pointer-events: all;
 }
 
 .wrapper {
@@ -365,6 +390,9 @@ $activeColor: rgba(81, 117, 199, 0.68);
 
   i {
     color: $activeColor !important;
+  }
+  & > * {
+    border-radius: 0;
   }
 
   & > *:first-child {

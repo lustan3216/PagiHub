@@ -18,16 +18,17 @@
     @click="click"
     @dblclick.native="dblclick"
   >
-    <slot/>
+    <slot />
 
-    {{ nodeShortName }} - {{ shortId }}
+    {{ nodeShortName }}
+    <template v-if="isComponent"> - {{ shortId }} </template>
   </el-button>
 </template>
 
 <script>
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import { shortTagName, shortId } from '@/utils/node'
+import { shortTagName, shortId, isComponent } from '@/utils/node'
 import { CAN_NOT_RENAME, LABEL } from '@/const'
 
 const observable = Vue.observable({ editingId: null })
@@ -53,14 +54,21 @@ export default {
     node() {
       return this.componentsMap[this.id]
     },
+    isComponent() {
+      return isComponent(this.node)
+    },
     nodeShortName() {
       return shortTagName(this.node)
     },
     shortId() {
-      return shortId(this.id)
+      return this.isComponent && shortId(this.id)
     },
     editing() {
-      return observable.editingId === this.id && this.editable && !this.node[CAN_NOT_RENAME]
+      return (
+        observable.editingId === this.id &&
+        this.editable &&
+        !this.node[CAN_NOT_RENAME]
+      )
     }
   },
   methods: {

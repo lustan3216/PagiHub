@@ -8,18 +8,6 @@
       v-if="firstChild"
       :id="firstChild.id"
     />
-
-    <div
-      v-else
-      class="flex-center h-100"
-    >
-      <component-add
-        v-if="!isExample && selected"
-        :id="id"
-        style="font-size: 16px;"
-        class="p-10"
-      />
-    </div>
   </div>
 </template>
 
@@ -34,7 +22,6 @@ import AsyncComponent from '../TemplateUtils/AsyncComponent'
 export default {
   name: 'GridItem',
   components: {
-    ComponentAdd: () => import('../TemplateUtils/ComponentAdd'),
     ControllerLayer,
     NodeController,
     AsyncComponent
@@ -49,9 +36,6 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     firstChild() {
       return this.innerChildren[0]
-    },
-    selected() {
-      return this.selectedComponentIds.includes(this.id)
     }
   },
   watch: {
@@ -63,25 +47,25 @@ export default {
     },
     'node.style.default': {
       handler(value = {}) {
-        this.dashBorder =
-          !value.border &&
-          !value.borderTop &&
-          !value.borderRight &&
-          !value.borderBottom &&
-          !value.borderLeft
+        this.checkBorder(value)
       },
       immediate: true
     },
     'firstChild.style.default': {
       handler(value = {}) {
-        this.dashBorder =
-          !value.border &&
-          !value.borderTop &&
-          !value.borderRight &&
-          !value.borderBottom &&
-          !value.borderLeft
+        this.checkBorder(value)
       },
       immediate: true
+    }
+  },
+  methods: {
+    checkBorder(value) {
+      this.dashBorder =
+        !value.border &&
+        !value.borderTop &&
+        !value.borderRight &&
+        !value.borderBottom &&
+        !value.borderLeft
     }
   }
 }

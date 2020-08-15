@@ -35,7 +35,9 @@
       slim
     />
 
-    <dimension />
+    <el-form >
+      <dimension />
+    </el-form>
 
     <el-divider content-position="left">STACK</el-divider>
 

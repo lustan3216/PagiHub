@@ -1,5 +1,5 @@
 <template>
-  <div v-if="gridItemNodes.length">
+  <div>
     <el-divider content-position="left">
       DIMENSION
     </el-divider>
@@ -29,6 +29,7 @@
 
       <el-col :span="12">
         <select-unit
+          :disabled="!gridItemNodes.length"
           v-model.number="w"
           :max="cols"
           :units="['col']"
@@ -40,7 +41,10 @@
       </el-col>
 
       <el-col :span="12">
-        <select-unit v-model.number="h" />
+        <select-unit
+          :disabled="!gridItemNodes.length"
+          v-model.number="h"
+        />
       </el-col>
     </el-row>
   </div>

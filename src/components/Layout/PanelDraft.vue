@@ -43,9 +43,7 @@ export default {
   watch: {
     editingComponentSetId(value) {
       if (value) {
-        this.$nextTick(() => {
-          this.checkBreakpoint()
-        })
+        this.checkBreakpoint()
       }
     }
   },
@@ -110,11 +108,13 @@ export default {
       this.resizeNodeQuickFn()
     },
     checkBreakpoint() {
-      const { clientWidth } = this.$refs.artBoard.$el
-      const points = ['lg', 'md', 'sm', 'xs', 'xxs']
+      this.$nextTick(() => {
+        const { clientWidth } = this.$refs.artBoard.$el
+        const points = ['lg', 'md', 'sm', 'xs', 'xxs']
 
-      this.APP_SET({
-        breakpoint: points.find(key => clientWidth >= BREAK_POINTS[key])
+        this.APP_SET({
+          breakpoint: points.find(key => clientWidth >= BREAK_POINTS[key])
+        })
       })
     }
   }

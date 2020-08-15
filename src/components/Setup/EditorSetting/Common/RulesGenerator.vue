@@ -12,9 +12,14 @@
 <script>
 import formCreate from '@form-create/element-ui'
 import { Switch, Tooltip, InputNumber } from 'element-ui'
-import { cloneObject, getValueByPath, objectHasAnyKey } from '@/utils/tool'
+import {
+  arrayLast,
+  cloneObject,
+  getValueByPath,
+  objectHasAnyKey
+} from '@/utils/tool'
 import { vm } from '@/utils/vmMap'
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { PROPS } from '@/const'
 import SelectUnit from '@/components/Components/SelectUnit'
 import SliderPoints from '@/components/Components/SliderPoints'
@@ -42,16 +47,6 @@ export default {
     }
   },
   data() {
-    let innerRules = {}
-    const selectedComponentNode = this.$store.getters[
-      'app/selectedComponentNode'
-    ]
-
-    if (selectedComponentNode) {
-      innerRules = cloneObject(this.rules)
-      traversalRules(innerRules, this.transformRule)
-    }
-
     return {
       api: {},
       option: {
@@ -59,10 +54,19 @@ export default {
         info: { type: 'tooltip' },
         submitBtn: { show: false }
       },
-      innerRules
+      innerRules: {}
     }
   },
+  created() {
+    let innerRules = {}
+
+    innerRules = cloneObject(this.rules)
+    traversalRules(innerRules, this.transformRule)
+
+    this.innerRules = innerRules
+  },
   computed: {
+    ...mapGetters('app', ['selectedComponentNodes']),
     canShowSetting() {
       return objectHasAnyKey(this.innerRules)
     }
@@ -87,11 +91,16 @@ export default {
         value = undefined
       }
 
-      const path = rule.path
-        ? `${this.id}.${PROPS}.${rule.path}.${rule.field}`
-        : `${this.id}.${PROPS}.${rule.field}`
+      const records = []
+      this.selectedComponentNodes.forEach(node => {
+        const path = rule.path
+          ? `${node.id}.${PROPS}.${rule.path}.${rule.field}`
+          : `${node.id}.${PROPS}.${rule.field}`
 
-      this.RECORD([{ path, value }])
+        records.push({ path, value })
+      })
+
+      this.RECORD(records)
     }
   }
 }

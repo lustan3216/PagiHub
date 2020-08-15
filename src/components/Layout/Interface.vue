@@ -23,7 +23,6 @@
       v-for="id in selectedComponentIds"
       :name="`Interface-${id}`"
       :key="`Interface-${id}`"
-      slim
     />
   </div>
 </template>

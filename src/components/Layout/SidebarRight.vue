@@ -15,10 +15,7 @@
 
     <div class="sidebar-right-content">
       <panel-styles v-if="activePanel === 'PanelStyles'"/>
-      <panel-settings
-        v-else-if="activePanel === 'PanelSettings' && theOnlySelectedComponentId"
-        :id="theOnlySelectedComponentId"
-      />
+      <panel-settings v-else-if="activePanel === 'PanelSettings'" />
 
     </div>
   </div>

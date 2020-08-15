@@ -13,7 +13,9 @@ import {
   LABEL,
   AUTO_HEIGHT,
   CAN_NOT_RENAME,
-  PROPS, SOFT_DELETE, TEXT_EDITOR
+  PROPS,
+  SOFT_DELETE,
+  TEXT_EDITOR
 } from '../const'
 
 const points = ['lg', 'md', 'sm', 'xs', 'xxs']
@@ -55,9 +57,10 @@ export const layers = function(options) {
   }
 }
 
-export const body = function() {
+export const artBoard = function() {
   return {
-    [TAG]: 'body',
+    [TAG]: LAYERS,
+    [LABEL]: 'artBoard',
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: [grid()]
   }
