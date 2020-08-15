@@ -52,7 +52,7 @@
               :clearable="false"
               :key="option.name"
               v-bind="options[option.name]"
-              @input="option.value = $event"
+              @input="onChange(index, $event)"
             />
           </el-col>
         </el-row>
