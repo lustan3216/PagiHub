@@ -14,12 +14,8 @@
 </template>
 
 <script>
-import { Tooltip } from 'element-ui'
 export default {
   name: 'Tip',
-  components: {
-    ElTooltip: Tooltip
-  },
   props: {
     content: {
       type: String,

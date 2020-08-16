@@ -1,21 +1,33 @@
 <template>
   <div id="sidebar-right">
     <el-button-group class="flex">
-      <el-button
-        icon="el-icon-brush"
-        class="flex1"
-        @click="activePanel = 'PanelStyles'"
-      />
-      <el-button
-        icon="el-icon-setting"
-        class="flex1"
-        @click="activePanel = 'PanelSettings'"
-      />
+      <el-tooltip
+        effect="light"
+        placement="top"
+        content="Style"
+      >
+        <el-button
+          icon="el-icon-brush"
+          class="flex1"
+          @click="activePanel = 'PanelStyles'"
+        />
+      </el-tooltip>
+
+      <el-tooltip
+        effect="light"
+        placement="top"
+        content="Setting"
+      >
+        <el-button
+          icon="el-icon-setting"
+          class="flex1"
+          @click="activePanel = 'PanelSettings'"
+        />
+      </el-tooltip>
     </el-button-group>
 
     <div class="sidebar-right-content">
-      <panel-styles v-if="activePanel === 'PanelStyles'" />
-      <panel-settings v-else-if="activePanel === 'PanelSettings'" />
+      <component :is="activePanel" />
     </div>
   </div>
 </template>

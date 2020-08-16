@@ -114,7 +114,6 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import ViewPortController from '../TemplateUtils/ViewPortController'
-import { Tooltip } from 'element-ui'
 import { vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
 import jsonHistory from '@/store/jsonHistory'
 
@@ -123,8 +122,7 @@ export default {
   components: {
     ViewPortController,
     DialogInteracted,
-    DialogComponentSet,
-    ElTooltip: Tooltip
+    DialogComponentSet
   },
   computed: {
     ...mapState('app', [

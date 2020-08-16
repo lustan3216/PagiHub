@@ -58,7 +58,6 @@ const self = {
       return arrayUniq(tags).length === 1
     },
     canSetUp() {
-      console.log(this.areSameTag && this.hasVueComponent)
       return this.areSameTag && this.hasVueComponent
     }
   }

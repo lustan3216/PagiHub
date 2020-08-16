@@ -27,14 +27,12 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { isGridItem } from '@/utils/node'
-import { Tooltip, Divider } from 'element-ui'
+import { Divider } from 'element-ui'
 import { BREAK_POINTS } from '@/const'
 
 export default {
   name: 'ItemHiddenController',
   components: {
-    ElTooltip: Tooltip,
     ElDivider: Divider
   },
   computed: {

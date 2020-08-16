@@ -81,7 +81,7 @@
 <script>
 import { mapMutations, mapState, mapActions } from 'vuex'
 import NodeName from './NodeName'
-import { Popover, Tooltip } from 'element-ui'
+import { Popover } from 'element-ui'
 import { isGridItem, traversalAncestorAndSelf } from '@/utils/node'
 import { isMac } from '@/utils/device'
 import { lerp } from '@/utils/animation'
@@ -105,7 +105,6 @@ export default {
   components: {
     NodeName,
     ElPopover: Popover,
-    ElTooltip: Tooltip,
     ComponentAdd: () => import('../TemplateUtils/ComponentAdd')
   },
   inject: {

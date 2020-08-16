@@ -1,54 +1,64 @@
 <template>
-  <el-tree
-    ref="tree"
-    :filter-node-method="filterTagBySearching"
-    :data="innerTree"
-    :indent="12"
-    :allow-drop="allowDrop"
-    :expand-on-click-node="false"
-    default-expand-all
-    class="tree"
-    node-key="id"
-    draggable
-    @node-drop="layerIndexChange"
-  >
-    <template v-slot="{ data }">
-      <div
-        v-if="data && data.id"
-        class="relative w-100 over-hidden"
-        @mouseenter.stop="hoverNode(data.id)"
-        @mouseleave.stop="hoverLeaveNode(data.id)"
-      >
-        <hidden
-          v-if="checkHidden(data)"
-          :id="data.id"
-        />
-        <node-name
-          :id="data.id"
-          :class="{ active: selectedComponentIds.includes(data.id) }"
-          class="text-left"
-          editable
-          @click="nodeClick($event, data.id)"
-        />
+  <div class="flex-column h-100k">
+    <el-input
+      v-shortkey.avoid
+      v-model="filterText"
+      placeholder="Search Node"
+      size="small"
+      class="m-b-10"
+    />
 
-        <transition name="fade">
-          <node-controller
-            v-if="data.id === hoverId"
-            :id="data.id"
-            class="controller hover-color"
-          />
-        </transition>
-
+    <el-tree
+      ref="tree"
+      :filter-node-method="filterTagBySearching"
+      :data="innerTree"
+      :indent="12"
+      :allow-drop="allowDrop"
+      :expand-on-click-node="false"
+      default-expand-all
+      class="tree"
+      node-key="id"
+      draggable
+      @node-drop="layerIndexChange"
+    >
+      <template v-slot="{ data }">
         <div
-          v-if="data.id !== hoverId"
-          class="controller"
+          v-if="data && data.id"
+          class="relative w-100 over-hidden"
+          @mouseenter.stop="hoverNode(data.id)"
+          @mouseleave.stop="hoverLeaveNode(data.id)"
         >
-          <visible :id="data.id" />
-          <touchable :id="data.id" />
+          <hidden
+            v-if="checkHidden(data)"
+            :id="data.id"
+          />
+          <node-name
+            :id="data.id"
+            :class="{ active: selectedComponentIds.includes(data.id) }"
+            class="text-left"
+            editable
+            @click="nodeClick($event, data.id)"
+          />
+
+          <transition name="fade">
+            <node-controller
+              v-if="data.id === hoverId"
+              :id="data.id"
+              class="controller hover-color"
+            />
+          </transition>
+
+          <div
+            v-if="data.id !== hoverId"
+            class="controller"
+          >
+            <visible :id="data.id" />
+            <touchable :id="data.id" />
+          </div>
         </div>
-      </div>
-    </template>
-  </el-tree>
+      </template>
+    </el-tree>
+  </div>
 </template>
 
 <script>
@@ -75,15 +85,10 @@ export default {
     Visible,
     Hidden
   },
-  props: {
-    filterText: {
-      type: String,
-      default: ''
-    }
-  },
   data() {
     return {
-      hoverId: null
+      hoverId: null,
+      filterText: ''
     }
   },
   computed: {
@@ -177,7 +182,7 @@ export default {
 
 <style scoped lang="scss">
 .tree {
-  background: transparent;
+  overflow: scroll;
 }
 .controller {
   position: absolute;

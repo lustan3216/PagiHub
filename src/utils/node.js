@@ -7,7 +7,8 @@ import {
   KIND,
   LABEL,
   LAYERS,
-  GRID_ITEM, KEY
+  GRID_ITEM,
+  KEY
 } from '@/const'
 
 export function findFirstCommonParentTree(ids) {

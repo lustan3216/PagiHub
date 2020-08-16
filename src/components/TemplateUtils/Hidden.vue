@@ -16,13 +16,9 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { Tooltip } from 'element-ui'
 
 export default {
   name: 'Hidden',
-  components: {
-    ElTooltip: Tooltip
-  },
   props: {
     id: {
       type: String,

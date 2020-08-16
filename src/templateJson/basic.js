@@ -96,9 +96,9 @@ export const carousel = function() {
           }
         ]
       }),
-      layers({ [KEY]: 'slider' }),
-      layers({ [KEY]: 'slider' }),
-      layers({ [KEY]: 'slider' })
+      layers({ [LABEL]: 'slider', [KEY]: 'slider' }),
+      layers({ [LABEL]: 'slider', [KEY]: 'slider' }),
+      layers({ [LABEL]: 'slider', [KEY]: 'slider' })
     ]
   }
 }

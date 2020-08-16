@@ -66,13 +66,9 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 import { BREAK_POINTS } from '@/const'
-import { Tooltip } from 'element-ui'
 
 export default {
   name: 'ViewPortController',
-  components: {
-    ElTooltip: Tooltip
-  },
   computed: {
     ...mapState('app', ['breakpoint']),
     breakpoints() {

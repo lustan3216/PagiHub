@@ -1,62 +1,82 @@
 <template>
-  <multipane
-    class="sidebar-left"
-    layout="horizontal"
-  >
-    <div class="extra justify-between">
-      <el-button type="text">Components</el-button>
+  <div class="sidebar-left">
+    <el-button-group class="flex">
+      <el-tooltip
+        effect="light"
+        placement="top"
+        content="Pages"
+      >
+        <el-button
+          icon="el-icon-brush"
+          class="flex1"
+          @click="activePanel = 'PanelPages'"
+        />
+      </el-tooltip>
 
-      <dialog-component-set
-        v-if="projectId"
-        :parent-id="projectId"
-        button-text="Create"
-        button-type="primary"
-      />
-    </div>
+      <el-tooltip
+        effect="light"
+        placement="top"
+        content="Components"
+      >
+        <el-button
+          icon="el-icon-brush"
+          class="flex1"
+          @click="activePanel = 'PanelProject'"
+        />
+      </el-tooltip>
 
-    <panel-project
-      v-if="isLogin"
-      class="panel"
-      style="height: 40%;"
-    />
+      <el-tooltip
+        effect="light"
+        placement="top"
+        content="Asset"
+      >
+        <el-button
+          icon="el-icon-setting"
+          class="flex1"
+          @click="activePanel = 'PanelAsset'"
+        />
+      </el-tooltip>
+    </el-button-group>
 
-    <multipane-resizer />
+    <panel-asset v-if="activePanel === 'PanelAsset'" />
 
-    <el-input
-      v-shortkey.avoid
-      v-model="filterText"
-      placeholder="Search Node"
-      size="small"
-      class="extra transparent"
-    />
+    <split-pane
+      v-else
+      :default-percent="40"
+      split="horizontal"
+    >
+      <template slot="paneL">
+        <component
+          v-if="isLogin"
+          :is="activePanel"
+        />
+      </template>
 
-    <panel-nodes
-      :filter-text="filterText"
-      class="panel"
-      style="height:90%;"
-    />
-  </multipane>
+      <template slot="paneR">
+        <panel-nodes />
+      </template>
+    </split-pane>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import PanelNodes from '../Setup/PanelNodes'
-import PanelProject from '../Setup/PanelProject'
-import { Multipane, MultipaneResizer } from 'vue-multipane'
+import SplitPane from 'vue-splitpane'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 
 export default {
   name: 'SidebarLeft',
   components: {
-    PanelNodes,
-    PanelProject,
+    PanelNodes: () => import('../Setup/PanelNodes'),
+    PanelProject: () => import('../Setup/PanelProject'),
+    PanelPages: () => import('../Setup/PanelPages'),
+    PanelAsset: () => import('../Setup/PanelAsset'),
     DialogComponentSet,
-    Multipane,
-    MultipaneResizer
+    SplitPane
   },
   data() {
     return {
-      filterText: ''
+      activePanel: 'PanelProject'
     }
   },
   computed: {
@@ -69,60 +89,30 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.el-button-group {
+  margin-right: -1px;
+  & > button {
+    border-color: $color-grey;
+  }
+}
+
 .sidebar-left {
   width: 260px;
   background-color: white;
   border-right: 1px solid $color-grey;
 }
 
-.panel {
-  padding: 5px;
-  background-color: #fff;
-  overflow: scroll;
-}
-
-.extra {
-  padding: 5px;
-  width: calc(100% - 10px);
-}
-
-::v-deep.layout-h .multipane-resizer {
-  height: 8px;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-  background-color: #fff;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  position: relative;
-  flex-shrink: 0;
-  top: 0;
-
-  &::before {
-    margin-top: -2px;
-    transform: translateX(-50%);
-    width: 30px;
-    height: 1px;
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    background-color: rgba(0, 0, 0, 0.15);
-    -webkit-transition: background-color 0.3s;
-    transition: background-color 0.3s;
+::v-deep {
+  .splitter-pane {
+    background-color: #ffffff;
+    padding: 5px;
+    box-sizing: border-box;
   }
-
-  &::after {
-    margin-top: 1px;
-    transform: translateX(-50%);
-    width: 30px;
-    height: 1px;
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    background-color: rgba(0, 0, 0, 0.15);
-    -webkit-transition: background-color 0.3s;
-    transition: background-color 0.3s;
+  .splitter-paneR {
+    z-index: 1;
+  }
+  .splitter-pane-resizer {
+    z-index: 2;
   }
 }
 </style>

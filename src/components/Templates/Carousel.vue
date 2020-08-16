@@ -90,7 +90,7 @@ import childrenMixin from '@/components/Templates/mixins/children'
 import Grid from './Grid'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, KEY } from '@/const'
-import { CarouselItem, Carousel, Tooltip } from 'element-ui'
+import { CarouselItem, Carousel } from 'element-ui'
 import { traversal } from '@/utils/tool'
 import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
 
@@ -101,8 +101,7 @@ export default {
     AsyncComponent,
     Grid,
     ElCarouselItem: CarouselItem,
-    ElCarousel: Carousel,
-    ElTooltip: Tooltip
+    ElCarousel: Carousel
   },
   directives: {
     ObserveVisibility

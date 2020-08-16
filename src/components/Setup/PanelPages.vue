@@ -1,14 +1,14 @@
 <template>
   <div class="flex-column h-100">
     <div class="m-b-10 justify-between">
-      <el-button type="text">Components</el-button>
+      <el-button type="text">Pages</el-button>
 
-      <dialog-component-set
-        v-if="projectId"
-        :parent-id="projectId"
-        button-text="Create"
-        button-type="primary"
-      />
+      <!--      <dialog-component-set-->
+      <!--        v-if="projectId"-->
+      <!--        :parent-id="projectId"-->
+      <!--        button-text="Create"-->
+      <!--        button-type="primary"-->
+      <!--      />-->
     </div>
 
     <el-tree

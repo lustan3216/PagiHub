@@ -37,6 +37,7 @@ Vue.mixin({
 })
 
 import {
+  Tooltip,
   Dialog,
   Dropdown,
   DropdownMenu,
@@ -64,6 +65,7 @@ import {
 Vue.prototype.$ELEMENT = { size: 'mini' }
 Vue.prototype.$loading = Loading.service
 
+Vue.use(Tooltip)
 Vue.use(Dialog)
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)
