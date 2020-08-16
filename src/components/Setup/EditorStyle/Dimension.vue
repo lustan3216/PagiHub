@@ -11,10 +11,10 @@
       type="flex"
       align="middle"
     >
-      <el-col :span="5">
+      <el-col :span="4">
         <span
           class="title flex"
-          style="align-items: baseline;"
+          style="align-items: baseline"
         >
           W
           <tip class="m-l-5">
@@ -26,7 +26,7 @@
             any device automatically.
             <br >
             <br >
-            The grid system has <b class="crucial">{{ cols }}</b> columns
+            The grid system has <span class="crucial">{{ cols }}</span> columns
             maximum on each device.
           </tip>
         </span>
@@ -41,14 +41,24 @@
         />
       </el-col>
 
-      <el-col :span="3">
-        <span class="title">H</span>
+      <el-col :span="4">
+        <span
+          class="title flex"
+          style="align-items: baseline"
+        >
+          H
+          <tip class="m-l-5">
+            Ratio will be ignored if height unit is
+            <span class="crucial">vw</span>.
+          </tip>
+        </span>
       </el-col>
 
       <el-col :span="12">
         <select-unit
           :disabled="!gridItemNodes.length"
-          v-model.number="h"
+          v-model="h"
+          :units="['px', 'vh']"
         />
       </el-col>
     </el-row>
@@ -64,7 +74,7 @@ import SelectUnit from '@/components/Components/SelectUnit'
 import { Divider } from 'element-ui'
 import { COLUMNS } from '@/const'
 import { isGridItem } from '@/utils/node'
-import { arrayUniq } from '@/utils/tool'
+import { arrayLast, arrayUniq } from '@/utils/tool'
 import AutoHeight from './AutoHeight'
 import Ratio from './Ratio'
 
@@ -103,10 +113,7 @@ export default {
     },
     w: {
       get() {
-        const allSame = arrayUniq(this.allW).length === 1
-        if (allSame) {
-          return this.allW[0]
-        }
+        return arrayLast(this.allW)
       },
       set(value) {
         const records = []
@@ -123,10 +130,7 @@ export default {
     },
     h: {
       get() {
-        const allSame = arrayUniq(this.allH).length === 1
-        if (allSame) {
-          return this.allH[0]
-        }
+        return arrayLast(this.allH)
       },
       set(value) {
         const records = []

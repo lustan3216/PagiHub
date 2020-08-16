@@ -1,12 +1,17 @@
 <template>
+  <!--  padding: 1px; 很重要，因為grid item -1px, 如果item貼齊上邊，會因為上面看不到虛線下面看得到虛線-->
   <div
-    v-if="editingComponentSetId"
     id="art-board"
-    :id="editingComponentSetId"
+    :style="{
+      padding: isDraftMode ? '1px' : false
+    }"
     class="art-board"
     @scroll="onScroll"
   >
-    <component-set :id="editingComponentSetId" />
+    <component-set
+      v-if="editingComponentSetId"
+      :id="editingComponentSetId"
+    />
   </div>
 </template>
 
@@ -15,6 +20,7 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import ComponentSet from '../TemplateUtils/ComponentSet'
 
+let timer = null
 export default {
   name: 'ArtBoard',
   components: {
@@ -26,11 +32,6 @@ export default {
       rootComponentSetId: this.id
     }
   },
-  data() {
-    return {
-      canvasWidth: 0
-    }
-  },
   computed: {
     ...mapState('app', ['scaleRatio']),
     ...mapState('component', ['editingComponentSetId']),
@@ -38,19 +39,18 @@ export default {
       return this.componentsMap[this.editingComponentSetId]
     }
   },
+  mounted() {
+    this.artBoardResizing(false)
+  },
   methods: {
-    ...mapMutations('app', {
-      appSET: 'SET'
-    }),
-    ...mapActions('app', ['resizeNodeQuickFn']),
+    ...mapActions('app', ['artBoardResizing']),
     onScroll() {
-      this.APP_SET({ windowResizing: true })
+      this.artBoardResizing(true)
       if (timer !== null) {
         clearTimeout(timer)
       }
       timer = setTimeout(() => {
-        this.APP_SET({ windowResizing: false })
-        this.resizeNodeQuickFn()
+        this.artBoardResizing(false)
       }, 100)
     }
   }

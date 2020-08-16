@@ -30,10 +30,25 @@
 </template>
 
 <script>
-import forGridItem from './mixins/forGridItem'
+import forNodeMixin from './mixins/forNode'
+import { isGridItem } from '@/utils/node'
 export default {
   name: 'Overflow',
-  mixins: [forGridItem('overflow')]
+  mixins: [forNodeMixin('overflow')],
+  computed: {
+    nodes() {
+      const nodes = []
+      this.selectedComponentNodes.filter(node => {
+        if (isGridItem(node)) {
+          nodes.push(node)
+        } else if (isGridItem(node.parentNode)) {
+          nodes.push(node.parentNode)
+        }
+      })
+
+      return nodes
+    },
+  }
 }
 </script>
 

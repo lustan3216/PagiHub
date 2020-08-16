@@ -30,11 +30,11 @@ export const gridItems = function() {
   return [
     {
       [TAG]: GRID_ITEM,
-      [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 100 })
+      [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: '100px' })
     },
     {
       [TAG]: GRID_ITEM,
-      [PROPS]: mapPoints({ x: 22, y: 0, w: 44, h: 130 })
+      [PROPS]: mapPoints({ x: 22, y: 0, w: 44, h: '130px' })
     }
   ]
 }
@@ -81,14 +81,14 @@ export const carousel = function() {
         [CAN_NEW_ITEM]: false,
         [CHILDREN]: [
           {
-            [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }),
+            [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: '71px' }),
             [TAG]: GRID_ITEM,
             [KEY]: 'prev',
             [CAN_NOT_COPY]: true,
             [CAN_NOT_DELETE]: true
           },
           {
-            [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }),
+            [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: '71px' }),
             [TAG]: GRID_ITEM,
             [KEY]: 'next',
             [CAN_NOT_COPY]: true,

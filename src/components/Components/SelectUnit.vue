@@ -90,7 +90,7 @@ export default {
     },
     units: {
       type: [Array, String],
-      default: () => ['px', '%', 'vh', 'vw']
+      default: () => ['px', '%']
     }
   },
   data() {

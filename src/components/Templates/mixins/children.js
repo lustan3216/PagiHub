@@ -52,7 +52,7 @@ export default {
     _addNodesToParentAndRecord(nodeTree = {}) {
       // nodeTree should be single node instead of an array
       // could be triggered by copy, delete
-      this.SET_EDITING_COMPONENT_SET_ID(this.rootComponentSetId)
+
       const records = []
 
       nodeTree = cloneJson(nodeTree)

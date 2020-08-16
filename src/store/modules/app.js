@@ -7,11 +7,13 @@ import {
 } from '@/utils/node'
 import { quickFnMap } from '@/components/TemplateUtils/NodeQuickFunctions'
 import { debounce } from 'throttle-debounce'
+import { BREAK_POINTS } from '@/const'
 
 const state = {
-  windowResizing: false,
+  artBoardResizing: false,
   breakpoint: 'lg',
   artBoardWidth: 1200,
+  artBoardHeight: 768,
   scaleRatio: 1,
   selectedComponentIds: [],
   copyComponentIds: [],
@@ -85,7 +87,28 @@ const actions = {
     })
     return copyComponentIds
   },
-  resizeNodeQuickFn: debounce(250, function({ state }) {
+
+  artBoardResizing: debounce(50, function(
+    { state, commit, dispatch },
+    boolean
+  ) {
+    const { clientWidth, clientHeight } = document.getElementById('art-board')
+    const points = ['lg', 'md', 'sm', 'xs', 'xxs']
+    const breakpoint = points.find(key => clientWidth >= BREAK_POINTS[key])
+
+    commit('SET', {
+      breakpoint,
+      artBoardResizing: boolean,
+      artBoardWidth: parseInt(clientWidth),
+      artBoardHeight: parseInt(clientHeight)
+    })
+
+    if (!boolean) {
+      dispatch('resizeNodeQuickFn')
+    }
+  }),
+
+  resizeNodeQuickFn: debounce(210, function({ state }) {
     state.selectedComponentIds.forEach(id => {
       if (quickFnMap[id]) {
         quickFnMap[id].resize()

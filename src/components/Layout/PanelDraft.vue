@@ -1,5 +1,8 @@
 <template>
-  <div class="editor">
+  <div
+    ref="panelDraft"
+    class="editor"
+  >
     <portal
       v-if="isDraftMode"
       to="nav-middle"
@@ -15,10 +18,10 @@
           :min-height="567"
           :min-width="320"
           :draggable="false"
-          @resize="resizing"
-          @resizeEnd="resized"
+          @resize="artBoardResizing(true)"
+          @resizeEnd="artBoardResizing(false)"
         >
-          <art-board ref="artBoard" />
+          <art-board />
         </dialog-interacted>
       </view-port>
     </main>
@@ -41,12 +44,8 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
-import { isMac } from '@/utils/device'
 import ComponentSet from '../TemplateUtils/ComponentSet'
 import DialogInteracted from '@/components/Components/DialogInteracted'
-import { BREAK_POINTS } from '@/const'
-
-let timer = null
 
 export default {
   name: 'PanelDraft',
@@ -63,13 +62,6 @@ export default {
   computed: {
     ...mapState('app', ['selectedComponentIds'])
   },
-  watch: {
-    editingComponentSetId(value) {
-      if (value) {
-        this.checkBreakpoint()
-      }
-    }
-  },
   created() {
     if (this.$route.params.projectId) {
       this.getProject(this.$route.params.projectId).then(project => {
@@ -81,56 +73,13 @@ export default {
 
     this.initExamples()
     window.addEventListener('resize', () => {
-      this.checkBreakpoint()
-      this.setProductionIfWindowSmall()
+      this.artBoardResizing(true)
     })
   },
   methods: {
-    ...mapActions('app', ['resizeNodeQuickFn']),
+    ...mapActions('app', ['artBoardResizing']),
     ...mapActions('example', ['initExamples']),
-    ...mapActions('component', ['patchComponentSet', 'getProject']),
-    ...mapMutations('mode', ['SET_PRODUCTION_MODE', 'SET_DRAFT_MODE']),
-    ...mapMutations('app', {
-      APP_SET: 'SET'
-    }),
-    isMac,
-    setProductionIfWindowSmall() {
-      if (window.innerWidth < 992) {
-        this.SET_PRODUCTION_MODE()
-      } else {
-        this.SET_DRAFT_MODE()
-      }
-
-      this.APP_SET({ windowResizing: true })
-
-      if (timer !== null) {
-        clearTimeout(timer)
-      }
-
-      timer = setTimeout(() => {
-        this.APP_SET({ windowResizing: false })
-        this.resizeNodeQuickFn()
-      }, 100)
-    },
-    resizing() {
-      this.APP_SET({ windowResizing: true })
-      this.checkBreakpoint()
-    },
-    resized() {
-      this.APP_SET({ windowResizing: false })
-      this.resizeNodeQuickFn()
-    },
-    checkBreakpoint() {
-      this.$nextTick(() => {
-        const { clientWidth } = this.$refs.artBoard.$el
-        const points = ['lg', 'md', 'sm', 'xs', 'xxs']
-
-        this.APP_SET({
-          breakpoint: points.find(key => clientWidth >= BREAK_POINTS[key]),
-          artBoardWidth: parseInt(clientWidth)
-        })
-      })
-    }
+    ...mapActions('component', ['getProject'])
   }
 }
 </script>

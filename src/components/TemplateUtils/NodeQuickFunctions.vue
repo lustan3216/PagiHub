@@ -134,7 +134,7 @@ export default {
       'copyComponentIds',
       'selectedComponentIds',
       'selectedComponentNode',
-      'windowResizing'
+      'artBoardResizing'
     ]),
     newItemToolTip() {
       if (this.node[CAN_NEW_ITEM]) {
@@ -215,7 +215,7 @@ export default {
     }
   },
   watch: {
-    windowResizing(value) {
+    artBoardResizing(value) {
       if (value) {
         this.framer.style.opacity = 0
       }

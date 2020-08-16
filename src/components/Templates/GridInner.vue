@@ -29,12 +29,13 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { AUTO_HEIGHT, CHILDREN, PROPS } from '@/const'
+import { AUTO_HEIGHT, CHILDREN, COLUMNS, PROPS } from '@/const'
 import { deleteBy } from '@/utils/tool'
 import VueGridLayout from 'vue-grid-layout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { debounce } from 'throttle-debounce'
+import { toPrecision } from '@/utils/number'
 
 export default {
   name: 'GridInner',
@@ -64,7 +65,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds', 'breakpoint', 'artBoardWidth']),
+    ...mapState('app', [
+      'selectedComponentIds',
+      'breakpoint',
+      'artBoardWidth',
+      'artBoardHeight'
+    ]),
     ...mapState('component', ['componentsMap']),
     currentBreakPoint() {
       return this.isExample ? 'lg' : this.breakpoint
@@ -87,7 +93,7 @@ export default {
       deep: true,
       immediate: true
     },
-    artBoardWidth: debounce(100, function() {
+    artBoardWidth: debounce(50, function() {
       this.getCurrentLayout(this.innerChildren)
     }),
     lockIds(ids) {
@@ -113,14 +119,19 @@ export default {
           return
         }
 
-        const w = child.props[breakPoint].w || 0
-        let h = child.props[breakPoint].h || 0
+        const w = child.props[breakPoint].w
+        let h = child.props[breakPoint].h
+        const hUnit = h.toString().replace(/\d/g, '')
         const { ratio } = child.props
 
-        if (ratio && ratio.h && ratio.w) {
+        if (hUnit === 'px' && ratio && ratio.h && ratio.w) {
           layoutW = layoutW || this.$refs.gridGenerator.$el.clientWidth
-          const itemWidth = (parseInt(layoutW) / 96) * w
+          const itemWidth = (parseInt(layoutW) / COLUMNS) * w
           h = (itemWidth / ratio.w) * ratio.h
+        } else if (hUnit === 'vh') {
+          h = (this.artBoardHeight / 100) * parseInt(h)
+        } else {
+          h = parseInt(h)
         }
 
         layout.push({
@@ -130,7 +141,8 @@ export default {
           x: child.props[breakPoint].x || 0,
           y: child.props[breakPoint].y || 0,
           w,
-          h
+          h,
+          hUnit: hUnit
         })
       })
 
@@ -153,10 +165,16 @@ export default {
           w: oldChild.w
         }
 
+        let h = child.h
+
+        if (child.hUnit === 'vh') {
+          h = h / (this.artBoardHeight / 100)
+        }
+
         const newValue = {
           x: child.x,
           y: child.y,
-          h: child.h,
+          h: toPrecision(h, 0) + child.hUnit,
           w: child.w
         }
         if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
@@ -167,7 +185,9 @@ export default {
         }
       })
 
-      this.RECORD(records)
+      if (records.length) {
+        this.RECORD(records)
+      }
     },
     itemAutoHeight(newChildren) {
       // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto height的高了

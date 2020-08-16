@@ -159,7 +159,8 @@ const mutations = {
     })
   },
   SOFT_RECORD(state, payLoad) {
-    const set = ({ path, value }) => setValueByPath(state.componentsMap, path, value)
+    const set = ({ path, value }) =>
+      setValueByPath(state.componentsMap, path, value)
     Array.isArray(payLoad) ? payLoad.forEach(set) : set(payLoad)
   },
   RECORD(state, payLoad) {

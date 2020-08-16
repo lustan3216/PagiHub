@@ -224,7 +224,7 @@ export default {
     visibleChange(index, value) {
       this.boxShadowArray[index].visible = value
       const boxShadow = stringify(this.boxShadowArray.filter(x => x.visible))
-      this.softRecordStyles(boxShadow)
+      this.softRecordStyles({ boxShadow })
     }
   }
 }

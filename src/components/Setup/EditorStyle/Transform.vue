@@ -298,7 +298,7 @@ export default {
     visibleChange(index, value) {
       this.transformArray[index].visible = value
       const transform = this.stringify(this.transformArray.filter(x => x.visible))
-      this.softRecordStyles(transform)
+      this.softRecordStyles({ transform })
     }
   }
 }
