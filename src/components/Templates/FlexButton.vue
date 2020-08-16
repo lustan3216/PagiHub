@@ -3,13 +3,13 @@
     v-free-style="innerStyles"
     v-if="isDraftMode"
     v-bind="innerProps"
-    type
+    type="text"
     class="wh-100 m-0 button"
   >
     <text-editor-inner
       :id="id"
       :editing="editing"
-      :value="innerValue || 'Edit Me'"
+      :value="innerValue || 'I can link'"
     />
 
     <portal

@@ -92,7 +92,7 @@ export const carousel = function() {
             [TAG]: GRID_ITEM,
             [KEY]: 'next',
             [CAN_NOT_COPY]: true,
-            [CAN_NOT_DELETE]: true,
+            [CAN_NOT_DELETE]: true
           }
         ]
       }),
@@ -115,6 +115,9 @@ export const flexButton = function() {
   return {
     [TAG]: 'flex-button',
     [LABEL]: 'link',
+    [STYLE]: {
+      default: { border: '1px solid #dcdfe6' }
+    },
     [CAN_BE_EDITED]: true
   }
 }

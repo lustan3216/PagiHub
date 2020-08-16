@@ -14,6 +14,7 @@ https://github.com/antonreshetov/vue-eva-icons
 bug: grid 畫面縮小後會壞掉, hidden 變換螢幕時也會壞掉
 
 <ol>
+font的padding
 layer 往後移，如果下一層沒東西就直接往後下移層，如果有東西就間隔一個跳下一層 // 5<li>bring to front, bring forward, send to back, 至前，至後, style 永遠再 layer 最底層</li>
 style 的checkbox 暫時刪除
 position fixed (might be a checkbox) // 如果是這個可能多出 top left

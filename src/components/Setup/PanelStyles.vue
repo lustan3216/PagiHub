@@ -118,7 +118,9 @@ export default {
       return this.selectedComponentIds.map(id => this.componentsMap[id])
     },
     canFont() {
-      return this.nodes.every(node => [TEXT_EDITOR].includes(node.tag))
+      return this.nodes.every(node =>
+        [TEXT_EDITOR, 'flex-button'].includes(node.tag)
+      )
     },
     canRadius() {
       return this.nodes.every(node => ![GRID, LAYERS].includes(node.tag))
