@@ -110,7 +110,7 @@ export default {
     changeUniq(uniq) {
       this.isUniq = uniq
       if (uniq) {
-        this.assignStyles({
+        this.recordStyles({
           border: this.borderTop,
           borderTop: undefined,
           borderRight: undefined,
@@ -118,7 +118,7 @@ export default {
           borderLeft: undefined
         })
       } else {
-        this.assignStyles({
+        this.recordStyles({
           border: undefined,
           borderTop: this.border,
           borderRight: this.border,
@@ -144,7 +144,7 @@ export default {
       })
 
       if (isUniq) {
-        this.assignStyles({
+        this.recordStyles({
           border,
           borderTop: undefined,
           borderRight: undefined,
@@ -152,7 +152,7 @@ export default {
           borderLeft: undefined
         })
       } else {
-        this.assignStyles({
+        this.recordStyles({
           border: undefined,
           borderTop,
           borderRight,
@@ -171,7 +171,7 @@ export default {
     checkIsUniq(borders = this.borders) {
       return arrayUniq(Object.values(borders)).length === 1
     },
-    assignStyles(object) {
+    recordStyles(object) {
       const records = []
 
       for (const key in object) {

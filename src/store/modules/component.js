@@ -24,7 +24,7 @@ import {
   toArray,
   objectFirstKey,
   cloneJson,
-  isPlainObject
+  setValueByPath
 } from '@/utils/tool'
 import { CHILDREN, ID, PARENT_ID, LABEL } from '@/const'
 import { isProject, isComponentSet } from '@/utils/node'
@@ -158,12 +158,12 @@ const mutations = {
       }
     })
   },
+  SOFT_RECORD(state, payLoad) {
+    const set = ({ path, value }) => setValueByPath(state.componentsMap, path, value)
+    Array.isArray(payLoad) ? payLoad.forEach(set) : set(payLoad)
+  },
   RECORD(state, payLoad) {
-    if (Array.isArray(payLoad) && payLoad.length) {
-      jsonHistory.record(payLoad)
-    } else if (isPlainObject(payLoad)) {
-      jsonHistory.record(payLoad)
-    }
+    jsonHistory.record(payLoad)
   },
   REDO() {
     const done = rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)

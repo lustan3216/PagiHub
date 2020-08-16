@@ -38,8 +38,9 @@
     >
       <el-col :span="2">
         <el-checkbox
-          v-model="option.visible"
+          :value="option.visible"
           style="margin-top: 7px;"
+          @input="visibleChange(index, $event)"
         />
       </el-col>
 
@@ -67,7 +68,6 @@ import forNodeMixin from './mixins/forNode'
 import { Divider } from 'element-ui'
 import { arrayLast, splitAt } from '@/utils/tool'
 import { humanize } from '@/utils/string'
-import { stringify } from '@/components/Setup/EditorStyle/utils/boxShadow'
 
 export default {
   name: 'Effect',
@@ -177,18 +177,17 @@ export default {
   methods: {
     humanize,
     onChange(index, value) {
-      console.log(value)
       this.filterArray[index].value = value
-
-      const filter = this.filterArray
+      this.recordStyles({ filter: this.stringify(this.filterArray) })
+    },
+    stringify(filterArray) {
+      return filterArray
         .filter(effect => effect.name && effect.value)
         .map(effect => {
           const options = this.options[effect.name]
           return `${options.name}(${parseFloat(effect.value)}${options.units})`
         })
         .join(' ')
-
-      this.assignStyles({ filter })
     },
     departFilterToArray() {
       const split = this.filter.match(/[^)|\s]+\)/g) || []
@@ -205,7 +204,12 @@ export default {
     },
     clean() {
       this.filterArray = this.filterArray.filter(x => x.visible)
-      this.assignStyles({ filter: this.filterArray })
+      this.recordStyles({ filter: this.filterArray })
+    },
+    visibleChange(index, value) {
+      this.filterArray[index].visible = value
+      const filter = this.stringify(this.filterArray.filter(x => x.visible))
+      this.softRecordStyles(filter)
     }
   }
 }

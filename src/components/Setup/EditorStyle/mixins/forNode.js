@@ -1,6 +1,7 @@
 import { STYLE } from '@/const'
 import { mapMutations, mapGetters } from 'vuex'
 import { arrayLast, getValueByPath } from '@/utils/tool'
+import { stringify } from '@/components/Setup/EditorStyle/utils/boxShadow'
 
 export default function(attr) {
   return {
@@ -22,13 +23,13 @@ export default function(attr) {
           return arrayLast(this.allValues) || ''
         },
         set(value) {
-          this.assignStyles({ [attr]: value || undefined })
+          this.recordStyles({ [attr]: value || undefined })
         }
       }
     },
     methods: {
-      ...mapMutations('component', ['RECORD']),
-      assignStyles(object) {
+      ...mapMutations('component', ['RECORD', 'SOFT_RECORD']),
+      recordStyles(object) {
         const records = []
 
         for (const key in object) {
@@ -43,6 +44,18 @@ export default function(attr) {
         }
 
         this.RECORD(records)
+      },
+      softRecordStyles(value) {
+        const records = []
+
+        this.selectedComponentNodes.forEach(node => {
+          records.push({
+            path: `${node.id}.${STYLE}.${this.state}.${attr}`,
+            value
+          })
+        })
+
+        this.SOFT_RECORD(records)
       }
     }
   }

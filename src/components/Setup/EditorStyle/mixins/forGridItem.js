@@ -35,13 +35,13 @@ export default function(attr) {
           return arrayLast(this.allValues) || ''
         },
         set(value) {
-          this.assignStyles({ [attr]: value || undefined })
+          this.recordStyles({ [attr]: value || undefined })
         }
       }
     },
     methods: {
       ...mapMutations('component', ['RECORD']),
-      assignStyles(object) {
+      recordStyles(object) {
         const records = []
 
         for (const key in object) {

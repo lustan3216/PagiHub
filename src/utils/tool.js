@@ -1,6 +1,7 @@
 import objectAssign from 'object-assign'
 import isPlainObject from 'is-plain-object'
 import getValueByPath from 'lodash.get'
+import setValueByPath from 'lodash.set'
 import { isUndefined, isString } from 'element-ui/src/utils/types'
 import { on, off } from 'element-ui/src/utils/dom.js'
 
@@ -9,6 +10,7 @@ export {
   isPlainObject,
   isString,
   getValueByPath,
+  setValueByPath,
   objectAssign,
   on,
   off

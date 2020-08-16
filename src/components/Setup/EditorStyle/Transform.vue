@@ -65,8 +65,9 @@
       >
         <el-col :span="2">
           <el-checkbox
-            v-model="option.visible"
+            :value="option.visible"
             style="margin-top: 7px;"
+            @input="visibleChange(index, $event)"
           />
         </el-col>
 
@@ -191,35 +192,38 @@ export default {
   methods: {
     onChange(index, value) {
       this.transformArray[index].value = value
-      const {
-        skewX,
-        skewY,
-        translateX,
-        translateY,
-        scaleX = 1,
-        scaleY = 1,
-        rotate
-      } = this.transformArray.reduce((acc, effect) => {
+      this.recordStyles({ transform: this.stringify(this.transformArray) })
+    },
+    stringify(transformArray) {
+      const ValidValue  = transformArray.reduce((acc, effect) => {
         if (effect.value || effect.value === 0) {
           acc[effect.name] = effect.value
         }
         return acc
       }, {})
 
+      const {
+              skewX,
+              skewY,
+              translateX,
+              translateY,
+              scaleX = 1,
+              scaleY = 1,
+              rotate
+            } = ValidValue
+
       const _rotate = rotate && `rotate(${rotate})`
       const skew = this.bindValue(skewX, skewY, 'skew')
       const translate = this.bindValue(translateX, translateY, 'translate')
       const scale =
-        scaleX === scaleY && scaleX === 1
-          ? ''
-          : this.bindValue(scaleX, scaleY, 'scale')
+              scaleX === scaleY && scaleX === 1
+                ? ''
+                : this.bindValue(scaleX, scaleY, 'scale')
 
-      const transform = [_rotate, skew, translate, scale]
+      return [_rotate, skew, translate, scale]
         .filter(x => x)
         .join(' ')
         .trim()
-
-      this.assignStyles({ transform })
     },
     departTransformToArray() {
       const [rotate] = this.getValue(this.transform, 'rotate')
@@ -290,6 +294,11 @@ export default {
         value: this.options[name].default,
         visible: true
       })
+    },
+    visibleChange(index, value) {
+      this.transformArray[index].visible = value
+      const transform = this.stringify(this.transformArray.filter(x => x.visible))
+      this.softRecordStyles(transform)
     }
   }
 }

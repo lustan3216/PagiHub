@@ -42,7 +42,7 @@ export default {
         }
       },
       set(opacity) {
-        this.assignStyles({ opacity: Number(opacity / 100).toString() })
+        this.recordStyles({ opacity: Number(opacity / 100).toString() })
       }
     }
   }

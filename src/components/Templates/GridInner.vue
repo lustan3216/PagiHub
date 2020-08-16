@@ -167,9 +167,7 @@ export default {
         }
       })
 
-      if (records.length) {
-        this.RECORD(records)
-      }
+      this.RECORD(records)
     },
     itemAutoHeight(newChildren) {
       // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto height的高了

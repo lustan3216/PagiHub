@@ -39,8 +39,9 @@
           >
             <el-col :span="2">
               <el-checkbox
-                v-model="boxShadow.visible"
+                :value="boxShadow.visible"
                 style="margin-top: 7px;"
+                @input="visibleChange(index, $event)"
               />
             </el-col>
 
@@ -179,7 +180,7 @@ export default {
     },
     onChange(index, key, value) {
       this.boxShadowArray[index][key] = value
-      this.assignStyles({
+      this.recordStyles({
         boxShadow: stringify(this.boxShadowArray) || undefined
       })
     },
@@ -199,13 +200,13 @@ export default {
     },
     clean() {
       this.boxShadowArray = this.boxShadowArray.filter(x => x.visible)
-      this.assignStyles({ boxShadow: stringify(this.boxShadowArray) })
+      this.recordStyles({ boxShadow: stringify(this.boxShadowArray) })
     },
     itemMove({ detail }) {
       const id = detail.ids[0]
       const originalIndex = findIndexBy(this.boxShadowArray, 'id', +id)
       arrayMove(this.boxShadowArray, originalIndex, detail.index)
-      this.assignStyles({ boxShadow: stringify(this.boxShadowArray) })
+      this.recordStyles({ boxShadow: stringify(this.boxShadowArray) })
     },
     addNew() {
       this.boxShadowArray.push({
@@ -218,7 +219,12 @@ export default {
         spreadRadius: 5,
         visible: true
       })
-      this.assignStyles({ boxShadow: stringify(this.boxShadowArray) })
+      this.recordStyles({ boxShadow: stringify(this.boxShadowArray) })
+    },
+    visibleChange(index, value) {
+      this.boxShadowArray[index].visible = value
+      const boxShadow = stringify(this.boxShadowArray.filter(x => x.visible))
+      this.softRecordStyles(boxShadow)
     }
   }
 }

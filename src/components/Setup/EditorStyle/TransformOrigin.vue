@@ -85,7 +85,7 @@ export default {
           transformOrigin = `${x} ${y}`
         }
 
-        this.assignStyles({ transformOrigin })
+        this.recordStyles({ transformOrigin })
       },
       deep: true
     }

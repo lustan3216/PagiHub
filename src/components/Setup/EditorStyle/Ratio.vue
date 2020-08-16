@@ -87,9 +87,7 @@ export default {
           })
         })
 
-        if (records.length) {
-          this.RECORD(records)
-        }
+        this.RECORD(records)
       }
     },
     h: {
@@ -109,9 +107,7 @@ export default {
           })
         })
 
-        if (records.length) {
-          this.RECORD(records)
-        }
+        this.RECORD(records)
       }
     }
   },

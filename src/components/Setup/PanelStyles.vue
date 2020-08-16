@@ -63,7 +63,7 @@
     <!--      <transitions-->
     <!--        :disabled="!isDefaultState"-->
     <!--        :value="styles.transition"-->
-    <!--        @change="assignStyles($event)"-->
+    <!--        @change="recordStyles($event)"-->
     <!--      />-->
   </el-form>
 </template>
