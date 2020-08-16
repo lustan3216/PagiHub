@@ -1,6 +1,6 @@
 import { mapMutations, mapGetters } from 'vuex'
 import { arrayLast, getValueByPath } from '@/utils/tool'
-import { recordStyles, softRecordStyles } from '../utils/record'
+import { STYLE } from '@/const'
 
 export default function(attr) {
   return {
@@ -25,14 +25,44 @@ export default function(attr) {
           return arrayLast(this.allValues) || ''
         },
         set(value) {
-          this.recordStyles(this.nodes, { [attr]: value || undefined })
+          this.recordStyles({ [attr]: value || undefined })
         }
       }
     },
     methods: {
       ...mapMutations('component', ['RECORD', 'SOFT_RECORD']),
-      recordStyles,
-      softRecordStyles
+      recordStyles(object) {
+        const records = []
+
+        for (const key in object) {
+          const value = object[key]
+
+          this.nodes.forEach(node => {
+            records.push({
+              path: `${node.id}.${STYLE}.${this.state}.${key}`,
+              value
+            })
+          })
+        }
+
+        this.RECORD(records)
+      },
+      softRecordStyles(object) {
+        const records = []
+
+        for (const key in object) {
+          const value = object[key]
+
+          this.nodes.forEach(node => {
+            records.push({
+              path: `${node.id}.${STYLE}.${this.state}.${key}`,
+              value
+            })
+          })
+        }
+
+        this.SOFT_RECORD(records)
+      }
     }
   }
 }
