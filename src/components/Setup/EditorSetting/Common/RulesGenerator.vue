@@ -12,12 +12,7 @@
 <script>
 import formCreate from '@form-create/element-ui'
 import { Switch, Tooltip, InputNumber } from 'element-ui'
-import {
-  arrayLast,
-  cloneObject,
-  getValueByPath,
-  objectHasAnyKey
-} from '@/utils/tool'
+import { cloneObject, getValueByPath, objectHasAnyKey } from '@/utils/tool'
 import { vm } from '@/utils/vmMap'
 import { mapGetters, mapMutations } from 'vuex'
 import { PROPS } from '@/const'
@@ -50,7 +45,7 @@ export default {
     return {
       api: {},
       option: {
-        form: { size: 'mini' },
+        form: { labelPosition: 'right', size: 'mini', labelWidth: '100px' },
         info: { type: 'tooltip' },
         submitBtn: { show: false }
       },

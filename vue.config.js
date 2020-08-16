@@ -9,9 +9,7 @@ module.exports = {
   transpileDependencies: [
     // 'element-ui',
     'vue-grid-generator',
-    'vue',
-    'vue-clamp',
-    'resize-detector'
+    'vue'
   ],
   runtimeCompiler: true,
   productionSourceMap: false,

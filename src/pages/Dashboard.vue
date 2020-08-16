@@ -11,42 +11,42 @@
         {{ username || email }}
       </div>
 
-      <el-divider/>
+      <el-divider />
 
       <div class="flex-column">
         <el-button
           type="text"
           icon="el-icon-camera"
           size="medium"
-          class="link"
+          class="link-li"
           @click="$router.push({ name: 'Design' })"
         >Design</el-button>
         <el-button
           type="text"
           icon="el-icon-picture-outline-round"
           size="medium"
-          class="link"
+          class="link-li"
           @click="$router.push({ name: 'Profile' })"
         >Profile</el-button>
         <el-button
           type="text"
           icon="el-icon-picture-outline-round"
           size="medium"
-          class="link"
+          class="link-li"
           @click="$router.push({ name: 'Pages' })"
         >Pages</el-button>
         <el-button
           type="text"
           icon="el-icon-help"
           size="medium"
-          class="link"
+          class="link-li"
           @click="$router.push({ name: 'Help' })"
         >Help</el-button>
         <el-button
           type="text"
           icon="el-icon-picture-outline-round"
           size="medium"
-          class="link"
+          class="link-li"
           @click="logout"
         >Logout</el-button>
       </div>
@@ -78,25 +78,25 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .sidebar {
-    padding: 30px;
-    flex: 1;
-    background-color: #F9F9F9;
-  }
-  .link {
-    text-align: left;
-    margin-left: 0;
-    font-size: 14px;
-    color: $color-black;
-    font-weight: normal;
-  }
-  .name {
-    color: #909399;
-    font-size: 14px;
-  }
-  .view{
-    flex: 6;
-    @include calc-vh('height', '100vh');
-    overflow: scroll;
-  }
+.sidebar {
+  padding: 30px;
+  flex: 1;
+  background-color: #f9f9f9;
+}
+.link-li {
+  text-align: left;
+  margin-left: 0;
+  font-size: 14px;
+  color: $color-black;
+  font-weight: normal;
+}
+.name {
+  color: #909399;
+  font-size: 14px;
+}
+.view {
+  flex: 6;
+  @include calc-vh('height', '100vh');
+  overflow: scroll;
+}
 </style>

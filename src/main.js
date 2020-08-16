@@ -3,7 +3,6 @@ import '@/styles/index.scss'
 import '@/utils/polyfill'
 import '@/amplify'
 import 'intersection-observer'
-import 'whatwg-fetch'
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
@@ -92,7 +91,7 @@ Vue.use(Loading.directive)
 // eslint-disable-next-line
 import i18n from './i18n'
 
-import WebFont from 'webfontloader';
+import WebFont from 'webfontloader'
 Vue.prototype.$t = key => i18n[key]
 Vue.prototype.$Log = console.log
 Vue.prototype.$log = console.log

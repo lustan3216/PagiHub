@@ -26,7 +26,7 @@ import {
   cloneJson,
   isPlainObject
 } from '@/utils/tool'
-import { CHILDREN, ID, PARENT_ID } from '@/const'
+import { CHILDREN, ID, PARENT_ID, LABEL } from '@/const'
 import { isProject, isComponentSet } from '@/utils/node'
 import { defineNodeProperties } from '@/utils/nodeProperties'
 import {
@@ -35,8 +35,7 @@ import {
   recordRootComponentSetIdByArray
 } from '@/utils/rootComponentSetId'
 import { vmAddNodesToParentAndRecord } from '@/utils/vmMap'
-import { artBoard } from '@/templateJson/basic'
-import ca from 'element-ui/src/locale/lang/ca'
+import { layers } from '@/templateJson/basic'
 
 let childrenOf = {}
 const tmpChildrenOf = {}
@@ -232,7 +231,12 @@ const actions = {
       getCopyComponentIds()
       getTmpComponentsArray()
     } else {
-      vmAddNodesToParentAndRecord(id, artBoard())
+      vmAddNodesToParentAndRecord(
+        id,
+        layers({
+          [LABEL]: state.componentsMap[id][LABEL]
+        })
+      )
     }
   },
 

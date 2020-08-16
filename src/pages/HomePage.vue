@@ -1,6 +1,9 @@
 <template>
   <div class="flex-center">
-    <h1>Yet to do homepage. Please login or go dashboard first then create <span @click="$dialog.open('login')">a</span>  project.</h1>
+    <h1>
+      Yet to do homepage. Please login or go dashboard first then create
+      <span @dblclick="$dialog.open('login')">a</span> project.
+    </h1>
   </div>
 </template>
 
@@ -10,6 +13,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

@@ -3,7 +3,7 @@
     v-if="canSetUp"
     :is="vueComponentTag"
     :id="lastNode.id"
-    class="p-r-10"
+    class="m-t-10 settings"
   />
 </template>
 
@@ -66,3 +66,14 @@ const self = {
 
 export default self
 </script>
+
+<style scoped lang="scss">
+::v-deep.settings {
+  .el-col.el-col-24 {
+    margin-bottom: 10px;
+  }
+  .el-form-item__label {
+    height: 30px;
+  }
+}
+</style>

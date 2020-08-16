@@ -11,9 +11,7 @@
     "purge": "rm -rf ./node_modules/.cache/hard-source"
   },
   "dependencies": {
-    "@aws-amplify/ui-vue": "^0.2.7",
     "@form-create/element-ui": "^1.0.10",
-    "@simonwep/selection-js": "^1.6.0",
     "aws-amplify": "^3.0.17",
     "aws-sdk": "^2.693.0",
     "axios": "^0.19.2",
@@ -41,8 +39,7 @@
     "vue-router": "^3.3.4",
     "vue-shortkey": "^3.1.7",
     "vuex": "^3.1.1",
-    "webfontloader": "^1.6.28",
-    "whatwg-fetch": "^3.2.0"
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@babel/preset-flow": "^7.9.0",
@@ -71,7 +68,7 @@
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-vue": "^4.7.1",
     "hard-source-webpack-plugin": "^0.13.1",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "sass-loader": "^7.1.0",
     "vue-cli-plugin-s3-deploy": "^4.0.0-rc3",
     "vue-cli-plugin-webfontloader": "^0.1.1",

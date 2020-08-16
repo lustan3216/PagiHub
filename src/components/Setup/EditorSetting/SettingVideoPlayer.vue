@@ -57,7 +57,12 @@ export default {
             options: ['youtube', 'vimeo']
           }),
           string('embedId', {
-            validate: [required]
+            validate: [required],
+            props: {
+              type: 'textarea',
+              row: 3,
+              resize: 'vertical'
+            }
           }),
           select('controls', {
             options: defaultSetting.controls,

@@ -60,7 +60,7 @@ export default {
     Grid: () => import('../Templates/Grid'),
     GridItem: () => import('../Templates/GridItem'),
 
-    Divider: () => import('../Templates/Divider'),
+    // Divider: () => import('../Templates/Divider'),
     VideoPlayer: () => import('../Templates/VideoPlayer'),
     Layers: () => import('../Templates/Layers'),
     Drawer: () => import('../Templates/Drawer'),

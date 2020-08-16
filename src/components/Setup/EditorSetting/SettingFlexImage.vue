@@ -36,9 +36,20 @@ export default {
             options: ['fill', 'contain', 'cover', 'none', 'scale-down']
           }),
           string(SRC, {
-            validate: [{ type: 'url', message: '需選擇正確的網址' }]
+            validate: [{ type: 'url', message: '需選擇正確的網址' }],
+            props: {
+              type: 'textarea',
+              row: 3,
+              resize: 'vertical'
+            }
           }),
-          string(ERROR)
+          string(ERROR, {
+            props: {
+              type: 'textarea',
+              row: 3,
+              resize: 'vertical'
+            }
+          })
         ],
         defaultSetting
       )

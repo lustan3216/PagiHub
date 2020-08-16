@@ -14,9 +14,8 @@
     </el-button-group>
 
     <div class="sidebar-right-content">
-      <panel-styles v-if="activePanel === 'PanelStyles'"/>
+      <panel-styles v-if="activePanel === 'PanelStyles'" />
       <panel-settings v-else-if="activePanel === 'PanelSettings'" />
-
     </div>
   </div>
 </template>
@@ -79,7 +78,7 @@ export default {
     font-size: 12px;
     line-height: 18px;
   }
-  &.el-button-group{
+  &.el-button-group {
     margin-left: -1px;
     & > button {
       border-color: $color-grey;
@@ -91,10 +90,10 @@ export default {
     @include calc-vh('max-height', '100vh - 100px');
     overflow: scroll;
 
-    .el-button--mini, .el-button--mini.is-round{
+    .el-button--mini,
+    .el-button--mini.is-round {
       padding: 7px;
     }
   }
 }
-
 </style>

@@ -2,6 +2,7 @@ import store from '@/store'
 import localforage from 'localforage'
 import { cloneJson } from '@/utils/tool'
 import { API } from 'aws-amplify'
+import axios from 'axios'
 
 export function getProjects() {
   return API.get('staging', '/projects', {})
@@ -29,10 +30,8 @@ export function getComponentSets(projectId) {
 
 export function getComponentSetChildren(id) {
   const userId = store.state.user.id.split('_')[1]
-  return fetch(
-    `https://d3uga24p04v3ke.cloudfront.net/${userId}/${id}/draft.json`
-  )
-    .then(x => x.json())
+  return axios
+    .get(`https://d3uga24p04v3ke.cloudfront.net/${userId}/${id}/draft.json`)
     .catch(_ => [])
 }
 

@@ -59,16 +59,6 @@ export const layers = function(options) {
   }
 }
 
-export const artBoard = function() {
-  return {
-    [TAG]: LAYERS,
-    [KEY]: 'artBoard',
-    [LABEL]: 'artBoard',
-    [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [grid()]
-  }
-}
-
 export const iframer = function(options) {
   return {
     [TAG]: 'iframer',
@@ -135,12 +125,6 @@ export const flexImage = function() {
   }
 }
 
-export const divider = function() {
-  return {
-    [TAG]: 'divider'
-  }
-}
-
 export const videoPlayer = function() {
   return {
     [TAG]: 'video-player',
@@ -168,7 +152,6 @@ export default [
   textEditor(),
   flexImage(),
   carousel(),
-  divider(),
   videoPlayer(),
   flexButton(),
   iframer()
