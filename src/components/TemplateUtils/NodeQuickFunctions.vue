@@ -1,7 +1,7 @@
 <template>
   <portal
     v-if="element"
-    :to="`Interface-${id}`"
+    :to="`PanelDraft-${id}`"
   >
     <div
       :id="`quick-fn-${id}`"

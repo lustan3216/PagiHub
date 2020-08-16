@@ -56,7 +56,7 @@ export default new VueRouter({
     {
       path: '/:projectId/draft',
       name: 'Draft',
-      component: () => import('@/components/Layout/Interface')
+      component: () => import('@/components/Layout/PanelDraft')
     }
   ]
 })

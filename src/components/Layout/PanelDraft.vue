@@ -1,21 +1,40 @@
 <template>
-  <view-port>
-    <dialog-interacted
-      :min-height="567"
-      :min-width="320"
-      :draggable="false"
-      @resize="resizing"
-      @resizeEnd="resized"
+  <div class="editor">
+    <portal
+      v-if="isDraftMode"
+      to="nav-middle"
     >
-      <art-board
-        v-if="editingComponentSetId"
-        ref="artBoard"
-        :id="editingComponentSetId"
-        :key="editingComponentSetId"
-        @scroll.native="onScroll"
-      />
-    </dialog-interacted>
-  </view-port>
+      <function-bar />
+    </portal>
+
+    <sidebar-left v-if="isDraftMode" />
+
+    <main class="flex1 relative over-hidden">
+      <view-port>
+        <dialog-interacted
+          :min-height="567"
+          :min-width="320"
+          :draggable="false"
+          @resize="resizing"
+          @resizeEnd="resized"
+        >
+          <art-board ref="artBoard" />
+        </dialog-interacted>
+      </view-port>
+    </main>
+
+    <sidebar-right v-if="isDraftMode" />
+
+    <portal-target
+      name="TextEditorMenu"
+      slim
+    />
+    <portal-target
+      v-for="id in selectedComponentIds"
+      :name="`PanelDraft-${id}`"
+      :key="`PanelDraft-${id}`"
+    />
+  </div>
 </template>
 
 <script>
@@ -35,10 +54,14 @@ export default {
     ArtBoard,
     ViewPort,
     ComponentSet,
-    DialogInteracted
+    DialogInteracted,
+    SidebarRight: () => import('@/components/Layout/SidebarRight'),
+    SidebarLeft: () => import('@/components/Layout/SidebarLeft'),
+    FunctionBar: () => import('@/components/Layout/FunctionBar'),
+    PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
   computed: {
-    ...mapState('component', ['editingComponentSetId'])
+    ...mapState('app', ['selectedComponentIds'])
   },
   watch: {
     editingComponentSetId(value) {
@@ -89,16 +112,6 @@ export default {
         this.resizeNodeQuickFn()
       }, 100)
     },
-    onScroll() {
-      this.APP_SET({ windowResizing: true })
-      if (timer !== null) {
-        clearTimeout(timer)
-      }
-      timer = setTimeout(() => {
-        this.APP_SET({ windowResizing: false })
-        this.resizeNodeQuickFn()
-      }, 100)
-    },
     resizing() {
       this.APP_SET({ windowResizing: true })
       this.checkBreakpoint()
@@ -127,5 +140,12 @@ export default {
   overflow: scroll;
   background-color: #fff;
   @include calc-vh('height', '100vh - 80px');
+}
+
+.editor {
+  @include calc-vh('height', '100vh - 50px');
+  display: flex;
+  overflow: hidden;
+  background-color: $color-grey;
 }
 </style>

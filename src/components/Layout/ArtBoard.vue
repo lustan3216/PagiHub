@@ -1,11 +1,17 @@
 <template>
-  <div id="art-board" class="art-board">
-    <component-set :id="id" />
+  <div
+    v-if="editingComponentSetId"
+    id="art-board"
+    :id="editingComponentSetId"
+    class="art-board"
+    @scroll="onScroll"
+  >
+    <component-set :id="editingComponentSetId" />
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import DialogInteracted from '@/components/Components/DialogInteracted'
 import ComponentSet from '../TemplateUtils/ComponentSet'
 
@@ -20,12 +26,6 @@ export default {
       rootComponentSetId: this.id
     }
   },
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
   data() {
     return {
       canvasWidth: 0
@@ -33,22 +33,34 @@ export default {
   },
   computed: {
     ...mapState('app', ['scaleRatio']),
+    ...mapState('component', ['editingComponentSetId']),
     node() {
-      return this.componentsMap[this.id]
+      return this.componentsMap[this.editingComponentSetId]
     }
   },
   methods: {
     ...mapMutations('app', {
       appSET: 'SET'
-    })
+    }),
+    ...mapActions('app', ['resizeNodeQuickFn']),
+    onScroll() {
+      this.APP_SET({ windowResizing: true })
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(() => {
+        this.APP_SET({ windowResizing: false })
+        this.resizeNodeQuickFn()
+      }, 100)
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-  .art-board {
-    overflow: scroll;
-    background-color: #fff;
-    @include calc-vh('height', '100vh - 80px');
-  }
+.art-board {
+  overflow: scroll;
+  background-color: #fff;
+  @include calc-vh('height', '100vh - 80px');
+}
 </style>
