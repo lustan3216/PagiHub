@@ -106,7 +106,7 @@ export default {
     this.isUniq = this.checkIsUniq()
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('component', ['DEBOUNCE_RECORD']),
     changeUniq(uniq) {
       this.isUniq = uniq
       if (uniq) {
@@ -185,7 +185,7 @@ export default {
         })
       }
 
-      this.RECORD(records)
+      this.DEBOUNCE_RECORD(records)
     }
   }
 }

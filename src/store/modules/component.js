@@ -27,7 +27,7 @@ import {
   setValueByPath
 } from '@/utils/tool'
 import { CHILDREN, ID, PARENT_ID, LABEL } from '@/const'
-import { isProject, isComponentSet } from '@/utils/node'
+import { isProject, isComponentSet, traversalChildren } from '@/utils/node'
 import { defineNodeProperties } from '@/utils/nodeProperties'
 import {
   getRootComponentSetId,
@@ -166,6 +166,9 @@ const mutations = {
   RECORD(state, payLoad) {
     jsonHistory.record(payLoad)
   },
+  DEBOUNCE_RECORD(state, payLoad) {
+    jsonHistory.debounceRecord(payLoad, 200)
+  },
   REDO() {
     const done = rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)
     if (done) {
@@ -232,12 +235,19 @@ const actions = {
       getCopyComponentIds()
       getTmpComponentsArray()
     } else {
-      vmAddNodesToParentAndRecord(
-        id,
-        layers({
-          [LABEL]: state.componentsMap[id][LABEL]
-        })
-      )
+      const initNode = layers({ [LABEL]: state.componentsMap[id][LABEL] })
+      vmAddNodesToParentAndRecord(id, initNode)
+      const componentSet = state.componentsMap[id]
+      const ids = []
+
+      traversalChildren(componentSet, ({ id }) => {
+        ids.push(id)
+      })
+
+      jsonHistory.cleanDeltas(delta => {
+        const key = objectFirstKey(delta)
+        return ids.includes(key)
+      })
     }
   },
 

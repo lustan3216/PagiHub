@@ -87,7 +87,7 @@ export default {
           })
         })
 
-        this.RECORD(records)
+        this.DEBOUNCE_RECORD(records)
       }
     },
     h: {
@@ -107,12 +107,12 @@ export default {
           })
         })
 
-        this.RECORD(records)
+        this.DEBOUNCE_RECORD(records)
       }
     }
   },
   methods: {
-    ...mapMutations('component', ['RECORD'])
+    ...mapMutations('component', ['DEBOUNCE_RECORD'])
   }
 }
 </script>

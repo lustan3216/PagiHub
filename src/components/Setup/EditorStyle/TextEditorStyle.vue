@@ -123,7 +123,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import { Divider } from 'element-ui'
 import { EditorMenuBubble } from 'tiptap'
 import SelectUnit from '@/components/Components/SelectUnit'
@@ -150,7 +149,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
     setAttribute(attr, value) {
       this.editor.commands[attr]({ [attr]: value })
       this.$refs[attr] && this.$refs[attr].focus && this.$refs[attr].focus()

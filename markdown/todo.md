@@ -14,22 +14,22 @@ https://github.com/antonreshetov/vue-eva-icons
 bug: grid 畫面縮小後會壞掉, hidden 變換螢幕時也會壞掉
 
 <ol>
-font的padding
+jsonstorey 的 clsonejson拿掉, 改用 filter, 可能可以減少 shawllow equal負擔
 layer 往後移，如果下一層沒東西就直接往後下移層，如果有東西就間隔一個跳下一層 // 5<li>bring to front, bring forward, send to back, 至前，至後, style 永遠再 layer 最底層</li>
-style 的checkbox 暫時刪除
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
-background
-數字大量改變時合成一個 hisotry
-background color / image
-5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li>
 5<li>sreen size changer</li>
 5<li>每個 component set 都可以組建合併得按鈕 / or 選版本</li>
-5<li>search panel</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
+
+background color / image
+5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li>
+5<li>search panel</li>
 20<li>可瀏覽 production 版本</li>
 2<li>uploader image, consider how to compress</li>
+
 <li>SEO首頁</li>
 <li>need login when publishing </li>
+font的padding
 <li>radius 可加增神奇第二元素</li>
 </ol>
 
