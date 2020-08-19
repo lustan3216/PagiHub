@@ -36,7 +36,8 @@ export default {
     match() {
       if (this.isInvalid(this.value)) {
         return null
-      } else {
+      }
+      else {
         // eslint-disable-next-line
         return parseFloat(this.value)
       }
@@ -48,7 +49,8 @@ export default {
       set(value) {
         if (this.isInvalid(value)) {
           this.$emit('input', null)
-        } else {
+        }
+        else {
           this.$emit('input', value + this.unit)
         }
       }

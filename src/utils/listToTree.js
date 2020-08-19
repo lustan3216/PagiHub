@@ -20,7 +20,8 @@ export default function listToTree(data, topId) {
       childrenOf[parentId] = childrenOf[parentId] || []
       // push it into its parent's children object
       childrenOf[parentId].push(item)
-    } else {
+    }
+    else {
       tree.push(item)
     }
   }

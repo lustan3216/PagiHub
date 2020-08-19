@@ -10,7 +10,8 @@ export default function(click, dblclick) {
       click()
       arr = []
       id = null
-    } else {
+    }
+    else {
       dblclick()
       arr = []
       id = null

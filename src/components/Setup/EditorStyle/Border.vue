@@ -92,7 +92,8 @@ export default {
     emit({ unit, style = 'solid', color = '#000' }) {
       if (unit && parseInt(unit)) {
         this.$emit('input', [unit, style, color].join(' '))
-      } else {
+      }
+      else {
         this.$emit('input', '')
       }
     }

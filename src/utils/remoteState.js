@@ -59,7 +59,8 @@ export default class RemoteState {
           jsonHistory.currentIndex
         )
         action = 'undo'
-      } else if (jsonHistory.currentIndex < this.remoteIndex) {
+      }
+      else if (jsonHistory.currentIndex < this.remoteIndex) {
         deltas = this.transformDeltas(
           jsonHistory.currentIndex,
           this.remoteIndex
@@ -77,7 +78,8 @@ export default class RemoteState {
           this.requesting = false
           // save in localstroage
         })
-    } catch (e) {
+    }
+    catch (e) {
       this.requesting = false
       throw e
     }

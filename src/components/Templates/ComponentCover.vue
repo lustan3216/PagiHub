@@ -1,13 +1,22 @@
 <template>
   <div class="relative h-100">
-    <grid-generator
-      v-for="(child, index) in innerChildren"
-      :id="child.id"
-      :key="child.id"
-      :style="{ 'z-index': child.sortIndex }"
-      :class="{ absolute: child.sortIndex }"
-      :data-layer="Boolean(child.sortIndex)"
-    />
+    <template v-for="(child, index) in innerChildren">
+      <controller-layer
+        v-if="index === 0"
+        :id="child.id"
+        :key="child.id"
+      >
+        <grid-generator :id="child.id" />
+      </controller-layer>
+
+      <grid-generator
+        v-else
+        :id="child.id"
+        :style="{ 'z-index': index }"
+        :class="{ absolute: index }"
+        :data-layer="Boolean(index)"
+      />
+    </template>
   </div>
 </template>
 
@@ -19,7 +28,7 @@ import { SORT_INDEX } from '@/const'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 
 export default {
-  name: 'Layers',
+  name: 'ComponentBody',
   components: {
     GridGenerator,
     ControllerLayer

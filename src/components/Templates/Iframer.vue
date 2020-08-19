@@ -10,14 +10,14 @@
 </template>
 
 <script>
-  import nodeMixin from '@/components/Templates/mixins/node'
-  import { defaultSetting } from '../Setup/EditorSetting/SettingIframer'
+import nodeMixin from '@/components/Templates/mixins/node'
+import { defaultSetting } from '../Setup/EditorSetting/SettingIframer'
 
-  export default {
-    defaultSetting,
-    name: 'Iframer',
-    mixins: [nodeMixin]
-  }
+export default {
+  defaultSetting,
+  name: 'Iframer',
+  mixins: [nodeMixin]
+}
 </script>
 
 <style lang="scss" scoped></style>

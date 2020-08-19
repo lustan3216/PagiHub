@@ -94,7 +94,8 @@ export default function freeView(baseElement, options = {}) {
         if (scaleCallback) {
           scaleCallback(event, self)
         }
-      } else if (canMove) {
+      }
+      else if (canMove) {
         self.x = self.x - normalized.pixelX
         self.y = self.y - normalized.pixelY
 

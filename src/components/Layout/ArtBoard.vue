@@ -16,15 +16,13 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
-import DialogInteracted from '@/components/Components/DialogInteracted'
+import { mapActions, mapState } from 'vuex'
 import ComponentSet from '../TemplateUtils/ComponentSet'
 
 let timer = null
 export default {
   name: 'ArtBoard',
   components: {
-    DialogInteracted,
     ComponentSet
   },
   provide() {
@@ -39,8 +37,12 @@ export default {
       return this.componentsMap[this.editingComponentSetId]
     }
   },
-  mounted() {
-    this.artBoardResizing(false)
+  watch: {
+    editingComponentSetId(id) {
+      if (id) {
+        this.artBoardResizing(false)
+      }
+    }
   },
   methods: {
     ...mapActions('app', ['artBoardResizing']),
@@ -61,6 +63,6 @@ export default {
 .art-board {
   overflow: scroll;
   background-color: #fff;
-  @include calc-vh('height', '100vh - 80px');
+  height: 100%;
 }
 </style>

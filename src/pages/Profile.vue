@@ -159,7 +159,8 @@ export default {
             message: 'Update success',
             type: 'warning'
           })
-        } else {
+        }
+        else {
           console.log('error submit!!')
           return false
         }

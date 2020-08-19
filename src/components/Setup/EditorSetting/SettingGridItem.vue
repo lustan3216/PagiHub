@@ -13,7 +13,7 @@ export const defaultSetting = {
   // isDraggable: true,
   // isResizable: true,
   // static: false,
-  autoHeight: false,
+  autoHeight: false
 }
 
 const options = [

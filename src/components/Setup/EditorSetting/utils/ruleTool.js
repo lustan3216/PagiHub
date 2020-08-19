@@ -11,11 +11,13 @@ import { url as urlPath } from '@/validator'
 export function traversalRules(rules, fn) {
   if (rules.isPlainObject) {
     Object.values(rules).forEach(x => traversalRules(x, fn))
-  } else if (isArray(rules)) {
+  }
+  else if (isArray(rules)) {
     rules.forEach(rule => {
       if (rule.type === 'group') {
         traversalRules(rule.props.rules, fn)
-      } else if (rule.control && rule.control.length) {
+      }
+      else if (rule.control && rule.control.length) {
         rule.control.forEach(x => traversalRules(x.rule, fn))
       }
 
@@ -29,7 +31,8 @@ export const assignDefaultValue = (rules, defaultSetting) => {
     let value
     if (rule.path) {
       value = getValueByPath(defaultSetting, `${rule.path}.${rule.field}`)
-    } else {
+    }
+    else {
       value = defaultSetting[rule.field]
     }
     if (!isUndefined(value)) {

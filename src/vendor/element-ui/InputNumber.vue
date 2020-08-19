@@ -129,7 +129,8 @@ export default {
           console.warn('[Element Warn][InputNumber]precision should not be less than the decimal places of step')
         }
         return precision
-      } else {
+      }
+      else {
         return Math.max(getPrecision(value), stepPrecision)
       }
     },

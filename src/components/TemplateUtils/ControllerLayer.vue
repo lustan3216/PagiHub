@@ -62,7 +62,8 @@ export default {
     node() {
       if (this.isExample) {
         return this.basicExamplesMap[this.id]
-      } else {
+      }
+      else {
         return this.componentsMap[this.id]
       }
     },
@@ -106,7 +107,8 @@ export default {
               clickInside = true
               break loop1
             }
-          } else if (areaSelector[0] === '#') {
+          }
+          else if (areaSelector[0] === '#') {
             if (element.id === areaSelector.replace('#', '')) {
               clickInside = true
               break loop1
@@ -138,7 +140,8 @@ export default {
 
       if (event.metaKey || event.ctrlKey) {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)
-      } else {
+      }
+      else {
         this.SET_SELECTED_COMPONENT_ID(this.id)
       }
     }

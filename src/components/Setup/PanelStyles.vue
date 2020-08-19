@@ -1,6 +1,6 @@
 <template>
   <el-form
-    :disabled="!selectedComponentIds.length"
+    :disabled="!selectedComponentNodes.length"
     label-position="top"
   >
     <!--    <div class="m-b-10">-->
@@ -70,7 +70,7 @@
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { TEXT_EDITOR, GRID, LAYERS, GRID_ITEM } from '@/const'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
@@ -113,23 +113,26 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
-    nodes() {
-      return this.selectedComponentIds.map(id => this.componentsMap[id])
-    },
+    ...mapGetters('app', ['selectedComponentNodes']),
     canFont() {
-      return this.nodes.every(node =>
+      return this.selectedComponentNodes.every(node =>
         [TEXT_EDITOR, 'flex-button'].includes(node.tag)
       )
     },
     canRadius() {
-      return this.nodes.every(node => ![GRID, LAYERS].includes(node.tag))
+      return this.selectedComponentNodes.every(
+        node => ![GRID, LAYERS].includes(node.tag)
+      )
     },
     canBorder() {
-      return this.nodes.every(node => ![GRID, LAYERS].includes(node.tag))
+      return this.selectedComponentNodes.every(
+        node => ![GRID, LAYERS].includes(node.tag)
+      )
     },
     canOverflow() {
-      return this.nodes.every(node => [GRID_ITEM].includes(node.tag))
+      return this.selectedComponentNodes.every(node =>
+        [GRID_ITEM].includes(node.tag)
+      )
     },
     isDefaultState() {
       return this.state === 'default'

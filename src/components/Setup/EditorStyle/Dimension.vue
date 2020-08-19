@@ -4,7 +4,7 @@
       DIMENSION
     </el-divider>
 
-    <auto-height />
+    <!--    <auto-height />-->
 
     <el-row
       :gutter="10"
@@ -75,13 +75,13 @@ import { Divider } from 'element-ui'
 import { COLUMNS } from '@/const'
 import { isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/tool'
-import AutoHeight from './AutoHeight'
+// import AutoHeight from './AutoHeight'
 import Ratio from './Ratio'
 
 export default {
   name: 'Dimension',
   components: {
-    AutoHeight,
+    // AutoHeight,
     SelectUnit,
     Tip,
     Ratio,
@@ -98,7 +98,8 @@ export default {
       this.selectedComponentNodes.filter(node => {
         if (isGridItem(node)) {
           nodes.push(node)
-        } else if (isGridItem(node.parentNode)) {
+        }
+        else if (isGridItem(node.parentNode)) {
           nodes.push(node.parentNode)
         }
       })
@@ -125,7 +126,7 @@ export default {
           })
         })
 
-        this.DEBOUNCE_RECORD(records)
+        this.RECORD(records)
       }
     },
     h: {
@@ -142,12 +143,12 @@ export default {
           })
         })
 
-        this.DEBOUNCE_RECORD(records)
+        this.RECORD(records)
       }
     }
   },
   methods: {
-    ...mapMutations('component', ['DEBOUNCE_RECORD'])
+    ...mapMutations('component', ['RECORD'])
   }
 }
 </script>

@@ -17,7 +17,6 @@ export const TAG = 'tag' // 拿來找vueComponent用的
 export const KEY = 'key' // 有些vueComponent會被當曾別的應用，像是layer會被當曾artBoard, or grid 變成carousel indicator, 拿來特別辦事用
 export const LABEL = 'label' // 前端顯示且可被修改的
 
-
 export const CAN_NEW_ITEM = 'canNewItem'
 export const CAN_BE_EDITED = 'canBeEdited'
 export const CAN_NOT_DELETE = 'canNotDelete'
@@ -31,6 +30,7 @@ export const INITIATE = 'initiate'
 export const TEXT_EDITOR = 'text-editor'
 export const CAROUSEL = 'carousel'
 export const LAYERS = 'layers'
+export const COMPONENT_BODY = 'component-body'
 export const COMPONENT_SET = 'component-set'
 export const GRID = 'grid'
 export const GRID_ITEM = 'grid-item'

@@ -15,10 +15,12 @@ export function movable({ movableFunction, move, moveIgnoreSelector }, event) {
 
       if (els.length) {
         return !Array.from(els).find(x => x.contains(target))
-      } else {
+      }
+      else {
         return true
       }
-    } else {
+    }
+    else {
       return true
     }
   }
@@ -33,10 +35,12 @@ export function scalable({ scalableFunction, scale, scaleIgnoreSelector }, event
       const els = document.querySelectorAll(scaleIgnoreSelector)
       if (els.length) {
         return !Array.from(els).find(x => x.contains(target))
-      } else {
+      }
+      else {
         return true
       }
-    } else {
+    }
+    else {
       return true
     }
   }
@@ -52,7 +56,8 @@ export function assignStyle({ targetSelector, baseElement, x, y, scaleRatio }) {
       3
     )}) translate(${x}px, ${y}px)`
     target.style.webkitTransform = target.style.transform = transform
-  } else {
+  }
+  else {
     console.warn('Can not find the target')
   }
 }

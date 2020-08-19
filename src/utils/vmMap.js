@@ -1,9 +1,9 @@
 import store from '../store'
-import { CAN_NEW_ITEM, CHILDREN, GRID_ITEM, TAG } from '../const'
-import { isGridItem } from '@/utils/node'
+import { CAN_NEW_ITEM, COMPONENT_BODY, LAYERS, SORT_INDEX } from '../const'
+import { isOverlapComponent, isGridItem, traversalAncestorAndSelf } from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
-import localforage from 'localforage'
-import { twoArrayEqual } from '@/utils/tool'
+import { arrayMove, findIndexBy } from '@/utils/tool'
+import { grid } from '@/templateJson/basic'
 
 const vmMap = {}
 
@@ -35,7 +35,8 @@ export function getComputedStyle(id) {
   if (isForm) {
     const field = _vm.api.fields()[0]
     el = _vm.api.el(field).$el
-  } else {
+  }
+  else {
     el = document.querySelector(`[data-style-id="${id}"]`)
   }
 
@@ -51,10 +52,22 @@ export function $element(id) {
   return _vm && _vm.$el
 }
 
-export function vmCreateEmptyItem({ id }) {
+export function vmCreateEmptyItem(node) {
   // layers, grid-generator, carousel, form-generator
   // can new layer-item, grid-item, carousel-item, form-item
-  vm(id)._createEmptyItem()
+  if (node[CAN_NEW_ITEM]) {
+    vm(node.id)._createEmptyItem()
+  }
+  else {
+    traversalAncestorAndSelf(node, node => {
+      if (isGridItem(node)) {
+        store.commit('app/SET', { copyComponentIds: [node.id] })
+        const { children, ...emptyGridItem } = node
+        node.parentNode.$vm._addNodesToParentAndRecord(emptyGridItem)
+        return 'stop'
+      }
+    })
+  }
 }
 
 export async function vmPasteNodes() {
@@ -62,19 +75,19 @@ export async function vmPasteNodes() {
   const { tmpComponentsMap } = store.state.component
   const { copyComponentIds } = store.state.app
 
-  jsonHistory.recordsMerge(() => {
-    if (copyComponentIds.length === 1) {
-      const node = tmpComponentsMap[copyComponentIds[0]]
+  if (copyComponentIds.length === 1) {
+    const node = tmpComponentsMap[copyComponentIds[0]]
 
-      if (isGridItem(node)) {
-        vmPasteNode(node)
-      } else {
-        vmPasteInside(node)
-      }
-    } else if (copyComponentIds.length > 1) {
-      copyComponentIds.forEach(id => vmPasteNode(tmpComponentsMap[id]))
+    if (isGridItem(node)) {
+      vmPasteNode(node)
     }
-  })
+    else {
+      vmPasteInside(node)
+    }
+  }
+  else if (copyComponentIds.length > 1) {
+    copyComponentIds.forEach(id => vmPasteNode(tmpComponentsMap[id]))
+  }
 }
 
 export function vmPasteInside(theOneCopyNode) {
@@ -85,10 +98,12 @@ export function vmPasteInside(theOneCopyNode) {
     const selectedNode = componentsMap[selectedId]
     if (theOneCopyNode.id === selectedId) {
       vmPasteNode(theOneCopyNode)
-    } else if (theOneCopyNode && !isGridItem(theOneCopyNode)) {
+    }
+    else if (theOneCopyNode && !isGridItem(theOneCopyNode)) {
       if (isGridItem(selectedNode)) {
         vmAddNodesToParentAndRecord(selectedId, theOneCopyNode)
-      } else {
+      }
+      else {
         const stopNodeId = vmRemoveNode(selectedNode)
         vmAddNodesToParentAndRecord(stopNodeId, theOneCopyNode)
       }
@@ -102,7 +117,8 @@ export function vmPasteNode(node) {
   if (parentNode[CAN_NEW_ITEM]) {
     // if parentNode can new item, it means the node is one of layer-item, grid-item, carousel-item, form-item
     vmAddNodesToParentAndRecord(parentId, node)
-  } else {
+  }
+  else {
     // if parentNode can not new item, it means the node is a child of layer-item, grid-item, carousel-item, form-item
     const grandParentId = parentNode.parentId
     vmAddNodesToParentAndRecord(grandParentId, node.parentNode)

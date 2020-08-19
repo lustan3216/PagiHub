@@ -14,14 +14,15 @@ https://github.com/antonreshetov/vue-eva-icons
 bug: grid 畫面縮小後會壞掉, hidden 變換螢幕時也會壞掉
 
 <ol>
-jsonstorey 的 clsonejson拿掉, 改用 filter, 可能可以減少 shawllow equal負擔
-layer 往後移，如果下一層沒東西就直接往後下移層，如果有東西就間隔一個跳下一層 // 5<li>bring to front, bring forward, send to back, 至前，至後, style 永遠再 layer 最底層</li>
+component body 在 create componentSet時解決
+grid 的compact vertical 要做出來，因為有ratio
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 5<li>sreen size changer</li>
+background color / image
+
 5<li>每個 component set 都可以組建合併得按鈕 / or 選版本</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
 
-background color / image
 5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li>
 5<li>search panel</li>
 20<li>可瀏覽 production 版本</li>
@@ -35,6 +36,7 @@ font的padding
 
 ### Last
 
+<li>style 有必要做到device可以區分嗎？</li>
 <li>embed iframe,iframe 要可以自動 resize</li>
 可以 copy 進去 gridlayout
 <li>canTo caDelete 這些東西不要記錄在 json上，不然以後有更動的話，沒辦法改道s3裡面所有東西 每個 example 下特殊的key e.x.'sdew' 然後配對設定，寫在單獨檔案裡，類似nodeProperties</li>

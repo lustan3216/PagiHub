@@ -38,7 +38,8 @@ function getDataStyleId(element, binding) {
   if (id) {
     element.dataset.styleId = id
     return `[data-style-id="${id}"]`
-  } else {
+  }
+  else {
     const dataVIds = Object.keys(element.dataset).filter(x => x[0] === 'v')
 
     return dataVIds.reduce((acc, id) => {

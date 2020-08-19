@@ -2,7 +2,7 @@
   <!-- v-observe-visibility 跟vIf 一定要不同層，不然v-if false 的話沒辦法observer -->
   <div
     v-observe-visibility="options"
-    v-if="(!hidden && isExample) || isLayers"
+    v-if="visible && (isExample || isLayers || isGrid)"
     class="h-100"
   >
     <component
@@ -16,7 +16,7 @@
   <!--  should have observe-visibility here, otherwise some nested layout case, the grid layout will not work right-->
   <controller-layer
     v-observe-visibility="options"
-    v-else-if="!hidden"
+    v-else-if="visible"
     :id="id"
     class="h-100"
   >
@@ -24,6 +24,7 @@
       <!--  it will has a bug here if component without key like, editorText -->
       <!--  editing 給 texteditor 用的  -->
       <component
+        v-if="vIf"
         ref="component"
         :editing="itemEditing"
         :is="tag"
@@ -36,7 +37,13 @@
 
 <script>
 import { ObserveVisibility } from 'vue-observe-visibility'
-import { isComponentSet, getNode, isLayers, isGridItem } from '@/utils/node'
+import {
+  isComponentSet,
+  getNode,
+  isLayers,
+  isGridItem,
+  isGrid
+} from '@/utils/node'
 import { CAN_BE_EDITED, COMPONENT_SET } from '@/const'
 import { mapState } from 'vuex'
 
@@ -51,6 +58,8 @@ export default {
   components: {
     ControllerLayer: () => import('./ControllerLayer'),
     ComponentSet: () => import('./ComponentSet'),
+    ComponentBody: () => import('../Templates/ComponentBody'),
+    ComponentCover: () => import('../Templates/ComponentCover'),
 
     FlexImage: () => import('../Templates/FlexImage'),
     FlexButton: () => import('../Templates/FlexButton'),
@@ -101,7 +110,8 @@ export default {
               this.vIf = isVisible
               this.options = false
             }
-          } else {
+          }
+          else {
             this.vIf = isVisible
           }
         }
@@ -110,8 +120,10 @@ export default {
   },
   computed: {
     ...mapState('app', ['breakpoint']),
-    hidden() {
-      return this.node && this.node.hidden && this.node.hidden[this.breakpoint]
+    visible() {
+      const hidden =
+        this.node && this.node.hidden && this.node.hidden[this.breakpoint]
+      return this.node && !hidden
     },
     node() {
       return getNode(this.id, this.isExample)
@@ -120,14 +132,22 @@ export default {
       return this.node[CAN_BE_EDITED]
     },
     tag() {
+      if (!this.node) {
+        return
+      }
+
       if (isComponentSet(this.node)) {
         return COMPONENT_SET
-      } else {
+      }
+      else {
         return this.node.tag
       }
     },
     isLayers() {
       return isLayers(this.node)
+    },
+    isGrid() {
+      return isGrid(this.node)
     },
     isGridItem() {
       return isGridItem(this.node)

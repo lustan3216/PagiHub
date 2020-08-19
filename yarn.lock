@@ -9616,10 +9616,10 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
-json-history@0.3.8:
-  version "0.3.8"
-  resolved "https://registry.yarnpkg.com/json-history/-/json-history-0.3.8.tgz#4a0213c869ad1022ab2a95286c764157efc0c396"
-  integrity sha512-xV8lhRKTt7ll0Ryhmq/nj0kfDzgFx6JVxGSkm9wl7bsFv7rF9CqZPWG7ssP9kckVeOH9wy4MbUelonKiiFc9lw==
+json-history@0.3.13:
+  version "0.3.13"
+  resolved "https://registry.yarnpkg.com/json-history/-/json-history-0.3.13.tgz#c6b10db2f00260a387cebd1af2daa962bc9b61a8"
+  integrity sha512-p1uCf+zSMj21lpUSgZOzd56E/IegPH6BoPVJ+mcgq+ZURm0kGp5b+3kdUNtptzVd1HTNsZfNeQkcdoTQ/9juHw==
   dependencies:
     diff-match-patch "^1.0.5"
     lodash.get "^4.4.2"

@@ -159,7 +159,8 @@ export default {
 
     if (parent.isTree) {
       this.tree = parent
-    } else {
+    }
+    else {
       this.tree = parent.tree
     }
 
@@ -231,7 +232,8 @@ export default {
       if (this.expanded) {
         this.tree.$emit('node-collapse', this.node.data, this.node, this)
         this.node.collapse()
-      } else {
+      }
+      else {
         this.node.expand()
         this.$emit('node-expand', this.node.data, this.node, this)
       }

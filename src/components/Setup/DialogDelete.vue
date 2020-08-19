@@ -86,7 +86,8 @@ export default {
         if (valid) {
           if (isComponentSet(this.node)) {
             this.deleteComponentSet(this.id)
-          } else {
+          }
+          else {
             this.deleteProjectNode(this.id)
           }
           this.visible = false

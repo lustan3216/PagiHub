@@ -68,7 +68,8 @@ export default {
 
       if (this.isPlainObject) {
         this.$emit('input', this.zipToObject(this.points))
-      } else {
+      }
+      else {
         this.$emit('input', this.points)
       }
     },
@@ -86,7 +87,8 @@ export default {
         const value = this.zipToObject(this.points)
         this.$emit('input', value)
         this.$emit('change', value)
-      } else {
+      }
+      else {
         this.$emit('input', this.points)
         this.$emit('change', this.points)
       }

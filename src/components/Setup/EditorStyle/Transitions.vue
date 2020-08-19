@@ -188,7 +188,8 @@ export default {
 
       if (split.length === 4) {
         [property, duration, timing, delay] = split
-      } else {
+      }
+      else {
         property = split[0]
         duration = split[1]
         timing = split.slice(2, 6).join(' ')
@@ -210,7 +211,8 @@ export default {
             property
           }
         ]
-      } else {
+      }
+      else {
         this.values[index].property = property
       }
     }

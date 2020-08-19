@@ -48,7 +48,8 @@ const mutations = {
     const isExist = state.selectedComponentIds.includes(id)
     if (isExist) {
       state.selectedComponentIds = arraySubtract(state.selectedComponentIds, id)
-    } else {
+    }
+    else {
       state.selectedComponentIds.push(id)
     }
   }
@@ -88,7 +89,7 @@ const actions = {
     return copyComponentIds
   },
 
-  artBoardResizing: debounce(50, function(
+  artBoardResizing: debounce(20, function(
     { state, commit, dispatch },
     boolean
   ) {
@@ -128,16 +129,6 @@ const getters = {
       return rootState.component.componentsMap[
         getters.theOnlySelectedComponentId
       ]
-    }
-  },
-  selectedComponentTree(state, getters, rootState) {
-    if (getters.selectedComponentNode) {
-      return {
-        ...getters.selectedComponentNode,
-        children:
-          rootState.component.componentsMap[getters.theOnlySelectedComponentId]
-            .children
-      }
     }
   },
   selectedComponentNodes(state, getters, rootState) {

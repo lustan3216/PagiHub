@@ -33,18 +33,14 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations } from 'vuex'
 import Touchable from './Touchable'
 import Visible from './Visible'
 import { GRID_ITEM } from '@/const'
 import { isMac } from '@/utils/device'
 import { isLayers } from '@/utils/node'
 
-import {
-  vmCreateEmptyItem,
-  vmPasteNode,
-  vmRemoveNode
-} from '@/utils/vmMap'
+import { vmCreateEmptyItem, vmPasteNode, vmRemoveNode } from '@/utils/vmMap'
 
 export default {
   name: 'NodeController',
@@ -59,8 +55,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds', 'copyComponentIds']),
-    ...mapState('component', ['editingComponentSetId']),
     node() {
       return this.componentsMap[this.id]
     },
@@ -72,9 +66,6 @@ export default {
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)
-    },
-    selectedNodes() {
-      return this.selectedComponentIds.map(id => this.componentsMap[id])
     }
   },
   methods: {

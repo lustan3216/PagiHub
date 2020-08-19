@@ -55,32 +55,32 @@ export default {
       return [
         {
           name: 'lg',
-          content: `Hidden when screen larger than ${BREAK_POINTS.lg}px`,
+          content: `For Large Monitor, Only display when screen larger than ${BREAK_POINTS.lg}px`,
           icon: 'el-icon-data-line',
           hidden: lgHidden
         },
         {
           name: 'md',
-          content: `Hidden when screen larger than ${BREAK_POINTS.md}px and smaller than ${BREAK_POINTS.lg}px`,
+          content: `For Computer, Only display when screen larger than ${BREAK_POINTS.md}px`,
           icon: 'el-icon-monitor',
           hidden: mdHidden
         },
         {
           name: 'sm',
-          content: `Hidden when screen larger than ${BREAK_POINTS.sm}px and smaller than ${BREAK_POINTS.md}px`,
+          content: `For Tablet, Only display when screen larger than ${BREAK_POINTS.sm}px`,
           icon: 'el-icon-mobile',
           hidden: smHidden
         },
         {
           name: 'xs',
-          content: `Hidden when screen larger than ${BREAK_POINTS.xs}px and smaller than ${BREAK_POINTS.sm}px`,
+          content: `For Phone, Only display when screen larger than ${BREAK_POINTS.xs}px`,
           icon: 'el-icon-mobile-phone',
           hidden: xsHidden,
           class: 'rotate90'
         },
         {
           name: 'xxs',
-          content: `Hidden when screen larger than ${BREAK_POINTS.xxs}px and smaller than ${BREAK_POINTS.xs}px`,
+          content: `For Small Phone, Only display when screen larger than ${BREAK_POINTS.xxs}px`,
           icon: 'el-icon-mobile-phone',
           hidden: xxsHidden
         }

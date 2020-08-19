@@ -34,45 +34,23 @@
 
       <div class="left wrapper">
         <el-tooltip
-          :content="newItemToolTip"
           effect="light"
           placement="left"
         >
+          <div slot="content">
+            {{ newItemToolTip }} <span
+              class="m-l-10"
+              v-html="metaKey"
+            /> + B
+          </div>
           <el-button
             icon="el-icon-plus"
             class="icon"
-            @click="handleCommand('New Item')"
+            @click="vmCreateEmptyItem"
           />
         </el-tooltip>
 
-        <el-dropdown
-          trigger="click"
-          size="small"
-          @command="handleCommand"
-        >
-          <span class="icon">
-            <i class="el-icon-more-outline" />
-          </span>
-
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              v-for="option in options"
-              :key="option.name"
-              :command="option.name"
-              :divided="option.divided"
-              :disabled="option.disabled"
-            >
-              <div class="justify-between">
-                <span>{{ option.name }}</span>
-                <span
-                  v-if="option.shortKey"
-                  class="m-l-15"
-                  v-html="option.shortKey.join(' + ')"
-                />
-              </div>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <context-menu :id="id" />
       </div>
     </div>
   </portal>
@@ -81,17 +59,14 @@
 <script>
 import { mapMutations, mapState, mapActions } from 'vuex'
 import NodeName from './NodeName'
+import ContextMenu from './ContextMenu'
 import { Popover } from 'element-ui'
-import { isGridItem, traversalAncestorAndSelf } from '@/utils/node'
-import { isMac } from '@/utils/device'
+import { isGridItem } from '@/utils/node'
 import { lerp } from '@/utils/animation'
-import {
-  vmPasteNodes,
-  vmCreateEmptyItem,
-  vmRemoveNode,
-  vmPasteNode
-} from '@/utils/vmMap'
+import { arrayLast } from '@/utils/tool'
 import { CAN_NEW_ITEM, CAROUSEL, GRID, LAYERS } from '@/const'
+import { vmCreateEmptyItem } from '@/utils/vmMap'
+import { isMac } from '@/utils/device'
 
 let topShared = window.innerHeight / 2
 let leftShared = window.innerWidth / 2
@@ -104,6 +79,7 @@ export default {
   name: 'NodeQuickFunctions',
   components: {
     NodeName,
+    ContextMenu,
     ElPopover: Popover,
     ComponentAdd: () => import('../TemplateUtils/ComponentAdd')
   },
@@ -146,9 +122,13 @@ export default {
           case CAROUSEL:
             return 'Create An Empty Slider'
         }
-      } else {
+      }
+      else {
         return 'Copy An Empty Grid Item From It'
       }
+    },
+    metaKey() {
+      return isMac() ? '&#8984;' : '&#8963;'
     },
     node() {
       return this.componentsMap[this.id]
@@ -163,51 +143,12 @@ export default {
       return isGridItem(this.node)
     },
     canAddComponent() {
-      if (!this.isExample && this.isGridItem) {
+      const isLastOne = arrayLast(this.selectedComponentIds) === this.id
+
+      if (!this.isExample && this.isGridItem && isLastOne) {
         const { children = [] } = this.node
         return !children.length
       }
-    },
-    metaKey() {
-      return isMac() ? '&#8984;' : '&#8963;'
-    },
-    theOnlyCopyNodeAndNotGridItem() {
-      if (this.copyComponentIds.length === 1) {
-        const node = this.componentsMap[this.copyComponentIds[0]]
-        return node && !isGridItem(node)
-      }
-    },
-    options() {
-      return [
-        { name: 'Forward' },
-        { name: 'Backward' },
-        {
-          name: 'Copy',
-          shortKey: [this.metaKey, 'C'],
-          divided: true
-        },
-        {
-          name: 'Paste Inside',
-          shortKey: [this.metaKey, 'V'],
-          disabled:
-            !this.theOnlyCopyNodeAndNotGridItem || !isGridItem(this.node)
-        },
-        {
-          name: 'Replace',
-          shortKey: [this.metaKey, 'V'],
-          disabled: !this.theOnlyCopyNodeAndNotGridItem || isGridItem(this.node)
-        },
-        {
-          name: 'Cut',
-          shortKey: [this.metaKey, 'X'],
-          disabled: this.selectedComponentIds.length !== 1
-        },
-        { name: 'Duplicate' },
-        {
-          name: 'Delete',
-          shortKey: ['&#9003;']
-        }
-      ]
     },
     framer() {
       // 如果有refs=framer, 在拉動window時不知為什麼會找不到element
@@ -223,6 +164,7 @@ export default {
   },
   created() {
     this.resize()
+    // 給 store component 裡面呼叫的
     quickFnMap[this.id] = this
   },
   methods: {
@@ -230,8 +172,15 @@ export default {
       APP_SET: 'SET'
     }),
     ...mapActions('app', ['setCopySelectedNodeId']),
+    vmCreateEmptyItem() {
+      vmCreateEmptyItem(this.node)
+    },
     resize() {
       this.$nextTick(() => {
+        if (!this.element) {
+          return
+        }
+
         const {
           x: left,
           y: top,
@@ -265,7 +214,8 @@ export default {
             Math.abs(height - this.height) > 1
           ) {
             this.animationId = requestAnimationFrame(animate)
-          } else {
+          }
+          else {
             cancelAnimationFrame(this.animationId)
             Object.assign(this.framer.style, {
               width: width - 2 + 'px',
@@ -279,48 +229,6 @@ export default {
 
         this.animationId = requestAnimationFrame(animate)
       })
-    },
-    handleCommand(command) {
-      switch (command) {
-        case 'Forward':
-          break
-        case 'Backward':
-          break
-        case 'New Item':
-          if (this.node[CAN_NEW_ITEM]) {
-            vmCreateEmptyItem(this.node)
-          } else {
-            traversalAncestorAndSelf(this.node, node => {
-              if (isGridItem(node)) {
-                this.APP_SET({ copyComponentIds: [node.id] })
-                const { children, ...emptyGridItem } = node
-                node.parentNode.$vm._addNodesToParentAndRecord(emptyGridItem)
-                return 'stop'
-              }
-            })
-          }
-          break
-        case 'Copy':
-          this.setCopySelectedNodeId(this.id)
-          break
-        case 'Paste Inside':
-          vmPasteNodes()
-          break
-        case 'Replace':
-          vmPasteNodes()
-          break
-        case 'Cut':
-          this.setCopySelectedNodeId(this.id)
-          vmRemoveNode(this.node)
-          break
-        case 'Duplicate':
-          this.APP_SET({ copyComponentIds: [this.id] })
-          vmPasteNode(this.node)
-          break
-        case 'Delete':
-          vmRemoveNode(this.node)
-          break
-      }
     }
   }
 }
@@ -352,8 +260,8 @@ $activeColor: rgba(81, 117, 199, 0.68);
 }
 
 .bottom {
-  left: 0;
-  bottom: -30px;
+  left: 5px;
+  top: 5px;
 }
 
 .right {

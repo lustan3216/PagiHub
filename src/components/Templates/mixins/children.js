@@ -1,11 +1,11 @@
 import { mapMutations, mapState } from 'vuex'
-import { CHILDREN, GRID_ITEM, SORT_INDEX, TAG } from '@/const'
-import { cloneJson, traversal, arrayLast } from '@/utils/tool'
+import { CHILDREN, COMPONENT_BODY, GRID_ITEM, SORT_INDEX, TAG } from '@/const'
+import { cloneJson, arrayLast } from '@/utils/tool'
 import {
   traversalChildren,
-  isComponentSet,
   getNode,
-  traversalAncestorAndSelf
+  traversalAncestorAndSelf,
+  traversalSelfAndChildren
 } from '@/utils/node'
 import { appendIdNested } from '@/utils/nodeId'
 import * as basicTemplates from '@/templateJson/basic'
@@ -57,12 +57,9 @@ export default {
 
       nodeTree = cloneJson(nodeTree)
       // if node has not componentSetId means self is componentSet
-      appendIdNested(nodeTree, {
-        parentId: this.id,
-        componentSetId: isComponentSet(nodeTree) ? this.id : null
-      })
+      appendIdNested(nodeTree, this.id)
 
-      traversal(nodeTree, (_node, _parentNode) => {
+      traversalSelfAndChildren(nodeTree, (_node, _parentNode) => {
         // eslint-disable-next-line
         const { [CHILDREN]: _, ...node } = _node
         records.push({
@@ -121,11 +118,16 @@ export default {
         this.node,
         ({ id, tag, children, parentNode }) => {
           stopNodeId = id
-          if (isComponentSet(parentNode.parentNode) && children.length === 1) {
+          if (
+            parentNode.tag === COMPONENT_BODY &&
+            parentNode.children.length === 1
+          ) {
             return 'stop'
-          } else if (tag === GRID_ITEM || children.length > 1) {
+          }
+          else if (tag === GRID_ITEM || children.length > 1) {
             return 'stop'
-          } else if (children.length === 1) {
+          }
+          else if (children.length === 1) {
             records.unshift({
               path: id,
               value: undefined

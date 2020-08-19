@@ -30,7 +30,7 @@ export default function(attr) {
       }
     },
     methods: {
-      ...mapMutations('component', ['DEBOUNCE_RECORD', 'SOFT_RECORD']),
+      ...mapMutations('component', ['RECORD', 'SOFT_RECORD']),
       recordStyles(object) {
         const records = []
 
@@ -45,7 +45,7 @@ export default function(attr) {
           })
         }
 
-        this.DEBOUNCE_RECORD(records)
+        this.RECORD(records)
       },
       softRecordStyles(object) {
         const records = []

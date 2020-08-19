@@ -37,7 +37,8 @@ function createDocumentHandler(el, binding, vnode) {
       vnode.context[el[ctx].methodName]
     ) {
       vnode.context[el[ctx].methodName](mouseup)
-    } else {
+    }
+    else {
       el[ctx].bindingFn && el[ctx].bindingFn(mouseup)
     }
   }
@@ -64,7 +65,8 @@ export default {
         el[ctx].documentHandler = createDocumentHandler(el, binding, vnode)
         el[ctx].methodName = binding.expression
         el[ctx].bindingFn = binding.value
-      } else {
+      }
+      else {
         init(el, binding, vnode)
       }
     }

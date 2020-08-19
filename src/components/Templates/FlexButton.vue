@@ -87,7 +87,8 @@ export default {
       const events = this.clickEvents.map(x => x.fn)
       if (this.firstChild || this.redirectComponentSet) {
         return [...events, this.redirect]
-      } else {
+      }
+      else {
         return events
       }
     }
@@ -99,14 +100,16 @@ export default {
     redirect() {
       if (this.redirectComponentSet) {
         // convert node tree, tree 要cache
-      } else if (this.firstChild) {
+      }
+      else if (this.firstChild) {
         this.vmMap[this.firstChild.id].toggleVisibility()
       }
     },
     registerClickEvent(id, fn) {
       if (this.redirectComponentSet) {
         Message.eroor('Already link to a componentSet')
-      } else {
+      }
+      else {
         this.clickEvents.push({ id, fn })
       }
     },

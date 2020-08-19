@@ -63,15 +63,15 @@
 
 <script>
 import { Tree } from 'element-ui'
-import { SORT_INDEX, LAYERS, SOFT_DELETE, STYLE } from '@/const'
+import { SORT_INDEX, LAYERS, SOFT_DELETE, STYLE, COMPONENT_BODY } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { cloneJson, traversal, deleteBy } from '@/utils/tool'
+import { cloneJson, deleteBy } from '@/utils/tool'
 import NodeController from '../TemplateUtils/NodeController'
 import NodeName from '../TemplateUtils/NodeName'
 import Touchable from '../TemplateUtils/Touchable'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
-import { isGridItem } from '@/utils/node'
+import { sortByIndex, traversalSelfAndChildren } from '@/utils/node'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -105,9 +105,9 @@ export default {
       }
 
       const cloneTree = cloneJson(tree)
-      traversal(cloneTree, (node, parentNode) => {
-        if (node.tag === LAYERS && node.children) {
-          node.children.sort((a, b) => b[SORT_INDEX] - a[SORT_INDEX])
+      traversalSelfAndChildren(cloneTree, (node, parentNode) => {
+        if ([LAYERS, COMPONENT_BODY].includes(node.tag) && node.children) {
+          node.children = sortByIndex(node.children, false)
         }
 
         if (node[SOFT_DELETE]) {
@@ -156,7 +156,8 @@ export default {
     nodeClick(event, id) {
       if (event.metaKey || event.ctrlKey) {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(id)
-      } else {
+      }
+      else {
         this.TOGGLE_SELECTED_COMPONENT_ID(id)
       }
       this.resizeNodeQuickFn()
@@ -173,7 +174,7 @@ export default {
     scrollIntoView(id) {
       if (this.vmMap[id]) {
         // 可能被device hidden 所以map找不到
-        this.vmMap[id].$el.scrollIntoView({ behavior: 'smooth' })
+        this.vmMap[id].$el.scrollIntoView(false)
       }
     }
   }

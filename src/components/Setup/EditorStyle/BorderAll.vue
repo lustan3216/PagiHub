@@ -106,7 +106,7 @@ export default {
     this.isUniq = this.checkIsUniq()
   },
   methods: {
-    ...mapMutations('component', ['DEBOUNCE_RECORD']),
+    ...mapMutations('component', ['RECORD']),
     changeUniq(uniq) {
       this.isUniq = uniq
       if (uniq) {
@@ -117,7 +117,8 @@ export default {
           borderBottom: undefined,
           borderLeft: undefined
         })
-      } else {
+      }
+      else {
         this.recordStyles({
           border: undefined,
           borderTop: this.border,
@@ -151,7 +152,8 @@ export default {
           borderBottom: undefined,
           borderLeft: undefined
         })
-      } else {
+      }
+      else {
         this.recordStyles({
           border: undefined,
           borderTop,
@@ -185,7 +187,7 @@ export default {
         })
       }
 
-      this.DEBOUNCE_RECORD(records)
+      this.RECORD(records)
     }
   }
 }

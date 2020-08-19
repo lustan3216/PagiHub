@@ -117,7 +117,8 @@ export function base(fn) {
 
   if (fn) {
     return rules.filter(fn)
-  } else {
+  }
+  else {
     return rules
   }
 }

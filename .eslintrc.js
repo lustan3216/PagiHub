@@ -49,13 +49,7 @@ module.exports = {
       }
     ],
     'block-spacing': [2, 'always'],
-    'brace-style': [
-      2,
-      '1tbs',
-      {
-        allowSingleLine: true
-      }
-    ],
+    'brace-style': ['error', 'stroustrup'],
     camelcase: [
       0,
       {

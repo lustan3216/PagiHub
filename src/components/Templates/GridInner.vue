@@ -85,8 +85,9 @@ export default {
     innerChildren: {
       handler(newChildren) {
         this.$nextTick(() => {
-          this.itemAutoHeight(newChildren)
+          // this.itemAutoHeight(newChildren)
           this.getCurrentLayout(newChildren)
+          this.$refs.gridGenerator.resizeEvent()
           this.resizeNodeQuickFn()
         })
       },
@@ -128,9 +129,11 @@ export default {
           layoutW = layoutW || this.$refs.gridGenerator.$el.clientWidth
           const itemWidth = (parseInt(layoutW) / COLUMNS) * w
           h = (itemWidth / ratio.w) * ratio.h
-        } else if (hUnit === 'vh') {
+        }
+        else if (hUnit === 'vh') {
           h = (this.artBoardHeight / 100) * parseInt(h)
-        } else {
+        }
+        else {
           h = parseInt(h)
         }
 

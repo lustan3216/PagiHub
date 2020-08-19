@@ -59,6 +59,24 @@ export const layers = function(options) {
   }
 }
 
+export const componentBody = function(options) {
+  return {
+    [TAG]: 'component-body',
+    [CAN_NEW_ITEM]: true,
+    [CHILDREN]: [grid()],
+    [LABEL]: 'component-body',
+    ...options
+  }
+}
+
+export const componentCover = function(options) {
+  return {
+    [TAG]: 'component-cover',
+    [CAN_NEW_ITEM]: true,
+    ...options
+  }
+}
+
 export const iframer = function(options) {
   return {
     [TAG]: 'iframer',
@@ -106,8 +124,8 @@ export const carousel = function() {
 export const textEditor = function() {
   return {
     [TAG]: TEXT_EDITOR,
-    [CAN_BE_EDITED]: true,
-    [AUTO_HEIGHT]: true
+    [CAN_BE_EDITED]: true
+    // [AUTO_HEIGHT]: true
   }
 }
 
@@ -132,7 +150,7 @@ export const videoPlayer = function() {
   return {
     [TAG]: 'video-player',
     [CAN_BE_EDITED]: true,
-    [AUTO_HEIGHT]: true
+    props: { ratio: { w: 16, h: 9 }}
   }
 }
 

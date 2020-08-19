@@ -112,20 +112,23 @@ export default {
       let units
       if (this.isStringUnit) {
         units = [this.unit]
-      } else {
+      }
+      else {
         units = this.units
       }
 
       if (this.hasAuto) {
         return ['auto', ...units]
-      } else {
+      }
+      else {
         return units
       }
     },
     match() {
       if (this.isInvalid(this.innerValue)) {
         return ['', '']
-      } else {
+      }
+      else {
         // eslint-disable-next-line
         const [_, unit] =
           this.innerValue.toString().match(/-?[.\d]+(.+)?/) || []
@@ -141,7 +144,8 @@ export default {
 
         if (this.isInvalid(number)) {
           result = null
-        } else {
+        }
+        else {
           result = toPrecision(number, this.precision) + this.unit
         }
 
@@ -157,9 +161,11 @@ export default {
         const { length } = this.units
         if (length === 1) {
           return this.units[0]
-        } else if (length === 0) {
+        }
+        else if (length === 0) {
           return ''
-        } else {
+        }
+        else {
           return this.match[1] || this.units[0]
         }
       },
@@ -197,7 +203,8 @@ export default {
       let value
       if (!this.lastPosition) {
         value = e.clientY <= viewportOffset.top ? this.step : -1 * this.step
-      } else {
+      }
+      else {
         value = this.lastPosition >= e.clientY ? this.step : -1 * this.step
       }
 

@@ -60,9 +60,6 @@ export function createComponentSet(projectId, componentSet) {
   // const children = componentSet[CHILDREN]
 
   // componentSet[ID] = componentSetId
-  componentSet.w = 500
-  componentSet.h = 700
-
   return API.post('staging', `/projects/${projectId}/component-sets`, {
     body: componentSet
   })
@@ -74,7 +71,7 @@ export function createComponentSet(projectId, componentSet) {
   // }
   //
   // const array = []
-  // traversal(componentSet, node => {
+  // traversalSelfAndChildren(componentSet, node => {
   //   const { children, ...newNode } = node
   //   array.push(newNode)
   // })

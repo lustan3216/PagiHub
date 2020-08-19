@@ -40,12 +40,14 @@ const classAppendIds = cached(function(klass, styleId) {
 
   if (hasVDeep) {
     return klass.replace('::v-deep', styleId)
-  } else {
+  }
+  else {
     const index = lastIndexOfPseudo(klass)
 
     if (index >= 0) {
       return stringInsert(klass, styleId, index)
-    } else {
+    }
+    else {
       return klass.trim() + styleId
     }
   }
@@ -70,7 +72,8 @@ export function createTextNode(text) {
   if (element.styleSheet) {
     // @ts-ignore
     element.styleSheet.cssText = text
-  } else {
+  }
+  else {
     element.appendChild(document.createTextNode(text))
   }
   return element
@@ -87,7 +90,8 @@ export function mixClassesAndIds(cssBlock, styleId) {
         return acc
       }, [])
       .join(',')
-  } else {
+  }
+  else {
     return styleId
   }
 }

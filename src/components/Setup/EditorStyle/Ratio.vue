@@ -8,15 +8,15 @@
       <span class="title flex">
         Ratio
         <tip class="m-l-5">
-          No matter what column it is, we will make sure the ratio of width and height are
-          match.
+          No matter what column it is, we will make sure the ratio of width and
+          height are match.
         </tip>
       </span>
     </el-col>
 
     <el-col :span="12">
       <select-unit
-        :disabled="!gridItemNodes.length"
+        :disabled="ratioDisabled"
         v-model.number="w"
         :units="['W']"
       />
@@ -24,7 +24,7 @@
 
     <el-col :span="12">
       <select-unit
-        :disabled="!gridItemNodes.length"
+        :disabled="ratioDisabled"
         v-model.number="h"
         :units="['H']"
       />
@@ -48,12 +48,18 @@ export default {
   computed: {
     ...mapState('app', ['breakpoint']),
     ...mapGetters('app', ['selectedComponentNodes']),
+    ratioDisabled() {
+      // const hasInvalidComponent = this.selectedComponentNodes.find(node => 'video-player' === node.tag)
+
+      return !this.gridItemNodes.length
+    },
     gridItemNodes() {
       const nodes = []
       this.selectedComponentNodes.filter(node => {
         if (isGridItem(node)) {
           nodes.push(node)
-        } else if (isGridItem(node.parentNode)) {
+        }
+        else if (isGridItem(node.parentNode)) {
           nodes.push(node.parentNode)
         }
       })
@@ -87,7 +93,7 @@ export default {
           })
         })
 
-        this.DEBOUNCE_RECORD(records)
+        this.RECORD(records)
       }
     },
     h: {
@@ -107,12 +113,12 @@ export default {
           })
         })
 
-        this.DEBOUNCE_RECORD(records)
+        this.RECORD(records)
       }
     }
   },
   methods: {
-    ...mapMutations('component', ['DEBOUNCE_RECORD'])
+    ...mapMutations('component', ['RECORD'])
   }
 }
 </script>

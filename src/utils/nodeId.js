@@ -5,38 +5,30 @@ import {
   CHILDREN,
   COMPONENT_SET_ID
 } from '../const'
-import { toArray, traversal } from './tool'
+import { toArray } from './tool'
 import { ulid } from 'ulid'
-import { isComponent, isComponentSet } from '@/utils/node'
+import { isComponent, isComponentSet, traversalSelfAndChildren } from '@/utils/node'
 
-export function appendIdNested(nodes, { parentId, componentSetId } = {}) {
+export function appendIdNested(nodes, parentId) {
   if (parentId) {
     toArray(nodes).forEach(node => (node[PARENT_ID] = parentId))
   }
 
-  traversal(nodes, (node, parentNode) => {
+  traversalSelfAndChildren(nodes, (node, parentNode) => {
     if (isComponentSet(node)) {
       node[MASTER_ID] = node[ID]
       node[ID] = ulid()
 
-      appendIdNested(node[CHILDREN], {
-        parentId: node[ID],
-        componentSetId: node[ID]
-      })
-      return false
+      appendIdNested(node[CHILDREN], node[ID])
+      return 'stop'
     }
 
     const component = isComponent(node)
     if (component) {
-      if (componentSetId) {
-        node[COMPONENT_SET_ID] = componentSetId
-      } else {
-        // 代表是沒有componentSet當頭的component
-        node[ID] = ulid()
+      node[ID] = ulid()
 
-        if (parentNode) {
-          node[PARENT_ID] = parentNode[ID]
-        }
+      if (parentNode) {
+        node[PARENT_ID] = parentNode[ID]
       }
     }
   })

@@ -221,7 +221,8 @@ export default {
         // setData is required for draggable to work in FireFox
         // the content has to be '' so dragging a node out of the tree won't open a new tab in FireFox
         event.dataTransfer.setData('text/plain', '')
-      } catch (e) {}
+      }
+      catch (e) {}
       dragState.draggingNode = treeNode
       this.$emit('node-drag-start', treeNode.node, event)
     })
@@ -306,11 +307,14 @@ export default {
       const distance = event.clientY - targetPosition.top
       if (distance < targetPosition.height * prevPercent) {
         dropType = 'before'
-      } else if (distance > targetPosition.height * nextPercent) {
+      }
+      else if (distance > targetPosition.height * nextPercent) {
         dropType = 'after'
-      } else if (dropInner) {
+      }
+      else if (dropInner) {
         dropType = 'inner'
-      } else {
+      }
+      else {
         dropType = 'none'
       }
 
@@ -320,7 +324,8 @@ export default {
       const dropIndicator = this.$refs.dropIndicator
       if (dropType === 'before') {
         indicatorTop = iconPosition.top - treePosition.top
-      } else if (dropType === 'after') {
+      }
+      else if (dropType === 'after') {
         indicatorTop = iconPosition.bottom - treePosition.top
       }
       dropIndicator.style.top = indicatorTop + 'px'
@@ -328,7 +333,8 @@ export default {
 
       if (dropType === 'inner') {
         addClass(dropNode.$el, 'is-drop-inner')
-      } else {
+      }
+      else {
         removeClass(dropNode.$el, 'is-drop-inner')
       }
 
@@ -351,9 +357,11 @@ export default {
         }
         if (dropType === 'before') {
           dropNode.node.parent.insertBefore(draggingNodeCopy, dropNode.node)
-        } else if (dropType === 'after') {
+        }
+        else if (dropType === 'after') {
           dropNode.node.parent.insertAfter(draggingNodeCopy, dropNode.node)
-        } else if (dropType === 'inner') {
+        }
+        else if (dropType === 'inner') {
           dropNode.node.insertChild(draggingNodeCopy)
         }
         if (dropType !== 'none') {
@@ -546,7 +554,8 @@ export default {
         if (keyCode === 38) {
           // up
           nextIndex = currentIndex !== 0 ? currentIndex - 1 : 0
-        } else {
+        }
+        else {
           nextIndex =
             currentIndex < this.treeItemArray.length - 1 ? currentIndex + 1 : 0
         }

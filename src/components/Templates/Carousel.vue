@@ -91,7 +91,7 @@ import Grid from './Grid'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, KEY } from '@/const'
 import { CarouselItem, Carousel } from 'element-ui'
-import { traversal } from '@/utils/tool'
+import { traversalSelfAndChildren } from '@/utils/node'
 import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
 
 export default {
@@ -195,15 +195,18 @@ export default {
             if (i && position.x < -50) {
               i = false
               this.carousel.next()
-            } else if (i && position.x > 50) {
+            }
+            else if (i && position.x > 50) {
               i = false
               this.carousel.prev()
             }
-          } else {
+          }
+          else {
             if (i && position.y < -50) {
               i = false
               this.carousel.next()
-            } else if (i && position.y > 50) {
+            }
+            else if (i && position.y > 50) {
               i = false
               this.carousel.prev()
             }
@@ -224,7 +227,7 @@ export default {
       const node = this.componentsMap[id]
       const ids = []
 
-      traversal(node, ({ id }) => ids.push(id))
+      traversalSelfAndChildren(node, ({ id }) => ids.push(id))
 
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
     }

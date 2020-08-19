@@ -1,9 +1,8 @@
 import { SET } from '../index'
 import { ID } from '@/const'
 import basic from '@/templateJson/basic'
-import formItem from '@/templateJson/formItem'
 import { appendIdNested } from '@/utils/nodeId'
-import { traversal } from '@/utils/tool'
+import { traversalSelfAndChildren } from '@/utils/node'
 
 let inited = false
 
@@ -29,7 +28,7 @@ const actions = {
 
     const basicExamplesMap = {}
 
-    traversal(basicExamples, node => {
+    traversalSelfAndChildren(basicExamples, node => {
       const id = node[ID]
       basicExamplesMap[id] = node
     })

@@ -25,7 +25,8 @@ export default class TreeStore {
         this.root.doCreateChildren(data)
         this._initDefaultCheckedNodes()
       })
-    } else {
+    }
+    else {
       this._initDefaultCheckedNodes()
     }
   }
@@ -48,7 +49,8 @@ export default class TreeStore {
 
         if (node.root) {
           node.root.visible = allHidden === false
-        } else {
+        }
+        else {
           node.visible = allHidden === false
         }
       }
@@ -65,7 +67,8 @@ export default class TreeStore {
     if (instanceChanged) {
       this.root.setData(newVal)
       this._initDefaultCheckedNodes()
-    } else {
+    }
+    else {
       this.root.updateChildren()
     }
   }

@@ -1,5 +1,5 @@
 import store from '../store'
-import { allEqual, cloneJson } from './tool'
+import { allEqual, cloneJson, toArray } from './tool'
 import { humanize } from './string'
 import {
   NODE_TYPE,
@@ -8,7 +8,10 @@ import {
   LABEL,
   LAYERS,
   GRID_ITEM,
-  KEY
+  KEY,
+  GRID,
+  COMPONENT_BODY,
+  SORT_INDEX
 } from '@/const'
 
 export function findFirstCommonParentTree(ids) {
@@ -40,7 +43,8 @@ export function findFirstCommonParentTree(ids) {
     path.slice(x).reduce((tree, node) => {
       if (tree.children) {
         tree.children.push(node)
-      } else {
+      }
+      else {
         tree.children = [node]
       }
       return node
@@ -50,10 +54,20 @@ export function findFirstCommonParentTree(ids) {
   return commonTree
 }
 
+export function sortByIndex(children, asc = true) {
+  if (asc) {
+    return Array.from(children).sort((a, b) => a[SORT_INDEX] - b[SORT_INDEX])
+  }
+  else {
+    return Array.from(children).sort((a, b) => b[SORT_INDEX] - a[SORT_INDEX])
+  }
+}
+
 export function getNode(id, isExample) {
   if (isExample) {
     return store.state.example.basicExamplesMap[id]
-  } else {
+  }
+  else {
     return store.state.component.componentsMap[id]
   }
 }
@@ -77,6 +91,18 @@ export function traversalAncestorAndSelf(node, fn = () => {}) {
   }
 }
 
+export function traversalSelfAndChildren(nodes, fn, parentNode) {
+  toArray(nodes).forEach(node => {
+    const stop = fn(node, parentNode)
+
+    if (!stop) {
+      node.children &&
+        node.children.length &&
+        traversalSelfAndChildren(node.children, fn, node)
+    }
+  })
+}
+
 export function traversalChildren(node, fn) {
   const { children = [] } = node
   children.forEach(child => {
@@ -95,9 +121,11 @@ export function shortTagName(node) {
   const splitTag = tag.split('-')
   if (splitTag[1] === 'generator') {
     cache[tag] = splitTag[0]
-  } else if (splitTag[0] === 'form') {
+  }
+  else if (splitTag[0] === 'form') {
     cache[tag] = splitTag[1]
-  } else {
+  }
+  else {
     cache[tag] = tag
   }
   cache[tag] = humanize(cache[tag]).replace('-', '')
@@ -112,7 +140,8 @@ export function closestGridItem(node) {
   function find(node) {
     if (isGridItem(node)) {
       return node
-    } else {
+    }
+    else {
       return find(node.parentNode)
     }
   }
@@ -120,8 +149,16 @@ export function closestGridItem(node) {
   return find(node)
 }
 
+export function isOverlapComponent(node) {
+  return [LAYERS, COMPONENT_BODY].includes(node.tag)
+}
+
 export function isGridItem(node) {
   return node.tag === GRID_ITEM
+}
+
+export function isGrid(node) {
+  return node.tag === GRID
 }
 
 export function isProject(node) {
@@ -149,7 +186,8 @@ const indexMap = {}
 export function shortId(id) {
   if (indexMap[id]) {
     return indexMap[id]
-  } else {
+  }
+  else {
     indexMap[id] = index
     index++
     return indexMap[id]

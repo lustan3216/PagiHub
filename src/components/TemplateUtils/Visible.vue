@@ -42,7 +42,8 @@ export default {
     innerVisible(visible) {
       if (visible) {
         delete this.element.dataset.invisible
-      } else {
+      }
+      else {
         this.element.dataset.invisible = ''
       }
     }
@@ -52,7 +53,8 @@ export default {
       const index = observable.ids.indexOf(this.id)
       if (index > -1) {
         observable.ids.splice(index, 1)
-      } else {
+      }
+      else {
         observable.ids.push(this.id)
       }
     }

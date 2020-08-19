@@ -74,7 +74,8 @@ export default {
 
           if (id === this.id) {
             beSelectedNodes.push(node)
-          } else if (isUndefined(id)) {
+          }
+          else if (isUndefined(id)) {
             yetSelectedNodes.push(node)
           }
         }
@@ -143,7 +144,8 @@ export default {
           confirmButtonText: 'OK',
           message: JSON.stringify(data)
         })
-      } else {
+      }
+      else {
         MessageBox({
           title: 'From is invalid',
           confirmButtonText: 'OK',

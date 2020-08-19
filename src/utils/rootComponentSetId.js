@@ -16,7 +16,8 @@ export const getRootComponentSetId = nodeId => {
     )
     familyTreeIds = []
     return rootComponentSetIdMap[nodeId]
-  } else {
+  }
+  else {
     const { parentId } = componentsMap[nodeId]
     const parentNode = componentsMap[parentId]
 
@@ -24,7 +25,8 @@ export const getRootComponentSetId = nodeId => {
       familyTreeIds.forEach(id => (rootComponentSetIdMap[id] = parentNode.id))
       familyTreeIds = []
       return parentNode.id
-    } else {
+    }
+    else {
       familyTreeIds.push(nodeId)
       return getRootComponentSetId(parentNode.id)
     }

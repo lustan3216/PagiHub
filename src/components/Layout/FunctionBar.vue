@@ -26,7 +26,10 @@
     </el-tooltip>
   </dialog-interacted>
 
-  <nav v-else-if="isDraftMode">
+  <nav
+    v-else-if="isDraftMode"
+    class="align-center"
+  >
     <i
       v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
       :disabled="!selectedComponentIds.length"
@@ -37,6 +40,11 @@
       v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
       :disabled="!copyComponentIds.length"
       @shortkey="vmPasteNodes"
+    />
+
+    <i
+      v-shortkey="[isMac ? 'meta' : 'ctrl', 'b']"
+      @shortkey="vmCreateEmptyItem"
     />
 
     <i
@@ -79,11 +87,11 @@
       />
     </el-tooltip>
 
-    <i class="dot"/>
+    <i class="dot" />
 
-    <view-port-controller />
+    <portal-target name="ViewPortController" />
 
-    <i class="dot"/>
+    <i class="dot" />
 
     <el-tooltip
       effect="light"
@@ -110,32 +118,27 @@
 
 <script>
 import { isMac } from '@/utils/device'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import DialogInteracted from '@/components/Components/DialogInteracted'
-import DialogComponentSet from '../Setup/DialogComponentSet'
-import ViewPortController from '../TemplateUtils/ViewPortController'
-import { vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
 import jsonHistory from '@/store/jsonHistory'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import DialogComponentSet from '../Setup/DialogComponentSet'
+import { vmPasteNodes, vmRemoveNode, vmCreateEmptyItem } from '@/utils/vmMap'
+import { arrayLast } from '@/utils/tool'
 
 export default {
   name: 'FunctionBar',
   components: {
-    ViewPortController,
-    DialogInteracted,
     DialogComponentSet
   },
   computed: {
-    ...mapState('app', [
-      'copyComponentIds',
-      'selectedComponentIds'
+    ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
+    ...mapState('component', [
+      'editingComponentSetId',
+      'selectedComponentNode'
     ]),
-    ...mapState('component', ['editingComponentSetId', 'selectedComponentNode']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
+    ...mapGetters('app', ['selectedComponentNodes']),
     selected() {
       return this.selectedComponentIds.includes(this.id)
-    },
-    selectedNodes() {
-      return this.selectedComponentIds.map(id => this.componentsMap[id])
     }
   },
   methods: {
@@ -145,10 +148,11 @@ export default {
     isMac,
     publish() {},
     vmPasteNodes,
+    vmCreateEmptyItem() {
+      vmCreateEmptyItem(arrayLast(this.selectedComponentNodes))
+    },
     multiDelete() {
-      jsonHistory.recordsMerge(() => {
-        this.selectedNodes.forEach(node => vmRemoveNode(node))
-      })
+      this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
     },
     cut() {
       this.setCopySelectedNodeId(this.selectedComponentNode.id)

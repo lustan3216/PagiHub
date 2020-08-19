@@ -109,7 +109,8 @@ export default {
         node.className = 'hover-cover'
         $el.appendChild(node)
         hoverNode.push(node)
-      } else {
+      }
+      else {
         hoverNode.forEach(x => x.remove())
         hoverNode = []
       }

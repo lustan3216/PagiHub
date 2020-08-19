@@ -79,9 +79,11 @@ export default {
         let transformOrigin
         if (x === y && x === '50%') {
           transformOrigin = undefined
-        } else if (x === y) {
+        }
+        else if (x === y) {
           transformOrigin = x
-        } else {
+        }
+        else {
           transformOrigin = `${x} ${y}`
         }
 

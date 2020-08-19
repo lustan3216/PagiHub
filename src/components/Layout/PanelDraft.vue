@@ -12,19 +12,9 @@
 
     <sidebar-left v-if="isDraftMode" />
 
-    <main class="flex1 relative over-hidden">
-      <view-port>
-        <dialog-interacted
-          :min-height="567"
-          :min-width="320"
-          :draggable="false"
-          @resize="artBoardResizing(true)"
-          @resizeEnd="artBoardResizing(false)"
-        >
-          <art-board />
-        </dialog-interacted>
-      </view-port>
-    </main>
+    <view-port class="view-port interact-view">
+      <art-board />
+    </view-port>
 
     <sidebar-right v-if="isDraftMode" />
 
@@ -41,11 +31,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
 import ComponentSet from '../TemplateUtils/ComponentSet'
-import DialogInteracted from '@/components/Components/DialogInteracted'
 
 export default {
   name: 'PanelDraft',
@@ -53,7 +42,6 @@ export default {
     ArtBoard,
     ViewPort,
     ComponentSet,
-    DialogInteracted,
     SidebarRight: () => import('@/components/Layout/SidebarRight'),
     SidebarLeft: () => import('@/components/Layout/SidebarLeft'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
@@ -85,16 +73,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.interact-board {
-  overflow: scroll;
-  background-color: #fff;
-  @include calc-vh('height', '100vh - 80px');
-}
-
 .editor {
   @include calc-vh('height', '100vh - 50px');
   display: flex;
   overflow: hidden;
   background-color: $color-grey;
+}
+.view-port {
+  overflow: hidden;
+  position: relative;
+  flex: 1;
+}
+.interact-view {
+  @include calc-vh('height', '100vh - 80px');
 }
 </style>

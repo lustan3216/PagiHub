@@ -121,10 +121,12 @@ export default {
       if (value) {
         if (this.all === this.four.first) {
           this.$emit('input', this.four.first)
-        } else {
+        }
+        else {
           this.all = this.four.first
         }
-      } else {
+      }
+      else {
         this.four.first = this.all
         this.four.second = this.all
         this.four.third = this.all
@@ -154,16 +156,20 @@ export default {
       if (isUniq) {
         if (first === this.emptyValue) {
           result = undefined
-        } else {
+        }
+        else {
           result = [first]
         }
-      } else if (second === fourth) {
+      }
+      else if (second === fourth) {
         if (first === third) {
           result = [first, second]
-        } else {
+        }
+        else {
           result = [first, second, third]
         }
-      } else {
+      }
+      else {
         result = [first, second, third, fourth]
       }
 

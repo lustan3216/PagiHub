@@ -97,7 +97,8 @@ export default {
             this.visible = false
           })
         })
-      } else {
+      }
+      else {
         this.theButtonVmCanClose.removeClickEvent(this.id)
       }
     },

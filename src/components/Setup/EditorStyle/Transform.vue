@@ -195,7 +195,7 @@ export default {
       this.recordStyles({ transform: this.stringify(this.transformArray) })
     },
     stringify(transformArray) {
-      const ValidValue  = transformArray.reduce((acc, effect) => {
+      const ValidValue = transformArray.reduce((acc, effect) => {
         if (effect.value || effect.value === 0) {
           acc[effect.name] = effect.value
         }
@@ -203,14 +203,14 @@ export default {
       }, {})
 
       const {
-              skewX,
-              skewY,
-              translateX,
-              translateY,
-              scaleX = 1,
-              scaleY = 1,
-              rotate
-            } = ValidValue
+        skewX,
+        skewY,
+        translateX,
+        translateY,
+        scaleX = 1,
+        scaleY = 1,
+        rotate
+      } = ValidValue
 
       const _rotate = rotate && `rotate(${rotate})`
       const skew = this.bindValue(skewX, skewY, 'skew')
@@ -271,7 +271,8 @@ export default {
       if (match[1]) {
         const [a, b = ''] = match[1].split(',')
         return [a, b]
-      } else {
+      }
+      else {
         return ['', '']
       }
     },
@@ -279,9 +280,11 @@ export default {
     bindValue(a = 0, b = 0, attr) {
       if (!a && !b) {
         return ''
-      } else if (a === b) {
+      }
+      else if (a === b) {
         return `${attr}(${a})`
-      } else if (attr) {
+      }
+      else if (attr) {
         return `${attr}(${a},${b})`
       }
     },

@@ -30,7 +30,8 @@ const actions = {
       const { data } = await getCurrentUser()
       commit('SET', data)
       return data
-    } catch {
+    }
+    catch {
       commit('INIT')
     }
   },
@@ -38,7 +39,8 @@ const actions = {
     try {
       await Auth.signOut()
       commit('INIT')
-    } catch (error) {
+    }
+    catch (error) {
       console.log('error signing out: ', error)
     }
   }

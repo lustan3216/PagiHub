@@ -43,21 +43,6 @@
             type="textarea"
           />
         </el-form-item>
-
-        <el-form-item label="By Selected">
-          <el-checkbox
-            :disabled="theOnlySelectedComponentId"
-            v-model="form.createBySelected"
-            class="m-l-15"
-          />
-        </el-form-item>
-        <span>
-          {{
-            selectedNode
-              ? `You select a ${selectedNode.label}. It's able to be created`
-              : 'Can select a node to be created.'
-          }}
-        </span>
       </el-form>
     </dialog-confirmable>
   </el-button>
@@ -126,9 +111,6 @@ export default {
     isExist() {
       return Boolean(this.id)
     },
-    selectedNode() {
-      return this.componentsMap[this.theOnlySelectedComponentId]
-    },
     projectId() {
       return this.$route.params.projectId
     }
@@ -154,7 +136,8 @@ export default {
               id: this.id,
               attrs: this.form
             })
-          } else {
+          }
+          else {
             this.createComponentSet({
               projectId: this.projectId,
               attrs: this.form

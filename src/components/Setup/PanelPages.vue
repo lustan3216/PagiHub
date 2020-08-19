@@ -101,10 +101,10 @@ export default {
       }
     },
     rootComponentSets() {
-      return this.rootComponentSetIds.map(id => {
-        const { children, ...node } = this.componentsMap[id]
-        return node
-      })
+      // return this.rootComponentSetIds.map(id => {
+      //   const { children, ...node } = this.componentsMap[id]
+      //   return node
+      // })
     }
   },
   methods: {

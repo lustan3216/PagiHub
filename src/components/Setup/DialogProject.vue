@@ -117,7 +117,8 @@ export default {
               id: this.id,
               ...this.form
             })
-          } else {
+          }
+          else {
             const project = await this.createProject(this.form)
             this.$router.push(`/${project.id}/draft`)
           }

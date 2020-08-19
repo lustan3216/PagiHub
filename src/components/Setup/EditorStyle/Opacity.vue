@@ -37,7 +37,8 @@ export default {
         const value = arrayLast(this.allValues)
         if (value === '') {
           return 100
-        } else {
+        }
+        else {
           return value * 100
         }
       },

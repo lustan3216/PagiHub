@@ -29,7 +29,8 @@ export default {
     element() {
       if (this.isGridItem) {
         return this.vm.$el.closest('.vue-grid-item')
-      } else {
+      }
+      else {
         return this.vm.$el
       }
     },
@@ -55,7 +56,8 @@ export default {
           // GridGeneratorInner
           this.node.parentNode.$vm.$children[0].unlock(this.id)
         }
-      } else {
+      }
+      else {
         this.element.dataset.lock = ''
 
         if (this.isGridItem) {
@@ -71,7 +73,8 @@ export default {
       const index = observable.ids.indexOf(this.id)
       if (index > -1) {
         observable.ids.splice(index, 1)
-      } else {
+      }
+      else {
         observable.ids.push(this.id)
       }
     }

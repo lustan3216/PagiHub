@@ -41,13 +41,14 @@ export default {
       this.selectedComponentNodes.filter(node => {
         if (isGridItem(node)) {
           nodes.push(node)
-        } else if (isGridItem(node.parentNode)) {
+        }
+        else if (isGridItem(node.parentNode)) {
           nodes.push(node.parentNode)
         }
       })
 
       return nodes
-    },
+    }
   }
 }
 </script>

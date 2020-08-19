@@ -1,7 +1,7 @@
 <template>
   <div
-    :class="{ 'dash-border': dashBorder }"
     v-free-style="innerStyles"
+    :class="{ 'dash-border': dashBorder }"
     class="h-100"
   >
     <async-component
