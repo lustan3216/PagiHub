@@ -10,7 +10,7 @@ export default class RemoteState {
   timerId = null
   requesting = false
 
-  whenRecord() {
+  emitWhenRecord() {
     this.cleanTime()
     this.remoteIndex++
 
@@ -19,14 +19,14 @@ export default class RemoteState {
     }
   }
 
-  whenRedo() {
+  emitWhenRedo() {
     this.cleanTime()
     if (!this.requesting) {
       this.startTime()
     }
   }
 
-  whenUndo() {
+  emitWhenUndo() {
     this.cleanTime()
     if (!this.requesting) {
       this.startTime()

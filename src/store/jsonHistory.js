@@ -16,13 +16,13 @@ const jsonHistory = new JsonHistory({
 
   callback: {
     onDeltasChanged() {
-      // remoteState.whenRecord()
+      remoteState.emitWhenRecord()
     },
     onUndid() {
-      // remoteState.whenUndo()
+      remoteState.emitWhenUndo()
     },
     onRedid() {
-      // remoteState.whenRedo()
+      remoteState.emitWhenRedo()
     }
   }
 })

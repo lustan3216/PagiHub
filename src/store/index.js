@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import component from './modules/component'
+import component from './modules/component/index'
 import example from './modules/example'
 import app from './modules/app'
 import mode from './modules/mode'
@@ -30,12 +30,18 @@ window.addEventListener('storage', function(event) {
 
 export function getCopyComponentIds() {
   const ids = localStorage.getItem('copyComponentIds')
-  store.commit('app/SET', { copyComponentIds: JSON.parse(ids) || [] }, { root: true })
+  store.commit(
+    'app/SET',
+    { copyComponentIds: JSON.parse(ids) || [] },
+    { root: true }
+  )
 }
 
 export function getTmpComponentsArray() {
   const array = localStorage.getItem('tmpComponentsArray')
-  store.commit('component/SET_NODES_TO_TMP_MAP', JSON.parse(array) || [], { root: true })
+  store.commit('component/SET_NODES_TO_TMP_MAP', JSON.parse(array) || [], {
+    root: true
+  })
 }
 
 const store = new Vuex.Store({
