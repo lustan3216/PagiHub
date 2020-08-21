@@ -1,7 +1,9 @@
 <template>
   <div
     v-free-style="innerStyles"
-    :class="{ 'dash-border': dashBorder }"
+    :class="{
+      'dash-border': isDraftMode && nodeNoBorder && firstChildNoBorder
+    }"
     class="h-100"
   >
     <async-component
@@ -29,7 +31,8 @@ export default {
   mixins: [childrenMixin, nodeMixin],
   data() {
     return {
-      dashBorder: false
+      nodeNoBorder: false,
+      firstChildNoBorder: false
     }
   },
   computed: {
@@ -39,33 +42,28 @@ export default {
     }
   },
   watch: {
-    isDraftMode: {
-      handler(value) {
-        this.dashBorder = value
-      },
-      immediate: true
-    },
     'node.style.default': {
       handler(value = {}) {
-        this.checkBorder(value)
+        this.nodeNoBorder = this.checkNoBorder(value)
       },
       immediate: true
     },
     'firstChild.style.default': {
       handler(value = {}) {
-        this.checkBorder(value)
+        this.firstChildNoBorder = this.checkNoBorder(value)
       },
       immediate: true
     }
   },
   methods: {
-    checkBorder(value) {
-      this.dashBorder =
+    checkNoBorder(value) {
+      return (
         !value.border &&
         !value.borderTop &&
         !value.borderRight &&
         !value.borderBottom &&
         !value.borderLeft
+      )
     }
   }
 }

@@ -22,10 +22,11 @@
       name="TextEditorMenu"
       slim
     />
-    <portal-target
+
+    <node-quick-functions
       v-for="id in selectedComponentIds"
-      :name="`PanelDraft-${id}`"
-      :key="`PanelDraft-${id}`"
+      :id="id"
+      :key="id"
     />
   </div>
 </template>
@@ -35,11 +36,13 @@ import { mapState, mapActions } from 'vuex'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
 import ComponentSet from '../TemplateUtils/ComponentSet'
+import NodeQuickFunctions from '../TemplateUtils/NodeQuickFunctions'
 
 export default {
   name: 'PanelDraft',
   components: {
     ArtBoard,
+    NodeQuickFunctions,
     ViewPort,
     ComponentSet,
     SidebarRight: () => import('@/components/Layout/SidebarRight'),
@@ -53,6 +56,7 @@ export default {
   created() {
     if (this.$route.params.projectId) {
       this.getProject(this.$route.params.projectId).then(project => {
+        this.getAssets()
         if (!project) {
           this.$router.push('/projects')
         }
@@ -67,7 +71,8 @@ export default {
   methods: {
     ...mapActions('app', ['artBoardResizing']),
     ...mapActions('example', ['initExamples']),
-    ...mapActions('component', ['getProject'])
+    ...mapActions('component', ['getProject']),
+    ...mapActions('asset', ['getAssets'])
   }
 }
 </script>

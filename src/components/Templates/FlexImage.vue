@@ -1,7 +1,7 @@
 <template>
   <el-image
     v-free-style="innerStyles"
-    v-bind="innerProps"
+    v-bind="transformedProps"
     class="wh-100"
   >
     <div
@@ -24,8 +24,19 @@ export default {
   components: {
     ElImage: Image
   },
-  mixins: [nodeMixin]
+  mixins: [nodeMixin],
+  computed: {
+    transformedProps() {
+      if (/^https?:\/\//.test(this.innerProps.src)) {
+        return this.innerProps
+      }
+      else {
+        return {
+          ...this.innerProps,
+          src: this.assetHost + this.innerProps.src
+        }
+      }
+    }
+  }
 }
 </script>
-
-<style lang="scss" scoped></style>

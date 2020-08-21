@@ -415,8 +415,12 @@ export default {
         string = JSON.stringify(string)
       }
 
-      const fonts = string.match(/(?<=fontFamily":")[\w|\s]*/g)
-      return arrayUniq(fonts)
+      const match = string.match(/fontFamily":"([\w|\s]*)/g)
+      if (match) {
+        const fonts = match.map(x => x.replace(/fontFamily|[^\s\w]/g, ''))
+        return arrayUniq(fonts)
+      }
+      return []
     },
     showLinkMenu(attrs) {
       this.linkUrl = attrs.href

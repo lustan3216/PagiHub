@@ -140,9 +140,10 @@ export const flexButton = function() {
   }
 }
 
-export const flexImage = function() {
+export const flexImage = function(props) {
   return {
-    [TAG]: 'flex-image'
+    [TAG]: 'flex-image',
+    ...props
   }
 }
 

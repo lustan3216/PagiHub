@@ -30,7 +30,7 @@ export default {
   computed: {
     ...mapState('component', ['rootComponentSetIds']),
     node() {
-      return getNode(this.id, this.isExample)
+      return getNode(this.id)
     },
     children() {
       return (this.node && this.node.children) || []

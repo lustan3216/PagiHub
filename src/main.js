@@ -32,7 +32,8 @@ Vue.mixin({
     isPreviewMode: () => store.getters['mode/isPreviewMode'],
     isDraftMode: () => store.getters['mode/isDraftMode'],
     componentsMap: () => store.state.component.componentsMap,
-    vmMap: () => vmMap
+    vmMap: () => vmMap,
+    assetHost: () => 'https://staging-asset.lots.design/'
   }
 })
 

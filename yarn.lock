@@ -7508,6 +7508,11 @@ file-uri-to-path@1.0.0:
   resolved "https://registry.yarnpkg.com/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz#553a7b8446ff6f684359c445f1e37a05dacc33dd"
   integrity sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==
 
+filepond-plugin-file-validate-size@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-size/-/filepond-plugin-file-validate-size-2.2.1.tgz#7e0d879db85271d2b1ec4b18e8d4d452e3fd2007"
+  integrity sha512-u9JKJlg4Yff0ogNPb/6QK9Pwqr9DlcAnvQm2r9jHc5bXBoVhQZ+Dd4FcMdDyrSGBkYwiXVBD2It7qPOv94hVnQ==
+
 filepond-plugin-file-validate-type@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-type/-/filepond-plugin-file-validate-type-1.2.5.tgz#b3588088d2b0d5dbdf706d068c0ecdf28140a8e3"
@@ -8000,6 +8005,11 @@ growly@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/growly/-/growly-1.3.0.tgz#f10748cbe76af964b7c96c93c6bcc28af120c081"
   integrity sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
+
+gsap@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/gsap/-/gsap-3.5.0.tgz#ca1753b062309390b46fb3fda245a4a65fb52c2a"
+  integrity sha512-YewxuqAE0HjytsKFRUnjiUz0TatHR6L1aJjalYob1ajQpWCZz+gTRJOgQWiABfTEcA6YpgUcrWLEvEIM1Fftpg==
 
 gzip-size@^5.0.0:
   version "5.1.1"
@@ -9616,10 +9626,10 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
-json-history@0.3.13:
-  version "0.3.13"
-  resolved "https://registry.yarnpkg.com/json-history/-/json-history-0.3.13.tgz#c6b10db2f00260a387cebd1af2daa962bc9b61a8"
-  integrity sha512-p1uCf+zSMj21lpUSgZOzd56E/IegPH6BoPVJ+mcgq+ZURm0kGp5b+3kdUNtptzVd1HTNsZfNeQkcdoTQ/9juHw==
+json-history@0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/json-history/-/json-history-0.4.0.tgz#2e764ca806f6bb044a7e7358dd3f844bfcdad02d"
+  integrity sha512-EKKMgyhV2+WHIK0gDnfWQY2WP8Khn2DWY6wUnw7TUhdXB1NiFrjIeQZDdFEWs0TLdSlXJd9P+2c3Y6Waa8wYpg==
   dependencies:
     diff-match-patch "^1.0.5"
     lodash.get "^4.4.2"

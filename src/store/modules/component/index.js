@@ -13,7 +13,7 @@ import {
   getRootComponentSetId,
   recordRootComponentSetId
 } from '@/utils/rootComponentSetId'
-import { isComponentSet, isProject } from '@/utils/node'
+import { isComponentSet, isProject, cloneJsonWithoutChildren } from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
 import app from '@/main'
 
@@ -133,9 +133,9 @@ const mutations = {
   },
   // only for project and componentSet
   DELETE_NODE(state, id) {
-    // the number of projectIds and rootComponentSetIds are few, so lazy to check componentSet or project
-    deleteBy(state.projectIds, 'id', id)
-    deleteBy(state.rootComponentSetIds, 'id', id)
+    // the number of projectIds and rootComponentSetIds are a few, so lazy to check componentSet or project
+    deleteBy(state.projectIds, id)
+    deleteBy(state.rootComponentSetIds, id)
     Vue.delete(state.componentsMap, id)
   },
 
@@ -152,17 +152,7 @@ const mutations = {
     Array.isArray(payLoad) ? payLoad.forEach(set) : set(payLoad)
   },
   RECORD(state, payLoad) {
-    jsonHistory.debounceRecord(payLoad, 200, tree => {
-      const string = JSON.stringify(tree, function(key, value) {
-        if (value['children']) {
-          const { children, ...newObject } = value
-          return newObject
-        }
-        return value
-      })
-
-      return JSON.parse(string)
-    })
+    jsonHistory.debounceRecord(payLoad, 200, tree => cloneJsonWithoutChildren(tree))
   },
   REDO() {
     const done = rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)

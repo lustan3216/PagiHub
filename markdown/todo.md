@@ -12,10 +12,11 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 bug: grid 畫面縮小後會壞掉, hidden 變換螢幕時也會壞掉
+quick function 的 item editing
 
 <ol>
-component body 在 create componentSet時解決
-grid 的compact vertical 要做出來，因為有ratio
+
+grid 的 compact vertical 要做出來，因為有 ratio
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 5<li>sreen size changer</li>
 background color / image
@@ -23,10 +24,11 @@ background color / image
 5<li>每個 component set 都可以組建合併得按鈕 / or 選版本</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
 
-5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li>
+5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li> 合併 grid item 跟 component 的 style, style 應該有辦法合併獲優先顯示 component 的
 5<li>search panel</li>
 20<li>可瀏覽 production 版本</li>
 2<li>uploader image, consider how to compress</li>
+update children 要做 queue
 
 <li>SEO首頁</li>
 <li>need login when publishing </li>

@@ -28,26 +28,18 @@ export default {
       return this.innerChildren[0]
     }
   },
-  watch: {
-    firstChild: {
-      handler(node, oldNode) {
-        if (node || (!node && oldNode)) {
-          // !node && oldNode 的情景是正在編輯時刪除
-          return
-        }
-
-        this.getComponentSetChildren(this[ID])
-      },
-      immediate: true
-    }
-  },
   created() {
+    this.getComponentSetChildren(this[ID])
+
     const masterID = this.componentsMap[this.id][MASTER_ID]
     if (masterID) {
       if (!this.componentsMap[masterID]) {
         this.getComponentSet(masterID)
       }
     }
+  },
+  updated() {
+    this.getComponentSetChildren(this[ID])
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount

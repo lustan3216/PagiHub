@@ -11,7 +11,6 @@
       :key="category"
       :name="category"
       :label="humanize(category)"
-      lazy
       class="p-10"
     >
       <el-row
@@ -37,14 +36,21 @@
             </div>
 
             <div class="relative z-index1">
-              <component
-                :is="
-                  isComponentSet(component)
-                    ? 'component-set'
-                    : 'async-component'
-                "
+              <async-component
                 :id="component.id"
+                class="over-hidden"
               />
+            </div>
+
+            <div v-if="component.tags && component.tags.length">
+              <el-tag
+                v-for="tag in component.tags"
+                :key="tag"
+                effect="plain"
+                class="m-r-5"
+              >
+                {{ tag }}
+              </el-tag>
             </div>
           </div>
         </el-col>
@@ -59,8 +65,7 @@ import { cloneJson } from '@/utils/tool'
 import { humanize } from '@/utils/string'
 import { isComponentSet, shortTagName } from '@/utils/node'
 import AsyncComponent from './AsyncComponent'
-import ComponentSet from './ComponentSet'
-import { Card } from 'element-ui'
+import { Card, Tag } from 'element-ui'
 
 export default {
   name: 'ComponentTabs',
@@ -72,8 +77,8 @@ export default {
   },
   components: {
     AsyncComponent,
-    ComponentSet,
-    ElCard: Card
+    ElCard: Card,
+    ElTag: Tag
   },
   props: {
     button: {
@@ -86,22 +91,22 @@ export default {
       currentCategory: 'basic',
       options: [],
       search: '',
-      categories: ['basic', 'My', 'search']
+      categories: ['basic', 'myComponents', 'componentsHub']
     }
   },
   computed: {
-    ...mapState('component', ['editingComponentSetId']),
+    ...mapState('component', ['editingComponentSetId', 'rootComponentSetIds']),
     ...mapState('example', ['basicExamples']),
     componentsSets() {
-      return Object.values(this.componentsMap).filter(
-        node => isComponentSet(node) && node.id !== this.editingComponentSetId
-      )
+      return this.rootComponentSetIds
+        .map(id => this.componentsMap[id])
+        .filter(node => node.id !== this.editingComponentSetId)
     },
     components() {
       return {
         basic: this.basicExamples,
-        MyComponent: this.componentsSets,
-        search: []
+        myComponents: this.componentsSets,
+        componentsHub: []
       }
     }
   },
@@ -110,7 +115,12 @@ export default {
     shortTagName,
     isComponentSet,
     addTemplate(template) {
-      this.$emit('choose', cloneJson(template))
+      if (this.currentCategory === 'basic') {
+        this.$emit('choose', cloneJson(template))
+      }
+      else {
+        this.$emit('choose', cloneJson(template.children[0]))
+      }
     }
   }
 }

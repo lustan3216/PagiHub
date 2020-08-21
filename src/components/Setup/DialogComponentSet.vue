@@ -6,6 +6,7 @@
   >
     {{ buttonText }}
     <dialog-confirmable
+      :loading="loading"
       :visible.sync="visible"
       :disable-submit="!dirty"
       title="Component"
@@ -84,14 +85,13 @@ export default {
     const node = componentsMap[this.id]
 
     return {
+      loading: false,
       visible: false,
       dirty: false,
       form: {
         label: node ? node.label : '',
         description: node ? node.description : '',
-        tags: node ? node.tags : [],
-        parentId: this.parentId,
-        createBySelected: false
+        tags: node ? node.tags : []
       },
       categories: [
         { id: 0, label: 'Button' },
@@ -129,21 +129,24 @@ export default {
       Object.assign(this.$data, this.$options.data.call(this))
     },
     onSubmit() {
-      this.$refs.form.validate(valid => {
+      this.$refs.form.validate(async valid => {
         if (valid && this.dirty) {
+          this.loading = true
+
           if (this.isExist) {
-            this.patchComponentSet({
+            await this.patchComponentSet({
               id: this.id,
-              attrs: this.form
+              ...this.form
             })
           }
           else {
-            this.createComponentSet({
+            await this.createComponentSet({
               projectId: this.projectId,
-              attrs: this.form
+              ...this.form
             })
           }
 
+          this.loading = false
           this.visible = false
           this.$bus.$emit('component-tabs-visible')
         }

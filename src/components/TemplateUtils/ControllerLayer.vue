@@ -5,17 +5,13 @@
     @click.stop="singleClick"
     @dblclick.stop="dblclick"
   >
-    <node-quick-functions
-      v-if="selected"
-      :id="id"
-      :item-editing="itemEditing"
-    />
-
     <div
       v-click-outside="clickOutside"
       v-if="canBeEdited"
-      :class="{ 'grid-item-fix': itemEditing, 'no-action': !itemEditing }"
-      class="h-100"
+      :class="{
+        'grid-item-fix': itemEditing,
+        'no-action': !itemEditing
+      }"
     >
       <slot :item-editing="itemEditing" />
     </div>
@@ -23,24 +19,24 @@
     <slot v-else />
   </div>
 
-  <div v-else-if="node">
+  <div
+    v-else-if="node"
+    class="h-100"
+  >
     <slot />
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import NodeQuickFunctions from './NodeQuickFunctions'
 import { CAN_BE_EDITED } from '@/const'
+import { getNode } from '@/utils/node'
 import { isMac } from '@/utils/device'
 import clickOutside from '@/utils/clickOutside'
 
 export default {
   name: 'ControllerLayer',
   inject: { isExample: { default: false }},
-  components: {
-    NodeQuickFunctions
-  },
   directives: {
     clickOutside
   },
@@ -60,12 +56,7 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     ...mapState('example', ['basicExamplesMap']),
     node() {
-      if (this.isExample) {
-        return this.basicExamplesMap[this.id]
-      }
-      else {
-        return this.componentsMap[this.id]
-      }
+      return getNode(this.id)
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)
@@ -81,6 +72,9 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
+    isTextEditor() {
+      return this.node.tag === 'text-editor'
+    },
     clickOutside(event) {
       const insideArea = [
         '#sidebar-right',

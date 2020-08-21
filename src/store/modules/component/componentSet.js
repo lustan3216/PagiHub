@@ -1,39 +1,32 @@
 import {
   createComponentSet,
   deleteComponentSet,
-  getComponentSetChildren, getComponentSets,
+  getComponentSetChildren,
+  getComponentSets,
   patchComponentSet
 } from '@/api/node'
 import { recordRootComponentSetIdByArray } from '@/utils/rootComponentSetId'
 import { getCopyComponentIds, getTmpComponentsArray } from '@/store'
-import { vmAddNodesToParentAndRecord } from '@/utils/vmMap'
 import { componentBody } from '@/templateJson/basic'
-import { isComponentSet, traversalChildren, traversalSelfAndChildren } from '@/utils/node'
+import { isComponentSet, traversalSelfAndChildren } from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
 import { objectFirstKey } from '@/utils/tool'
+import { appendIdNested } from '@/utils/nodeId'
 
 export const actions = {
   async getComponentSetChildren({ commit, state }, id) {
+    const nodes = Object.values(state.componentsMap)
+    const imported = nodes.find(node => node.parentId === id)
+    if (imported) {
+      return
+    }
+
     const componentsArray = await getComponentSetChildren(id)
     if (componentsArray.length) {
       commit('SET_NODES_TO_MAP', componentsArray)
       recordRootComponentSetIdByArray(id, componentsArray)
       getCopyComponentIds()
       getTmpComponentsArray()
-    }
-    else {
-      vmAddNodesToParentAndRecord(id, componentBody())
-      const componentSet = state.componentsMap[id]
-      const ids = []
-
-      traversalChildren(componentSet, ({ id }) => {
-        ids.push(id)
-      })
-
-      jsonHistory.cleanDeltas(delta => {
-        const key = objectFirstKey(delta)
-        return ids.includes(key)
-      })
     }
   },
 
@@ -45,34 +38,51 @@ export const actions = {
     }
   },
 
-  async createComponentSet({ commit, state, dispatch }, { projectId, attrs }) {
-    const { data } = await createComponentSet(projectId, attrs)
-    commit('SET_EDITING_COMPONENT_SET_ID', data.id)
-    commit('SET_NODES_TO_MAP', data)
+  async createComponentSet(
+    { commit, state, dispatch },
+    { projectId, label, description, tags }
+  ) {
+    const tree = componentBody()
+    appendIdNested(tree)
+    const {
+      data: { children, ...componentSet }
+    } = await createComponentSet(projectId, {
+      description,
+      label,
+      tags,
+      children: tree
+    })
+    commit('SET_EDITING_COMPONENT_SET_ID', componentSet.id)
+    commit('SET_NODES_TO_MAP', [componentSet, ...children])
   },
 
-  async patchComponentSet({ commit, state, dispatch }, { id, attrs }) {
-    const { data } = await patchComponentSet(id, attrs)
+  async patchComponentSet(
+    { commit, state, dispatch },
+    { id, description, label, tags }
+  ) {
+    const { data } = await patchComponentSet(id, {
+      description,
+      label,
+      tags
+    })
     commit('SET_NODES_TO_MAP', data)
   },
 
   async deleteComponentSet({ state, commit, getters, dispatch }, id) {
     await deleteComponentSet(id)
     const node = state.componentsMap[id]
-    const ids = []
 
     traversalSelfAndChildren(node, child => {
-      ids.push(child.id)
-      commit('DELETE_NODE', id)
+      commit('DELETE_NODE', child.id)
 
       if (isComponentSet(node)) {
-        commit('CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', id)
+        commit('CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', child.id)
       }
-    })
 
-    jsonHistory.cleanDeltas(delta => {
-      const key = objectFirstKey(delta)
-      return ids.includes(key)
+      jsonHistory.cleanDeltas(delta => {
+        const key = objectFirstKey(delta)
+        return child.id === key
+      })
     })
   }
 }

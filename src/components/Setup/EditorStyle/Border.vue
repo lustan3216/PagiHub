@@ -37,7 +37,7 @@ import { ColorPicker } from 'element-ui'
 import { capitalize } from '@/utils/string'
 import SelectUnit from '@/components/Components/SelectUnit'
 
-const REGEX = /(?<!,) /
+const REGEX = / (?=\D)/
 const StyleSelect = {
   name: 'StyleSelect',
   functional: true,

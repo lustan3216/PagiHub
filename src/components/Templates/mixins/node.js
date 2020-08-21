@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     node() {
-      return getNode(this[ID], this.isExample)
+      return getNode(this[ID])
     },
     innerValue() {
       return this.node && this.node[VALUE]

@@ -6,6 +6,7 @@
     @click.stop="visible = !visible"
   >
     <dialog-confirmable
+      :loading="loading"
       :visible.sync="visible"
       :title="`Delete ${type}`"
       width="30%"
@@ -54,6 +55,7 @@ export default {
     const { label } = node
 
     return {
+      loading: false,
       node,
       label,
       visible: false,
@@ -82,15 +84,17 @@ export default {
       Object.assign(this.$data, this.$options.data.call(this))
     },
     onSubmit() {
-      this.$refs.form.validate(valid => {
+      this.$refs.form.validate(async valid => {
         if (valid) {
+          this.loading = true
           if (isComponentSet(this.node)) {
-            this.deleteComponentSet(this.id)
+            await this.deleteComponentSet(this.id)
           }
           else {
-            this.deleteProjectNode(this.id)
+            await this.deleteProjectNode(this.id)
           }
-          this.visible = false
+          // this.loading = false
+          // this.visible = false
         }
       })
     }

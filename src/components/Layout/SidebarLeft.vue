@@ -1,5 +1,8 @@
 <template>
-  <div class="sidebar-left">
+  <div
+    :style="{ width: isPanelAsset ? '400px' : '260px' }"
+    class="sidebar-left"
+  >
     <el-button-group class="flex">
       <el-tooltip
         effect="light"
@@ -31,7 +34,7 @@
         content="Asset"
       >
         <el-button
-          icon="el-icon-setting"
+          icon="el-icon-film"
           class="flex1"
           @click="activePanel = 'PanelAsset'"
         />
@@ -60,7 +63,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import SplitPane from 'vue-splitpane'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 
@@ -79,11 +82,26 @@ export default {
       activePanel: 'PanelProject'
     }
   },
+
   computed: {
     ...mapGetters('user', ['isLogin']),
     projectId() {
       return this.$route.params.projectId
+    },
+    isPanelAsset() {
+      return this.activePanel === 'PanelAsset'
     }
+  },
+  watch: {
+    isPanelAsset() {
+      this.artBoardResizing(true)
+      setTimeout(() => {
+        this.artBoardResizing(false)
+      }, 300)
+    }
+  },
+  methods: {
+    ...mapActions('app', ['resizeNodeQuickFn', 'artBoardResizing'])
   }
 }
 </script>
@@ -97,9 +115,9 @@ export default {
 }
 
 .sidebar-left {
-  width: 260px;
   background-color: white;
   border-right: 1px solid $color-grey;
+  transition: width 0.2s ease;
 }
 
 ::v-deep {

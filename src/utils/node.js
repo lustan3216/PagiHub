@@ -14,6 +14,18 @@ import {
   SORT_INDEX
 } from '@/const'
 
+export function cloneJsonWithoutChildren(tree) {
+  const string = JSON.stringify(tree, function(key, value) {
+    if (value['children']) {
+      const { children, ...newObject } = value
+      return newObject
+    }
+    return value
+  })
+
+  return JSON.parse(string)
+}
+
 export function findFirstCommonParentTree(ids) {
   // familyPaths = [
   //   [1,2,3,4,5]
@@ -63,13 +75,11 @@ export function sortByIndex(children, asc = true) {
   }
 }
 
-export function getNode(id, isExample) {
-  if (isExample) {
-    return store.state.example.basicExamplesMap[id]
-  }
-  else {
-    return store.state.component.componentsMap[id]
-  }
+export function getNode(id) {
+  return (
+    store.state.example.basicExamplesMap[id] ||
+    store.state.component.componentsMap[id]
+  )
 }
 
 export function traversalAncestorAndSelf(node, fn = () => {}) {
@@ -193,3 +203,19 @@ export function shortId(id) {
     return indexMap[id]
   }
 }
+// {
+//   "Sid": "Update",
+//   "Effect": "Allow",
+//   "Principal": {
+//   "AWS": [
+//     "arn:aws:iam::319924209672:role/service-role/componentSetChildren-put-role-ydnj7p44",
+//     "arn:aws:iam::319924209672:root",
+//     "arn:aws:iam::319924209672:role/service-role/componentSet-put-role-h3txxg2a"
+//   ]
+// },
+//   "Action": [
+//   "s3:PutObject",
+//   "s3:PutObjectAcl"
+// ],
+//   "Resource": "arn:aws:s3:::staging.node/*"
+// }

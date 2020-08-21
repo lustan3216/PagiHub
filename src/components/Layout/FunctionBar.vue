@@ -101,7 +101,7 @@
       <el-button
         v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
         :disabled="!editingComponentSetId"
-        icon="el-icon-picture-outline"
+        icon="el-icon-video-camera"
         type="text"
         @click="SET_PREVIEW_MODE"
         @shortkey.native="SET_PREVIEW_MODE"

@@ -1,59 +1,55 @@
 <template>
-  <portal
+  <div
     v-if="element"
-    :to="`PanelDraft-${id}`"
+    :id="`quick-fn-${id}`"
+    class="quick-functions flex-center"
   >
+    <component-add
+      v-if="canAddComponent"
+      :id="id"
+      style="font-size: 16px;"
+      class="can-action"
+    />
+
     <div
-      :id="`quick-fn-${id}`"
-      class="quick-functions flex-center"
+      :class="[top > 100 ? 'top' : 'bottom']"
+      class="wrapper flex"
     >
-      <component-add
-        v-if="canAddComponent"
+      <node-name
         :id="id"
-        style="font-size: 16px;"
-        class="can-action"
-      />
-
-      <div
-        :class="[top > 100 ? 'top' : 'bottom']"
-        class="wrapper flex"
+        class="title"
       >
-        <node-name
-          :id="id"
-          class="title"
-        >
-          <i :class="[itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank']" />
-        </node-name>
+        <i :class="[itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank']" />
+      </node-name>
 
-        <portal-target
-          v-if="isDraftMode"
-          :name="`QuickFunctions${id}`"
-          class="button-group"
-        />
-      </div>
-
-      <div class="left wrapper">
-        <el-tooltip
-          effect="light"
-          placement="left"
-        >
-          <div slot="content">
-            {{ newItemToolTip }} <span
-              class="m-l-10"
-              v-html="metaKey"
-            /> + B
-          </div>
-          <el-button
-            icon="el-icon-plus"
-            class="icon"
-            @click="vmCreateEmptyItem"
-          />
-        </el-tooltip>
-
-        <context-menu :id="id" />
-      </div>
+      <portal-target
+        v-if="isDraftMode"
+        :name="`QuickFunctions${id}`"
+        class="button-group"
+      />
     </div>
-  </portal>
+
+    <div class="left wrapper">
+      <el-tooltip
+        effect="light"
+        placement="left"
+      >
+        <div slot="content">
+          {{ newItemToolTip }} <span
+            class="m-l-10"
+            v-html="metaKey"
+          /> + B
+        </div>
+        <el-button
+          icon="el-icon-plus"
+          class="icon"
+          @click="vmCreateEmptyItem"
+        />
+      </el-tooltip>
+
+      <context-menu :id="id" />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -202,8 +198,8 @@ export default {
           Object.assign(this.framer.style, {
             width: this.width - 2 + 'px',
             height: this.height - 2 + 'px',
-            top: this.top + 'px',
-            left: this.left + 'px',
+            transform: `translate(${this.left}px, ${this.top}px)`,
+            webkitTransform: `translate(${this.left}px, ${this.top}px)`,
             opacity
           })
 
@@ -220,8 +216,8 @@ export default {
             Object.assign(this.framer.style, {
               width: width - 2 + 'px',
               height: height - 2 + 'px',
-              top: top + 'px',
-              left: left + 'px',
+              transform: top + 'px',
+              webkitTransform: left + 'px',
               opacity: '1'
             })
           }
@@ -242,6 +238,8 @@ $activeColor: rgba(81, 117, 199, 0.68);
   border: 1px dashed $activeColor;
   will-change: opacity, height, width, top, left;
   z-index: 800;
+  top: 0;
+  left: 0;
 }
 
 .wrapper {

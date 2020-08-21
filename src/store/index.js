@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import component from './modules/component/index'
 import example from './modules/example'
 import app from './modules/app'
+import asset from './modules/asset'
 import mode from './modules/mode'
 import user from './modules/user'
 import { isUndefined } from '../utils/tool'
@@ -51,7 +52,8 @@ const store = new Vuex.Store({
     mode,
     component,
     user,
-    example
+    example,
+    asset
   }
 })
 

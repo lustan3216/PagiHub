@@ -18,7 +18,7 @@
     v-observe-visibility="options"
     v-else-if="visible"
     :id="id"
-    class="h-100"
+    :class="{ 'h-100': !isTextEditor }"
   >
     <template v-slot="{ itemEditing }">
       <!--  it will has a bug here if component without key like, editorText -->
@@ -126,7 +126,7 @@ export default {
       return this.node && !hidden
     },
     node() {
-      return getNode(this.id, this.isExample)
+      return getNode(this.id)
     },
     canBeEdited() {
       return this.node[CAN_BE_EDITED]
@@ -151,6 +151,9 @@ export default {
     },
     isGridItem() {
       return isGridItem(this.node)
+    },
+    isTextEditor() {
+      return this.node.tag === 'text-editor'
     }
   }
 }

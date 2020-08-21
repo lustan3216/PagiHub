@@ -1,6 +1,6 @@
 import store from '@/store'
 import localforage from 'localforage'
-import { cloneJson } from '@/utils/tool'
+import { cloneJson, toArray } from '@/utils/tool'
 import { API } from 'aws-amplify'
 import axios from 'axios'
 
@@ -29,10 +29,7 @@ export function getComponentSets(projectId) {
 }
 
 export function getComponentSetChildren(id) {
-  const userId = store.state.user.id.split('_')[1]
-  return axios
-    .get(`https://d3uga24p04v3ke.cloudfront.net/${userId}/${id}/draft.json`)
-    .catch(_ => [])
+  return API.get('staging', `/component-sets/${id}/children`, {})
 }
 
 export function patchComponentSet(id, body) {
@@ -43,25 +40,32 @@ export function deleteComponentSet(id) {
   return API.del('staging', `/component-sets/${id}`, {})
 }
 
-export function putComponentSetChildren(deltas, action) {
-  return API.put(
+export function patchComponentSetChildren(deltas, action) {
+  return API.patch(
     'staging',
-    `/projects/${store.state.component.editingProjectId}/children`,
+    `/component-sets/${store.state.component.editingComponentSetId}/children`,
     {
       body: { deltas, action }
     }
   )
 }
 
-export function createComponentSet(projectId, componentSet) {
-  componentSet = cloneJson(componentSet)
+export function createComponentSet(
+  projectId,
+  { description, label, tags, children }
+) {
   // const componentSetId = nodeIds.generateProjectId()
   // 這裡children是要處理 假如componentSet是用selected component創造的
   // const children = componentSet[CHILDREN]
 
   // componentSet[ID] = componentSetId
   return API.post('staging', `/projects/${projectId}/component-sets`, {
-    body: componentSet
+    body: {
+      description,
+      label,
+      tags,
+      children: toArray(children)
+    }
   })
   // if (children.length) {
   //   componentSet.w = children[0].w

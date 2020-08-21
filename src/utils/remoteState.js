@@ -1,9 +1,9 @@
-import { putComponentSetChildren } from '@/api/node'
+import { patchComponentSetChildren } from '@/api/node'
 import { getRootComponentSetId } from '@/utils/rootComponentSetId'
 import { objectFirstKey } from '@/utils/tool'
 import jsonHistory from '@/store/jsonHistory'
 
-const DEBOUNCE_TIME = 2000
+const DEBOUNCE_TIME = 800
 
 export default class RemoteState {
   remoteIndex = 0
@@ -49,7 +49,7 @@ export default class RemoteState {
       }
 
       this.requesting = true
-      const currentIndex = jsonHistory.currentIndex
+      const requestIndex = jsonHistory.currentIndex
       let deltas
       let action
 
@@ -68,9 +68,9 @@ export default class RemoteState {
         action = 'redo'
       }
 
-      putComponentSetChildren(deltas, action)
+      patchComponentSetChildren(deltas, action)
         .then(() => {
-          this.remoteIndex = currentIndex
+          this.remoteIndex = requestIndex
           this.requesting = false
           this.requestPutDeltas()
         })
@@ -87,17 +87,16 @@ export default class RemoteState {
 
   transformDeltas(index, index2) {
     const deltas = []
-    jsonHistory.deltas.slice(index, index2).forEach(group => {
-      const newGroup = []
-      group.forEach(delta => {
-        newGroup.push({
-          delta,
-          rootComponentSetId: getRootComponentSetId(objectFirstKey(delta))
-        })
-      })
-      deltas.push(newGroup)
-    })
-
-    return deltas
+    // jsonHistory.deltas.slice(index, index2).forEach(group => {
+    //   const newGroup = []
+    //   group.forEach(delta => {
+    //     newGroup.push({
+    //       delta,
+    //       rootComponentSetId: getRootComponentSetId(objectFirstKey(delta))
+    //     })
+    //   })
+    //   deltas.push(newGroup)
+    // })
+    return jsonHistory.deltas.slice(index, index2)
   }
 }

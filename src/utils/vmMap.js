@@ -1,9 +1,6 @@
 import store from '../store'
-import { CAN_NEW_ITEM, COMPONENT_BODY, LAYERS, SORT_INDEX } from '../const'
-import { isOverlapComponent, isGridItem, traversalAncestorAndSelf } from '@/utils/node'
-import jsonHistory from '@/store/jsonHistory'
-import { arrayMove, findIndexBy } from '@/utils/tool'
-import { grid } from '@/templateJson/basic'
+import { CAN_NEW_ITEM } from '../const'
+import { isGridItem, traversalAncestorAndSelf } from '@/utils/node'
 
 const vmMap = {}
 
@@ -22,34 +19,6 @@ export function vmAppend(vm) {
 
 export function vmRemove(vm) {
   delete vmMap[vm.id]
-}
-
-export function getComputedStyle(id) {
-  const _vm = vm(id)
-  if (!_vm) {
-    return {}
-  }
-  const isForm = /^form/.test(_vm.$options._componentTag)
-  let el
-
-  if (isForm) {
-    const field = _vm.api.fields()[0]
-    el = _vm.api.el(field).$el
-  }
-  else {
-    el = document.querySelector(`[data-style-id="${id}"]`)
-  }
-
-  return window.getComputedStyle(el) || {}
-}
-
-export function getPlanStyle(id) {
-  return $element(id).getAttribute('style')
-}
-
-export function $element(id) {
-  const _vm = vm(id)
-  return _vm && _vm.$el
 }
 
 export function vmCreateEmptyItem(node) {

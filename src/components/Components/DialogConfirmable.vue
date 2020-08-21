@@ -50,6 +50,7 @@
 </template>
 
 <script>
+let loading
 export default {
   name: 'DialogConfirmable',
   props: {
@@ -58,6 +59,10 @@ export default {
       default: ''
     },
     visible: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
       type: Boolean,
       default: false
     },
@@ -79,6 +84,14 @@ export default {
     visible(value) {
       if (!value) {
         this.$emit('close')
+      }
+    },
+    loading(value) {
+      if (value) {
+        loading = this.$loading({ target: this.$el.firstChild })
+      }
+      else {
+        loading.close()
       }
     }
   },

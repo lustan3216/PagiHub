@@ -9,7 +9,7 @@
       <slot />
     </template>
 
-    <i class="el-icon-info" />
+    <i :class="icon" />
   </el-tooltip>
 </template>
 
@@ -24,6 +24,10 @@ export default {
     placement: {
       type: String,
       default: 'left'
+    },
+    icon: {
+      type: String,
+      default: 'el-icon-info'
     }
   }
 }
