@@ -2,7 +2,7 @@
   <!-- v-observe-visibility 跟vIf 一定要不同層，不然v-if false 的話沒辦法observer -->
   <div
     v-observe-visibility="options"
-    v-if="visible && (isExample || isLayers || isGrid)"
+    v-if="visible && (isLayers || isGrid)"
     class="h-100"
   >
     <component

@@ -20,7 +20,7 @@ grid 的 compact vertical 要做出來，因為有 ratio
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 5<li>sreen size changer</li>
 background color
-
+imag hub 搬去右邊，上傳時 v-if 要控制不然上傳會斷掉
 5<li>每個 component set 都可以組建合併得按鈕 / or 選版本</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
 

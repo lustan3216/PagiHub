@@ -326,6 +326,9 @@ export default {
     TextEditorStyle: () =>
       import('@/components/Setup/EditorStyle/TextEditorStyle')
   },
+  inject: {
+    isExample: { default: false }
+  },
   props: {
     id: {
       type: String,
@@ -383,25 +386,27 @@ export default {
       extensions,
       content: this.value,
       onBlur: () => {
-        if (!self.isExample && self.id) {
-          const json = self.editor.getJSON()
-          const fonts = this.findFontNames(json)
-          const records = [
-            {
-              path: `${self.id}.value`,
-              value: json
-            }
-          ]
-
-          if (fonts && fonts.length) {
-            records.push({
-              path: `${self.id}.fonts`,
-              value: fonts
-            })
-          }
-
-          self.RECORD(records)
+        if (self.isExample || !self.id) {
+          return
         }
+
+        const json = self.editor.getJSON()
+        const fonts = this.findFontNames(json)
+        const records = [
+          {
+            path: `${self.id}.value`,
+            value: json
+          }
+        ]
+
+        if (fonts && fonts.length) {
+          records.push({
+            path: `${self.id}.fonts`,
+            value: fonts
+          })
+        }
+
+        self.RECORD(records)
       }
     })
   },

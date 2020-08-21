@@ -1,7 +1,7 @@
 <template>
   <!-- id here is for selection using, can not delete -->
   <div
-    v-if="isDraftMode && node && !isExample"
+    v-if="isDraftMode && node"
     @click.stop="singleClick"
     @dblclick.stop="dblclick"
   >
@@ -19,10 +19,7 @@
     <slot v-else />
   </div>
 
-  <div
-    v-else-if="node"
-    class="h-100"
-  >
+  <div v-else-if="node">
     <slot />
   </div>
 </template>

@@ -25,7 +25,7 @@ import ComponentTabs from './ComponentTabs'
 import { vmAddNodesToParentAndRecord } from '@/utils/vmMap'
 
 export default {
-  name: 'ComponentAdd',
+  name: 'DialogComponentAdd',
   components: {
     ComponentTabs
   },
@@ -60,8 +60,13 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-::v-deep.dialog > .el-dialog__header {
+.dialog,
+::v-deep.dialog .el-dialog__header,
+::v-deep.dialog .el-dialog__body {
   padding: 0;
+}
+::v-deep > .el-dialog {
+  border-radius: 5px;
 }
 .component {
   height: 200px;

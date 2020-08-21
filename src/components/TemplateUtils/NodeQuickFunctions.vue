@@ -4,7 +4,7 @@
     :id="`quick-fn-${id}`"
     class="quick-functions flex-center"
   >
-    <component-add
+    <dialog-component-add
       v-if="canAddComponent"
       :id="id"
       style="font-size: 16px;"
@@ -29,7 +29,10 @@
       />
     </div>
 
-    <div class="left wrapper">
+    <div
+      v-if="!isExample"
+      class="left wrapper"
+    >
       <el-tooltip
         effect="light"
         placement="left"
@@ -77,7 +80,7 @@ export default {
     NodeName,
     ContextMenu,
     ElPopover: Popover,
-    ComponentAdd: () => import('../TemplateUtils/ComponentAdd')
+    DialogComponentAdd: () => import('../ComponentAddPanel/DialogComponentAdd')
   },
   inject: {
     isExample: { default: false }

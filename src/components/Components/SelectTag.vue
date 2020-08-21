@@ -4,13 +4,13 @@
     :remote-method="remoteMethod"
     :loading="loading"
     :multiple-limit="5"
+    :allow-create="allowCreate"
     v-bind="$attrs"
+    :placeholder="allowCreate ? 'Can create new tag.' : placeholder"
     multiple
     filterable
-    allow-create
     remote
     reserve-keyword
-    placeholder="请输入关键词"
   >
     <el-option
       v-for="item in options"
@@ -30,6 +30,14 @@ export default {
     value: {
       type: Array,
       default: () => []
+    },
+    allowCreate: {
+      type: Boolean,
+      default: true
+    },
+    placeholder: {
+      type: String,
+      default: 'Can select multiply tags'
     }
   },
   data() {
