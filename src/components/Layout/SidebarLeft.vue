@@ -82,7 +82,11 @@ export default {
       activePanel: 'PanelProject'
     }
   },
-
+  created() {
+    this.$bus.$on('open-panel-asset', () => {
+      this.activePanel = 'PanelAsset'
+    })
+  },
   computed: {
     ...mapGetters('user', ['isLogin']),
     projectId() {

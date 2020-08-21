@@ -85,7 +85,10 @@
               </el-button>
             </div>
 
-            <div v-if="hoverImage && hoverImage.id === data.id">
+            <div
+              v-if="hoverImage && hoverImage.id === data.id"
+              class="p-r-10"
+            >
               <el-button
                 v-if="data.url"
                 type="text"
@@ -178,7 +181,7 @@ export default {
     ...mapActions('asset', ['getAssets', 'deleteAsset', 'postAsset']),
     nodeDrop() {},
     addImageToComponent(data) {
-      const image = flexImage({ props: { src: data.url }})
+      const image = flexImage({ props: { src: this.assetHost + data.url }})
       appendIdNested(image)
       vmPasteInside(image)
     },
