@@ -1,3 +1,4 @@
+import { mapState } from 'vuex'
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { objectAssign, cloneJson } from '@/utils/tool'
 import { PROPS, VALUE, GRID, MASTER_ID, ID, STYLE } from '@/const'
@@ -29,6 +30,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('example', ['basicExamplesMap']),
     node() {
       return getNode(this[ID])
     },
@@ -47,6 +49,9 @@ export default {
     innerProps() {
       const setting = cloneJson(this.$options.defaultSetting || {})
       return objectAssign(setting, this.masterProps, this.selfProps)
+    },
+    currentMapString() {
+      return this.isExample ? 'basicExamplesMap' : 'componentsMap'
     }
   },
   created() {
@@ -76,22 +81,26 @@ export default {
       this.$watch(path, fn, { deep: true, immediate: true })
     },
     watchStyles() {
-      this.watch(`componentsMap.${this.id}.${STYLE}`, value => {
+      const path = `${this.currentMapString}.${this.id}.${STYLE}`
+      this.watch(path, value => {
         this.selfStyles = value || {}
       })
     },
     watchMasterStyles() {
-      this.watch(`componentsMap.${this.masterId}.${STYLE}`, value => {
+      const path = `${this.currentMapString}.${this.masterId}.${STYLE}`
+      this.watch(path, value => {
         this.masterStyles = value || {}
       })
     },
     watchProps() {
-      this.watch(`componentsMap.${this.id}.${PROPS}`, value => {
+      const path = `${this.currentMapString}.${this.id}.${PROPS}`
+      this.watch(path, value => {
         this.selfProps = value || {}
       })
     },
     watchMasterProps() {
-      this.watch(`componentsMap.${this.masterId}.${PROPS}`, value => {
+      const path = `${this.currentMapString}.${this.masterId}.${PROPS}`
+      this.watch(path, value => {
         this.masterProps = value || {}
       })
     },
@@ -100,9 +109,7 @@ export default {
         return
       }
 
-      const $el = this.node.tag === GRID
-        ? this.$el
-        : this.$el.parentNode
+      const $el = this.node.tag === GRID ? this.$el : this.$el.parentNode
 
       if (hover) {
         const node = document.createElement('DIV')
