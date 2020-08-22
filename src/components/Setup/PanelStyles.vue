@@ -71,7 +71,7 @@
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
 import { mapGetters } from 'vuex'
-import { TEXT_EDITOR, GRID, LAYERS, GRID_ITEM } from '@/const'
+import { TEXT_EDITOR, GRID_GENERATOR, LAYERS, GRID_GENERATOR_ITEM } from '@/const'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
 import Background from './EditorStyle/Background'
@@ -121,17 +121,17 @@ export default {
     },
     canRadius() {
       return this.selectedComponentNodes.every(
-        node => ![GRID, LAYERS].includes(node.tag)
+        node => ![GRID_GENERATOR, LAYERS].includes(node.tag)
       )
     },
     canBorder() {
       return this.selectedComponentNodes.every(
-        node => ![GRID, LAYERS].includes(node.tag)
+        node => ![GRID_GENERATOR, LAYERS].includes(node.tag)
       )
     },
     canOverflow() {
       return this.selectedComponentNodes.every(node =>
-        [GRID_ITEM].includes(node.tag)
+        [GRID_GENERATOR_ITEM].includes(node.tag)
       )
     },
     isDefaultState() {

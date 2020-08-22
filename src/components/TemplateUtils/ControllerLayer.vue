@@ -5,6 +5,17 @@
     @click.stop="singleClick"
     @dblclick.stop="dblclick"
   >
+    <portal
+      v-if="selected"
+      :to="`QuickFunction${id}`"
+    >
+      <node-quick-functions
+        :id="id"
+        :is-example="isExample"
+        :item-editing="itemEditing"
+      />
+    </portal>
+
     <div
       v-click-outside="clickOutside"
       v-if="canBeEdited"
@@ -12,6 +23,7 @@
         'grid-item-fix': itemEditing,
         'no-action': !itemEditing
       }"
+      class="h-100"
     >
       <slot :item-editing="itemEditing" />
     </div>
@@ -27,15 +39,19 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import { CAN_BE_EDITED } from '@/const'
-import { getNode } from '@/utils/node'
 import { isMac } from '@/utils/device'
+import { getNode } from '@/utils/node'
 import clickOutside from '@/utils/clickOutside'
+import NodeQuickFunctions from './NodeQuickFunctions'
 
 export default {
   name: 'ControllerLayer',
   inject: { isExample: { default: false }},
   directives: {
     clickOutside
+  },
+  components: {
+    NodeQuickFunctions
   },
   props: {
     id: {
@@ -51,7 +67,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapState('example', ['basicExamplesMap']),
+    ...mapState('example', ['exampleComponentsMap']),
     node() {
       return getNode(this.id)
     },
@@ -122,10 +138,7 @@ export default {
       // don't change selected component ids when dragging item,
       // otherwise vue-resizable-handle will cause a bug here
 
-      if (
-        this.isExample ||
-        event.target.classList.contains('vue-resizable-handle')
-      ) {
+      if (event.target.classList.contains('vue-resizable-handle')) {
         return
       }
 

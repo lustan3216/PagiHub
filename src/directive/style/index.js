@@ -1,6 +1,4 @@
-import freeStyle, { directive as freeStyleDirective } from '../freeStyle'
-import { ObserveVisibility } from 'vue-observe-visibility'
-import { objectHasAnyValue, objectAssign } from '@/utils/tool'
+import { directive as freeStyleDirective } from '../freeStyle'
 
 const directive = {
   update: method('update'),

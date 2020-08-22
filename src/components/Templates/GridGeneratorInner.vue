@@ -38,7 +38,7 @@ import { debounce } from 'throttle-debounce'
 import { toPrecision } from '@/utils/number'
 
 export default {
-  name: 'GridInner',
+  name: 'GridGeneratorItem',
   components: {
     VueGridGenerator: VueGridLayout.GridLayout,
     VueGridItem: VueGridLayout.GridItem,
@@ -84,11 +84,15 @@ export default {
   watch: {
     innerChildren: {
       handler(newChildren) {
+        this.getCurrentLayout(newChildren)
+
         this.$nextTick(() => {
           // this.itemAutoHeight(newChildren)
-          this.getCurrentLayout(newChildren)
-          this.$refs.gridGenerator.resizeEvent()
-          this.resizeNodeQuickFn()
+
+          setTimeout(() => {
+            this.$refs.gridGenerator.resizeEvent()
+            this.resizeNodeQuickFn()
+          }, 20)
         })
       },
       deep: true,
@@ -152,7 +156,10 @@ export default {
       this.layout = layout
     },
     layoutUpdated(newChildren) {
-      if (this.isExample) return
+      if (this.isExample) {
+        this.resizeNodeQuickFn()
+        return
+      }
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
       const records = []
 

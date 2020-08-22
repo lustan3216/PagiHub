@@ -17,32 +17,19 @@
     </view-port>
 
     <sidebar-right v-if="isDraftMode" />
-
-    <portal-target
-      name="TextEditorMenu"
-      slim
-    />
-
-    <node-quick-functions
-      v-for="id in selectedComponentIds"
-      :id="id"
-      :key="id"
-    />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
-import ComponentSet from '../TemplateUtils/ComponentSet'
-import NodeQuickFunctions from '../TemplateUtils/NodeQuickFunctions'
+import ComponentSet from '../Templates/ComponentSet'
 
 export default {
   name: 'PanelDraft',
   components: {
     ArtBoard,
-    NodeQuickFunctions,
     ViewPort,
     ComponentSet,
     SidebarRight: () => import('@/components/Layout/SidebarRight'),
@@ -50,20 +37,19 @@ export default {
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
     PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
-  computed: {
-    ...mapState('app', ['selectedComponentIds'])
-  },
   created() {
     if (this.$route.params.projectId) {
       this.getProject(this.$route.params.projectId).then(project => {
-        this.getAssets()
-        if (!project) {
+        if (project) {
+          this.getAssets()
+          this.initExamples()
+        }
+        else {
           this.$router.push('/projects')
         }
       })
     }
 
-    this.initExamples()
     window.addEventListener('resize', () => {
       this.artBoardResizing(true)
     })

@@ -1,7 +1,6 @@
 import {
   createProject,
   deleteProject,
-  getComponentSets,
   getProject,
   getProjects,
   patchProject

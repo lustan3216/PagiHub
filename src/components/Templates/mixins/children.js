@@ -1,5 +1,10 @@
 import { mapMutations, mapState } from 'vuex'
-import { CHILDREN, COMPONENT_BODY, GRID_ITEM, SORT_INDEX, TAG } from '@/const'
+import {
+  CHILDREN,
+  COMPONENT_BODY,
+  GRID_GENERATOR_ITEM,
+  SORT_INDEX
+} from '@/const'
 import { cloneJson, arrayLast } from '@/utils/tool'
 import {
   traversalChildren,
@@ -19,13 +24,7 @@ export default {
     }
   },
   inject: {
-    componentSetId: {
-      // the value is null only happen on componentSet node
-      // other cases should have string id
-      default: null
-    },
-    isExample: { default: false },
-    rootComponentSetId: { default: null }
+    isExample: { default: false }
   },
   computed: {
     ...mapState('component', ['rootComponentSetIds']),
@@ -124,7 +123,7 @@ export default {
           ) {
             return 'stop'
           }
-          else if (tag === GRID_ITEM || children.length > 1) {
+          else if (tag === GRID_GENERATOR_ITEM || children.length > 1) {
             return 'stop'
           }
           else if (children.length === 1) {

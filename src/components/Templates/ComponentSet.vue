@@ -8,17 +8,12 @@
 <script>
 import { mapActions } from 'vuex'
 import { ID, MASTER_ID } from '@/const'
-import AsyncComponent from './AsyncComponent'
+import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import childrenMixin from '@/components/Templates/mixins/children'
-import { vmAppend } from '@/utils/vmMap'
+import { vmAppend, vmRemove } from '@/utils/vmMap'
 
 export default {
   name: 'ComponentSet',
-  provide() {
-    return {
-      componentSetId: this.id
-    }
-  },
   components: {
     AsyncComponent
   },
@@ -40,11 +35,14 @@ export default {
   },
   updated() {
     this.getComponentSetChildren(this[ID])
+    if (this.isDraftMode) {
+      vmAppend(this, this.isExample)
+    }
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount
-    if (this.isDraftMode && !this.isExample) {
-      vmAppend(this)
+    if (this.isDraftMode) {
+      vmAppend(this, this.isExample)
     }
   },
   methods: {

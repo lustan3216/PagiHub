@@ -12,19 +12,22 @@
       />
     </el-input>
 
-    <span class="notice">After signed, which means you have agreed ours "Using Policy" and "Private Policy".</span>
+    <span
+      class="notice"
+    >After signed, which means you have agreed ours "Using Policy" and
+    "Private Policy".</span>
   </dialog-shadow>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
-import { Auth, Hub } from 'aws-amplify'
-import DialogShadow from './components/DialogCreateUsername'
+import { Auth } from 'aws-amplify'
+// import DialogShadow from './components/DialogCreateUsername'
 
 export default {
   name: 'DialogLogin',
   components: {
-    DialogShadow
+    // DialogShadow
   },
   data() {
     return {
@@ -48,29 +51,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .login-title{
-    font-size: 50px;
-    color: $color-black;
-    font-weight: lighter;
-    letter-spacing: 5px;
-  }
-  .span {
-    margin-left: 15px;
-    font-size: 15px;
-    letter-spacing: 1px;
-  }
-  .button {
-    width: 260px;
-    margin: 0;
-    border: none;
-    color: $color-black;
-    background: transparent;
-    border-radius: 5px;
-    padding: 10px 20px;
-  }
-  .notice {
-    color: $color-black;
-    margin-top: 60px;
-    font-size: 14px;
-  }
+.login-title {
+  font-size: 50px;
+  color: $color-black;
+  font-weight: lighter;
+  letter-spacing: 5px;
+}
+.span {
+  margin-left: 15px;
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+.button {
+  width: 260px;
+  margin: 0;
+  border: none;
+  color: $color-black;
+  background: transparent;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+.notice {
+  color: $color-black;
+  margin-top: 60px;
+  font-size: 14px;
+}
 </style>

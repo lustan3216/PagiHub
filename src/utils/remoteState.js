@@ -1,6 +1,4 @@
 import { patchComponentSetChildren } from '@/api/node'
-import { getRootComponentSetId } from '@/utils/rootComponentSetId'
-import { objectFirstKey } from '@/utils/tool'
 import jsonHistory from '@/store/jsonHistory'
 
 const DEBOUNCE_TIME = 800
@@ -86,7 +84,7 @@ export default class RemoteState {
   }
 
   transformDeltas(index, index2) {
-    const deltas = []
+    // const deltas = []
     // jsonHistory.deltas.slice(index, index2).forEach(group => {
     //   const newGroup = []
     //   group.forEach(delta => {

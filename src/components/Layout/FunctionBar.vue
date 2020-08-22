@@ -118,7 +118,6 @@
 
 <script>
 import { isMac } from '@/utils/device'
-import jsonHistory from '@/store/jsonHistory'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import { vmPasteNodes, vmRemoveNode, vmCreateEmptyItem } from '@/utils/vmMap'
@@ -131,12 +130,9 @@ export default {
   },
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
-    ...mapState('component', [
-      'editingComponentSetId',
-      'selectedComponentNode'
-    ]),
+    ...mapState('component', ['editingComponentSetId']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
-    ...mapGetters('app', ['selectedComponentNodes']),
+    ...mapGetters('app', ['selectedComponentNodes', 'selectedComponentNode']),
     selected() {
       return this.selectedComponentIds.includes(this.id)
     }
@@ -155,8 +151,10 @@ export default {
       this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
     },
     cut() {
-      this.setCopySelectedNodeId(this.selectedComponentNode.id)
-      vmRemoveNode(this.selectedComponentNode)
+      if (this.selectedComponentNode) {
+        this.setCopySelectedNodeId(this.selectedComponentNode.id)
+        vmRemoveNode(this.selectedComponentNode)
+      }
     }
   }
 }

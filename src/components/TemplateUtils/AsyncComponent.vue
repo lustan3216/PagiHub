@@ -39,10 +39,10 @@
 import { ObserveVisibility } from 'vue-observe-visibility'
 import {
   isComponentSet,
-  getNode,
   isLayers,
   isGridItem,
-  isGrid
+  isGrid,
+  getNode
 } from '@/utils/node'
 import { CAN_BE_EDITED, COMPONENT_SET } from '@/const'
 import { mapState } from 'vuex'
@@ -57,7 +57,7 @@ export default {
   },
   components: {
     ControllerLayer: () => import('./ControllerLayer'),
-    ComponentSet: () => import('./ComponentSet'),
+    ComponentSet: () => import('../Templates/ComponentSet'),
     ComponentBody: () => import('../Templates/ComponentBody'),
     ComponentCover: () => import('../Templates/ComponentCover'),
 
@@ -66,8 +66,8 @@ export default {
 
     Carousel: () => import('../Templates/Carousel'),
     TextEditor: () => import('../Templates/TextEditor'),
-    Grid: () => import('../Templates/Grid'),
-    GridItem: () => import('../Templates/GridItem'),
+    GridGenerator: () => import('../Templates/GridGenerator'),
+    GridGeneratorItem: () => import('../Templates/GridGeneratorItem'),
 
     // Divider: () => import('../Templates/Divider'),
     VideoPlayer: () => import('../Templates/VideoPlayer'),

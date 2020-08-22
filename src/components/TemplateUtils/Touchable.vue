@@ -10,7 +10,8 @@
 <script>
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import { GRID_ITEM } from '@/const'
+import { GRID_GENERATOR_ITEM } from '@/const'
+import { vmGet } from '@/utils/vmMap'
 const observable = Vue.observable({ ids: [] })
 
 export default {
@@ -35,13 +36,13 @@ export default {
       }
     },
     vm() {
-      return this.node.$vm
+      return vmGet(this.node.id)
     },
     node() {
       return this.componentsMap[this.id]
     },
     isGridItem() {
-      return this.vm.$options._componentTag === GRID_ITEM
+      return this.vm.$options._componentTag === GRID_GENERATOR_ITEM
     },
     innerTouchable() {
       return observable.ids.indexOf(this.id) === -1
@@ -54,7 +55,7 @@ export default {
 
         if (this.isGridItem) {
           // GridGeneratorInner
-          this.node.parentNode.$vm.$children[0].unlock(this.id)
+          vmGet(this.node.parentId).$children[0].unlock(this.id)
         }
       }
       else {
@@ -62,7 +63,7 @@ export default {
 
         if (this.isGridItem) {
           // GridGeneratorInner
-          this.node.parentNode.$vm.$children[0].lock(this.id)
+          vmGet(this.node.parentId).$children[0].lock(this.id)
         }
       }
     }

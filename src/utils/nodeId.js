@@ -1,13 +1,11 @@
-import {
-  ID,
-  PARENT_ID,
-  MASTER_ID,
-  CHILDREN,
-  COMPONENT_SET_ID
-} from '../const'
+import { ID, PARENT_ID, MASTER_ID, CHILDREN } from '../const'
 import { toArray } from './tool'
 import { ulid } from 'ulid'
-import { isComponent, isComponentSet, traversalSelfAndChildren } from '@/utils/node'
+import {
+  isComponent,
+  isComponentSet,
+  traversalSelfAndChildren
+} from '@/utils/node'
 
 export function appendIdNested(nodes, parentId) {
   if (parentId) {

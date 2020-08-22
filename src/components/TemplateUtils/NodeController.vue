@@ -36,7 +36,7 @@
 import { mapMutations } from 'vuex'
 import Touchable from './Touchable'
 import Visible from './Visible'
-import { GRID_ITEM } from '@/const'
+import { GRID_GENERATOR_ITEM } from '@/const'
 import { isMac } from '@/utils/device'
 import { isLayers } from '@/utils/node'
 
@@ -62,7 +62,7 @@ export default {
       return this.node.children
     },
     isGridItem() {
-      return this.node.tag === GRID_ITEM
+      return this.node.tag === GRID_GENERATOR_ITEM
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)

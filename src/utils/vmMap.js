@@ -9,30 +9,30 @@ if (process.env.NODE_ENV !== 'production') {
   window.vmMap = vmMap
 }
 
-export function vm(id) {
-  return vmMap[id]
+export function vmGet(id, isExample = false) {
+  return vmMap[isExample ? `example-${id}` : id]
 }
 
 export function vmAppend(vm) {
-  vmMap[vm.id] = vm
+  vmMap[vm.isExample ? `example-${vm.id}` : vm.id] = vm
 }
 
 export function vmRemove(vm) {
-  delete vmMap[vm.id]
+  delete vmMap[vm.isExample ? `example-${vm.id}` : vm.id]
 }
 
 export function vmCreateEmptyItem(node) {
   // layers, grid-generator, carousel, form-generator
   // can new layer-item, grid-item, carousel-item, form-item
   if (node[CAN_NEW_ITEM]) {
-    vm(node.id)._createEmptyItem()
+    vmGet(node.id)._createEmptyItem()
   }
   else {
     traversalAncestorAndSelf(node, node => {
       if (isGridItem(node)) {
         store.commit('app/SET', { copyComponentIds: [node.id] })
         const { children, ...emptyGridItem } = node
-        node.parentNode.$vm._addNodesToParentAndRecord(emptyGridItem)
+        vmGet(node.parentId)._addNodesToParentAndRecord(emptyGridItem)
         return 'stop'
       }
     })
@@ -95,10 +95,10 @@ export function vmPasteNode(node) {
 }
 
 export function vmRemoveNode(node) {
-  const stopNodeId = vm(node.parentId)._remove(node)
+  const stopNodeId = vmGet(node.parentId)._remove(node)
   return stopNodeId
 }
 
 export function vmAddNodesToParentAndRecord(id, nodes) {
-  vm(id)._addNodesToParentAndRecord(nodes)
+  vmGet(id)._addNodesToParentAndRecord(nodes)
 }

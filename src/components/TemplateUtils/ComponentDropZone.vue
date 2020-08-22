@@ -15,13 +15,13 @@ export default {
   name: 'ComponentDropZone',
   mixins: [childrenMixin],
   computed: {
-    ...mapState('example', ['basicExamplesMap'])
+    ...mapState('example', ['exampleComponentsMap'])
   },
   methods: {
     addComponent(event) {
       const id = event.dataTransfer.getData('id')
       if (id) {
-        this._addNodesToParentAndRecord(this.basicExamplesMap[id])
+        this._addNodesToParentAndRecord(this.exampleComponentsMap[id])
       }
     }
   }

@@ -1,6 +1,7 @@
 import store, { SET } from '@/store'
 import { CHILDREN, ID, PARENT_ID } from '@/const'
 import {
+  cloneJson,
   deleteBy,
   findBy,
   objectFirstKey,
@@ -13,12 +14,16 @@ import {
   getRootComponentSetId,
   recordRootComponentSetId
 } from '@/utils/rootComponentSetId'
-import { isComponentSet, isProject, cloneJsonWithoutChildren } from '@/utils/node'
+import {
+  isComponentSet,
+  isProject,
+  cloneJsonWithoutChildren
+} from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
 import app from '@/main'
 
 let childrenOf = {}
-const tmpChildrenOf = {}
+let tmpChildrenOf = {}
 
 const state = {
   editingProjectId: null,
@@ -34,10 +39,14 @@ const mutations = {
 
   // only for component or component attrs
   VUE_DELETE({ componentsMap }, { tree, key }) {
-    if (tree[key] && tree[key][ID]) {
+    const node = tree[key]
+    // 有id 代表component 沒有代表attr
+    if (node && node[ID]) {
+      delete childrenOf[node[ID]]
+
       const parentId = componentsMap[key][PARENT_ID]
       const parentNode = componentsMap[parentId]
-      if (parentNode) {
+      if (parentNode && parentNode[CHILDREN]) {
         deleteBy(parentNode[CHILDREN], 'id', key)
       }
     }
@@ -46,6 +55,7 @@ const mutations = {
   },
   // only for component or component attrs
   VUE_SET({ componentsMap }, { tree, key, value }) {
+    // 這裡一定要 cloneJson, 不然deltas裡面的值會被改掉
     if (tree[key] && tree[key].__ob__) {
       tree[key] = value
     }
@@ -77,6 +87,7 @@ const mutations = {
 
   // only for component used to be paste
   SET_NODES_TO_TMP_MAP(state, componentsArray) {
+    tmpChildrenOf = {}
     toArray(componentsArray).forEach(node => {
       const id = node[ID]
       const parentId = node[PARENT_ID]
@@ -152,7 +163,7 @@ const mutations = {
     Array.isArray(payLoad) ? payLoad.forEach(set) : set(payLoad)
   },
   RECORD(state, payLoad) {
-    jsonHistory.debounceRecord(payLoad, 200, tree => cloneJsonWithoutChildren(tree))
+    jsonHistory.debounceRecord(payLoad, 200)
   },
   REDO() {
     const done = rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)

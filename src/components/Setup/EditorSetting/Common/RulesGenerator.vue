@@ -13,7 +13,7 @@
 import formCreate from '@form-create/element-ui'
 import { Switch, Tooltip, InputNumber } from 'element-ui'
 import { cloneObject, getValueByPath, objectHasAnyKey } from '@/utils/tool'
-import { vm } from '@/utils/vmMap'
+import { vmGet } from '@/utils/vmMap'
 import { mapGetters, mapMutations } from 'vuex'
 import { PROPS } from '@/const'
 import SelectUnit from '@/components/Components/SelectUnit'
@@ -69,7 +69,7 @@ export default {
   methods: {
     ...mapMutations('component', ['RECORD']),
     transformRule(rule) {
-      const vmProps = vm(this.id).innerProps
+      const vmProps = vmGet(this.id).innerProps
       const path = rule.path ? `${rule.path}.${rule.field}` : `${rule.field}`
 
       defaultValueCache[rule.field] = rule.value

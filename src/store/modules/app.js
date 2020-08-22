@@ -10,11 +10,13 @@ import { debounce } from 'throttle-debounce'
 import { BREAK_POINTS } from '@/const'
 
 const state = {
-  artBoardResizing: false,
   breakpoint: 'lg',
+  artBoardResizing: false,
   artBoardWidth: 1200,
   artBoardHeight: 768,
   scaleRatio: 1,
+
+  beingAddedComponentId: null,
   selectedComponentIds: [],
   copyComponentIds: [],
   dialog: null
@@ -32,6 +34,7 @@ const mutations = {
     state.selectedComponentIds = []
     state.copyComponentIds = []
   },
+  SET_BEING_ADDED_COMPONENT_ID() {},
   CLEAN_SELECTED_COMPONENT_ID(state, ids) {
     state.selectedComponentIds = arraySubtract(state.selectedComponentIds, ids)
   },
@@ -55,7 +58,26 @@ const mutations = {
   }
 }
 
+let tmpSelectedComponentIds
 const actions = {
+  setBeingAddedComponentId({ commit, state }, id) {
+    commit('DIALOG_OPEN', 'ComponentTabs')
+    // 打開DialogComponentTabs 新增example時，原本draft上的selected component會跟example裡面的混在一起
+    // 打開時先暫時刪除，關掉時存回去
+    tmpSelectedComponentIds = state.selectedComponentIds
+    commit('SET', {
+      beingAddedComponentId: id,
+      selectedComponentIds: []
+    })
+  },
+  removeBeingAddedComponentId({ commit }) {
+    commit('DIALOG_CLOSE')
+
+    commit('SET', {
+      beingAddedComponentId: null,
+      selectedComponentIds: tmpSelectedComponentIds
+    })
+  },
   setCopySelectedNodeId({ commit, state, rootState }, ids) {
     const { rootComponentSetIds, componentsMap } = rootState.component
     const copyComponentIds = ids
@@ -89,7 +111,7 @@ const actions = {
     return copyComponentIds
   },
 
-  artBoardResizing: debounce(20, function(
+  artBoardResizing: debounce(150, function(
     { state, commit, dispatch },
     boolean
   ) {

@@ -94,7 +94,6 @@ Vue.use(Loading.directive)
 // eslint-disable-next-line
 import i18n from './i18n'
 
-import WebFont from 'webfontloader'
 Vue.prototype.$t = key => i18n[key]
 Vue.prototype.$Log = console.log
 Vue.prototype.$log = console.log

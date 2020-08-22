@@ -7,9 +7,9 @@ import {
   KIND,
   LABEL,
   LAYERS,
-  GRID_ITEM,
+  GRID_GENERATOR_ITEM,
   KEY,
-  GRID,
+  GRID_GENERATOR,
   COMPONENT_BODY,
   SORT_INDEX
 } from '@/const'
@@ -77,7 +77,7 @@ export function sortByIndex(children, asc = true) {
 
 export function getNode(id) {
   return (
-    store.state.example.basicExamplesMap[id] ||
+    store.state.example.exampleComponentsMap[id] ||
     store.state.component.componentsMap[id]
   )
 }
@@ -164,11 +164,11 @@ export function isOverlapComponent(node) {
 }
 
 export function isGridItem(node) {
-  return node.tag === GRID_ITEM
+  return node.tag === GRID_GENERATOR_ITEM
 }
 
 export function isGrid(node) {
-  return node.tag === GRID
+  return node.tag === GRID_GENERATOR
 }
 
 export function isProject(node) {

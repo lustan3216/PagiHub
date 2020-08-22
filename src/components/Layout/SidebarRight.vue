@@ -51,9 +51,6 @@ export default {
     return {
       activePanel: 'PanelStyles'
     }
-  },
-  computed: {
-    ...mapGetters('app', ['theOnlySelectedComponentId'])
   }
 }
 </script>

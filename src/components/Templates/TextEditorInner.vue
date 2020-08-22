@@ -478,7 +478,7 @@ const extensions = [
 
 <style lang="scss" scoped>
 $color-white: #ffffff;
-$color-grey: #f0f0f0;
+$color-grey: #b2b2b2;
 
 ::v-deep .svg-inline {
   width: 14px;

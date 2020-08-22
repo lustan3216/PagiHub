@@ -1,5 +1,5 @@
 <template>
-  <grid-inner
+  <grid-generator-inner
     v-free-style="innerStyles"
     :id="id"
     :inner-props="innerProps"
@@ -11,14 +11,14 @@ import nodeMixin from '@/components/Templates/mixins/node'
 // childrenMixin 要拿來新增刪除小孩的
 import childrenMixin from '@/components/Templates/mixins/children'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
-import GridInner from './GridInner'
+import GridGeneratorInner from './GridGeneratorInner'
 import { defaultSetting } from '../Setup/EditorSetting/SettingGridGenerator'
 
 export default {
   defaultSetting,
-  name: 'Grid',
+  name: 'GridGenerator',
   components: {
-    GridInner,
+    GridGeneratorInner,
     ControllerLayer
   },
   mixins: [nodeMixin, childrenMixin]

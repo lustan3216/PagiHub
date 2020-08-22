@@ -1,7 +1,7 @@
 import {
-  GRID,
+  GRID_GENERATOR,
   KEY,
-  GRID_ITEM,
+  GRID_GENERATOR_ITEM,
   LAYERS,
   CAROUSEL,
   CAN_NEW_ITEM,
@@ -25,25 +25,28 @@ const mapPoints = object =>
     return all
   }, {})
 
-export const gridItems = function() {
+export const gridGeneratorItems = function() {
   return [
     {
-      [TAG]: GRID_ITEM,
+      [TAG]: GRID_GENERATOR_ITEM,
+      [LABEL]: 'grid-item',
       [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: '100px' })
     },
     {
-      [TAG]: GRID_ITEM,
+      [TAG]: GRID_GENERATOR_ITEM,
+      [LABEL]: 'grid-item',
       [PROPS]: mapPoints({ x: 22, y: 0, w: 44, h: '130px' })
     }
   ]
 }
 
-export const grid = function(options) {
+export const gridGenerator = function(options) {
   return {
-    [TAG]: GRID,
+    [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
     [SORT_INDEX]: 0,
-    [CHILDREN]: gridItems(),
+    [LABEL]: 'grid',
+    [CHILDREN]: gridGeneratorItems(),
     ...options
   }
 }
@@ -52,7 +55,7 @@ export const layers = function(options) {
   return {
     [TAG]: LAYERS,
     [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [grid()],
+    [CHILDREN]: [gridGenerator()],
     [LABEL]: 'magic-layout',
     ...options
   }
@@ -62,8 +65,8 @@ export const componentBody = function(options) {
   return {
     [TAG]: 'component-body',
     [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [grid()],
-    [LABEL]: 'component-body',
+    [CHILDREN]: [gridGenerator()],
+    [LABEL]: 'component-background',
     ...options
   }
 }
@@ -90,7 +93,7 @@ export const carousel = function() {
     [CAN_NEW_ITEM]: true,
     [CAN_BE_EDITED]: true,
     [CHILDREN]: [
-      grid({
+      gridGenerator({
         [KEY]: 'indicators',
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true,
@@ -99,14 +102,14 @@ export const carousel = function() {
         [CHILDREN]: [
           {
             [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: '71px' }),
-            [TAG]: GRID_ITEM,
+            [TAG]: GRID_GENERATOR_ITEM,
             [KEY]: 'prev',
             [CAN_NOT_COPY]: true,
             [CAN_NOT_DELETE]: true
           },
           {
             [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: '71px' }),
-            [TAG]: GRID_ITEM,
+            [TAG]: GRID_GENERATOR_ITEM,
             [KEY]: 'next',
             [CAN_NOT_COPY]: true,
             [CAN_NOT_DELETE]: true
@@ -161,7 +164,7 @@ export const drawer = function() {
     {
       [TAG]: 'drawer',
       [STYLE]: { background: '#fff' },
-      [CHILDREN]: gridItems()
+      [CHILDREN]: gridGeneratorItems()
     }
   ]
 

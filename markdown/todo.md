@@ -11,10 +11,13 @@ https://github.com/pqina/vue-filepond
 https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
+<ol>
+<li>style 有必要做到device可以區分嗎？</li>
 bug: grid 畫面縮小後會壞掉, hidden 變換螢幕時也會壞掉
 quick function 的 item editing
 
-<ol>
+當 add componentSet + redo undo 有大ｂｕｇ 會造成 node 重複且迴圈
+ratio 因為自動改 h, 當 undo 時也會造成 loop 讓 undo 卡死
 
 grid 的 compact vertical 要做出來，因為有 ratio
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
@@ -38,7 +41,6 @@ font的padding
 
 ### Last
 
-<li>style 有必要做到device可以區分嗎？</li>
 <li>embed iframe,iframe 要可以自動 resize</li>
 可以 copy 進去 gridlayout
 <li>canTo caDelete 這些東西不要記錄在 json上，不然以後有更動的話，沒辦法改道s3裡面所有東西 每個 example 下特殊的key e.x.'sdew' 然後配對設定，寫在單獨檔案裡，類似nodeProperties</li>

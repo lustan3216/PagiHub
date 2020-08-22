@@ -1,6 +1,5 @@
 <template>
   <split-pane
-    v-else
     :default-percent="40"
     split="horizontal"
   >
@@ -73,12 +72,13 @@
               <div
                 v-if="data.url"
                 :style="{
-                  backgroundImage: `url(${assetHost + data.url})`
+                  backgroundImage: `url('${assetHost + data.url}')`
                 }"
                 class="m-r-5 sub-image"
               />
+
               <el-button
-                :icon="data.id ? '' : 'el-icon-folder'"
+                :icon="data.url ? '' : 'el-icon-folder'"
                 type="text"
               >
                 {{ data.label }}
@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { Tree, Avatar } from 'element-ui'
 import Tip from '@/components/Tutorial/Tip'
 import SplitPane from 'vue-splitpane'
@@ -174,6 +174,12 @@ export default {
       },
       labelFileProcessingError: error => {
         return error.response.data && error.response.data.message
+      },
+      onprocessfilestart: () => {
+        this.$emit('processStart')
+      },
+      onprocessfiles: () => {
+        this.$emit('processEnd')
       }
     })
   },

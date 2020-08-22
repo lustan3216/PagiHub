@@ -17,18 +17,13 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import ComponentSet from '../TemplateUtils/ComponentSet'
+import ComponentSet from '../Templates/ComponentSet'
 
 let timer = null
 export default {
   name: 'ArtBoard',
   components: {
     ComponentSet
-  },
-  provide() {
-    return {
-      rootComponentSetId: this.id
-    }
   },
   computed: {
     ...mapState('app', ['scaleRatio']),

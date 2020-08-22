@@ -1,5 +1,13 @@
 <template>
-  <div>
+  <el-dialog
+    ref="dialog"
+    visible
+    class="dialog"
+    destroy-on-close
+    top="5vh"
+    width="80vw"
+    @close="removeBeingAddedComponentId"
+  >
     <el-row
       :gutter="10"
       type="flex"
@@ -14,7 +22,7 @@
         />
       </el-col>
 
-      <el-col :span="10">
+      <el-col :span="9">
         <select-tag
           :allow-create="false"
           size="small"
@@ -23,7 +31,7 @@
       </el-col>
 
       <el-col :span="3">
-        <el-button-group class="w-100">
+        <el-button-group>
           <el-button
             :type="column === 24 ? 'primary' : ''"
             plain
@@ -52,7 +60,7 @@
       </el-col>
 
       <el-col
-        :span="1"
+        :span="2"
         class="align-center"
       >
         <tip placement="bottom">
@@ -109,22 +117,23 @@
         </el-row>
       </div>
     </div>
-  </div>
+  </el-dialog>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { cloneJson } from '@/utils/tool'
-import { humanize, bigCamelCase } from '@/utils/string'
+import { humanize } from '@/utils/string'
 import { isComponentSet } from '@/utils/node'
 import SelectTag from '@/components/Components/SelectTag'
 import Tip from '@/components/Tutorial/Tip'
 import CardBasicComponent from './CardBasicComponent'
 import CardLocalComponent from './CardLocalComponent'
 import CardPublicComponent from './CardPublicComponent'
+import { vmGet } from '@/utils/vmMap'
 
 export default {
-  name: 'ComponentTabs',
+  name: 'DialogComponentTabs',
   provide() {
     return {
       isExample: true,
@@ -138,16 +147,10 @@ export default {
     Tip,
     SelectTag
   },
-  props: {
-    button: {
-      type: Boolean,
-      default: false
-    }
-  },
   data() {
     return {
       column: 8,
-      currentCategory: 'basicComponent',
+      currentCategory: 'basicComponents',
       options: [],
       search: ''
     }
@@ -155,9 +158,10 @@ export default {
   computed: {
     ...mapState('component', ['editingComponentSetId', 'rootComponentSetIds']),
     ...mapState('example', ['basicExamples']),
+    ...mapState('app', ['beingAddedComponentId']),
     whichComponentCart() {
       switch (this.currentCategory) {
-        case 'basicComponent':
+        case 'basicComponents':
           return 'CardBasicComponent'
         case 'localComponents':
           return 'CardLocalComponent'
@@ -219,22 +223,26 @@ export default {
     },
     components() {
       return {
-        basicComponent: this.basicExamples,
+        basicComponents: this.basicExamples,
         localComponents: this.componentsSets,
         publicComponents: []
       }
     }
   },
   methods: {
+    ...mapActions('app', ['removeBeingAddedComponentId']),
     humanize,
     isComponentSet,
     addTemplate(template) {
-      if (this.currentCategory === 'basicComponent') {
-        this.$emit('choose', cloneJson(template))
+      const node = this.componentsMap[this.beingAddedComponentId]
+
+      if (this.currentCategory !== 'basicComponents') {
+        // 為了不拿到componentSet
+        template = template.children[0]
       }
-      else {
-        this.$emit('choose', cloneJson(template.children[0]))
-      }
+
+      vmGet(node.id)._addNodesToParentAndRecord(cloneJson(template))
+      this.$dialog.close()
     },
     quickSelect() {}
   }
@@ -260,7 +268,7 @@ export default {
 
 .button {
   transition: background-color 0.2s;
-  font-size: 13px;
+
   cursor: pointer;
   padding: 15px;
   &:hover {
@@ -271,9 +279,32 @@ export default {
   color: $color-black;
   display: block;
   margin-bottom: 5px;
+  font-size: 13px;
+}
+.subtitle {
+  color: #b2b2b2;
+  font-size: 12px;
 }
 .search {
   padding: 10px;
   border-bottom: 1px solid $color-grey;
+}
+.el-button-group {
+  width: 100%;
+  display: flex;
+  & button {
+    flex: 1;
+  }
+}
+.dialog,
+::v-deep.dialog .el-dialog__header,
+::v-deep.dialog .el-dialog__body {
+  padding: 0;
+}
+::v-deep > .el-dialog {
+  border-radius: 5px;
+}
+.component {
+  height: 200px;
 }
 </style>

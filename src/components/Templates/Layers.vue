@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import GridGenerator from './Grid'
+import GridGenerator from './GridGenerator'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { SORT_INDEX } from '@/const'

@@ -1,14 +1,19 @@
 <template>
   <div
-    v-if="element"
+    v-if="node"
     :id="`quick-fn-${id}`"
+    :style="{
+      zIndex: isExample ? 3000 : 800
+    }"
     class="quick-functions flex-center"
   >
-    <dialog-component-add
+    <el-button
       v-if="canAddComponent"
-      :id="id"
+      icon="el-icon-circle-plus-outline"
       style="font-size: 16px;"
       class="can-action"
+      type="text"
+      @click="tryToAddComponent"
     />
 
     <div
@@ -60,11 +65,11 @@ import { mapMutations, mapState, mapActions } from 'vuex'
 import NodeName from './NodeName'
 import ContextMenu from './ContextMenu'
 import { Popover } from 'element-ui'
-import { isGridItem } from '@/utils/node'
+import { isGridItem, getNode } from '@/utils/node'
 import { lerp } from '@/utils/animation'
 import { arrayLast } from '@/utils/tool'
-import { CAN_NEW_ITEM, CAROUSEL, GRID, LAYERS } from '@/const'
-import { vmCreateEmptyItem } from '@/utils/vmMap'
+import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
+import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 
 let topShared = window.innerHeight / 2
@@ -79,11 +84,10 @@ export default {
   components: {
     NodeName,
     ContextMenu,
-    ElPopover: Popover,
-    DialogComponentAdd: () => import('../ComponentAddPanel/DialogComponentAdd')
+    ElPopover: Popover
   },
   inject: {
-    isExample: { default: false }
+    rootComponentSetId: { default: null }
   },
   props: {
     id: {
@@ -91,6 +95,10 @@ export default {
       required: true
     },
     itemEditing: {
+      type: Boolean,
+      default: false
+    },
+    isExample: {
       type: Boolean,
       default: false
     }
@@ -116,7 +124,7 @@ export default {
         switch (this.node.tag) {
           case LAYERS:
             return 'Create An New Layer'
-          case GRID:
+          case GRID_GENERATOR:
             return 'Create An Empty Grid Item'
           case CAROUSEL:
             return 'Create An Empty Slider'
@@ -130,13 +138,7 @@ export default {
       return isMac() ? '&#8984;' : '&#8963;'
     },
     node() {
-      return this.componentsMap[this.id]
-    },
-    vm() {
-      return this.node && this.node.$vm
-    },
-    element() {
-      return this.vm && this.vm.$el
+      return getNode(this.id)
     },
     isGridItem() {
       return isGridItem(this.node)
@@ -152,6 +154,13 @@ export default {
     framer() {
       // 如果有refs=framer, 在拉動window時不知為什麼會找不到element
       return document.getElementById(`quick-fn-${this.id}`)
+    },
+    componentSetEl() {
+      const componentSetNode = vmGet(
+        this.node.rootComponentSetId,
+        this.isExample
+      )
+      return componentSetNode.$el
     }
   },
   watch: {
@@ -163,29 +172,53 @@ export default {
   },
   created() {
     this.resize()
+  },
+  mounted() {
+    // Don't put in created to prevent some component fail before mount
     // 給 store component 裡面呼叫的
     quickFnMap[this.id] = this
+    if (process.env.NODE_ENV === 'production') {
+      window.quickFnMap = quickFnMap
+    }
+  },
+  beforeDestroy() {
+    cancelAnimationFrame(this.animationId)
   },
   methods: {
     ...mapMutations('app', {
       APP_SET: 'SET'
     }),
-    ...mapActions('app', ['setCopySelectedNodeId']),
+    ...mapMutations('app', ['DIALOG_OPEN']),
+    ...mapActions('app', ['setCopySelectedNodeId', 'setBeingAddedComponentId']),
+    tryToAddComponent() {
+      this.setBeingAddedComponentId(this.id)
+    },
     vmCreateEmptyItem() {
       vmCreateEmptyItem(this.node)
     },
     resize() {
       this.$nextTick(() => {
-        if (!this.element) {
+        const vm = vmGet(this.node.id, this.isExample)
+        const element = vm && vm.$el
+
+        if (!element) {
           return
         }
 
+        const rect = element.getBoundingClientRect()
+        let { x: left, y: top, width, height } = rect
         const {
-          x: left,
-          y: top,
-          width,
-          height
-        } = this.element.getBoundingClientRect()
+          y: top1,
+          height: height1
+        } = this.componentSetEl.parentElement.getBoundingClientRect()
+
+        top = top < top1 ? top1 : top
+        height =
+          rect.top + height >= top1 + height1
+            ? top1 + height1 - top
+            : rect.top < top1
+              ? rect.top + height - top1
+              : height
 
         const alpha = 0.15
         let opacity = 0
@@ -196,6 +229,7 @@ export default {
           this.left = leftShared = lerp(this.left, left, alpha)
           this.width = widthShared = lerp(this.width, width, alpha)
           this.height = heightShared = lerp(this.height, height, alpha)
+
           opacity = lerp(opacity, 1, alpha / 2)
 
           Object.assign(this.framer.style, {
@@ -240,7 +274,6 @@ $activeColor: rgba(81, 117, 199, 0.68);
   pointer-events: none;
   border: 1px dashed $activeColor;
   will-change: opacity, height, width, top, left;
-  z-index: 800;
   top: 0;
   left: 0;
 }

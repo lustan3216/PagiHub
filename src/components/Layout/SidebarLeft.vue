@@ -1,6 +1,6 @@
 <template>
   <div
-    :style="{ width: isPanelAsset ? '400px' : '260px' }"
+    :style="{ width: editingAsset ? '400px' : '260px' }"
     class="sidebar-left"
   >
     <el-button-group class="flex">
@@ -41,10 +41,15 @@
       </el-tooltip>
     </el-button-group>
 
-    <panel-asset v-if="activePanel === 'PanelAsset'" />
+    <panel-asset
+      v-show="editingAsset"
+      v-if="editingAsset || uploading"
+      @processStart="uploading = true"
+      @processEnd="uploading = false"
+    />
 
     <split-pane
-      v-else
+      v-if="!editingAsset"
       :default-percent="40"
       split="horizontal"
     >
@@ -63,7 +68,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import SplitPane from 'vue-splitpane'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 
@@ -79,7 +84,8 @@ export default {
   },
   data() {
     return {
-      activePanel: 'PanelProject'
+      activePanel: 'PanelProject',
+      uploading: false
     }
   },
   created() {
@@ -89,15 +95,15 @@ export default {
   },
   computed: {
     ...mapGetters('user', ['isLogin']),
+    editingAsset() {
+      return this.activePanel === 'PanelAsset'
+    },
     projectId() {
       return this.$route.params.projectId
-    },
-    isPanelAsset() {
-      return this.activePanel === 'PanelAsset'
     }
   },
   watch: {
-    isPanelAsset() {
+    editingAsset() {
       this.artBoardResizing(true)
       setTimeout(() => {
         this.artBoardResizing(false)

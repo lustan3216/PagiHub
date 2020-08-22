@@ -18,6 +18,7 @@
           maxHeight
         }"
         class="example"
+        @scroll.native="scroll"
       />
     </div>
 
@@ -39,41 +40,48 @@
 </template>
 
 <script>
-  import { shortTagName } from '@/utils/node'
-  import AsyncComponent from '../TemplateUtils/AsyncComponent'
-  import { Card, Tag } from 'element-ui'
+import { shortTagName } from '@/utils/node'
+import AsyncComponent from '../TemplateUtils/AsyncComponent'
+import { Card, Tag } from 'element-ui'
+import { mapActions } from 'vuex'
 
-  export default {
-    name: 'CardLocalComponent',
-    components: {
-      AsyncComponent,
-      ElTag: Tag
+export default {
+  name: 'CardLocalComponent',
+  components: {
+    AsyncComponent,
+    ElTag: Tag
+  },
+  props: {
+    component: {
+      type: Object,
+      required: true
     },
-    props: {
-      component: {
-        type: Object,
-        required: true
-      },
-      maxHeight: {
-        type: String,
-        required: true
-      }
-    },
-    methods: {
-      shortTagName
+    maxHeight: {
+      type: String,
+      required: true
+    }
+  },
+  methods: {
+    ...mapActions('app', ['resizeNodeQuickFn']),
+    shortTagName,
+    scroll() {
+      setTimeout(() => {
+        this.resizeNodeQuickFn()
+      }, 100)
     }
   }
+}
 </script>
 
 <style scoped lang="scss">
-  .card {
-    border-radius: 5px;
-    height: 100%;
-    padding: 0 10px 10px;
-  }
-  .example {
-    overflow: scroll;
-    border: 1px solid $color-grey;
-    padding: 5px;
-  }
+.card {
+  border-radius: 5px;
+  height: 100%;
+  padding: 0 10px 10px;
+}
+.example {
+  overflow: scroll;
+  border: 1px solid $color-grey;
+  padding: 5px;
+}
 </style>

@@ -32,8 +32,8 @@ export const CAROUSEL = 'carousel'
 export const LAYERS = 'layers'
 export const COMPONENT_BODY = 'component-body'
 export const COMPONENT_SET = 'component-set'
-export const GRID = 'grid'
-export const GRID_ITEM = 'grid-item'
+export const GRID_GENERATOR = 'grid-generator'
+export const GRID_GENERATOR_ITEM = 'grid-generator-item'
 
 export const COLUMNS = 96
 export const BREAK_POINTS = {

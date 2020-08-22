@@ -50,10 +50,11 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 import { label, max, min, required } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
+import { Message } from 'element-ui'
 
 export default {
   name: 'DialogComponentSet',
@@ -107,7 +108,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['theOnlySelectedComponentId']),
     isExist() {
       return Boolean(this.id)
     },
@@ -131,24 +131,29 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async valid => {
         if (valid && this.dirty) {
-          this.loading = true
+          try {
+            this.loading = true
 
-          if (this.isExist) {
-            await this.patchComponentSet({
-              id: this.id,
-              ...this.form
-            })
+            if (this.isExist) {
+              await this.patchComponentSet({
+                id: this.id,
+                ...this.form
+              })
+            }
+            else {
+              await this.createComponentSet({
+                projectId: this.projectId,
+                ...this.form
+              })
+            }
           }
-          else {
-            await this.createComponentSet({
-              projectId: this.projectId,
-              ...this.form
-            })
+          catch (e) {
+            Message.warning(e.message)
           }
-
-          this.loading = false
-          this.visible = false
-          this.$bus.$emit('component-tabs-visible')
+          finally {
+            this.loading = false
+            this.visible = false
+          }
         }
       })
     }

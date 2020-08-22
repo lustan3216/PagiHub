@@ -1,7 +1,7 @@
 import { mapState } from 'vuex'
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { objectAssign, cloneJson } from '@/utils/tool'
-import { PROPS, VALUE, GRID, MASTER_ID, ID, STYLE } from '@/const'
+import { PROPS, VALUE, GRID_GENERATOR, MASTER_ID, ID, STYLE } from '@/const'
 import FreeStyle from '@/directive/freeStyle'
 import { getNode } from '@/utils/node'
 
@@ -30,9 +30,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('example', ['basicExamplesMap']),
+    ...mapState('example', ['exampleComponentsMap']),
     node() {
-      return getNode(this[ID])
+      return getNode(this.id)
     },
     innerValue() {
       return this.node && this.node[VALUE]
@@ -51,7 +51,7 @@ export default {
       return objectAssign(setting, this.masterProps, this.selfProps)
     },
     currentMapString() {
-      return this.isExample ? 'basicExamplesMap' : 'componentsMap'
+      return this.isExample ? 'exampleComponentsMap' : 'componentsMap'
     }
   },
   created() {
@@ -65,15 +65,21 @@ export default {
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount
-    if (this.isDraftMode && !this.isExample) {
-      vmAppend(this)
-      this.$bus.$on(`hover-${this.id}`, this.hoverCover)
+    if (this.isDraftMode) {
+      vmAppend(this, this.isExample)
+
+      if (!this.isExample) {
+        this.$bus.$on(`hover-${this.id}`, this.hoverCover)
+      }
     }
   },
   beforeDestroy() {
-    if (this.isDraftMode && !this.isExample) {
-      vmRemove(this.id)
-      this.$bus.$off(`hover-${this.id}`, this.hoverCover)
+    if (this.isDraftMode) {
+      vmRemove(this, this.isExample)
+
+      if (!this.isExample) {
+        this.$bus.$off(`hover-${this.id}`, this.hoverCover)
+      }
     }
   },
   methods: {
@@ -109,7 +115,8 @@ export default {
         return
       }
 
-      const $el = this.node.tag === GRID ? this.$el : this.$el.parentNode
+      const $el =
+        this.node.tag === GRID_GENERATOR ? this.$el : this.$el.parentNode
 
       if (hover) {
         const node = document.createElement('DIV')

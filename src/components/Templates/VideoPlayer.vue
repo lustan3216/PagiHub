@@ -43,16 +43,16 @@ export default {
     }
   },
   created() {
-    if (this.isExample) {
-      return
-    }
-    const { props = {}} = this.node && this.node.parentNode
-    if (!props.ratio || !props.ratio.w) {
-      this.RECORD({
-        path: `${this.node.parentId}.props.ratio`,
-        value: this.innerProps.ratio
-      })
-    }
+    // if (this.isExample) {
+    //   return
+    // }
+    // const { props = {}} = this.node && this.node.parentNode
+    // if (!props.ratio || !props.ratio.w) {
+    //   this.RECORD({
+    //     path: `${this.node.parentId}.props.ratio`,
+    //     value: this.innerProps.ratio
+    //   })
+    // }
   },
   methods: {
     ...mapMutations('component', ['RECORD']),

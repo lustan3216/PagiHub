@@ -39,7 +39,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import { INITIATE, PROPS } from '@/const'
-import { vm } from '@/utils/vmMap'
+import { vmGet } from '@/utils/vmMap'
 import { MessageBox } from 'element-ui'
 import { isUndefined } from '@/utils/tool'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSubmit'
@@ -126,7 +126,7 @@ export default {
       for (let i = 0; i < beSelectedNodes.length; i++) {
         const node = beSelectedNodes[i]
 
-        const $f = vm(node.id).api
+        const $f = vmGet(node.id).api
         $f.submit(
           formData => {
             data.push(formData)

@@ -1,6 +1,5 @@
 import store from '@/store'
-import { vm } from '@/utils/vmMap'
-import { isComponent, isGridItem, shortId, shortTagName } from '@/utils/node'
+import { vmGet } from '@/utils/vmMap'
 import { getRootComponentSetId } from '@/utils/rootComponentSetId'
 
 export function defineNodeProperties(node) {
@@ -16,9 +15,9 @@ export function defineNodeProperties(node) {
       enumerable: false
     })
 
-    Object.defineProperty(node, '$vm', {
+    Object.defineProperty(node, 'rootComponentSetId', {
       get() {
-        return vm(node.id)
+        return getRootComponentSetId(node.id)
       },
       enumerable: false
     })

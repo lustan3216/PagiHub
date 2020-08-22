@@ -18,6 +18,7 @@
           maxHeight
         }"
         class="example"
+        @scroll.native="resizeNodeQuickFn"
       />
     </div>
 
@@ -39,6 +40,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { shortTagName } from '@/utils/node'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { Tag } from 'element-ui'
@@ -60,6 +62,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('app', ['resizeNodeQuickFn']),
     shortTagName
   }
 }

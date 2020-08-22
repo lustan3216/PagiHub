@@ -8,6 +8,7 @@
 
     <div
       v-for="project in projects"
+      :key="project.label"
       class="card pointer"
       @click="$router.push(`/${project.id}/draft`)"
     >
@@ -95,7 +96,7 @@ export default {
   border-radius: 5px;
   margin-top: 25px;
   margin-bottom: 25px;
-  box-shadow: 4px 3px 21px -10px rgba(0,0,0,0.3);
+  box-shadow: 4px 3px 21px -10px rgba(0, 0, 0, 0.3);
 }
 
 h3 {
@@ -110,12 +111,12 @@ h3 {
 }
 .action-button {
   padding: 5px;
-  border:none;
+  border: none;
   font-size: 15px;
 }
 
-  .font{
-    color: #888;
-    font-size: 14px;
-  }
+.font {
+  color: #888;
+  font-size: 14px;
+}
 </style>

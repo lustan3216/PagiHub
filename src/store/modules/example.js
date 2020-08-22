@@ -8,7 +8,7 @@ let inited = false
 
 const state = {
   basicExamples: [],
-  basicExamplesMap: {}
+  exampleComponentsMap: {}
 }
 
 const mutations = {
@@ -26,16 +26,16 @@ const actions = {
     // const basicExamples = [...basic, ...formItem]
     appendIdNested(basicExamples)
 
-    const basicExamplesMap = {}
+    const exampleComponentsMap = {}
 
     traversalSelfAndChildren(basicExamples, node => {
       const id = node[ID]
-      basicExamplesMap[id] = node
+      exampleComponentsMap[id] = node
     })
 
     commit('SET', {
       basicExamples,
-      basicExamplesMap
+      exampleComponentsMap
     })
   }
 }
