@@ -155,6 +155,7 @@ export default {
       this.layout = layout
     },
     layoutUpdated(newChildren) {
+      console.log(21)
       if (this.isExample) {
         this.resizeNodeQuickFn()
         return

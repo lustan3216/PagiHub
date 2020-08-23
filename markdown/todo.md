@@ -15,11 +15,8 @@ https://github.com/antonreshetov/vue-eva-icons
 
 gri item 要處理 hidden 刪除 componentbody grid 要可以上 css controllerlayer
 
-ratio 設定之後 會忽略 h, 設定 vertical compact 的會忽略 Y
-手動拖移，變形才紀錄，自動的不紀錄
-
 bug: grid 畫面縮小後會壞掉
-
+ratio 設定之後 會忽略 h, 設定 vertical compact 的會忽略 Y
 ratio 因為自動改 h, 當 undo 時也會造成 loop 讓 undo 卡死
 layout 的最大寬，志中，比例的高 其他地方可能需要壓縮
 ratio 有的話 disable height

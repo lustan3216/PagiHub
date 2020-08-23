@@ -101,17 +101,6 @@ export default {
     projectId() {
       return this.$route.params.projectId
     }
-  },
-  watch: {
-    editingAsset() {
-      this.artBoardResizing(true)
-      setTimeout(() => {
-        this.artBoardResizing(false)
-      }, 300)
-    }
-  },
-  methods: {
-    ...mapActions('app', ['resizeNodeQuickFn', 'artBoardResizing'])
   }
 }
 </script>

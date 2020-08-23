@@ -12,16 +12,14 @@
 </template>
 
 <script>
-import GridGenerator from './GridGenerator'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
-import AsyncComponent from '../TemplateUtils/AsyncComponent'
 
 export default {
   name: 'Layers',
   components: {
-    GridGenerator,
-    AsyncComponent
+    AsyncComponent: () => import('../TemplateUtils/AsyncComponent'),
+    GridGenerator: () => import('../Templates/GridGenerator')
   },
   mixins: [nodeMixin, childrenMixin]
 }

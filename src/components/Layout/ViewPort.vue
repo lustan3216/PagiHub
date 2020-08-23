@@ -239,14 +239,12 @@ export default {
 
       this.$el.setAttribute('data-x', 0)
       this.$el.setAttribute('data-y', 0)
-      this.artBoardResizing(false)
     },
     setSize({ w, h }) {
       Object.assign(this.targetEl.style, {
         width: w + 'px',
         height: h ? h + 'px' : '100%'
       })
-      this.artBoardResizing(false)
     }
   }
 }

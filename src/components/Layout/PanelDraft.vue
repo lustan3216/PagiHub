@@ -49,13 +49,8 @@ export default {
         }
       })
     }
-
-    window.addEventListener('resize', () => {
-      this.artBoardResizing(false)
-    })
   },
   methods: {
-    ...mapActions('app', ['artBoardResizing']),
     ...mapActions('example', ['initExamples']),
     ...mapActions('component', ['getProject']),
     ...mapActions('asset', ['getAssets'])

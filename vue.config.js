@@ -8,7 +8,7 @@ const fs = require('fs')
 module.exports = {
   transpileDependencies: [
     // 'element-ui',
-    'vue-grid-layout',
+    // 'vue-grid-layout',
     'vue'
   ],
   runtimeCompiler: true,
