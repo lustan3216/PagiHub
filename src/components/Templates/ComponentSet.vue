@@ -10,7 +10,7 @@ import { mapActions } from 'vuex'
 import { ID, MASTER_ID } from '@/const'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import childrenMixin from '@/components/Templates/mixins/children'
-import { vmAppend, vmRemove } from '@/utils/vmMap'
+import { vmAppend } from '@/utils/vmMap'
 
 export default {
   name: 'ComponentSet',

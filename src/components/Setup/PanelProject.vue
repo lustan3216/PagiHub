@@ -25,6 +25,7 @@
       <template v-slot="{ data }">
         <div
           v-if="data && data.id"
+          :class="{ selected: editingComponentSetId === data.id }"
           class="relative w-100 over-hidden"
           @click="nodeClick($event, data)"
           @mouseenter="hoverId = data.id"
@@ -142,7 +143,7 @@ export default {
 
 <style scoped lang="scss">
 .selected {
-  background: aliceblue;
+  background: #f5f7fa;
   border-radius: 3px;
 }
 

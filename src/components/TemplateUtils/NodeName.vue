@@ -61,7 +61,12 @@ export default {
       return shortTagName(this.node)
     },
     shortId() {
-      return this.isComponent && shortId(this.id)
+      if (process.env.NODE_ENV === 'production') {
+        return this.isComponent && shortId(this.id)
+      }
+      else {
+        return this.id.substring(23, 26)
+      }
     },
     editing() {
       return observable.editingId === this.id && this.editable

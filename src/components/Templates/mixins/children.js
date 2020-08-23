@@ -1,7 +1,7 @@
 import { mapMutations, mapState } from 'vuex'
 import {
   CHILDREN,
-  COMPONENT_BODY,
+  COMPONENT_SET,
   GRID_GENERATOR_ITEM,
   SORT_INDEX
 } from '@/const'
@@ -118,8 +118,8 @@ export default {
         ({ id, tag, children, parentNode }) => {
           stopNodeId = id
           if (
-            parentNode.tag === COMPONENT_BODY &&
-            parentNode.children.length === 1
+            parentNode.parentNode.tag === COMPONENT_SET &&
+            parentNode.parentNode.children.length === 1
           ) {
             return 'stop'
           }

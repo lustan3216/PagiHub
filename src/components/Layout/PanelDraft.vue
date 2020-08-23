@@ -51,7 +51,7 @@ export default {
     }
 
     window.addEventListener('resize', () => {
-      this.artBoardResizing(true)
+      this.artBoardResizing(false)
     })
   },
   methods: {

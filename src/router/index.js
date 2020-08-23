@@ -23,7 +23,7 @@ export default new VueRouter({
     },
     {
       path: '/dashboard',
-      name: 'HomePage',
+      name: 'Dashboard',
       component: () => import('@/pages/Dashboard'),
       children: [
         {

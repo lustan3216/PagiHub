@@ -6,14 +6,14 @@ import {
 } from '@/utils/node'
 import { deleteBy, findIndexBy } from '@/utils/tool'
 import { appendIdNested } from '@/utils/nodeId'
-import { CAN_NEW_ITEM, CHILDREN, GRID_GENERATOR, SORT_INDEX, TAG } from '@/const'
+import { CHILDREN, SORT_INDEX } from '@/const'
 import { mapMutations } from 'vuex'
+import { gridGenerator } from '@/templateJson/basic'
 
-const emptyGird = () => ({
-  [TAG]: GRID_GENERATOR,
-  [CAN_NEW_ITEM]: true,
-  [SORT_INDEX]: 0
-})
+const emptyGird = () =>
+  gridGenerator({
+    [CHILDREN]: []
+  })
 
 export default {
   name: 'NodeMove',

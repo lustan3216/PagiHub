@@ -73,6 +73,8 @@
       <div class="flex1 flex-column">
         <div
           v-for="category in categories"
+          :key="category.name"
+          :class="{ active: currentCategory === category.name }"
           class="button"
           @click="currentCategory = category.name"
         >
@@ -84,6 +86,7 @@
 
         <div
           v-for="quickOption in quickOptions"
+          :key="quickOption.name"
           class="button"
           @click="quickSelect(quickOption)"
         >
@@ -107,8 +110,7 @@
             :span="column"
             style="margin-bottom: 35px;"
           >
-            <component
-              :is="whichComponentCart"
+            <component-card
               :component="component"
               :max-height="maxHeight"
               @add="addTemplate(component)"
@@ -127,7 +129,7 @@ import { humanize } from '@/utils/string'
 import { isComponentSet } from '@/utils/node'
 import SelectTag from '@/components/Components/SelectTag'
 import Tip from '@/components/Tutorial/Tip'
-import CardBasicComponent from './CardBasicComponent'
+import ComponentCard from './ComponentCard'
 import CardLocalComponent from './CardLocalComponent'
 import CardPublicComponent from './CardPublicComponent'
 import { vmGet } from '@/utils/vmMap'
@@ -141,7 +143,7 @@ export default {
     }
   },
   components: {
-    CardBasicComponent,
+    ComponentCard,
     CardLocalComponent,
     CardPublicComponent,
     Tip,
@@ -159,16 +161,6 @@ export default {
     ...mapState('component', ['editingComponentSetId', 'rootComponentSetIds']),
     ...mapState('example', ['basicExamples']),
     ...mapState('app', ['beingAddedComponentId']),
-    whichComponentCart() {
-      switch (this.currentCategory) {
-        case 'basicComponents':
-          return 'CardBasicComponent'
-        case 'localComponents':
-          return 'CardLocalComponent'
-        default:
-          return 'CardPublicComponent'
-      }
-    },
     categories() {
       return [
         {
@@ -273,6 +265,9 @@ export default {
   padding: 15px;
   &:hover {
     background-color: #fafafa;
+  }
+  &.active {
+    background-color: #f8f8f8;
   }
 }
 .title {

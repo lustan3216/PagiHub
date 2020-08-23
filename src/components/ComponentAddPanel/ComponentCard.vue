@@ -46,7 +46,7 @@ import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { Tag } from 'element-ui'
 
 export default {
-  name: 'CardBasicComponent',
+  name: 'ComponentCard',
   components: {
     AsyncComponent,
     ElTag: Tag

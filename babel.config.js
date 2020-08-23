@@ -1,6 +1,6 @@
 // presets: [['@vue/app', { useBuiltIns: 'usage' }], '@babel/preset-flow'],
 module.exports = {
-  presets: ['@vue/app'],
+  presets: [['@vue/app', { useBuiltIns: 'usage' }], '@babel/preset-flow'],
   plugins: [
     [
       'component',
@@ -8,6 +8,7 @@ module.exports = {
         libraryName: 'element-ui',
         styleLibraryName: 'theme-chalk'
       }
-    ]
+    ],
+    '@babel/plugin-transform-flow-comments'
   ]
 }

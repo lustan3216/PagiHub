@@ -198,6 +198,10 @@ export default {
     },
     resize() {
       this.$nextTick(() => {
+        if (!this.node) {
+          return
+        }
+
         const vm = vmGet(this.node.id, this.isExample)
         const element = vm && vm.$el
 
@@ -253,8 +257,8 @@ export default {
             Object.assign(this.framer.style, {
               width: width - 2 + 'px',
               height: height - 2 + 'px',
-              transform: top + 'px',
-              webkitTransform: left + 'px',
+              transform: `translate(${left}px, ${top}px)`,
+              webkitTransform: `translate(${left}px, ${top}px)`,
               opacity: '1'
             })
           }

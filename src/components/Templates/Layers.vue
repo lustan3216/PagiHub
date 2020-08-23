@@ -1,7 +1,7 @@
 <template>
   <div class="relative h-100">
-    <grid-generator
-      v-for="(child, index) in innerChildren"
+    <async-component
+      v-for="child in innerChildren"
       :id="child.id"
       :key="child.id"
       :style="{ 'z-index': child.sortIndex }"
@@ -15,14 +15,13 @@
 import GridGenerator from './GridGenerator'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
-import { SORT_INDEX } from '@/const'
-import ControllerLayer from '../TemplateUtils/ControllerLayer'
+import AsyncComponent from '../TemplateUtils/AsyncComponent'
 
 export default {
   name: 'Layers',
   components: {
     GridGenerator,
-    ControllerLayer
+    AsyncComponent
   },
   mixins: [nodeMixin, childrenMixin]
 }

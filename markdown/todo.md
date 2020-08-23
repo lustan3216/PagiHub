@@ -12,29 +12,40 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-<li>style 有必要做到device可以區分嗎？</li>
-bug: grid 畫面縮小後會壞掉, hidden 變換螢幕時也會壞掉
-quick function 的 item editing
 
-當 add componentSet + redo undo 有大ｂｕｇ 會造成 node 重複且迴圈
+gri item 要處理 hidden 刪除 componentbody grid 要可以上 css controllerlayer
+
+ratio 設定之後 會忽略 h, 設定 vertical compact 的會忽略 Y
+手動拖移，變形才紀錄，自動的不紀錄
+
+bug: grid 畫面縮小後會壞掉
+
 ratio 因為自動改 h, 當 undo 時也會造成 loop 讓 undo 卡死
-
+layout 的最大寬，志中，比例的高 其他地方可能需要壓縮
+ratio 有的話 disable height
 grid 的 compact vertical 要做出來，因為有 ratio
+
+single grid item compact isstead of all item,
+might need to add one more breakpoint
+ratio support
+columns 理論上應該需要 每個節點都不同
+把 grid item grid layout 拆開
+placeholder disabled when compact vertical
+
+<li>style 有必要做到device可以區分嗎？</li>
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 5<li>sreen size changer</li>
-background color
-imag hub 搬去右邊，上傳時 v-if 要控制不然上傳會斷掉
 5<li>每個 component set 都可以組建合併得按鈕 / or 選版本</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
-
 5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li> 合併 grid item 跟 component 的 style, style 應該有辦法合併獲優先顯示 component 的
 5<li>search panel</li>
 20<li>可瀏覽 production 版本</li>
-2<li>uploader image, consider how to compress</li>
+<li>need login when publishing </li>
+
+background color
 update children 要做 queue
 
 <li>SEO首頁</li>
-<li>need login when publishing </li>
 font的padding
 <li>radius 可加增神奇第二元素</li>
 </ol>

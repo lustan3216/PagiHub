@@ -63,9 +63,9 @@
 
 <script>
 import { Tree } from 'element-ui'
-import { SORT_INDEX, LAYERS, SOFT_DELETE, STYLE, COMPONENT_BODY } from '@/const'
+import { SORT_INDEX, LAYERS, SOFT_DELETE, STYLE } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { cloneJson, deleteBy } from '@/utils/tool'
+import { arrayUniq, cloneJson, deleteBy } from '@/utils/tool'
 import NodeController from '../TemplateUtils/NodeController'
 import NodeName from '../TemplateUtils/NodeName'
 import Touchable from '../TemplateUtils/Touchable'
@@ -106,10 +106,15 @@ export default {
 
       const cloneTree = cloneJson(tree)
       traversalSelfAndChildren(cloneTree, (node, parentNode) => {
-        if ([LAYERS, COMPONENT_BODY].includes(node.tag) && node.children) {
-          node.children = sortByIndex(node.children, false)
+        if ([LAYERS].includes(node.tag) && node.children) {
+          parentNode.children = sortByIndex(node.children, false)
         }
-
+        if (
+          node.children.length !==
+          arrayUniq(node.children.map(x => x.id)).length
+        ) {
+          debugger
+        }
         if (node[SOFT_DELETE]) {
           deleteBy(parentNode.children, 'id', node.id)
         }

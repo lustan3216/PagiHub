@@ -22,7 +22,7 @@ import NodeController from '../TemplateUtils/NodeController'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 
 export default {
-  name: 'GridItem',
+  name: 'GridGeneratorItem',
   components: {
     ControllerLayer,
     NodeController,

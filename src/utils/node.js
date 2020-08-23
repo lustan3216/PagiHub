@@ -10,7 +10,6 @@ import {
   GRID_GENERATOR_ITEM,
   KEY,
   GRID_GENERATOR,
-  COMPONENT_BODY,
   SORT_INDEX
 } from '@/const'
 
@@ -160,7 +159,7 @@ export function closestGridItem(node) {
 }
 
 export function isOverlapComponent(node) {
-  return [LAYERS, COMPONENT_BODY].includes(node.tag)
+  return [LAYERS].includes(node.tag)
 }
 
 export function isGridItem(node) {

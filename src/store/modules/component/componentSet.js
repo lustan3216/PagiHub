@@ -7,7 +7,7 @@ import {
 } from '@/api/node'
 import { recordRootComponentSetIdByArray } from '@/utils/rootComponentSetId'
 import { getCopyComponentIds, getTmpComponentsArray } from '@/store'
-import { componentBody } from '@/templateJson/basic'
+import { layers } from '@/templateJson/basic'
 import { isComponentSet, traversalSelfAndChildren } from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
 import { objectFirstKey } from '@/utils/tool'
@@ -42,7 +42,7 @@ export const actions = {
     { commit, state, dispatch },
     { projectId, label, description, tags }
   ) {
-    const tree = componentBody()
+    const tree = layers()
     appendIdNested(tree)
     const {
       data: { children, ...componentSet }
@@ -73,9 +73,12 @@ export const actions = {
     const node = state.componentsMap[id]
 
     traversalSelfAndChildren(node, child => {
-      commit('DELETE_NODE', child.id)
+      commit('VUE_DELETE', {
+        tree: state.componentsMap,
+        key: child.id
+      })
 
-      if (isComponentSet(node)) {
+      if (isComponentSet(child)) {
         commit('CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', child.id)
       }
 

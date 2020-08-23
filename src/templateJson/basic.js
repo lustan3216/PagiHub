@@ -19,24 +19,30 @@ import {
 } from '../const'
 
 const points = ['lg', 'md', 'sm', 'xs', 'xxs']
-const mapPoints = object =>
-  points.reduce((all, point) => {
+
+const mapPoints = object => {
+  return points.reduce((all, point) => {
     all[point] = object
     return all
   }, {})
+}
+
+export const gridGeneratorItem = function(options) {
+  return {
+    [TAG]: GRID_GENERATOR_ITEM,
+    [LABEL]: 'container',
+    [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: '100px' }),
+    [STYLE]: { default: { overflow: 'scroll' }},
+    ...options
+  }
+}
 
 export const gridGeneratorItems = function() {
   return [
-    {
-      [TAG]: GRID_GENERATOR_ITEM,
-      [LABEL]: 'grid-item',
-      [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: '100px' })
-    },
-    {
-      [TAG]: GRID_GENERATOR_ITEM,
-      [LABEL]: 'grid-item',
+    gridGeneratorItem(),
+    gridGeneratorItem({
       [PROPS]: mapPoints({ x: 22, y: 0, w: 44, h: '130px' })
-    }
+    })
   ]
 }
 
@@ -45,7 +51,7 @@ export const gridGenerator = function(options) {
     [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
     [SORT_INDEX]: 0,
-    [LABEL]: 'grid',
+    [LABEL]: 'layer',
     [CHILDREN]: gridGeneratorItems(),
     ...options
   }
@@ -57,24 +63,6 @@ export const layers = function(options) {
     [CAN_NEW_ITEM]: true,
     [CHILDREN]: [gridGenerator()],
     [LABEL]: 'magic-layout',
-    ...options
-  }
-}
-
-export const componentBody = function(options) {
-  return {
-    [TAG]: 'component-body',
-    [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [gridGenerator()],
-    [LABEL]: 'component-background',
-    ...options
-  }
-}
-
-export const componentCover = function(options) {
-  return {
-    [TAG]: 'component-cover',
-    [CAN_NEW_ITEM]: true,
     ...options
   }
 }

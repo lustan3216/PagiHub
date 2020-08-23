@@ -14,11 +14,7 @@ import {
   getRootComponentSetId,
   recordRootComponentSetId
 } from '@/utils/rootComponentSetId'
-import {
-  isComponentSet,
-  isProject,
-  cloneJsonWithoutChildren
-} from '@/utils/node'
+import { isComponentSet, isProject } from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
 import app from '@/main'
 
@@ -42,10 +38,17 @@ const mutations = {
     const node = tree[key]
     // 有id 代表component 沒有代表attr
     if (node && node[ID]) {
-      delete childrenOf[node[ID]]
+      if (isProject(node)) {
+        deleteBy(state.projectIds, node.id)
+      }
+      else if (isComponentSet(node)) {
+        deleteBy(state.rootComponentSetIds, node.id)
+      }
 
+      delete childrenOf[node[ID]]
       const parentId = componentsMap[key][PARENT_ID]
       const parentNode = componentsMap[parentId]
+
       if (parentNode && parentNode[CHILDREN]) {
         deleteBy(parentNode[CHILDREN], 'id', key)
       }
@@ -55,7 +58,9 @@ const mutations = {
   },
   // only for component or component attrs
   VUE_SET({ componentsMap }, { tree, key, value }) {
+    value = cloneJson(value)
     // 這裡一定要 cloneJson, 不然deltas裡面的值會被改掉
+    // VUE_DELETE delete childrenOf[node[ID]] 和 value = cloneJson(value) 一定要 不然會有reference loop bug
     if (tree[key] && tree[key].__ob__) {
       tree[key] = value
     }
@@ -142,13 +147,6 @@ const mutations = {
       defineNodeProperties(node)
     })
   },
-  // only for project and componentSet
-  DELETE_NODE(state, id) {
-    // the number of projectIds and rootComponentSetIds are a few, so lazy to check componentSet or project
-    deleteBy(state.projectIds, id)
-    deleteBy(state.rootComponentSetIds, id)
-    Vue.delete(state.componentsMap, id)
-  },
 
   CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS(state, ids) {
     toArray(ids).forEach(id => {
@@ -158,6 +156,7 @@ const mutations = {
     })
   },
   SOFT_RECORD(state, payLoad) {
+    // for hiding style temporary. not really update the json data
     const set = ({ path, value }) =>
       setValueByPath(state.componentsMap, path, value)
     Array.isArray(payLoad) ? payLoad.forEach(set) : set(payLoad)

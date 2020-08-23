@@ -4,8 +4,8 @@
     v-bind="innerProps"
     :layout="layout"
     :margin="[0, 0]"
-    :is-draggable="isDraftMode || isExample"
-    :is-resizable="isDraftMode || isExample"
+    :is-draggable="isDraftMode"
+    :is-resizable="isDraftMode"
     @layout-updated="layoutUpdated($event)"
   >
     <vue-grid-item
@@ -31,7 +31,8 @@
 import { mapState, mapActions } from 'vuex'
 import { AUTO_HEIGHT, CHILDREN, COLUMNS, PROPS } from '@/const'
 import { deleteBy } from '@/utils/tool'
-import VueGridLayout from 'vue-grid-layout'
+import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
+import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { debounce } from 'throttle-debounce'
@@ -40,8 +41,8 @@ import { toPrecision } from '@/utils/number'
 export default {
   name: 'GridGeneratorItem',
   components: {
-    VueGridGenerator: VueGridLayout.GridLayout,
-    VueGridItem: VueGridLayout.GridItem,
+    VueGridGenerator: GridLayout,
+    VueGridItem: GridItem,
     AsyncComponent
   },
   mixins: [childrenMixin],
@@ -84,11 +85,9 @@ export default {
   watch: {
     innerChildren: {
       handler(newChildren) {
-        this.getCurrentLayout(newChildren)
-
         this.$nextTick(() => {
-          // this.itemAutoHeight(newChildren)
-
+          // this.getCurrentLayout 會因為拿不到refs噴bug
+          this.getCurrentLayout(newChildren)
           setTimeout(() => {
             this.$refs.gridGenerator.resizeEvent()
             this.resizeNodeQuickFn()

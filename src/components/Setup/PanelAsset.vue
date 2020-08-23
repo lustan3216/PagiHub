@@ -124,6 +124,7 @@ import { vmPasteInside } from '@/utils/vmMap'
 import { postAsset } from '@/api/asset'
 import { flexImage } from '@/templateJson/basic'
 import FolderParser from '@/utils/folderParser'
+import { humanize } from '@/utils/string'
 
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,
@@ -173,7 +174,7 @@ export default {
         process: postAsset
       },
       labelFileProcessingError: error => {
-        return error.response.data && error.response.data.message
+        return error.response.data && humanize(error.response.data.message)
       },
       onprocessfilestart: () => {
         this.$emit('processStart')

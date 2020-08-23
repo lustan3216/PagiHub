@@ -2,7 +2,7 @@
   <!-- v-observe-visibility 跟vIf 一定要不同層，不然v-if false 的話沒辦法observer -->
   <div
     v-observe-visibility="options"
-    v-if="visible && (isLayers || isGrid)"
+    v-if="visible && isLayers"
     class="h-100"
   >
     <component
@@ -58,9 +58,6 @@ export default {
   components: {
     ControllerLayer: () => import('./ControllerLayer'),
     ComponentSet: () => import('../Templates/ComponentSet'),
-    ComponentBody: () => import('../Templates/ComponentBody'),
-    ComponentCover: () => import('../Templates/ComponentCover'),
-
     FlexImage: () => import('../Templates/FlexImage'),
     FlexButton: () => import('../Templates/FlexButton'),
 
