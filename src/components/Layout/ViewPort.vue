@@ -83,6 +83,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import ViewPortCover from './ViewPortCover'
 import { directive } from '@/directive/freeView'
 import { BREAK_POINTS } from '@/const'
+import { setTransform } from '@/utils/style'
 
 export default {
   name: 'ViewPort',
@@ -184,12 +185,12 @@ export default {
             x += event.deltaRect.left / this.scaleRatio
             y += event.deltaRect.top / this.scaleRatio
 
-            Object.assign(target.style, {
-              webkitTransform: `translate(${x}px, ${y}px)`,
-              transform: `translate(${x}px, ${y}px)`,
-              height: h + 'px',
-              width: w + 'px'
-            })
+            Object.assign(target.style, setTransform({
+              top: y,
+              left: x,
+              height: h,
+              width: w
+            }))
 
             target.setAttribute('data-x', x)
             target.setAttribute('data-y', y)
@@ -231,8 +232,7 @@ export default {
     },
     reset() {
       Object.assign(this.targetEl.style, {
-        webkitTransform: null,
-        transform: null,
+        ...setTransform(),
         height: '100%',
         width: null
       })

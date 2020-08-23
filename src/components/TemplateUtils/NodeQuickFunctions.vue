@@ -68,6 +68,7 @@ import { Popover } from 'element-ui'
 import { isGridItem, getNode } from '@/utils/node'
 import { lerp } from '@/utils/animation'
 import { arrayLast } from '@/utils/tool'
+import { setTransform } from '@/utils/style'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
@@ -237,11 +238,13 @@ export default {
           opacity = lerp(opacity, 1, alpha / 2)
 
           Object.assign(this.framer.style, {
-            width: this.width - 2 + 'px',
-            height: this.height - 2 + 'px',
-            transform: `translate(${this.left}px, ${this.top}px)`,
-            webkitTransform: `translate(${this.left}px, ${this.top}px)`,
-            opacity
+            opacity,
+            ...setTransform({
+              width: this.width - 2,
+              height: this.height - 2,
+              left: this.left,
+              top: this.top
+            })
           })
 
           if (
@@ -255,11 +258,13 @@ export default {
           else {
             cancelAnimationFrame(this.animationId)
             Object.assign(this.framer.style, {
-              width: width - 2 + 'px',
-              height: height - 2 + 'px',
-              transform: `translate(${left}px, ${top}px)`,
-              webkitTransform: `translate(${left}px, ${top}px)`,
-              opacity: '1'
+              opacity: '1',
+              ...setTransform({
+                width: width - 2,
+                height: height - 2,
+                left,
+                top
+              })
             })
           }
         }

@@ -12,15 +12,13 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-
-gri item 要處理 hidden 刪除 componentbody grid 要可以上 css controllerlayer
+layer 裡面層級的css 看要不要要處理，css要放在哪一個grid
 
 bug: grid 畫面縮小後會壞掉
 ratio 設定之後 會忽略 h, 設定 vertical compact 的會忽略 Y
 ratio 因為自動改 h, 當 undo 時也會造成 loop 讓 undo 卡死
-layout 的最大寬，志中，比例的高 其他地方可能需要壓縮
 ratio 有的話 disable height
-grid 的 compact vertical 要做出來，因為有 ratio
+layout 的最大寬，志中，比例的高 其他地方可能需要壓縮
 
 single grid item compact isstead of all item,
 might need to add one more breakpoint

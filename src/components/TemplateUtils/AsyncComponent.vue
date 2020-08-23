@@ -46,7 +46,6 @@ import {
 } from '@/utils/node'
 import { CAN_BE_EDITED, COMPONENT_SET } from '@/const'
 import { mapState } from 'vuex'
-import { required } from '@/validator'
 
 export default {
   name: 'AsyncComponent',

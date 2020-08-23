@@ -5,7 +5,6 @@
     :layout="layout"
     :margin="[0, 0]"
     :is-draggable="isDraftMode"
-    :is-resizable="isDraftMode"
     @layout-updated="layoutUpdated($event)"
   >
     <vue-grid-item
@@ -34,7 +33,6 @@ import { deleteBy } from '@/utils/tool'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
-import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { debounce } from 'throttle-debounce'
 import { toPrecision } from '@/utils/number'
 
@@ -43,7 +41,8 @@ export default {
   components: {
     VueGridGenerator: GridLayout,
     VueGridItem: GridItem,
-    AsyncComponent
+    // 因為lopp call AsyncComponent, 這裏不用 async import 會噴bug
+    AsyncComponent: () => import('../TemplateUtils/AsyncComponent')
   },
   mixins: [childrenMixin],
   inject: {
@@ -89,7 +88,6 @@ export default {
           // this.getCurrentLayout 會因為拿不到refs噴bug
           this.getCurrentLayout(newChildren)
           setTimeout(() => {
-            this.$refs.gridGenerator.resizeEvent()
             this.resizeNodeQuickFn()
           }, 20)
         })
@@ -148,14 +146,15 @@ export default {
           y: child.props[breakPoint].y || 0,
           w,
           h,
-          hUnit: hUnit
+          hUnit: hUnit,
+          ratioX: index === 1 ? 2 : 0,
+          ratioY: index === 1 ? 1 : 0
         })
       })
 
       this.layout = layout
     },
     layoutUpdated(newChildren) {
-      console.log(21)
       if (this.isExample) {
         this.resizeNodeQuickFn()
         return

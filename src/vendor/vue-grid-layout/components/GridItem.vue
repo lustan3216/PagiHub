@@ -47,11 +47,8 @@
     opacity: 0.2;
     transition-duration: 100ms;
     z-index: 2;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
     user-select: none;
+    transition-timing-function: ease;
   }
 
   .vue-grid-item > .vue-resizable-handle {
@@ -142,6 +139,10 @@
         required: false,
         default: false
       },
+      rowHeight: {
+        type: Number,
+        default: 0
+      },
       minH: {
         type: Number,
         required: false,
@@ -161,6 +162,14 @@
         type: Number,
         required: false,
         default: Infinity
+      },
+      ratioX: {
+        type: Number,
+        default: 0
+      },
+      ratioY: {
+        type: Number,
+        default: 0
       },
       x: {
         type: Number,
@@ -301,8 +310,14 @@
       }
     },
     mounted: function() {
-      this.cols = this.$parent.colNum
-      this.rowHeight = this.$parent.rowHeight
+      // lots-design fix bug
+      if (this.$parent.responsive) {
+        this.cols = this.$parent.cols[this.$parent.lastBreakpoint]
+      } else {
+        this.cols = this.$parent.colNum
+      }
+
+      this.rowHeight = this.rowHeight || this.$parent.rowHeight
       this.containerWidth = this.$parent.width !== null ? this.$parent.width : 100
       this.margin = this.$parent.margin !== undefined ? this.$parent.margin : [10, 10]
       this.maxRows = this.$parent.maxRows
@@ -507,14 +522,18 @@
             break
           }
           case 'resizemove': {
-            //                        console.log("### resize => " + event.type + ", lastW=" + this.lastW + ", lastH=" + this.lastH);
+            // console.log("### resize => " + event.type + ", lastW=" + this.lastW + ", lastH=" + this.lastH);
             const coreEvent = createCoreData(this.lastW, this.lastH, x, y)
             if (this.renderRtl) {
               newSize.width = this.resizing.width - coreEvent.deltaX
             } else {
               newSize.width = this.resizing.width + coreEvent.deltaX
             }
-            newSize.height = this.resizing.height + coreEvent.deltaY
+            if (this.ratioX && this.ratioY) {
+              newSize.height = this.calcRatioH(newSize.width)
+            } else {
+              newSize.height = this.resizing.height + coreEvent.deltaY
+            }
 
             ///console.log("### resize => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
             this.resizing = newSize
@@ -715,6 +734,12 @@
        * @param  {Number} width  Width in pixels.
        * @return {Object} w, h as grid units.
        */
+      calcRatioH(width) {
+        let h = Math.round((width / this.ratioX * this.ratioY + this.margin[1]) / (this.rowHeight + this.margin[1]))
+        // Capping
+        h = Math.max(Math.min(h, this.maxRows - this.innerY), 0)
+        return h
+      },
       calcWH(height, width) {
         const colWidth = this.calcColWidth()
 

@@ -2,12 +2,12 @@
   <div ref="item" class="vue-grid-layout" :style="mergedStyle">
     <slot></slot>
     <grid-item class="vue-grid-placeholder"
-               v-show="isDragging"
+               v-show="showPlaceHolder && isDragging"
                :x="placeholder.x"
                :y="placeholder.y"
                :w="placeholder.w"
                :h="placeholder.h"
-               :i="placeholder.i"></grid-item>
+               :i="placeholder.i"/>
   </div>
 </template>
 <style>
@@ -56,6 +56,10 @@
       autoSize: {
         type: Boolean,
         default: true
+      },
+      scale: {
+        type: Number,
+        default: 1
       },
       colNum: {
         type: Number,
@@ -128,6 +132,8 @@
     },
     data: function() {
       return {
+        // lots-design
+        showPlaceHolder: false,
         width: null,
         mergedStyle: {},
         lastLayoutLength: 0,
@@ -190,6 +196,7 @@
 
           compact(self.layout, self.verticalCompact)
 
+          // lots-design
           // self.$emit('layout-updated', self.layout)
 
           self.updateHeight()
@@ -298,6 +305,7 @@
           this.eventBus.$emit('updateWidth', this.width)
           this.updateHeight()
 
+          // lots-design
           // this.$emit('layout-updated', this.layout)
         }
       },
@@ -312,6 +320,8 @@
         }
 
         this.eventBus.$emit('resizeEvent')
+
+        // lots-design
         this.resizeNodeQuickFn()
       },
       containerHeight: function() {
@@ -330,11 +340,15 @@
         }
 
         if (eventName === 'dragmove' || eventName === 'dragstart') {
+          // lot-design 原本沒有以下這行的唷 :)
+          this.showPlaceHolder = l.verticalCompact
+
           this.placeholder.i = id
           this.placeholder.x = l.x
           this.placeholder.y = l.y
           this.placeholder.w = w
           this.placeholder.h = h
+
           this.$nextTick(function() {
             this.isDragging = true
           })
@@ -347,7 +361,7 @@
         }
 
         // Move the element to the dragged location.
-        this.layout = moveElement(this.layout, l, x, y, true, this.preventCollision)
+        this.layout = moveElement(this.layout, l, x, y, true, l.verticalCompact || this.preventCollision)
         compact(this.layout, this.verticalCompact)
         // needed because vue can't detect changes on array element properties
         this.eventBus.$emit('compact')

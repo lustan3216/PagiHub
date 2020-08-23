@@ -1,25 +1,37 @@
 <template>
   <div class="relative h-100">
-    <async-component
-      v-for="child in innerChildren"
-      :id="child.id"
-      :key="child.id"
-      :style="{ 'z-index': child.sortIndex }"
-      :class="{ absolute: child.sortIndex }"
-      :data-layer="Boolean(child.sortIndex)"
-    />
+    <template v-for="(child, index) in innerChildren">
+      <controller-layer
+        v-if="index === 0"
+        :id="child.id"
+        :key="child.id"
+      >
+        <grid-generator :id="child.id" />
+      </controller-layer>
+
+      <grid-generator
+        v-else
+        :id="child.id"
+        :key="child.id"
+        :style="{ 'z-index': index }"
+        :class="{ absolute: index }"
+        :data-layer="Boolean(index)"
+      />
+    </template>
   </div>
 </template>
 
 <script>
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
+import ControllerLayer from '../TemplateUtils/ControllerLayer'
+import GridGenerator from '../Templates/GridGenerator'
 
 export default {
   name: 'Layers',
   components: {
-    AsyncComponent: () => import('../TemplateUtils/AsyncComponent'),
-    GridGenerator: () => import('../Templates/GridGenerator')
+    ControllerLayer,
+    GridGenerator
   },
   mixins: [nodeMixin, childrenMixin]
 }
