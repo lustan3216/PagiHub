@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import ComponentSet from '../Templates/ComponentSet'
 
 let timer = null
@@ -40,15 +40,16 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapActions('app', ['artBoardResizing']),
     onScroll() {
-      this.artBoardResizing(true)
+      this.APP_SET({ isArtBoardResizing: true })
       if (timer !== null) {
         clearTimeout(timer)
       }
       timer = setTimeout(() => {
         this.artBoardResizing(false)
-      }, 100)
+      }, 80)
     }
   }
 }

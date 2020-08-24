@@ -37,7 +37,7 @@ export const defaultSetting = {
   hideControls: true,
   resetOnEnd: false,
   displayDuration: false,
-  ratio: { w: 16, h: 9 },
+  // ratio: { w: 16, h: 9 },
   fullscreen: { enabled: true, fallback: true, iosNative: true }
 }
 

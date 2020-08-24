@@ -17,7 +17,7 @@
     <el-col :span="12">
       <select-unit
         :disabled="ratioDisabled"
-        v-model.number="w"
+        v-model.number="ratioW"
         :units="['W']"
       />
     </el-col>
@@ -25,7 +25,7 @@
     <el-col :span="12">
       <select-unit
         :disabled="ratioDisabled"
-        v-model.number="h"
+        v-model.number="ratioH"
         :units="['H']"
       />
     </el-col>
@@ -66,21 +66,21 @@ export default {
 
       return nodes
     },
-    allW() {
+    allRatioW() {
       return this.gridItemNodes.map(node =>
-        getValueByPath(node, 'props.ratio.w')
+        getValueByPath(node, 'props.ratioW')
       )
     },
-    allH() {
+    allRatioH() {
       return this.gridItemNodes.map(node =>
-        getValueByPath(node, 'props.ratio.h')
+        getValueByPath(node, 'props.ratioH')
       )
     },
-    w: {
+    ratioW: {
       get() {
-        const allSame = arrayUniq(this.allW).length === 1
+        const allSame = arrayUniq(this.allRatioW).length === 1
         if (allSame) {
-          return this.allW[0]
+          return this.allRatioW[0]
         }
       },
       set(value) {
@@ -88,7 +88,7 @@ export default {
 
         this.gridItemNodes.forEach(node => {
           records.push({
-            path: `${node.id}.props.ratio.w`,
+            path: `${node.id}.props.ratioW`,
             value: value || undefined
           })
         })
@@ -96,11 +96,11 @@ export default {
         this.RECORD(records)
       }
     },
-    h: {
+    ratioH: {
       get() {
-        const allSame = arrayUniq(this.allH).length === 1
+        const allSame = arrayUniq(this.allRatioH).length === 1
         if (allSame) {
-          return this.allH[0]
+          return this.allRatioH[0]
         }
       },
       set(value) {
@@ -108,7 +108,7 @@ export default {
 
         this.gridItemNodes.forEach(node => {
           records.push({
-            path: `${node.id}.props.ratio.h`,
+            path: `${node.id}.props.ratioH`,
             value: value || undefined
           })
         })

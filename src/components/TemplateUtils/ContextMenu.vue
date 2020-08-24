@@ -82,7 +82,7 @@ export default {
       'copyComponentIds',
       'selectedComponentIds',
       'selectedComponentNode',
-      'artBoardResizing'
+      'isArtBoardResizing'
     ]),
     node() {
       return this.componentsMap[this.id]

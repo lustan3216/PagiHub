@@ -6,7 +6,7 @@
     @dblclick.stop="dblclick"
   >
     <portal
-      v-if="selected && !artBoardResizing"
+      v-if="selected && !isArtBoardResizing"
       :to="`QuickFunction${id}`"
     >
       <node-quick-functions
@@ -66,7 +66,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds', 'artBoardResizing']),
+    ...mapState('app', ['selectedComponentIds', 'isArtBoardResizing']),
     ...mapState('example', ['exampleComponentsMap']),
     node() {
       return getNode(this.id)

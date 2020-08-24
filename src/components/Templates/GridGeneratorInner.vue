@@ -96,9 +96,9 @@ export default {
       deep: true,
       immediate: true
     },
-    artBoardWidth: debounce(50, function() {
+    artBoardWidth() {
       this.getCurrentLayout(this.innerChildren)
-    }),
+    },
     lockIds(ids) {
       this.layout.forEach(layout => {
         layout.static = ids.includes(layout.id)
@@ -115,41 +115,38 @@ export default {
     },
     getCurrentLayout(children, breakPoint = this.currentBreakPoint) {
       const layout = []
+      const { artBoardHeight } = this
       let layoutW
-
-      children.forEach((child, index) => {
-        if (!child.props || (child.hidden && child.hidden[breakPoint])) {
+      children.forEach(({ props, hidden, id }, index) => {
+        if (!props || (hidden && hidden[breakPoint])) {
           return
         }
 
-        const w = child.props[breakPoint].w
-        let h = child.props[breakPoint].h
-        const hUnit = h.toString().replace(/\d/g, '')
-        const { ratio } = child.props
+        const w = props[breakPoint].w
+        let h = props[breakPoint].h
+        const { ratioW, ratioH, verticalCompact } = props
 
-        if (hUnit === 'px' && ratio && ratio.h && ratio.w) {
+        if (ratioH && ratioW) {
           layoutW = layoutW || this.$refs.gridGenerator.$el.clientWidth
           const itemWidth = (parseInt(layoutW) / COLUMNS) * w
-          h = (itemWidth / ratio.w) * ratio.h
+          h = (itemWidth / ratioW) * ratioH
         }
-        else if (hUnit === 'vh') {
-          h = (this.artBoardHeight / 100) * parseInt(h)
+        else if (props[breakPoint].hUnit === 'vh') {
+          h = (artBoardHeight / 100) * parseInt(h)
         }
         else {
           h = parseInt(h)
         }
 
         layout.push({
-          static: this.lockIds.includes(child.id),
-          id: child.id,
-          i: child.id || index, // should not happen, but just prevent crash in case
-          x: child.props[breakPoint].x || 0,
-          y: child.props[breakPoint].y || 0,
+          static: this.lockIds.includes(id),
+          id: id,
+          i: id || index, // should not happen, but just prevent crash in case
+          x: props[breakPoint].x || 0,
+          y: props[breakPoint].y || 0,
           w,
           h,
-          hUnit: hUnit,
-          ratioX: index === 1 ? 2 : 0,
-          ratioY: index === 1 ? 1 : 0
+          verticalCompact
         })
       })
 
@@ -184,13 +181,13 @@ export default {
         const newValue = {
           x: child.x,
           y: child.y,
-          h: toPrecision(h, 0) + child.hUnit,
+          h: toPrecision(h, 0),
           w: child.w
         }
         if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
           records.push({
             path: `${child.id}.${PROPS}.${this.currentBreakPoint}`,
-            value: newValue
+            value: { ...oldValue, ...newValue }
           })
         }
       })

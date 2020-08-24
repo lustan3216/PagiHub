@@ -11,7 +11,7 @@ import { BREAK_POINTS } from '@/const'
 
 const state = {
   breakpoint: 'lg',
-  artBoardResizing: false,
+  isArtBoardResizing: false,
   artBoardWidth: 1200,
   artBoardHeight: 768,
   scaleRatio: 1,
@@ -111,17 +111,14 @@ const actions = {
     return copyComponentIds
   },
 
-  artBoardResizing: debounce(150, function(
-    { state, commit, dispatch },
-    boolean
-  ) {
+  artBoardResizing({ state, commit, dispatch }, boolean) {
     const { clientWidth, clientHeight } = document.getElementById('art-board')
     const points = ['lg', 'md', 'sm', 'xs', 'xxs']
     const breakpoint = points.find(key => clientWidth >= BREAK_POINTS[key])
 
     commit('SET', {
       breakpoint,
-      artBoardResizing: boolean,
+      isArtBoardResizing: boolean,
       artBoardWidth: parseInt(clientWidth),
       artBoardHeight: parseInt(clientHeight)
     })
@@ -129,9 +126,9 @@ const actions = {
     if (!boolean) {
       dispatch('resizeNodeQuickFn')
     }
-  }),
+  },
 
-  resizeNodeQuickFn: debounce(210, function({ state }) {
+  resizeNodeQuickFn: debounce(200, function({ state }) {
     state.selectedComponentIds.forEach(id => {
       if (quickFnMap[id]) {
         quickFnMap[id].resize()

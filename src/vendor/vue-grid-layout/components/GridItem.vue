@@ -139,10 +139,6 @@
         required: false,
         default: false
       },
-      rowHeight: {
-        type: Number,
-        default: 0
-      },
       minH: {
         type: Number,
         required: false,
@@ -317,7 +313,7 @@
         this.cols = this.$parent.colNum
       }
 
-      this.rowHeight = this.rowHeight || this.$parent.rowHeight
+      this.rowHeight = this.$parent.rowHeight
       this.containerWidth = this.$parent.width !== null ? this.$parent.width : 100
       this.margin = this.$parent.margin !== undefined ? this.$parent.margin : [10, 10]
       this.maxRows = this.$parent.maxRows
@@ -529,11 +525,7 @@
             } else {
               newSize.width = this.resizing.width + coreEvent.deltaX
             }
-            if (this.ratioX && this.ratioY) {
-              newSize.height = this.calcRatioH(newSize.width)
-            } else {
-              newSize.height = this.resizing.height + coreEvent.deltaY
-            }
+            newSize.height = this.resizing.height + coreEvent.deltaY
 
             ///console.log("### resize => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
             this.resizing = newSize

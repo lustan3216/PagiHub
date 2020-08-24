@@ -13,20 +13,7 @@ https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
 layer 裡面層級的css 看要不要要處理，css要放在哪一個grid
-
 bug: grid 畫面縮小後會壞掉
-ratio 設定之後 會忽略 h, 設定 vertical compact 的會忽略 Y
-ratio 因為自動改 h, 當 undo 時也會造成 loop 讓 undo 卡死
-ratio 有的話 disable height
-layout 的最大寬，志中，比例的高 其他地方可能需要壓縮
-
-single grid item compact isstead of all item,
-might need to add one more breakpoint
-ratio support
-columns 理論上應該需要 每個節點都不同
-把 grid item grid layout 拆開
-placeholder disabled when compact vertical
-
 <li>style 有必要做到device可以區分嗎？</li>
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 5<li>sreen size changer</li>

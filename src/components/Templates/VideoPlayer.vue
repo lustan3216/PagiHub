@@ -33,26 +33,33 @@ export default {
       return this.$refs.plyr.player
     },
     ratio() {
-      const { defaultW, defaultH } = this.innerProps.ratio
-      const w = getValueByPath(this.node, 'parentNode.props.ratio.w', defaultW)
-      const h = getValueByPath(this.node, 'parentNode.props.ratio.h', defaultH)
-      return `${w}:${h}`
+      const w = getValueByPath(this.node, 'parentNode.props.ratioW')
+      const h = getValueByPath(this.node, 'parentNode.props.ratioH')
+      return w && h ? `${w}:${h}` : '16:9'
     },
     transformedProps() {
       return { ...this.innerProps, ratio: this.ratio }
     }
   },
   created() {
-    // if (this.isExample) {
-    //   return
-    // }
-    // const { props = {}} = this.node && this.node.parentNode
-    // if (!props.ratio || !props.ratio.w) {
-    //   this.RECORD({
-    //     path: `${this.node.parentId}.props.ratio`,
-    //     value: this.innerProps.ratio
-    //   })
-    // }
+    if (this.isExample) {
+      return
+    }
+
+    const { props = {}} = this.node && this.node.parentNode
+
+    if (!props.ratioW || !props.ratioH) {
+      this.RECORD([
+        {
+          path: `${this.node.parentId}.props.ratioW`,
+          value: 16
+        },
+        {
+          path: `${this.node.parentId}.props.ratioH`,
+          value: 9
+        }
+      ])
+    }
   },
   methods: {
     ...mapMutations('component', ['RECORD']),

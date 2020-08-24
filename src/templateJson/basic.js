@@ -31,7 +31,7 @@ export const gridGeneratorItem = function(options) {
   return {
     [TAG]: GRID_GENERATOR_ITEM,
     [LABEL]: 'container',
-    [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: '100px' }),
+    [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 100 }),
     [STYLE]: { default: { overflow: 'scroll' }},
     ...options
   }
@@ -41,7 +41,7 @@ export const gridGeneratorItems = function() {
   return [
     gridGeneratorItem(),
     gridGeneratorItem({
-      [PROPS]: mapPoints({ x: 22, y: 0, w: 44, h: '130px' })
+      [PROPS]: mapPoints({ x: 22, y: 0, w: 44, h: 130 })
     })
   ]
 }
@@ -89,14 +89,14 @@ export const carousel = function() {
         [CAN_NEW_ITEM]: false,
         [CHILDREN]: [
           {
-            [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: '71px' }),
+            [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }),
             [TAG]: GRID_GENERATOR_ITEM,
             [KEY]: 'prev',
             [CAN_NOT_COPY]: true,
             [CAN_NOT_DELETE]: true
           },
           {
-            [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: '71px' }),
+            [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }),
             [TAG]: GRID_GENERATOR_ITEM,
             [KEY]: 'next',
             [CAN_NOT_COPY]: true,
