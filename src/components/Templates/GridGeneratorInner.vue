@@ -38,7 +38,7 @@ import { debounce } from 'throttle-debounce'
 import { toPrecision } from '@/utils/number'
 
 export default {
-  name: 'GridGeneratorItem',
+  name: 'GridGeneratorInner',
   components: {
     VueGridGenerator: GridLayout,
     VueGridItem: GridItem,

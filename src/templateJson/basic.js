@@ -18,7 +18,7 @@ import {
   SORT_INDEX
 } from '../const'
 
-const points = ['lg', 'md', 'sm', 'xs', 'xxs']
+const points = ['xl', 'lg', 'md', 'sm', 'xs', 'xxs']
 
 const mapPoints = object => {
   return points.reduce((all, point) => {

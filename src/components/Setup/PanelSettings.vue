@@ -15,12 +15,12 @@ import { arrayLast, arrayUniq } from '@/utils/tool'
 const self = {
   name: 'PanelSettings',
   components: {
-    SettingDrawer: () => import('./EditorSetting/SettingDrawer'),
-    SettingDivider: () => import('./EditorSetting/SettingDivider'),
+    // SettingDrawer: () => import('./EditorSetting/SettingDrawer'),
+    // SettingDivider: () => import('./EditorSetting/SettingDivider'),
     SettingFlexButton: () => import('./EditorSetting/SettingFlexButton'),
     SettingFlexImage: () => import('./EditorSetting/SettingFlexImage'),
-    SettingGridGenerator: () => import('./EditorSetting/SettingGridGenerator'),
-    SettingGridItem: () => import('./EditorSetting/SettingGridItem'),
+    // SettingGridGenerator: () => import('./EditorSetting/SettingGridGenerator'),
+    // SettingGridItem: () => import('./EditorSetting/SettingGridItem'),
     SettingVideoPlayer: () => import('./EditorSetting/SettingVideoPlayer'),
     SettingCarousel: () => import('./EditorSetting/SettingCarousel'),
     SettingIframer: () => import('./EditorSetting/SettingIframer'),

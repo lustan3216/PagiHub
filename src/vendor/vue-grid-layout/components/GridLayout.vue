@@ -116,13 +116,13 @@
       breakpoints: {
         type: Object,
         default: function() {
-          return { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }
+          return { xl: 1440, lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }
         }
       },
       cols: {
         type: Object,
         default: function() {
-          return { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }
+          return { xl: 16, lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }
         }
       },
       preventCollision: {

@@ -113,8 +113,9 @@ const actions = {
 
   artBoardResizing({ state, commit, dispatch }, boolean) {
     const { clientWidth, clientHeight } = document.getElementById('art-board')
-    const points = ['lg', 'md', 'sm', 'xs', 'xxs']
-    const breakpoint = points.find(key => clientWidth >= BREAK_POINTS[key])
+    const points = Object.keys(BREAK_POINTS)
+    const breakpoint =
+      points.find(key => clientWidth >= BREAK_POINTS[key]) || 'xxs'
 
     commit('SET', {
       breakpoint,
