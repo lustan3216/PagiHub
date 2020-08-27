@@ -49,7 +49,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('component', ['RECORD'])
+    ...mapMutations('node', ['RECORD'])
   }
 }
 </script>

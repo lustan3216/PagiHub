@@ -69,7 +69,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     isMac,
     isLayers,
     vmCreateEmptyItem,

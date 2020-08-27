@@ -77,7 +77,7 @@ export default {
     }
   },
   data() {
-    const { componentsMap } = this.$store.state.component
+    const { componentsMap } = this.$store.state.node
     const node = componentsMap[this.id]
     return {
       visible: false,
@@ -108,7 +108,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('component', ['createWebsite', 'patchWebsite']),
+    ...mapActions('node', ['createWebsite', 'patchWebsite']),
     onSubmit() {
       this.$refs.form.validate(async valid => {
         if (valid && this.dirty) {

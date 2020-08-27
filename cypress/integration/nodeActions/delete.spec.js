@@ -5,16 +5,16 @@ context('Actions', () => {
     cy.visit('https://example.cypress.io/commands/actions')
   })
 
-  describe('component', () => {
+  describe('node', () => {
     it('layersRoot')
   })
-  describe('component set', () => {
+  describe('node set', () => {
     it('layersRoot')
   })
-  describe('components', () => {
+  describe('nodes', () => {
     it('layersRoot')
   })
-  describe('component set', () => {
+  describe('node set', () => {
     it('layersRoot')
   })
 })

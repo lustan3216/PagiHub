@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['scaleRatio']),
-    ...mapState('component', ['editingComponentSetId']),
+    ...mapState('node', ['editingComponentSetId']),
     node() {
       return this.componentsMap[this.editingComponentSetId]
     }

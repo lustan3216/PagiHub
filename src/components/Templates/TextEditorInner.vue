@@ -414,7 +414,7 @@ export default {
     this.editor.destroy()
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     findFontNames(string) {
       if (typeof string === 'object') {
         string = JSON.stringify(string)

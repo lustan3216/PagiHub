@@ -32,7 +32,7 @@ export function postAsset(
       formData.append('label', file.name)
       formData.append('path', pathArray.join('/'))
 
-      const projectId = store.state.component.editingProjectId
+      const projectId = store.state.node.editingProjectId
       const url = `https://staging-api.lots.design/projects/${projectId}/asset`
 
       Auth.currentSession()

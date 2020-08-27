@@ -60,7 +60,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('component', ['componentsMap']),
+    ...mapState('node', ['componentsMap']),
     selection() {
       const yetSelectedNodes = []
       const beSelectedNodes = []
@@ -117,7 +117,7 @@ export default {
       .catch(() => {})
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     submit() {
       const data = []
       const invalidFields = []

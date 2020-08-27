@@ -40,13 +40,13 @@ export function appendIdNested(nodes, parentId) {
 // 7. form 裡面或是link做連結，被複製時不可以亂掉
 // example = [
 //   {
-//     kind: 'component',
+//     kind: 'node',
 //     children: [
 //       {
-//         kind: 'componentSet',
+//         kind: 'nodeSet',
 //         children: [
 //           {
-//             kind: 'component'
+//             kind: 'node'
 //           }
 //         ]
 //       }

@@ -8,7 +8,7 @@ VueRouter.prototype.push = function push(location) {
       !err.message.includes('Avoided redundant navigation to current location')
     ) {
       // But print any other errors to the console
-      throw (err)
+      throw err
     }
   })
 }
@@ -27,18 +27,13 @@ export default new VueRouter({
       component: () => import('@/pages/Dashboard'),
       children: [
         {
-          path: 'profile',
-          name: 'Profile',
-          component: () => import('@/pages/Profile')
+          path: 'designs',
+          name: 'Designs',
+          component: () => import('@/pages/Designs')
         },
         {
-          path: 'design',
-          name: 'Design',
-          component: () => import('@/pages/Design')
-        },
-        {
-          path: 'pages',
-          name: 'Pages',
+          path: 'websites',
+          name: 'Websites',
           component: () => import('@/pages/Websites')
         }
       ]
@@ -51,7 +46,7 @@ export default new VueRouter({
     {
       path: '/404',
       name: 'NotFound',
-      component: () => import('@/pages/Design')
+      component: () => import('@/pages/Designs')
     },
     {
       path: '/:projectId/draft',

@@ -13,7 +13,7 @@ import PortalVue from 'portal-vue'
 import formCreate from '@form-create/element-ui'
 import vmMap from '@/utils/vmMap'
 import jsonHistory from '@/store/jsonHistory'
-jsonHistory.tree = store.state.component.componentsMap
+jsonHistory.tree = store.state.node.componentsMap
 
 import vhCheck from 'vh-check'
 vhCheck()
@@ -31,7 +31,7 @@ Vue.mixin({
     isProductionMode: () => store.getters['mode/isProductionMode'],
     isPreviewMode: () => store.getters['mode/isPreviewMode'],
     isDraftMode: () => store.getters['mode/isDraftMode'],
-    componentsMap: () => store.state.component.componentsMap,
+    componentsMap: () => store.state.node.componentsMap,
     vmMap: () => vmMap,
     assetHost: () => 'https://staging-asset.lots.design/'
   }

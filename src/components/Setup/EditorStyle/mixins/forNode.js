@@ -30,7 +30,7 @@ export default function(attr) {
       }
     },
     methods: {
-      ...mapMutations('component', ['RECORD', 'SOFT_RECORD']),
+      ...mapMutations('node', ['RECORD', 'SOFT_RECORD']),
       recordStyles(object) {
         const records = []
 

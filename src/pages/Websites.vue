@@ -1,29 +1,29 @@
 <template>
   <div class="wrapper">
-    <dialog-project
+    <dialog-website
       button-text="Create Website"
       type="primary"
       size="small"
     />
 
     <div
-      v-for="project in projects"
-      :key="project.label"
+      v-for="website in websites"
+      :key="website.label"
       class="card pointer"
-      @click="$router.push(`/${project.id}/draft`)"
+      @click="$router.push(`/${website.id}/draft`)"
     >
       <div class="justify-between">
-        <h3 class="font-spacing">{{ project.label }}</h3>
+        <h3 class="font-spacing">{{ website.label }}</h3>
 
         <div>
           <dialog-delete
-            :id="project.id"
+            :id="website.id"
             class="action-button"
           />
 
-          <dialog-project
-            :key="project.updatedAt"
-            :id="project.id"
+          <dialog-website
+            :key="website.updatedAt"
+            :id="website.id"
             class="action-button"
           />
         </div>
@@ -31,7 +31,7 @@
 
       <div class="subtitle">
         <el-tag
-          v-for="tag in project.tags"
+          v-for="tag in website.tags"
           :key="tag"
           effect="plain"
           class="m-r-5"
@@ -41,12 +41,12 @@
       </div>
 
       <p class="font">
-        {{ project.description }}
+        {{ website.description }}
       </p>
 
       <div>
         <i class="el-icon-date m-r-10" />
-        <span class="font">{{ time(project.createdAt) }}</span>
+        <span class="font">{{ time(website.createdAt) }}</span>
       </div>
     </div>
   </div>
@@ -67,7 +67,7 @@ export default {
     DialogWebsite
   },
   computed: {
-    projects() {
+    websites() {
       return Object.values(this.componentsMap).filter(node => isWebsite(node))
     }
   },
@@ -75,7 +75,7 @@ export default {
     this.getWebsites()
   },
   methods: {
-    ...mapActions('component', ['getWebsites']),
+    ...mapActions('node', ['getWebsites']),
     time(time) {
       const x = new Date(time)
       return `${x.getFullYear()} / ${x.getMonth() + 1} / ${x.getDate()}`

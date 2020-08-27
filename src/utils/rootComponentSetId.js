@@ -8,7 +8,7 @@ let familyTreeIds = []
 
 export const getRootComponentSetId = nodeId => {
   familyTreeIds.push(nodeId)
-  const { componentsMap, rootComponentSetIds } = store.state.component
+  const { componentsMap, rootComponentSetIds } = store.state.node
 
   if (rootComponentSetIdMap[nodeId]) {
     familyTreeIds.forEach(

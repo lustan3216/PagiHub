@@ -8,7 +8,7 @@
     <dialog-confirmable
       :visible.sync="visible"
       :disable-submit="!dirty"
-      title="Project"
+      title="Design"
       width="50vw"
       class="dialog"
       @confirm="onSubmit"
@@ -77,7 +77,7 @@ export default {
     }
   },
   data() {
-    const { componentsMap } = this.$store.state.component
+    const { componentsMap } = this.$store.state.node
     const node = componentsMap[this.id]
     return {
       visible: false,
@@ -108,7 +108,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('component', ['createProject', 'patchProject']),
+    ...mapActions('node', ['createProject', 'patchProject']),
     onSubmit() {
       this.$refs.form.validate(async valid => {
         if (valid && this.dirty) {

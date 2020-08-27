@@ -57,6 +57,8 @@ export const PATH = 'path'
 
 export const NODE_TYPE = {
   PROJECT: 'project',
+  WEBSITE: 'website',
+  PAGE: 'page',
   FOLDER: 1,
   COMPONENT_SET: 'componentSet',
   COMPONENT: undefined

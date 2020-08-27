@@ -46,7 +46,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('component', ['getComponentSetChildren'])
+    ...mapActions('node', ['getComponentSetChildren'])
   }
 }
 </script>

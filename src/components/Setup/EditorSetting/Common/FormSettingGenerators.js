@@ -39,7 +39,7 @@ const submit = {
     }
   },
   computed: {
-    ...mapState('component', ['componentsMap']),
+    ...mapState('node', ['componentsMap']),
     submitButtons() {
       return this.findButtonIds('form-submit')
     },

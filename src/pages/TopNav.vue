@@ -25,7 +25,7 @@
         v-if="isLogin"
         type="text"
         icon="el-icon-files"
-        @click="$router.push({ name: 'Design' })"
+        @click="$router.push('/dashboard/designs')"
       >
         Dashboard
       </el-button>

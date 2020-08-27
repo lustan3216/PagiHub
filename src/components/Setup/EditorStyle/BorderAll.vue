@@ -106,7 +106,7 @@ export default {
     this.isUniq = this.checkIsUniq()
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     changeUniq(uniq) {
       this.isUniq = uniq
       if (uniq) {

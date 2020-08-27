@@ -9,11 +9,11 @@ const jsonHistory = new JsonHistory({
     return cloneJsonWithoutChildren(tree)
   },
   setter(tree, key, value) {
-    store.commit('component/VUE_SET', { tree, key, value })
+    store.commit('node/VUE_SET', { tree, key, value })
   },
 
   deleter(tree, key) {
-    store.commit('component/VUE_DELETE', { tree, key })
+    store.commit('node/VUE_DELETE', { tree, key })
   },
 
   callback: {

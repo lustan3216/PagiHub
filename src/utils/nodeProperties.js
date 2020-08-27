@@ -6,7 +6,7 @@ export function defineProperties(node) {
   const defined = 'parentNode' in node
 
   if (!defined) {
-    const { componentsMap } = store.state.component
+    const { componentsMap } = store.state.node
 
     Object.defineProperty(node, 'parentNode', {
       get() {

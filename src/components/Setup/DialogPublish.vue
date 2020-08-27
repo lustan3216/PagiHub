@@ -48,7 +48,7 @@ export default {
     DialogConfirmable
   },
   data() {
-    const { componentsMap } = this.$store.state.component
+    const { componentsMap } = this.$store.state.node
 
     const node = componentsMap[this.id]
 
@@ -61,7 +61,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('component', ['editingComponentSetId']),
+    ...mapState('node', ['editingComponentSetId']),
     node() {
       return this.componentsMap[this.editingComponentSetId]
     },
@@ -78,7 +78,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('component', ['publishComponentSet']),
+    ...mapActions('node', ['publishComponentSet']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },

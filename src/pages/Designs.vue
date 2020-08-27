@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <dialog-project
-      button-text="Create Project"
+      button-text="Create Design"
       type="primary"
       size="small"
     />
@@ -60,7 +60,7 @@ import DialogProject from '@/components/Setup/DialogProject'
 import { isProject } from '@/utils/node'
 
 export default {
-  name: 'Projects',
+  name: 'Designs',
   components: {
     ElTag: Tag,
     DialogDelete,
@@ -75,7 +75,7 @@ export default {
     this.getProjects()
   },
   methods: {
-    ...mapActions('component', ['getProjects']),
+    ...mapActions('node', ['getProjects']),
     time(time) {
       const x = new Date(time)
       return `${x.getFullYear()} / ${x.getMonth() + 1} / ${x.getDate()}`

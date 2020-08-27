@@ -79,7 +79,7 @@ const actions = {
     })
   },
   setCopySelectedNodeId({ commit, state, rootState }, ids) {
-    const { rootComponentSetIds, componentsMap } = rootState.component
+    const { rootComponentSetIds, componentsMap } = rootState.node
     const copyComponentIds = ids
       ? toArray(ids)
       : state.selectedComponentIds.filter(
@@ -105,7 +105,7 @@ const actions = {
     localStorage.setItem('copyComponentIds', JSON.stringify(copyComponentIds))
     localStorage.setItem('tmpComponentsArray', JSON.stringify(copyNodeArray))
     commit('SET', { copyComponentIds })
-    commit('component/SET_NODES_TO_TMP_MAP', cloneJson(copyNodeArray), {
+    commit('node/SET_NODES_TO_TMP_MAP', cloneJson(copyNodeArray), {
       root: true
     })
     return copyComponentIds
@@ -146,14 +146,14 @@ const getters = {
   },
   selectedComponentNode(state, getters, rootState) {
     if (getters.theOnlySelectedComponentId) {
-      return rootState.component.componentsMap[
+      return rootState.node.componentsMap[
         getters.theOnlySelectedComponentId
       ]
     }
   },
   selectedComponentNodes(state, getters, rootState) {
     return state.selectedComponentIds
-      .map(id => rootState.component.componentsMap[id])
+      .map(id => rootState.node.componentsMap[id])
       .filter(node => node)
   }
 }

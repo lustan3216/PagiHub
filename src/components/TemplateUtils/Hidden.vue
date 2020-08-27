@@ -40,7 +40,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     record() {
       if (this.hidden) {
         this.RECORD({

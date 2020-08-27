@@ -14,7 +14,7 @@ const mutations = {
 
 const actions = {
   async getAssets({ rootState, commit }) {
-    const { editingProjectId } = rootState.component
+    const { editingProjectId } = rootState.node
     const data = await getAssets(editingProjectId)
 
     commit('SET', { images: data.data })

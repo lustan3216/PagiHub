@@ -88,7 +88,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     click(name, hidden) {
       const records = []
 

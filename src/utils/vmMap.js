@@ -41,7 +41,7 @@ export function vmCreateEmptyItem(node) {
 
 export async function vmPasteNodes() {
   // the component should get from tmpComponentsMap to prevent data modified after copy or cross browser
-  const { tmpComponentsMap } = store.state.component
+  const { tmpComponentsMap } = store.state.node
   const { copyComponentIds } = store.state.app
 
   if (copyComponentIds.length === 1) {
@@ -60,7 +60,7 @@ export async function vmPasteNodes() {
 }
 
 export function vmPasteInside(theOneCopyNode) {
-  const { componentsMap } = store.state.component
+  const { componentsMap } = store.state.node
   const { selectedComponentIds } = store.state.app
 
   selectedComponentIds.forEach(selectedId => {

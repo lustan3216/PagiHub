@@ -27,7 +27,7 @@ export default {
     isExample: { default: false }
   },
   computed: {
-    ...mapState('component', ['rootComponentSetIds']),
+    ...mapState('node', ['rootComponentSetIds']),
     node() {
       return getNode(this.id)
     },
@@ -37,7 +37,7 @@ export default {
     innerChildren() {
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
-      // children 因為每次更新 draftNodesMap，如果innerChildren用computed會所有的component都被更新
+      // children 因為每次更新 draftcomponentsMap，如果innerChildren用computed會所有的component都被更新
       return this.children.map(({ [CHILDREN]: _, ...node }) => node)
     }
   },
@@ -46,7 +46,7 @@ export default {
       'SET_SELECTED_COMPONENT_ID',
       'CLEAN_SELECTED_COMPONENT_ID'
     ]),
-    ...mapMutations('component', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
+    ...mapMutations('node', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
 
     _addNodesToParentAndRecord(nodeTree = {}) {
       // nodeTree should be single node instead of an array

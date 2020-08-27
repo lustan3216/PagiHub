@@ -74,7 +74,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('component', ['createFolder']),
+    ...mapActions('node', ['createFolder']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },

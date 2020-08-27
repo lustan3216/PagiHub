@@ -69,7 +69,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('component', ['VUE_SET', 'VUE_DELETE']),
+    ...mapMutations('node', ['VUE_SET', 'VUE_DELETE']),
     click() {
       const index = observable.ids.indexOf(this.id)
       if (index > -1) {

@@ -60,7 +60,7 @@ export default {
   methods: {
     ...mapMutations('mode', ['SET_DRAFT_MODE']),
     ...mapActions('example', ['initExamples']),
-    ...mapActions('component', ['getProject']),
+    ...mapActions('node', ['getProject']),
     ...mapActions('asset', ['getAssets'])
   }
 }

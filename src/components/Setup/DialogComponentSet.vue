@@ -81,7 +81,7 @@ export default {
     }
   },
   data() {
-    const { componentsMap } = this.$store.state.component
+    const { componentsMap } = this.$store.state.node
 
     const node = componentsMap[this.id]
 
@@ -124,7 +124,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('component', ['createComponentSet', 'patchComponentSet']),
+    ...mapActions('node', ['createComponentSet', 'patchComponentSet']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
     },

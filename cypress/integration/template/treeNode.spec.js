@@ -5,7 +5,7 @@ context('Actions', () => {
     cy.visit('https://example.cypress.io/commands/actions')
   })
 
-  describe('component hover', () => {
+  describe('node hover', () => {
     it('layers')
     it('gridGenerator')
     it('gridItem')

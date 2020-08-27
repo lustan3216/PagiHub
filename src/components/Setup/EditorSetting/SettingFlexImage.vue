@@ -104,7 +104,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     recordStyles(option) {
       const records = []
 

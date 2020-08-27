@@ -73,7 +73,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     click(event) {
       observable.editingId = null
       this.$emit('click', event)

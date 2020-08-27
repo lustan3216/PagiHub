@@ -49,7 +49,7 @@
                 :key="data.updatedAt"
                 :id="data.id"
                 :parent-id="data.parentId"
-                :is="`dialog-${kebabCase(data)}`"
+                :is="`dialog-${kebabCase(data.kind)}`"
               />
             </div>
           </transition>
@@ -88,7 +88,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('component', ['rootComponentSetIds', 'editingComponentSetId']),
+    ...mapState('node', ['rootComponentSetIds', 'editingComponentSetId']),
     projectId() {
       return this.$route.params.projectId
     },
@@ -111,8 +111,8 @@ export default {
     isProject,
     isFolder,
     kebabCase,
-    ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
-    ...mapActions('component', ['modifyProjectNodeParent']),
+    ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
+    ...mapActions('node', ['modifyProjectNodeParent']),
     nodeParentChange({ data: childData }, { data: parentData }, action) {
       if (action === 'inner') {
         this.modifyProjectNodeParent({
@@ -122,12 +122,13 @@ export default {
       }
     },
     nodeClick(event, node) {
+      console.log(node)
       if (isComponentSet(node)) {
         this.SET_EDITING_COMPONENT_SET_ID(node.id)
       }
     },
     allowDrop(_, { data: node }, action) {
-      return action === 'inner' && (this.isFolder(node) || this.isProject(node))
+      return action === 'inner' && (isFolder(node) || isProject(node))
     }
   }
 }

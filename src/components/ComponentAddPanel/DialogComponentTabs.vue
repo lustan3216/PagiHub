@@ -159,7 +159,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('component', ['editingComponentSetId', 'rootComponentSetIds']),
+    ...mapState('node', ['editingComponentSetId', 'rootComponentSetIds']),
     ...mapState('example', ['basicExamples']),
     ...mapState('app', ['beingAddedComponentId']),
     categories() {

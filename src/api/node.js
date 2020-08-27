@@ -49,7 +49,7 @@ export function deleteComponentSet(id) {
 export function patchComponentSetChildren({ deltas, action, tree }) {
   return API.patch(
     'staging',
-    `/component-sets/${store.state.component.editingComponentSetId}/children`,
+    `/component-sets/${store.state.node.editingComponentSetId}/children`,
     {
       body: { deltas, action, tree }
     }

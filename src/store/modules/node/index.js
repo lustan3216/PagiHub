@@ -204,10 +204,10 @@ function rollbackSelectedComponentSet(deltaGroup) {
   }
 
   const id = objectFirstKey(deltaGroup[0])
-  const { editingProjectId } = store.state.component
+  const { editingProjectId } = store.state.node
   const rootComponentSetId = getRootComponentSetId(id)
   if (rootComponentSetId !== editingProjectId) {
-    store.commit('component/SET_EDITING_COMPONENT_SET_ID', rootComponentSetId, {
+    store.commit('node/SET_EDITING_COMPONENT_SET_ID', rootComponentSetId, {
       root: true
     })
   }
@@ -222,6 +222,8 @@ export default {
   getters,
   actions: {
     ...require('./componentSet').actions,
-    ...require('./project').actions
+    ...require('./project').actions,
+    ...require('./website').actions,
+    ...require('./page').actions
   }
 }

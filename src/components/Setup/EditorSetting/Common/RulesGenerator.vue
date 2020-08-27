@@ -67,7 +67,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     transformRule(rule) {
       const vmProps = vmGet(this.id).innerProps
       const path = rule.path ? `${rule.path}.${rule.field}` : `${rule.field}`

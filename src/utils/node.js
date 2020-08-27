@@ -31,8 +31,8 @@ export function findFirstCommonParentTree(ids) {
   //   [1,8,9]
   // ]
   let familyPaths = ids.map(id => [
-    ...store.getters['component/parentPath'](id),
-    store.state.component.componentsMap[id]
+    ...store.getters['node/parentPath'](id),
+    store.state.node.componentsMap[id]
   ])
 
   familyPaths = cloneJson(familyPaths)
@@ -76,7 +76,7 @@ export function sortByIndex(children, asc = true) {
 export function getNode(id) {
   return (
     store.state.example.exampleComponentsMap[id] ||
-    store.state.component.componentsMap[id]
+    store.state.node.componentsMap[id]
   )
 }
 
@@ -175,6 +175,14 @@ export function isProject(node) {
 
 export function isComponent(node) {
   return node[KIND] === NODE_TYPE.COMPONENT
+}
+
+export function isWebsite(node) {
+  return node[KIND] === NODE_TYPE.WEBSITE
+}
+
+export function isPage(node) {
+  return node[KIND] === NODE_TYPE.PAGE
 }
 
 export function isFolder(node) {

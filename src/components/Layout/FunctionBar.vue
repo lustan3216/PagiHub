@@ -98,7 +98,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
-    ...mapState('component', ['editingComponentSetId']),
+    ...mapState('node', ['editingComponentSetId']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
     ...mapGetters('app', ['selectedComponentNodes', 'selectedComponentNode']),
     selected() {
@@ -108,7 +108,7 @@ export default {
   methods: {
     ...mapActions('app', ['setCopySelectedNodeId']),
     ...mapMutations('mode', ['SET_PREVIEW_MODE']),
-    ...mapMutations('component', ['REDO', 'UNDO']),
+    ...mapMutations('node', ['REDO', 'UNDO']),
     isMac,
     publish() {},
     vmPasteNodes,

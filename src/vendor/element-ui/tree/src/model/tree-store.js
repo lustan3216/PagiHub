@@ -12,7 +12,7 @@ export default class TreeStore {
       }
     }
 
-    this.nodesMap = {}
+    this.componentsMap = {}
 
     this.root = new Node({
       data: this.data,
@@ -76,7 +76,7 @@ export default class TreeStore {
   getNode(data) {
     if (data instanceof Node) return data
     const key = typeof data !== 'object' ? data : getNodeKey(this.key, data)
-    return this.nodesMap[key] || null
+    return this.componentsMap[key] || null
   }
 
   insertBefore(data, refData) {
@@ -110,10 +110,10 @@ export default class TreeStore {
 
   _initDefaultCheckedNodes() {
     const defaultCheckedKeys = this.defaultCheckedKeys || []
-    const nodesMap = this.nodesMap
+    const componentsMap = this.componentsMap
 
     defaultCheckedKeys.forEach((checkedKey) => {
-      const node = nodesMap[checkedKey]
+      const node = componentsMap[checkedKey]
 
       if (node) {
         node.setChecked(true, !this.checkStrictly)
@@ -141,7 +141,7 @@ export default class TreeStore {
     if (!key || !node || !node.data) return
 
     const nodeKey = node.key
-    if (nodeKey !== undefined) this.nodesMap[node.key] = node
+    if (nodeKey !== undefined) this.componentsMap[node.key] = node
   }
 
   deregisterNode(node) {
@@ -152,7 +152,7 @@ export default class TreeStore {
       this.deregisterNode(child)
     })
 
-    delete this.nodesMap[node.key]
+    delete this.componentsMap[node.key]
   }
 
   getCheckedNodes(leafOnly = false, includeHalfChecked = false) {
@@ -203,10 +203,10 @@ export default class TreeStore {
 
   _getAllNodes() {
     const allNodes = []
-    const nodesMap = this.nodesMap
-    for (const nodeKey in nodesMap) {
-      if (nodesMap.hasOwnProperty(nodeKey)) {
-        allNodes.push(nodesMap[nodeKey])
+    const componentsMap = this.componentsMap
+    for (const nodeKey in componentsMap) {
+      if (componentsMap.hasOwnProperty(nodeKey)) {
+        allNodes.push(componentsMap[nodeKey])
       }
     }
 
@@ -214,7 +214,7 @@ export default class TreeStore {
   }
 
   updateChildren(key, data) {
-    const node = this.nodesMap[key]
+    const node = this.componentsMap[key]
     if (!node) return
     const childNodes = node.childNodes
     for (let i = childNodes.length - 1; i >= 0; i--) {
@@ -325,7 +325,7 @@ export default class TreeStore {
 
   setUserCurrentNode(node) {
     const key = node[this.key]
-    const currNode = this.nodesMap[key]
+    const currNode = this.componentsMap[key]
     this.setCurrentNode(currNode)
   }
 

@@ -98,7 +98,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     record(newGridPosition) {
       const newGrid = emptyGird()
 

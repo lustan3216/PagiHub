@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import component from './modules/component/index'
+import node from './modules/node/index'
 import example from './modules/example'
 import app from './modules/app'
 import asset from './modules/asset'
@@ -40,7 +40,7 @@ export function getCopyComponentIds() {
 
 export function getTmpComponentsArray() {
   const array = localStorage.getItem('tmpComponentsArray')
-  store.commit('component/SET_NODES_TO_TMP_MAP', JSON.parse(array) || [], {
+  store.commit('node/SET_NODES_TO_TMP_MAP', JSON.parse(array) || [], {
     root: true
   })
 }
@@ -50,7 +50,7 @@ const store = new Vuex.Store({
   modules: {
     app,
     mode,
-    component,
+    node,
     user,
     example,
     asset

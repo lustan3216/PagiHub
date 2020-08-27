@@ -73,7 +73,7 @@ export default {
       'artBoardWidth',
       'artBoardHeight'
     ]),
-    ...mapState('component', ['componentsMap']),
+    ...mapState('node', ['componentsMap']),
     currentBreakPoint() {
       return this.isExample ? 'lg' : this.breakpoint
     },
@@ -89,9 +89,7 @@ export default {
         this.$nextTick(() => {
           // this.getCurrentLayout 會因為拿不到refs噴bug
           this.getCurrentLayout(newChildren)
-          setTimeout(() => {
-            this.resizeNodeQuickFn()
-          }, 20)
+          this.resizeNodeQuickFn()
         })
       },
       deep: true,

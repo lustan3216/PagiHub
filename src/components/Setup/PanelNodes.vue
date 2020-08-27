@@ -93,7 +93,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds', 'breakpoint']),
-    ...mapState('component', ['editingComponentSetId']),
+    ...mapState('node', ['editingComponentSetId']),
     componentSetNode() {
       return this.componentsMap[this.editingComponentSetId]
     },
@@ -136,7 +136,7 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
       'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
-    ...mapMutations('component', ['RECORD']),
+    ...mapMutations('node', ['RECORD']),
     checkHidden(node) {
       return node.hidden && node.hidden[this.breakpoint]
     },
