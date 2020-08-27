@@ -1,6 +1,6 @@
 import { isUndefined } from '@/utils/tool'
 
-export function setTransform({ top, left, width, height } = {}) {
+export function setTransform({ top, left } = {}) {
   const translate = isUndefined(top) && isUndefined(left)
     ? null
     : `translate(${left || 0}px,${top || 0}px`
@@ -10,8 +10,6 @@ export function setTransform({ top, left, width, height } = {}) {
     WebkitTransform: translate,
     MozTransform: translate,
     msTransform: translate,
-    OTransform: translate,
-    width: width + 'px',
-    height: height + 'px'
+    OTransform: translate
   }
 }

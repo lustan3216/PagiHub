@@ -1,8 +1,8 @@
 <template>
   <div>
-    <top-nav v-if="!inDashboard" />
+    <top-nav v-if="hasNavBar" />
 
-    <router-view :style="{ paddingTop: inDashboard ? '0' : '50px' }" />
+    <router-view :style="{ paddingTop: hasNavBar ? '50px' : '0' }" />
 
     <transition name="fade">
       <component :is="dialog" />
@@ -10,20 +10,20 @@
 
     <portal-target
       v-for="id in selectedComponentIds"
-      :name="`QuickFunction${id}`"
+      :name="`App-${id}`"
       :key="id"
       slim
     />
 
     <portal-target
-      name="TextEditorMenu"
-      slim
+      name="App"
+      multiple
     />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import TopNav from '@/pages/TopNav'
 
 export default {
@@ -37,8 +37,12 @@ export default {
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     ...mapState('app', ['dialog']),
+    ...mapGetters('user', ['isLogin']),
     inDashboard() {
       return this.$route.path.indexOf('/dashboard/') === 0
+    },
+    hasNavBar() {
+      return !this.inDashboard && !this.isPreviewMode
     }
   },
   created() {

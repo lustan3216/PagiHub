@@ -3,7 +3,6 @@ import { allEqual, cloneJson, toArray } from './tool'
 import { humanize } from './string'
 import {
   NODE_TYPE,
-  NODE_TYPE_STRING,
   KIND,
   LABEL,
   LAYERS,
@@ -184,10 +183,6 @@ export function isFolder(node) {
 
 export function isComponentSet(node) {
   return node[KIND] === NODE_TYPE.COMPONENT_SET
-}
-
-export function typeString(node) {
-  return NODE_TYPE_STRING[node[KIND]]
 }
 
 let index = 1

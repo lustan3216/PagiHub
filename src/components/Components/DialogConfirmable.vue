@@ -41,7 +41,7 @@
             plain
             @click="confirm"
           >
-            Confirm
+            {{ confirmText }}
           </el-button>
         </slot>
       </div>
@@ -73,6 +73,10 @@ export default {
     showFooter: {
       type: Boolean,
       default: true
+    },
+    confirmText: {
+      type: String,
+      default: 'Connfirm'
     }
   },
   computed: {
@@ -120,6 +124,7 @@ export default {
   }
 
   .el-dialog {
+    max-width: 500px;
     border-radius: 5px;
     overflow: hidden;
   }

@@ -7,7 +7,7 @@
   >
     <portal
       v-if="selected && !isArtBoardResizing"
-      :to="`QuickFunction${id}`"
+      :to="`App-${id}`"
     >
       <node-quick-functions
         :id="id"

@@ -36,16 +36,22 @@ export function patchComponentSet(id, body) {
   return API.patch('staging', `/component-sets/${id}`, { body })
 }
 
+export function publishComponentSet(id, tree, description) {
+  return API.post('staging', `/component-sets/${id}/publish`, {
+    body: { tree, description }
+  })
+}
+
 export function deleteComponentSet(id) {
   return API.del('staging', `/component-sets/${id}`, {})
 }
 
-export function patchComponentSetChildren(deltas, action) {
+export function patchComponentSetChildren({ deltas, action, tree }) {
   return API.patch(
     'staging',
     `/component-sets/${store.state.component.editingComponentSetId}/children`,
     {
-      body: { deltas, action }
+      body: { deltas, action, tree }
     }
   )
 }

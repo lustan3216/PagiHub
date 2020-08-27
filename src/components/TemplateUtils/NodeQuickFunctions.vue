@@ -66,12 +66,11 @@ import NodeName from './NodeName'
 import ContextMenu from './ContextMenu'
 import { Popover } from 'element-ui'
 import { isGridItem, getNode } from '@/utils/node'
-import { lerp } from '@/utils/animation'
 import { arrayLast } from '@/utils/tool'
-import { setTransform } from '@/utils/style'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
+import gsap from 'gsap'
 
 let topShared = window.innerHeight / 2
 let leftShared = window.innerWidth / 2
@@ -157,10 +156,12 @@ export default {
       return document.getElementById(`quick-fn-${this.id}`)
     },
     componentSetEl() {
-      const componentSetNode = vmGet(
-        this.node.rootComponentSetId,
-        this.isExample
-      )
+      const { rootComponentSetId } = this.node
+      if (!rootComponentSetId) {
+        // this context will happen in Baic components in example tabs
+        return
+      }
+      const componentSetNode = vmGet(rootComponentSetId, this.isExample)
       return componentSetNode.$el
     }
   },
@@ -199,7 +200,7 @@ export default {
     },
     resize() {
       this.$nextTick(() => {
-        if (!this.node) {
+        if (!this.node || !this.componentSetEl) {
           return
         }
 
@@ -225,51 +226,32 @@ export default {
               ? rect.top + height - top1
               : height
 
-        const alpha = 0.15
-        let opacity = 0
-        this.animationId && cancelAnimationFrame(this.animationId)
-
-        const animate = () => {
-          this.top = topShared = lerp(this.top, top, alpha)
-          this.left = leftShared = lerp(this.left, left, alpha)
-          this.width = widthShared = lerp(this.width, width, alpha)
-          this.height = heightShared = lerp(this.height, height, alpha)
-
-          opacity = lerp(opacity, 1, alpha / 2)
-
-          Object.assign(this.framer.style, {
-            opacity,
-            ...setTransform({
-              width: this.width - 2,
-              height: this.height - 2,
-              left: this.left,
-              top: this.top
-            })
-          })
-
-          if (
-            Math.abs(top - this.top) > 1 ||
-            Math.abs(left - this.left) > 1 ||
-            Math.abs(width - this.width) > 1 ||
-            Math.abs(height - this.height) > 1
-          ) {
-            this.animationId = requestAnimationFrame(animate)
+        gsap.fromTo(
+          this.framer,
+          {
+            opacity: 0,
+            x: leftShared,
+            y: topShared,
+            width: widthShared,
+            height: heightShared
+          },
+          {
+            opacity: 1,
+            x: left,
+            y: top,
+            width: width - 2,
+            height: height - 2,
+            ease: 'power3',
+            duration: 0.7,
+            onUpdate() {
+              const { width, height, x, y } = this.vars
+              leftShared = x
+              topShared = y
+              widthShared = width
+              heightShared = height
+            }
           }
-          else {
-            cancelAnimationFrame(this.animationId)
-            Object.assign(this.framer.style, {
-              opacity: '1',
-              ...setTransform({
-                width: width - 2,
-                height: height - 2,
-                left,
-                top
-              })
-            })
-          }
-        }
-
-        this.animationId = requestAnimationFrame(animate)
+        )
       })
     }
   }
@@ -282,7 +264,6 @@ $activeColor: rgba(81, 117, 199, 0.68);
   position: absolute;
   pointer-events: none;
   border: 1px dashed $activeColor;
-  will-change: opacity, height, width, top, left;
   top: 0;
   left: 0;
 }

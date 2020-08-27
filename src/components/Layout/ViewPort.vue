@@ -1,7 +1,8 @@
 <template>
   <div
     v-free-view="freeViewOptions"
-    class="fake-transform relative p-15"
+    :class="{ resizeBar, draft: isDraftMode }"
+    class="fake-transform view-port"
   >
     <!--   這層雖然多餘，但為了要限制 interact 的 size grab bar 被拉出去  -->
     <!--  interactjs.modifiers.restrictEdges({ outer: 'parent' })  -->
@@ -11,59 +12,78 @@
         class="target"
         style="height: 100%;"
       >
-        <div class="handler top" />
-        <div class="handler right" />
-        <div class="handler bottom" />
-        <div class="handler left" />
+        <template v-if="resizeBar">
+          <div class="handler top" />
+          <div class="handler right" />
+          <div class="handler bottom" />
+          <div class="handler left" />
+        </template>
         <slot />
       </div>
     </div>
 
     <portal to="ViewPortController">
-      <el-tooltip
-        v-for="button in shortCutButtons"
-        :content="`Set view port to ${button.w}px width`"
-        :key="button.name"
-        effect="light"
-        placement="bottom"
-      >
-        <el-button
-          :type="breakpoint === button.name ? 'primary' : 'text'"
-          :class="button.class"
-          :icon="button.icon"
-          class="shortcut-button"
-          plain
-          @click="setSize({ w: button.w })"
-        />
-      </el-tooltip>
+      <div class="align-center">
+        <el-tooltip
+          v-if="isPreviewMode"
+          content="Hide Resize bar"
+          effect="light"
+          placement="bottom"
+        >
+          <el-button
+            :type="resizeBar ? 'primary' : 'text'"
+            icon="el-icon-full-screen"
+            class="shortcut-button"
+            plain
+            @click="resizeBar = !resizeBar"
+          />
+        </el-tooltip>
 
-      <el-dropdown
-        size="small"
-        split-button
-        type
-        @click="reset"
-      >
-        <i class="el-icon-refresh-left" />
-        <span class="grey-font">
-          {{ artBoardWidth }} X {{ artBoardHeight }}
-        </span>
+        <el-tooltip
+          v-for="button in shortCutButtons"
+          :content="`Set view port to ${button.w}px width`"
+          :key="button.name"
+          effect="light"
+          placement="bottom"
+        >
+          <el-button
+            :type="breakpoint === button.name ? 'primary' : 'text'"
+            :class="button.class"
+            :icon="button.icon"
+            class="shortcut-button"
+            plain
+            @click="setSize({ w: button.w })"
+          />
+        </el-tooltip>
 
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="option in deviceOptions"
-            :key="option.name"
-            :value="option.name"
-            @click.native="setSize({ w: option.w, h: option.h })"
-          >
-            <div class="justify-between">
-              <span class="grey-font">{{ option.name }}</span>
-              <span
-                class="m-l-15 grey-font"
-              >{{ option.w }} X {{ option.h }}</span>
-            </div>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+        <el-dropdown
+          size="small"
+          split-button
+          type
+          @click="reset"
+        >
+          <i class="el-icon-refresh-left" />
+          <span class="grey-font">
+            {{ artBoardWidth }} X {{ artBoardHeight }}
+          </span>
+
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item
+              v-for="option in deviceOptions"
+              :key="option.name"
+              :value="option.name"
+              @click.native="setSize({ w: option.w, h: option.h })"
+            >
+              <div class="justify-between">
+                <span class="grey-font">{{ option.name }}</span>
+                <span
+                  class="m-l-15 grey-font"
+                >{{ option.w }} X {{ option.h }}</span>
+              </div>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </portal>
 
     <portal to="TopNav">
@@ -95,6 +115,7 @@ export default {
   },
   data() {
     return {
+      resizeBar: true,
       scaleRatio: 1,
       freeViewOptions: {
         move: false,
@@ -122,6 +143,7 @@ export default {
     },
     shortCutButtons() {
       return [
+        { name: 'xl', w: this.breakpoints.xl, icon: 'el-icon-data-line' },
         { name: 'lg', w: this.breakpoints.lg, icon: 'el-icon-data-line' },
         { name: 'md', w: this.breakpoints.md, icon: 'el-icon-monitor' },
         { name: 'sm', w: this.breakpoints.sm, icon: 'el-icon-mobile' },
@@ -162,6 +184,13 @@ export default {
       ]
     }
   },
+  watch: {
+    isDraftMode(value) {
+      if (value) {
+        this.resizeBar = true
+      }
+    }
+  },
   mounted() {
     this.interact
       .resizable({
@@ -185,12 +214,14 @@ export default {
             x += event.deltaRect.left / this.scaleRatio
             y += event.deltaRect.top / this.scaleRatio
 
-            Object.assign(target.style, setTransform({
-              top: y,
-              left: x,
-              height: h,
-              width: w
-            }))
+            Object.assign(target.style, {
+              height: h + 'px',
+              width: w + 'px',
+              ...setTransform({
+                top: y,
+                left: x
+              })
+            })
 
             target.setAttribute('data-x', x)
             target.setAttribute('data-y', y)
@@ -303,5 +334,26 @@ export default {
   font-size: 16px;
   padding: 7px;
   margin: 5px 10px;
+}
+
+.view-port {
+  overflow: hidden;
+  position: relative;
+  @include calc-vh('height', '100vh - 30px');
+
+  &:not(.resizeBar) {
+    @include calc-vh('height', '100vh');
+  }
+  &.resizeBar {
+    padding: 15px;
+  }
+  &.draft {
+    @include calc-vh('height', '100vh - 80px');
+  }
+}
+
+.el-dropdown {
+  margin-right: 10px;
+  margin-left: 10px;
 }
 </style>

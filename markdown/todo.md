@@ -12,8 +12,16 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-layer 裡面層級的css 看要不要要處理，css要放在哪一個grid
+page 裡面的instance 要可以點右鍵跳到主component
+instance 可以直接複製，跟著王 copy父曾是master就直接copy ，但也要做一個按鈕控制分離，當copy進page record一個值紀錄此page有用該component
+carousle 的命名要改，因為grid 的名字會重疊
+
+layer 裡面層級的 css 看要不要要處理，css 要放在哪一個 grid
 bug: grid 畫面縮小後會壞掉
+
+pages 系統
+page 還要做路由
+
 <li>style 有必要做到device可以區分嗎？</li>
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 5<li>sreen size changer</li>
@@ -25,24 +33,29 @@ position fixed (might be a checkbox) // 如果是這個可能多出 top left
 <li>need login when publishing </li>
 
 background color
-update children 要做 queue
+font 的 padding
 
 <li>SEO首頁</li>
-font的padding
+update children 要做 queue
+button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction在弄就好
 <li>radius 可加增神奇第二元素</li>
+style 可以 checkbox 看 master 的 style 暫時不用做
+svg
 </ol>
 
 ### Last
 
+style 支援 每個 device 可客製化, hover click
+fingerprintjs2
+
 <li>embed iframe,iframe 要可以自動 resize</li>
-可以 copy 進去 gridlayout
+多個node 可以 copy 進去 gridlayout
 <li>canTo caDelete 這些東西不要記錄在 json上，不然以後有更動的話，沒辦法改道s3裡面所有東西 每個 example 下特殊的key e.x.'sdew' 然後配對設定，寫在單獨檔案裡，類似nodeProperties</li>
 5<li>避風港跟三振條款</li>
 每個 componentSet 要記錄一個 tools 的 version 不然怕以後更新互有衝突
 5<li>會有需要設計的版本管理嗎 ? // 做個儲存的按鈕，自動存的時候有動畫，自己點的時候可commit類似publish, 但是是給draft的</li>
 5<li>project's favicon and SEO can be edited in the project modal</li>
 5<li>seo sitemap page要可以挑選</li>
-5<li>carousel 可以用 鍵盤控制，動畫的出現</li>
 <li>table</li>
 <li>assets folder / component folder</li>
 <li>試試看能不能解決 drawer的layout</li>

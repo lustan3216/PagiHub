@@ -9,7 +9,7 @@ import {
   toArray
 } from '@/utils/tool'
 import Vue from 'vue'
-import { defineNodeProperties } from '@/utils/nodeProperties'
+import { defineProperties } from '@/utils/nodeProperties'
 import {
   getRootComponentSetId,
   recordRootComponentSetId
@@ -73,7 +73,7 @@ const mutations = {
         childrenOf[parentId] = childrenOf[parentId] || []
         childrenOf[parentId].push(value)
 
-        defineNodeProperties(value)
+        defineProperties(value)
         Vue.set(componentsMap, key, value)
         recordRootComponentSetId(value[ID])
       }
@@ -110,7 +110,7 @@ const mutations = {
       }
 
       Vue.set(state.tmpComponentsMap, id, node)
-      defineNodeProperties(node)
+      defineProperties(node)
     })
   },
 
@@ -144,7 +144,7 @@ const mutations = {
       }
 
       Vue.set(componentsMap, id, node)
-      defineNodeProperties(node)
+      defineProperties(node, state)
     })
   },
 

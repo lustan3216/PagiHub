@@ -35,7 +35,7 @@
 import { mapActions } from 'vuex'
 import { required } from '@/validator'
 import { capitalize } from '@/utils/string'
-import { NODE_TYPE_STRING, KIND } from '@/const'
+import { KIND } from '@/const'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import { isComponentSet } from '@/utils/node'
 
@@ -75,7 +75,7 @@ export default {
   },
   computed: {
     type() {
-      return capitalize(NODE_TYPE_STRING[this.node[KIND]])
+      return capitalize(this.node[KIND])
     }
   },
   methods: {

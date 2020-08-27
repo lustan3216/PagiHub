@@ -37,6 +37,8 @@ export default {
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
     buttons() {
+      let xxlHidden = false
+      let xlHidden = false
       let lgHidden = false
       let mdHidden = false
       let smHidden = false
@@ -45,6 +47,8 @@ export default {
 
       if (this.selectedComponentNodes.length === 1) {
         const { hidden } = this.selectedComponentNodes[0]
+        xxlHidden = hidden && hidden.xxl
+        xlHidden = hidden && hidden.xl
         lgHidden = hidden && hidden.lg
         mdHidden = hidden && hidden.md
         smHidden = hidden && hidden.sm
@@ -54,8 +58,14 @@ export default {
 
       return [
         {
+          name: 'xl',
+          content: `Hidden when screen larger than ${BREAK_POINTS.xl}px`,
+          icon: 'el-icon-data-line',
+          hidden: xlHidden
+        },
+        {
           name: 'lg',
-          content: `Hidden when screen larger than ${BREAK_POINTS.lg}px`,
+          content: `Hidden when screen larger than ${BREAK_POINTS.lg}px and smaller than ${BREAK_POINTS.xl}px`,
           icon: 'el-icon-data-line',
           hidden: lgHidden
         },
@@ -108,6 +118,6 @@ export default {
 <style scoped lang="scss">
 .el-button--mini,
 .el-button--mini.is-round {
-  padding: 7px 17px !important;
+  padding: 7px 13px !important;
 }
 </style>

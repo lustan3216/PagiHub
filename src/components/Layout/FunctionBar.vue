@@ -1,35 +1,5 @@
 <template>
-  <dialog-interacted
-    v-if="isPreviewMode"
-    :resizable="false"
-    class="preview"
-  >
-    <portal-target
-      name="ViewPort"
-      class="inline-block m-l-15 box-shadow"
-    />
-
-    <el-tooltip
-      v-if="isPreviewMode"
-      effect="light"
-      content="Close Preview"
-      placement="bottom"
-    >
-      <el-button
-        v-shortkey="['esc']"
-        icon="el-icon-close"
-        circle
-        class="shadow-button m-l-15"
-        @click="SET_DRAFT_MODE"
-        @shortkey.native="SET_DRAFT_MODE"
-      />
-    </el-tooltip>
-  </dialog-interacted>
-
-  <nav
-    v-else-if="isDraftMode"
-    class="align-center"
-  >
+  <nav class="align-center">
     <i
       v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
       :disabled="!selectedComponentIds.length"
@@ -108,11 +78,7 @@
       />
     </el-tooltip>
 
-    <el-button
-      :disabled="!editingComponentSetId"
-      type="text"
-      icon="el-icon-upload"
-    />
+    <dialog-publish />
   </nav>
 </template>
 
@@ -122,11 +88,13 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import { vmPasteNodes, vmRemoveNode, vmCreateEmptyItem } from '@/utils/vmMap'
 import { arrayLast } from '@/utils/tool'
+import DialogPublish from '@/components/Setup/DialogPublish'
 
 export default {
   name: 'FunctionBar',
   components: {
-    DialogComponentSet
+    DialogComponentSet,
+    DialogPublish
   },
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
@@ -139,7 +107,7 @@ export default {
   },
   methods: {
     ...mapActions('app', ['setCopySelectedNodeId']),
-    ...mapMutations('mode', ['SET_PREVIEW_MODE', 'SET_DRAFT_MODE']),
+    ...mapMutations('mode', ['SET_PREVIEW_MODE']),
     ...mapMutations('component', ['REDO', 'UNDO']),
     isMac,
     publish() {},

@@ -1,9 +1,7 @@
 import store from './index'
 import JsonHistory from 'json-history'
-import RemoteState from '@/utils/remoteState'
+import draftState from '@/utils/draftState'
 import { cloneJsonWithoutChildren } from '@/utils/node'
-
-const remoteState = new RemoteState()
 
 const jsonHistory = new JsonHistory({
   steps: 200,
@@ -20,13 +18,13 @@ const jsonHistory = new JsonHistory({
 
   callback: {
     onDeltasChanged() {
-      remoteState.emitWhenRecord()
+      draftState.emitWhenRecord()
     },
     onUndid() {
-      remoteState.emitWhenUndo()
+      draftState.emitWhenUndo()
     },
     onRedid() {
-      remoteState.emitWhenRedo()
+      draftState.emitWhenRedo()
     }
   }
 })

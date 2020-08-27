@@ -49,7 +49,7 @@
                 :key="data.updatedAt"
                 :id="data.id"
                 :parent-id="data.parentId"
-                :is="`dialog-${kebabCase(typeString(data))}`"
+                :is="`dialog-${kebabCase(data)}`"
               />
             </div>
           </transition>
@@ -62,14 +62,14 @@
 <script>
 import { Tree } from 'element-ui'
 import { mapState, mapActions, mapMutations } from 'vuex'
-import { NODE_TYPE, NODE_TYPE_STRING } from '@/const'
+import { NODE_TYPE } from '@/const'
 import DialogProject from './DialogProject'
 import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
 import NodeName from '../TemplateUtils/NodeName'
 import { kebabCase } from '@/utils/string'
-import { isComponentSet, isProject, isFolder, typeString } from '@/utils/node'
+import { isComponentSet, isProject, isFolder } from '@/utils/node'
 
 export default {
   name: 'PanelProject',
@@ -83,7 +83,6 @@ export default {
   },
   data() {
     return {
-      NODE_TYPE_STRING,
       ...NODE_TYPE,
       hoverId: null
     }
@@ -111,7 +110,6 @@ export default {
     isComponentSet,
     isProject,
     isFolder,
-    typeString,
     kebabCase,
     ...mapMutations('component', ['SET_EDITING_COMPONENT_SET_ID']),
     ...mapActions('component', ['modifyProjectNodeParent']),

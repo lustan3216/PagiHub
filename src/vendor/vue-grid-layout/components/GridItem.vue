@@ -64,11 +64,14 @@
     background-origin: content-box;
     box-sizing: border-box;
     cursor: se-resize;
-
     z-index: 100;
-    background-color: white !important;
+    transition: background-color 0.3s, border-radius 0.3s;
+  }
+
+  .vue-grid-item:hover > .vue-resizable-handle {
     border-radius: 10px 10px 0;
     opacity: 0.8;
+    background-color: white;
   }
 
   .vue-grid-item > .vue-rtl-resizable-handle {

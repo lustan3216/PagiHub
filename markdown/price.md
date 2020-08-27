@@ -9,7 +9,6 @@ user management，每個 component 可根據不同 user 換不同 component
 且可內船 data or 外傳，而且是 reactive 的，可以互動
 anaylistic daily data
 host in own domain,
-擴充字體 / webfontloader
 form submit amount 1000, can be deleted, 前 1 萬筆免費，後面開始收錢每多少收一次
 connect to google sheet 跟上面一樣
 可上傳影音

@@ -1,8 +1,7 @@
 <template>
   <div class="profile">
-
     <el-alert
-      v-if="!verified || !username"
+      v-if="!username"
       :description="warning"
       class="m-t-20"
       title="Have no ability to publish project yet"
@@ -19,22 +18,8 @@
       <el-form-item label="EMAIL">
         <el-input
           :value="email"
-          class="no-action"
-        >
-          <template v-if="!verified">
-            <el-button
-              slot="prepend"
-              type="warn"
-              icon="el-icon-warning-outline"
-            />
-            <el-button
-              slot="append"
-              icon="el-icon-s-promotion"
-            >
-              Send the verified email.
-            </el-button>
-          </template>
-        </el-input>
+          readonly
+        />
       </el-form-item>
 
       <el-form-item
@@ -44,8 +29,8 @@
         <el-input
           v-model="data.username"
           :class="{ 'no-action': username }"
+          :readonly="data.username"
           placeholder="lotsDesign123"
-          @focus="submitForm"
         />
       </el-form-item>
 
@@ -56,7 +41,6 @@
         <el-input
           v-model="data.facebookId"
           placeholder="lots-design"
-          @focus="submitForm"
         >
           <template slot="prepend">Https://www.facebook.com/</template>
         </el-input>
@@ -69,7 +53,6 @@
         <el-input
           v-model="data.instagramId"
           placeholder="lulala"
-          @focus="submitForm"
         >
           <template slot="prepend">@</template>
         </el-input>
@@ -81,9 +64,14 @@
           v-model="data.description"
           show-word-limit
           type="textarea"
-          @focus="submitForm"
         />
       </el-form-item>
+
+      <el-button
+        type="primary"
+        plain
+        @click="submitForm"
+      >Submit</el-button>
     </el-form>
   </div>
 </template>
@@ -103,7 +91,6 @@ export default {
     return {
       dirty: false,
       data: {
-        username: null,
         description: null,
         facebookId: null,
         instagramId: null
@@ -133,26 +120,29 @@ export default {
     }
   },
   created() {
-    this.getCurrentUser().then(user => {
-      this.coverPhoto = user.coverPhoto
-      this.email = user.email
-      this.verified = user.verified
-      this.username = user.username
-      this.data.username = user.username
-      this.data.description = user.description
-      this.data.facebookId = user.facebookId
-      this.data.instagramId = user.instagramId
-      this.$watch('data', () => {
-        this.dirty = true
-      }, {
-        deep: true
-      })
-    })
+    // this.getCurrentUser().then(user => {
+    //   this.coverPhoto = user.coverPhoto
+    //   this.email = user.email
+    //   this.verified = user.verified
+    //   this.username = user.username
+    //   this.data.username = user.username
+    //   this.data.description = user.description
+    //   this.data.facebookId = user.facebookId
+    //   this.data.instagramId = user.instagramId
+    //   this.$watch(
+    //     'data',
+    //     () => {
+    //       this.dirty = true
+    //     },
+    //     {
+    //       deep: true
+    //     }
+    //   )
+    // })
   },
   methods: {
-    ...mapActions('user', ['getCurrentUser']),
     submitForm() {
-      this.$refs.form.validate((valid) => {
+      this.$refs.form.validate(valid => {
         if (valid) {
           patchCurrentUser(this.data)
           Message({
@@ -171,10 +161,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .profile {
-    padding: 30px;
-    margin: 10vh auto;
+.profile {
+  padding: 30px;
+  margin: 10vh auto;
 
-    width: 50vw;
-  }
+  width: 50vw;
+}
 </style>

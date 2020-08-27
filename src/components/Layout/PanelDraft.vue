@@ -1,6 +1,7 @@
 <template>
   <div
     ref="panelDraft"
+    :class="{ draft: isDraftMode }"
     class="editor"
   >
     <portal
@@ -12,16 +13,21 @@
 
     <sidebar-left v-if="isDraftMode" />
 
-    <view-port class="view-port interact-view">
+    <view-port
+      :class="{ draft: isDraftMode }"
+      style="flex: 1"
+    >
       <art-board />
     </view-port>
 
     <sidebar-right v-if="isDraftMode" />
+
+    <preview-controller v-if="isPreviewMode" />
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
 import ComponentSet from '../Templates/ComponentSet'
@@ -32,13 +38,14 @@ export default {
     ArtBoard,
     ViewPort,
     ComponentSet,
+    PreviewController: () => import('@/components/Layout/PreviewController'),
     SidebarRight: () => import('@/components/Layout/SidebarRight'),
     SidebarLeft: () => import('@/components/Layout/SidebarLeft'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
     PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
   created() {
-    if (this.$route.params.projectId) {
+    if (this.$route.params.projectId && this.isDraftMode) {
       this.getProject(this.$route.params.projectId).then(project => {
         if (project) {
           this.getAssets()
@@ -51,6 +58,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('mode', ['SET_DRAFT_MODE']),
     ...mapActions('example', ['initExamples']),
     ...mapActions('component', ['getProject']),
     ...mapActions('asset', ['getAssets'])
@@ -60,17 +68,11 @@ export default {
 
 <style scoped lang="scss">
 .editor {
-  @include calc-vh('height', '100vh - 50px');
   display: flex;
   overflow: hidden;
   background-color: $color-grey;
 }
-.view-port {
-  overflow: hidden;
-  position: relative;
-  flex: 1;
-}
-.interact-view {
-  @include calc-vh('height', '100vh - 80px');
+.draft.editor {
+  @include calc-vh('height', '100vh - 50px');
 }
 </style>

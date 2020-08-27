@@ -26,15 +26,15 @@
           icon="el-icon-picture-outline-round"
           size="medium"
           class="link-li"
-          @click="$router.push({ name: 'Profile' })"
-        >Profile</el-button>
-        <el-button
-          type="text"
-          icon="el-icon-picture-outline-round"
-          size="medium"
-          class="link-li"
           @click="$router.push({ name: 'Pages' })"
         >Pages</el-button>
+<!--        <el-button-->
+<!--          type="text"-->
+<!--          icon="el-icon-picture-outline-round"-->
+<!--          size="medium"-->
+<!--          class="link-li"-->
+<!--          @click="$router.push({ name: 'Profile' })"-->
+<!--        >Profile</el-button>-->
         <el-button
           type="text"
           icon="el-icon-help"

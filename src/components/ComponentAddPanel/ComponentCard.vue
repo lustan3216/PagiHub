@@ -1,5 +1,8 @@
 <template>
-  <div class="card">
+  <div
+    v-if="show"
+    class="card"
+  >
     <div class="p-10 justify-between">
       <span style="visibility: hidden">ADD</span>
       <b style="line-height: 28px;">
@@ -44,6 +47,7 @@ import { mapActions } from 'vuex'
 import { shortTagName } from '@/utils/node'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { Tag } from 'element-ui'
+import gsap from 'gsap'
 
 export default {
   name: 'ComponentCard',
@@ -52,6 +56,10 @@ export default {
     ElTag: Tag
   },
   props: {
+    delay: {
+      type: Number,
+      required: true
+    },
     component: {
       type: Object,
       required: true
@@ -60,6 +68,23 @@ export default {
       type: String,
       required: true
     }
+  },
+  data() {
+    return {
+      show: false
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.show = true
+      this.$nextTick(() => {
+        gsap.from(this.$el, {
+          opacity: 0,
+          duration: 3,
+          ease: 'elastic'
+        })
+      })
+    }, this.delay)
   },
   methods: {
     ...mapActions('app', ['resizeNodeQuickFn']),

@@ -45,23 +45,16 @@
             "Arn"
         ]
     },
-    "useDefault": "defaultSocial",
+    "useDefault": "default",
     "hostedUI": true,
     "usernameAttributes": [
         "email"
     ],
     "triggers": "{}",
-    "hostedUIDomainName": "staging",
-    "authProvidersUserPool": [
-        "Facebook",
-        "Google"
-    ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
     "userPoolGroupList": [],
     "parentStack": {
         "Ref": "AWS::StackId"
     },
     "permissions": [],
-    "dependsOn": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://staging.lots.design/\",\"https://localhost:8080/\",\"https://d3krzgs8wl8eha.cloudfront.net/\"],\"LogoutURLs\":[\"https://staging.lots.design/\",\"https://localhost:8080/\",\"https://d3krzgs8wl8eha.cloudfront.net/\"]}"
+    "dependsOn": []
 }

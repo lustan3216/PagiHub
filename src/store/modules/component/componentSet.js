@@ -3,15 +3,17 @@ import {
   deleteComponentSet,
   getComponentSetChildren,
   getComponentSets,
-  patchComponentSet
+  patchComponentSet,
+  publishComponentSet
 } from '@/api/node'
 import { recordRootComponentSetIdByArray } from '@/utils/rootComponentSetId'
 import { getCopyComponentIds, getTmpComponentsArray } from '@/store'
 import { layers } from '@/templateJson/basic'
 import { isComponentSet, traversalSelfAndChildren } from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
-import { objectFirstKey } from '@/utils/tool'
+import { cloneJson, objectFirstKey } from '@/utils/tool'
 import { appendIdNested } from '@/utils/nodeId'
+import draftState from '@/utils/draftState'
 
 export const actions = {
   async getComponentSetChildren({ commit, state }, id) {
@@ -20,6 +22,8 @@ export const actions = {
     if (imported) {
       return
     }
+
+    commit('SET_EDITING_COMPONENT_SET_ID', id)
 
     const componentsArray = await getComponentSetChildren(id)
     if (componentsArray.length) {
@@ -32,10 +36,10 @@ export const actions = {
 
   async getComponentSets({ commit, state }, projectId) {
     const { data: nodes } = await getComponentSets(projectId)
-    commit('SET_NODES_TO_MAP', nodes)
     if (nodes[0] && nodes[0].id) {
       commit('SET_EDITING_COMPONENT_SET_ID', nodes[0].id)
     }
+    commit('SET_NODES_TO_MAP', nodes)
   },
 
   async createComponentSet(
@@ -66,6 +70,21 @@ export const actions = {
       tags
     })
     commit('SET_NODES_TO_MAP', data)
+  },
+
+  async publishComponentSet({ commit, state }, description) {
+    const node = state.componentsMap[state.editingComponentSetId]
+    const tree = cloneJson(node)
+    await draftState.publish(tree)
+    const { data: versionNode } = await publishComponentSet(
+      state.editingComponentSetId,
+      tree,
+      description
+    )
+    commit('SOFT_RECORD', {
+      path: `${versionNode.id}.version`,
+      value: versionNode.version
+    })
   },
 
   async deleteComponentSet({ state, commit, getters, dispatch }, id) {

@@ -1,16 +1,16 @@
 import { SET } from '../index'
-import { getCurrentUser } from '@/api/user'
 import { Auth } from 'aws-amplify'
+import router from '@/router'
 
 const state = {
   id: null,
   email: null,
-  verified: false,
   coverPhoto: null,
   username: null,
   description: null,
   facebookId: null,
-  instagramId: null
+  instagramId: null,
+  user: null
 }
 
 const initData = JSON.parse(JSON.stringify(state))
@@ -27,13 +27,31 @@ const mutations = {
 const actions = {
   async getCurrentUser({ commit }) {
     try {
-      const { data } = await getCurrentUser()
-      commit('SET', data)
-      return data
+      window.Auth = Auth
+      const user = await Auth.currentAuthenticatedUser()
+      const { attributes } = user
+      const id = JSON.parse(attributes.identities)[0].userId
+
+      commit('SET', {
+        id,
+        user,
+        email: attributes.email,
+        coverPhoto: attributes['custom:coverPhoto'],
+        username: attributes['custom:username'],
+        description: attributes['custom:description'],
+        facebookId: attributes['custom:facebookId'],
+        instagramId: attributes['custom:instagramId']
+      })
     }
     catch {
+      router.push('/')
       commit('INIT')
     }
+  },
+  updateUser({ state, commit }, {}) {
+    state.user.updateAttributes([{ Name: 'custom:description',Value: '1' }], () => {
+
+    })
   },
   async logout({ commit }) {
     try {

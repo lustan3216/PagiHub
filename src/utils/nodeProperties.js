@@ -2,7 +2,7 @@ import store from '@/store'
 import { vmGet } from '@/utils/vmMap'
 import { getRootComponentSetId } from '@/utils/rootComponentSetId'
 
-export function defineNodeProperties(node) {
+export function defineProperties(node) {
   const defined = 'parentNode' in node
 
   if (!defined) {

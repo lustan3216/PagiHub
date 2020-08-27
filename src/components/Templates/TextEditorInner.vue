@@ -11,7 +11,7 @@
         />
       </portal>
 
-      <portal to="PanelDraft">
+      <portal to="App">
         <editor-menu-bubble
           v-slot="{ commands, isActive, getMarkAttrs, menu }"
           :editor="editor"

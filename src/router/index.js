@@ -39,7 +39,7 @@ export default new VueRouter({
         {
           path: 'pages',
           name: 'Pages',
-          component: () => import('@/pages/Pages')
+          component: () => import('@/pages/Websites')
         }
       ]
     },

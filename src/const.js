@@ -36,7 +36,6 @@ export const GRID_GENERATOR_ITEM = 'grid-generator-item'
 
 export const COLUMNS = 96
 export const COLUMN_OBJECT = {
-  xxl: COLUMNS,
   xl: COLUMNS,
   lg: COLUMNS,
   md: COLUMNS,
@@ -45,7 +44,6 @@ export const COLUMN_OBJECT = {
   xxs: COLUMNS
 }
 export const BREAK_POINTS = {
-  xxl: 1600,
   xl: 1440,
   lg: 1200,
   md: 992,
@@ -54,18 +52,13 @@ export const BREAK_POINTS = {
   xxs: 320
 }
 
-export const EXAMPLE = 'EXAMPLE' // need to uppercase separate id of different types
-// 01EDEHZQ2M9V8X4VZ7HEFJ1R0A could be project or componentSet
-// 12a01EDEHZQ2M9V8X4VZ7HEFJ1R0A is component
-// 12aEXAMPLE is example
-
 export const SORT_INDEX = 'sortIndex'
 export const PATH = 'path'
 
 export const NODE_TYPE = {
-  PROJECT: 'p',
+  PROJECT: 'project',
   FOLDER: 1,
-  COMPONENT_SET: 's',
+  COMPONENT_SET: 'componentSet',
   COMPONENT: undefined
 }
 
@@ -73,11 +66,4 @@ export const STYLE_STATE = {
   none: 0,
   hover: 1,
   click: 2
-}
-
-export const NODE_TYPE_STRING = {
-  [NODE_TYPE.PROJECT]: 'project',
-  [NODE_TYPE.FOLDER]: 'folder',
-  [NODE_TYPE.COMPONENT_SET]: 'componentSet',
-  [NODE_TYPE.COMPONENT]: 'component'
 }

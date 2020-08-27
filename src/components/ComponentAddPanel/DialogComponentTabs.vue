@@ -105,12 +105,13 @@
           style="flex-wrap: wrap"
         >
           <el-col
-            v-for="component in components[currentCategory]"
+            v-for="(component, index) in components[currentCategory]"
             :key="component.id"
             :span="column"
             style="margin-bottom: 35px;"
           >
             <component-card
+              :delay="index * 100"
               :component="component"
               :max-height="maxHeight"
               @add="addTemplate(component)"
@@ -214,11 +215,11 @@ export default {
         .filter(node => node.id !== this.editingComponentSetId)
     },
     components() {
-      return {
+      return Object.freeze({
         basicComponents: this.basicExamples,
         localComponents: this.componentsSets,
         publicComponents: []
-      }
+      })
     }
   },
   methods: {
@@ -256,6 +257,9 @@ export default {
   .vue-grid-layout {
     min-height: 150px;
   }
+  .el-dialog__headerbtn {
+    z-index: 10;
+  }
 }
 
 .button {
@@ -283,6 +287,7 @@ export default {
 .search {
   padding: 10px;
   border-bottom: 1px solid $color-grey;
+  overflow: hidden;
 }
 .el-button-group {
   width: 100%;
@@ -298,6 +303,7 @@ export default {
 }
 ::v-deep > .el-dialog {
   border-radius: 5px;
+  overflow: hidden;
 }
 .component {
   height: 200px;
