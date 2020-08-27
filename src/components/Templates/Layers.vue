@@ -1,8 +1,8 @@
 <template>
   <div class="relative h-100">
-    <template v-for="(child, index) in innerChildren">
+    <template v-for="child in innerChildren">
       <controller-layer
-        v-if="index === 0"
+        v-if="child.sortIndex === 0"
         :id="child.id"
         :key="child.id"
       >
@@ -13,9 +13,9 @@
         v-else
         :id="child.id"
         :key="child.id"
-        :style="{ 'z-index': index }"
-        :class="{ absolute: index }"
-        :data-layer="Boolean(index)"
+        :style="{ 'z-index': child.sortIndex }"
+        :class="{ absolute: child.sortIndex }"
+        :data-layer="Boolean(child.sortIndex)"
       />
     </template>
   </div>

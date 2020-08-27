@@ -10,7 +10,9 @@ import {
   traversalChildren,
   getNode,
   traversalAncestorAndSelf,
-  traversalSelfAndChildren
+  traversalSelfAndChildren,
+  isLayers,
+  isGrid
 } from '@/utils/node'
 import { appendIdNested } from '@/utils/nodeId'
 import * as basicTemplates from '@/templateJson/basic'
@@ -57,6 +59,10 @@ export default {
       nodeTree = cloneJson(nodeTree)
       // if node has not componentSetId means self is componentSet
       appendIdNested(nodeTree, this.id)
+
+      if (isGrid(nodeTree)) {
+        nodeTree[SORT_INDEX] = this.children.length
+      }
 
       traversalSelfAndChildren(nodeTree, (_node, _parentNode) => {
         // eslint-disable-next-line
