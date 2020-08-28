@@ -1,10 +1,10 @@
 import store from '@/store'
-import { vmGet } from '@/utils/vmMap'
-import { getRootComponentSetId } from '@/utils/rootComponentSetId'
+import { recordRootComponentSetId, getRootComponentSetId } from '@/utils/rootComponentSetId'
 
-export function defineProperties(node) {
+export function defineProperties(node, rootComponentSetId) {
+  recordRootComponentSetId(node, rootComponentSetId)
+
   const defined = 'parentNode' in node
-
   if (!defined) {
     const { componentsMap } = store.state.node
 

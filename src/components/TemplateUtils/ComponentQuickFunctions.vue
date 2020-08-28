@@ -20,12 +20,12 @@
       :class="[top > 100 ? 'top' : 'bottom']"
       class="wrapper flex"
     >
-      <node-name
+      <component-name
         :id="id"
         class="title"
       >
         <i :class="[itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank']" />
-      </node-name>
+      </component-name>
 
       <portal-target
         v-if="isDraftMode"
@@ -62,7 +62,7 @@
 
 <script>
 import { mapMutations, mapState, mapActions } from 'vuex'
-import NodeName from './NodeName'
+import ComponentName from './ComponentName'
 import ContextMenu from './ContextMenu'
 import { Popover } from 'element-ui'
 import { isGridItem, getNode } from '@/utils/node'
@@ -80,9 +80,9 @@ let heightShared = 0
 export const quickFnMap = {}
 
 export default {
-  name: 'NodeQuickFunctions',
+  name: 'ComponentQuickFunctions',
   components: {
-    NodeName,
+    ComponentName,
     ContextMenu,
     ElPopover: Popover
   },

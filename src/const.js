@@ -14,7 +14,7 @@ export const VALUE = 'value'
 export const KIND = 'kind'
 
 export const TAG = 'tag' // 拿來找vueComponent用的
-export const KEY = 'key' // 有些vueComponent會被當曾別的應用，像是layer會被當曾artBoard, or grid 變成carousel indicator, 拿來特別辦事用
+export const POLYMORPHISM = 'polymorphism' // 有些vueComponent會被當曾別的應用，像是layer會被當曾artBoard, or grid 變成carousel indicator, 拿來特別辦事用
 export const LABEL = 'label' // 前端顯示且可被修改的
 
 export const CAN_NEW_ITEM = 'canNewItem'
@@ -60,7 +60,7 @@ export const NODE_TYPE = {
   WEBSITE: 'website',
   PAGE: 'page',
   FOLDER: 1,
-  COMPONENT_SET: 'componentSet',
+  COMPONENT_SET: 'component-set',
   COMPONENT: undefined
 }
 

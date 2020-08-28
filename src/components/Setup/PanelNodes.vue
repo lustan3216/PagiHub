@@ -32,7 +32,7 @@
             v-if="checkHidden(data)"
             :id="data.id"
           />
-          <node-name
+          <component-name
             :id="data.id"
             :class="{ active: selectedComponentIds.includes(data.id) }"
             class="text-left"
@@ -41,7 +41,7 @@
           />
 
           <transition name="fade">
-            <node-controller
+            <component-controller
               v-if="data.id === hoverId"
               :id="data.id"
               class="controller hover-color"
@@ -66,12 +66,12 @@ import { Tree } from 'element-ui'
 import { SORT_INDEX, LAYERS, SOFT_DELETE, STYLE } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { arrayUniq, cloneJson, deleteBy } from '@/utils/tool'
-import NodeController from '../TemplateUtils/NodeController'
-import NodeName from '../TemplateUtils/NodeName'
+import ComponentController from '../TemplateUtils/ComponentController'
+import ComponentName from '../TemplateUtils/ComponentName'
 import Touchable from '../TemplateUtils/Touchable'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
-import { sortByIndex, traversalSelfAndChildren } from '@/utils/node'
+import { isLayers, sortByIndex, traversalSelfAndChildren } from '@/utils/node'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -79,8 +79,8 @@ export default {
   name: 'PanelNodes',
   components: {
     ElTree: Tree,
-    NodeController,
-    NodeName,
+    ComponentController,
+    ComponentName,
     Touchable,
     Visible,
     Hidden
@@ -106,9 +106,10 @@ export default {
 
       const cloneTree = cloneJson(tree)
       traversalSelfAndChildren(cloneTree, (node, parentNode) => {
-        if ([LAYERS].includes(node.tag) && node.children) {
+        if (isLayers(node) && node.children) {
           parentNode.children = sortByIndex(node.children, false)
         }
+
         if (
           node.children.length !==
           arrayUniq(node.children.map(x => x.id)).length

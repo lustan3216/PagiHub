@@ -15,6 +15,7 @@
     />
 
     <el-button
+      v-if="!canNotDelete"
       type="text"
       icon="el-icon-delete"
       @click.stop="() => vmRemoveNode(node)"
@@ -36,14 +37,13 @@
 import { mapMutations } from 'vuex'
 import Touchable from './Touchable'
 import Visible from './Visible'
-import { GRID_GENERATOR_ITEM } from '@/const'
 import { isMac } from '@/utils/device'
-import { isLayers } from '@/utils/node'
+import { isComponentSet, isGridItem, isLayers, isProject } from '@/utils/node'
 
 import { vmCreateEmptyItem, vmPasteNode, vmRemoveNode } from '@/utils/vmMap'
 
 export default {
-  name: 'NodeController',
+  name: 'ComponentController',
   components: {
     Visible,
     Touchable
@@ -55,6 +55,18 @@ export default {
     }
   },
   computed: {
+    canNotDelete() {
+      const { parentNode } = this.node
+      if (isProject(parentNode)) {
+        return true
+      }
+      else if (
+        isComponentSet(parentNode) &&
+        parentNode.children.length === 1
+      ) {
+        return true
+      }
+    },
     node() {
       return this.componentsMap[this.id]
     },
@@ -62,7 +74,7 @@ export default {
       return this.node.children
     },
     isGridItem() {
-      return this.node.tag === GRID_GENERATOR_ITEM
+      return isGridItem(this.node)
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)

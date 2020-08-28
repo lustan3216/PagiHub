@@ -10,7 +10,7 @@
 import { mapState, mapMutations } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { assignDefaultValue, boolean, select, number } from './utils/ruleTool'
-import { SOFT_DELETE, CHILDREN, KEY } from '@/const'
+import { SOFT_DELETE, CHILDREN, POLYMORPHISM } from '@/const'
 
 // https://gs-shop.github.io/vue-slick-carousel/#/api
 // data-swiper-parallax 在grid item設定
@@ -115,7 +115,7 @@ export default {
     },
     arrow(value) {
       const IndicatorGrid = this.componentsMap[this.id][CHILDREN].find(
-        x => x[KEY] === 'indicators'
+        x => x[POLYMORPHISM] === 'indicators'
       )
       this.RECORD([
         {

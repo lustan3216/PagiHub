@@ -5,14 +5,16 @@ import {
   GRID_GENERATOR_ITEM,
   SORT_INDEX
 } from '@/const'
-import { cloneJson, arrayLast } from '@/utils/tool'
+import { cloneJson, arrayLast, getValueByPath } from '@/utils/tool'
 import {
   traversalChildren,
   getNode,
   traversalAncestorAndSelf,
   traversalSelfAndChildren,
   isLayers,
-  isGrid
+  isGrid,
+  isProject,
+  isComponentSet
 } from '@/utils/node'
 import { appendIdNested } from '@/utils/nodeId'
 import * as basicTemplates from '@/templateJson/basic'
@@ -60,7 +62,7 @@ export default {
       // if node has not componentSetId means self is componentSet
       appendIdNested(nodeTree, this.id)
 
-      if (isGrid(nodeTree)) {
+      if (isLayers(this.node)) {
         nodeTree[SORT_INDEX] = this.children.length
       }
 
@@ -103,12 +105,7 @@ export default {
         return
       }
       // should use vmMap method to call to keep consistency
-      const records = [
-        {
-          path: theNodeGonnaRemove.id,
-          value: undefined
-        }
-      ]
+      const records = []
 
       traversalChildren(theNodeGonnaRemove, child => {
         records.unshift({
@@ -117,15 +114,31 @@ export default {
         })
       })
 
+      if (this.children.length > 1 && isLayers(this.node)) {
+        const children = this.children.filter(
+          child => child.id !== theNodeGonnaRemove.id
+        )
+        children.forEach((child, index) => {
+          records.unshift({
+            path: `${child.id}.${SORT_INDEX}`,
+            value: index
+          })
+        })
+      }
+
       let stopNodeId
 
       traversalAncestorAndSelf(
         this.node,
         ({ id, tag, children, parentNode }) => {
           stopNodeId = id
-          if (
-            parentNode.parentNode.tag === COMPONENT_SET &&
-            parentNode.parentNode.children.length === 1
+
+          if (isProject(parentNode)) {
+            return 'stop'
+          }
+          else if (
+            isComponentSet(parentNode) &&
+            parentNode.children.length === 1
           ) {
             return 'stop'
           }

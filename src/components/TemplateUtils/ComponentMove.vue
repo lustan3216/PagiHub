@@ -16,7 +16,7 @@ const emptyGird = () =>
   })
 
 export default {
-  name: 'NodeMove',
+  name: 'ComponentMove',
   props: {
     id: {
       type: String,

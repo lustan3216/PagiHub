@@ -12,6 +12,7 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
+刪除有問題 第一層node也不要刪除
 page 裡面的instance 要可以點右鍵跳到主component
 instance 可以直接複製，跟著王 copy父曾是master就直接copy ，但也要做一個按鈕控制分離，當copy進page record一個值紀錄此page有用該component
 carousle 的命名要改，因為grid 的名字會重疊

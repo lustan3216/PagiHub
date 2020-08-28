@@ -30,7 +30,6 @@
 
     <async-component
       v-if="firstChild"
-      :tag="firstChild.tag"
       :id="firstChild.id"
     />
   </el-button>

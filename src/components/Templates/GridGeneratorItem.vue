@@ -18,14 +18,14 @@ import { mapState } from 'vuex'
 import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
-import NodeController from '../TemplateUtils/NodeController'
+import ComponentController from '../TemplateUtils/ComponentController'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 
 export default {
   name: 'GridGeneratorItem',
   components: {
     ControllerLayer,
-    NodeController,
+    ComponentController,
     AsyncComponent
   },
   mixins: [childrenMixin, nodeMixin],

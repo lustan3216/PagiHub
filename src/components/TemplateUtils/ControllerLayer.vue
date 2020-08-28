@@ -9,7 +9,7 @@
       v-if="selected && !isArtBoardResizing"
       :to="`App-${id}`"
     >
-      <node-quick-functions
+      <component-quick-functions
         :id="id"
         :is-example="isExample"
         :item-editing="itemEditing"
@@ -42,7 +42,7 @@ import { CAN_BE_EDITED } from '@/const'
 import { isMac } from '@/utils/device'
 import { getNode } from '@/utils/node'
 import clickOutside from '@/utils/clickOutside'
-import NodeQuickFunctions from './NodeQuickFunctions'
+import ComponentQuickFunctions from './ComponentQuickFunctions'
 
 export default {
   name: 'ControllerLayer',
@@ -51,7 +51,7 @@ export default {
     clickOutside
   },
   components: {
-    NodeQuickFunctions
+    ComponentQuickFunctions
   },
   props: {
     id: {

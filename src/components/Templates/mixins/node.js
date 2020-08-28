@@ -3,7 +3,7 @@ import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { objectAssign, cloneJson } from '@/utils/tool'
 import { PROPS, VALUE, GRID_GENERATOR, MASTER_ID, ID, STYLE } from '@/const'
 import FreeStyle from '@/directive/freeStyle'
-import { getNode } from '@/utils/node'
+import { getNode, isGrid } from '@/utils/node'
 
 let hoverNode = []
 
@@ -115,8 +115,7 @@ export default {
         return
       }
 
-      const $el =
-        this.node.tag === GRID_GENERATOR ? this.$el : this.$el.parentNode
+      const $el = isGrid(this.node) ? this.$el : this.$el.parentNode
 
       if (hover) {
         const node = document.createElement('DIV')

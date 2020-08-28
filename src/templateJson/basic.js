@@ -1,6 +1,6 @@
 import {
   GRID_GENERATOR,
-  KEY,
+  POLYMORPHISM,
   GRID_GENERATOR_ITEM,
   LAYERS,
   CAROUSEL,
@@ -82,7 +82,7 @@ export const carousel = function() {
     [CAN_BE_EDITED]: true,
     [CHILDREN]: [
       gridGenerator({
-        [KEY]: 'indicators',
+        [POLYMORPHISM]: 'indicators',
         [CAN_NOT_COPY]: true,
         [CAN_NOT_DELETE]: true,
         [SOFT_DELETE]: true,
@@ -91,22 +91,22 @@ export const carousel = function() {
           {
             [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }),
             [TAG]: GRID_GENERATOR_ITEM,
-            [KEY]: 'prev',
+            [POLYMORPHISM]: 'prev',
             [CAN_NOT_COPY]: true,
             [CAN_NOT_DELETE]: true
           },
           {
             [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }),
             [TAG]: GRID_GENERATOR_ITEM,
-            [KEY]: 'next',
+            [POLYMORPHISM]: 'next',
             [CAN_NOT_COPY]: true,
             [CAN_NOT_DELETE]: true
           }
         ]
       }),
-      layers({ [LABEL]: 'slider', [KEY]: 'slider' }),
-      layers({ [LABEL]: 'slider', [KEY]: 'slider' }),
-      layers({ [LABEL]: 'slider', [KEY]: 'slider' })
+      layers({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
+      layers({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
+      layers({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' })
     ]
   }
 }

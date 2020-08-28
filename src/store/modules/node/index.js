@@ -10,11 +10,8 @@ import {
 } from '@/utils/tool'
 import Vue from 'vue'
 import { defineProperties } from '@/utils/nodeProperties'
-import {
-  getRootComponentSetId,
-  recordRootComponentSetId
-} from '@/utils/rootComponentSetId'
 import { isComponentSet, isProject } from '@/utils/node'
+import { getRootComponentSetId } from '@/utils/rootComponentSetId'
 import jsonHistory from '@/store/jsonHistory'
 import app from '@/main'
 
@@ -75,7 +72,6 @@ const mutations = {
 
         defineProperties(value)
         Vue.set(componentsMap, key, value)
-        recordRootComponentSetId(value[ID])
       }
       else {
         if (key === 'parentId') {
@@ -115,10 +111,10 @@ const mutations = {
   },
 
   // only for project and componentSet
-  SET_NODES_TO_MAP(state, componentsArray) {
+  SET_NODES_TO_MAP(state, { nodes, rootComponentSetId }) {
     const { rootComponentSetIds, projectIds, componentsMap } = state
 
-    toArray(componentsArray).forEach(node => {
+    toArray(nodes).forEach(node => {
       const id = node[ID]
       const parentId = node[PARENT_ID]
 
@@ -144,7 +140,7 @@ const mutations = {
       }
 
       Vue.set(componentsMap, id, node)
-      defineProperties(node, state)
+      defineProperties(node, rootComponentSetId)
     })
   },
 

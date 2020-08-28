@@ -5,7 +5,7 @@ import {
   traversalAncestorAndSelf,
   traversalChildren
 } from '@/utils/node'
-import { quickFnMap } from '@/components/TemplateUtils/NodeQuickFunctions'
+import { quickFnMap } from '@/components/TemplateUtils/ComponentQuickFunctions'
 import { debounce } from 'throttle-debounce'
 import { BREAK_POINTS } from '@/const'
 
@@ -129,7 +129,7 @@ const actions = {
     }
   },
 
-  resizeNodeQuickFn: debounce(200, function({ state }) {
+  resizeNodeQuickFn: debounce(210, function({ state }) {
     state.selectedComponentIds.forEach(id => {
       if (quickFnMap[id]) {
         quickFnMap[id].resize()
@@ -146,9 +146,7 @@ const getters = {
   },
   selectedComponentNode(state, getters, rootState) {
     if (getters.theOnlySelectedComponentId) {
-      return rootState.node.componentsMap[
-        getters.theOnlySelectedComponentId
-      ]
+      return rootState.node.componentsMap[getters.theOnlySelectedComponentId]
     }
   },
   selectedComponentNodes(state, getters, rootState) {

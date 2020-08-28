@@ -34,7 +34,7 @@ import { LABEL } from '@/const'
 const observable = Vue.observable({ editingId: null })
 
 export default {
-  name: 'NodeName',
+  name: 'ComponentName',
   props: {
     id: {
       type: String,

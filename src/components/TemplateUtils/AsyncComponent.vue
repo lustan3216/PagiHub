@@ -133,12 +133,7 @@ export default {
         return
       }
 
-      if (isComponentSet(this.node)) {
-        return COMPONENT_SET
-      }
-      else {
-        return this.node.tag
-      }
+      return this.node.tag
     },
     isLayers() {
       return isLayers(this.node)

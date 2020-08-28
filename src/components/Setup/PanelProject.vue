@@ -30,9 +30,9 @@
           @click="nodeClick($event, data)"
           @mouseenter="hoverId = data.id"
         >
-          <node-name
+          <component-name
             :id="data.id"
-            :icon="icon[data.kind]"
+            :icon="icon[data.tag]"
             class="w-100 text-left"
           />
 
@@ -50,7 +50,7 @@
                 :key="data.updatedAt"
                 :id="data.id"
                 :parent-id="data.parentId"
-                :is="`dialog-${kebabCase(data.kind)}`"
+                :is="`dialog-${kebabCase(data.tag)}`"
               />
             </div>
           </transition>
@@ -68,7 +68,7 @@ import DialogProject from './DialogProject'
 import DialogFolder from './DialogFolder'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
-import NodeName from '../TemplateUtils/NodeName'
+import ComponentName from '../TemplateUtils/ComponentName'
 import { kebabCase } from '@/utils/string'
 import { isComponentSet, isProject, isFolder } from '@/utils/node'
 
@@ -80,7 +80,7 @@ export default {
     DialogProject,
     DialogFolder,
     DialogDelete,
-    NodeName
+    ComponentName
   },
   data() {
     return {

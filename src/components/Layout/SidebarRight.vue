@@ -37,7 +37,7 @@ import { mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
 import PanelExplain from '../Setup/PanelExplain'
-import NodeInfo from '../TemplateUtils/NodeName'
+import NodeInfo from '../TemplateUtils/ComponentName'
 
 export default {
   name: 'SidebarRight',

@@ -11,7 +11,7 @@ export const actions = {
   async getWebsites({ commit }) {
     const { data } = await getWebsites()
 
-    commit('SET_NODES_TO_MAP', data)
+    commit('SET_NODES_TO_MAP', { nodes: data })
     commit('SET', { projectIds: data.map(x => x[ID]) })
   },
 
@@ -20,7 +20,7 @@ export const actions = {
 
     if (!node) {
       const { data } = await getWebsite(id)
-      commit('SET_NODES_TO_MAP', data)
+      commit('SET_NODES_TO_MAP', { nodes: data })
       node = data
     }
 
@@ -35,13 +35,13 @@ export const actions = {
   async createWebsite({ commit }, form) {
     const { data } = await createWebsite(form)
 
-    commit('SET_NODES_TO_MAP', data)
+    commit('SET_NODES_TO_MAP', { nodes: data })
     return data
   },
 
   async patchWebsite({ commit }, { id, ...form }) {
     const { data } = await patchWebsite(id, form)
-    commit('SET_NODES_TO_MAP', data)
+    commit('SET_NODES_TO_MAP', { nodes: data })
   },
 
   modifyWebsiteNodeParent({ commit, state }, { parentId, id }) {

@@ -3,11 +3,10 @@ import { allEqual, cloneJson, toArray } from './tool'
 import { humanize } from './string'
 import {
   NODE_TYPE,
-  KIND,
   LABEL,
   LAYERS,
   GRID_GENERATOR_ITEM,
-  KEY,
+  POLYMORPHISM,
   GRID_GENERATOR,
   SORT_INDEX
 } from '@/const'
@@ -121,7 +120,7 @@ export function traversalChildren(node, fn) {
 
 const cache = {}
 export function shortTagName(node) {
-  const tag = node[LABEL] || node[KEY] || node.tag
+  const tag = node[LABEL] || node[POLYMORPHISM] || node.tag
   if (cache[tag]) {
     return cache[tag]
   }
@@ -170,27 +169,27 @@ export function isGrid(node) {
 }
 
 export function isProject(node) {
-  return node.kind === NODE_TYPE.PROJECT
+  return node.tag === NODE_TYPE.PROJECT
 }
 
 export function isComponent(node) {
-  return node[KIND] === NODE_TYPE.COMPONENT
+  return !isComponentSet(node) && !isProject(node) && !isFolder(node)
 }
 
 export function isWebsite(node) {
-  return node[KIND] === NODE_TYPE.WEBSITE
+  return node.tag === NODE_TYPE.WEBSITE
 }
 
 export function isPage(node) {
-  return node[KIND] === NODE_TYPE.PAGE
+  return node.tag === NODE_TYPE.PAGE
 }
 
 export function isFolder(node) {
-  return node[KIND] === NODE_TYPE.FOLDER
+  return node.tag === NODE_TYPE.FOLDER
 }
 
 export function isComponentSet(node) {
-  return node[KIND] === NODE_TYPE.COMPONENT_SET
+  return node.tag === NODE_TYPE.COMPONENT_SET
 }
 
 let index = 1

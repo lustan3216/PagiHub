@@ -8,7 +8,7 @@
       <i class="el-icon-more-outline" />
     </span>
 
-    <node-move :id="id">
+    <component-move :id="id">
       <template
         v-slot="{
           canMoveForward,
@@ -55,7 +55,7 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
-    </node-move>
+    </component-move>
   </el-dropdown>
 </template>
 
@@ -63,13 +63,13 @@
 import { isGridItem } from '@/utils/node'
 import { isMac } from '@/utils/device'
 import { vmPasteNode, vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
-import NodeMove from './NodeMove'
+import ComponentMove from './ComponentMove'
 import { mapState } from 'vuex'
 
 export default {
   name: 'ContextMenu',
   components: {
-    NodeMove
+    ComponentMove
   },
   props: {
     id: {

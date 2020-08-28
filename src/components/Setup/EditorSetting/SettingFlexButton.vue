@@ -9,6 +9,7 @@
 import RulesGenerator from './Common/RulesGenerator'
 import { select, assignDefaultValue } from './utils/ruleTool'
 import { CHILDREN, NODE_TYPE } from '@/const'
+import { isComponentSet } from '@/utils/node'
 
 export const REDIRECT_TO = 'redirectTo'
 
@@ -29,7 +30,7 @@ export default {
   computed: {
     linkableComponentSet() {
       return Object.values(this.componentsMap).filter(
-        node => node.kind === NODE_TYPE.COMPONENT_SET
+        node => isComponentSet(node)
       )
     },
     spec() {

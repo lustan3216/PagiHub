@@ -11,7 +11,7 @@ export const actions = {
   async getProjects({ commit }) {
     const { data } = await getProjects()
 
-    commit('SET_NODES_TO_MAP', data)
+    commit('SET_NODES_TO_MAP', { nodes: data })
     commit('SET', { projectIds: data.map(x => x[ID]) })
   },
 
@@ -20,7 +20,7 @@ export const actions = {
 
     if (!node) {
       const { data } = await getProject(id)
-      commit('SET_NODES_TO_MAP', data)
+      commit('SET_NODES_TO_MAP', { nodes: data })
       node = data
     }
 
@@ -35,13 +35,13 @@ export const actions = {
   async createProject({ commit }, form) {
     const { data } = await createProject(form)
 
-    commit('SET_NODES_TO_MAP', data)
+    commit('SET_NODES_TO_MAP', { nodes: data })
     return data
   },
 
   async patchProject({ commit }, { id, ...form }) {
     const { data } = await patchProject(id, form)
-    commit('SET_NODES_TO_MAP', data)
+    commit('SET_NODES_TO_MAP', { nodes: data })
   },
 
   modifyProjectNodeParent({ commit, state }, { parentId, id }) {

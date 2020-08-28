@@ -6,29 +6,29 @@ import {
   patchComponentSet,
   publishComponentSet
 } from '@/api/node'
-import { recordRootComponentSetIdByArray } from '@/utils/rootComponentSetId'
+
+import jsonHistory from '@/store/jsonHistory'
 import { getCopyComponentIds, getTmpComponentsArray } from '@/store'
 import { layers } from '@/templateJson/basic'
 import { isComponentSet, traversalSelfAndChildren } from '@/utils/node'
-import jsonHistory from '@/store/jsonHistory'
 import { cloneJson, objectFirstKey } from '@/utils/tool'
 import { appendIdNested } from '@/utils/nodeId'
 import draftState from '@/utils/draftState'
 
 export const actions = {
   async getComponentSetChildren({ commit, state }, id) {
-    const nodes = Object.values(state.componentsMap)
-    const imported = nodes.find(node => node.parentId === id)
+    const imported = Object.values(state.componentsMap).find(
+      node => node.parentId === id
+    )
     if (imported) {
       return
     }
 
     commit('SET_EDITING_COMPONENT_SET_ID', id)
 
-    const componentsArray = await getComponentSetChildren(id)
-    if (componentsArray.length) {
-      commit('SET_NODES_TO_MAP', componentsArray)
-      recordRootComponentSetIdByArray(id, componentsArray)
+    const nodes = await getComponentSetChildren(id)
+    if (nodes.length) {
+      commit('SET_NODES_TO_MAP', { nodes, rootComponentSetId: id })
       getCopyComponentIds()
       getTmpComponentsArray()
     }
@@ -39,7 +39,7 @@ export const actions = {
     if (nodes[0] && nodes[0].id) {
       commit('SET_EDITING_COMPONENT_SET_ID', nodes[0].id)
     }
-    commit('SET_NODES_TO_MAP', nodes)
+    commit('SET_NODES_TO_MAP', { nodes })
   },
 
   async createComponentSet(
@@ -57,7 +57,10 @@ export const actions = {
       children: tree
     })
     commit('SET_EDITING_COMPONENT_SET_ID', componentSet.id)
-    commit('SET_NODES_TO_MAP', [componentSet, ...children])
+    commit('SET_NODES_TO_MAP', {
+      nodes: [componentSet, ...children],
+      rootComponentSetId: componentSet.id
+    })
   },
 
   async patchComponentSet(
@@ -69,7 +72,7 @@ export const actions = {
       label,
       tags
     })
-    commit('SET_NODES_TO_MAP', data)
+    commit('SET_NODES_TO_MAP', { nodes: data })
   },
 
   async publishComponentSet({ commit, state }, description) {
