@@ -1,7 +1,7 @@
 <template>
   <div class="flex-column h-100">
     <div class="m-b-10 justify-between">
-      <el-button type="text">Components</el-button>
+      <el-button type="text">Website</el-button>
 
       <dialog-component-set
         v-if="projectId"
@@ -78,7 +78,6 @@ export default {
     ElTree: Tree,
     DialogComponentSet,
     DialogProject,
-    DialogFolder,
     DialogDelete,
     ComponentName
   },

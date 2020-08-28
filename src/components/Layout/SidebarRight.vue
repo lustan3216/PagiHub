@@ -36,7 +36,6 @@
 import { mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
-import PanelExplain from '../Setup/PanelExplain'
 import NodeInfo from '../TemplateUtils/ComponentName'
 
 export default {
@@ -44,8 +43,7 @@ export default {
   components: {
     NodeInfo,
     PanelStyles,
-    PanelSettings,
-    PanelExplain
+    PanelSettings
   },
   data() {
     return {

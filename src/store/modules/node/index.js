@@ -54,7 +54,7 @@ const mutations = {
     Vue.delete(tree, key)
   },
   // only for component or component attrs
-  VUE_SET({ componentsMap }, { tree, key, value }) {
+  VUE_SET({ componentsMap, editingComponentSetId }, { tree, key, value }) {
     value = cloneJson(value)
     // 這裡一定要 cloneJson, 不然deltas裡面的值會被改掉
     // VUE_DELETE delete childrenOf[node[ID]] 和 value = cloneJson(value) 一定要 不然會有reference loop bug
@@ -70,7 +70,7 @@ const mutations = {
         childrenOf[parentId] = childrenOf[parentId] || []
         childrenOf[parentId].push(value)
 
-        defineProperties(value)
+        defineProperties(value, editingComponentSetId)
         Vue.set(componentsMap, key, value)
       }
       else {

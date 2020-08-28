@@ -6,10 +6,11 @@ import {
   patchComponentSet,
   publishComponentSet
 } from '@/api/node'
+
+import jsonHistory from '@/store/jsonHistory'
 import { getCopyComponentIds, getTmpComponentsArray } from '@/store'
 import { layers } from '@/templateJson/basic'
 import { isComponentSet, traversalSelfAndChildren } from '@/utils/node'
-import jsonHistory from '@/store/jsonHistory'
 import { cloneJson, objectFirstKey } from '@/utils/tool'
 import { appendIdNested } from '@/utils/nodeId'
 import draftState from '@/utils/draftState'
@@ -55,7 +56,10 @@ export const actions = {
       children: tree
     })
     commit('SET_EDITING_COMPONENT_SET_ID', componentSet.id)
-    commit('SET_NODES_TO_MAP', { nodes: [componentSet, ...children], rootComponentSetId: componentSet.id })
+    commit('SET_NODES_TO_MAP', {
+      nodes: [componentSet, ...children],
+      rootComponentSetId: componentSet.id
+    })
   },
 
   async patchComponentSet(

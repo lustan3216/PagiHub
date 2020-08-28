@@ -65,6 +65,8 @@ import { isMac } from '@/utils/device'
 import { vmPasteNode, vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
 import ComponentMove from './ComponentMove'
 import { mapState } from 'vuex'
+import { getValueByPath } from '@/utils/tool'
+import { COMPONENT_SET } from '@/const'
 
 export default {
   name: 'ContextMenu',
@@ -96,6 +98,22 @@ export default {
         return node && !isGridItem(node)
       }
     },
+    canNotDelete() {
+      const { parentNode } = this.node
+      if (
+        getValueByPath(parentNode, 'parentNode.tag') === COMPONENT_SET &&
+        parentNode.children.length === 1
+      ) {
+        return true
+      }
+      else if (
+        getValueByPath(parentNode, 'parentNode.parentNode.tag') ===
+          COMPONENT_SET &&
+        parentNode.children.length === 1
+      ) {
+        return true
+      }
+    },
     options() {
       return [
         {
@@ -122,6 +140,7 @@ export default {
         { name: 'Duplicate' },
         {
           name: 'Delete',
+          disabled: this.canNotDelete,
           shortKey: ['&#9003;']
         }
       ]

@@ -16,6 +16,7 @@ https://github.com/antonreshetov/vue-eva-icons
 page 裡面的instance 要可以點右鍵跳到主component
 instance 可以直接複製，跟著王 copy父曾是master就直接copy ，但也要做一個按鈕控制分離，當copy進page record一個值紀錄此page有用該component
 carousle 的命名要改，因為grid 的名字會重疊
+移動 grid item的時候 標記外層grid，才知道哪裡被卡住
 
 layer 裡面層級的 css 看要不要要處理，css 要放在哪一個 grid
 bug: grid 畫面縮小後會壞掉

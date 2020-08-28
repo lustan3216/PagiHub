@@ -122,7 +122,6 @@ export default {
       }
     },
     nodeClick(event, node) {
-      console.log(node)
       if (isComponentSet(node)) {
         this.SET_EDITING_COMPONENT_SET_ID(node.id)
       }

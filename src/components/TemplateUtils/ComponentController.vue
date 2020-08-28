@@ -38,9 +38,11 @@ import { mapMutations } from 'vuex'
 import Touchable from './Touchable'
 import Visible from './Visible'
 import { isMac } from '@/utils/device'
-import { isComponentSet, isGridItem, isLayers, isProject } from '@/utils/node'
+import { getValueByPath } from '@/utils/tool'
+import { isGridItem, isLayers } from '@/utils/node'
 
 import { vmCreateEmptyItem, vmPasteNode, vmRemoveNode } from '@/utils/vmMap'
+import { COMPONENT_SET } from '@/const'
 
 export default {
   name: 'ComponentController',
@@ -57,11 +59,15 @@ export default {
   computed: {
     canNotDelete() {
       const { parentNode } = this.node
-      if (isProject(parentNode)) {
+      if (
+        getValueByPath(parentNode, 'parentNode.tag') === COMPONENT_SET &&
+        parentNode.children.length === 1
+      ) {
         return true
       }
       else if (
-        isComponentSet(parentNode) &&
+        getValueByPath(parentNode, 'parentNode.parentNode.tag') ===
+          COMPONENT_SET &&
         parentNode.children.length === 1
       ) {
         return true

@@ -133,11 +133,9 @@ export default {
         ({ id, tag, children, parentNode }) => {
           stopNodeId = id
 
-          if (isProject(parentNode)) {
-            return 'stop'
-          }
-          else if (
-            isComponentSet(parentNode) &&
+          if (
+            parentNode.parentNode &&
+            isComponentSet(parentNode.parentNode) &&
             parentNode.children.length === 1
           ) {
             return 'stop'
