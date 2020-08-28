@@ -3,28 +3,20 @@
     <div class="m-b-10 justify-between">
       <el-button
         type="text"
-        class="no-border small-title"
-        icon="el-icon-arrow-left"
-        @click="$emit('update:visible', false)"
-      >
-        Pages
-      </el-button>
+        class="small-title"
+      >Designs</el-button>
 
-      <el-button-group>
-        <dialog-component-set
-          :parent-id="editingProjectId"
-          polymorphism="page"
-          button-text="Page"
-          button-type="primary"
-        />
-        <el-button type="primary">Routes</el-button>
-      </el-button-group>
+      <dialog-component-set
+        polymorphism="design"
+        button-text="Design"
+        button-type="primary"
+      />
     </div>
 
     <el-tree
       ref="tree"
-      :data="pages"
-      :indent="16"
+      :data="designs"
+      :indent="12"
       class="tree"
       node-key="id"
       draggable
@@ -54,7 +46,7 @@
                 :key="data.updatedAt"
                 :id="data.id"
                 :parent-id="editingProjectId"
-                polymorphism="page"
+                polymorphism="design"
               />
             </div>
           </transition>
@@ -76,24 +68,18 @@ import { kebabCase } from '@/utils/string'
 import {
   isComponentSet,
   isProject,
-  isPage,
-  cloneJsonWithoutChildren
+  cloneJsonWithoutChildren,
+  isDesign
 } from '@/utils/node'
 
 export default {
-  name: 'PanelPages',
+  name: 'PanelDesigns',
   components: {
     ElTree: Tree,
     DialogComponentSet,
     DialogProject,
     DialogDelete,
     ComponentName
-  },
-  props: {
-    visible: {
-      type: Boolean,
-      required: true
-    }
   },
   data() {
     return {
@@ -103,18 +89,14 @@ export default {
   },
   computed: {
     ...mapState('node', ['editingProjectId', 'editingComponentSetId']),
-    pages() {
+    designs() {
       return Object.values(this.componentsMap)
-        .filter(node => {
-          return node.parentId === this.editingProjectId && isPage(node)
-        })
+        .filter(node => isDesign(node))
         .map(node => cloneJsonWithoutChildren(node))
     }
   },
   created() {
-    this.getComponentSets({
-      polymorphism: 'page'
-    })
+    this.getComponentSets({ polymorphism: 'design' })
   },
   methods: {
     ...mapMutations('node', {

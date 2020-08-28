@@ -9,7 +9,7 @@
       :loading="loading"
       :visible.sync="visible"
       :disable-submit="!dirty"
-      title="Component"
+      :title="polymorphism.toUpperCase()"
       width="50%"
       @confirm="onSubmit"
       @close="initData"
@@ -67,9 +67,13 @@ export default {
     id: {
       type: String
     },
-    parentId: {
+    polymorphism: {
       type: String,
       required: true
+    },
+    parentId: {
+      type: String,
+      default: ''
     },
     buttonType: {
       type: String,
@@ -137,12 +141,14 @@ export default {
             if (this.isExist) {
               await this.patchComponentSet({
                 id: this.id,
+                polymorphism: this.polymorphism,
                 ...this.form
               })
             }
             else {
               await this.createComponentSet({
-                projectId: this.projectId,
+                parentId: this.parentId,
+                polymorphism: this.polymorphism,
                 ...this.form
               })
             }

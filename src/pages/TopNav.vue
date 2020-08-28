@@ -21,14 +21,23 @@
         Help
       </el-button>
 
-      <el-button
-        v-if="isLogin"
-        type="text"
-        icon="el-icon-files"
-        @click="$router.push('/dashboard/designs')"
-      >
-        Dashboard
-      </el-button>
+      <template v-if="isLogin">
+        <el-button
+          type="text"
+          icon="el-icon-files"
+          @click="$router.push('/dashboard/designs')"
+        >
+          Dashboard
+        </el-button>
+
+        <el-button
+          type="text"
+          icon="el-icon-files"
+          @click="$router.push({ name: 'WorkBoard' })"
+        >
+          Wrokboard
+        </el-button>
+      </template>
 
       <!--      <el-button-->
       <!--        v-else-->

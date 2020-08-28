@@ -10,9 +10,9 @@ import { ID } from '@/const'
 export const actions = {
   async getProjects({ commit }) {
     const { data } = await getProjects()
-
+    const projectIds = data.map(x => x[ID])
     commit('SET_NODES_TO_MAP', { nodes: data })
-    commit('SET', { projectIds: data.map(x => x[ID]) })
+    commit('SET', { projectIds, editingProjectId: projectIds[0] })
   },
 
   async getProject({ state, commit, dispatch }, id) {
@@ -35,6 +35,7 @@ export const actions = {
   async createProject({ commit }, form) {
     const { data } = await createProject(form)
 
+    commit('SET', { editingProjectId: data.id })
     commit('SET_NODES_TO_MAP', { nodes: data })
     return data
   },

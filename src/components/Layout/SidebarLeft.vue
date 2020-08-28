@@ -7,24 +7,24 @@
       <el-tooltip
         effect="light"
         placement="top"
-        content="Pages"
+        content="Websites"
       >
         <el-button
-          icon="el-icon-brush"
+          icon="el-icon-files"
           class="flex1"
-          @click="activePanel = 'PanelPages'"
+          @click="activePanel = 'PanelProject'"
         />
       </el-tooltip>
 
       <el-tooltip
         effect="light"
         placement="top"
-        content="Components"
+        content="Designs"
       >
         <el-button
-          icon="el-icon-brush"
+          icon="el-icon-news"
           class="flex1"
-          @click="activePanel = 'PanelProject'"
+          @click="activePanel = 'PanelDesigns'"
         />
       </el-tooltip>
 
@@ -34,7 +34,7 @@
         content="Asset"
       >
         <el-button
-          icon="el-icon-film"
+          icon="el-icon-picture-outline"
           class="flex1"
           @click="activePanel = 'PanelAsset'"
         />
@@ -76,9 +76,10 @@ export default {
   name: 'SidebarLeft',
   components: {
     PanelNodes: () => import('../Setup/PanelNodes'),
-    PanelProject: () => import('../Setup/PanelProject'),
-    PanelPages: () => import('../Setup/PanelPages'),
+    PanelProject: () => import('../Setup/PanelProjects'),
+    PanelPage: () => import('../Setup/PanelPages'),
     PanelAsset: () => import('../Setup/PanelAsset'),
+    PanelDesigns: () => import('../Setup/PanelDesigns'),
     DialogComponentSet,
     SplitPane
   },
@@ -128,6 +129,9 @@ export default {
 }
 
 ::v-deep {
+  .vue-splitter-container {
+    @include calc-vh('height', '100% - 20px');
+  }
   .splitter-pane {
     background-color: #ffffff;
     padding: 5px;

@@ -1,8 +1,8 @@
 import store from '@/store'
 import localforage from 'localforage'
-import { cloneJson, toArray } from '@/utils/tool'
+import { toArray } from '@/utils/tool'
+import { queryString } from '@/utils/url'
 import { API } from 'aws-amplify'
-import axios from 'axios'
 
 export function getProjects() {
   return API.get('staging', '/projects', {})
@@ -24,8 +24,12 @@ export function deleteProject(id) {
   return API.del('staging', `/projects/${id}`, {})
 }
 
-export function getComponentSets(projectId) {
-  return API.get('staging', `/projects/${projectId}/component-sets`, {})
+export function getComponentSets(parentId, polymorphism) {
+  const _queryString = queryString({
+    polymorphism,
+    parentId
+  })
+  return API.get('staging', `/component-sets?${_queryString}`, {})
 }
 
 export function getComponentSetChildren(id) {
@@ -56,17 +60,23 @@ export function patchComponentSetChildren({ deltas, action, tree }) {
   )
 }
 
-export function createComponentSet(
-  projectId,
-  { description, label, tags, children }
-) {
+export function createComponentSet({
+  description,
+  label,
+  tags,
+  children,
+  parentId,
+  polymorphism
+}) {
   // const componentSetId = nodeIds.generateProjectId()
   // 這裡children是要處理 假如componentSet是用selected component創造的
   // const children = componentSet[CHILDREN]
 
   // componentSet[ID] = componentSetId
-  return API.post('staging', `/projects/${projectId}/component-sets`, {
+  return API.post('staging', `/component-sets`, {
     body: {
+      parentId,
+      polymorphism,
       description,
       label,
       tags,

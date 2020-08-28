@@ -1,14 +1,14 @@
 <template>
   <el-button
-    :icon="`el-icon-${isExist ? 's-tools' : 'plus'}`"
-    v-bind="$attrs"
+    :icon="`el-icon-${isExist ? 's-tools' : 'circle-plus-outline'}`"
+    :type="buttonType"
     @click.stop="visible = !visible"
   >
     {{ buttonText }}
     <dialog-confirmable
       :visible.sync="visible"
       :disable-submit="!dirty"
-      title="Design"
+      title="Website"
       width="50vw"
       class="dialog"
       @confirm="onSubmit"
@@ -71,6 +71,10 @@ export default {
       type: String,
       default: ''
     },
+    buttonType: {
+      type: String,
+      default: 'text'
+    },
     buttonText: {
       type: String,
       default: ''
@@ -119,8 +123,7 @@ export default {
             })
           }
           else {
-            const project = await this.createProject(this.form)
-            this.$router.push(`/${project.id}/draft`)
+            await this.createProject(this.form)
           }
 
           this.form = {

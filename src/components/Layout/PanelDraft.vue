@@ -45,16 +45,18 @@ export default {
     PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
   created() {
-    if (this.$route.params.projectId && this.isDraftMode) {
-      this.getProject(this.$route.params.projectId).then(project => {
-        if (project) {
-          this.getAssets()
-          this.initExamples()
-        }
-        else {
-          this.$router.push('/projects')
-        }
-      })
+    if (this.isDraftMode) {
+      this.initExamples()
+
+      // this.getProject(this.$route.params.projectId).then(project => {
+      //   if (project) {
+      //     this.getAssets()
+      //
+      //   }
+      //   else {
+      //     this.$router.push('/projects')
+      //   }
+      // })
     }
   },
   methods: {

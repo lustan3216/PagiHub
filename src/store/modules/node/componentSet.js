@@ -27,14 +27,20 @@ export const actions = {
 
     const componentsArray = await getComponentSetChildren(id)
     if (componentsArray.length) {
-      commit('SET_NODES_TO_MAP', { nodes: componentsArray })
+      commit('SET_NODES_TO_MAP', {
+        nodes: componentsArray,
+        rootComponentSetId: id
+      })
       getCopyComponentIds()
       getTmpComponentsArray()
     }
   },
 
-  async getComponentSets({ commit, state }, projectId) {
-    const { data: nodes } = await getComponentSets(projectId)
+  async getComponentSets({ commit, state }, { polymorphism }) {
+    const { data: nodes } = await getComponentSets(
+      state.editingProjectId,
+      polymorphism
+    )
     if (nodes[0] && nodes[0].id) {
       commit('SET_EDITING_COMPONENT_SET_ID', nodes[0].id)
     }
@@ -43,13 +49,15 @@ export const actions = {
 
   async createComponentSet(
     { commit, state, dispatch },
-    { projectId, label, description, tags }
+    { parentId, label, description, tags, polymorphism }
   ) {
     const tree = layers()
     appendIdNested(tree)
     const {
       data: { children, ...componentSet }
-    } = await createComponentSet(projectId, {
+    } = await createComponentSet({
+      parentId,
+      polymorphism,
       description,
       label,
       tags,

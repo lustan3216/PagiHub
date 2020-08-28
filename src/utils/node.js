@@ -120,6 +120,10 @@ export function traversalChildren(node, fn) {
 
 const cache = {}
 export function shortTagName(node) {
+  if (!node) {
+    return
+  }
+
   const tag = node[LABEL] || node[POLYMORPHISM] || node.tag
   if (cache[tag]) {
     return cache[tag]
@@ -176,12 +180,12 @@ export function isComponent(node) {
   return !isComponentSet(node) && !isProject(node) && !isFolder(node)
 }
 
-export function isWebsite(node) {
-  return node.tag === NODE_TYPE.WEBSITE
+export function isPage(node) {
+  return isComponentSet(node) && node[POLYMORPHISM] === NODE_TYPE.PAGE
 }
 
-export function isPage(node) {
-  return node.tag === NODE_TYPE.PAGE
+export function isDesign(node) {
+  return isComponentSet(node) && node[POLYMORPHISM] === NODE_TYPE.DESIGN
 }
 
 export function isFolder(node) {

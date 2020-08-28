@@ -1,12 +1,14 @@
 <template>
-  <div class="flex-column h-100k">
-    <el-input
-      v-shortkey.avoid
-      v-model="filterText"
-      placeholder="Search Node"
-      size="small"
-      class="m-b-10"
-    />
+  <div class="flex-column h-100">
+    <span
+      v-if="editingNode"
+      class="small-title align-center"
+    >
+      <i
+        :class="pathIcon"
+        class="m-r-5"
+      /> {{ editingPath }}
+    </span>
 
     <el-tree
       ref="tree"
@@ -58,12 +60,20 @@
         </div>
       </template>
     </el-tree>
+
+    <el-input
+      v-shortkey.avoid
+      v-model="filterText"
+      placeholder="Search Node"
+      size="small"
+      class="m-b-10"
+    />
   </div>
 </template>
 
 <script>
 import { Tree } from 'element-ui'
-import { SORT_INDEX, LAYERS, SOFT_DELETE, STYLE } from '@/const'
+import { SORT_INDEX, SOFT_DELETE, STYLE } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { arrayUniq, cloneJson, deleteBy } from '@/utils/tool'
 import ComponentController from '../TemplateUtils/ComponentController'
@@ -71,7 +81,15 @@ import ComponentName from '../TemplateUtils/ComponentName'
 import Touchable from '../TemplateUtils/Touchable'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
-import { isLayers, sortByIndex, traversalSelfAndChildren } from '@/utils/node'
+import {
+  isDesign,
+  isLayers,
+  isPage,
+  shortTagName,
+  sortByIndex,
+  traversalSelfAndChildren
+} from '@/utils/node'
+import { capitalize } from '@/utils/string'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -124,6 +142,29 @@ export default {
       })
 
       return cloneTree.children
+    },
+    editingNode() {
+      return this.componentsMap[this.editingComponentSetId]
+    },
+    editingNodeName() {
+      return capitalize(shortTagName(this.editingNode))
+    },
+    editingPath() {
+      if (isDesign(this.editingNode)) {
+        return this.editingNodeName
+      }
+      else if (isPage(this.editingNode)) {
+        const { parentNode } = this.editingNode
+        return [capitalize(parentNode.label), this.editingNodeName].join(' > ')
+      }
+    },
+    pathIcon() {
+      if (isDesign(this.editingNode)) {
+        return 'el-icon-news'
+      }
+      else if (isPage(this.editingNode)) {
+        return 'el-icon-files'
+      }
     }
   },
   watch: {
@@ -190,6 +231,7 @@ export default {
 <style scoped lang="scss">
 .tree {
   overflow: scroll;
+  flex: 1;
 }
 .controller {
   position: absolute;
@@ -204,5 +246,10 @@ export default {
 }
 .active {
   background-color: #f0f7ff;
+}
+
+.small-title {
+  display: block;
+  margin: 5px 10px;
 }
 </style>

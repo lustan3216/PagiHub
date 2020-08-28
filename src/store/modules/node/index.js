@@ -218,8 +218,6 @@ export default {
   getters,
   actions: {
     ...require('./componentSet').actions,
-    ...require('./project').actions,
-    ...require('./website').actions,
-    ...require('./page').actions
+    ...require('./project').actions
   }
 }

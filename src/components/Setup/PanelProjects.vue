@@ -1,38 +1,46 @@
 <template>
-  <div class="flex-column h-100">
-    <div class="m-b-10 justify-between">
-      <el-button type="text">Website</el-button>
+  <panel-pages
+    v-if="isPanelPages && editingProjectId"
+    :visible.sync="isPanelPages"
+  />
 
-      <dialog-component-set
-        v-if="projectId"
-        :parent-id="projectId"
-        button-text="Create"
+  <div
+    v-else
+    class="flex-column h-100"
+  >
+    <div class="m-b-10 justify-between">
+      <el-button
+        type="text"
+        class="no-border small-title"
+        icon="el-icon-arrow-right"
+        @click="isPanelPages = true"
+      >Websites</el-button>
+
+      <dialog-project
+        button-text="Website"
         button-type="primary"
       />
     </div>
 
     <el-tree
       ref="tree"
-      :data="rootComponentSets"
-      :indent="16"
-      :allow-drop="allowDrop"
+      :data="projects"
+      :indent="12"
       class="tree"
       node-key="id"
-      draggable
       check-strictly
-      @node-drop="nodeParentChange"
     >
       <template v-slot="{ data }">
         <div
           v-if="data && data.id"
-          :class="{ selected: editingComponentSetId === data.id }"
+          :class="{ selected: editingProjectId === data.id }"
           class="relative w-100 over-hidden"
           @click="nodeClick($event, data)"
           @mouseenter="hoverId = data.id"
         >
           <component-name
             :id="data.id"
-            :icon="icon[data.tag]"
+            icon="el-icon-files"
             class="w-100 text-left"
           />
 
@@ -41,16 +49,12 @@
               v-if="data.id === hoverId"
               class="controller"
             >
-              <dialog-delete
-                v-if="isComponentSet(data) || isFolder(data)"
-                :id="data.id"
-              />
+              <dialog-delete :id="data.id" />
 
-              <component
+              <dialog-project
                 :key="data.updatedAt"
                 :id="data.id"
-                :parent-id="data.parentId"
-                :is="`dialog-${kebabCase(data.tag)}`"
+                type="text"
               />
             </div>
           </transition>
@@ -63,44 +67,31 @@
 <script>
 import { Tree } from 'element-ui'
 import { mapState, mapActions, mapMutations } from 'vuex'
-import { NODE_TYPE } from '@/const'
 import DialogProject from './DialogProject'
-import DialogFolder from './DialogFolder'
-import DialogComponentSet from './DialogComponentSet'
+import PanelPages from './PanelPages'
 import DialogDelete from './DialogDelete'
 import ComponentName from '../TemplateUtils/ComponentName'
-import { kebabCase } from '@/utils/string'
-import { isComponentSet, isProject, isFolder } from '@/utils/node'
+import { isProject } from '@/utils/node'
 
 export default {
-  name: 'PanelProject',
+  name: 'PanelProjects',
   components: {
     ElTree: Tree,
-    DialogComponentSet,
     DialogProject,
+    PanelPages,
     DialogDelete,
     ComponentName
   },
   data() {
     return {
-      ...NODE_TYPE,
-      hoverId: null
+      hoverId: null,
+      isPanelPages: false
     }
   },
   computed: {
-    ...mapState('node', ['rootComponentSetIds', 'editingComponentSetId']),
-    projectId() {
-      return this.$route.params.projectId
-    },
-    icon() {
-      return {
-        [NODE_TYPE.PROJECT]: 'el-icon-files',
-        [NODE_TYPE.FOLDER]: 'el-icon-folder-opened',
-        [NODE_TYPE.COMPONENT_SET]: 'el-icon-lollipop'
-      }
-    },
-    rootComponentSets() {
-      return this.rootComponentSetIds
+    ...mapState('node', ['projectIds', 'editingProjectId']),
+    projects() {
+      return this.projectIds
         .map(id => {
           const newNode = this.componentsMap[id]
           if (newNode) {
@@ -111,28 +102,21 @@ export default {
         .filter(node => node)
     }
   },
+  created() {
+    this.getProjects()
+  },
   methods: {
-    isComponentSet,
-    isProject,
-    isFolder,
-    kebabCase,
+    ...mapMutations('node', {
+      NODE_SET: 'SET'
+    }),
     ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
-    ...mapActions('node', ['modifyProjectNodeParent']),
-    nodeParentChange({ data: childData }, { data: parentData }, action) {
-      if (action === 'inner') {
-        this.modifyProjectNodeParent({
-          parentId: parentData.id,
-          id: childData.id
-        })
-      }
-    },
+    ...mapActions('node', ['getProjects']),
+    isProject,
     nodeClick(event, node) {
-      if (isComponentSet(node)) {
-        this.SET_EDITING_COMPONENT_SET_ID(node.id)
-      }
-    },
-    allowDrop(_, { data: node }, action) {
-      return action === 'inner' && (isFolder(node) || isProject(node))
+      this.isPanelPages = true
+      this.NODE_SET({
+        editingProjectId: node.id
+      })
     }
   }
 }
