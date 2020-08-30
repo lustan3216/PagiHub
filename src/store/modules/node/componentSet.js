@@ -37,14 +37,20 @@ export const actions = {
   },
 
   async getComponentSets({ commit, state }, { projectId, polymorphism }) {
-    const { data: nodes } = await getComponentSets({
+    const nodes = Object.values(state.componentsMap)
+    const imported = nodes.find(node => node.parentId === projectId)
+    if (imported) {
+      return
+    }
+
+    const { data: componentSets } = await getComponentSets({
       parentId: projectId,
       polymorphism
     })
-    if (nodes[0] && nodes[0].id) {
-      commit('SET_EDITING_COMPONENT_SET_ID', nodes[0].id)
+    if (componentSets[0] && componentSets[0].id) {
+      commit('SET_EDITING_COMPONENT_SET_ID', componentSets[0].id)
     }
-    commit('SET_NODES_TO_MAP', { nodes })
+    commit('SET_NODES_TO_MAP', { nodes: componentSets })
   },
 
   async createComponentSet(

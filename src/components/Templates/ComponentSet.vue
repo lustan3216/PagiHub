@@ -26,12 +26,12 @@ export default {
   created() {
     this.getComponentSetChildren(this[ID])
 
-    const masterID = this.componentsMap[this.id][MASTER_ID]
-    if (masterID) {
-      if (!this.componentsMap[masterID]) {
-        this.getComponentSet(masterID)
-      }
-    }
+    // const masterID = this.componentsMap[this.id][MASTER_ID]
+    // if (masterID) {
+    //   if (!this.componentsMap[masterID]) {
+    //     this.getComponentSet(masterID)
+    //   }
+    // }
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount
