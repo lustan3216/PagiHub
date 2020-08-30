@@ -4,61 +4,42 @@
     class="sidebar-left"
   >
     <el-button-group class="flex">
-      <el-tooltip
-        effect="light"
-        placement="top"
-        content="Websites"
-      >
-        <el-button
-          icon="el-icon-files"
-          class="flex1"
-          @click="activePanel = 'PanelProject'"
-        />
-      </el-tooltip>
+      <el-button
+        icon="el-icon-files"
+        class="flex1"
+        @click="activePanel = 'PanelProject'"
+      />
 
-      <el-tooltip
-        effect="light"
-        placement="top"
-        content="Designs"
-      >
-        <el-button
-          icon="el-icon-news"
-          class="flex1"
-          @click="activePanel = 'PanelDesigns'"
-        />
-      </el-tooltip>
+      <el-button
+        icon="el-icon-news"
+        class="flex1"
+        @click="activePanel = 'PanelDesigns'"
+      />
 
-      <el-tooltip
-        effect="light"
-        placement="top"
-        content="Asset"
-      >
-        <el-button
-          icon="el-icon-picture-outline"
-          class="flex1"
-          @click="activePanel = 'PanelAsset'"
-        />
-      </el-tooltip>
+      <el-button
+        icon="el-icon-picture-outline"
+        class="flex1"
+        @click="activePanel = 'PanelAsset'"
+      />
     </el-button-group>
 
     <panel-asset
       v-show="editingAsset"
+      v-if="editingAsset || uploading"
       @processStart="uploading = true"
       @processEnd="uploading = false"
     />
 
     <split-pane
-      v-show="!editingAsset"
+      v-if="!editingAsset"
       :default-percent="40"
       split="horizontal"
     >
       <template slot="paneL">
-        <keep-alive>
-          <component
-            v-if="isLogin"
-            :is="activePanel"
-          />
-        </keep-alive>
+        <component
+          v-if="isLogin"
+          :is="activePanel"
+        />
       </template>
 
       <template slot="paneR">

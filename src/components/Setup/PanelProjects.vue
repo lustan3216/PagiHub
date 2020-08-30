@@ -1,7 +1,7 @@
 <template>
   <div class="wh-100">
     <panel-pages
-      v-show="isPanelPages && editingProjectId"
+      v-if="isPanelPages && editingProjectId"
       :visible.sync="isPanelPages"
     />
 

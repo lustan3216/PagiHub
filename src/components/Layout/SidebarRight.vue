@@ -1,29 +1,17 @@
 <template>
   <div id="sidebar-right">
     <el-button-group class="flex">
-      <el-tooltip
-        effect="light"
-        placement="top"
-        content="Style"
-      >
-        <el-button
-          icon="el-icon-brush"
-          class="flex1"
-          @click="activePanel = 'PanelStyles'"
-        />
-      </el-tooltip>
+      <el-button
+        icon="el-icon-brush"
+        class="flex1"
+        @click="activePanel = 'PanelStyles'"
+      />
 
-      <el-tooltip
-        effect="light"
-        placement="top"
-        content="Setting"
-      >
-        <el-button
-          icon="el-icon-setting"
-          class="flex1"
-          @click="activePanel = 'PanelSettings'"
-        />
-      </el-tooltip>
+      <el-button
+        icon="el-icon-setting"
+        class="flex1"
+        @click="activePanel = 'PanelSettings'"
+      />
     </el-button-group>
 
     <div class="sidebar-right-content">
