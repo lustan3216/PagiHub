@@ -15,8 +15,7 @@ export default {
     }
   },
   inject: {
-    isExample: { default: false },
-    rootComponentSetId: { default: null }
+    isExample: { default: false }
   },
   directives: {
     FreeStyle
@@ -43,7 +42,7 @@ export default {
     innerStyles() {
       return {
         id: this.id,
-        ...objectAssign(this.masterStyles, this.selfStyles)
+        ...objectAssign({}, this.masterStyles, this.selfStyles)
       }
     },
     innerProps() {

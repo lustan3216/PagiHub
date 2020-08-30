@@ -104,6 +104,9 @@ export default {
       })
     }
   },
+  mounted() {
+    this.$refs.gridGenerator.onWindowResize()
+  },
   methods: {
     ...mapActions('app', ['resizeNodeQuickFn']),
     lock(id) {

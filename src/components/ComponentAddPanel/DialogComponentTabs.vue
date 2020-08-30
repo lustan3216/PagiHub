@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import { humanize } from '@/utils/string'
 import { isComponentSet } from '@/utils/node'
@@ -139,8 +139,7 @@ export default {
   name: 'DialogComponentTabs',
   provide() {
     return {
-      isExample: true,
-      componentSetId: 0
+      isExample: true
     }
   },
   components: {
@@ -223,16 +222,22 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('node', ['RECORD']),
     ...mapActions('app', ['removeBeingAddedComponentId']),
     humanize,
     isComponentSet,
     addTemplate(template) {
       const node = this.componentsMap[this.beingAddedComponentId]
 
-      if (this.currentCategory !== 'basicComponents') {
+      if (isComponentSet(template)) {
         // 為了不拿到componentSet
         template = template.children[0]
       }
+
+      this.RECORD({
+        path: `${node.id}.style.default.overflow`,
+        value: 'scroll'
+      })
 
       vmGet(node.id)._addNodesToParentAndRecord(cloneJson(template))
       this.$dialog.close()

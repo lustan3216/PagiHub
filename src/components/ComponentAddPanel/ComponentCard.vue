@@ -21,7 +21,7 @@
           maxHeight
         }"
         class="example"
-        @scroll.native="resizeNodeQuickFn"
+        @scroll.native="onScroll"
       />
     </div>
 
@@ -43,11 +43,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import { shortTagName } from '@/utils/node'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { Tag } from 'element-ui'
 import gsap from 'gsap'
+
+let timer
 
 export default {
   name: 'ComponentCard',
@@ -87,8 +89,18 @@ export default {
     }, this.delay)
   },
   methods: {
-    ...mapActions('app', ['resizeNodeQuickFn']),
-    shortTagName
+    ...mapMutations('app', { APP_SET: 'SET' }),
+    ...mapActions('app', ['artBoardResizing']),
+    shortTagName,
+    onScroll() {
+      this.APP_SET({ isArtBoardResizing: true })
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(() => {
+        this.artBoardResizing(false)
+      }, 80)
+    }
   }
 }
 </script>

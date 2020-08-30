@@ -7,13 +7,18 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { ID } from '@/const'
+import store from '@/store'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import childrenMixin from '@/components/Templates/mixins/children'
-import { vmAppend } from '@/utils/vmMap'
 
 export default {
-  name: 'ComponentSet',
+  name: 'ConnectionLayer',
+  provide() {
+    const node = store.state.node.componentsMap[this.id]
+    return {
+      rootMasterId: node.rootMasterId
+    }
+  },
   components: {
     AsyncComponent
   },
@@ -24,13 +29,7 @@ export default {
     }
   },
   created() {
-    this.getComponentSetChildren(this[ID])
-  },
-  mounted() {
-    // Don't put in created to prevent some component fail before mount
-    if (this.isDraftMode) {
-      vmAppend(this, this.isExample)
-    }
+    this.getComponentSetChildren(this.node.rootMasterId)
   },
   methods: {
     ...mapActions('node', ['getComponentSetChildren'])

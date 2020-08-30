@@ -5,6 +5,7 @@
     :style="{
       zIndex: isExample ? 3000 : 800
     }"
+    :class="{ 'has-connection': hasConnection }"
     class="quick-functions flex-center"
   >
     <el-button
@@ -27,11 +28,15 @@
         <i :class="[itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank']" />
       </component-name>
 
-      <portal-target
-        v-if="isDraftMode"
-        :name="`QuickFunctions${id}`"
-        class="button-group"
-      />
+      <div class="button-group">
+        <connection-jumper :id="id" :root-master-id="rootMasterId"/>
+
+        <portal-target
+          v-if="isDraftMode"
+          :name="`QuickFunctions${id}`"
+          slim
+        />
+      </div>
     </div>
 
     <div
@@ -43,7 +48,8 @@
         placement="left"
       >
         <div slot="content">
-          {{ newItemToolTip }} <span
+          {{ newItemToolTip }}
+          <span
             class="m-l-10"
             v-html="metaKey"
           /> + B
@@ -64,10 +70,17 @@
 import { mapMutations, mapState, mapActions } from 'vuex'
 import ComponentName from './ComponentName'
 import ContextMenu from './ContextMenu'
+import ConnectionJumper from './ConnectionJumper'
 import { Popover } from 'element-ui'
 import { isGridItem, getNode } from '@/utils/node'
 import { arrayLast } from '@/utils/tool'
-import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
+import {
+  CAN_NEW_ITEM,
+  CAROUSEL,
+  GRID_GENERATOR,
+  LAYERS,
+  MASTER_ID
+} from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import gsap from 'gsap'
@@ -82,17 +95,19 @@ export const quickFnMap = {}
 export default {
   name: 'ComponentQuickFunctions',
   components: {
+    ConnectionJumper,
     ComponentName,
     ContextMenu,
     ElPopover: Popover
-  },
-  inject: {
-    rootComponentSetId: { default: null }
   },
   props: {
     id: {
       type: String,
       required: true
+    },
+    rootMasterId: {
+      type: String,
+      default: ''
     },
     itemEditing: {
       type: Boolean,
@@ -109,7 +124,8 @@ export default {
       left: leftShared,
       width: widthShared,
       height: heightShared,
-      animationId: null
+      animationId: null,
+      canGoBack: null
     }
   },
   computed: {
@@ -133,6 +149,9 @@ export default {
       else {
         return 'Copy An Empty Grid Item From It'
       }
+    },
+    hasConnection() {
+      return this.node[MASTER_ID]
     },
     metaKey() {
       return isMac() ? '&#8984;' : '&#8963;'
@@ -214,10 +233,13 @@ export default {
 
         const rect = element.getBoundingClientRect()
         let { x: left, y: top, width, height } = rect
-        const {
-          y: top1,
-          height: height1
-        } = this.componentSetEl.parentElement.getBoundingClientRect()
+
+        const bounderNode = this.isExample
+          ? this.componentSetEl.parentElement
+          : element.closest('.vue-grid-item') ||
+            this.componentSetEl.parentElement
+
+        const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()
 
         top = top < top1 ? top1 : top
         height =
@@ -262,6 +284,25 @@ export default {
 
 <style scoped lang="scss">
 $activeColor: rgba(81, 117, 199, 0.68);
+$connectColor: rgba(135, 199, 124, 0.68);
+
+::v-deep.has-connection {
+  &.quick-functions,
+  .title,
+  .wrapper > *,
+  .button-group > * {
+    border-color: $connectColor !important;
+    color: $connectColor !important;
+  }
+
+  .button-group i {
+    color: $connectColor;
+  }
+  .can-action {
+    color: $connectColor;
+  }
+}
+
 .quick-functions {
   position: absolute;
   pointer-events: none;
@@ -298,6 +339,7 @@ $activeColor: rgba(81, 117, 199, 0.68);
 .el-icon-more-outline {
   transform: rotate(90deg);
 }
+
 .title {
   background-color: white;
   padding: 5px;
@@ -350,7 +392,7 @@ $activeColor: rgba(81, 117, 199, 0.68);
   }
 
   i {
-    color: $activeColor !important;
+    color: $activeColor;
   }
 
   & > *:first-child {

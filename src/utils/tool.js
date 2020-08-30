@@ -192,6 +192,7 @@ export function asyncGetValue(fn, timeout = 2000) {
   let id
   return new Promise((resolve, reject) => {
     setTimeout(function() {
+      reject()
       cancelAnimationFrame(id)
     }, timeout)
 

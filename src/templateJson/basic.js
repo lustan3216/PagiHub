@@ -32,7 +32,6 @@ export const gridGeneratorItem = function(options) {
     [TAG]: GRID_GENERATOR_ITEM,
     [LABEL]: 'container',
     [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 100 }),
-    [STYLE]: { default: { overflow: 'scroll' }},
     ...options
   }
 }

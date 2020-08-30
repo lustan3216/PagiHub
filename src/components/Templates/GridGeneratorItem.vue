@@ -5,6 +5,7 @@
       'dash-border': isDraftMode && nodeNoBorder && firstChildNoBorder
     }"
     class="h-100"
+    @scroll="onScroll"
   >
     <async-component
       v-if="firstChild"
@@ -14,12 +15,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
+
+let timer
 
 export default {
   name: 'GridGeneratorItem',
@@ -56,6 +59,8 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('app', { APP_SET: 'SET' }),
+    ...mapActions('app', ['artBoardResizing']),
     checkNoBorder(value) {
       return (
         !value.border &&
@@ -64,6 +69,15 @@ export default {
         !value.borderBottom &&
         !value.borderLeft
       )
+    },
+    onScroll() {
+      this.APP_SET({ isArtBoardResizing: true })
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(() => {
+        this.artBoardResizing(false)
+      }, 80)
     }
   }
 }

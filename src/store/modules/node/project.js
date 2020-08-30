@@ -8,14 +8,11 @@ import {
 import { ID } from '@/const'
 
 export const actions = {
-  async getProjects({ commit, state }) {
+  async getProjects({ commit }) {
     const { data } = await getProjects()
     const projectIds = data.map(x => x[ID])
     commit('SET_NODES_TO_MAP', { nodes: data })
-
-    if (!state.editingProjectId) {
-      commit('SET', { projectIds, editingProjectId: projectIds[0] })
-    }
+    commit('SET', { projectIds })
   },
 
   async getProject({ state, commit, dispatch }, id) {

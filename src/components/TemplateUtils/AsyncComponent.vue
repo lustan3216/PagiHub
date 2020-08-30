@@ -1,17 +1,11 @@
 <template>
   <!-- v-observe-visibility 跟vIf 一定要不同層，不然v-if false 的話沒辦法observer -->
-  <div
-    v-observe-visibility="options"
-    v-if="visible && isLayers"
-    class="h-100"
-  >
-    <component
-      v-if="vIf"
-      :is="tag"
-      :id="id"
-      :key="id"
-    />
-  </div>
+  <component
+    v-if="(visible && isLayers) || isConnectionLayer"
+    :is="tag"
+    :id="id"
+    :key="id"
+  />
 
   <!--  should have observe-visibility here, otherwise some nested layout case, the grid layout will not work right-->
   <controller-layer
@@ -37,7 +31,13 @@
 
 <script>
 import { ObserveVisibility } from 'vue-observe-visibility'
-import { isLayers, isGridItem, isGrid, getNode } from '@/utils/node'
+import {
+  isLayers,
+  isGridItem,
+  isGrid,
+  getNode,
+  isConnectionLayer
+} from '@/utils/node'
 import { CAN_BE_EDITED } from '@/const'
 import { mapState } from 'vuex'
 
@@ -51,6 +51,7 @@ export default {
   },
   components: {
     ControllerLayer: () => import('./ControllerLayer'),
+    ConnectionLayer: () => import('./ConnectionLayer'),
     ComponentSet: () => import('../Templates/ComponentSet'),
     FlexImage: () => import('../Templates/FlexImage'),
     FlexButton: () => import('../Templates/FlexButton'),
@@ -105,7 +106,12 @@ export default {
       }
     }
 
-    if (isGridItem(node) || isGrid(node) || isLayers(node)) {
+    if (
+      isGridItem(node) ||
+      isGrid(node) ||
+      isLayers(node) ||
+      isConnectionLayer(node)
+    ) {
       noObserve = true
       options = false
     }
@@ -113,6 +119,12 @@ export default {
     return {
       vIf: noObserve,
       options
+    }
+  },
+  created() {
+    if (!this.isExample && this.isDraftMode) {
+      this.vIf = true
+      this.options = false
     }
   },
   computed: {
@@ -137,6 +149,9 @@ export default {
     },
     isLayers() {
       return isLayers(this.node)
+    },
+    isConnectionLayer() {
+      return isConnectionLayer(this.node)
     },
     isGrid() {
       return isGrid(this.node)

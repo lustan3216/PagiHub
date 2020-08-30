@@ -1,5 +1,8 @@
 import store from '@/store'
-import { recordRootComponentSetId, getRootComponentSetId } from '@/utils/rootComponentSetId'
+import {
+  recordRootComponentSetId,
+  getRootComponentSetId
+} from '@/utils/rootComponentSetId'
 
 export function defineProperties(node, rootComponentSetId) {
   recordRootComponentSetId(node, rootComponentSetId)
@@ -18,6 +21,14 @@ export function defineProperties(node, rootComponentSetId) {
     Object.defineProperty(node, 'rootComponentSetId', {
       get() {
         return getRootComponentSetId(node.id)
+      },
+      enumerable: false
+    })
+
+    Object.defineProperty(node, 'rootComponentSet', {
+      get() {
+        const id = getRootComponentSetId(node.id)
+        return componentsMap[id]
       },
       enumerable: false
     })

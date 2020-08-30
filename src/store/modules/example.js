@@ -1,7 +1,7 @@
 import { SET } from '../index'
 import { ID } from '@/const'
 import basic from '@/templateJson/basic'
-import { appendIdNested } from '@/utils/nodeId'
+import { appendIdsWithoutConnection } from '@/utils/nodeId'
 import { traversalSelfAndChildren } from '@/utils/node'
 
 let inited = false
@@ -24,7 +24,7 @@ const actions = {
     inited = true
     const basicExamples = basic
     // const basicExamples = [...basic, ...formItem]
-    appendIdNested(basicExamples)
+    appendIdsWithoutConnection(basicExamples)
 
     const exampleComponentsMap = {}
 

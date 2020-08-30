@@ -12,6 +12,7 @@
       <component-quick-functions
         :id="id"
         :is-example="isExample"
+        :root-master-id="rootMasterId"
         :item-editing="itemEditing"
       />
     </portal>
@@ -46,7 +47,10 @@ import ComponentQuickFunctions from './ComponentQuickFunctions'
 
 export default {
   name: 'ControllerLayer',
-  inject: { isExample: { default: false }},
+  inject: {
+    isExample: { default: false },
+    rootMasterId: { default: '' }
+  },
   directives: {
     clickOutside
   },

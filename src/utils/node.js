@@ -8,7 +8,7 @@ import {
   GRID_GENERATOR_ITEM,
   POLYMORPHISM,
   GRID_GENERATOR,
-  SORT_INDEX
+  SORT_INDEX, CAROUSEL
 } from '@/const'
 
 export function cloneJsonWithoutChildren(tree) {
@@ -159,6 +159,13 @@ export function closestGridItem(node) {
   return find(node)
 }
 
+export function canBeInstance(componentSetId, id) {
+  const { componentsMap } = store.state.node
+  const node = componentsMap[id]
+
+  return isPage(componentsMap[componentSetId]) && isDesign(node.rootComponentSet)
+}
+
 export function isLayers(node) {
   if (node) {
     return node.tag === LAYERS && isUndefined(node[POLYMORPHISM])
@@ -172,6 +179,18 @@ export function isOverlapComponent(node) {
 export function isGridItem(node) {
   if (node) {
     return node.tag === GRID_GENERATOR_ITEM
+  }
+}
+
+export function isCarousel(node) {
+  if (node) {
+    return node.tag === CAROUSEL
+  }
+}
+
+export function isConnectionLayer(node) {
+  if (node) {
+    return node.tag === 'connection-layer'
   }
 }
 

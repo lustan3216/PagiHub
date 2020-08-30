@@ -10,9 +10,9 @@
   </div>
 </template>
 <style>
-  .animated {
-    /*transition: all 200ms ease;*/
-    /*transition-property: left, top, right;*/
+  .vue-grid-item.transition {
+    transition: all 200ms ease;
+    transition-property: left, top, right;
     /* add right for rtl */
   }
 
@@ -208,7 +208,6 @@
     inject: ['eventBus'],
     data: function() {
       return {
-        animated: false,
         cols: 1,
         containerWidth: 100,
         rowHeight: 30,
@@ -311,7 +310,6 @@
     },
     mounted: function() {
       // lots-design fix bug
-      this.animated = true
       if (this.$parent.responsive) {
         this.cols = this.$parent.cols[this.$parent.lastBreakpoint]
       } else {
@@ -334,6 +332,9 @@
       }
       this.useCssTransforms = this.$parent.useCssTransforms
       this.createStyle()
+      this.$nextTick(() => {
+        this.transition = true
+      })
     },
     watch: {
       isDraggable: function() {
@@ -413,7 +414,7 @@
     computed: {
       classObj() {
         return {
-          animated: this.animated,
+          transition: this.transition,
           'vue-resizable': this.resizableAndNotStatic,
           'static': this.static,
           'resizing': this.isResizing,

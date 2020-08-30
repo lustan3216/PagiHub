@@ -55,9 +55,6 @@ export function patchComponentSetChildren({
   action,
   tree
 }) {
-  if (!componentSetId) {
-    debugger
-  }
   return API.patch('staging', `/component-sets/${componentSetId}/children`, {
     body: { deltas, action, tree }
   })

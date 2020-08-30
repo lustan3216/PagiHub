@@ -12,7 +12,7 @@ import { getCopyComponentIds, getTmpComponentsArray } from '@/store'
 import { layers } from '@/templateJson/basic'
 import { isComponentSet, traversalSelfAndChildren } from '@/utils/node'
 import { cloneJson, objectFirstKey } from '@/utils/tool'
-import { appendIdNested } from '@/utils/nodeId'
+import { appendIdsWithoutConnection } from '@/utils/nodeId'
 import draftState from '@/utils/draftState'
 
 export const actions = {
@@ -22,8 +22,6 @@ export const actions = {
     if (imported) {
       return
     }
-
-    commit('SET_EDITING_COMPONENT_SET_ID', id)
 
     const componentsArray = await getComponentSetChildren({ id })
     if (componentsArray.length) {
@@ -47,7 +45,11 @@ export const actions = {
       parentId: projectId,
       polymorphism
     })
-    if (componentSets[0] && componentSets[0].id) {
+    if (
+      componentSets[0] &&
+      componentSets[0].id &&
+      !state.editingComponentSetId
+    ) {
       commit('SET_EDITING_COMPONENT_SET_ID', componentSets[0].id)
     }
     commit('SET_NODES_TO_MAP', { nodes: componentSets })
@@ -58,7 +60,7 @@ export const actions = {
     { parentId, label, description, tags, polymorphism }
   ) {
     const tree = layers()
-    appendIdNested(tree)
+    appendIdsWithoutConnection(tree)
     const {
       data: { children, ...componentSet }
     } = await createComponentSet({

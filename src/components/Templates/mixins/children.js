@@ -14,9 +14,17 @@ import {
   isLayers,
   isGrid,
   isProject,
-  isComponentSet
+  isComponentSet,
+  canBeInstance,
+  isPage,
+  isDesign,
+  isCarousel
 } from '@/utils/node'
-import { appendIdNested } from '@/utils/nodeId'
+import {
+  appendIds,
+  appendIdsWithConnection,
+  appendIdsWithoutConnection
+} from '@/utils/nodeId'
 import * as basicTemplates from '@/templateJson/basic'
 import { camelCase } from '@/utils/string'
 
@@ -59,8 +67,25 @@ export default {
       const records = []
 
       nodeTree = cloneJson(nodeTree)
-      // if node has not componentSetId means self is componentSet
-      appendIdNested(nodeTree, this.id)
+
+      const { rootComponentSet } = this.componentsMap[nodeTree.id]
+      if (isPage(this.node.rootComponentSet) && isDesign(rootComponentSet)) {
+        nodeTree = {
+          tag: 'connection-layer',
+          rootMasterId: rootComponentSet.id,
+          children: [nodeTree]
+        }
+        appendIdsWithConnection(nodeTree, this.id)
+      }
+      else if (
+        isPage(this.node.rootComponentSet) &&
+        isPage(rootComponentSet)
+      ) {
+        appendIds(nodeTree, this.id)
+      }
+      else {
+        appendIdsWithoutConnection(nodeTree, this.id)
+      }
 
       if (isLayers(this.node)) {
         nodeTree[SORT_INDEX] = this.children.length
@@ -132,6 +157,15 @@ export default {
       }
 
       const stopNodeId = this.id
+
+      if (isLayers(this.node) || isCarousel(this.node)) {
+        if (this.node.children.length === 1) {
+          records.unshift({
+            path: this.node.id,
+            value: undefined
+          })
+        }
+      }
 
       // traversalAncestorAndSelf(
       //   this.node,

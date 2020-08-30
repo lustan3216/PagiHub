@@ -39,7 +39,10 @@ class DraftState {
   }
 
   startTime(componentSetId) {
-    this.timerId = setTimeout(this.requestPutDeltas.bind(this, componentSetId), DEBOUNCE_TIME)
+    this.timerId = setTimeout(
+      this.requestPutDeltas.bind(this, componentSetId),
+      DEBOUNCE_TIME
+    )
   }
 
   async requestImmediately(componentSetId) {
@@ -117,9 +120,13 @@ class DraftState {
       }
 
       const requestDeltaTime = this.currentDeltaTime
-      this.promise = await patchComponentSetChildren({ deltas, action, componentSetId })
+      this.promise = await patchComponentSetChildren({
+        deltas,
+        action,
+        componentSetId
+      })
       this.remoteRecordTime = requestDeltaTime
-      this.requestPutDeltas() // to check any new record is created when requesting
+      this.requestPutDeltas(componentSetId) // to check any new record is created when requesting
     }
     catch (e) {
       // should save in localstroage for tmp

@@ -16,9 +16,11 @@ if (process.env.NODE_ENV !== 'production') {
 export function recordRootComponentSetId(node, componentSetId) {
   if (isComponent(node) && componentSetId) {
     rootComponentSetIdMap[node.id] = componentSetId
+
     componentBelongsMap[componentSetId] =
-      componentBelongsMap[componentSetId] || []
-    componentBelongsMap[componentSetId].push(node.id)
+      componentBelongsMap[componentSetId] || new Set()
+
+    componentBelongsMap[componentSetId].add(node.id)
   }
 }
 
