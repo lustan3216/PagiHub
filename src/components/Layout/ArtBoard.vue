@@ -11,6 +11,7 @@
     <component-set
       v-if="editingComponentSetId"
       :id="editingComponentSetId"
+      :key="editingComponentSetId"
     />
   </div>
 </template>

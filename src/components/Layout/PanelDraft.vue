@@ -47,23 +47,12 @@ export default {
   created() {
     if (this.isDraftMode) {
       this.initExamples()
-
-      // this.getProject(this.$route.params.projectId).then(project => {
-      //   if (project) {
-      //     this.getAssets()
-      //
-      //   }
-      //   else {
-      //     this.$router.push('/projects')
-      //   }
-      // })
     }
   },
   methods: {
     ...mapMutations('mode', ['SET_DRAFT_MODE']),
     ...mapActions('example', ['initExamples']),
-    ...mapActions('node', ['getProject']),
-    ...mapActions('asset', ['getAssets'])
+    ...mapActions('node', ['getProject'])
   }
 }
 </script>

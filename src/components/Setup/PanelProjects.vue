@@ -1,66 +1,68 @@
 <template>
-  <panel-pages
-    v-if="isPanelPages && editingProjectId"
-    :visible.sync="isPanelPages"
-  />
+  <div class="wh-100">
+    <panel-pages
+      v-show="isPanelPages && editingProjectId"
+      :visible.sync="isPanelPages"
+    />
 
-  <div
-    v-else
-    class="flex-column h-100"
-  >
-    <div class="m-b-10 justify-between">
-      <el-button
-        type="text"
-        class="no-border small-title"
-        icon="el-icon-arrow-right"
-        @click="isPanelPages = true"
-      >Websites</el-button>
-
-      <dialog-project
-        button-text="Website"
-        button-type="primary"
-      />
-    </div>
-
-    <el-tree
-      ref="tree"
-      :data="projects"
-      :indent="12"
-      class="tree"
-      node-key="id"
-      check-strictly
+    <div
+      v-show="!isPanelPages || !editingProjectId"
+      class="flex-column"
     >
-      <template v-slot="{ data }">
-        <div
-          v-if="data && data.id"
-          :class="{ selected: editingProjectId === data.id }"
-          class="relative w-100 over-hidden"
-          @click="nodeClick($event, data)"
-          @mouseenter="hoverId = data.id"
-        >
-          <component-name
-            :id="data.id"
-            icon="el-icon-files"
-            class="w-100 text-left"
-          />
+      <div class="m-b-10 justify-between">
+        <el-button
+          type="text"
+          class="no-border small-title"
+          icon="el-icon-arrow-right"
+          @click="isPanelPages = true"
+        >Websites</el-button>
 
-          <transition name="fade">
-            <div
-              v-if="data.id === hoverId"
-              class="controller"
-            >
-              <dialog-delete :id="data.id" />
+        <dialog-project
+          button-text="Website"
+          button-type="primary"
+        />
+      </div>
 
-              <dialog-project
-                :key="data.updatedAt"
-                :id="data.id"
-                type="text"
-              />
-            </div>
-          </transition>
-        </div>
-      </template>
-    </el-tree>
+      <el-tree
+        ref="tree"
+        :data="projects"
+        :indent="12"
+        class="tree"
+        node-key="id"
+        check-strictly
+      >
+        <template v-slot="{ data }">
+          <div
+            v-if="data && data.id"
+            :class="{ selected: editingProjectId === data.id }"
+            class="relative w-100 over-hidden"
+            @click="nodeClick($event, data)"
+            @mouseenter="hoverId = data.id"
+          >
+            <component-name
+              :id="data.id"
+              icon="el-icon-files"
+              class="w-100 text-left"
+            />
+
+            <transition name="fade">
+              <div
+                v-if="data.id === hoverId"
+                class="controller"
+              >
+                <dialog-delete :id="data.id" />
+
+                <dialog-project
+                  :key="data.updatedAt"
+                  :id="data.id"
+                  type="text"
+                />
+              </div>
+            </transition>
+          </div>
+        </template>
+      </el-tree>
+    </div>
   </div>
 </template>
 
@@ -72,6 +74,8 @@ import PanelPages from './PanelPages'
 import DialogDelete from './DialogDelete'
 import ComponentName from '../TemplateUtils/ComponentName'
 import { isProject } from '@/utils/node'
+
+let isPanelPages = false
 
 export default {
   name: 'PanelProjects',
@@ -85,7 +89,7 @@ export default {
   data() {
     return {
       hoverId: null,
-      isPanelPages: false
+      isPanelPages
     }
   },
   computed: {
@@ -100,6 +104,11 @@ export default {
           }
         })
         .filter(node => node)
+    }
+  },
+  watch: {
+    isPanelPages(value) {
+      isPanelPages = value
     }
   },
   created() {

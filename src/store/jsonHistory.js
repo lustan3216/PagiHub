@@ -18,13 +18,16 @@ const jsonHistory = new JsonHistory({
 
   callback: {
     onDeltasChanged() {
-      draftState.emitWhenRecord()
+      const componentSetId = store.state.node.editingComponentSetId
+      draftState.emitWhenRecord(componentSetId)
     },
     onUndid() {
-      draftState.emitWhenUndo()
+      const componentSetId = store.state.node.editingComponentSetId
+      draftState.emitWhenUndo(componentSetId)
     },
     onRedid() {
-      draftState.emitWhenRedo()
+      const componentSetId = store.state.node.editingComponentSetId
+      draftState.emitWhenRedo(componentSetId)
     }
   }
 })

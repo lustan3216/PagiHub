@@ -15,7 +15,6 @@
     />
 
     <el-button
-      v-if="!canNotDelete"
       type="text"
       icon="el-icon-delete"
       @click.stop="() => vmRemoveNode(node)"

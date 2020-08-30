@@ -21,7 +21,7 @@
     <slot />
 
     {{ nodeShortName }}
-    <template v-if="isComponent"> - {{ shortId }} </template>
+    <template> - {{ shortId }} </template>
   </el-button>
 </template>
 

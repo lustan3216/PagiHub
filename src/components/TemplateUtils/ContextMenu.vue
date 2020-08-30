@@ -140,7 +140,6 @@ export default {
         { name: 'Duplicate' },
         {
           name: 'Delete',
-          disabled: this.canNotDelete,
           shortKey: ['&#9003;']
         }
       ]

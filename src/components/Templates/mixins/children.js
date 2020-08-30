@@ -105,7 +105,12 @@ export default {
         return
       }
       // should use vmMap method to call to keep consistency
-      const records = []
+      const records = [
+        {
+          path: theNodeGonnaRemove.id,
+          value: undefined
+        }
+      ]
 
       traversalChildren(theNodeGonnaRemove, child => {
         records.unshift({
@@ -126,31 +131,32 @@ export default {
         })
       }
 
-      let stopNodeId
+      const stopNodeId = this.id
 
-      traversalAncestorAndSelf(
-        this.node,
-        ({ id, tag, children, parentNode }) => {
-          stopNodeId = id
-
-          if (
-            parentNode.parentNode &&
-            isComponentSet(parentNode.parentNode) &&
-            parentNode.children.length === 1
-          ) {
-            return 'stop'
-          }
-          else if (tag === GRID_GENERATOR_ITEM || children.length > 1) {
-            return 'stop'
-          }
-          else if (children.length === 1) {
-            records.unshift({
-              path: id,
-              value: undefined
-            })
-          }
-        }
-      )
+      // traversalAncestorAndSelf(
+      //   this.node,
+      //   ({ id, tag, children, parentNode }) => {
+      //     stopNodeId = id
+      //
+      //     if (
+      //       parentNode &&
+      //       parentNode.parentNode &&
+      //       isComponentSet(parentNode.parentNode) &&
+      //       parentNode.children.length === 1
+      //     ) {
+      //       return 'stop'
+      //     }
+      //     else if (tag === GRID_GENERATOR_ITEM || children.length > 1) {
+      //       return 'stop'
+      //     }
+      //     else if (children.length === 1) {
+      //       records.unshift({
+      //         path: id,
+      //         value: undefined
+      //       })
+      //     }
+      //   }
+      // )
 
       const ids = records.map(x => x.path)
       this.CLEAN_SELECTED_COMPONENT_ID(ids)

@@ -31,7 +31,7 @@ export function arrayMove(arr, old_index, new_index) {
   arr.splice(new_index, 0, arr.splice(old_index, 1)[0])
   return arr // for testing
 }
-window.arrayMove = arrayMove
+
 export function cloneObject(obj) {
   let copy
 
@@ -83,6 +83,14 @@ export function arrayLast(e) {
 
 export function arrayUniq(e) {
   return [...new Set(e)]
+}
+
+export function findLastIndex(array, fn) {
+  const index = array.slice().reverse().findIndex(fn)
+  const count = array.length - 1
+  const finalIndex = index >= 0 ? count - index : index
+
+  return finalIndex
 }
 
 export function splitAt(string, index) {

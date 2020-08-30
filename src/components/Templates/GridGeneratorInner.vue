@@ -152,8 +152,11 @@ export default {
       this.layout = layout
     },
     layoutUpdated(newChildren) {
-      if (this.isExample) {
+      this.$nextTick(() => {
         this.resizeNodeQuickFn()
+      })
+
+      if (this.isExample) {
         return
       }
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈

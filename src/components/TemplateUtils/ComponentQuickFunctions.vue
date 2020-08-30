@@ -199,6 +199,7 @@ export default {
       vmCreateEmptyItem(this.node)
     },
     resize() {
+      const self = this
       this.$nextTick(() => {
         if (!this.node || !this.componentSetEl) {
           return
@@ -249,6 +250,7 @@ export default {
               topShared = y
               widthShared = width
               heightShared = height
+              self.top = y
             }
           }
         )

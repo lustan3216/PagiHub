@@ -6,9 +6,19 @@
 import { isComponent } from '@/utils/node'
 
 export const rootComponentSetIdMap = {}
+export const componentBelongsMap = {}
+
+if (process.env.NODE_ENV !== 'production') {
+  window.rootComponentSetIdMap = rootComponentSetIdMap
+  window.componentBelongsMap = componentBelongsMap
+}
+
 export function recordRootComponentSetId(node, componentSetId) {
   if (isComponent(node) && componentSetId) {
     rootComponentSetIdMap[node.id] = componentSetId
+    componentBelongsMap[componentSetId] =
+      componentBelongsMap[componentSetId] || []
+    componentBelongsMap[componentSetId].push(node.id)
   }
 }
 

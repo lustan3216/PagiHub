@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-column h-100">
+  <div class="flex-column wh-100">
     <span
       v-if="editingNode"
       class="small-title align-center"
@@ -16,8 +16,6 @@
       :data="innerTree"
       :indent="12"
       :allow-drop="allowDrop"
-      :expand-on-click-node="false"
-      default-expand-all
       class="tree"
       node-key="id"
       draggable
@@ -89,7 +87,6 @@ import {
   sortByIndex,
   traversalSelfAndChildren
 } from '@/utils/node'
-import { capitalize } from '@/utils/string'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -125,7 +122,9 @@ export default {
       const cloneTree = cloneJson(tree)
       traversalSelfAndChildren(cloneTree, (node, parentNode) => {
         if (isLayers(node) && node.children) {
-          parentNode.children = sortByIndex(node.children, false)
+          parentNode.children = sortByIndex(node.children, false).filter(
+            node => !node[SOFT_DELETE]
+          )
         }
 
         if (
@@ -134,6 +133,7 @@ export default {
         ) {
           debugger
         }
+
         if (node[SOFT_DELETE]) {
           deleteBy(parentNode.children, 'id', node.id)
         }
@@ -147,7 +147,7 @@ export default {
       return this.componentsMap[this.editingComponentSetId]
     },
     editingNodeName() {
-      return capitalize(shortTagName(this.editingNode))
+      return shortTagName(this.editingNode)
     },
     editingPath() {
       if (isDesign(this.editingNode)) {
@@ -155,7 +155,7 @@ export default {
       }
       else if (isPage(this.editingNode)) {
         const { parentNode } = this.editingNode
-        return [capitalize(parentNode.label), this.editingNodeName].join(' > ')
+        return [parentNode.label, this.editingNodeName].join(' > ')
       }
     },
     pathIcon() {

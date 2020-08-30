@@ -1,5 +1,5 @@
 import store from '../store'
-import { allEqual, cloneJson, toArray } from './tool'
+import { allEqual, cloneJson, isUndefined, toArray } from './tool'
 import { humanize } from './string'
 import {
   NODE_TYPE,
@@ -139,12 +139,11 @@ export function shortTagName(node) {
   else {
     cache[tag] = tag
   }
-  cache[tag] = humanize(cache[tag]).replace('-', '')
-  return cache[tag]
-}
+  if (isComponent(node)) {
+    cache[tag] = humanize(cache[tag]).replace('-', '')
+  }
 
-export function isLayers(node) {
-  return node.tag === LAYERS
+  return cache[tag]
 }
 
 export function closestGridItem(node) {
@@ -160,40 +159,62 @@ export function closestGridItem(node) {
   return find(node)
 }
 
+export function isLayers(node) {
+  if (node) {
+    return node.tag === LAYERS && isUndefined(node[POLYMORPHISM])
+  }
+}
+
 export function isOverlapComponent(node) {
   return [LAYERS].includes(node.tag)
 }
 
 export function isGridItem(node) {
-  return node.tag === GRID_GENERATOR_ITEM
+  if (node) {
+    return node.tag === GRID_GENERATOR_ITEM
+  }
 }
 
 export function isGrid(node) {
-  return node.tag === GRID_GENERATOR
+  if (node) {
+    return node.tag === GRID_GENERATOR
+  }
 }
 
 export function isProject(node) {
-  return node.tag === NODE_TYPE.PROJECT
+  if (node) {
+    return node.tag === NODE_TYPE.PROJECT
+  }
 }
 
 export function isComponent(node) {
-  return !isComponentSet(node) && !isProject(node) && !isFolder(node)
+  if (node) {
+    return !isComponentSet(node) && !isProject(node) && !isFolder(node)
+  }
 }
 
 export function isPage(node) {
-  return isComponentSet(node) && node[POLYMORPHISM] === NODE_TYPE.PAGE
+  if (node) {
+    return isComponentSet(node) && node[POLYMORPHISM] === NODE_TYPE.PAGE
+  }
 }
 
 export function isDesign(node) {
-  return isComponentSet(node) && node[POLYMORPHISM] === NODE_TYPE.DESIGN
+  if (node) {
+    return isComponentSet(node) && node[POLYMORPHISM] === NODE_TYPE.DESIGN
+  }
 }
 
 export function isFolder(node) {
-  return node.tag === NODE_TYPE.FOLDER
+  if (node) {
+    return node.tag === NODE_TYPE.FOLDER
+  }
 }
 
 export function isComponentSet(node) {
-  return node.tag === NODE_TYPE.COMPONENT_SET
+  if (node) {
+    return node.tag === NODE_TYPE.COMPONENT_SET
+  }
 }
 
 let index = 1

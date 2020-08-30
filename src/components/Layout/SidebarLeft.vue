@@ -43,21 +43,22 @@
 
     <panel-asset
       v-show="editingAsset"
-      v-if="editingAsset || uploading"
       @processStart="uploading = true"
       @processEnd="uploading = false"
     />
 
     <split-pane
-      v-if="!editingAsset"
+      v-show="!editingAsset"
       :default-percent="40"
       split="horizontal"
     >
       <template slot="paneL">
-        <component
-          v-if="isLogin"
-          :is="activePanel"
-        />
+        <keep-alive>
+          <component
+            v-if="isLogin"
+            :is="activePanel"
+          />
+        </keep-alive>
       </template>
 
       <template slot="paneR">
@@ -85,7 +86,7 @@ export default {
   },
   data() {
     return {
-      activePanel: 'PanelProject',
+      activePanel: 'PanelDesigns',
       uploading: false
     }
   },
@@ -126,6 +127,7 @@ export default {
   background-color: white;
   border-right: 1px solid $color-grey;
   transition: width 0.2s ease;
+  height: 100%;
 }
 
 ::v-deep {

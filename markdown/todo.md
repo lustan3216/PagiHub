@@ -12,31 +12,33 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-刪除有問題 第一層node也不要刪除
 page 裡面的instance 要可以點右鍵跳到主component
 instance 可以直接複製，跟著王 copy父曾是master就直接copy ，但也要做一個按鈕控制分離，當copy進page record一個值紀錄此page有用該component
-carousle 的命名要改，因為grid 的名字會重疊
 移動 grid item的時候 標記外層grid，才知道哪裡被卡住
+刪除可以刪到底， 會出現加入component的按鈕，只能加入 componentet or gird
+panel node 會一直被關起來
 
 layer 裡面層級的 css 看要不要要處理，css 要放在哪一個 grid
-bug: grid 畫面縮小後會壞掉
 
 pages 系統
 page 還要做路由
 
-<li>style 有必要做到device可以區分嗎？</li>
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
-5<li>sreen size changer</li>
-5<li>每個 component set 都可以組建合併得按鈕 / or 選版本</li>
+button 要可以連結路由
+5<li>弄個 panel 可以快速顯示 master instance & 顯示切換版本</li>
 10<li>每個 button 都可以點了 連結到 componentSet / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
 5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li> 合併 grid item 跟 component 的 style, style 應該有辦法合併獲優先顯示 component 的
 5<li>search panel</li>
 20<li>可瀏覽 production 版本</li>
+
 <li>need login when publishing </li>
 
+bug: grid 畫面縮小後會壞掉
+5<li>sreen size changer</li>
 background color
 font 的 padding
 
+<li>style 有必要做到device可以區分嗎？</li>
 <li>SEO首頁</li>
 update children 要做 queue
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction在弄就好

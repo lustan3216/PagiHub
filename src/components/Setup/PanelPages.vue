@@ -1,5 +1,8 @@
 <template>
-  <div class="flex-column h-100">
+  <div
+    v-if="editingProjectId"
+    class="flex-column wh-100"
+  >
     <div class="m-b-10 justify-between">
       <el-button
         type="text"
@@ -7,18 +10,15 @@
         icon="el-icon-arrow-left"
         @click="$emit('update:visible', false)"
       >
-        Pages
+        {{ projectName }}
       </el-button>
 
-      <el-button-group>
-        <dialog-component-set
-          :parent-id="editingProjectId"
-          polymorphism="page"
-          button-text="Page"
-          button-type="primary"
-        />
-        <el-button type="primary">Routes</el-button>
-      </el-button-group>
+      <dialog-component-set
+        :parent-id="editingProjectId"
+        polymorphism="page"
+        button-text="Page"
+        button-type="primary"
+      />
     </div>
 
     <el-tree
@@ -72,7 +72,7 @@ import DialogProject from './DialogProject'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
 import ComponentName from '../TemplateUtils/ComponentName'
-import { kebabCase } from '@/utils/string'
+import { kebabCase, capitalize } from '@/utils/string'
 import {
   isComponentSet,
   isProject,
@@ -109,6 +109,9 @@ export default {
           return node.parentId === this.editingProjectId && isPage(node)
         })
         .map(node => cloneJsonWithoutChildren(node))
+    },
+    projectName() {
+      return this.componentsMap[this.editingProjectId].label
     }
   },
   created() {

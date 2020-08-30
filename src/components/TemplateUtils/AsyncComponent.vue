@@ -37,14 +37,8 @@
 
 <script>
 import { ObserveVisibility } from 'vue-observe-visibility'
-import {
-  isComponentSet,
-  isLayers,
-  isGridItem,
-  isGrid,
-  getNode
-} from '@/utils/node'
-import { CAN_BE_EDITED, COMPONENT_SET } from '@/const'
+import { isLayers, isGridItem, isGrid, getNode } from '@/utils/node'
+import { CAN_BE_EDITED } from '@/const'
 import { mapState } from 'vuex'
 
 export default {
@@ -98,21 +92,27 @@ export default {
   },
   data() {
     // draftMode因為css & setting需要拿vm，不打開拿不到
-    return {
-      vIf: false,
-      options: {
-        callback: isVisible => {
-          if (this.onceObserve) {
-            if (isVisible) {
-              this.vIf = isVisible
-              this.options = false
-            }
-          }
-          else {
-            this.vIf = isVisible
-          }
-        }
+    const node = getNode(this.id)
+    let noObserve = false
+
+    let options = {
+      once: this.onceObserve,
+      callback: isVisible => {
+        this.vIf = isVisible
+      },
+      intersection: {
+        rootMargin: '100px'
       }
+    }
+
+    if (isGridItem(node) || isGrid(node) || isLayers(node)) {
+      noObserve = true
+      options = false
+    }
+
+    return {
+      vIf: noObserve,
+      options
     }
   },
   computed: {

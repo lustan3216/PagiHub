@@ -158,7 +158,7 @@ const mutations = {
     Array.isArray(payLoad) ? payLoad.forEach(set) : set(payLoad)
   },
   RECORD(state, payLoad) {
-    jsonHistory.debounceRecord(payLoad, 200)
+    jsonHistory.debounceRecord(payLoad, 150)
   },
   REDO() {
     const done = rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)
@@ -199,7 +199,7 @@ function rollbackSelectedComponentSet(deltaGroup) {
     return false
   }
 
-  const id = objectFirstKey(deltaGroup[0])
+  const id = objectFirstKey(deltaGroup.group[0])
   const { editingProjectId } = store.state.node
   const rootComponentSetId = getRootComponentSetId(id)
   if (rootComponentSetId !== editingProjectId) {

@@ -7,6 +7,7 @@ import asset from './modules/asset'
 import mode from './modules/mode'
 import user from './modules/user'
 import { isUndefined } from '../utils/tool'
+import draftState from '../utils/draftState'
 
 Vue.use(Vuex)
 
@@ -56,5 +57,10 @@ const store = new Vuex.Store({
     asset
   }
 })
+
+store.watch(
+  state => state.node.editingComponentSetId,
+  (newValue, oldValue) => draftState.requestImmediately(oldValue)
+)
 
 export default store

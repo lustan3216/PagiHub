@@ -50,14 +50,18 @@ export function deleteComponentSet(id) {
   return API.del('staging', `/component-sets/${id}`, {})
 }
 
-export function patchComponentSetChildren({ deltas, action, tree }) {
-  return API.patch(
-    'staging',
-    `/component-sets/${store.state.node.editingComponentSetId}/children`,
-    {
-      body: { deltas, action, tree }
-    }
-  )
+export function patchComponentSetChildren({
+  componentSetId,
+  deltas,
+  action,
+  tree
+}) {
+  if (!componentSetId) {
+    debugger
+  }
+  return API.patch('staging', `/component-sets/${componentSetId}/children`, {
+    body: { deltas, action, tree }
+  })
 }
 
 export function createComponentSet({

@@ -39,10 +39,60 @@
     </template>
 
     <template slot="paneR">
-      <div
-        class="flex"
-        style="align-items: baseline"
-      >
+      <div class="flex-column wh-100">
+        <el-tree
+          ref="tree"
+          :filter-node-method="filterTagBySearching"
+          :data="nodeTree"
+          :indent="16"
+          :draggable="false"
+          class="tree h-100"
+          node-key="id"
+          default-expand-all
+        >
+          <template v-slot="{ data }">
+            <div
+              class="justify-between relative w-100 over-hidden"
+              @mouseenter="hoverImage = data"
+              @mouseleave="hoverImage = null"
+            >
+              <div class="align-center">
+                <div
+                  v-if="data.url"
+                  :style="{
+                    backgroundImage: `url('${assetHost + data.url}')`
+                  }"
+                  class="m-r-5 sub-image"
+                />
+
+                <el-button
+                  :icon="data.url ? '' : 'el-icon-folder'"
+                  type="text"
+                >
+                  {{ data.label }}
+                </el-button>
+              </div>
+
+              <div
+                v-if="hoverImage && hoverImage.id === data.id"
+                class="p-r-10"
+              >
+                <el-button
+                  v-if="data.url"
+                  type="text"
+                  icon="el-icon-plus"
+                  @click="addImageToComponent(data)"
+                />
+                <el-button
+                  type="text"
+                  icon="el-icon-delete"
+                  @click="removeImage(data)"
+                />
+              </div>
+            </div>
+          </template>
+        </el-tree>
+
         <el-input
           v-shortkey.avoid
           v-model="filterText"
@@ -51,59 +101,6 @@
           class="m-b-10"
         />
       </div>
-
-      <el-tree
-        ref="tree"
-        :filter-node-method="filterTagBySearching"
-        :data="nodeTree"
-        :indent="16"
-        :draggable="false"
-        class="tree"
-        node-key="id"
-        default-expand-all
-      >
-        <template v-slot="{ data }">
-          <div
-            class="justify-between relative w-100 over-hidden"
-            @mouseenter="hoverImage = data"
-            @mouseleave="hoverImage = null"
-          >
-            <div class="align-center">
-              <div
-                v-if="data.url"
-                :style="{
-                  backgroundImage: `url('${assetHost + data.url}')`
-                }"
-                class="m-r-5 sub-image"
-              />
-
-              <el-button
-                :icon="data.url ? '' : 'el-icon-folder'"
-                type="text"
-              >
-                {{ data.label }}
-              </el-button>
-            </div>
-
-            <div
-              v-if="hoverImage && hoverImage.id === data.id"
-              class="p-r-10"
-            >
-              <el-button
-                v-if="data.url"
-                type="text"
-                icon="el-icon-plus"
-                @click="addImageToComponent(data)"
-              />
-              <el-button
-                type="text"
-                icon="el-icon-delete"
-                @click="removeImage(data)"
-              />
-            </div>
-          </div>
-        </template>
-      </el-tree>
     </template>
   </split-pane>
 </template>
@@ -169,6 +166,7 @@ export default {
     }
   },
   created() {
+    this.getAssets()
     setOptions({
       server: {
         process: postAsset

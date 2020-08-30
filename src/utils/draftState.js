@@ -1,35 +1,35 @@
 import { patchComponentSetChildren } from '@/api/node'
 import jsonHistory from '@/store/jsonHistory'
-import store from '@/store'
-import { cloneJson } from '@/utils/tool'
+import { findLastIndex } from '@/utils/tool'
 
 const DEBOUNCE_TIME = 1500
+const INIT_TIME = +new Date()
 
 class DraftState {
-  remoteRecordTime = +new Date()
+  remoteRecordTime = INIT_TIME
   timerId = null
   requesting = false
   promise = null
 
-  emitWhenRecord() {
+  emitWhenRecord(componentSetId) {
     this.cleanTime()
 
     if (!this.requesting) {
-      this.startTime()
+      this.startTime(componentSetId)
     }
   }
 
-  emitWhenRedo() {
+  emitWhenRedo(componentSetId) {
     this.cleanTime()
     if (!this.requesting) {
-      this.startTime()
+      this.startTime(componentSetId)
     }
   }
 
-  emitWhenUndo() {
+  emitWhenUndo(componentSetId) {
     this.cleanTime()
     if (!this.requesting) {
-      this.startTime()
+      this.startTime(componentSetId)
     }
   }
 
@@ -38,11 +38,20 @@ class DraftState {
     this.timerId = null
   }
 
-  startTime() {
-    this.timerId = setTimeout(this.requestPutDeltas.bind(this), DEBOUNCE_TIME)
+  startTime(componentSetId) {
+    this.timerId = setTimeout(this.requestPutDeltas.bind(this, componentSetId), DEBOUNCE_TIME)
   }
 
-  async publish(tree) {
+  async requestImmediately(componentSetId) {
+    if (this.promise) {
+      await this.promise
+    }
+
+    this.cleanTime()
+    this.requestPutDeltas(componentSetId)
+  }
+
+  async publish(componentSetId, tree) {
     try {
       await this.promise
       this.cleanTime()
@@ -50,7 +59,7 @@ class DraftState {
 
       const requestDeltaTime = +new Date()
 
-      await patchComponentSetChildren({ tree })
+      await patchComponentSetChildren({ tree, componentSetId })
       this.remoteRecordTime = requestDeltaTime
     }
     catch (e) {
@@ -64,16 +73,17 @@ class DraftState {
 
   get currentDeltaTime() {
     const { currentIndex, deltas } = jsonHistory
-    return deltas[currentIndex].createdAt
+    return deltas[currentIndex] ? deltas[currentIndex].createdAt : INIT_TIME
   }
 
   getRedoDeltas() {
     //        2.5 = remoteRecordTime
     // [5,4,3,    2,1]
     // [5,4,3,2,1].slice(0,3) = [5,4,3]
-    const index = jsonHistory.deltas.findIndex(
-      delta => delta.createdAt > this.remoteRecordTime
-    )
+    const index = findLastIndex(jsonHistory.deltas, delta => {
+      return delta.createdAt > this.remoteRecordTime
+    })
+
     return jsonHistory.deltas.slice(jsonHistory.currentIndex, index + 1)
   }
 
@@ -82,12 +92,12 @@ class DraftState {
     // [5,4,   3,2,1]
     // [5,4,3,2,1].slice(0,3) = [5,4,3]
     const index = jsonHistory.deltas.findIndex(
-      delta => delta.createdAt < this.remoteRecordTime
+      delta => delta.createdAt <= this.remoteRecordTime
     )
-    return jsonHistory.deltas.slice(jsonHistory.currentIndex, index + 1)
+    return jsonHistory.deltas.slice(index, jsonHistory.currentIndex)
   }
 
-  async requestPutDeltas() {
+  async requestPutDeltas(componentSetId) {
     try {
       if (this.remoteRecordTime === this.currentDeltaTime) {
         return
@@ -107,7 +117,7 @@ class DraftState {
       }
 
       const requestDeltaTime = this.currentDeltaTime
-      this.promise = await patchComponentSetChildren({ deltas, action })
+      this.promise = await patchComponentSetChildren({ deltas, action, componentSetId })
       this.remoteRecordTime = requestDeltaTime
       this.requestPutDeltas() // to check any new record is created when requesting
     }

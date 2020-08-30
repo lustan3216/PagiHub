@@ -33,12 +33,6 @@ export default {
       }
     }
   },
-  updated() {
-    this.getComponentSetChildren(this[ID])
-    if (this.isDraftMode) {
-      vmAppend(this, this.isExample)
-    }
-  },
   mounted() {
     // Don't put in created to prevent some component fail before mount
     if (this.isDraftMode) {

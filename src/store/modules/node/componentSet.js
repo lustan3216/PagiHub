@@ -85,7 +85,7 @@ export const actions = {
   async publishComponentSet({ commit, state }, description) {
     const node = state.componentsMap[state.editingComponentSetId]
     const tree = cloneJson(node)
-    await draftState.publish(tree)
+    await draftState.publish(state.editingComponentSetId, tree)
     const { data: versionNode } = await publishComponentSet(
       state.editingComponentSetId,
       tree,
