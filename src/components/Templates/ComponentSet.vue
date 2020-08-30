@@ -23,15 +23,17 @@ export default {
       return this.innerChildren[0]
     }
   },
+  watch: {
+    [`node.${[MASTER_ID]}`](masterID) {
+      if (masterID) {
+        if (!this.componentsMap[masterID]) {
+          this.getComponentSet(masterID)
+        }
+      }
+    }
+  },
   created() {
     this.getComponentSetChildren(this[ID])
-
-    // const masterID = this.componentsMap[this.id][MASTER_ID]
-    // if (masterID) {
-    //   if (!this.componentsMap[masterID]) {
-    //     this.getComponentSet(masterID)
-    //   }
-    // }
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount

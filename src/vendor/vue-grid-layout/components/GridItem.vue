@@ -10,9 +10,9 @@
   </div>
 </template>
 <style>
-  .vue-grid-item {
-    transition: all 200ms ease;
-    transition-property: left, top, right;
+  .animated {
+    /*transition: all 200ms ease;*/
+    /*transition-property: left, top, right;*/
     /* add right for rtl */
   }
 
@@ -208,6 +208,7 @@
     inject: ['eventBus'],
     data: function() {
       return {
+        animated: false,
         cols: 1,
         containerWidth: 100,
         rowHeight: 30,
@@ -310,6 +311,7 @@
     },
     mounted: function() {
       // lots-design fix bug
+      this.animated = true
       if (this.$parent.responsive) {
         this.cols = this.$parent.cols[this.$parent.lastBreakpoint]
       } else {
@@ -411,6 +413,7 @@
     computed: {
       classObj() {
         return {
+          animated: this.animated,
           'vue-resizable': this.resizableAndNotStatic,
           'static': this.static,
           'resizing': this.isResizing,
