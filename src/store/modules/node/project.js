@@ -22,7 +22,7 @@ export const actions = {
     let node = state.componentsMap[id]
 
     if (!node) {
-      const { data } = await getProject(id)
+      const { data } = await getProject({ id })
       commit('SET_NODES_TO_MAP', { nodes: data })
       node = data
     }
@@ -36,7 +36,7 @@ export const actions = {
   },
 
   async createProject({ commit }, form) {
-    const { data } = await createProject(form)
+    const { data } = await createProject({ body: form })
 
     commit('SET', { editingProjectId: data.id })
     commit('SET_NODES_TO_MAP', { nodes: data })
@@ -44,7 +44,7 @@ export const actions = {
   },
 
   async patchProject({ commit }, { id, ...form }) {
-    const { data } = await patchProject(id, form)
+    const { data } = await patchProject({ id, body: form })
     commit('SET_NODES_TO_MAP', { nodes: data })
   },
 
@@ -59,7 +59,7 @@ export const actions = {
   },
 
   async deleteProjectNode({ state, commit, getters, dispatch }, id) {
-    await deleteProject(id)
+    await deleteProject({ id })
     commit('INIT')
   }
 }

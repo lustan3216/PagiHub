@@ -49,7 +49,7 @@ const actions = {
     }
   },
   updateUser({ state, commit }, {}) {
-    state.user.updateAttributes([{ Name: 'custom:description',Value: '1' }], () => {
+    state.user.updateAttributes([{ Name: 'custom:description', Value: '1' }], () => {
 
     })
   },

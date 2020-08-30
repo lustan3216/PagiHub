@@ -25,7 +25,7 @@ export const actions = {
 
     commit('SET_EDITING_COMPONENT_SET_ID', id)
 
-    const componentsArray = await getComponentSetChildren(id)
+    const componentsArray = await getComponentSetChildren({ id })
     if (componentsArray.length) {
       commit('SET_NODES_TO_MAP', {
         nodes: componentsArray,
@@ -36,11 +36,11 @@ export const actions = {
     }
   },
 
-  async getComponentSets({ commit, state }, { polymorphism }) {
-    const { data: nodes } = await getComponentSets(
-      state.editingProjectId,
+  async getComponentSets({ commit, state }, { projectId, polymorphism }) {
+    const { data: nodes } = await getComponentSets({
+      parentId: projectId,
       polymorphism
-    )
+    })
     if (nodes[0] && nodes[0].id) {
       commit('SET_EDITING_COMPONENT_SET_ID', nodes[0].id)
     }
@@ -74,10 +74,13 @@ export const actions = {
     { commit, state, dispatch },
     { id, description, label, tags }
   ) {
-    const { data } = await patchComponentSet(id, {
-      description,
-      label,
-      tags
+    const { data } = await patchComponentSet({
+      id,
+      body: {
+        description,
+        label,
+        tags
+      }
     })
     commit('SET_NODES_TO_MAP', { nodes: data })
   },
@@ -86,11 +89,11 @@ export const actions = {
     const node = state.componentsMap[state.editingComponentSetId]
     const tree = cloneJson(node)
     await draftState.publish(state.editingComponentSetId, tree)
-    const { data: versionNode } = await publishComponentSet(
-      state.editingComponentSetId,
+    const { data: versionNode } = await publishComponentSet({
+      id: state.editingComponentSetId,
       tree,
       description
-    )
+    })
     commit('SOFT_RECORD', {
       path: `${versionNode.id}.version`,
       value: versionNode.version
@@ -98,7 +101,7 @@ export const actions = {
   },
 
   async deleteComponentSet({ state, commit, getters, dispatch }, id) {
-    await deleteComponentSet(id)
+    await deleteComponentSet({ id })
     const node = state.componentsMap[id]
 
     traversalSelfAndChildren(node, child => {

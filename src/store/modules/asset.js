@@ -15,13 +15,13 @@ const mutations = {
 const actions = {
   async getAssets({ rootState, commit }) {
     const { editingProjectId } = rootState.node
-    const data = await getAssets(editingProjectId)
+    const data = await getAssets({ projectId: editingProjectId })
 
     commit('SET', { images: data.data })
   },
   // postAsset is a special case, hard to do here. the code in PanelAsset
   async deleteAsset({ state, commit }, id) {
-    await deleteAsset(id)
+    await deleteAsset({ id })
     commit('SET', { images: state.images.filter(image => image.id !== id) })
   }
 }

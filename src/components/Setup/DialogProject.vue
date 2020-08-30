@@ -123,7 +123,7 @@ export default {
             })
           }
           else {
-            await this.createProject(this.form)
+            await this.createProject({ body: this.form })
           }
 
           this.form = {

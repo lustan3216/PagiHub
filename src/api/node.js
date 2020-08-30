@@ -1,4 +1,3 @@
-import store from '@/store'
 import localforage from 'localforage'
 import { toArray } from '@/utils/tool'
 import { queryString } from '@/utils/url'
@@ -8,45 +7,45 @@ export function getProjects() {
   return API.get('staging', '/projects', {})
 }
 
-export function getProject(id) {
+export function getProject({ id }) {
   return API.get('staging', `/projects/${id}`, {})
 }
 
-export function createProject(body) {
+export function createProject({ body }) {
   return API.post('staging', `/projects`, { body })
 }
 
-export function patchProject(id, body) {
+export function patchProject({ id, body }) {
   return API.patch('staging', `/projects/${id}`, { body })
 }
 
-export function deleteProject(id) {
+export function deleteProject({ id }) {
   return API.del('staging', `/projects/${id}`, {})
 }
 
-export function getComponentSets(parentId, polymorphism) {
+export function getComponentSets({ parentId, polymorphism }) {
   const _queryString = queryString({
-    polymorphism,
-    parentId
+    parentId,
+    polymorphism
   })
   return API.get('staging', `/component-sets?${_queryString}`, {})
 }
 
-export function getComponentSetChildren(id) {
+export function getComponentSetChildren({ id }) {
   return API.get('staging', `/component-sets/${id}/children`, {})
 }
 
-export function patchComponentSet(id, body) {
+export function patchComponentSet({ id, body }) {
   return API.patch('staging', `/component-sets/${id}`, { body })
 }
 
-export function publishComponentSet(id, tree, description) {
+export function publishComponentSet({ id, tree, description }) {
   return API.post('staging', `/component-sets/${id}/publish`, {
     body: { tree, description }
   })
 }
 
-export function deleteComponentSet(id) {
+export function deleteComponentSet({ id }) {
   return API.del('staging', `/component-sets/${id}`, {})
 }
 

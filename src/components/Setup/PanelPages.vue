@@ -114,10 +114,15 @@ export default {
       return this.componentsMap[this.editingProjectId].label
     }
   },
-  created() {
-    this.getComponentSets({
-      polymorphism: 'page'
-    })
+  watch: {
+    editingProjectId: {
+      handler(projectId) {
+        if (projectId) {
+          this.getComponentSets({ projectId, polymorphism: 'page' })
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
     ...mapMutations('node', {
