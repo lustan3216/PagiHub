@@ -1,7 +1,7 @@
 import RulesGenerator from './RulesGenerator'
 import { assignDefaultValue } from '../utils/ruleTool'
 import { capitalize } from '@/utils/string'
-import { isArray } from '@/utils/tool'
+import { isArray } from '@/utils/array'
 
 export default function(name, rules, defaultSetting) {
   return {

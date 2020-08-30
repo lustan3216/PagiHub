@@ -4,7 +4,7 @@ import {
   sortByIndex,
   traversalAncestorAndSelf
 } from '@/utils/node'
-import { deleteBy, findIndexBy } from '@/utils/tool'
+import { deleteBy, findIndexBy } from '@/utils/array'
 import { appendIdsWithoutConnection } from '@/utils/nodeId'
 import { CHILDREN, SORT_INDEX } from '@/const'
 import { mapMutations } from 'vuex'

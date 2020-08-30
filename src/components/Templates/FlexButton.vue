@@ -53,7 +53,7 @@ import TextEditorInner from './TextEditorInner'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { REDIRECT_TO } from '../Setup/EditorSetting/SettingFlexButton'
-import { deleteBy } from '@/utils/tool'
+import { deleteBy } from '@/utils/array'
 
 export default {
   defaultSetting,

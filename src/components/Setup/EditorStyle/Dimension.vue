@@ -120,7 +120,8 @@ import SelectUnit from '@/components/Components/SelectUnit'
 import { Divider } from 'element-ui'
 import { COLUMNS } from '@/const'
 import { isGridItem } from '@/utils/node'
-import { arrayLast, arrayUniq, getValueByPath } from '@/utils/tool'
+import { arrayLast, arrayUniq } from '@/utils/array'
+import { getValueByPath } from '@/utils/tool'
 
 export default {
   name: 'Dimension',

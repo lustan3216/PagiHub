@@ -1,6 +1,6 @@
 import { patchComponentSetChildren } from '@/api/node'
 import jsonHistory from '@/store/jsonHistory'
-import { findLastIndex } from '@/utils/tool'
+import { findLastIndex } from '@/utils/array'
 
 const DEBOUNCE_TIME = 1500
 const INIT_TIME = +new Date()

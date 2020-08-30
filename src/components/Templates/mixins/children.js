@@ -5,7 +5,8 @@ import {
   GRID_GENERATOR_ITEM,
   SORT_INDEX
 } from '@/const'
-import { cloneJson, arrayLast, getValueByPath } from '@/utils/tool'
+import { arrayLast } from '@/utils/array'
+import { cloneJson, getValueByPath } from '@/utils/tool'
 import {
   traversalChildren,
   getNode,

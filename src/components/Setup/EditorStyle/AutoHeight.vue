@@ -17,7 +17,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import { AUTO_HEIGHT, STYLE, TEXT_EDITOR } from '@/const'
-import { arrayLast } from '@/utils/tool'
+import { arrayLast } from '@/utils/array'
 
 export default {
   name: 'AutoHeight',

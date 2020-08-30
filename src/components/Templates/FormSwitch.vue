@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import { objectAssign, cloneJson } from '@/utils/tool'
+import { objectAssign } from '@/utils/object'
+import { cloneJson } from '@/utils/tool'
 import nodeMixin from '@/components/Templates/mixins/node'
 import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSwitch'

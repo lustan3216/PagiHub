@@ -1,6 +1,7 @@
 import { kebabCase, capitalize } from 'element-ui/src/utils/util'
+import { isString } from 'element-ui/src/utils/types'
 
-export { kebabCase, capitalize }
+export { isString, kebabCase, capitalize }
 
 export function camelCase(value) {
   if (!value) return ''
@@ -24,4 +25,8 @@ export function humanize(value) {
     /-(\w)/g,
     x => ` ${x[1].toUpperCase()}`
   )
+}
+
+export function splitAt(string, index) {
+  return [string.slice(0, index), string.slice(index)]
 }

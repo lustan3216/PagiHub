@@ -1,4 +1,4 @@
-import { arrayFirst, arrayLast } from '@/utils/tool'
+import { arrayFirst, arrayLast } from '@/utils/array'
 const VALUES_REG = /,(?![^\(]*\))/
 const PARTS_REG = /\s(?![^(]*\))/
 const LENGTH_REG = /^[0-9]+[a-zA-Z%]+?$/

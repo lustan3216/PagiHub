@@ -1,5 +1,6 @@
 import { SET } from '../index'
-import { arraySubtract, cloneJson, toArray } from '@/utils/tool'
+import { arraySubtract, toArray } from '@/utils/array'
+import { cloneJson } from '@/utils/tool'
 import {
   isComponent,
   traversalAncestorAndSelf,

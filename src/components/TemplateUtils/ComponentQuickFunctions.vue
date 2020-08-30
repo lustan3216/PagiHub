@@ -73,7 +73,7 @@ import ContextMenu from './ContextMenu'
 import ConnectionJumper from './ConnectionJumper'
 import { Popover } from 'element-ui'
 import { isGridItem, getNode } from '@/utils/node'
-import { arrayLast } from '@/utils/tool'
+import { arrayLast } from '@/utils/array'
 import {
   CAN_NEW_ITEM,
   CAROUSEL,

@@ -23,7 +23,7 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import forNode from './mixins/forNode'
-import { arrayLast } from '@/utils/tool'
+import { arrayLast } from '@/utils/array'
 
 export default {
   name: 'Opacity',

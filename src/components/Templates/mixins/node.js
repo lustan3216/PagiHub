@@ -1,6 +1,8 @@
 import { mapState } from 'vuex'
 import { vmAppend, vmRemove } from '@/utils/vmMap'
-import { objectAssign, cloneJson } from '@/utils/tool'
+import { objectAssign } from '@/utils/object'
+import { cloneJson } from '@/utils/tool'
+
 import { PROPS, VALUE, GRID_GENERATOR, MASTER_ID, ID, STYLE } from '@/const'
 import FreeStyle from '@/directive/freeStyle'
 import { getNode, isGrid } from '@/utils/node'

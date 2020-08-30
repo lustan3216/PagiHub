@@ -49,7 +49,7 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import forNodeMixin from './mixins/forNode'
-import { arrayLast, arrayUniq } from '@/utils/tool'
+import { arrayLast, arrayUniq } from '@/utils/array'
 import { Divider } from 'element-ui'
 
 export default {

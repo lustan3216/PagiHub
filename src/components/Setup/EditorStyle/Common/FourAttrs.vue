@@ -82,7 +82,7 @@
 
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
-import { arrayUniq, isArray } from '@/utils/tool'
+import { arrayUniq, isArray } from '@/utils/array'
 import { humanize } from '@/utils/string'
 
 export default {

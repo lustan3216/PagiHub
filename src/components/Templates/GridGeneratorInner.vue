@@ -31,7 +31,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { AUTO_HEIGHT, CHILDREN, COLUMNS, PROPS } from '@/const'
-import { deleteBy } from '@/utils/tool'
+import { deleteBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'

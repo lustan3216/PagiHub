@@ -87,7 +87,7 @@ import { isMac } from '@/utils/device'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import { vmPasteNodes, vmRemoveNode, vmCreateEmptyItem } from '@/utils/vmMap'
-import { arrayLast } from '@/utils/tool'
+import { arrayLast } from '@/utils/array'
 import DialogPublish from '@/components/Setup/DialogPublish'
 
 export default {

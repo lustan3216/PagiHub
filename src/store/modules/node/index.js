@@ -1,16 +1,15 @@
 import store, { SET } from '@/store'
 import { CHILDREN, ID, PARENT_ID } from '@/const'
 import {
-  cloneJson,
   deleteBy,
   findBy,
-  objectFirstKey,
-  setValueByPath,
   toArray
-} from '@/utils/tool'
+} from '@/utils/array'
 import Vue from 'vue'
 import { defineProperties } from '@/utils/nodeProperties'
 import { isComponentSet, isProject } from '@/utils/node'
+import { objectFirstKey } from '@/utils/object'
+import { cloneJson, setValueByPath } from '@/utils/tool'
 import { getRootComponentSetId } from '@/utils/rootComponentSetId'
 import jsonHistory from '@/store/jsonHistory'
 import app from '@/main'

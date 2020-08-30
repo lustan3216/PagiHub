@@ -1,5 +1,5 @@
 import { ID, PARENT_ID, MASTER_ID, CHILDREN } from '../const'
-import { toArray } from './tool'
+import { toArray } from './array'
 import { ulid } from 'ulid'
 import {
   isComponent,

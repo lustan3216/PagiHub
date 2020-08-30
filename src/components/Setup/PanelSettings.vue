@@ -10,7 +10,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { bigCamelCase } from '@/utils/string'
-import { arrayLast, arrayUniq } from '@/utils/tool'
+import { arrayLast, arrayUniq } from '@/utils/array'
 
 const self = {
   name: 'PanelSettings',

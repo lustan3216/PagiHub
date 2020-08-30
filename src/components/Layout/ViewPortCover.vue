@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { arrayLast } from '@/utils/tool'
+import { arrayLast } from '@/utils/array'
 export default {
   name: 'ViewPortCover',
   props: {

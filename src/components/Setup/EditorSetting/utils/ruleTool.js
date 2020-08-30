@@ -4,7 +4,7 @@ import {
   cloneJson,
   isUndefined,
   isArray
-} from '@/utils/tool'
+} from '@/utils/array'
 import { capitalize, humanize } from '@/utils/string'
 import { url as urlPath } from '@/validator'
 

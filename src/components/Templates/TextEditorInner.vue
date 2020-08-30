@@ -312,7 +312,7 @@ import {
   TextAlign
 } from '../../vendor/tiptap'
 import { mapState, mapMutations } from 'vuex'
-import { arrayUniq } from '../../utils/tool'
+import { arrayUniq } from '../../utils/array'
 import WebFont from 'webfontloader'
 import ColorPicker from '@/components/Components/ColorPicker'
 

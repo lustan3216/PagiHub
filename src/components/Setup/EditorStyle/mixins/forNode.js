@@ -1,5 +1,6 @@
 import { mapMutations, mapGetters } from 'vuex'
-import { arrayLast, getValueByPath } from '@/utils/tool'
+import { arrayLast } from '@/utils/array'
+import { getValueByPath } from '@/utils/tool'
 import { STYLE } from '@/const'
 
 export default function(attr) {

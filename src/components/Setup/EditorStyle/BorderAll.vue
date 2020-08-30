@@ -50,7 +50,8 @@
 <script>
 import Border from './Border'
 import { Divider } from 'element-ui'
-import { arrayLast, arrayUniq, getValueByPath } from '@/utils/tool'
+import { arrayLast, arrayUniq } from '@/utils/array'
+import { getValueByPath } from '@/utils/tool'
 import { mapMutations, mapGetters } from 'vuex'
 import { STYLE } from '@/const'
 

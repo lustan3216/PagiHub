@@ -66,8 +66,8 @@
 import SelectUnit from '@/components/Components/SelectUnit'
 import forNodeMixin from './mixins/forNode'
 import { Divider } from 'element-ui'
-import { arrayLast, splitAt } from '@/utils/tool'
-import { humanize } from '@/utils/string'
+import { arrayLast } from '@/utils/array'
+import { humanize, splitAt } from '@/utils/string'
 
 export default {
   name: 'Effect',

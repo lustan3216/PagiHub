@@ -12,7 +12,8 @@
 <script>
 import formCreate from '@form-create/element-ui'
 import { Switch, Tooltip, InputNumber } from 'element-ui'
-import { cloneObject, getValueByPath, objectHasAnyKey } from '@/utils/tool'
+import { getValueByPath } from '@/utils/tool'
+import { cloneObject, objectHasAnyKey } from '@/utils/object'
 import { vmGet } from '@/utils/vmMap'
 import { mapGetters, mapMutations } from 'vuex'
 import { PROPS } from '@/const'

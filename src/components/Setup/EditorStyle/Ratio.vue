@@ -37,7 +37,8 @@ import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
 import { isGridItem } from '@/utils/node'
-import { arrayUniq, getValueByPath } from '@/utils/tool'
+import { arrayUniq } from '@/utils/array'
+import { getValueByPath } from '@/utils/tool'
 
 export default {
   name: 'Ratio',

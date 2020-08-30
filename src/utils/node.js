@@ -1,6 +1,8 @@
 import store from '../store'
-import { allEqual, cloneJson, isUndefined, toArray } from './tool'
+import { allEqual, toArray } from './array'
+import { isUndefined } from './tool'
 import { humanize } from './string'
+import { cloneJson } from './tool'
 import {
   NODE_TYPE,
   LABEL,

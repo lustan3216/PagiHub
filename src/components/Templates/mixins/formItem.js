@@ -1,6 +1,7 @@
 import { mapMutations } from 'vuex'
 import validator from '@/validator'
-import { cloneJson, toArray } from '@/utils/tool'
+import { toArray } from '@/utils/array'
+import { cloneJson } from '@/utils/tool'
 import formCreate from '@form-create/element-ui/dist/form-create'
 import {
   Slider,

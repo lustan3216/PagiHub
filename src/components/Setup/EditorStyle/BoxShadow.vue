@@ -148,7 +148,7 @@ import {
   parse,
   stringify
 } from '@/components/Setup/EditorStyle/utils/boxShadow'
-import { findIndexBy, arrayMove } from '../../../utils/tool'
+import { findIndexBy, arrayMove } from '../../../utils/array'
 import forNodeMixin from './mixins/forNode'
 
 export default {

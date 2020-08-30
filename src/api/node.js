@@ -1,5 +1,5 @@
 import localforage from 'localforage'
-import { toArray } from '@/utils/tool'
+import { toArray } from '@/utils/array'
 import { queryString } from '@/utils/url'
 import { API } from 'aws-amplify'
 

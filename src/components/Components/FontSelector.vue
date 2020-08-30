@@ -18,7 +18,7 @@
 import { Message } from 'element-ui'
 import WebFont from 'webfontloader'
 import localforage from 'localforage'
-import { arrayUniq } from '../../utils/tool'
+import { arrayUniq } from '../../utils/array'
 const EXTRA_FONTS = 'extraFonts'
 
 export default {
