@@ -1,11 +1,7 @@
-import {
-  getValueByPath,
-  isPlainObject,
-  cloneJson,
-  isUndefined,
-  isArray
-} from '@/utils/array'
+import { isArray } from '@/utils/array'
 import { capitalize, humanize } from '@/utils/string'
+import { getValueByPath, cloneJson, isUndefined } from '@/utils/tool'
+import { isPlainObject } from '@/utils/object'
 import { url as urlPath } from '@/validator'
 
 export function traversalRules(rules, fn) {

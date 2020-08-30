@@ -7,7 +7,7 @@ import {
 } from './util'
 
 import { FREE_STYLE } from './index'
-import { isPlainObject } from '@/utils/array'
+import { isPlainObject } from '@/utils/object'
 
 export function generateStyleBlock(styleId, element, style) {
   let parsedCssBlocks = '\n'

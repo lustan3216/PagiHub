@@ -24,7 +24,7 @@
 
 <script>
 import { Slider } from 'element-ui'
-import { isPlainObject as _isPlainObject } from '@/utils/array'
+import { isPlainObject as _isPlainObject } from '@/utils/object'
 
 export default {
   name: 'SliderPoints',
