@@ -19,6 +19,7 @@
       class="tree"
       node-key="id"
       draggable
+      default-expand-all
       @node-drop="layerIndexChange"
     >
       <template v-slot="{ data }">
@@ -73,7 +74,7 @@
 import { Tree } from 'element-ui'
 import { SORT_INDEX, SOFT_DELETE, STYLE } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { arrayUniq, deleteBy } from '@/utils/array'
+import { arrayUniq, deleteBy, findIndexBy } from '@/utils/array'
 import { cloneJson } from '@/utils/tool'
 import ComponentController from '../TemplateUtils/ComponentController'
 import ComponentName from '../TemplateUtils/ComponentName'
@@ -82,6 +83,7 @@ import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
 import {
   isDesign,
+  isGridItem,
   isLayers,
   isPage,
   shortTagName,
@@ -122,10 +124,17 @@ export default {
 
       const cloneTree = cloneJson(tree)
       traversalSelfAndChildren(cloneTree, (node, parentNode) => {
-        if (isLayers(node) && node.children) {
-          parentNode.children = sortByIndex(node.children, false).filter(
-            node => !node[SOFT_DELETE]
-          )
+        node.children = node.children.filter(node => node && !node[SOFT_DELETE])
+
+        if (isLayers(node)) {
+          parentNode.children = sortByIndex(node.children, false)
+        }
+
+        if (isGridItem(node)) {
+          const index = parentNode.children.findIndex(x => x.id === node.id)
+          if (index >= 0 && node.children[0]) {
+            parentNode.children[index] = node.children[0]
+          }
         }
 
         if (
@@ -133,10 +142,6 @@ export default {
           arrayUniq(node.children.map(x => x.id)).length
         ) {
           debugger
-        }
-
-        if (node[SOFT_DELETE]) {
-          deleteBy(parentNode.children, 'id', node.id)
         }
 
         delete node[STYLE]

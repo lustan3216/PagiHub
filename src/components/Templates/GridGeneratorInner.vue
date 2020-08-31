@@ -6,6 +6,7 @@
     :margin="[0, 0]"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
+    :class="{ pulsate }"
     prevent-collision
     @layout-updated="layoutUpdated($event)"
   >
@@ -19,6 +20,10 @@
       }"
       drag-ignore-from=".grid-item-fix"
       drag-allow-from="div"
+      @resizeStart="itemUpdating"
+      @resized="itemUpdated"
+      @moveStart="itemUpdating"
+      @moved="itemUpdated"
     >
       <async-component
         :key="child.id"
@@ -35,8 +40,10 @@ import { deleteBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
-import { debounce } from 'throttle-debounce'
 import { toPrecision } from '@/utils/number'
+import { closestGridItem } from '@/utils/node'
+import { throttle } from 'throttle-debounce'
+import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'GridGeneratorInner',
@@ -62,6 +69,7 @@ export default {
   },
   data() {
     return {
+      pulsate: false,
       layout: [],
       lockIds: [] // touchable will use it
     }
@@ -81,6 +89,10 @@ export default {
       // 拿掉 style, props, 不然因為watch deep, 每次都會有多餘的更新
       // style 這裡完全不需要，因為gridItem component處理掉了
       return this.children.map(({ [CHILDREN]: _, style, ...node }) => node)
+    },
+    closestBoundaryEl() {
+      const item = this.$el.closest('.vue-grid-item')
+      return item || document.getElementById('art-board')
     }
   },
   watch: {
@@ -108,7 +120,7 @@ export default {
     this.$refs.gridGenerator.onWindowResize()
   },
   methods: {
-    ...mapActions('app', ['resizeNodeQuickFn']),
+    ...mapActions('app', ['resizeNodeQuickFn', 'artBoardResizing']),
     lock(id) {
       this.lockIds.push(id)
     },
@@ -200,6 +212,14 @@ export default {
       if (records.length) {
         this.RECORD(records)
       }
+    },
+    itemUpdating() {
+      this.closestBoundaryEl.classList.add('border-pulse')
+      this.artBoardResizing(true)
+    },
+    itemUpdated() {
+      this.closestBoundaryEl.classList.remove('border-pulse')
+      this.artBoardResizing(false)
     },
     itemAutoHeight(newChildren) {
       // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto height的高了

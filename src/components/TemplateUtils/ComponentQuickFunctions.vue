@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="node"
+    v-if="node && visible"
     :id="`quick-fn-${id}`"
     :style="{
       zIndex: isExample ? 3000 : 800
@@ -132,7 +132,8 @@ export default {
       width: widthShared,
       height: heightShared,
       animationId: null,
-      canGoBack: null
+      canGoBack: null,
+      visible: true
     }
   },
   computed: {
@@ -241,12 +242,20 @@ export default {
         const rect = element.getBoundingClientRect()
         let { x: left, y: top, width, height } = rect
 
-        const bounderNode = this.isExample
-          ? this.componentSetEl.parentElement
-          : element.closest('.vue-grid-layout').closest('.vue-grid-item') ||
-            this.componentSetEl.parentElement
+        let bounderNode
+        if (!this.isExample) {
+          const layout = element.closest('.vue-grid-layout')
+          bounderNode = layout && layout.closest('.vue-grid-item')
+        }
+
+        bounderNode = bounderNode || this.componentSetEl.parentElement
 
         const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()
+
+        this.visible = top < top1 + height1
+        if (!this.visible) {
+          return
+        }
 
         top = top < top1 ? top1 : top
         height =

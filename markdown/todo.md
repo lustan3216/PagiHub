@@ -12,10 +12,14 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-page 裡面的instance 要可以點右鍵跳到主component
-instance 可以直接複製，跟著王 copy父曾是master就直接copy ，但也要做一個按鈕控制分離，當copy進page record一個值紀錄此page有用該component
-移動 grid item的時候 標記外層grid，才知道哪裡被卡住
-刪除可以刪到底， 會出現加入component的按鈕，只能加入 componentet or gird
+text / article style inheritance 要分開, button 裡面的要是可以inherit的
+快捷跳到前後一個 componentSet
+Reset to Master State
+style 點名字，可以連結回 master style
+softRecord 應該是有問題，因為 record 紀錄的會不一樣
+instance 可以直接複製，跟著王 copy 父曾是 master 就直接 copy ，但也要做一個按鈕控制分離，當 copy 進 page record 一個值紀錄此 page 有用該 component
+
+刪除可以刪到底， 會出現加入 component 的按鈕，只能加入 componentet or gird
 panel node 會一直被關起來
 
 layer 裡面層級的 css 看要不要要處理，css 要放在哪一個 grid
@@ -49,7 +53,7 @@ svg
 </ol>
 
 ### Last
-
+folder System
 style 支援 每個 device 可客製化, hover click
 fingerprintjs2
 

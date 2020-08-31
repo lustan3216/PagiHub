@@ -1,6 +1,6 @@
 <template>
   <form-item
-    v-free-style="innerStyles"
+
     v-model="api"
     :id="id"
     :rule="innerRule2"

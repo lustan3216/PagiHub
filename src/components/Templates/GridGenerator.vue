@@ -1,9 +1,20 @@
 <template>
   <grid-generator-inner
-    v-free-style="innerStyles"
+    v-if="isGridItemParent"
     :id="id"
     :inner-props="innerProps"
   />
+  <div
+    v-else
+    :style="innerStyles.default"
+    class="h-100"
+    @scroll="onScroll"
+  >
+    <grid-generator-inner
+      :id="id"
+      :inner-props="innerProps"
+    />
+  </div>
 </template>
 
 <script>
@@ -13,6 +24,8 @@ import childrenMixin from '@/components/Templates/mixins/children'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import GridGeneratorInner from './GridGeneratorInner'
 import { defaultSetting } from '../Setup/EditorSetting/SettingGridGenerator'
+import { isGridItem } from '@/utils/node'
+import { updateWrapperStyle } from '@/utils/quickFunction'
 
 export default {
   defaultSetting,
@@ -21,6 +34,14 @@ export default {
     GridGeneratorInner,
     ControllerLayer
   },
-  mixins: [nodeMixin, childrenMixin]
+  mixins: [nodeMixin, childrenMixin],
+  computed: {
+    isGridItemParent() {
+      return isGridItem(this.node.parentNode)
+    }
+  },
+  methods: {
+    onScroll: updateWrapperStyle
+  }
 }
 </script>

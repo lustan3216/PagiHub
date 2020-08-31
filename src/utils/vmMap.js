@@ -31,7 +31,7 @@ export function vmCreateEmptyItem(node) {
     traversalAncestorAndSelf(node, node => {
       if (isGridItem(node)) {
         store.commit('app/SET', { copyComponentIds: [node.id] })
-        const { children, ...emptyGridItem } = node
+        const { children, masterId, ...emptyGridItem } = node
         vmGet(node.parentId)._addNodesToParentAndRecord(emptyGridItem)
         return 'stop'
       }

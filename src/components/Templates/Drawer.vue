@@ -20,7 +20,7 @@
       :show-close="false"
     >
       <controller-layer
-        v-free-style="innerStyles"
+
         :id="id"
         class="h-100"
       >

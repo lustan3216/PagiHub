@@ -10,7 +10,8 @@ import {
   GRID_GENERATOR_ITEM,
   POLYMORPHISM,
   GRID_GENERATOR,
-  SORT_INDEX, CAROUSEL
+  SORT_INDEX,
+  CAROUSEL
 } from '@/const'
 
 export function cloneJsonWithoutChildren(tree) {
@@ -148,13 +149,16 @@ export function shortTagName(node) {
   return cache[tag]
 }
 
-export function closestGridItem(node) {
+export function closestGridItem(node, fn) {
   function find(node) {
     if (isGridItem(node)) {
+      fn && fn(node)
       return node
     }
     else {
-      return find(node.parentNode)
+      if (node && node.parentNode) {
+        return find(node.parentNode)
+      }
     }
   }
 
@@ -165,7 +169,9 @@ export function canBeInstance(componentSetId, id) {
   const { componentsMap } = store.state.node
   const node = componentsMap[id]
 
-  return isPage(componentsMap[componentSetId]) && isDesign(node.rootComponentSet)
+  return (
+    isPage(componentsMap[componentSetId]) && isDesign(node.rootComponentSet)
+  )
 }
 
 export function isLayers(node) {

@@ -36,7 +36,6 @@
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
-import { isGridItem } from '@/utils/node'
 import { arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 
@@ -52,28 +51,15 @@ export default {
     ratioDisabled() {
       // const hasInvalidComponent = this.selectedComponentNodes.find(node => 'video-player' === node.tag)
 
-      return !this.gridItemNodes.length
-    },
-    gridItemNodes() {
-      const nodes = []
-      this.selectedComponentNodes.filter(node => {
-        if (isGridItem(node)) {
-          nodes.push(node)
-        }
-        else if (isGridItem(node.parentNode)) {
-          nodes.push(node.parentNode)
-        }
-      })
-
-      return nodes
+      return !this.selectedComponentNodes.length
     },
     allRatioW() {
-      return this.gridItemNodes.map(node =>
+      return this.selectedComponentNodes.map(node =>
         getValueByPath(node, 'props.ratioW')
       )
     },
     allRatioH() {
-      return this.gridItemNodes.map(node =>
+      return this.selectedComponentNodes.map(node =>
         getValueByPath(node, 'props.ratioH')
       )
     },
@@ -87,7 +73,7 @@ export default {
       set(value) {
         const records = []
 
-        this.gridItemNodes.forEach(node => {
+        this.selectedComponentNodes.forEach(node => {
           records.push({
             path: `${node.id}.props.ratioW`,
             value: value || undefined
@@ -107,7 +93,7 @@ export default {
       set(value) {
         const records = []
 
-        this.gridItemNodes.forEach(node => {
+        this.selectedComponentNodes.forEach(node => {
           records.push({
             path: `${node.id}.props.ratioH`,
             value: value || undefined

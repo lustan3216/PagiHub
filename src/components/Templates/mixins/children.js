@@ -1,10 +1,5 @@
 import { mapMutations, mapState } from 'vuex'
-import {
-  CHILDREN,
-  COMPONENT_SET,
-  GRID_GENERATOR_ITEM,
-  SORT_INDEX
-} from '@/const'
+import { CHILDREN, STYLE, SORT_INDEX, PROPS } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { cloneJson, getValueByPath } from '@/utils/tool'
 import {
@@ -19,7 +14,8 @@ import {
   canBeInstance,
   isPage,
   isDesign,
-  isCarousel
+  isCarousel,
+  isGridItem
 } from '@/utils/node'
 import {
   appendIds,
@@ -28,6 +24,7 @@ import {
 } from '@/utils/nodeId'
 import * as basicTemplates from '@/templateJson/basic'
 import { camelCase } from '@/utils/string'
+import { objectAssign } from '@/utils/object'
 
 export default {
   props: {
@@ -69,8 +66,20 @@ export default {
 
       nodeTree = cloneJson(nodeTree)
 
-      const { rootComponentSet } = this.componentsMap[nodeTree.id]
-      if (isPage(this.node.rootComponentSet) && isDesign(rootComponentSet)) {
+      if (isGridItem(this.node)) {
+        // 加入的時候都把gridItem 的 style 放到nodeTree上，比較好管理style才不會兩邊放，直接merge兩邊style
+        // 可解決的場景是，master都是最低的，但有可能gridItem 都無法編輯到所以master永遠被蓋過
+        nodeTree[STYLE] = objectAssign({}, this.node[STYLE], nodeTree[STYLE])
+        records.push({
+          path: `${this.id}.${STYLE}`,
+          value: undefined
+        })
+      }
+
+      const { rootComponentSet } = getNode(nodeTree.id, this.isExample)
+      const canConnect =
+        isPage(this.node.rootComponentSet) && isDesign(rootComponentSet)
+      if (canConnect) {
         nodeTree = {
           tag: 'connection-layer',
           rootMasterId: rootComponentSet.id,
@@ -93,8 +102,17 @@ export default {
       }
 
       traversalSelfAndChildren(nodeTree, (_node, _parentNode) => {
-        // eslint-disable-next-line
-        const { [CHILDREN]: _, ...node } = _node
+        let node
+        if (canConnect) {
+          // eslint-disable-next-line
+          const { [CHILDREN]: _, ...newNode } = _node
+          node = newNode
+        }
+        else {
+          // eslint-disable-next-line
+          const { [CHILDREN]: _1, [STYLE]: _2, [PROPS]: _3, ...newNode } = _node
+          node = newNode
+        }
         records.push({
           path: node.id,
           value: { ...node, parentId: node.parentId }

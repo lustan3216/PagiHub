@@ -1,6 +1,7 @@
 <template>
   <el-dialog
     ref="dialog"
+    :class="currentCategory"
     visible
     class="dialog"
     destroy-on-close
@@ -168,11 +169,11 @@ export default {
           subtitle: 'The basic UI kit'
         },
         {
-          name: 'localComponents',
+          name: 'localDesigns',
           subtitle: "Components you've created"
         },
         {
-          name: 'publicComponents',
+          name: 'publicDesigns',
           subtitle: 'The component publish by other designer'
         }
       ]
@@ -216,8 +217,8 @@ export default {
     components() {
       return Object.freeze({
         basicComponents: this.basicExamples,
-        localComponents: this.componentsSets,
-        publicComponents: []
+        localDesigns: this.componentsSets,
+        publicDesigns: []
       })
     }
   },
@@ -255,7 +256,7 @@ export default {
   border-left: 1px solid $color-grey;
 }
 
-::v-deep {
+::v-deep.basicComponents {
   .el-carousel__container {
     height: 200px !important;
   }

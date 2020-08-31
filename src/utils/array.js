@@ -13,7 +13,12 @@ export function arrayMove(arr, old_index, new_index) {
 export const isArray = Array.isArray
 
 export function arrayFirst(e) {
-  return e[0]
+  if (isArray(e)) {
+    return e[0]
+  }
+  else {
+    return e
+  }
 }
 
 export function arrayLast(e) {

@@ -37,7 +37,6 @@ export default {
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
     buttons() {
-      let xxlHidden = false
       let xlHidden = false
       let lgHidden = false
       let mdHidden = false
@@ -47,7 +46,6 @@ export default {
 
       if (this.selectedComponentNodes.length === 1) {
         const { hidden } = this.selectedComponentNodes[0]
-        xxlHidden = hidden && hidden.xxl
         xlHidden = hidden && hidden.xl
         lgHidden = hidden && hidden.lg
         mdHidden = hidden && hidden.md

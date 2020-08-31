@@ -65,12 +65,14 @@
     box-sizing: border-box;
     cursor: se-resize;
     z-index: 100;
+    visibility: hidden;
     transition: background-color 0.3s, border-radius 0.3s;
   }
 
   .vue-grid-item:hover > .vue-resizable-handle {
     border-radius: 10px 10px 0;
     opacity: 0.8;
+    visibility: visible;
     background-color: white;
   }
 
@@ -581,6 +583,9 @@
         if (event.type === 'resizeend' && (this.previousW !== this.innerW || this.previousH !== this.innerH)) {
           this.$emit('resized', this.i, pos.h, pos.w, newSize.height, newSize.width)
         }
+        if (event.type === 'resizestart') {
+          this.$emit('resizeStart', this.i, pos.h, pos.w, newSize.height, newSize.width)
+        }
         this.eventBus.$emit('resizeEvent', event.type, this.i, this.innerX, this.innerY, pos.h, pos.w)
       },
       handleDrag(event) {
@@ -663,6 +668,9 @@
         }
         if (event.type === 'dragend' && (this.previousX !== this.innerX || this.previousY !== this.innerY)) {
           this.$emit('moved', this.i, pos.x, pos.y)
+        }
+        if (event.type === 'dragstart') {
+          this.$emit('moveStart', this.i, pos.x, pos.y)
         }
         this.eventBus.$emit('dragEvent', event.type, this.i, pos.x, pos.y, this.innerH, this.innerW)
       },

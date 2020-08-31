@@ -24,8 +24,8 @@
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
 import ComponentSet from '../Templates/ComponentSet'
+import { updateWrapperStyle } from '@/utils/quickFunction'
 
-let timer = null
 export default {
   name: 'ArtBoard',
   components: {
@@ -46,17 +46,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapActions('app', ['artBoardResizing']),
-    onScroll() {
-      this.APP_SET({ isArtBoardResizing: true })
-      if (timer !== null) {
-        clearTimeout(timer)
-      }
-      timer = setTimeout(() => {
-        this.artBoardResizing(false)
-      }, 80)
-    }
+    onScroll: updateWrapperStyle
   }
 }
 </script>

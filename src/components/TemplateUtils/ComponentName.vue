@@ -61,8 +61,8 @@ export default {
       return shortTagName(this.node)
     },
     shortId() {
-      if (process.env.NODE_ENV === 'production') {
-        return this.isComponent && shortId(this.id)
+      if (process.env.NODE_ENV === 'production' && this.isComponent) {
+        return shortId(this.id)
       }
       else {
         return this.id.substring(23, 26)

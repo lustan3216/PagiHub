@@ -3,8 +3,9 @@
 @import './tool.scss';
 @import './space.scss';
 @import './color.scss';
-@import 'text';
+@import './text.scss';
 @import './element.scss';
+@import './animation';
 
 body {
   color: #2c3e50;
@@ -52,4 +53,9 @@ input[type='number'] {
 
 [data-style-id] {
   box-sizing: border-box;
+}
+
+.grid-item-border {
+  border: 1px dashed #dedede;
+  //margin: -1px;
 }

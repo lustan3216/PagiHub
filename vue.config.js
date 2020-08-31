@@ -9,6 +9,7 @@ module.exports = {
   transpileDependencies: [
     // 'element-ui',
     // 'vue-grid-layout',
+    'vue-observe-visibility',
     'vue'
   ],
   runtimeCompiler: true,

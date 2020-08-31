@@ -1,6 +1,5 @@
 <template>
   <div
-    v-free-style="innerStyles"
     v-observe-visibility="options"
     class="h-100"
   >
@@ -265,7 +264,7 @@ export default {
   }
 }
 
-.customer-indicator{
+.customer-indicator {
   position: absolute;
   width: 100%;
   z-index: 10;

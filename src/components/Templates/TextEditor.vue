@@ -1,6 +1,6 @@
 <template>
   <text-editor-inner
-    v-free-style="innerStyles"
+
     :id="id"
     :editing="editing"
     :value="innerValue"

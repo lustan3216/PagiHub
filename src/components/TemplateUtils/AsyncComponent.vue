@@ -1,7 +1,7 @@
 <template>
   <!-- v-observe-visibility 跟vIf 一定要不同層，不然v-if false 的話沒辦法observer -->
   <component
-    v-if="(visible && isLayers) || isConnectionLayer"
+    v-if="visible && (isLayers || isConnectionLayer || isGridItemWithChild)"
     :is="tag"
     :id="id"
     :key="id"
@@ -12,7 +12,6 @@
     v-observe-visibility="options"
     v-else-if="visible"
     :id="id"
-    :class="{ 'h-100': !isTextEditor }"
   >
     <template v-slot="{ itemEditing }">
       <!--  it will has a bug here if component without key like, editorText -->
@@ -40,6 +39,7 @@ import {
 } from '@/utils/node'
 import { CAN_BE_EDITED } from '@/const'
 import { mapState } from 'vuex'
+import { arrayFirst } from '@/utils/array'
 
 export default {
   name: 'AsyncComponent',
@@ -150,6 +150,9 @@ export default {
     isLayers() {
       return isLayers(this.node)
     },
+    isGridItemWithChild() {
+      return this.isGridItem && arrayFirst(this.node.children)
+    },
     isConnectionLayer() {
       return isConnectionLayer(this.node)
     },
@@ -158,9 +161,6 @@ export default {
     },
     isGridItem() {
       return isGridItem(this.node)
-    },
-    isTextEditor() {
-      return this.node.tag === 'text-editor'
     }
   }
 }

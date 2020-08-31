@@ -1,9 +1,9 @@
 <template>
   <vue-plyr
-    v-free-style="innerStyles"
+
     ref="plyr"
-    :options="transformedProps"
-    :key="JSON.stringify(transformedProps)"
+    :options="innerProps"
+    :key="JSON.stringify(innerProps)"
     class="h-100"
     @mouseleave="mouseleave"
   >
@@ -37,8 +37,9 @@ export default {
       const h = getValueByPath(this.node, 'parentNode.props.ratioH')
       return w && h ? `${w}:${h}` : '16:9'
     },
-    transformedProps() {
-      return { ...this.innerProps, ratio: this.ratio }
+    innerProps() {
+      const props = nodeMixin.computed.innerProps.call(this)
+      return { ...props, ratio: this.ratio }
     }
   },
   created() {

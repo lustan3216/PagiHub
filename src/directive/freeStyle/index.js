@@ -1,5 +1,6 @@
 import { generateStyleBlock } from './parser'
 import { kebabCase } from '@/utils/string'
+import { deepEqual } from 'vue-observe-visibility/src/utils'
 
 export const FREE_STYLE = '@@FREE_STYLE'
 window[FREE_STYLE] = window[FREE_STYLE] || {}
@@ -8,21 +9,25 @@ window[FREE_STYLE] = window[FREE_STYLE] || {}
 // 還有hover click active, 有sudo的css, 用style做不出來
 
 export default {
-  bind(element, binding) {
-    if (binding.value) {
-      const styleId = getDataStyleId(element, binding)
-      generateStyleBlock(styleId, element, binding.value)
+  bind(element, { value }) {
+    console.log('bind')
+    if (value) {
+      const styleId = getDataStyleId(element, value)
+      generateStyleBlock(styleId, element, value)
     }
   },
-  update(element, binding) {
-    if (binding.value) {
-      const styleId = getDataStyleId(element, binding)
-      generateStyleBlock(styleId, element, binding.value)
+  update(element, { value, oldValue }) {
+    console.log('update', value.id)
+    if (deepEqual(value, oldValue)) return
+    if (value) {
+      const styleId = getDataStyleId(element, value)
+      generateStyleBlock(styleId, element, value)
     }
   },
-  unbind(element, binding) {
-    if (binding.value) {
-      const styleId = getDataStyleId(element, binding)
+  unbind(element, { value }) {
+    console.log('unbind', value.id)
+    if (value) {
+      const styleId = getDataStyleId(element, value)
       const el = window[FREE_STYLE][styleId]
 
       if (el) {
@@ -32,8 +37,8 @@ export default {
   }
 }
 
-function getDataStyleId(element, binding) {
-  const { id } = binding.value
+function getDataStyleId(element, value) {
+  const { id } = value
 
   if (id) {
     element.dataset.styleId = id

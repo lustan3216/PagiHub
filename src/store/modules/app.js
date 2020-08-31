@@ -130,7 +130,7 @@ const actions = {
     }
   },
 
-  resizeNodeQuickFn: debounce(210, function({ state }) {
+  resizeNodeQuickFn: debounce(310, function({ state }) {
     state.selectedComponentIds.forEach(id => {
       if (quickFnMap[id]) {
         quickFnMap[id].resize()

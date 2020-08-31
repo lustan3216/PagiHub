@@ -1,4 +1,5 @@
 import store from '@/store'
+import vmMap from '@/utils/vmMap'
 import {
   recordRootComponentSetId,
   getRootComponentSetId

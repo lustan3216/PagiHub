@@ -2,6 +2,7 @@
   <!-- id here is for selection using, can not delete -->
   <div
     v-if="isDraftMode && node"
+    :class="{ 'h-100': !isTextEditor }"
     @click.stop="singleClick"
     @dblclick.stop="dblclick"
   >
@@ -32,7 +33,10 @@
     <slot v-else />
   </div>
 
-  <div v-else-if="node">
+  <div
+    v-else-if="node"
+    :class="{ 'h-100': !isTextEditor }"
+  >
     <slot />
   </div>
 </template>
@@ -80,6 +84,9 @@ export default {
     },
     canBeEdited() {
       return this.node && this.node[CAN_BE_EDITED]
+    },
+    isTextEditor() {
+      return this.node.tag === 'text-editor'
     }
   },
   methods: {
@@ -89,9 +96,6 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
-    isTextEditor() {
-      return this.node.tag === 'text-editor'
-    },
     clickOutside(event) {
       const insideArea = [
         '#sidebar-right',

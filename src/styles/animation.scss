@@ -1,0 +1,16 @@
+.border-pulse {
+  border: 1px dashed rgba(255, 133, 106, 0.71);
+  margin: -1px;
+  animation: border-pulse 1s infinite;
+}
+@keyframes border-pulse {
+  0% {
+    border-color: rgba(255, 133, 106, 0.71);
+  }
+  50% {
+    border-color: rgb(159, 0, 0);
+  }
+  100% {
+    border-color: rgba(255, 133, 106, 0.71);
+  }
+}

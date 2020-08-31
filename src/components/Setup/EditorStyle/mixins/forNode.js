@@ -1,6 +1,7 @@
 import { mapMutations, mapGetters } from 'vuex'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
+import { vmGet } from '@/utils/vmMap'
 import { STYLE } from '@/const'
 
 export default function(attr) {
@@ -17,9 +18,10 @@ export default function(attr) {
         return this.selectedComponentNodes
       },
       allValues() {
-        return this.nodes.map(node =>
-          getValueByPath(node, ['style', this.state, attr], '')
-        )
+        return this.nodes.map(node => {
+          const vm = vmGet(node.id, this.isExample)
+          return getValueByPath(vm, ['innerStyles', this.state, attr], '')
+        })
       },
       [attr]: {
         get() {
