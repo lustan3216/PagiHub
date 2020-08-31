@@ -29,7 +29,10 @@
       </component-name>
 
       <div class="button-group">
-        <connection-jumper :id="id" :root-master-id="rootMasterId"/>
+        <connection-jumper
+          :id="id"
+          :root-master-id="rootMasterId"
+        />
 
         <portal-target
           v-if="isDraftMode"
@@ -91,6 +94,10 @@ let widthShared = 0
 let heightShared = 0
 
 export const quickFnMap = {}
+
+if (process.env.NODE_ENV !== 'production') {
+  window.quickFnMap = quickFnMap
+}
 
 export default {
   name: 'ComponentQuickFunctions',
@@ -236,7 +243,7 @@ export default {
 
         const bounderNode = this.isExample
           ? this.componentSetEl.parentElement
-          : element.closest('.vue-grid-item') ||
+          : element.closest('.vue-grid-layout').closest('.vue-grid-item') ||
             this.componentSetEl.parentElement
 
         const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()

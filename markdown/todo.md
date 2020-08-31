@@ -25,8 +25,9 @@ page 還要做路由
 
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 button 要可以連結路由
+
 5<li>弄個 panel 可以快速顯示 master instance & 顯示切換版本</li>
-10<li>每個 button 都可以點了 連結到 componentSet / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
+10<li>每個 button 都可以點了 連結到 page / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
 5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li> 合併 grid item 跟 component 的 style, style 應該有辦法合併獲優先顯示 component 的
 5<li>search panel</li>
 20<li>可瀏覽 production 版本</li>
