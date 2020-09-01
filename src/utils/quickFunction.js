@@ -6,7 +6,7 @@ export function updateWrapperStyle() {
     return
   }
 
-  store.commit('app/SET', { isArtBoardResizing: true })
+  store.commit('app/SET', { gridResizing: true })
   if (timer !== null) {
     clearTimeout(timer)
   }

@@ -6,7 +6,6 @@
     :margin="[0, 0]"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
-    :class="{ pulsate }"
     prevent-collision
     @layout-updated="layoutUpdated($event)"
   >
@@ -34,16 +33,13 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import { AUTO_HEIGHT, CHILDREN, COLUMNS, PROPS } from '@/const'
 import { deleteBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
-import { closestGridItem } from '@/utils/node'
-import { throttle } from 'throttle-debounce'
-import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'GridGeneratorInner',
@@ -69,7 +65,6 @@ export default {
   },
   data() {
     return {
-      pulsate: false,
       layout: [],
       lockIds: [] // touchable will use it
     }
@@ -120,6 +115,9 @@ export default {
     this.$refs.gridGenerator.onWindowResize()
   },
   methods: {
+    ...mapMutations('app', {
+      APP_SET: 'SET'
+    }),
     ...mapActions('app', ['resizeNodeQuickFn', 'artBoardResizing']),
     lock(id) {
       this.lockIds.push(id)
@@ -167,10 +165,6 @@ export default {
       this.layout = layout
     },
     layoutUpdated(newChildren) {
-      this.$nextTick(() => {
-        this.resizeNodeQuickFn()
-      })
-
       if (this.isExample) {
         return
       }
@@ -214,36 +208,36 @@ export default {
       }
     },
     itemUpdating() {
-      this.closestBoundaryEl.classList.add('border-pulse')
-      this.artBoardResizing(true)
+      // this.closestBoundaryEl.classList.add('border-pulse')
+      this.APP_SET({ gridResizing: true })
     },
     itemUpdated() {
-      this.closestBoundaryEl.classList.remove('border-pulse')
-      this.artBoardResizing(false)
+      // this.closestBoundaryEl.classList.remove('border-pulse')
+      this.APP_SET({ gridResizing: false })
     },
-    itemAutoHeight(newChildren) {
-      // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto height的高了
-      if (!this.layout.length || this.isExample) {
-        return
-      }
-
-      newChildren.forEach(node => {
-        const gridItem = this.componentsMap[node.id]
-        const autoHeightItem = gridItem.children[0]
-
-        if (autoHeightItem && autoHeightItem[AUTO_HEIGHT]) {
-          const child = this.$refs[node.id][0]
-          this.$nextTick(() => {
-            // 新增組建的時候，有可能組建還沒渲染就autosize，會造成零空間
-            if (!this.vmMap[autoHeightItem.id]) return
-
-            child.$el.classList.add('disable-h-100')
-            child.autoSize()
-            child.$el.classList.remove('disable-h-100')
-          })
-        }
-      })
-    }
+    // itemAutoHeight(newChildren) {
+    //   // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto height的高了
+    //   if (!this.layout.length || this.isExample) {
+    //     return
+    //   }
+    //
+    //   newChildren.forEach(node => {
+    //     const gridItem = this.componentsMap[node.id]
+    //     const autoHeightItem = gridItem.children[0]
+    //
+    //     if (autoHeightItem && autoHeightItem[AUTO_HEIGHT]) {
+    //       const child = this.$refs[node.id][0]
+    //       this.$nextTick(() => {
+    //         // 新增組建的時候，有可能組建還沒渲染就autosize，會造成零空間
+    //         if (!this.vmMap[autoHeightItem.id]) return
+    //
+    //         child.$el.classList.add('disable-h-100')
+    //         child.autoSize()
+    //         child.$el.classList.remove('disable-h-100')
+    //       })
+    //     }
+    //   })
+    // }
   }
 }
 </script>

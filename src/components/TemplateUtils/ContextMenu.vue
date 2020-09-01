@@ -84,7 +84,7 @@ export default {
       'copyComponentIds',
       'selectedComponentIds',
       'selectedComponentNode',
-      'isArtBoardResizing'
+      'gridResizing'
     ]),
     node() {
       return this.componentsMap[this.id]

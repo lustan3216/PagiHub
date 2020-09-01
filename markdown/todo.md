@@ -53,6 +53,8 @@ svg
 </ol>
 
 ### Last
+
+grid item 移動時，最外誆 要動畫
 folder System
 style 支援 每個 device 可客製化, hover click
 fingerprintjs2

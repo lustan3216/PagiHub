@@ -2,7 +2,7 @@
   <div
     :class="{ 'grid-item-border': isDraftMode }"
     :style="innerStyles.default"
-    class="h-100 border-box"
+    class="h-100"
     @scroll="onScroll"
   >
     <async-component

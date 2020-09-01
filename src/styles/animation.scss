@@ -1,6 +1,7 @@
 .border-pulse {
   border: 1px dashed rgba(255, 133, 106, 0.71);
   margin: -1px;
+  box-sizing: border-box;
   animation: border-pulse 1s infinite;
 }
 @keyframes border-pulse {

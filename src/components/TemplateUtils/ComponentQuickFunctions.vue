@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="node && visible"
+    v-if="node"
     :id="`quick-fn-${id}`"
     :style="{
       zIndex: isExample ? 3000 : 800
@@ -132,8 +132,8 @@ export default {
       width: widthShared,
       height: heightShared,
       animationId: null,
-      canGoBack: null,
-      visible: true
+      canGoBack: null
+      // visible: true
     }
   },
   computed: {
@@ -141,7 +141,7 @@ export default {
       'copyComponentIds',
       'selectedComponentIds',
       'selectedComponentNode',
-      'isArtBoardResizing'
+      'gridResizing'
     ]),
     newItemToolTip() {
       if (this.node[CAN_NEW_ITEM]) {
@@ -193,7 +193,7 @@ export default {
     }
   },
   watch: {
-    isArtBoardResizing(value) {
+    gridResizing(value) {
       if (value) {
         this.framer.style.opacity = 0
       }
@@ -252,10 +252,10 @@ export default {
 
         const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()
 
-        this.visible = top < top1 + height1
-        if (!this.visible) {
-          return
-        }
+        // this.visible = top < top1 + height1
+        // if (!this.visible) {
+        //   return
+        // }
 
         top = top < top1 ? top1 : top
         height =

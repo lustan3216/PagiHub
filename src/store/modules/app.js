@@ -12,7 +12,7 @@ import { BREAK_POINTS } from '@/const'
 
 const state = {
   breakpoint: 'lg',
-  isArtBoardResizing: false,
+  gridResizing: false,
   artBoardWidth: 1200,
   artBoardHeight: 768,
   scaleRatio: 1,
@@ -120,7 +120,7 @@ const actions = {
 
     commit('SET', {
       breakpoint,
-      isArtBoardResizing: boolean,
+      gridResizing: boolean,
       artBoardWidth: parseInt(clientWidth),
       artBoardHeight: parseInt(clientHeight)
     })
