@@ -324,7 +324,7 @@
         // lots-design
         this.resizeNodeQuickFn()
       },
-      containerHeight: function() {
+       containerHeight: function() {
         if (!this.autoSize) return
         // console.log("bottom: " + bottom(this.layout))
         // console.log("rowHeight + margins: " + (this.rowHeight + this.margin[1]) + this.margin[1])
@@ -353,7 +353,8 @@
             this.isDragging = true
           })
           //this.$broadcast("updateWidth", this.width);
-          this.eventBus.$emit('updateWidth', this.width)
+          // lots-design
+          // this.eventBus.$emit('updateWidth', this.width)
         } else {
           this.$nextTick(function() {
             this.isDragging = false
@@ -413,7 +414,8 @@
             this.isDragging = true
           })
           //this.$broadcast("updateWidth", this.width);
-          this.eventBus.$emit('updateWidth', this.width)
+          // lots-design
+          // this.eventBus.$emit('updateWidth', this.width)
 
         } else {
           this.$nextTick(function() {

@@ -1,10 +1,6 @@
 import store, { SET } from '@/store'
 import { CHILDREN, ID, PARENT_ID } from '@/const'
-import {
-  deleteBy,
-  findBy,
-  toArray
-} from '@/utils/array'
+import { deleteBy, findBy, toArray } from '@/utils/array'
 import Vue from 'vue'
 import { defineProperties } from '@/utils/nodeProperties'
 import { isComponentSet, isProject } from '@/utils/node'
@@ -157,7 +153,7 @@ const mutations = {
     Array.isArray(payLoad) ? payLoad.forEach(set) : set(payLoad)
   },
   RECORD(state, payLoad) {
-    jsonHistory.debounceRecord(payLoad, 150)
+    jsonHistory.debounceRecord(payLoad, 300)
   },
   REDO() {
     const done = rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)

@@ -1,3 +1,4 @@
+import { debounce } from "throttle-debounce"
 <template>
   <div ref="item"
        class="vue-grid-item"
@@ -10,7 +11,7 @@
   </div>
 </template>
 <style>
-  .vue-grid-item.transition {
+  .vue-grid-item {
     transition: all 200ms ease;
     transition-property: left, top, right;
     /* add right for rtl */
@@ -96,8 +97,9 @@
   import { setTopLeft, setTopRight, setTransformRtl, setTransform } from '../helpers/utils'
   import { getControlPosition, createCoreData } from '../helpers/draggableUtils'
   import { getDocumentDir } from '../helpers/DOM'
+  import { debounce } from 'throttle-debounce'
   //    var eventBus = require('./eventBus');
-
+  var elementResizeDetectorMaker = require('element-resize-detector')
   let interact = require('interactjs')
 
   export default {
@@ -124,6 +126,10 @@
        type: Number,
        required: true
        },*/
+      autoHeight: {
+        type: Boolean,
+        default: false
+      },
       isDraggable: {
         type: Boolean,
         required: false,
@@ -240,7 +246,9 @@
         innerX: this.x,
         innerY: this.y,
         innerW: this.w,
-        innerH: this.h
+        innerH: this.h,
+
+        erd: null
       }
     },
     created() {
@@ -339,6 +347,27 @@
       })
     },
     watch: {
+      autoHeight: {
+        handler(value) {
+          this.$nextTick(() => {
+            const slot = this.$slots.default && this.$slots.default[0]
+            if (value) {
+              if (this.autoHeight && slot) {
+                this.erd = elementResizeDetectorMaker({
+                  strategy: 'scroll', //<- For ultra performance.
+                })
+                this.erd.listenTo(slot.elm, this.autoSize)
+
+              }
+            }
+            else if (this.erd) {
+              this.erd.removeListener(slot.elm, this.autoSize)
+              this.erd = null
+            }
+          })
+        },
+        immediate: true
+      },
       isDraggable: function() {
         this.draggable = this.isDraggable
       },
@@ -842,7 +871,7 @@
           })
         }
       },
-      autoSize: function() {
+      autoSize: debounce(150, function() {
         // ok here we want to calculate if a resize is needed
         this.previousW = this.innerW
         this.previousH = this.innerH
@@ -879,7 +908,7 @@
           this.$emit('resized', this.i, pos.h, pos.w, newSize.height, newSize.width)
           this.eventBus.$emit('resizeEvent', 'resizeend', this.i, this.innerX, this.innerY, pos.h, pos.w)
         }
-      }
+      })
     }
   }
 </script>

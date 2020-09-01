@@ -12,6 +12,7 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
+text 要auto height
 text / article style inheritance 要分開, button 裡面的要是可以inherit的
 快捷跳到前後一個 componentSet
 Reset to Master State
@@ -54,6 +55,7 @@ svg
 
 ### Last
 
+publish 除了第一版，之後的都要跟前一個版本做比較
 grid item 移動時，最外誆 要動畫
 folder System
 style 支援 每個 device 可客製化, hover click

@@ -92,6 +92,8 @@ let topShared = window.innerHeight / 2
 let leftShared = window.innerWidth / 2
 let widthShared = 0
 let heightShared = 0
+let opacityShared = 0
+let lastId = null
 
 export const quickFnMap = {}
 
@@ -194,6 +196,7 @@ export default {
   },
   watch: {
     gridResizing(value) {
+      console.log(value)
       if (value) {
         this.framer.style.opacity = 0
       }
@@ -265,10 +268,15 @@ export default {
               ? rect.top + height - top1
               : height
 
+        if (this.id !== lastId) {
+          opacityShared = 0
+        }
+        lastId = this.id
+
         gsap.fromTo(
           this.framer,
           {
-            opacity: 0,
+            opacity: opacityShared,
             x: leftShared,
             y: topShared,
             width: widthShared,
@@ -283,11 +291,12 @@ export default {
             ease: 'power3',
             duration: 0.7,
             onUpdate() {
-              const { width, height, x, y } = this.vars
+              const { width, height, x, y, opacity } = this.vars
               leftShared = x
               topShared = y
               widthShared = width
               heightShared = height
+              opacityShared = opacity
               self.top = y
             }
           }

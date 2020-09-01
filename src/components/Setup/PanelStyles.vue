@@ -71,7 +71,12 @@
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
 import { mapGetters } from 'vuex'
-import { TEXT_EDITOR, GRID_GENERATOR, LAYERS, GRID_GENERATOR_ITEM } from '@/const'
+import {
+  TEXT_EDITOR,
+  GRID_GENERATOR,
+  LAYERS,
+  GRID_GENERATOR_ITEM
+} from '@/const'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
 import Background from './EditorStyle/Background'

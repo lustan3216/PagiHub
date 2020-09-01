@@ -6,18 +6,19 @@
 
     <!--    <auto-height />-->
 
+    <auto-height />
+
     <el-row
-      :gutter="10"
       type="flex"
       align="middle"
     >
       <el-col
-        :span="7"
+        :span="10"
         class="title"
       >
         Sticky Top
       </el-col>
-      <el-col :span="6">
+      <el-col :span="7">
         <el-checkbox v-model="verticalCompact" />
       </el-col>
     </el-row>
@@ -122,12 +123,14 @@ import { COLUMNS } from '@/const'
 import { isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
+import AutoHeight from './AutoHeight'
 
 export default {
   name: 'Dimension',
   components: {
     SelectUnit,
     Tip,
+    AutoHeight,
     ElDivider: Divider
   },
 

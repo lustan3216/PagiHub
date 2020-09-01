@@ -6,7 +6,6 @@
     :margin="[0, 0]"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
-    prevent-collision
     @layout-updated="layoutUpdated($event)"
   >
     <vue-grid-item
@@ -35,11 +34,13 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { AUTO_HEIGHT, CHILDREN, COLUMNS, PROPS } from '@/const'
-import { deleteBy } from '@/utils/array'
+import { arrayFirst, deleteBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
+import { getNode } from '@/utils/node'
+import { debounce } from 'throttle-debounce'
 
 export default {
   name: 'GridGeneratorInner',
@@ -129,6 +130,7 @@ export default {
       const layout = []
       const { artBoardHeight } = this
       let layoutW
+
       children.forEach(({ props, hidden, id }, index) => {
         if (!props || (hidden && hidden[breakPoint])) {
           return
@@ -150,6 +152,10 @@ export default {
           h = parseInt(h)
         }
 
+        const node = getNode(id, this.isExample)
+        const autoHeightItem = arrayFirst(node.children)
+        const autoHeight = autoHeightItem && autoHeightItem[AUTO_HEIGHT]
+
         layout.push({
           static: this.lockIds.includes(id),
           id: id,
@@ -158,7 +164,8 @@ export default {
           y: props[breakPoint].y || 0,
           w,
           h,
-          verticalCompact
+          verticalCompact,
+          autoHeight
         })
       })
 
@@ -211,33 +218,33 @@ export default {
       // this.closestBoundaryEl.classList.add('border-pulse')
       this.APP_SET({ gridResizing: true })
     },
-    itemUpdated() {
+    itemUpdated: debounce(150, function() {
       // this.closestBoundaryEl.classList.remove('border-pulse')
       this.APP_SET({ gridResizing: false })
-    },
-    // itemAutoHeight(newChildren) {
-    //   // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto height的高了
-    //   if (!this.layout.length || this.isExample) {
-    //     return
-    //   }
-    //
-    //   newChildren.forEach(node => {
-    //     const gridItem = this.componentsMap[node.id]
-    //     const autoHeightItem = gridItem.children[0]
-    //
-    //     if (autoHeightItem && autoHeightItem[AUTO_HEIGHT]) {
-    //       const child = this.$refs[node.id][0]
-    //       this.$nextTick(() => {
-    //         // 新增組建的時候，有可能組建還沒渲染就autosize，會造成零空間
-    //         if (!this.vmMap[autoHeightItem.id]) return
-    //
-    //         child.$el.classList.add('disable-h-100')
-    //         child.autoSize()
-    //         child.$el.classList.remove('disable-h-100')
-    //       })
-    //     }
-    //   })
-    // }
+    }),
+    itemAutoHeight() {
+      // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto height的高了
+      if (!this.layout.length || this.isExample) {
+        return
+      }
+
+      this.layout.forEach(node => {
+        const gridItem = this.componentsMap[node.id]
+        const autoHeightItem = gridItem.children[0]
+
+        if (autoHeightItem && autoHeightItem[AUTO_HEIGHT]) {
+          const child = this.$refs[node.id][0]
+          this.$nextTick(() => {
+            // 新增組建的時候，有可能組建還沒渲染就autosize，會造成零空間
+            if (!this.vmMap[autoHeightItem.id]) return
+
+            // child.$el.classList.add('disable-h-100')
+            child.autoSize()
+            // child.$el.classList.remove('disable-h-100')
+          })
+        }
+      })
+    }
   }
 }
 </script>

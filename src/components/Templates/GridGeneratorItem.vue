@@ -1,8 +1,7 @@
 <template>
   <div
-    :class="{ 'grid-item-border': isDraftMode }"
+    :class="{ 'grid-item-border': isDraftMode, 'h-100': !autoHeight }"
     :style="innerStyles.default"
-    class="h-100"
     @scroll="onScroll"
   >
     <async-component
@@ -33,6 +32,9 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     firstChild() {
       return this.innerChildren[0]
+    },
+    autoHeight() {
+      return this.firstChild && this.firstChild.autoHeight
     }
   },
   methods: {

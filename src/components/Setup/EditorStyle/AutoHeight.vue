@@ -5,10 +5,10 @@
     align="middle"
   >
     <el-col :span="10">
-      <span class="title p-r-10">Fix Container</span>
+      <span class="title">Fix Container</span>
     </el-col>
 
-    <el-col :span="14">
+    <el-col :span="7">
       <el-checkbox v-model="autoHeight" />
     </el-col>
   </el-row>
@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { AUTO_HEIGHT, STYLE, TEXT_EDITOR } from '@/const'
+import { AUTO_HEIGHT, TEXT_EDITOR } from '@/const'
 import { arrayLast } from '@/utils/array'
 
 export default {
@@ -24,8 +24,8 @@ export default {
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
     nodes() {
-      return this.selectedComponentNodes.filter(node =>
-        ['video-player', TEXT_EDITOR].includes(node.tag)
+      return this.selectedComponentNodes.filter(
+        node => TEXT_EDITOR === node.tag
       )
     },
     allValues() {
