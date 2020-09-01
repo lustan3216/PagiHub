@@ -41,6 +41,7 @@ import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
 import { getNode } from '@/utils/node'
 import { debounce } from 'throttle-debounce'
+import { getValueByPath } from '@/utils/tool'
 
 export default {
   name: 'GridGeneratorInner',
@@ -141,7 +142,7 @@ export default {
         const { ratioW, ratioH, verticalCompact } = props
 
         if (ratioH && ratioW) {
-          layoutW = layoutW || this.$refs.gridGenerator.$el.clientWidth
+          layoutW = layoutW || this.$el.clientWidth
           const itemWidth = (parseInt(layoutW) / COLUMNS) * w
           h = (itemWidth / ratioW) * ratioH
         }
@@ -152,10 +153,6 @@ export default {
           h = parseInt(h)
         }
 
-        const node = getNode(id, this.isExample)
-        const autoHeightItem = arrayFirst(node.children)
-        const autoHeight = autoHeightItem && autoHeightItem[AUTO_HEIGHT]
-
         layout.push({
           static: this.lockIds.includes(id),
           id: id,
@@ -165,7 +162,7 @@ export default {
           w,
           h,
           verticalCompact,
-          autoHeight
+          autoHeight: false
         })
       })
 

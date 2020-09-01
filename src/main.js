@@ -63,8 +63,20 @@ import {
   Form,
   FormItem
 } from 'element-ui'
-Vue.prototype.$ELEMENT = { size: 'mini' }
-Vue.prototype.$loading = Loading.service
+// eslint-disable-next-line
+import i18n from './i18n'
+
+Vue.prototype.$t = key => i18n[key]
+Vue.prototype.$Log = console.log
+Vue.prototype.$log = console.log
+Vue.prototype.$bus = new Vue()
+Vue.prototype.$dialog = {
+  close: () => store.commit('app/DIALOG_CLOSE'),
+  open: name => store.commit('app/DIALOG_OPEN', name)
+}
+
+Vue.config.productionTip = false
+Vue.config.devtools = process.env.NODE_ENV === 'development'
 
 Vue.use(Tooltip)
 Vue.use(Dialog)
@@ -91,20 +103,8 @@ Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Loading.directive)
 
-// eslint-disable-next-line
-import i18n from './i18n'
-
-Vue.prototype.$t = key => i18n[key]
-Vue.prototype.$Log = console.log
-Vue.prototype.$log = console.log
-Vue.prototype.$bus = new Vue()
-Vue.prototype.$dialog = {
-  close: () => store.commit('app/DIALOG_CLOSE'),
-  open: name => store.commit('app/DIALOG_OPEN', name)
-}
-
-Vue.config.productionTip = false
-Vue.config.devtools = process.env.NODE_ENV === 'development'
+Vue.prototype.$ELEMENT = { size: 'mini' }
+Vue.prototype.$loading = Loading.service
 
 const app = new Vue({
   render: h => h(App),

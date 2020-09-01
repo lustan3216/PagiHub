@@ -354,7 +354,7 @@ import { debounce } from "throttle-debounce"
             if (value) {
               if (this.autoHeight && slot) {
                 this.erd = elementResizeDetectorMaker({
-                  strategy: 'scroll', //<- For ultra performance.
+                  strategy: 'scroll' //<- For ultra performance.
                 })
                 this.erd.listenTo(slot.elm, this.autoSize)
 

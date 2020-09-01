@@ -4,10 +4,6 @@
       DIMENSION
     </el-divider>
 
-    <!--    <auto-height />-->
-
-    <auto-height />
-
     <el-row
       type="flex"
       align="middle"
@@ -123,14 +119,12 @@ import { COLUMNS } from '@/const'
 import { isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
-import AutoHeight from './AutoHeight'
 
 export default {
   name: 'Dimension',
   components: {
     SelectUnit,
     Tip,
-    AutoHeight,
     ElDivider: Divider
   },
 

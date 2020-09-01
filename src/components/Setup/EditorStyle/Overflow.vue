@@ -13,6 +13,10 @@
         @input="overflow = $event"
       >
         <el-option
+          label="Fit Container"
+          value="fixContainer"
+        />
+        <el-option
           label="Visible"
           value="visible"
         />

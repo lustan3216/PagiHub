@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="{ 'grid-item-border': isDraftMode, 'h-100': !autoHeight }"
+    :class="{ 'grid-item-border': isDraftMode, 'h-100': !fixContainer }"
     :style="innerStyles.default"
     @scroll="onScroll"
   >
@@ -19,6 +19,8 @@ import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { updateWrapperStyle } from '@/utils/quickFunction'
+import { getValueByPath } from '@/utils/tool'
+import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'GridGeneratorItem',
@@ -33,8 +35,20 @@ export default {
     firstChild() {
       return this.innerChildren[0]
     },
-    autoHeight() {
-      return this.firstChild && this.firstChild.autoHeight
+    fixContainer() {
+      return (
+        getValueByPath(this, 'firstChild.style.default.overflow') ===
+        'fixContainer'
+      )
+    }
+  },
+  watch: {
+    'firstChild.style.default.overflow'(value) {
+      const layout = vmGet(this.node.parentId, this.isExample)
+      const layoutInner = layout.$children[0]
+      const item = layoutInner.layout.find(node => node.id === this.id)
+
+      item.autoHeight = value === 'fixContainer'
     }
   },
   methods: {
