@@ -15,15 +15,14 @@
 
       <dialog-component-set
         :parent-id="editingProjectId"
-        polymorphism="page"
-        button-text="Page"
+        button-text="Component"
         button-type="primary"
       />
     </div>
 
     <el-tree
       ref="tree"
-      :data="pages"
+      :data="componentSets"
       :indent="16"
       class="tree"
       node-key="id"
@@ -54,7 +53,6 @@
                 :key="data.updatedAt"
                 :id="data.id"
                 :parent-id="editingProjectId"
-                polymorphism="page"
               />
             </div>
           </transition>
@@ -72,11 +70,10 @@ import DialogProject from './DialogProject'
 import DialogComponentSet from './DialogComponentSet'
 import DialogDelete from './DialogDelete'
 import ComponentName from '../TemplateUtils/ComponentName'
-import { kebabCase, capitalize } from '@/utils/string'
+import { kebabCase } from '@/utils/string'
 import {
   isComponentSet,
   isProject,
-  isPage,
   cloneJsonWithoutChildren
 } from '@/utils/node'
 
@@ -103,11 +100,9 @@ export default {
   },
   computed: {
     ...mapState('node', ['editingProjectId', 'editingComponentSetId']),
-    pages() {
+    componentSets() {
       return Object.values(this.componentsMap)
-        .filter(node => {
-          return node.parentId === this.editingProjectId && isPage(node)
-        })
+        .filter(node => node.parentId === this.editingProjectId)
         .map(node => cloneJsonWithoutChildren(node))
     },
     projectName() {
@@ -118,7 +113,7 @@ export default {
     editingProjectId: {
       handler(projectId) {
         if (projectId) {
-          this.getComponentSets({ projectId, polymorphism: 'page' })
+          this.getComponentSets({ projectId })
         }
       },
       immediate: true

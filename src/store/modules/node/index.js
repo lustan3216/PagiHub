@@ -187,7 +187,13 @@ const mutations = {
   }
 }
 
-const getters = {}
+const getters = {
+  projectNodes(state) {
+    return state.projectIds
+      .map(id => state.componentsMap[id])
+      .filter(node => node)
+  }
+}
 
 function rollbackSelectedComponentSet(deltaGroup) {
   if (!deltaGroup) {

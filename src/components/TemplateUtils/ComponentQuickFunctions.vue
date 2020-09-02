@@ -21,12 +21,10 @@
       :class="[top > 100 ? 'top' : 'bottom']"
       class="wrapper flex"
     >
-      <component-name
-        :id="id"
-        class="title"
-      >
+      <div class="title">
         <i :class="[itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank']" />
-      </component-name>
+        <span> {{ nodeShortName }} - {{ shortId }} </span>
+      </div>
 
       <div class="button-group">
         <connection-jumper
@@ -43,7 +41,7 @@
     </div>
 
     <div
-      v-if="!isExample"
+      v-if="!isExample && isLastOne"
       class="left wrapper"
     >
       <el-tooltip
@@ -75,7 +73,7 @@ import ComponentName from './ComponentName'
 import ContextMenu from './ContextMenu'
 import ConnectionJumper from './ConnectionJumper'
 import { Popover } from 'element-ui'
-import { isGridItem, getNode } from '@/utils/node'
+import { isGridItem, getNode, shortTagName, shortId } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import {
   CAN_NEW_ITEM,
@@ -166,16 +164,28 @@ export default {
     metaKey() {
       return isMac() ? '&#8984;' : '&#8963;'
     },
+    nodeShortName() {
+      return shortTagName(this.node)
+    },
+    shortId() {
+      if (process.env.NODE_ENV === 'production' && this.isComponent) {
+        return shortId(this.id)
+      }
+      else {
+        return this.id.substring(23, 26)
+      }
+    },
     node() {
       return getNode(this.id)
     },
     isGridItem() {
       return isGridItem(this.node)
     },
+    isLastOne() {
+      return arrayLast(this.selectedComponentIds) === this.id
+    },
     canAddComponent() {
-      const isLastOne = arrayLast(this.selectedComponentIds) === this.id
-
-      if (!this.isExample && this.isGridItem && isLastOne) {
+      if (!this.isExample && this.isGridItem && this.isLastOne) {
         const { children = [] } = this.node
         return !children.length
       }
@@ -196,7 +206,6 @@ export default {
   },
   watch: {
     gridResizing(value) {
-      console.log(value)
       if (value) {
         this.framer.style.opacity = 0
       }
@@ -243,6 +252,7 @@ export default {
         }
 
         const rect = element.getBoundingClientRect()
+
         let { x: left, y: top, width, height } = rect
 
         let bounderNode
@@ -288,8 +298,8 @@ export default {
             y: top,
             width: width - 2,
             height: height - 2,
-            ease: 'power3',
-            duration: 0.7,
+            ease: 'power4',
+            duration: 1,
             onUpdate() {
               const { width, height, x, y, opacity } = this.vars
               leftShared = x
@@ -371,6 +381,8 @@ $connectColor: rgba(135, 199, 124, 0.68);
   border: 1px solid $activeColor;
   border-radius: 5px;
   color: $activeColor !important;
+  font-size: 12px;
+  font-weight: 500;
 }
 .left.wrapper,
 .right.wrapper {

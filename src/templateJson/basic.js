@@ -113,8 +113,8 @@ export const carousel = function() {
 export const textEditor = function() {
   return {
     [TAG]: TEXT_EDITOR,
-    [CAN_BE_EDITED]: true
-    // [AUTO_HEIGHT]: true
+    [CAN_BE_EDITED]: true,
+    [STYLE]: { default: { overflow: 'fitContainer' }}
   }
 }
 
@@ -140,7 +140,7 @@ export const videoPlayer = function() {
   return {
     [TAG]: 'video-player',
     [CAN_BE_EDITED]: true,
-    props: { ratio: { w: 16, h: 9 }}
+    [STYLE]: { ratio: { w: 16, h: 9 }}
   }
 }
 

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { assignDefaultValue, boolean, select, number } from './utils/ruleTool'
 import { SOFT_DELETE, CHILDREN, POLYMORPHISM } from '@/const'

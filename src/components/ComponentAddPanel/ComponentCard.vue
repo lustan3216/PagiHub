@@ -1,6 +1,7 @@
 <template>
   <div
     v-if="show"
+    :id="`example-${component.id}`"
     class="card"
   >
     <div class="p-10 justify-between">
@@ -14,7 +15,7 @@
       </el-button>
     </div>
 
-    <div class="relative z-index1 p-1">
+    <div class="relative z-index1 p-1 example-boundary">
       <async-component
         :id="component.id"
         :style="{

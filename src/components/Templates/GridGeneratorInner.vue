@@ -2,14 +2,14 @@
   <vue-grid-generator
     ref="gridGenerator"
     v-bind="innerProps"
-    :layout="layout"
+    :layout="innerLayouts"
     :margin="[0, 0]"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
     @layout-updated="layoutUpdated($event)"
   >
     <vue-grid-item
-      v-for="child in layout"
+      v-for="child in innerLayouts"
       v-bind="child"
       :ref="child.id"
       :key="child.id"
@@ -33,13 +33,13 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
-import { AUTO_HEIGHT, CHILDREN, COLUMNS, PROPS } from '@/const'
-import { arrayFirst, deleteBy } from '@/utils/array'
+import { CHILDREN, COLUMNS, PROPS, STYLE } from '@/const'
+import { deleteBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
-import { getNode } from '@/utils/node'
+import { getBreakpoint } from '@/utils/layout'
 import { debounce } from 'throttle-debounce'
 import { getValueByPath } from '@/utils/tool'
 
@@ -52,6 +52,11 @@ export default {
     AsyncComponent: () => import('../TemplateUtils/AsyncComponent')
   },
   mixins: [childrenMixin],
+  provide() {
+    return {
+      layouts: this.layouts
+    }
+  },
   inject: {
     isExample: { default: false }
   },
@@ -67,8 +72,9 @@ export default {
   },
   data() {
     return {
-      layout: [],
-      lockIds: [] // touchable will use it
+      layouts: [],
+      lockIds: [], // touchable will use it
+      innerLayouts: []
     }
   },
   computed: {
@@ -80,11 +86,12 @@ export default {
     ]),
     ...mapState('node', ['componentsMap']),
     currentBreakPoint() {
-      return this.isExample ? 'lg' : this.breakpoint
+      return this.isExample
+        ? getBreakpoint(this.$el.closest('.example-boundary'))
+        : this.breakpoint
     },
     innerChildren() {
       // 拿掉 style, props, 不然因為watch deep, 每次都會有多餘的更新
-      // style 這裡完全不需要，因為gridItem component處理掉了
       return this.children.map(({ [CHILDREN]: _, style, ...node }) => node)
     },
     closestBoundaryEl() {
@@ -95,10 +102,25 @@ export default {
   watch: {
     innerChildren: {
       handler(newChildren) {
+        // style 已經統一從 gridGeneratorItem裡面送innerStyle過來了，這裏不要再處理
+        // 這裡只要注意有沒有新增刪除node
+        const layouts = []
+
+        newChildren.forEach(child => {
+          // 有找到就塞舊的，因為也沒變，沒找到代表新增的，剩下的就是刪除的不用塞
+          const layout = this.layouts.find(x => x.id === child.id)
+          layouts.push(layout || child)
+        })
+
+        this.layouts = layouts
+      },
+      immediate: true
+    },
+    layouts: {
+      handler(value) {
         this.$nextTick(() => {
           // this.getCurrentLayout 會因為拿不到refs噴bug
-          this.getCurrentLayout(newChildren)
-          this.resizeNodeQuickFn()
+          this.getCurrentLayout(value)
         })
       },
       deep: true,
@@ -108,7 +130,7 @@ export default {
       this.getCurrentLayout(this.innerChildren)
     },
     lockIds(ids) {
-      this.layout.forEach(layout => {
+      this.layouts.forEach(layout => {
         layout.static = ids.includes(layout.id)
       })
     }
@@ -117,9 +139,7 @@ export default {
     this.$refs.gridGenerator.onWindowResize()
   },
   methods: {
-    ...mapMutations('app', {
-      APP_SET: 'SET'
-    }),
+    ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapActions('app', ['resizeNodeQuickFn', 'artBoardResizing']),
     lock(id) {
       this.lockIds.push(id)
@@ -127,33 +147,36 @@ export default {
     unlock(id) {
       deleteBy(this.lockIds, id)
     },
-    getCurrentLayout(children, breakPoint = this.currentBreakPoint) {
-      const layout = []
+    getCurrentLayout(children) {
+      const breakPoint = this.currentBreakPoint
+      const layouts = []
       const { artBoardHeight } = this
       let layoutW
 
-      children.forEach(({ props, hidden, id }, index) => {
-        if (!props || (hidden && hidden[breakPoint])) {
+      children.forEach(({ props, style = {}, autoHeight, id }, index) => {
+        if (!props || getValueByPath(style, [breakPoint, 'hidden'])) {
           return
         }
 
         const w = props[breakPoint].w
         let h = props[breakPoint].h
-        const { ratioW, ratioH, verticalCompact } = props
+        const { ratioW, ratioH, verticalCompact } = style
 
-        if (ratioH && ratioW) {
-          layoutW = layoutW || this.$el.clientWidth
-          const itemWidth = (parseInt(layoutW) / COLUMNS) * w
-          h = (itemWidth / ratioW) * ratioH
-        }
-        else if (props[breakPoint].hUnit === 'vh') {
-          h = (artBoardHeight / 100) * parseInt(h)
-        }
-        else {
-          h = parseInt(h)
+        if (!autoHeight) {
+          if (props[breakPoint].hUnit === 'vh') {
+            h = (artBoardHeight / 100) * parseInt(h)
+          }
+          else if (ratioH && ratioW) {
+            layoutW = layoutW || this.$el.clientWidth
+            const itemWidth = (parseInt(layoutW) / COLUMNS) * w
+            h = (itemWidth / ratioW) * ratioH
+          }
+          else {
+            h = parseInt(h)
+          }
         }
 
-        layout.push({
+        layouts.push({
           static: this.lockIds.includes(id),
           id: id,
           i: id || index, // should not happen, but just prevent crash in case
@@ -162,11 +185,14 @@ export default {
           w,
           h,
           verticalCompact,
-          autoHeight: false
+          autoHeight
         })
       })
 
-      this.layout = layout
+      this.innerLayouts = layouts
+      this.$nextTick(() => {
+        this.resizeNodeQuickFn()
+      })
     },
     layoutUpdated(newChildren) {
       if (this.isExample) {
@@ -218,30 +244,7 @@ export default {
     itemUpdated: debounce(150, function() {
       // this.closestBoundaryEl.classList.remove('border-pulse')
       this.APP_SET({ gridResizing: false })
-    }),
-    itemAutoHeight() {
-      // 第一次加載不執行, 因為理論上儲存成功時，grid item已經是auto height的高了
-      if (!this.layout.length || this.isExample) {
-        return
-      }
-
-      this.layout.forEach(node => {
-        const gridItem = this.componentsMap[node.id]
-        const autoHeightItem = gridItem.children[0]
-
-        if (autoHeightItem && autoHeightItem[AUTO_HEIGHT]) {
-          const child = this.$refs[node.id][0]
-          this.$nextTick(() => {
-            // 新增組建的時候，有可能組建還沒渲染就autosize，會造成零空間
-            if (!this.vmMap[autoHeightItem.id]) return
-
-            // child.$el.classList.add('disable-h-100')
-            child.autoSize()
-            // child.$el.classList.remove('disable-h-100')
-          })
-        }
-      })
-    }
+    })
   }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
   <el-tooltip
+    v-if="hidden"
     effect="light"
     content="Hidden on current window width, click to display."
     placement="bottom"
@@ -16,6 +17,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { getValueByPath } from '@/utils/tool'
 
 export default {
   name: 'Hidden',
@@ -36,7 +38,7 @@ export default {
       return this.componentsMap[this.id]
     },
     hidden() {
-      return this.node.hidden && this.node.hidden[this.breakpoint]
+      return getValueByPath(this.node, ['style', this.breakpoint, 'hidden'])
     }
   },
   methods: {
@@ -44,7 +46,7 @@ export default {
     record() {
       if (this.hidden) {
         this.RECORD({
-          path: `${this.id}.hidden.${this.breakpoint}`,
+          path: `${this.id}.style.${this.breakpoint}.hidden`,
           value: undefined
         })
       }

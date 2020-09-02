@@ -1,4 +1,3 @@
-import { mapState } from 'vuex'
 import { vmAppend, vmRemove, vmGet } from '@/utils/vmMap'
 import { objectAssign } from '@/utils/object'
 import { cloneJson } from '@/utils/tool'
@@ -17,14 +16,24 @@ export default {
       required: true
     }
   },
+  provide() {
+    return {
+      master: this.master
+    }
+  },
   inject: {
-    isExample: { default: false }
+    isExample: { default: false },
+    master: { default: null }
   },
   directives: {
     FreeStyle
   },
   data() {
     return {
+      master: {
+        id: this.id,
+        isMaster: false
+      },
       childStyles: {},
       masterStyles: {},
       masterProps: {},
@@ -32,7 +41,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('example', ['exampleComponentsMap']),
     node() {
       return getNode(this.id)
     },
@@ -48,20 +56,21 @@ export default {
     masterId() {
       return this.node && this.node[MASTER_ID]
     },
-    firstChild() {
+    gridItemHasChild() {
       return isGridItem(this.node) && arrayFirst(this.innerChildren)
     },
     innerStyles() {
-      if (isGridItem(this.node) && this.firstChild) {
+      if (isGridItem(this.node) && this.gridItemHasChild) {
         return this.childStyles
       }
       else {
+        const other = objectAssign({}, this.masterStyles, this.selfStyles)
         const defaultStyle = objectAssign(
           {},
           this.masterStyles.default,
           this.selfStyles.default
         )
-        return { default: defaultStyle }
+        return { ...other, default: defaultStyle }
       }
     },
     innerProps() {
@@ -120,18 +129,18 @@ export default {
     //     this.selfStyles = value || {}
     //   })
     // },
-    watchMasterStyles() {
-      const path = `${this.currentMapString}.${this.masterId}.${STYLE}`
-      this.watch(path, value => {
-        this.masterStyles = value || {}
-      })
-    },
     // watchProps() {
     //   const path = `${this.currentMapString}.${this.id}.${PROPS}`
     //   this.watch(path, value => {
     //     this.selfProps = value || {}
     //   })
     // },
+    watchMasterStyles() {
+      const path = `${this.currentMapString}.${this.masterId}.${STYLE}`
+      this.watch(path, value => {
+        this.masterStyles = value || {}
+      })
+    },
     watchMasterProps() {
       const path = `${this.currentMapString}.${this.masterId}.${PROPS}`
       this.watch(path, value => {

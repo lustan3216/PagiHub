@@ -14,7 +14,7 @@
       >
         <el-option
           label="Fit Container"
-          value="fixContainer"
+          value="fitContainer"
         />
         <el-option
           label="Visible"

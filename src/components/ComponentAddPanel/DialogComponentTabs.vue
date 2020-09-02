@@ -140,7 +140,7 @@ export default {
   name: 'DialogComponentTabs',
   provide() {
     return {
-      isExample: true
+      isExample: this.isExample
     }
   },
   components: {
@@ -152,6 +152,7 @@ export default {
   },
   data() {
     return {
+      isExample: true,
       column: 8,
       currentCategory: 'basicComponents',
       options: [],
@@ -233,12 +234,12 @@ export default {
       if (isComponentSet(template)) {
         // 為了不拿到componentSet
         template = template.children[0]
-      }
 
-      this.RECORD({
-        path: `${node.id}.style.default.overflow`,
-        value: 'scroll'
-      })
+        this.RECORD({
+          path: `${node.id}.style.default.overflow`,
+          value: 'scroll'
+        })
+      }
 
       vmGet(node.id)._addNodesToParentAndRecord(cloneJson(template))
       this.$dialog.close()

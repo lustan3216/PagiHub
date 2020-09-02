@@ -1,15 +1,5 @@
 <template>
   <div class="flex-column wh-100">
-    <span
-      v-if="editingNode"
-      class="small-title align-center"
-    >
-      <i
-        :class="pathIcon"
-        class="m-r-5"
-      /> {{ editingPath }}
-    </span>
-
     <el-tree
       ref="tree"
       :filter-node-method="filterTagBySearching"
@@ -29,10 +19,7 @@
           @mouseenter.stop="hoverNode(data.id)"
           @mouseleave.stop="hoverLeaveNode(data.id)"
         >
-          <hidden
-            v-if="checkHidden(data)"
-            :id="data.id"
-          />
+          <hidden :id="data.id" />
           <component-name
             :id="data.id"
             :class="{ active: selectedComponentIds.includes(data.id) }"
@@ -148,30 +135,30 @@ export default {
       })
 
       return cloneTree.children
-    },
-    editingNode() {
-      return this.componentsMap[this.editingComponentSetId]
-    },
-    editingNodeName() {
-      return shortTagName(this.editingNode)
-    },
-    editingPath() {
-      if (isDesign(this.editingNode)) {
-        return this.editingNodeName
-      }
-      else if (isPage(this.editingNode)) {
-        const { parentNode } = this.editingNode
-        return [parentNode.label, this.editingNodeName].join(' > ')
-      }
-    },
-    pathIcon() {
-      if (isDesign(this.editingNode)) {
-        return 'el-icon-news'
-      }
-      else if (isPage(this.editingNode)) {
-        return 'el-icon-files'
-      }
     }
+    // editingNode() {
+    //   return this.componentsMap[this.editingComponentSetId]
+    // },
+    // editingNodeName() {
+    //   return shortTagName(this.editingNode)
+    // },
+    // editingPath() {
+    //   if (isDesign(this.editingNode)) {
+    //     return this.editingNodeName
+    //   }
+    //   else if (isPage(this.editingNode)) {
+    //     const { parentNode } = this.editingNode
+    //     return [parentNode.label, this.editingNodeName].join(' > ')
+    //   }
+    // },
+    // pathIcon() {
+    //   if (isDesign(this.editingNode)) {
+    //     return 'el-icon-news'
+    //   }
+    //   else if (isPage(this.editingNode)) {
+    //     return 'el-icon-files'
+    //   }
+    // }
   },
   watch: {
     filterText(val) {
@@ -185,9 +172,6 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
     ...mapMutations('node', ['RECORD']),
-    checkHidden(node) {
-      return node.hidden && node.hidden[this.breakpoint]
-    },
     allowDrop(drag, drop, action) {
       const sameLayer = drag.parent === drop.parent
       return sameLayer && ['prev', 'next'].includes(action)

@@ -35,30 +35,9 @@ export const actions = {
     }
   },
 
-  async getComponentSets({ commit, state }, { projectId, polymorphism }) {
-    const nodes = Object.values(state.componentsMap)
-    const imported = nodes.find(node => node.parentId === projectId)
-    if (imported) {
-      return
-    }
-
-    const { data: componentSets } = await getComponentSets({
-      parentId: projectId,
-      polymorphism
-    })
-    if (
-      componentSets[0] &&
-      componentSets[0].id &&
-      !state.editingComponentSetId
-    ) {
-      commit('SET_EDITING_COMPONENT_SET_ID', componentSets[0].id)
-    }
-    commit('SET_NODES_TO_MAP', { nodes: componentSets })
-  },
-
   async createComponentSet(
     { commit, state, dispatch },
-    { parentId, label, description, tags, polymorphism }
+    { parentId, label, description, tags }
   ) {
     const tree = layers()
     appendIdsWithoutConnection(tree)
@@ -66,7 +45,6 @@ export const actions = {
       data: { children, ...componentSet }
     } = await createComponentSet({
       parentId,
-      polymorphism,
       description,
       label,
       tags,

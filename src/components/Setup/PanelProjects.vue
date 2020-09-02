@@ -1,114 +1,111 @@
 <template>
   <div class="wh-100">
-    <panel-pages
-      v-if="isPanelPages && editingProjectId"
-      :visible.sync="isPanelPages"
-    />
-
-    <div
-      v-show="!isPanelPages || !editingProjectId"
-      class="flex-column"
-    >
-      <div class="m-b-10 justify-between">
-        <el-button
-          type="text"
-          class="no-border small-title"
-          icon="el-icon-arrow-right"
-          @click="isPanelPages = true"
-        >Websites</el-button>
-
+    <div class="m-b-10 justify-between">
+      <el-button-group>
         <dialog-project
-          button-text="Website"
+          button-text="Project"
           button-type="primary"
         />
-      </div>
 
-      <el-tree
-        ref="tree"
-        :data="projects"
-        :indent="12"
-        class="tree"
-        node-key="id"
-        check-strictly
-      >
-        <template v-slot="{ data }">
-          <div
-            v-if="data && data.id"
-            :class="{ selected: editingProjectId === data.id }"
-            class="relative w-100 over-hidden"
-            @click="nodeClick($event, data)"
-            @mouseenter="hoverId = data.id"
-          >
-            <component-name
-              :id="data.id"
-              icon="el-icon-files"
-              class="w-100 text-left"
-            />
-
-            <transition name="fade">
-              <div
-                v-if="data.id === hoverId"
-                class="controller"
-              >
-                <dialog-delete :id="data.id" />
-
-                <dialog-project
-                  :key="data.updatedAt"
-                  :id="data.id"
-                  type="text"
-                />
-              </div>
-            </transition>
-          </div>
-        </template>
-      </el-tree>
+        <dialog-component-set
+          button-text="Component"
+          button-type="primary"
+        />
+      </el-button-group>
     </div>
+
+    <el-tree
+      ref="tree"
+      :data="innerTree"
+      :indent="12"
+      class="tree"
+      node-key="id"
+      default-expand-all
+      check-strictly
+    >
+      <template v-slot="{ data }">
+        <div
+          v-if="data && data.id"
+          :class="{ selected: editingProjectId === data.id }"
+          class="relative w-100 over-hidden"
+          @click="nodeClick($event, data)"
+          @mouseenter="hoverId = data.id"
+        >
+          <component-name
+            :id="data.id"
+            :icon="`el-icon-${data.isComponentSet ? 'copy-document' : 'files'}`"
+            class="w-100 text-left"
+          />
+
+          <transition name="fade">
+            <div
+              v-if="data.id === hoverId"
+              class="controller"
+            >
+              <dialog-delete :id="data.id" />
+
+              <dialog-project
+                :key="data.updatedAt"
+                :id="data.id"
+                type="text"
+              />
+            </div>
+          </transition>
+        </div>
+      </template>
+    </el-tree>
   </div>
 </template>
 
 <script>
 import { Tree } from 'element-ui'
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import DialogProject from './DialogProject'
-import PanelPages from './PanelPages'
+import PanelComponentSets from './PanelComponentSets'
 import DialogDelete from './DialogDelete'
 import ComponentName from '../TemplateUtils/ComponentName'
-import { isProject } from '@/utils/node'
-
-let isPanelPages = false
+import DialogComponentSet from '@/components/Setup/DialogComponentSet'
+import {
+  isProject,
+  isComponentSet,
+  traversalSelfAndChildren,
+  cloneJsonWithoutChildren
+} from '@/utils/node'
 
 export default {
   name: 'PanelProjects',
   components: {
+    DialogComponentSet,
     ElTree: Tree,
     DialogProject,
-    PanelPages,
+    PanelComponentSets,
     DialogDelete,
     ComponentName
   },
   data() {
     return {
-      hoverId: null,
-      isPanelPages
+      hoverId: null
     }
   },
   computed: {
     ...mapState('node', ['projectIds', 'editingProjectId']),
-    projects() {
-      return this.projectIds
-        .map(id => {
-          const newNode = this.componentsMap[id]
-          if (newNode) {
-            const { children, ...node } = newNode
-            return node
-          }
-        })
-        .filter(node => node)
-    }
-  },
-  watch: {
-    isPanelPages(value) {
-      isPanelPages = value
+    ...mapGetters('node', ['projectNodes']),
+    innerTree() {
+      const tree = []
+
+      traversalSelfAndChildren(this.projectNodes, (node, parentNode) => {
+        if (isProject(node)) {
+          tree.push(node)
+        }
+        else if (isComponentSet(node)) {
+          const index = parentNode.children.findIndex(x => x.id === node.id)
+          const componentSet = cloneJsonWithoutChildren(node)
+          componentSet.isComponentSet = true
+          parentNode.children[index] = componentSet
+        }
+      })
+
+      return tree.sort((a, b) => b.updatedAt - a.updatedAt)
     }
   },
   created() {
@@ -119,13 +116,16 @@ export default {
       NODE_SET: 'SET'
     }),
     ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
-    ...mapActions('node', ['getProjects']),
+    ...mapActions('node', ['getProjects', 'getComponentSets']),
     isProject,
     nodeClick(event, node) {
-      this.isPanelPages = true
-      this.NODE_SET({
-        editingProjectId: node.id
-      })
+      if (isProject(node)) {
+        this.NODE_SET({ editingProjectId: node.id })
+      }
+      else if (isComponentSet(node)) {
+        this.NODE_SET({ editingProjectId: node.parentId })
+        this.SET_EDITING_COMPONENT_SET_ID(node.id)
+      }
     }
   }
 }

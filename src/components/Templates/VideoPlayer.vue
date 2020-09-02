@@ -42,26 +42,6 @@ export default {
       return { ...props, ratio: this.ratio }
     }
   },
-  created() {
-    if (this.isExample) {
-      return
-    }
-
-    const { props = {}} = this.node && this.node.parentNode
-
-    if (!props.ratioW || !props.ratioH) {
-      this.RECORD([
-        {
-          path: `${this.node.parentId}.props.ratioW`,
-          value: 16
-        },
-        {
-          path: `${this.node.parentId}.props.ratioH`,
-          value: 9
-        }
-      ])
-    }
-  },
   methods: {
     ...mapMutations('node', ['RECORD']),
     mouseleave() {

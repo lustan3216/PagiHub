@@ -1,39 +1,32 @@
 import {
   createProject,
   deleteProject,
-  getProject,
   getProjects,
   patchProject
 } from '@/api/node'
-import { ID } from '@/const'
+import { isComponentSet, isProject } from '@/utils/node'
 
 export const actions = {
   async getProjects({ commit }) {
-    const { data } = await getProjects()
-    const projectIds = data.map(x => x[ID])
-    commit('SET_NODES_TO_MAP', { nodes: data })
-    commit('SET', { projectIds })
-  },
+    const { data: nodes } = await getProjects()
+    const projectIds = []
+    const rootComponentSetIds = []
 
-  async getProject({ state, commit, dispatch }, id) {
-    let node = state.componentsMap[id]
-
-    if (!node) {
-      const { data } = await getProject({ id })
-      commit('SET_NODES_TO_MAP', { nodes: data })
-      node = data
-    }
-
-    commit('SET', {
-      rootComponentSetIds: [],
-      editingProjectId: id
+    nodes.forEach(node => {
+      if (isProject(node)) {
+        projectIds.push(node.id)
+      }
+      else if (isComponentSet(node)) {
+        rootComponentSetIds.push(node.id)
+      }
     })
-    dispatch('getComponentSets', id)
-    return node
+
+    commit('SET_NODES_TO_MAP', { nodes })
+    commit('SET', { projectIds, rootComponentSetIds })
   },
 
   async createProject({ commit }, form) {
-    const { data } = await createProject({ body: form })
+    const { data } = await createProject(form)
 
     commit('SET', { editingProjectId: data.id })
     commit('SET_NODES_TO_MAP', { nodes: data })
@@ -41,7 +34,7 @@ export const actions = {
   },
 
   async patchProject({ commit }, { id, ...form }) {
-    const { data } = await patchProject({ id, body: form })
+    const { data } = await patchProject({ id, ...form })
     commit('SET_NODES_TO_MAP', { nodes: data })
   },
 

@@ -11,12 +11,6 @@
       />
 
       <el-button
-        icon="el-icon-news"
-        class="flex1"
-        @click="activePanel = 'PanelDesigns'"
-      />
-
-      <el-button
         icon="el-icon-picture-outline"
         class="flex1"
         @click="activePanel = 'PanelAsset'"
@@ -59,15 +53,14 @@ export default {
   components: {
     PanelNodes: () => import('../Setup/PanelNodes'),
     PanelProject: () => import('../Setup/PanelProjects'),
-    PanelPage: () => import('../Setup/PanelPages'),
+    PanelPage: () => import('../Setup/PanelComponentSets'),
     PanelAsset: () => import('../Setup/PanelAsset'),
-    PanelDesigns: () => import('../Setup/PanelDesigns'),
     DialogComponentSet,
     SplitPane
   },
   data() {
     return {
-      activePanel: 'PanelDesigns',
+      activePanel: 'PanelProject',
       uploading: false
     }
   },

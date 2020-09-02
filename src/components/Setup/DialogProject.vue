@@ -8,7 +8,7 @@
     <dialog-confirmable
       :visible.sync="visible"
       :disable-submit="!dirty"
-      title="Website"
+      title="Project"
       width="50vw"
       class="dialog"
       @confirm="onSubmit"
@@ -123,7 +123,7 @@ export default {
             })
           }
           else {
-            await this.createProject({ body: this.form })
+            await this.createProject(this.form)
           }
 
           this.form = {

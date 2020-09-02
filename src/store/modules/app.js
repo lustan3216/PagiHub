@@ -8,7 +8,7 @@ import {
 } from '@/utils/node'
 import { quickFnMap } from '@/components/TemplateUtils/ComponentQuickFunctions'
 import { debounce } from 'throttle-debounce'
-import { BREAK_POINTS } from '@/const'
+import { getBreakpoint } from '@/utils/layout'
 
 const state = {
   breakpoint: 'lg',
@@ -113,14 +113,12 @@ const actions = {
   },
 
   artBoardResizing({ state, commit, dispatch }, boolean) {
-    const { clientWidth, clientHeight } = document.getElementById('art-board')
-    const points = Object.keys(BREAK_POINTS)
-    const breakpoint =
-      points.find(key => clientWidth >= BREAK_POINTS[key]) || 'xxs'
+    const element = document.getElementById('art-board')
+    const { clientWidth, clientHeight } = element
 
     commit('SET', {
-      breakpoint,
       gridResizing: boolean,
+      breakpoint: getBreakpoint(element),
       artBoardWidth: parseInt(clientWidth),
       artBoardHeight: parseInt(clientHeight)
     })

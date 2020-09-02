@@ -141,6 +141,10 @@ export default {
         {
           name: 'Delete',
           shortKey: ['&#9003;']
+        },
+        {
+          name: 'Make Master Component',
+          divided: true
         }
       ]
     }
@@ -167,6 +171,12 @@ export default {
           break
         case 'Delete':
           vmRemoveNode(this.node)
+          break
+        case 'Make Master Component':
+          this.RECORD({
+            path: `${this.id}.isMasterComponent`,
+            value: true
+          })
           break
       }
     }

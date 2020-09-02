@@ -220,18 +220,6 @@ export function isComponent(node) {
   }
 }
 
-export function isPage(node) {
-  if (node) {
-    return isComponentSet(node) && node[POLYMORPHISM] === NODE_TYPE.PAGE
-  }
-}
-
-export function isDesign(node) {
-  if (node) {
-    return isComponentSet(node) && node[POLYMORPHISM] === NODE_TYPE.DESIGN
-  }
-}
-
 export function isFolder(node) {
   if (node) {
     return node.tag === NODE_TYPE.FOLDER

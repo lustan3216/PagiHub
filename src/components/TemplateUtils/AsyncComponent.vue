@@ -97,12 +97,15 @@ export default {
     let noObserve = false
 
     let options = {
-      once: this.onceObserve,
+      once: this.onceObserve && !this.isExample,
       callback: isVisible => {
         this.vIf = isVisible
       },
       intersection: {
-        rootMargin: '100px'
+        root: this.isExample
+          ? document.getElementById(`example-${node.rootComponentSetId}`)
+          : document.getElementById('art-board'),
+        rootMargin: '200px 0px'
       }
     }
 

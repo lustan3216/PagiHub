@@ -28,6 +28,7 @@
 import { mapMutations, mapGetters } from 'vuex'
 import { Divider } from 'element-ui'
 import { BREAK_POINTS } from '@/const'
+import { getValueByPath } from '@/utils/tool'
 
 export default {
   name: 'ItemHiddenController',
@@ -45,13 +46,13 @@ export default {
       let xxsHidden = false
 
       if (this.selectedComponentNodes.length === 1) {
-        const { hidden } = this.selectedComponentNodes[0]
-        xlHidden = hidden && hidden.xl
-        lgHidden = hidden && hidden.lg
-        mdHidden = hidden && hidden.md
-        smHidden = hidden && hidden.sm
-        xsHidden = hidden && hidden.xs
-        xxsHidden = hidden && hidden.xxs
+        const node = this.selectedComponentNodes[0]
+        xlHidden = getValueByPath(node, 'style.xl.hidden')
+        lgHidden = getValueByPath(node, 'style.lg.hidden')
+        mdHidden = getValueByPath(node, 'style.md.hidden')
+        smHidden = getValueByPath(node, 'style.sm.hidden')
+        xsHidden = getValueByPath(node, 'style.xs.hidden')
+        xxsHidden = getValueByPath(node, 'style.xxs.hidden')
       }
 
       return [
@@ -102,7 +103,7 @@ export default {
 
       this.selectedComponentNodes.forEach(node => {
         records.push({
-          path: `${node.id}.hidden.${name}`,
+          path: `${node.id}.style.${name}.hidden`,
           value: hidden || undefined
         })
       })

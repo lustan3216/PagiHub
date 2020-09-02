@@ -9,8 +9,8 @@
       :loading="loading"
       :visible.sync="visible"
       :disable-submit="!dirty"
-      :title="polymorphism.toUpperCase()"
       width="50%"
+      title="Component"
       @confirm="onSubmit"
       @close="initData"
     >
@@ -20,6 +20,21 @@
         :model="form"
         label-width="110px"
       >
+        <el-form-item
+          v-if="!isExist"
+          label="Project"
+          prop="parentId"
+        >
+          <el-select v-model="form.parentId">
+            <el-option
+              v-for="project in projectNodes"
+              :key="project.id"
+              :value="project.id"
+              :label="project.label"
+            />
+          </el-select>
+        </el-form-item>
+
         <el-form-item
           label="Name"
           prop="label"
@@ -50,7 +65,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { label, max, min, required } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
@@ -66,14 +81,6 @@ export default {
     // eslint-disable-next-line
     id: {
       type: String
-    },
-    polymorphism: {
-      type: String,
-      required: true
-    },
-    parentId: {
-      type: String,
-      default: ''
     },
     buttonType: {
       type: String,
@@ -96,7 +103,8 @@ export default {
       form: {
         label: node ? node.label : '',
         description: node ? node.description : '',
-        tags: node ? node.tags : []
+        tags: node ? node.tags : [],
+        parentId: null
       },
       categories: [
         { id: 0, label: 'Button' },
@@ -106,17 +114,17 @@ export default {
       ],
       rules: {
         label,
+        parentId: [required],
         description: [required],
         tags: [required, min(1), max(5)]
       }
     }
   },
   computed: {
+    ...mapState('node', ['editingProjectId']),
+    ...mapGetters('node', ['projectNodes']),
     isExist() {
       return Boolean(this.id)
-    },
-    projectId() {
-      return this.$route.params.projectId
     }
   },
   watch: {
@@ -126,6 +134,9 @@ export default {
       },
       deep: true
     }
+  },
+  created() {
+    this.form.parentId = this.editingProjectId
   },
   methods: {
     ...mapActions('node', ['createComponentSet', 'patchComponentSet']),
@@ -141,16 +152,11 @@ export default {
             if (this.isExist) {
               await this.patchComponentSet({
                 id: this.id,
-                polymorphism: this.polymorphism,
                 ...this.form
               })
             }
             else {
-              await this.createComponentSet({
-                parentId: this.parentId,
-                polymorphism: this.polymorphism,
-                ...this.form
-              })
+              await this.createComponentSet(this.form)
             }
           }
           catch (e) {

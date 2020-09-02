@@ -1,18 +1,20 @@
 <template>
   <grid-generator-inner
     v-if="isGridItemParent"
+    :style="innerStyles.default"
     :id="id"
     :inner-props="innerProps"
   />
   <div
     v-else
     :style="innerStyles.default"
-    class="h-100"
+    class="h-100 no-action"
     @scroll="onScroll"
   >
     <grid-generator-inner
       :id="id"
       :inner-props="innerProps"
+      class="can-action"
     />
   </div>
 </template>

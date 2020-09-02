@@ -39,10 +39,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-    editable: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
@@ -69,7 +65,7 @@ export default {
       }
     },
     editing() {
-      return observable.editingId === this.id && this.editable
+      return observable.editingId === this.id
     }
   },
   methods: {
@@ -79,10 +75,8 @@ export default {
       this.$emit('click', event)
     },
     dblclick() {
-      if (this.editable) {
-        this.name = this.nodeShortName
-        observable.editingId = this.id
-      }
+      this.name = this.nodeShortName
+      observable.editingId = this.id
     },
     enter() {
       observable.editingId = null

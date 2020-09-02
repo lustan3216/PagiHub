@@ -1,6 +1,6 @@
 <template>
   <async-component
-    v-if="firstChild"
+    v-if="firstChild && firstChild.id"
     :id="firstChild.id"
   />
 </template>

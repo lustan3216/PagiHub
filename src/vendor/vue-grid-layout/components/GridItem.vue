@@ -814,7 +814,9 @@ import { debounce } from "throttle-debounce"
           if (!this.dragEventSet) {
             this.dragEventSet = true
             this.interactObj.on('dragstart dragmove dragend', function(event) {
-              self.handleDrag(event)
+              requestAnimationFrame(() => {
+                self.handleDrag(event)
+              })
             })
           }
         } else {
@@ -841,7 +843,7 @@ import { debounce } from "throttle-debounce"
             edges: {
               left: false,
               right: '.' + this.resizableHandleClass,
-              bottom: '.' + this.resizableHandleClass,
+              bottom: this.autoHeight ? false : '.' + this.resizableHandleClass,
               top: false
             },
             ignoreFrom: this.resizeIgnoreFrom,
@@ -862,7 +864,9 @@ import { debounce } from "throttle-debounce"
             this.resizeEventSet = true
             this.interactObj
               .on('resizestart resizemove resizeend', function(event) {
-                self.handleResize(event)
+                requestAnimationFrame(() => {
+                  self.handleResize(event)
+                })
               })
           }
         } else {

@@ -1,12 +1,12 @@
 <template>
   <div
-    :class="{ 'grid-item-border': isDraftMode, 'h-100': !fixContainer }"
+    :class="{ 'grid-item-border': isDraftMode, 'h-100': !fitContainer }"
     :style="innerStyles.default"
     @scroll="onScroll"
   >
     <async-component
-      v-if="firstChild"
-      :id="firstChild.id"
+      v-if="child"
+      :id="child.id"
     />
   </div>
 </template>
@@ -20,7 +20,6 @@ import ComponentController from '../TemplateUtils/ComponentController'
 import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { updateWrapperStyle } from '@/utils/quickFunction'
 import { getValueByPath } from '@/utils/tool'
-import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'GridGeneratorItem',
@@ -30,25 +29,34 @@ export default {
     AsyncComponent
   },
   mixins: [childrenMixin, nodeMixin],
+  inject: {
+    layouts: { required: true }
+  },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    firstChild() {
+    child() {
       return this.innerChildren[0]
     },
-    fixContainer() {
+    fitContainer() {
       return (
-        getValueByPath(this, 'firstChild.style.default.overflow') ===
-        'fixContainer'
+        getValueByPath(this.child, 'style.default.overflow') === 'fitContainer'
       )
     }
   },
   watch: {
-    'firstChild.style.default.overflow'(value) {
-      const layout = vmGet(this.node.parentId, this.isExample)
-      const layoutInner = layout.$children[0]
-      const item = layoutInner.layout.find(node => node.id === this.id)
+    innerStyles: {
+      handler(style) {
+        const self = this.layouts.find(x => x.id === this.id)
 
-      item.autoHeight = value === 'fixContainer'
+        if (self) {
+          const autoHeight =
+            getValueByPath(style, 'default.overflow') === 'fitContainer'
+          this.$set(self, 'autoHeight', autoHeight)
+          this.$set(self, 'style', style)
+        }
+      },
+      immediate: true,
+      deep: true
     }
   },
   methods: {

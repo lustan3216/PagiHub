@@ -61,15 +61,14 @@
         >
           H
           <tip class="m-l-5">
-            Ratio will be ignored if height unit is
-            <span class="crucial">vw</span>.
+            Height will be disabled if Overflow is fit container.
           </tip>
         </span>
       </el-col>
 
       <el-col :span="12">
         <select-unit
-          :disabled="!gridItemNodes.length || hasValidRatio"
+          :disabled="heightDisabled"
           v-model="h"
           :units="['px', 'vh']"
         />
@@ -85,8 +84,9 @@
         <span class="title flex">
           Ratio
           <tip class="m-l-5">
-            No matter what column it is, we will make sure the ratio of width
-            and height are match.
+            Ratio will be disabled if height unit is
+            <span class="crucial">vw</span> or Overflow is
+            <span class="crucial">fit container</span>.
           </tip>
         </span>
       </el-col>
@@ -115,7 +115,7 @@ import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
 import { Divider } from 'element-ui'
-import { COLUMNS } from '@/const'
+import { COLUMNS, PROPS, STYLE } from '@/const'
 import { isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
@@ -131,16 +131,26 @@ export default {
   computed: {
     ...mapState('app', ['breakpoint']),
     ...mapGetters('app', ['selectedComponentNodes']),
-    hasValidRatio() {
-      return Boolean(this.ratioH && this.ratioW)
-    },
     cols() {
       return COLUMNS
     },
+    fitContainer() {
+      const result = this.selectedComponentNodes.find(node => {
+        return getValueByPath(node, 'style.default.overflow') === 'fitContainer'
+      })
+
+      return Boolean(result)
+    },
+    heightDisabled() {
+      const result =
+        !this.selectedComponentNodes.length ||
+        Boolean(this.ratioH && this.ratioW) ||
+        this.fitContainer
+      return Boolean(result)
+    },
     ratioDisabled() {
       // const hasInvalidComponent = this.selectedComponentNodes.find(node => 'video-player' === node.tag)
-
-      return !this.gridItemNodes.length
+      return !this.selectedComponentNodes.length || this.fitContainer
     },
     gridItemNodes() {
       const nodes = []
@@ -156,14 +166,16 @@ export default {
       return nodes
     },
     allVerticalCompact() {
-      return this.gridItemNodes.map(node => node.props.verticalCompact)
+      return this.selectedComponentNodes.map(node =>
+        getValueByPath(node, [STYLE, 'verticalCompact'])
+      )
     },
     allW() {
-      return this.gridItemNodes.map(node => node.props[this.breakpoint].w)
+      return this.gridItemNodes.map(node => node[PROPS][this.breakpoint].w)
     },
     allH() {
       return this.gridItemNodes.map(node => {
-        const prop = node.props[this.breakpoint]
+        const prop = node[PROPS][this.breakpoint]
         return (prop.h || '').toString() + (prop.hUnit || 'px')
       })
     },
@@ -174,9 +186,9 @@ export default {
       set(value) {
         const records = []
 
-        this.gridItemNodes.forEach(node => {
+        this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.props.verticalCompact`,
+            path: `${node.id}.${STYLE}.verticalCompact`,
             value: value || undefined
           })
         })
@@ -193,7 +205,7 @@ export default {
 
         this.gridItemNodes.forEach(node => {
           records.push({
-            path: `${node.id}.props.${this.breakpoint}.w`,
+            path: `${node.id}.${PROPS}.${this.breakpoint}.w`,
             value: value || 0
           })
         })
@@ -212,11 +224,11 @@ export default {
         value = parseInt(value)
         this.gridItemNodes.forEach(node => {
           records.push({
-            path: `${node.id}.props.${this.breakpoint}.hUnit`,
+            path: `${node.id}.${PROPS}.${this.breakpoint}.hUnit`,
             value: hUnit === 'vh' ? 'vh' : undefined
           })
           records.push({
-            path: `${node.id}.props.${this.breakpoint}.h`,
+            path: `${node.id}.${PROPS}.${this.breakpoint}.h`,
             value: value || 0
           })
         })
@@ -225,13 +237,13 @@ export default {
       }
     },
     allRatioW() {
-      return this.gridItemNodes.map(node =>
-        getValueByPath(node, 'props.ratioW')
+      return this.selectedComponentNodes.map(node =>
+        getValueByPath(node, [STYLE, 'ratioW'])
       )
     },
     allRatioH() {
-      return this.gridItemNodes.map(node =>
-        getValueByPath(node, 'props.ratioH')
+      return this.selectedComponentNodes.map(node =>
+        getValueByPath(node, [STYLE, 'ratioH'])
       )
     },
     ratioW: {
@@ -244,9 +256,9 @@ export default {
       set(value) {
         const records = []
 
-        this.gridItemNodes.forEach(node => {
+        this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.props.ratioW`,
+            path: `${node.id}.${STYLE}.ratioW`,
             value: value || undefined
           })
         })
@@ -264,9 +276,9 @@ export default {
       set(value) {
         const records = []
 
-        this.gridItemNodes.forEach(node => {
+        this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.props.ratioH`,
+            path: `${node.id}.${STYLE}.ratioH`,
             value: value || undefined
           })
         })

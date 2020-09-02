@@ -12,8 +12,6 @@ import {
   isProject,
   isComponentSet,
   canBeInstance,
-  isPage,
-  isDesign,
   isCarousel,
   isGridItem
 } from '@/utils/node'
@@ -76,26 +74,26 @@ export default {
         })
       }
 
-      const { rootComponentSet } = getNode(nodeTree.id, this.isExample)
-      const canConnect =
-        isPage(this.node.rootComponentSet) && isDesign(rootComponentSet)
-      if (canConnect) {
-        nodeTree = {
-          tag: 'connection-layer',
-          rootMasterId: rootComponentSet.id,
-          children: [nodeTree]
-        }
-        appendIdsWithConnection(nodeTree, this.id)
-      }
-      else if (
-        isPage(this.node.rootComponentSet) &&
-        isPage(rootComponentSet)
-      ) {
-        appendIds(nodeTree, this.id)
-      }
-      else {
-        appendIdsWithoutConnection(nodeTree, this.id)
-      }
+      // const { rootComponentSet } = getNode(nodeTree.id, this.isExample)
+      // const canConnect =
+      //   isPage(this.node.rootComponentSet) && isDesign(rootComponentSet)
+      // if (canConnect) {
+      //   nodeTree = {
+      //     tag: 'connection-layer',
+      //     rootMasterId: rootComponentSet.id,
+      //     children: [nodeTree]
+      //   }
+      //   appendIdsWithConnection(nodeTree, this.id)
+      // }
+      // else if (
+      //   isPage(this.node.rootComponentSet) &&
+      //   isPage(rootComponentSet)
+      // ) {
+      //   appendIds(nodeTree, this.id)
+      // }
+      // else {
+      appendIdsWithoutConnection(nodeTree, this.id)
+      // }
 
       if (isLayers(this.node)) {
         nodeTree[SORT_INDEX] = this.children.length
@@ -103,16 +101,16 @@ export default {
 
       traversalSelfAndChildren(nodeTree, (_node, _parentNode) => {
         let node
-        if (canConnect) {
-          // eslint-disable-next-line
-          const { [CHILDREN]: _, ...newNode } = _node
-          node = newNode
-        }
-        else {
-          // eslint-disable-next-line
-          const { [CHILDREN]: _1, [STYLE]: _2, [PROPS]: _3, ...newNode } = _node
-          node = newNode
-        }
+        // if (canConnect) {
+        // eslint-disable-next-line
+        const { [CHILDREN]: _, ...newNode } = _node
+        node = newNode
+        // }
+        // else {
+        //   eslint-disable-next-line
+        // const { [CHILDREN]: _1, [STYLE]: _2, [PROPS]: _3, ...newNode } = _node
+        // node = newNode
+        // }
         records.push({
           path: node.id,
           value: { ...node, parentId: node.parentId }
