@@ -27,8 +27,6 @@ export const defaultSetting = {
   verticalCompact: false,
   responsive: true,
   rowHeight: 1,
-  horizontalMargin: 0,
-  verticalMargin: 0,
   breakpoints: BREAK_POINTS,
   cols: COLUMN_OBJECT
 }

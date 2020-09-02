@@ -110,6 +110,10 @@ export default {
       loop1: for (let i = 0; i < event.path.length; i++) {
         const element = event.path[i]
 
+        if (['HTML', 'BODY'].includes(element.tagName)) {
+          break loop1
+        }
+
         if (element.id === 'art-board' || element.tagName === 'BODY') {
           clickInside = false
           break

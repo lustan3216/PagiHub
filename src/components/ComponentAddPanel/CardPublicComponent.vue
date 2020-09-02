@@ -18,7 +18,7 @@
           maxHeight
         }"
         class="example"
-        @scroll.native="scroll"
+        @scroll.passive.native="scroll"
       />
     </div>
 

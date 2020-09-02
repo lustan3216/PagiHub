@@ -35,11 +35,13 @@ import {
   isGridItem,
   isGrid,
   getNode,
-  isConnectionLayer
+  isConnectionLayer,
+  isComponentSet
 } from '@/utils/node'
 import { CAN_BE_EDITED } from '@/const'
 import { mapState } from 'vuex'
 import { arrayFirst } from '@/utils/array'
+import { getValueByPath } from '@/utils/tool'
 
 export default {
   name: 'AsyncComponent',
@@ -94,9 +96,8 @@ export default {
   data() {
     // draftMode因為css & setting需要拿vm，不打開拿不到
     const node = getNode(this.id)
-    let noObserve = false
 
-    let options = {
+    const options = {
       once: this.onceObserve && !this.isExample,
       callback: isVisible => {
         this.vIf = isVisible
@@ -105,22 +106,14 @@ export default {
         root: this.isExample
           ? document.getElementById(`example-${node.rootComponentSetId}`)
           : document.getElementById('art-board'),
-        rootMargin: '200px 0px'
+        rootMargin: '300px 0px 0px 300px'
       }
     }
 
-    if (
-      isGridItem(node) ||
-      isGrid(node) ||
-      isLayers(node) ||
-      isConnectionLayer(node)
-    ) {
-      noObserve = true
-      options = false
-    }
-
     return {
-      vIf: noObserve,
+      vIf: isComponentSet(
+        getValueByPath(node, 'parentNode.parentNode.parentNode')
+      ),
       options
     }
   },

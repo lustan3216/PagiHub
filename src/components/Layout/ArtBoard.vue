@@ -6,7 +6,7 @@
       padding: isDraftMode ? '1px' : false
     }"
     class="art-board"
-    @scroll="onScroll"
+    @scroll.passive="onScroll"
   >
     <transition
       name="slide"

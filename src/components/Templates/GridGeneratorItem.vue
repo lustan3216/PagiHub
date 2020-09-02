@@ -2,7 +2,7 @@
   <div
     :class="{ 'grid-item-border': isDraftMode, 'h-100': !fitContainer }"
     :style="innerStyles.default"
-    @scroll="onScroll"
+    @scroll.passive="onScroll"
   >
     <async-component
       v-if="child"
