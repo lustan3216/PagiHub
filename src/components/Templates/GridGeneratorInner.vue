@@ -75,7 +75,8 @@ export default {
     return {
       layouts: [],
       lockIds: [], // touchable will use it
-      gridItemsData: {}
+      gridItemsData: {},
+      exampleBoundary: 'xs'
     }
   },
   computed: {
@@ -87,9 +88,7 @@ export default {
     ]),
     ...mapState('node', ['componentsMap']),
     currentBreakPoint() {
-      return this.isExample
-        ? getBreakpoint(this.$el.closest('.example-boundary'))
-        : this.breakpoint
+      return this.isExample ? this.exampleBoundary : this.breakpoint
     },
     isInstance() {
       return getMasterId(this.node)
@@ -169,6 +168,13 @@ export default {
       },
       deep: true,
       immediate: true
+    }
+  },
+  mounted() {
+    if (this.isExample) {
+      this.exampleBoundary = getBreakpoint(
+        this.$el.closest('.example-boundary')
+      )
     }
   },
   methods: {
