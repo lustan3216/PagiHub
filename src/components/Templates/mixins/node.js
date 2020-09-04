@@ -1,11 +1,12 @@
 import { vmAppend, vmRemove, vmGet } from '@/utils/vmMap'
 import { cloneJson, deepMerge } from '@/utils/tool'
 
-import { PROPS, VALUE, STYLE, GRID } from '@/const'
+import { PROPS, VALUE, STYLE } from '@/const'
 import FreeStyle from '@/directive/freeStyle'
 import { getNode, isGrid, isGridItem } from '@/utils/node'
 import { arrayFirst } from '@/utils/array'
 import { getMasterId } from '@/utils/inheritance'
+import { objectHasAnyKey } from '@/utils/object'
 
 let hoverNode = []
 
@@ -31,9 +32,6 @@ export default {
   data() {
     return {
       childStyles: {}
-      // masterStyles: {},
-      // masterProps: {},
-      // masterValue: null
     }
   },
   computed: {
@@ -74,9 +72,6 @@ export default {
       if (isGridItem(this.node)) {
         return deepMerge(this.masterNode.grid, this.node.grid)
       }
-    },
-    currentMapString() {
-      return this.isExample ? 'exampleComponentsMap' : 'componentsMap'
     }
   },
   mounted() {
@@ -89,20 +84,10 @@ export default {
       }
     }
 
-    // if (isGridItem(this.node)) {
-    //   this.watchMasterGrid()
-    // }
-
     const { parentNode } = this.node
     if (isGridItem(parentNode)) {
       this.watchStylesToUpdateParents()
     }
-
-    // if (this.masterId) {
-    //   this.watchMasterStyles()
-    //   this.watchMasterProps()
-    //   this.watchMasterValue()
-    // }
   },
   beforeDestroy() {
     if (this.isDraftMode) {
@@ -120,33 +105,13 @@ export default {
     watchStylesToUpdateParents() {
       this.watch('innerStyles', value => {
         this.$nextTick(() => {
+          if (!objectHasAnyKey(value)) {
+            return
+          }
+
           const vm = vmGet(this.node.parentId, this.isExample)
-          vm.childStyles = value || {}
+          vm.childStyles = value
         })
-      })
-    },
-    watchMasterGrid() {
-      const path = `${this.currentMapString}.${this.masterId}.${GRID}`
-      this.watch(path, value => {
-        this.masterGrid = value || {}
-      })
-    },
-    watchMasterStyles() {
-      const path = `${this.currentMapString}.${this.masterId}.${STYLE}`
-      this.watch(path, value => {
-        this.masterStyles = value || {}
-      })
-    },
-    watchMasterProps() {
-      const path = `${this.currentMapString}.${this.masterId}.${PROPS}`
-      this.watch(path, value => {
-        this.masterProps = value || {}
-      })
-    },
-    watchMasterValue() {
-      const path = `${this.currentMapString}.${this.masterId}.value`
-      this.watch(path, value => {
-        this.masterValue = value || {}
       })
     },
     hoverCover(hover) {
