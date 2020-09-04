@@ -11,7 +11,7 @@ export function deepMerge(a = {}, b = {}, c) {
   return DeepMerge(a, b, c)
 }
 
-deepMerge.all = DeepMerge.all
+deepMerge.all = array => DeepMerge.all(array.filter(x => x))
 
 export function cloneJson(e) {
   return JSON.parse(JSON.stringify(e))

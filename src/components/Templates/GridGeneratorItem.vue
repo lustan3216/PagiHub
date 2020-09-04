@@ -29,7 +29,7 @@ export default {
   },
   mixins: [childrenMixin, nodeMixin],
   inject: {
-    childrenInnerStyles: { required: true }
+    gridItemsData: { required: true }
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
@@ -40,23 +40,19 @@ export default {
       return (
         getValueByPath(this.child, 'style.default.overflow') === 'fitContainer'
       )
+    },
+    data() {
+      return {
+        style: this.innerStyles,
+        grid: this.innerGrid,
+        autoHeight: this.fitContainer
+      }
     }
   },
   watch: {
-    masterGrid: {
-      handler(grid) {
-        // const self = this.layouts.find(x => x.id === this.id)
-        //
-        // if (self) {
-        //   Object.assign(self.grid, grid)
-        // }
-      },
-      immediate: true,
-      deep: true
-    },
-    innerStyles: {
-      handler(style) {
-        this.$set(this.childrenInnerStyles, this.id, style)
+    data: {
+      handler(value) {
+        this.$set(this.gridItemsData, this.id, value)
       },
       immediate: true,
       deep: true

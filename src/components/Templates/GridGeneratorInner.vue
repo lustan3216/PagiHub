@@ -32,9 +32,8 @@
 </template>
 
 <script>
-import store from '@/store'
 import { mapState, mapActions, mapMutations } from 'vuex'
-import { COLUMNS, GRID, CHILDREN } from '@/const'
+import { COLUMNS, GRID } from '@/const'
 import { deleteBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
@@ -56,7 +55,7 @@ export default {
   mixins: [childrenMixin],
   provide() {
     return {
-      childrenInnerStyles: this.childrenInnerStyles
+      gridItemsData: this.gridItemsData
     }
   },
   inject: {
@@ -76,7 +75,7 @@ export default {
     return {
       layouts: [],
       lockIds: [], // touchable will use it
-      childrenInnerStyles: {}
+      gridItemsData: {}
     }
   },
   computed: {
@@ -95,33 +94,81 @@ export default {
     isInstance() {
       return getMasterId(this.node)
     },
-    innerChildren() {
-      // 這裡的style不准，統一拿gridItem裡面的innerStyle
-      return this.children.map(({ [CHILDREN]: _, style, ...node }) => node)
+    computedLayouts() {
+      const breakPoint = this.currentBreakPoint
+      const { artBoardHeight } = this
+      const layouts = []
+      let layoutW
+
+      this.children.forEach(({ id }, index) => {
+        const data = {
+          static: this.lockIds.includes(id),
+          id: id,
+          i: id || index, // should not happen, but just prevent crash in case
+          x: 0,
+          y: 0,
+          w: 0,
+          h: 0,
+          verticalCompact: false,
+          autoHeight: false
+        }
+
+        if (!this.gridItemsData[id]) {
+          return layouts.push(data)
+        }
+
+        const { style = {}, grid, autoHeight } = this.gridItemsData[id]
+
+        if (getValueByPath(style, [breakPoint, 'hidden'])) {
+          return
+        }
+
+        let w = 0
+        let h = 0
+        const { ratioW, ratioH, verticalCompact } = style
+
+        if (grid) {
+          w = grid[breakPoint].w
+          h = grid[breakPoint].h
+
+          if (!autoHeight) {
+            if (grid[breakPoint].hUnit === 'vh') {
+              h = (artBoardHeight / 100) * parseInt(h)
+            }
+            else if (ratioH && ratioW) {
+              layoutW = layoutW || this.$el.clientWidth
+              const itemWidth = (parseInt(layoutW) / COLUMNS) * w
+              h = (itemWidth / ratioW) * ratioH
+            }
+            else {
+              h = parseInt(h)
+            }
+          }
+        }
+
+        layouts.push({
+          static: this.lockIds.includes(id),
+          id: id,
+          i: id || index, // should not happen, but just prevent crash in case
+          x: grid[breakPoint].x || 0,
+          y: grid[breakPoint].y || 0,
+          w,
+          h,
+          verticalCompact,
+          autoHeight
+        })
+      })
+
+      return layouts
     }
   },
   watch: {
-    innerChildren: {
-      handler(newChildren) {
-        this.getCurrentLayout(newChildren, this.childrenInnerStyles)
+    computedLayouts: {
+      handler(value) {
+        this.layouts = value
       },
       deep: true,
       immediate: true
-    },
-    childrenInnerStyles: {
-      handler(styles) {
-        this.getCurrentLayout(this.innerChildren, styles)
-      },
-      deep: true,
-      immediate: true
-    },
-    artBoardWidth() {
-      this.getCurrentLayout(this.innerChildren, this.childrenInnerStyles)
-    },
-    lockIds(ids) {
-      this.layouts.forEach(layout => {
-        layout.static = ids.includes(layout.id)
-      })
     }
   },
   methods: {
@@ -132,61 +179,6 @@ export default {
     },
     unlock(id) {
       deleteBy(this.lockIds, id)
-    },
-    getCurrentLayout(children, childrenInnerStyles) {
-      this.$nextTick(() => {
-        const breakPoint = this.currentBreakPoint
-        const layouts = []
-        const { artBoardHeight } = this
-        let layoutW
-
-        children.forEach(({ grid, id }, index) => {
-          const style = childrenInnerStyles[id] || {}
-          if (getValueByPath(style, [breakPoint, 'hidden'])) {
-            return
-          }
-          let w = 0
-          let h = 0
-          const { ratioW, ratioH, verticalCompact } = style
-          const autoHeight =
-            getValueByPath(style, 'default.overflow') === 'fitContainer'
-
-          if (grid) {
-            w = grid[breakPoint].w
-            h = grid[breakPoint].h
-
-            if (!autoHeight) {
-              if (grid[breakPoint].hUnit === 'vh') {
-                h = (artBoardHeight / 100) * parseInt(h)
-              }
-              else if (ratioH && ratioW) {
-                layoutW = layoutW || this.$el.clientWidth
-                const itemWidth = (parseInt(layoutW) / COLUMNS) * w
-                h = (itemWidth / ratioW) * ratioH
-              }
-              else {
-                h = parseInt(h)
-              }
-            }
-          }
-
-          layouts.push({
-            static: this.lockIds.includes(id),
-            id: id,
-            i: id || index, // should not happen, but just prevent crash in case
-            x: grid[breakPoint].x || 0,
-            y: grid[breakPoint].y || 0,
-            w,
-            h,
-            verticalCompact,
-            autoHeight
-          })
-        })
-
-        this.layouts = layouts
-
-        this.resizeNodeQuickFn()
-      })
     },
     layoutUpdated(newChildren) {
       if (this.isExample) {

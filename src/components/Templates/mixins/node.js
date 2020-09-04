@@ -30,11 +30,10 @@ export default {
   },
   data() {
     return {
-      childStyles: {},
-      masterStyles: {},
-      masterProps: {},
-      masterGrid: {},
-      masterValue: null
+      childStyles: {}
+      // masterStyles: {},
+      // masterProps: {},
+      // masterValue: null
     }
   },
   computed: {
@@ -48,10 +47,13 @@ export default {
       return this.node[PROPS] || {}
     },
     innerValue() {
-      return this.masterValue || this.node[VALUE]
+      return this.masterNode.value || this.node[VALUE]
     },
     masterId() {
       return getMasterId(this.node)
+    },
+    masterNode() {
+      return getNode(this.masterId) || {}
     },
     gridItemHasChild() {
       return isGridItem(this.node) && arrayFirst(this.innerChildren)
@@ -61,12 +63,17 @@ export default {
         return this.childStyles
       }
       else {
-        return deepMerge(this.masterStyles, this.selfStyles)
+        return deepMerge(this.masterNode[STYLE], this.selfStyles)
       }
     },
     innerProps() {
       const setting = cloneJson(this.$options.defaultSetting || {})
-      return deepMerge.all([setting, this.masterProps, this.selfProps])
+      return deepMerge.all([setting, this.masterNode[PROPS], this.selfProps])
+    },
+    innerGrid() {
+      if (isGridItem(this.node)) {
+        return deepMerge(this.masterNode.grid, this.node.grid)
+      }
     },
     currentMapString() {
       return this.isExample ? 'exampleComponentsMap' : 'componentsMap'
@@ -82,20 +89,20 @@ export default {
       }
     }
 
-    if (isGridItem(this.node)) {
-      this.watchMasterGrid()
-    }
+    // if (isGridItem(this.node)) {
+    //   this.watchMasterGrid()
+    // }
 
     const { parentNode } = this.node
     if (isGridItem(parentNode)) {
       this.watchStylesToUpdateParents()
     }
 
-    if (this.masterId) {
-      this.watchMasterStyles()
-      this.watchMasterProps()
-      this.watchMasterValue()
-    }
+    // if (this.masterId) {
+    //   this.watchMasterStyles()
+    //   this.watchMasterProps()
+    //   this.watchMasterValue()
+    // }
   },
   beforeDestroy() {
     if (this.isDraftMode) {

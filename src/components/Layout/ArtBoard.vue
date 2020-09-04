@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import ComponentSet from '../Templates/ComponentSet'
 import { updateWrapperStyle } from '@/utils/quickFunction'
 

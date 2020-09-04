@@ -116,9 +116,10 @@ import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
 import { Divider } from 'element-ui'
 import { COLUMNS, GRID, STYLE } from '@/const'
-import { isGridItem } from '@/utils/node'
+import { isGrid, isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
+import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'Dimension',
@@ -129,14 +130,24 @@ export default {
   },
 
   computed: {
-    ...mapState('app', ['breakpoint']),
-    ...mapGetters('app', ['selectedComponentNodes']),
+    ...mapState('app', ['breakpoint', 'selectedComponentIds']),
+    selectedComponentNodes() {
+      return this.selectedComponentIds
+        .map(id => this.componentsMap[id])
+        .filter(node => node && !isGrid(node))
+    },
+    vms() {
+      return this.selectedComponentNodes.map(node => vmGet(node.id))
+    },
     cols() {
       return COLUMNS
     },
     fitContainer() {
-      const result = this.selectedComponentNodes.find(node => {
-        return getValueByPath(node, 'style.default.overflow') === 'fitContainer'
+      const result = this.vms.find(node => {
+        return (
+          getValueByPath(node, 'innerStyles.default.overflow') ===
+          'fitContainer'
+        )
       })
 
       return Boolean(result)
@@ -165,17 +176,20 @@ export default {
 
       return nodes
     },
+    gridItemVms() {
+      return this.gridItemNodes.map(node => vmGet(node.id))
+    },
     allVerticalCompact() {
-      return this.selectedComponentNodes.map(node =>
-        getValueByPath(node, [STYLE, 'verticalCompact'])
+      return this.vms.map(vm =>
+        getValueByPath(vm, 'innerStyles.verticalCompact')
       )
     },
     allW() {
-      return this.gridItemNodes.map(node => node[GRID][this.breakpoint].w)
+      return this.gridItemVms.map(vm => vm.innerGrid[this.breakpoint].w)
     },
     allH() {
-      return this.gridItemNodes.map(node => {
-        const prop = node[GRID][this.breakpoint]
+      return this.gridItemVms.map(vm => {
+        const prop = vm.innerGrid[this.breakpoint]
         return (prop.h || '').toString() + (prop.hUnit || 'px')
       })
     },
@@ -237,14 +251,10 @@ export default {
       }
     },
     allRatioW() {
-      return this.selectedComponentNodes.map(node =>
-        getValueByPath(node, [STYLE, 'ratioW'])
-      )
+      return this.vms.map(vm => getValueByPath(vm, 'innerStyles.ratioW'))
     },
     allRatioH() {
-      return this.selectedComponentNodes.map(node =>
-        getValueByPath(node, [STYLE, 'ratioH'])
-      )
+      return this.vms.map(vm => getValueByPath(vm, 'innerStyles.ratioH'))
     },
     ratioW: {
       get() {

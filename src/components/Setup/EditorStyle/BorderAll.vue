@@ -54,6 +54,7 @@ import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { mapMutations, mapGetters } from 'vuex'
 import { STYLE } from '@/const'
+import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'BorderAll',
@@ -96,6 +97,9 @@ export default {
         borderBottom: this.borderBottom,
         borderLeft: this.borderLeft
       }
+    },
+    vms() {
+      return this.selectedComponentNodes.map(node => vmGet(node.id))
     }
   },
   watch: {
@@ -165,8 +169,8 @@ export default {
       }
     },
     getValue(attr) {
-      const values = this.selectedComponentNodes.map(node =>
-        getValueByPath(node, ['style', this.state, attr])
+      const values = this.vms.map(vm =>
+        getValueByPath(vm, ['innerStyles', this.state, attr])
       )
 
       return arrayLast(values) || ''

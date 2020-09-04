@@ -1,5 +1,5 @@
 import { mapMutations, mapState } from 'vuex'
-import { CHILDREN, STYLE, SORT_INDEX, PROPS } from '@/const'
+import { CHILDREN, STYLE, SORT_INDEX, PROPS, GRID } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { cloneJson, deepMerge } from '@/utils/tool'
 import { canInherit, appendIdsInherited } from '@/utils/inheritance'
@@ -103,7 +103,13 @@ export default {
         if (isInherited) {
           // eslint-disable-next-line
           // 清空 instance上所有的設定，這樣才能知道拿的是master還是要覆蓋
-          const { [CHILDREN]: _1, [STYLE]: _2, [PROPS]: _3, ...newNode } = _node
+          const {
+            [CHILDREN]: _1,
+            [STYLE]: _2,
+            [PROPS]: _3,
+            [GRID]: _4,
+            ...newNode
+          } = _node
           node = newNode
         }
         else {
