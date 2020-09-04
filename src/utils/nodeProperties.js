@@ -14,7 +14,7 @@ export function defineProperties(node, rootComponentSetId) {
 
     Object.defineProperty(node, 'parentNode', {
       get() {
-        return componentsMap[this.parentId]
+        return this.parentId && componentsMap[this.parentId]
       },
       enumerable: false
     })

@@ -18,8 +18,8 @@ import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import { updateWrapperStyle } from '@/utils/quickFunction'
-import { deepMerge, getValueByPath } from '@/utils/tool'
-import { deepEqual } from 'vue-observe-visibility/src/utils'
+import { getValueByPath } from '@/utils/tool'
+
 export default {
   name: 'GridGeneratorItem',
   components: {
@@ -29,7 +29,7 @@ export default {
   },
   mixins: [childrenMixin, nodeMixin],
   inject: {
-    layouts: { required: true }
+    childrenInnerStyles: { required: true }
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
@@ -45,25 +45,18 @@ export default {
   watch: {
     masterGrid: {
       handler(grid) {
-        const self = this.layouts.find(x => x.id === this.id)
-
-        if (self) {
-          deepMerge(self.grid, grid)
-        }
+        // const self = this.layouts.find(x => x.id === this.id)
+        //
+        // if (self) {
+        //   Object.assign(self.grid, grid)
+        // }
       },
       immediate: true,
       deep: true
     },
     innerStyles: {
       handler(style) {
-        const self = this.layouts.find(x => x.id === this.id)
-
-        if (self) {
-          const autoHeight =
-            getValueByPath(style, 'default.overflow') === 'fitContainer'
-          this.$set(self, 'autoHeight', autoHeight)
-          this.$set(self, 'style', style)
-        }
+        this.$set(this.childrenInnerStyles, this.id, style)
       },
       immediate: true,
       deep: true

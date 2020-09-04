@@ -12,6 +12,7 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
+grid 最好columns 都不一樣，當寬度變時，item會扁掉，修bug
 因為 把 text editor 在async component 的key拿掉了，應該會有沒有re-render的bug
 優化controller lyaer click outside, 一下子觸發太多node, 解決add完template, 鎖定會不見
 grid layout 要100%

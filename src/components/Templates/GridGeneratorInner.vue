@@ -2,14 +2,14 @@
   <vue-grid-generator
     ref="gridGenerator"
     v-bind="innerProps"
-    :layout="innerLayouts"
+    :layout="layouts"
     :margin="[0, 0]"
     :is-draggable="isDraftMode && !isInstance"
     :is-resizable="isDraftMode && !isInstance"
     @layout-updated="layoutUpdated($event)"
   >
     <vue-grid-item
-      v-for="child in innerLayouts"
+      v-for="child in layouts"
       v-bind="child"
       :ref="child.id"
       :key="child.id"
@@ -44,7 +44,6 @@ import { getBreakpoint } from '@/utils/layout'
 import { debounce } from 'throttle-debounce'
 import { getValueByPath } from '@/utils/tool'
 import { getMasterId } from '@/utils/inheritance'
-import { cloneJsonWithoutChildren, getNode } from '@/utils/node'
 
 export default {
   name: 'GridGeneratorInner',
@@ -57,7 +56,7 @@ export default {
   mixins: [childrenMixin],
   provide() {
     return {
-      layouts: this.layouts
+      childrenInnerStyles: this.childrenInnerStyles
     }
   },
   inject: {
@@ -74,12 +73,10 @@ export default {
     }
   },
   data() {
-    const { children } = getNode(this.id, this.isExample)
-    // 這裡的layout因為有蛋生雞，雞生蛋的問題，第一次的layout直接用children產生，之後的update的統一由gridGeneratorItem更新
     return {
       layouts: [],
       lockIds: [], // touchable will use it
-      innerLayouts: []
+      childrenInnerStyles: {}
     }
   },
   computed: {
@@ -99,39 +96,27 @@ export default {
       return getMasterId(this.node)
     },
     innerChildren() {
-      // 拿掉 style, 不然因為watch deep, 每次都會有多餘的更新
+      // 這裡的style不准，統一拿gridItem裡面的innerStyle
       return this.children.map(({ [CHILDREN]: _, style, ...node }) => node)
     }
   },
   watch: {
     innerChildren: {
       handler(newChildren) {
-        // style 已經統一從 gridGeneratorItem裡面送innerStyle過來了，這裏不要再處理
-        // 這裡只要注意有沒有新增刪除node
-        const layouts = []
-
-        newChildren.forEach(child => {
-          // 有找到就塞舊的，因為也沒變，沒找到代表新增的，剩下的就是刪除的不用塞
-          const layout = this.layouts.find(x => x.id === child.id)
-          layouts.push(layout || child)
-        })
-
-        this.layouts = layouts
+        this.getCurrentLayout(newChildren, this.childrenInnerStyles)
       },
+      deep: true,
       immediate: true
     },
-    layouts: {
-      handler(value) {
-        this.$nextTick(() => {
-          // this.getCurrentLayout 會因為拿不到refs噴bug
-          this.getCurrentLayout(value)
-        })
+    childrenInnerStyles: {
+      handler(styles) {
+        this.getCurrentLayout(this.innerChildren, styles)
       },
       deep: true,
       immediate: true
     },
     artBoardWidth() {
-      this.getCurrentLayout(this.innerChildren)
+      this.getCurrentLayout(this.innerChildren, this.childrenInnerStyles)
     },
     lockIds(ids) {
       this.layouts.forEach(layout => {
@@ -148,54 +133,58 @@ export default {
     unlock(id) {
       deleteBy(this.lockIds, id)
     },
-    getCurrentLayout(children) {
-      const breakPoint = this.currentBreakPoint
-      const layouts = []
-      const { artBoardHeight } = this
-      let layoutW
+    getCurrentLayout(children, childrenInnerStyles) {
+      this.$nextTick(() => {
+        const breakPoint = this.currentBreakPoint
+        const layouts = []
+        const { artBoardHeight } = this
+        let layoutW
 
-      children.forEach(({ grid, props, style = {}, autoHeight, id }, index) => {
-        if (getValueByPath(style, [breakPoint, 'hidden'])) {
-          return
-        }
-        let w = 0
-        let h = 0
-        const { ratioW, ratioH, verticalCompact } = style
+        children.forEach(({ grid, id }, index) => {
+          const style = childrenInnerStyles[id] || {}
+          if (getValueByPath(style, [breakPoint, 'hidden'])) {
+            return
+          }
+          let w = 0
+          let h = 0
+          const { ratioW, ratioH, verticalCompact } = style
+          const autoHeight =
+            getValueByPath(style, 'default.overflow') === 'fitContainer'
 
-        if (grid) {
-          w = grid[breakPoint].w
-          h = grid[breakPoint].h
+          if (grid) {
+            w = grid[breakPoint].w
+            h = grid[breakPoint].h
 
-          if (!autoHeight) {
-            if (grid[breakPoint].hUnit === 'vh') {
-              h = (artBoardHeight / 100) * parseInt(h)
-            }
-            else if (ratioH && ratioW) {
-              layoutW = layoutW || this.$el.clientWidth
-              const itemWidth = (parseInt(layoutW) / COLUMNS) * w
-              h = (itemWidth / ratioW) * ratioH
-            }
-            else {
-              h = parseInt(h)
+            if (!autoHeight) {
+              if (grid[breakPoint].hUnit === 'vh') {
+                h = (artBoardHeight / 100) * parseInt(h)
+              }
+              else if (ratioH && ratioW) {
+                layoutW = layoutW || this.$el.clientWidth
+                const itemWidth = (parseInt(layoutW) / COLUMNS) * w
+                h = (itemWidth / ratioW) * ratioH
+              }
+              else {
+                h = parseInt(h)
+              }
             }
           }
-        }
 
-        layouts.push({
-          static: this.lockIds.includes(id),
-          id: id,
-          i: id || index, // should not happen, but just prevent crash in case
-          x: grid[breakPoint].x || 0,
-          y: grid[breakPoint].y || 0,
-          w,
-          h,
-          verticalCompact,
-          autoHeight
+          layouts.push({
+            static: this.lockIds.includes(id),
+            id: id,
+            i: id || index, // should not happen, but just prevent crash in case
+            x: grid[breakPoint].x || 0,
+            y: grid[breakPoint].y || 0,
+            w,
+            h,
+            verticalCompact,
+            autoHeight
+          })
         })
-      })
 
-      this.innerLayouts = layouts
-      this.$nextTick(() => {
+        this.layouts = layouts
+
         this.resizeNodeQuickFn()
       })
     },

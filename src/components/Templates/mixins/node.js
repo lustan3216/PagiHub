@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     node() {
-      return getNode(this.id)
+      return getNode(this.id, this.isExample)
     },
     selfStyles() {
       return this.node[STYLE] || {}
@@ -62,12 +62,6 @@ export default {
       }
       else {
         return deepMerge(this.masterStyles, this.selfStyles)
-        // const defaultStyle = deepMerge(
-        //   {},
-        //   this.masterStyles.default,
-        //   this.selfStyles.default
-        // )
-        // return { ...other, default: defaultStyle }
       }
     },
     innerProps() {
