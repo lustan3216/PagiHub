@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    id="examples-dialog"
     ref="dialog"
     :class="currentCategory"
     visible

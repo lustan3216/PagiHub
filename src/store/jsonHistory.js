@@ -19,10 +19,6 @@ const jsonHistory = new JsonHistory({
   callback: {
     onDeltasChanged() {
       const componentSetId = store.state.node.editingComponentSetId
-
-      if (!componentSetId) {
-        debugger
-      }
       draftState.emitWhenRecord(componentSetId)
     },
     onUndid() {

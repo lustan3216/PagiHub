@@ -1,5 +1,5 @@
 <template>
-  <async-component
+  <component-giver
     v-if="firstChild && firstChild.id"
     :id="firstChild.id"
   />
@@ -8,14 +8,14 @@
 <script>
 import { mapActions } from 'vuex'
 import { ID } from '@/const'
-import AsyncComponent from '../TemplateUtils/AsyncComponent'
+import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { vmAppend } from '@/utils/vmMap'
 
 export default {
   name: 'ComponentSet',
   components: {
-    AsyncComponent
+    ComponentGiver
   },
   mixins: [childrenMixin],
   computed: {

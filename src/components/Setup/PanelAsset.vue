@@ -116,7 +116,7 @@ import vueFilePond, { setOptions } from 'vue-filepond'
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size'
-import { appendIdsWithoutConnection } from '@/utils/nodeId'
+import { appendIds } from '@/utils/nodeId'
 import { vmPasteInside } from '@/utils/vmMap'
 import { postAsset } from '@/api/asset'
 import { flexImage } from '@/templateJson/basic'
@@ -187,7 +187,7 @@ export default {
     nodeDrop() {},
     addImageToComponent(data) {
       const image = flexImage({ props: { src: this.assetHost + data.url }})
-      appendIdsWithoutConnection(image)
+      appendIds(image)
       vmPasteInside(image)
     },
     filterTagBySearching(value, { label, tag }) {

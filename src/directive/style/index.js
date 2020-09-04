@@ -39,7 +39,7 @@ function method(name) {
     //       ...binding,
     //       value(visible) {
     //         if (visible) {
-    //           const mergedStyle = objectAssign.all([
+    //           const mergedStyle = Object.assign.all([
     //             {},
     //             styles,
     //             { default: showStyle, id }

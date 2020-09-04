@@ -8,16 +8,19 @@
     class="art-board"
     @scroll.passive="onScroll"
   >
-    <transition
-      name="slide"
-      mode="out-in"
-    >
-      <component-set
-        v-if="editingComponentSetId"
-        :id="editingComponentSetId"
-        :key="editingComponentSetId"
-      />
-    </transition>
+    <template v-if="editingComponentSetId">
+      <transition
+        name="slide"
+        mode="out-in"
+      >
+        <keep-alive>
+          <component-set
+            :id="editingComponentSetId"
+            :key="editingComponentSetId"
+          />
+        </keep-alive>
+      </transition>
+    </template>
   </div>
 </template>
 

@@ -60,11 +60,11 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 import { isGridItem } from '@/utils/node'
 import { isMac } from '@/utils/device'
 import { vmPasteNode, vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
 import ComponentMove from './ComponentMove'
-import { mapState } from 'vuex'
 import { getValueByPath } from '@/utils/tool'
 import { COMPONENT_SET } from '@/const'
 
@@ -150,6 +150,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('node', ['RECORD']),
     handleCommand(command) {
       switch (command) {
         case 'Copy':
@@ -174,7 +175,7 @@ export default {
           break
         case 'Make Master Component':
           this.RECORD({
-            path: `${this.id}.isMasterComponent`,
+            path: `${this.id}.inheritance.isMasterParent`,
             value: true
           })
           break

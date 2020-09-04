@@ -1,12 +1,12 @@
 import { vmAppend, vmRemove, vmGet } from '@/utils/vmMap'
-import { objectAssign } from '@/utils/object'
-import { cloneJson } from '@/utils/tool'
+import { cloneJson, deepMerge } from '@/utils/tool'
 
-import { PROPS, VALUE, MASTER_ID, ID, STYLE } from '@/const'
+import { PROPS, VALUE, STYLE, GRID } from '@/const'
 import FreeStyle from '@/directive/freeStyle'
 import { getNode, isGrid, isGridItem } from '@/utils/node'
 import { arrayFirst } from '@/utils/array'
-window.objectAssign = objectAssign
+import { getMasterId } from '@/utils/inheritance'
+
 let hoverNode = []
 
 export default {
@@ -16,27 +16,24 @@ export default {
       required: true
     }
   },
-  provide() {
-    return {
-      master: this.master
-    }
-  },
   inject: {
     isExample: { default: false },
-    master: { default: null }
+    inheritance: {
+      default: {
+        inheritParentId: null,
+        masterComponentSetId: null
+      }
+    }
   },
   directives: {
     FreeStyle
   },
   data() {
     return {
-      master: {
-        id: this.id,
-        isMaster: false
-      },
       childStyles: {},
       masterStyles: {},
       masterProps: {},
+      masterGrid: {},
       masterValue: null
     }
   },
@@ -54,7 +51,7 @@ export default {
       return this.masterValue || this.node[VALUE]
     },
     masterId() {
-      return this.node && this.node[MASTER_ID]
+      return getMasterId(this.node)
     },
     gridItemHasChild() {
       return isGridItem(this.node) && arrayFirst(this.innerChildren)
@@ -64,18 +61,18 @@ export default {
         return this.childStyles
       }
       else {
-        const other = objectAssign({}, this.masterStyles, this.selfStyles)
-        const defaultStyle = objectAssign(
-          {},
-          this.masterStyles.default,
-          this.selfStyles.default
-        )
-        return { ...other, default: defaultStyle }
+        return deepMerge(this.masterStyles, this.selfStyles)
+        // const defaultStyle = deepMerge(
+        //   {},
+        //   this.masterStyles.default,
+        //   this.selfStyles.default
+        // )
+        // return { ...other, default: defaultStyle }
       }
     },
     innerProps() {
       const setting = cloneJson(this.$options.defaultSetting || {})
-      return objectAssign(setting, this.masterProps, this.selfProps)
+      return deepMerge.all([setting, this.masterProps, this.selfProps])
     },
     currentMapString() {
       return this.isExample ? 'exampleComponentsMap' : 'componentsMap'
@@ -89,6 +86,10 @@ export default {
       if (!this.isExample) {
         this.$bus.$on(`hover-${this.id}`, this.hoverCover)
       }
+    }
+
+    if (isGridItem(this.node)) {
+      this.watchMasterGrid()
     }
 
     const { parentNode } = this.node
@@ -123,18 +124,12 @@ export default {
         })
       })
     },
-    // watchStyles() {
-    //   const path = `${this.currentMapString}.${this.id}.${STYLE}`
-    //   this.watch(path, value => {
-    //     this.selfStyles = value || {}
-    //   })
-    // },
-    // watchProps() {
-    //   const path = `${this.currentMapString}.${this.id}.${PROPS}`
-    //   this.watch(path, value => {
-    //     this.selfProps = value || {}
-    //   })
-    // },
+    watchMasterGrid() {
+      const path = `${this.currentMapString}.${this.masterId}.${GRID}`
+      this.watch(path, value => {
+        this.masterGrid = value || {}
+      })
+    },
     watchMasterStyles() {
       const path = `${this.currentMapString}.${this.masterId}.${STYLE}`
       this.watch(path, value => {

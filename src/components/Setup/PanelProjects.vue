@@ -112,6 +112,9 @@ export default {
     this.getProjects()
   },
   methods: {
+    ...mapMutations('app', {
+      APP_SET: 'SET'
+    }),
     ...mapMutations('node', {
       NODE_SET: 'SET'
     }),
@@ -123,6 +126,7 @@ export default {
         this.NODE_SET({ editingProjectId: node.id })
       }
       else if (isComponentSet(node)) {
+        this.APP_SET({ selectedComponentIds: [] })
         this.NODE_SET({ editingProjectId: node.parentId })
         this.SET_EDITING_COMPONENT_SET_ID(node.id)
       }

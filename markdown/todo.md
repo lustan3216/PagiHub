@@ -12,8 +12,11 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-text 要auto height
-text / article style inheritance 要分開, button 裡面的要是可以inherit的
+因為 把 text editor 在async component 的key拿掉了，應該會有沒有re-render的bug
+優化controller lyaer click outside, 一下子觸發太多node, 解決add完template, 鎖定會不見
+grid layout 要100%
+
+text / article style inheritance 要分開, button 裡面的要是可以 inherit 的
 快捷跳到前後一個 componentSet
 Reset to Master State
 style 點名字，可以連結回 master style

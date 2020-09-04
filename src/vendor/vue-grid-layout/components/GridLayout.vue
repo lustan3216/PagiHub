@@ -1,5 +1,5 @@
 <template>
-  <div ref="item" class="vue-grid-layout" :style="mergedStyle">
+  <div ref="item" class="vue-grid-layout h-100">
     <slot></slot>
     <grid-item class="vue-grid-placeholder"
                v-show="showPlaceHolder && isDragging"
@@ -179,6 +179,9 @@
     beforeMount: function() {
       this.$emit('layout-before-mount', this.layout)
     },
+    activated() {
+      this.onWindowResize()
+    },
     mounted: function() {
       this.$emit('layout-mounted', this.layout)
       this.$nextTick(function() {
@@ -198,8 +201,8 @@
 
           // lots-design
           // self.$emit('layout-updated', self.layout)
-
-          self.updateHeight()
+          // lots-design
+          // self.updateHeight()
           self.$nextTick(function() {
             this.erd = elementResizeDetectorMaker({
               strategy: 'scroll', //<- For ultra performance.
@@ -209,6 +212,7 @@
             this.erd.listenTo(self.$refs.item, function() {
               self.onWindowResize()
             })
+            self.onWindowResize()
           })
         })
       })
@@ -244,7 +248,8 @@
               this.$emit('layout-ready', self.layout)
             })
           }
-          this.updateHeight()
+          // lots-design
+          // this.updateHeight()
         })
       },
       layout: function() {
@@ -273,7 +278,8 @@
         this.eventBus.$emit('setMaxRows', this.maxRows)
       },
       margin() {
-        this.updateHeight()
+        // lots-design
+        // this.updateHeight()
       }
     },
     methods: {
@@ -303,13 +309,15 @@
 
           compact(this.layout, this.verticalCompact)
           this.eventBus.$emit('updateWidth', this.width)
-          this.updateHeight()
+          // lots-design
+          // this.updateHeight()
 
           // lots-design
           // this.$emit('layout-updated', this.layout)
         }
       },
       updateHeight: function() {
+        // lots-design
         this.mergedStyle = {
           height: this.containerHeight()
         }
@@ -366,7 +374,8 @@
         compact(this.layout, this.verticalCompact)
         // needed because vue can't detect changes on array element properties
         this.eventBus.$emit('compact')
-        this.updateHeight()
+        // lots-design
+        // this.updateHeight()
         if (eventName === 'dragend') this.$emit('layout-updated', this.layout)
       },
       resizeEvent: function(eventName, id, x, y, h, w) {
@@ -427,7 +436,8 @@
 
         compact(this.layout, this.verticalCompact)
         this.eventBus.$emit('compact')
-        this.updateHeight()
+        // lots-design
+        // this.updateHeight()
 
         if (eventName === 'resizeend') this.$emit('layout-updated', this.layout)
       },

@@ -165,15 +165,6 @@ export function closestGridItem(node, fn) {
   return find(node)
 }
 
-export function canBeInstance(componentSetId, id) {
-  const { componentsMap } = store.state.node
-  const node = componentsMap[id]
-
-  return (
-    isPage(componentsMap[componentSetId]) && isDesign(node.rootComponentSet)
-  )
-}
-
 export function isLayers(node) {
   if (node) {
     return node.tag === LAYERS && isUndefined(node[POLYMORPHISM])
@@ -193,12 +184,6 @@ export function isGridItem(node) {
 export function isCarousel(node) {
   if (node) {
     return node.tag === CAROUSEL
-  }
-}
-
-export function isConnectionLayer(node) {
-  if (node) {
-    return node.tag === 'connection-layer'
   }
 }
 

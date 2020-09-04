@@ -13,7 +13,7 @@ import { layers } from '@/templateJson/basic'
 import { isComponentSet, traversalSelfAndChildren } from '@/utils/node'
 import { objectFirstKey } from '@/utils/object'
 import { cloneJson } from '@/utils/tool'
-import { appendIdsWithoutConnection } from '@/utils/nodeId'
+import { appendIds } from '@/utils/nodeId'
 import draftState from '@/utils/draftState'
 
 export const actions = {
@@ -40,7 +40,7 @@ export const actions = {
     { parentId, label, description, tags }
   ) {
     const tree = layers()
-    appendIdsWithoutConnection(tree)
+    appendIds(tree)
     const {
       data: { children, ...componentSet }
     } = await createComponentSet({

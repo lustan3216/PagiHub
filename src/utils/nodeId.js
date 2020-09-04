@@ -1,11 +1,8 @@
-import { ID, PARENT_ID, MASTER_ID, CHILDREN } from '../const'
+import { ID, PARENT_ID, MASTER_ID } from '../const'
 import { toArray } from './array'
 import { ulid } from 'ulid'
-import {
-  isComponent,
-  isComponentSet,
-  traversalSelfAndChildren
-} from '@/utils/node'
+import { getNode, isComponent, traversalSelfAndChildren } from '@/utils/node'
+import { setMasterId } from '@/utils/inheritance'
 
 export function appendIds(nodes, parentId, fn) {
   if (parentId) {
@@ -21,18 +18,6 @@ export function appendIds(nodes, parentId, fn) {
         node[PARENT_ID] = parentNode[ID]
       }
     }
-  })
-}
-
-export function appendIdsWithoutConnection(nodes, parentId) {
-  appendIds(nodes, parentId, node => {
-    delete node[MASTER_ID]
-  })
-}
-
-export function appendIdsWithConnection(nodes, parentId) {
-  appendIds(nodes, parentId, node => {
-    node[MASTER_ID] = node[ID]
   })
 }
 

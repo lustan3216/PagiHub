@@ -13,8 +13,8 @@
       <component-quick-functions
         :id="id"
         :is-example="isExample"
-        :root-master-id="rootMasterId"
         :item-editing="itemEditing"
+        v-bind="inheritance"
       />
     </portal>
 
@@ -53,7 +53,12 @@ export default {
   name: 'ControllerLayer',
   inject: {
     isExample: { default: false },
-    rootMasterId: { default: '' }
+    inheritance: {
+      default: {
+        inheritParentId: null,
+        masterComponentSetId: null
+      }
+    }
   },
   directives: {
     clickOutside
@@ -99,9 +104,10 @@ export default {
     clickOutside(event) {
       const insideArea = [
         '#sidebar-right',
-        '.el-select-dropdown__item',
+        '#examples-dialog',
         '#component-tabs',
         '#menu-bubble',
+        '.el-select-dropdown__item',
         '.el-tooltip__popper',
         '.el-color-dropdown'
       ]
@@ -113,11 +119,11 @@ export default {
         if (['HTML', 'BODY'].includes(element.tagName)) {
           break loop1
         }
-
-        if (element.id === 'art-board' || element.tagName === 'BODY') {
+        else if (element.id === 'art-board') {
           clickInside = false
-          break
+          break loop1
         }
+
         for (let ii = 0; ii < insideArea.length; ii++) {
           const areaSelector = insideArea[ii]
 

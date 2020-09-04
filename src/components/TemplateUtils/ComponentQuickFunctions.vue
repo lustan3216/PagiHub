@@ -5,7 +5,7 @@
     :style="{
       zIndex: isExample ? 3000 : 800
     }"
-    :class="{ 'has-connection': hasConnection }"
+    :class="{ instance: isInstance }"
     class="quick-functions flex-center"
   >
     <el-button
@@ -21,15 +21,22 @@
       :class="[top > 100 ? 'top' : 'bottom']"
       class="wrapper flex"
     >
-      <div class="title">
+      <component-name
+        :id="id"
+        :editable="false"
+        :is-example="isExample"
+        :inherit-parent-id="inheritParentId"
+        :master-component-set-id="masterComponentSetId"
+        class="component-name"
+      >
         <i :class="[itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank']" />
-        <span> {{ nodeShortName }} - {{ shortId }} </span>
-      </div>
+      </component-name>
 
       <div class="button-group">
-        <connection-jumper
+        <inheritance-jumper
           :id="id"
-          :root-master-id="rootMasterId"
+          :inherit-parent-id="inheritParentId"
+          :master-component-set-id="masterComponentSetId"
         />
 
         <portal-target
@@ -71,26 +78,20 @@
 import { mapMutations, mapState, mapActions } from 'vuex'
 import ComponentName from './ComponentName'
 import ContextMenu from './ContextMenu'
-import ConnectionJumper from './ConnectionJumper'
+import InheritanceJumper from './InheritanceJumper'
 import { Popover } from 'element-ui'
-import { isGridItem, getNode, shortTagName, shortId } from '@/utils/node'
+import { isGridItem, getNode } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
-import {
-  CAN_NEW_ITEM,
-  CAROUSEL,
-  GRID_GENERATOR,
-  LAYERS,
-  MASTER_ID
-} from '@/const'
+import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import gsap from 'gsap'
+import { getMasterId } from '@/utils/inheritance'
 
 let topShared = window.innerHeight / 2
 let leftShared = window.innerWidth / 2
 let widthShared = 0
 let heightShared = 0
-let lastId = null
 
 export const quickFnMap = {}
 
@@ -101,7 +102,7 @@ if (process.env.NODE_ENV !== 'production') {
 export default {
   name: 'ComponentQuickFunctions',
   components: {
-    ConnectionJumper,
+    InheritanceJumper,
     ComponentName,
     ContextMenu,
     ElPopover: Popover
@@ -111,7 +112,11 @@ export default {
       type: String,
       required: true
     },
-    rootMasterId: {
+    inheritParentId: {
+      type: String,
+      default: ''
+    },
+    masterComponentSetId: {
       type: String,
       default: ''
     },
@@ -132,7 +137,6 @@ export default {
       height: heightShared,
       animationId: null,
       canGoBack: null
-      // visible: true
     }
   },
   computed: {
@@ -157,28 +161,17 @@ export default {
         return 'Copy An Empty Grid Item From It'
       }
     },
-    hasConnection() {
-      return this.node[MASTER_ID]
-    },
     metaKey() {
       return isMac() ? '&#8984;' : '&#8963;'
-    },
-    nodeShortName() {
-      return shortTagName(this.node)
-    },
-    shortId() {
-      if (process.env.NODE_ENV === 'production' && this.isComponent) {
-        return shortId(this.id)
-      }
-      else {
-        return this.id.substring(23, 26)
-      }
     },
     node() {
       return getNode(this.id)
     },
     isGridItem() {
       return isGridItem(this.node)
+    },
+    isInstance() {
+      return getMasterId(this.node)
     },
     isLastOne() {
       return arrayLast(this.selectedComponentIds) === this.id
@@ -192,15 +185,6 @@ export default {
     framer() {
       // 如果有refs=framer, 在拉動window時不知為什麼會找不到element
       return document.getElementById(`quick-fn-${this.id}`)
-    },
-    componentSetEl() {
-      const { rootComponentSetId } = this.node
-      if (!rootComponentSetId) {
-        // this context will happen in Baic components in example tabs
-        return
-      }
-      const componentSetNode = vmGet(rootComponentSetId, this.isExample)
-      return componentSetNode.$el
     }
   },
   created() {
@@ -214,14 +198,10 @@ export default {
       window.quickFnMap = quickFnMap
     }
   },
-  beforeDestroy() {
-    cancelAnimationFrame(this.animationId)
-  },
   methods: {
     ...mapMutations('app', {
       APP_SET: 'SET'
     }),
-    ...mapMutations('app', ['DIALOG_OPEN']),
     ...mapActions('app', ['setCopySelectedNodeId', 'setBeingAddedComponentId']),
     tryToAddComponent() {
       this.setBeingAddedComponentId(this.id)
@@ -232,7 +212,7 @@ export default {
     resize() {
       const self = this
       this.$nextTick(() => {
-        if (!this.node || !this.componentSetEl) {
+        if (!this.node) {
           return
         }
 
@@ -248,12 +228,14 @@ export default {
         let { x: left, y: top, width, height } = rect
 
         let bounderNode
-        if (!this.isExample) {
+        if (this.isExample) {
+          bounderNode = element.closest('.card')
+        }
+        else {
           const layout = element.closest('.vue-grid-layout')
           bounderNode = layout && layout.closest('.vue-grid-item')
+          bounderNode = bounderNode || document.getElementById('art-board')
         }
-
-        bounderNode = bounderNode || this.componentSetEl.parentElement
 
         const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()
 
@@ -270,8 +252,6 @@ export default {
               ? rect.top + height - top1
               : height
 
-        lastId = this.id
-
         gsap.fromTo(
           this.framer,
           {
@@ -281,12 +261,12 @@ export default {
             height: heightShared
           },
           {
-            x: left,
-            y: top,
-            width: width - 2,
-            height: height - 2,
-            ease: 'power4',
-            duration: 1,
+            x: Math.round(left),
+            y: Math.round(top),
+            width: Math.round(width - 2),
+            height: Math.round(height - 2),
+            ease: 'ease',
+            duration: 0.3,
             onUpdate() {
               const { width, height, x, y } = this.vars
               leftShared = x
@@ -307,9 +287,8 @@ export default {
 $activeColor: rgba(81, 117, 199, 0.68);
 $connectColor: rgba(135, 199, 124, 0.68);
 
-::v-deep.has-connection {
+::v-deep.instance {
   &.quick-functions,
-  .title,
   .wrapper > *,
   .button-group > * {
     border-color: $connectColor !important;
@@ -361,7 +340,7 @@ $connectColor: rgba(135, 199, 124, 0.68);
   transform: rotate(90deg);
 }
 
-.title {
+.component-name {
   background-color: white;
   padding: 5px;
   border: 1px solid $activeColor;
@@ -370,6 +349,7 @@ $connectColor: rgba(135, 199, 124, 0.68);
   font-size: 12px;
   font-weight: 500;
 }
+
 .left.wrapper,
 .right.wrapper {
   display: flex;

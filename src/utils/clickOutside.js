@@ -7,7 +7,10 @@ const ctx = '@@clickoutsideContext'
 let startClick
 let seed = 0
 
-!Vue.prototype.$isServer && on(document, 'mousedown', e => (startClick = e))
+!Vue.prototype.$isServer &&
+  on(document, 'mousedown', e => {
+    startClick = e
+  })
 
 !Vue.prototype.$isServer &&
   on(document, 'mouseup', e => {

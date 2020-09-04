@@ -1,37 +1,26 @@
 <template>
   <div class="relative h-100">
-    <template v-for="child in innerChildren">
-      <controller-layer
-        v-if="child.sortIndex === 0"
-        :id="child.id"
-        :key="child.id"
-      >
-        <grid-generator :id="child.id" />
-      </controller-layer>
-
-      <grid-generator
-        v-else
-        :id="child.id"
-        :key="child.id"
-        :style="{ 'z-index': child.sortIndex }"
-        :class="{ absolute: child.sortIndex }"
-        :data-layer="Boolean(child.sortIndex)"
-      />
-    </template>
+    <component-giver
+      v-for="child in innerChildren"
+      :controller="!child.sortIndex"
+      :id="child.id"
+      :key="child.id"
+      :style="{ 'z-index': child.sortIndex }"
+      :class="{ absolute: child.sortIndex }"
+      :data-layer="Boolean(child.sortIndex)"
+    />
   </div>
 </template>
 
 <script>
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
-import ControllerLayer from '../TemplateUtils/ControllerLayer'
-import GridGenerator from '../Templates/GridGenerator'
+import ComponentGiver from '../TemplateUtils/ComponentGiver'
 
 export default {
   name: 'Layers',
   components: {
-    ControllerLayer,
-    GridGenerator
+    ComponentGiver
   },
   mixins: [nodeMixin, childrenMixin]
 }

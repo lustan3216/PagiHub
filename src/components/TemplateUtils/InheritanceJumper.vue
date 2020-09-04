@@ -1,6 +1,6 @@
 <template>
   <el-tooltip
-    v-if="canBackToInstance || node.masterId"
+    v-if="canBackToInstance || masterId"
     :content="
       canBackToInstance
         ? `Back to Instance ${instanceComponentSetName}`
@@ -20,9 +20,9 @@
 <script>
 import Vue from 'vue'
 import { asyncGetValue } from '@/utils/tool'
-import { MASTER_ID } from '@/const'
 import { mapMutations } from 'vuex'
 import { getNode, shortTagName } from '@/utils/node'
+import { getMasterId } from '@/utils/inheritance'
 
 const originalEditing = Vue.observable({
   componentSetId: null,
@@ -30,13 +30,17 @@ const originalEditing = Vue.observable({
 })
 
 export default {
-  name: 'ConnectionJump',
+  name: 'InheritanceJumper',
   props: {
     id: {
       type: String,
       required: true
     },
-    rootMasterId: {
+    inheritParentId: {
+      type: String,
+      default: ''
+    },
+    masterComponentSetId: {
       type: String,
       default: ''
     }
@@ -47,6 +51,9 @@ export default {
     },
     canBackToInstance() {
       return originalEditing.componentSetId
+    },
+    masterId() {
+      return getMasterId(this.node)
     },
     instanceComponentSetName() {
       return shortTagName(this.componentsMap[originalEditing.componentSetId])
@@ -64,10 +71,11 @@ export default {
       this.NODE_SET({ editingComponentSetId: originalEditing.componentSetId })
 
       this.$nextTick(async() => {
-        const el = await asyncGetValue(() => {
-          const id = originalEditing.componentId
-          return this.vmMap[id] && this.vmMap[id].$el
-        })
+        const el = await asyncGetValue([
+          this.vmMap,
+          originalEditing.componentId,
+          '$el'
+        ])
 
         setTimeout(() => {
           el.scrollIntoView(false)
@@ -78,21 +86,17 @@ export default {
       })
     },
     backToMaster() {
-      this.NODE_SET({ editingComponentSetId: this.rootMasterId })
-
-      const masterId = this.node[MASTER_ID]
+      this.NODE_SET({ editingComponentSetId: this.masterComponentSetId })
 
       this.$nextTick(async() => {
-        const el = await asyncGetValue(() => {
-          return this.vmMap[masterId] && this.vmMap[masterId].$el
-        })
+        const el = await asyncGetValue([this.vmMap, this.masterId, '$el'])
         setTimeout(() => {
           originalEditing.componentId = this.id
           originalEditing.componentSetId = this.node.rootComponentSetId
 
           el.scrollIntoView(false)
-          this.SET_SELECTED_COMPONENT_ID(masterId)
-        }, 50)
+          this.SET_SELECTED_COMPONENT_ID(this.masterId)
+        }, 100)
       })
     }
   }

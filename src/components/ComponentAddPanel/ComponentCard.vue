@@ -16,7 +16,7 @@
     </div>
 
     <div class="relative z-index1 p-1 example-boundary">
-      <async-component
+      <component-giver
         :id="component.id"
         :style="{
           maxHeight
@@ -45,7 +45,7 @@
 
 <script>
 import { shortTagName } from '@/utils/node'
-import AsyncComponent from '../TemplateUtils/AsyncComponent'
+import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { Tag } from 'element-ui'
 import gsap from 'gsap'
 import { updateWrapperStyle } from '@/utils/quickFunction'
@@ -53,7 +53,7 @@ import { updateWrapperStyle } from '@/utils/quickFunction'
 export default {
   name: 'ComponentCard',
   components: {
-    AsyncComponent,
+    ComponentGiver,
     ElTag: Tag
   },
   props: {

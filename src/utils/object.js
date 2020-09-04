@@ -1,8 +1,7 @@
 import isPlainObject from 'is-plain-object'
-import objectAssign from 'object-assign'
 import { traversalSelfAndChildren } from '@/utils/node'
 
-export { objectAssign, isPlainObject }
+export { isPlainObject }
 
 export function cloneObject(obj) {
   let copy

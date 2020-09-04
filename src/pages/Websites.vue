@@ -21,11 +21,11 @@
             class="action-button"
           />
 
-          <dialog-website
-            :key="website.updatedAt"
-            :id="website.id"
-            class="action-button"
-          />
+<!--          <dialog-website-->
+<!--            :key="website.updatedAt"-->
+<!--            :id="website.id"-->
+<!--            class="action-button"-->
+<!--          />-->
         </div>
       </div>
 
@@ -56,15 +56,13 @@
 import { mapActions } from 'vuex'
 import { Tag } from 'element-ui'
 import DialogDelete from '@/components/Setup/DialogDelete'
-import DialogWebsite from '@/components/Setup/DialogWebsite'
 import { isWebsite } from '@/utils/node'
 
 export default {
   name: 'Websites',
   components: {
     ElTag: Tag,
-    DialogDelete,
-    DialogWebsite
+    DialogDelete
   },
   computed: {
     websites() {

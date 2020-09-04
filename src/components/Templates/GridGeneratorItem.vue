@@ -4,7 +4,7 @@
     :style="innerStyles.default"
     @scroll.passive="onScroll"
   >
-    <async-component
+    <component-giver
       v-if="child"
       :id="child.id"
     />
@@ -17,16 +17,15 @@ import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
-import AsyncComponent from '../TemplateUtils/AsyncComponent'
 import { updateWrapperStyle } from '@/utils/quickFunction'
-import { getValueByPath } from '@/utils/tool'
-
+import { deepMerge, getValueByPath } from '@/utils/tool'
+import { deepEqual } from 'vue-observe-visibility/src/utils'
 export default {
   name: 'GridGeneratorItem',
   components: {
     ControllerLayer,
     ComponentController,
-    AsyncComponent
+    ComponentGiver: () => import('../TemplateUtils/ComponentGiver')
   },
   mixins: [childrenMixin, nodeMixin],
   inject: {
@@ -44,6 +43,17 @@ export default {
     }
   },
   watch: {
+    masterGrid: {
+      handler(grid) {
+        const self = this.layouts.find(x => x.id === this.id)
+
+        if (self) {
+          deepMerge(self.grid, grid)
+        }
+      },
+      immediate: true,
+      deep: true
+    },
     innerStyles: {
       handler(style) {
         const self = this.layouts.find(x => x.id === this.id)

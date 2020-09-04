@@ -12,7 +12,7 @@ import {
   CAN_NOT_COPY,
   STYLE,
   LABEL,
-  PROPS,
+  GRID,
   SOFT_DELETE,
   TEXT_EDITOR,
   SORT_INDEX
@@ -31,7 +31,7 @@ export const gridGeneratorItem = function(options) {
   return {
     [TAG]: GRID_GENERATOR_ITEM,
     [LABEL]: 'container',
-    [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 100 }),
+    [GRID]: mapPoints({ x: 0, y: 0, w: 22, h: 100 }),
     ...options
   }
 }
@@ -40,7 +40,7 @@ export const gridGeneratorItems = function() {
   return [
     gridGeneratorItem(),
     gridGeneratorItem({
-      [PROPS]: mapPoints({ x: 22, y: 0, w: 44, h: 130 })
+      [GRID]: mapPoints({ x: 22, y: 0, w: 44, h: 130 })
     })
   ]
 }
@@ -88,14 +88,14 @@ export const carousel = function() {
         [CAN_NEW_ITEM]: false,
         [CHILDREN]: [
           {
-            [PROPS]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }),
+            [GRID]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }),
             [TAG]: GRID_GENERATOR_ITEM,
             [POLYMORPHISM]: 'prev',
             [CAN_NOT_COPY]: true,
             [CAN_NOT_DELETE]: true
           },
           {
-            [PROPS]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }),
+            [GRID]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }),
             [TAG]: GRID_GENERATOR_ITEM,
             [POLYMORPHISM]: 'next',
             [CAN_NOT_COPY]: true,
@@ -140,7 +140,7 @@ export const videoPlayer = function() {
   return {
     [TAG]: 'video-player',
     [CAN_BE_EDITED]: true,
-    [STYLE]: { ratio: { w: 16, h: 9 }}
+    [STYLE]: { ratioW: 16, ratioH: 9}
   }
 }
 

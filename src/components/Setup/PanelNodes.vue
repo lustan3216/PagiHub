@@ -124,13 +124,6 @@ export default {
           }
         }
 
-        if (
-          node.children.length !==
-          arrayUniq(node.children.map(x => x.id)).length
-        ) {
-          debugger
-        }
-
         delete node[STYLE]
       })
 

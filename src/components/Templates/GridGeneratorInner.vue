@@ -4,8 +4,8 @@
     v-bind="innerProps"
     :layout="innerLayouts"
     :margin="[0, 0]"
-    :is-draggable="isDraftMode"
-    :is-resizable="isDraftMode"
+    :is-draggable="isDraftMode && !isInstance"
+    :is-resizable="isDraftMode && !isInstance"
     @layout-updated="layoutUpdated($event)"
   >
     <vue-grid-item
@@ -23,7 +23,7 @@
       @moveStart="itemUpdating"
       @moved="itemUpdated"
     >
-      <async-component
+      <component-giver
         :key="child.id"
         :id="child.id"
       />
@@ -32,8 +32,9 @@
 </template>
 
 <script>
+import store from '@/store'
 import { mapState, mapActions, mapMutations } from 'vuex'
-import { CHILDREN, COLUMNS, PROPS, STYLE } from '@/const'
+import { COLUMNS, GRID, CHILDREN } from '@/const'
 import { deleteBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
@@ -42,6 +43,8 @@ import { toPrecision } from '@/utils/number'
 import { getBreakpoint } from '@/utils/layout'
 import { debounce } from 'throttle-debounce'
 import { getValueByPath } from '@/utils/tool'
+import { getMasterId } from '@/utils/inheritance'
+import { cloneJsonWithoutChildren, getNode } from '@/utils/node'
 
 export default {
   name: 'GridGeneratorInner',
@@ -49,7 +52,7 @@ export default {
     VueGridGenerator: GridLayout,
     VueGridItem: GridItem,
     // 因為lopp call AsyncComponent, 這裏不用 async import 會噴bug
-    AsyncComponent: () => import('../TemplateUtils/AsyncComponent')
+    ComponentGiver: () => import('../TemplateUtils/ComponentGiver')
   },
   mixins: [childrenMixin],
   provide() {
@@ -71,6 +74,8 @@ export default {
     }
   },
   data() {
+    const { children } = getNode(this.id, this.isExample)
+    // 這裡的layout因為有蛋生雞，雞生蛋的問題，第一次的layout直接用children產生，之後的update的統一由gridGeneratorItem更新
     return {
       layouts: [],
       lockIds: [], // touchable will use it
@@ -90,13 +95,12 @@ export default {
         ? getBreakpoint(this.$el.closest('.example-boundary'))
         : this.breakpoint
     },
-    innerChildren() {
-      // 拿掉 style, props, 不然因為watch deep, 每次都會有多餘的更新
-      return this.children.map(({ [CHILDREN]: _, style, ...node }) => node)
+    isInstance() {
+      return getMasterId(this.node)
     },
-    closestBoundaryEl() {
-      const item = this.$el.closest('.vue-grid-item')
-      return item || document.getElementById('art-board')
+    innerChildren() {
+      // 拿掉 style, 不然因為watch deep, 每次都會有多餘的更新
+      return this.children.map(({ [CHILDREN]: _, style, ...node }) => node)
     }
   },
   watch: {
@@ -135,9 +139,6 @@ export default {
       })
     }
   },
-  mounted() {
-    this.$refs.gridGenerator.onWindowResize()
-  },
   methods: {
     ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapActions('app', ['resizeNodeQuickFn', 'artBoardResizing']),
@@ -153,26 +154,30 @@ export default {
       const { artBoardHeight } = this
       let layoutW
 
-      children.forEach(({ props, style = {}, autoHeight, id }, index) => {
-        if (!props || getValueByPath(style, [breakPoint, 'hidden'])) {
+      children.forEach(({ grid, props, style = {}, autoHeight, id }, index) => {
+        if (getValueByPath(style, [breakPoint, 'hidden'])) {
           return
         }
-
-        const w = props[breakPoint].w
-        let h = props[breakPoint].h
+        let w = 0
+        let h = 0
         const { ratioW, ratioH, verticalCompact } = style
 
-        if (!autoHeight) {
-          if (props[breakPoint].hUnit === 'vh') {
-            h = (artBoardHeight / 100) * parseInt(h)
-          }
-          else if (ratioH && ratioW) {
-            layoutW = layoutW || this.$el.clientWidth
-            const itemWidth = (parseInt(layoutW) / COLUMNS) * w
-            h = (itemWidth / ratioW) * ratioH
-          }
-          else {
-            h = parseInt(h)
+        if (grid) {
+          w = grid[breakPoint].w
+          h = grid[breakPoint].h
+
+          if (!autoHeight) {
+            if (grid[breakPoint].hUnit === 'vh') {
+              h = (artBoardHeight / 100) * parseInt(h)
+            }
+            else if (ratioH && ratioW) {
+              layoutW = layoutW || this.$el.clientWidth
+              const itemWidth = (parseInt(layoutW) / COLUMNS) * w
+              h = (itemWidth / ratioW) * ratioH
+            }
+            else {
+              h = parseInt(h)
+            }
           }
         }
 
@@ -180,8 +185,8 @@ export default {
           static: this.lockIds.includes(id),
           id: id,
           i: id || index, // should not happen, but just prevent crash in case
-          x: props[breakPoint].x || 0,
-          y: props[breakPoint].y || 0,
+          x: grid[breakPoint].x || 0,
+          y: grid[breakPoint].y || 0,
           w,
           h,
           verticalCompact,
@@ -202,10 +207,10 @@ export default {
       const records = []
 
       newChildren.forEach((child, index) => {
-        if (!this.innerChildren[index] || !this.innerChildren[index].props) {
+        if (!this.innerChildren[index] || !this.innerChildren[index][GRID]) {
           return
         }
-        const oldChild = this.innerChildren[index].props[this.breakpoint]
+        const oldChild = this.innerChildren[index][GRID][this.breakpoint]
         const oldValue = {
           x: oldChild.x,
           y: oldChild.y,
@@ -227,7 +232,7 @@ export default {
         }
         if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
           records.push({
-            path: `${child.id}.${PROPS}.${this.currentBreakPoint}`,
+            path: `${child.id}.${GRID}.${this.currentBreakPoint}`,
             value: { ...oldValue, ...newValue }
           })
         }

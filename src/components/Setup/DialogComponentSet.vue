@@ -10,7 +10,7 @@
       :visible.sync="visible"
       :disable-submit="!dirty"
       width="50%"
-      title="Component"
+      title="Design"
       @confirm="onSubmit"
       @close="initData"
     >

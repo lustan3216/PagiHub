@@ -1,7 +1,7 @@
 export const STYLE = 'style'
 
 export const CHILDREN = 'children'
-export const NAME = 'name'
+export const GRID = 'grid'
 export const PROPS = 'props'
 export const VALIDATE = 'validate'
 export const PARENT_ID = 'parentId'
@@ -34,7 +34,7 @@ export const COMPONENT_SET = 'component-set'
 export const GRID_GENERATOR = 'grid-generator'
 export const GRID_GENERATOR_ITEM = 'grid-generator-item'
 
-export const COLUMNS = 96
+export const COLUMNS = 72
 export const COLUMN_OBJECT = {
   xl: COLUMNS,
   lg: COLUMNS,

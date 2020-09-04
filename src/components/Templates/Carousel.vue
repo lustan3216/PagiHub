@@ -74,7 +74,7 @@
         :key="child.id"
         :class="`carousel-item-${id}`"
       >
-        <async-component :id="child.id" />
+        <component-giver :id="child.id" />
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -91,13 +91,13 @@ import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, POLYMORPHISM } from '@/const'
 import { CarouselItem, Carousel } from 'element-ui'
 import { traversalSelfAndChildren } from '@/utils/node'
-import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
+import ComponentGiver from '@/components/TemplateUtils/ComponentGiver'
 
 export default {
   defaultSetting,
   name: 'Carousel',
   components: {
-    AsyncComponent,
+    ComponentGiver,
     Grid,
     ElCarouselItem: CarouselItem,
     ElCarousel: Carousel

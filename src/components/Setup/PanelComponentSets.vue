@@ -15,7 +15,7 @@
 
       <dialog-component-set
         :parent-id="editingProjectId"
-        button-text="Component"
+        button-text="Design"
         button-type="primary"
       />
     </div>

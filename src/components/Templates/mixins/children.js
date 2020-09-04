@@ -1,28 +1,19 @@
 import { mapMutations, mapState } from 'vuex'
 import { CHILDREN, STYLE, SORT_INDEX, PROPS } from '@/const'
 import { arrayLast } from '@/utils/array'
-import { cloneJson, getValueByPath } from '@/utils/tool'
+import { cloneJson, deepMerge } from '@/utils/tool'
+import { canInherit, appendIdsInherited } from '@/utils/inheritance'
+import { appendIds } from '@/utils/nodeId'
 import {
   traversalChildren,
   getNode,
-  traversalAncestorAndSelf,
   traversalSelfAndChildren,
   isLayers,
-  isGrid,
-  isProject,
-  isComponentSet,
-  canBeInstance,
   isCarousel,
   isGridItem
 } from '@/utils/node'
-import {
-  appendIds,
-  appendIdsWithConnection,
-  appendIdsWithoutConnection
-} from '@/utils/nodeId'
 import * as basicTemplates from '@/templateJson/basic'
 import { camelCase } from '@/utils/string'
-import { objectAssign } from '@/utils/object'
 
 export default {
   props: {
@@ -32,7 +23,13 @@ export default {
     }
   },
   inject: {
-    isExample: { default: false }
+    isExample: { default: false },
+    inheritance: {
+      default: {
+        inheritParentId: null,
+        masterComponentSetId: null
+      }
+    }
   },
   computed: {
     ...mapState('node', ['rootComponentSetIds']),
@@ -42,12 +39,18 @@ export default {
     children() {
       return (this.node && this.node.children) || []
     },
+    childrenLengthChange() {
+      return this.children.length
+    },
     innerChildren() {
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
       // children 因為每次更新 draftcomponentsMap，如果innerChildren用computed會所有的component都被更新
       return this.children.map(({ [CHILDREN]: _, ...node }) => node)
     }
+  },
+  watch: {
+    childrenLengthChange() {}
   },
   methods: {
     ...mapMutations('app', [
@@ -67,33 +70,29 @@ export default {
       if (isGridItem(this.node)) {
         // 加入的時候都把gridItem 的 style 放到nodeTree上，比較好管理style才不會兩邊放，直接merge兩邊style
         // 可解決的場景是，master都是最低的，但有可能gridItem 都無法編輯到所以master永遠被蓋過
-        nodeTree[STYLE] = objectAssign({}, this.node[STYLE], nodeTree[STYLE])
+        nodeTree[STYLE] = deepMerge(this.node[STYLE], nodeTree[STYLE])
         records.push({
           path: `${this.id}.${STYLE}`,
           value: undefined
         })
       }
+      let isInherited = false
 
-      // const { rootComponentSet } = getNode(nodeTree.id, this.isExample)
-      // const canConnect =
-      //   isPage(this.node.rootComponentSet) && isDesign(rootComponentSet)
-      // if (canConnect) {
-      //   nodeTree = {
-      //     tag: 'connection-layer',
-      //     rootMasterId: rootComponentSet.id,
-      //     children: [nodeTree]
-      //   }
-      //   appendIdsWithConnection(nodeTree, this.id)
-      // }
-      // else if (
-      //   isPage(this.node.rootComponentSet) &&
-      //   isPage(rootComponentSet)
-      // ) {
-      //   appendIds(nodeTree, this.id)
-      // }
-      // else {
-      appendIdsWithoutConnection(nodeTree, this.id)
-      // }
+      if (canInherit(nodeTree)) {
+        isInherited = true
+        appendIdsInherited(nodeTree, this.id)
+      }
+      else if (isGridItem(nodeTree) && canInherit(nodeTree.children[0])) {
+        // 當griditem 裡面的first children 自己複製自己的時候
+        const { [CHILDREN]: _, ...gridItem } = nodeTree
+        appendIds(gridItem, this.id)
+        appendIdsInherited(nodeTree.children[0], gridItem.id)
+        gridItem.children = [nodeTree.children[0]]
+        nodeTree = gridItem
+      }
+      else {
+        appendIds(nodeTree, this.id)
+      }
 
       if (isLayers(this.node)) {
         nodeTree[SORT_INDEX] = this.children.length
@@ -101,16 +100,17 @@ export default {
 
       traversalSelfAndChildren(nodeTree, (_node, _parentNode) => {
         let node
-        // if (canConnect) {
-        // eslint-disable-next-line
-        const { [CHILDREN]: _, ...newNode } = _node
-        node = newNode
-        // }
-        // else {
-        //   eslint-disable-next-line
-        // const { [CHILDREN]: _1, [STYLE]: _2, [PROPS]: _3, ...newNode } = _node
-        // node = newNode
-        // }
+        if (isInherited) {
+          // eslint-disable-next-line
+          // 清空 instance上所有的設定，這樣才能知道拿的是master還是要覆蓋
+          const { [CHILDREN]: _1, [STYLE]: _2, [PROPS]: _3, ...newNode } = _node
+          node = newNode
+        }
+        else {
+          // eslint-disable-next-line
+          const { [CHILDREN]: _, ...newNode } = _node
+          node = newNode
+        }
         records.push({
           path: node.id,
           value: { ...node, parentId: node.parentId }

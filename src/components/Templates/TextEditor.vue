@@ -1,6 +1,5 @@
 <template>
   <text-editor-inner
-
     :id="id"
     :editing="editing"
     :value="innerValue"

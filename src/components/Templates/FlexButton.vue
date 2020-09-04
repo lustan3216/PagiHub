@@ -28,7 +28,7 @@
       </el-tooltip>
     </portal>
 
-    <async-component
+    <component-giver
       v-if="firstChild"
       :id="firstChild.id"
     />
@@ -50,7 +50,7 @@ import { Message } from 'element-ui'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import TextEditorInner from './TextEditorInner'
-import AsyncComponent from '../TemplateUtils/AsyncComponent'
+import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { REDIRECT_TO } from '../Setup/EditorSetting/SettingFlexButton'
 import { deleteBy } from '@/utils/array'
@@ -60,7 +60,7 @@ export default {
   name: 'FlexButton',
   components: {
     TextEditorInner,
-    AsyncComponent
+    ComponentGiver
   },
   mixins: [nodeMixin, childrenMixin],
   props: {

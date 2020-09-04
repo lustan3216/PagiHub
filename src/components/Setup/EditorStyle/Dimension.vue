@@ -115,7 +115,7 @@ import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
 import { Divider } from 'element-ui'
-import { COLUMNS, PROPS, STYLE } from '@/const'
+import { COLUMNS, GRID, STYLE } from '@/const'
 import { isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
@@ -171,11 +171,11 @@ export default {
       )
     },
     allW() {
-      return this.gridItemNodes.map(node => node[PROPS][this.breakpoint].w)
+      return this.gridItemNodes.map(node => node[GRID][this.breakpoint].w)
     },
     allH() {
       return this.gridItemNodes.map(node => {
-        const prop = node[PROPS][this.breakpoint]
+        const prop = node[GRID][this.breakpoint]
         return (prop.h || '').toString() + (prop.hUnit || 'px')
       })
     },
@@ -205,7 +205,7 @@ export default {
 
         this.gridItemNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${PROPS}.${this.breakpoint}.w`,
+            path: `${node.id}.${GRID}.${this.breakpoint}.w`,
             value: value || 0
           })
         })
@@ -224,11 +224,11 @@ export default {
         value = parseInt(value)
         this.gridItemNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${PROPS}.${this.breakpoint}.hUnit`,
+            path: `${node.id}.${GRID}.${this.breakpoint}.hUnit`,
             value: hUnit === 'vh' ? 'vh' : undefined
           })
           records.push({
-            path: `${node.id}.${PROPS}.${this.breakpoint}.h`,
+            path: `${node.id}.${GRID}.${this.breakpoint}.h`,
             value: value || 0
           })
         })

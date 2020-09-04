@@ -11,25 +11,39 @@
       @click="enter"
     />
   </el-input>
+
   <el-button
     v-else-if="node"
     v-bind="{ ...$props, ...$attrs }"
+    :class="{ instance: isInstance }"
     type="text"
     @click="click"
     @dblclick.native="dblclick"
   >
-    <slot />
+    <template v-if="isMasterParent">
+      <i class="el-icon-medal-1" />
+    </template>
 
-    {{ nodeShortName }}
-    <template> - {{ shortId }} </template>
+    <template v-else-if="isInstanceParent">
+      <i class="el-icon-medal" />
+    </template>
+
+    <span> {{ nodeShortName }} - {{ shortId }} </span>
+
+    <slot />
   </el-button>
 </template>
 
 <script>
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import { shortTagName, shortId, isComponent } from '@/utils/node'
+import { shortTagName, shortId, isComponent, getNode } from '@/utils/node'
 import { LABEL } from '@/const'
+import {
+  isMasterParent,
+  isInstanceParent,
+  getMasterId
+} from '@/utils/inheritance'
 
 const observable = Vue.observable({ editingId: null })
 
@@ -39,6 +53,22 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    inheritParentId: {
+      type: String,
+      default: ''
+    },
+    inheritRootComponentSetId: {
+      type: String,
+      default: ''
+    },
+    editable: {
+      type: Boolean,
+      default: false
+    },
+    isExample: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -48,7 +78,16 @@ export default {
   },
   computed: {
     node() {
-      return this.componentsMap[this.id]
+      return getNode(this.id, this.isExample)
+    },
+    isMasterParent() {
+      return isMasterParent(this.node)
+    },
+    isInstanceParent() {
+      return isInstanceParent(this.node)
+    },
+    isInstance() {
+      return getMasterId(this.node)
     },
     isComponent() {
       return isComponent(this.node)
@@ -65,7 +104,7 @@ export default {
       }
     },
     editing() {
-      return observable.editingId === this.id
+      return observable.editingId === this.id && this.editable
     }
   },
   methods: {
@@ -75,8 +114,10 @@ export default {
       this.$emit('click', event)
     },
     dblclick() {
-      this.name = this.nodeShortName
-      observable.editingId = this.id
+      if (this.editable) {
+        this.name = this.nodeShortName
+        observable.editingId = this.id
+      }
     },
     enter() {
       observable.editingId = null
@@ -93,6 +134,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$activeColor: rgba(81, 117, 199, 0.68);
+$connectColor: rgba(135, 199, 124, 0.68);
+
+::v-deep.instance {
+  color: $connectColor !important;
+}
+
 .el-button {
   padding-left: 5px;
   padding-right: 5px;

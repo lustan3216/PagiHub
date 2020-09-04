@@ -5,7 +5,7 @@ import {
   traversalAncestorAndSelf
 } from '@/utils/node'
 import { deleteBy, findIndexBy } from '@/utils/array'
-import { appendIdsWithoutConnection } from '@/utils/nodeId'
+import { appendIds } from '@/utils/nodeId'
 import { CHILDREN, SORT_INDEX } from '@/const'
 import { mapMutations } from 'vuex'
 import { gridGenerator } from '@/templateJson/basic'
@@ -103,7 +103,7 @@ export default {
       const newGrid = emptyGird()
 
       newGrid[SORT_INDEX] = newGridPosition
-      appendIdsWithoutConnection(newGrid, this.canOverlapComponent.id)
+      appendIds(newGrid, this.canOverlapComponent.id)
       const ids = Array.from(this.gridIds)
       ids.splice(newGridPosition, 0, newGrid.id)
 
