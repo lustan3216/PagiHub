@@ -22,9 +22,6 @@ Vue.use(VueRouter)
 Vue.use(formCreate)
 Vue.use(PortalVue)
 Vue.use(VueShortKey, { prevent: ['input', 'textarea', '.ProseMirror'] })
-if (process.env.NODE_ENV !== 'production') {
-  window.store = store
-}
 
 Vue.mixin({
   computed: {
@@ -76,7 +73,12 @@ Vue.prototype.$dialog = {
 }
 
 Vue.config.productionTip = false
-Vue.config.devtools = process.env.NODE_ENV === 'development'
+
+if (process.env.NODE_ENV !== 'production') {
+  window.store = store
+  window.Vue = Vue
+  Vue.config.devtools = true
+}
 
 Vue.use(Tooltip)
 Vue.use(Dialog)

@@ -35,10 +35,12 @@ export function setMasterId(node, id) {
 }
 
 export function appendIdsInherited(nodes, parentId) {
-  const { rootComponentSetId } = getNode(nodes.id, false)
-  nodes.inheritance = {
-    isInstanceParent: true,
-    masterComponentSetId: rootComponentSetId
+  if (canInherit(nodes)) {
+    const { rootComponentSetId } = getNode(nodes.id, false)
+    nodes.inheritance = {
+      isInstanceParent: true,
+      masterComponentSetId: rootComponentSetId
+    }
   }
 
   appendIds(nodes, parentId, node => {

@@ -13,7 +13,7 @@ import { debounce } from "throttle-debounce"
 <style>
   .vue-grid-item {
     transition: all 200ms ease;
-    transition-property: left, top, right, transform, width, height;
+    transition-property: left, top, right, width, height;
     /* add right for rtl */
   }
 

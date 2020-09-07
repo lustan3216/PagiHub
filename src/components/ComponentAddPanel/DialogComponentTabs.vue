@@ -242,7 +242,7 @@ export default {
         })
       }
 
-      vmGet(node.id)._addNodesToParentAndRecord(cloneJson(template))
+      vmGet(node.id).addNodesToParentAndRecord(cloneJson(template))
       this.$dialog.close()
     },
     quickSelect() {}

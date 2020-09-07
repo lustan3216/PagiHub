@@ -27,13 +27,9 @@
     <!--      </el-radio-group>-->
     <!--    </div>-->
 
-    <item-hidden-controller />
+    <portal-target name="PanelStyles" />
 
-    <portal-target
-      v-if="canFont"
-      name="FontStyles"
-      slim
-    />
+    <item-hidden-controller />
 
     <dimension />
 
@@ -118,30 +114,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('app', ['selectedComponentNodes']),
-    canFont() {
-      return this.selectedComponentNodes.every(node =>
-        [TEXT_EDITOR, 'flex-button'].includes(node.tag)
-      )
-    },
-    canRadius() {
-      return this.selectedComponentNodes.every(
-        node => ![GRID_GENERATOR, LAYERS].includes(node.tag)
-      )
-    },
-    canBorder() {
-      return this.selectedComponentNodes.every(
-        node => ![GRID_GENERATOR, LAYERS].includes(node.tag)
-      )
-    },
-    canOverflow() {
-      return this.selectedComponentNodes.every(node =>
-        [GRID_GENERATOR_ITEM].includes(node.tag)
-      )
-    },
-    isDefaultState() {
-      return this.state === 'default'
-    }
+    ...mapGetters('app', ['selectedComponentNodes'])
   }
 }
 </script>

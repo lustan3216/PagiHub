@@ -118,6 +118,10 @@ export default {
 
         const { style = {}, grid, autoHeight } = this.gridItemsData[id]
 
+        if (!grid[breakPoint]) {
+          return layouts.push(data)
+        }
+
         if (getValueByPath(style, [breakPoint, 'hidden'])) {
           return
         }
@@ -126,7 +130,7 @@ export default {
         let h = 0
         const { ratioW, ratioH, verticalCompact } = style
 
-        if (grid) {
+        if (grid && grid[breakPoint]) {
           w = grid[breakPoint].w
           h = grid[breakPoint].h
 

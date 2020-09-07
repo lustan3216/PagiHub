@@ -14,7 +14,20 @@
         :id="id"
         :is-example="isExample"
         :item-editing="itemEditing"
-        v-bind="inheritance"
+        :inherit-parent-id="inheritance.inheritParentId"
+        :master-component-set-id="inheritance.masterComponentSetId"
+      />
+    </portal>
+
+    <portal
+      v-if="selected && onlyOneSelected && isInstance"
+      to="PanelStyles"
+    >
+      <setting-inheritance
+        :id="id"
+        :item-editing="itemEditing"
+        :inherit-parent-id="inheritance.inheritParentId"
+        :master-component-set-id="inheritance.masterComponentSetId"
       />
     </portal>
 
@@ -47,24 +60,23 @@ import { CAN_BE_EDITED } from '@/const'
 import { isMac } from '@/utils/device'
 import { getNode } from '@/utils/node'
 import clickOutside from '@/utils/clickOutside'
-import ComponentQuickFunctions from './ComponentQuickFunctions'
+import { getMasterId } from '@/utils/inheritance'
+import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
 
 export default {
   name: 'ControllerLayer',
   inject: {
     isExample: { default: false },
     inheritance: {
-      default: {
-        inheritParentId: null,
-        masterComponentSetId: null
-      }
+      default: inheritanceObject()
     }
   },
   directives: {
     clickOutside
   },
   components: {
-    ComponentQuickFunctions
+    ComponentQuickFunctions: () => import('./ComponentQuickFunctions'),
+    SettingInheritance: () => import('@/components/Setup/EditorSetting/SettingInheritance')
   },
   props: {
     id: {
@@ -73,7 +85,7 @@ export default {
     }
   },
   data() {
-    // 有些component像是 textedit or video, 裡面有拖拉多種互動，需要用 itemEditing 判定需不需要鎖住，經由點兩下就可操作
+    // 有些component像是 text edit or video, 裡面有拖拉多種互動，需要用 itemEditing 判定需不需要鎖住，經由點兩下就可操作
     return {
       itemEditing: false
     }
@@ -84,8 +96,14 @@ export default {
     node() {
       return getNode(this.id)
     },
+    onlyOneSelected() {
+      return this.selectedComponentIds.length === 1
+    },
     selected() {
       return this.selectedComponentIds.includes(this.id)
+    },
+    isInstance() {
+      return getMasterId(this.node)
     },
     canBeEdited() {
       return this.node && this.node[CAN_BE_EDITED]

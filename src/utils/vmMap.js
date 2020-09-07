@@ -25,14 +25,14 @@ export function vmCreateEmptyItem(node) {
   // layers, grid-generator, carousel, form-generator
   // can new layer-item, grid-item, carousel-item, form-item
   if (node[CAN_NEW_ITEM]) {
-    vmGet(node.id)._createEmptyItem()
+    vmGet(node.id).createEmptyItem()
   }
   else {
     traversalAncestorAndSelf(node, node => {
       if (isGridItem(node)) {
         store.commit('app/SET', { copyComponentIds: [node.id] })
         const { children, masterId, ...emptyGridItem } = node
-        vmGet(node.parentId)._addNodesToParentAndRecord(emptyGridItem)
+        vmGet(node.parentId).addNodesToParentAndRecord(emptyGridItem)
         return 'stop'
       }
     })
@@ -95,10 +95,10 @@ export function vmPasteNode(node) {
 }
 
 export function vmRemoveNode(node) {
-  const stopNodeId = vmGet(node.parentId)._remove(node)
+  const stopNodeId = vmGet(node.parentId).removeNodes(node)
   return stopNodeId
 }
 
 export function vmAddNodesToParentAndRecord(id, nodes) {
-  vmGet(id)._addNodesToParentAndRecord(nodes)
+  vmGet(id).addNodesToParentAndRecord(nodes)
 }

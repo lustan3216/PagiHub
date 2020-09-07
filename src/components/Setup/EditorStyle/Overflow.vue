@@ -13,6 +13,7 @@
         @input="overflow = $event"
       >
         <el-option
+          v-if="canFitContainer"
           label="Fit Container"
           value="fitContainer"
         />
@@ -35,10 +36,16 @@
 
 <script>
 import forNodeMixin from './mixins/forNode'
+import { TEXT_EDITOR } from '@/const'
 
 export default {
   name: 'Overflow',
-  mixins: [forNodeMixin('overflow')]
+  mixins: [forNodeMixin('overflow')],
+  computed: {
+    canFitContainer() {
+      return this.nodes.every(node => [TEXT_EDITOR].includes(node.tag))
+    }
+  }
 }
 </script>
 

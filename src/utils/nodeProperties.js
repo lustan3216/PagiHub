@@ -1,5 +1,5 @@
 import store from '@/store'
-import vmMap, { vmGet } from '@/utils/vmMap'
+import { traversalAncestorAndSelf } from '@/utils/node'
 import {
   recordRootComponentSetId,
   getRootComponentSetId

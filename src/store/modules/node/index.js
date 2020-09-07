@@ -147,7 +147,7 @@ const mutations = {
     })
   },
   SOFT_RECORD(state, payLoad) {
-    // for hiding style temporary. not really update the json data
+    // update tree directly without jsonHistory
     const set = ({ path, value }) =>
       setValueByPath(state.componentsMap, path, value)
     Array.isArray(payLoad) ? payLoad.forEach(set) : set(payLoad)

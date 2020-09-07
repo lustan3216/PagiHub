@@ -7,6 +7,7 @@ import { getNode, isGrid, isGridItem } from '@/utils/node'
 import { arrayFirst } from '@/utils/array'
 import { getMasterId } from '@/utils/inheritance'
 import { objectHasAnyKey } from '@/utils/object'
+import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
 
 let hoverNode = []
 
@@ -20,10 +21,7 @@ export default {
   inject: {
     isExample: { default: false },
     inheritance: {
-      default: {
-        inheritParentId: null,
-        masterComponentSetId: null
-      }
+      default: inheritanceObject()
     }
   },
   directives: {

@@ -4,7 +4,10 @@
     class="editor"
   >
     <template v-if="isDraftMode && editing">
-      <portal to="FontStyles">
+      <portal
+        v-if="canEditStyle"
+        to="PanelStyles"
+      >
         <text-editor-style
           :id="id"
           :editor="editor"
@@ -311,10 +314,11 @@ import {
   LineHeight,
   TextAlign
 } from '../../vendor/tiptap'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import { arrayUniq } from '../../utils/array'
 import WebFont from 'webfontloader'
 import ColorPicker from '@/components/Components/ColorPicker'
+import { TEXT_EDITOR } from '@/const'
 
 export default {
   name: 'TextEditorInner',
@@ -363,6 +367,12 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
+    ...mapGetters('app', ['selectedComponentNodes']),
+    canEditStyle() {
+      return this.selectedComponentNodes.every(node =>
+        [TEXT_EDITOR, 'flex-button'].includes(node.tag)
+      )
+    },
     selected() {
       return this.selectedComponentIds.includes(this.id)
     }

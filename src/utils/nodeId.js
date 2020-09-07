@@ -1,8 +1,7 @@
 import { ID, PARENT_ID, MASTER_ID } from '../const'
 import { toArray } from './array'
 import { ulid } from 'ulid'
-import { getNode, isComponent, traversalSelfAndChildren } from '@/utils/node'
-import { setMasterId } from '@/utils/inheritance'
+import { isComponent, traversalSelfAndChildren } from '@/utils/node'
 
 export function appendIds(nodes, parentId, fn) {
   if (parentId) {

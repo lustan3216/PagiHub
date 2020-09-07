@@ -21,7 +21,7 @@ export default {
     addComponent(event) {
       const id = event.dataTransfer.getData('id')
       if (id) {
-        this._addNodesToParentAndRecord(this.exampleComponentsMap[id])
+        this.addNodesToParentAndRecord(this.exampleComponentsMap[id])
       }
     }
   }

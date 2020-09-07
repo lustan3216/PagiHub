@@ -1,8 +1,12 @@
 import { mapMutations, mapState } from 'vuex'
 import { CHILDREN, STYLE, SORT_INDEX, PROPS, GRID } from '@/const'
 import { arrayLast } from '@/utils/array'
-import { cloneJson, deepMerge } from '@/utils/tool'
-import { canInherit, appendIdsInherited } from '@/utils/inheritance'
+import { cloneJson, deepMerge, getValueByPath } from '@/utils/tool'
+import {
+  canInherit,
+  appendIdsInherited,
+  getMasterId
+} from '@/utils/inheritance'
 import { appendIds } from '@/utils/nodeId'
 import {
   traversalChildren,
@@ -14,6 +18,8 @@ import {
 } from '@/utils/node'
 import * as basicTemplates from '@/templateJson/basic'
 import { camelCase } from '@/utils/string'
+import { arraySubtract } from '@/utils/array'
+import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
 
 export default {
   props: {
@@ -25,32 +31,49 @@ export default {
   inject: {
     isExample: { default: false },
     inheritance: {
-      default: {
-        inheritParentId: null,
-        masterComponentSetId: null
-      }
+      default: inheritanceObject()
     }
   },
   computed: {
-    ...mapState('node', ['rootComponentSetIds']),
+    ...mapState('node', ['rootComponentSetIds', 'editingComponentSetId']),
     node() {
       return getNode(this.id)
+    },
+    masterId() {
+      return getMasterId(this.node)
+    },
+    masterNode() {
+      return getNode(this.masterId) || {}
     },
     children() {
       return (this.node && this.node.children) || []
     },
-    childrenLengthChange() {
-      return this.children.length
-    },
     innerChildren() {
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
-      // children 因為每次更新 draftcomponentsMap，如果innerChildren用computed會所有的component都被更新
+      // children 因為每次更新 draft componentsMap，如果innerChildren用computed會所有的component都被更新
       return this.children.map(({ [CHILDREN]: _, ...node }) => node)
+    },
+    masterChildren() {
+      return getValueByPath(this.masterNode, 'children')
+    },
+    masterChildrenChanged() {
+      return getValueByPath(this.masterChildren, 'length')
+    },
+    sameComponentSet() {
+      return this.node.rootComponentSetId === this.editingComponentSetId
     }
   },
   watch: {
-    childrenLengthChange() {}
+    masterChildrenChanged(value, oldValue) {
+      this.updateChildrenWithMaster(value, oldValue)
+    }
+  },
+  created() {
+    this.updateChildrenWithMaster(this.masterChildren, this.children)
+  },
+  activated() {
+    this.updateChildrenWithMaster(this.masterChildren, this.children)
   },
   methods: {
     ...mapMutations('app', [
@@ -59,7 +82,28 @@ export default {
     ]),
     ...mapMutations('node', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
 
-    _addNodesToParentAndRecord(nodeTree = {}) {
+    updateChildrenWithMaster(newChildren = [], oldChildren = []) {
+      const diff = newChildren.length - oldChildren.length
+      if (
+        !this.inheritance.loaded ||
+        !this.masterId ||
+        !this.sameComponentSet ||
+        !diff
+      ) {
+        return
+      }
+
+      if (diff === 1) {
+        const newItem = arraySubtract(newChildren, oldChildren)
+        this.addNodesToParentAndRecord(newItem)
+      }
+      else if (diff === -1) {
+        const deleteItem = arraySubtract(oldChildren, newChildren)
+        this.removeNodes(deleteItem)
+      }
+    },
+
+    addNodesToParentAndRecord(nodeTree = {}) {
       // nodeTree should be single node instead of an array
       // could be triggered by copy, delete
 
@@ -78,17 +122,15 @@ export default {
       }
       let isInherited = false
 
-      if (canInherit(nodeTree)) {
+      if (canInherit(nodeTree) || this.inheritance.inheritParentId) {
         isInherited = true
         appendIdsInherited(nodeTree, this.id)
       }
       else if (isGridItem(nodeTree) && canInherit(nodeTree.children[0])) {
-        // 當griditem 裡面的first children 自己複製自己的時候
-        const { [CHILDREN]: _, ...gridItem } = nodeTree
-        appendIds(gridItem, this.id)
-        appendIdsInherited(nodeTree.children[0], gridItem.id)
-        gridItem.children = [nodeTree.children[0]]
-        nodeTree = gridItem
+        // this.node 會是grid
+        // 當gridItem 裡面的first children 自己複製自己的時候
+        isInherited = true
+        appendIdsInherited(nodeTree, this.id)
       }
       else {
         appendIds(nodeTree, this.id)
@@ -126,7 +168,7 @@ export default {
       this.RECORD(records)
     },
 
-    _createEmptyItem() {
+    createEmptyItem() {
       // should use vmMap method to call to keep consistency
 
       // 這裏拿到的example有可能有deep children
@@ -145,10 +187,10 @@ export default {
         emptyItem[SORT_INDEX] = currentMaxIndex + 1
       }
 
-      this._addNodesToParentAndRecord(emptyItem)
+      this.addNodesToParentAndRecord(emptyItem)
     },
 
-    _remove(theNodeGonnaRemove) {
+    removeNodes(theNodeGonnaRemove) {
       if (this.isExample) {
         return
       }

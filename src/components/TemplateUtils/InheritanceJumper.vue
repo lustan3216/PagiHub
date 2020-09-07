@@ -1,17 +1,24 @@
 <template>
   <el-tooltip
     v-if="canBackToInstance || masterId"
-    :content="
-      canBackToInstance
-        ? `Back to Instance ${instanceComponentSetName}`
-        : 'Edit Master Component'
-    "
+    :content="notice"
+    :disabled="text"
     effect="light"
     placement="top"
   >
     <el-button
+      v-if="text"
+      :icon="canBackToInstance ? 'el-icon-refresh-left' : 'el-icon-refresh'"
       type
-      icon="el-icon-share"
+      @click="onClick"
+    >
+      {{ notice }}
+    </el-button>
+
+    <el-button
+      v-else
+      :icon="canBackToInstance ? 'el-icon-refresh-left' : 'el-icon-refresh'"
+      type
       @click="onClick"
     />
   </el-tooltip>
@@ -20,7 +27,7 @@
 <script>
 import Vue from 'vue'
 import { asyncGetValue } from '@/utils/tool'
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { getNode, shortTagName } from '@/utils/node'
 import { getMasterId } from '@/utils/inheritance'
 
@@ -43,9 +50,14 @@ export default {
     masterComponentSetId: {
       type: String,
       default: ''
+    },
+    text: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
+    ...mapState('node', ['editingComponentSetId']),
     node() {
       return getNode(this.id)
     },
@@ -57,6 +69,16 @@ export default {
     },
     instanceComponentSetName() {
       return shortTagName(this.componentsMap[originalEditing.componentSetId])
+    },
+    instanceName() {
+      return shortTagName(this.componentsMap[originalEditing.componentId])
+    },
+    notice() {
+      return this.canBackToInstance
+        ? this.editingComponentSetId === originalEditing.componentSetId
+          ? `Back to ${this.instanceName}`
+          : `Back to ${this.instanceComponentSetName}`
+        : 'Edit Master'
     }
   },
   methods: {
