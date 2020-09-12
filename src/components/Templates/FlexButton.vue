@@ -80,7 +80,7 @@ export default {
     },
     redirectComponentSet() {
       const linkId = this.innerProps[REDIRECT_TO]
-      return linkId && this.componentsMap[linkId]
+      return linkId && this.nodesMap[linkId]
     },
     availableEvents() {
       const events = this.clickEvents.map(x => x.fn)

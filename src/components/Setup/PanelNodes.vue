@@ -59,7 +59,7 @@
 
 <script>
 import { Tree } from 'element-ui'
-import { SORT_INDEX, SOFT_DELETE, STYLE } from '@/const'
+import { SORT_INDEX, SOFT_DELETE, STYLES } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { arrayUniq, deleteBy, findIndexBy } from '@/utils/array'
 import { cloneJson } from '@/utils/tool'
@@ -100,7 +100,7 @@ export default {
     ...mapState('app', ['selectedComponentIds', 'breakpoint']),
     ...mapState('node', ['editingComponentSetId']),
     componentSetNode() {
-      return this.componentsMap[this.editingComponentSetId]
+      return this.nodesMap[this.editingComponentSetId]
     },
     innerTree() {
       const tree = this.componentSetNode
@@ -124,13 +124,13 @@ export default {
           }
         }
 
-        delete node[STYLE]
+        delete node[STYLES]
       })
 
       return cloneTree.children
     }
     // editingNode() {
-    //   return this.componentsMap[this.editingComponentSetId]
+    //   return this.nodesMap[this.editingComponentSetId]
     // },
     // editingNodeName() {
     //   return shortTagName(this.editingNode)

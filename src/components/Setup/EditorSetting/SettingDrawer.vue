@@ -32,7 +32,7 @@ export default {
   computed: {
     allChildren() {
       const allChildren = []
-      traversalChildren(this.componentsMap[this.id], child => {
+      traversalChildren(this.nodesMap[this.id], child => {
         if (child.tag.includes('button')) {
           allChildren.push(child)
         }

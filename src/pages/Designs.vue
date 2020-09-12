@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     projects() {
-      return Object.values(this.componentsMap).filter(node => isProject(node))
+      return Object.values(this.nodesMap).filter(node => isProject(node))
     }
   },
   created() {

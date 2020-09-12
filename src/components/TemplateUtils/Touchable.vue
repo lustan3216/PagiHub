@@ -39,7 +39,7 @@ export default {
       return vmGet(this.node.id)
     },
     node() {
-      return this.componentsMap[this.id]
+      return this.nodesMap[this.id]
     },
     isGridItem() {
       return this.vm.$options._componentTag === GRID_GENERATOR_ITEM

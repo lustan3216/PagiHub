@@ -9644,10 +9644,10 @@ jsesc@~0.5.0:
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
 
-json-history@0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/json-history/-/json-history-0.5.1.tgz#37731b4795e575ab7de45030502891a6f6d2bc91"
-  integrity sha512-zHVmlqzav+SAyeBC+r5zUv55OM8axJ/V9jZirP3GyCkLIZI0jfrgH+5gMm5KI1MSiuqIG/yziGpLVDZIx/PssA==
+json-history@0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/json-history/-/json-history-0.5.3.tgz#415f8fa2eb327a2439ea6fcda362569aa8160c13"
+  integrity sha512-pJ04v9A/h+435w6azo8i61DknLC6yCL/JBr6PR7ih20MWWFcy94KSuSV9ssiql+4yJC/gLcDNbThWj0+S3PCvA==
   dependencies:
     diff-match-patch "^1.0.5"
     lodash.get "^4.4.2"
@@ -10018,6 +10018,11 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
+
+lodash.unset@^4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/lodash.unset/-/lodash.unset-4.5.2.tgz#370d1d3e85b72a7e1b0cdf2d272121306f23e4ed"
+  integrity sha1-Nw0dPoW3Kn4bDN8tJyEhMG8j5O0=
 
 lodash@4.17.15, lodash@^4.15.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.3.0:
   version "4.17.15"

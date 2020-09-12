@@ -89,7 +89,7 @@ export default {
       )
     },
     currentProps() {
-      return this.componentsMap[this.id].props || {}
+      return this.nodesMap[this.id].props || {}
     },
     isHorizontal() {
       // undefined situation comes from after the second updating
@@ -114,7 +114,7 @@ export default {
       api.trigger('indicatorPosition', 'change', value ? 'bottom' : 'right')
     },
     arrow(value) {
-      const IndicatorGrid = this.componentsMap[this.id][CHILDREN].find(
+      const IndicatorGrid = this.nodesMap[this.id][CHILDREN].find(
         x => x[POLYMORPHISM] === 'indicators'
       )
       this.RECORD([

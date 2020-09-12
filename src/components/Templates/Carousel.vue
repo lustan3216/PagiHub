@@ -127,7 +127,7 @@ export default {
       return this.innerChildren.find(x => x[POLYMORPHISM] === 'indicators')
     },
     customerIndicatorNode() {
-      return this.componentsMap[this.customerIndicator.id]
+      return this.nodesMap[this.customerIndicator.id]
     },
     prevGridItemId() {
       return this.customerIndicatorNode[CHILDREN][0].id
@@ -223,7 +223,7 @@ export default {
     ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_ID']),
     checkSelectedComponent(index, oldIndex) {
       const { id } = this.gridGenerators[oldIndex]
-      const node = this.componentsMap[id]
+      const node = this.nodesMap[id]
       const ids = []
 
       traversalSelfAndChildren(node, ({ id }) => ids.push(id))

@@ -15,7 +15,7 @@ import {
 
 import Switch from '../../../vendor/element-ui/Switch'
 import SelectUnit from '@/components/Components/SelectUnit'
-import { VALUE } from '@/const'
+import { STYLES, VALUE } from '@/const'
 
 formCreate.component('SelectUnit', SelectUnit)
 formCreate.component('ElSwitch', Switch)
@@ -55,7 +55,7 @@ export default {
         type: this.$options.type,
         props,
         field,
-        style: this.innerStyles,
+        [STYLES]: this.innerStyles,
         value: this.innerValue,
         options: options.map(label => ({
           label,

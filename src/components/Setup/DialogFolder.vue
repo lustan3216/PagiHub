@@ -70,7 +70,7 @@ export default {
   },
   created() {
     if (this.id) {
-      Object.assign(this.form, this.componentsMap[this.id])
+      Object.assign(this.form, this.nodesMap[this.id])
     }
   },
   methods: {

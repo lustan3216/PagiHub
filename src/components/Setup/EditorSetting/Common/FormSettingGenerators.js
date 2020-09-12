@@ -39,7 +39,7 @@ const submit = {
     }
   },
   computed: {
-    ...mapState('node', ['componentsMap']),
+    ...mapState('node', ['nodesMap']),
     submitButtons() {
       return this.findButtonIds('form-submit')
     },
@@ -54,7 +54,7 @@ const submit = {
   },
   methods: {
     findButtonIds(tagName) {
-      return Object.values(this.componentsMap).reduce((acc, x) => {
+      return Object.values(this.nodesMap).reduce((acc, x) => {
         if (x.tag === tagName) {
           acc.push(x.id)
         }

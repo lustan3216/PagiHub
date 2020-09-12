@@ -37,7 +37,7 @@ export default {
       return getNode(this.id)
     },
     masterParentNode() {
-      return this.componentsMap[this.masterComponentSetId]
+      return this.nodesMap[this.masterComponentSetId]
     },
     masterComponentSetId() {
       return getValueByPath(this.node, 'inheritance.masterComponentSetId')

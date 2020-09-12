@@ -14,11 +14,11 @@ import { isComponentSet, traversalSelfAndChildren } from '@/utils/node'
 import { objectFirstKey } from '@/utils/object'
 import { cloneJson } from '@/utils/tool'
 import { appendIds } from '@/utils/nodeId'
-import draftState from '@/utils/draftState'
+import draftState from '@/utils/draftStateUploader'
 
 export const actions = {
   async getComponentSetChildren({ commit, state }, id) {
-    const nodes = Object.values(state.componentsMap)
+    const nodes = Object.values(state.nodesMap)
     const imported = nodes.find(node => node.parentId === id)
     if (imported) {
       return
@@ -50,7 +50,12 @@ export const actions = {
       tags,
       children: tree
     })
-    commit('SET_EDITING_COMPONENT_SET_ID', componentSet.id)
+
+    commit('SET', {
+      editingProjectId: parentId,
+      editingComponentSetId: componentSet.id
+    })
+
     commit('SET_NODES_TO_MAP', {
       nodes: [componentSet, ...children],
       rootComponentSetId: componentSet.id
@@ -73,7 +78,7 @@ export const actions = {
   },
 
   async publishComponentSet({ commit, state }, description) {
-    const node = state.componentsMap[state.editingComponentSetId]
+    const node = state.nodesMap[state.editingComponentSetId]
     const tree = cloneJson(node)
     await draftState.publish(state.editingComponentSetId, tree)
     const { data: versionNode } = await publishComponentSet({
@@ -89,11 +94,11 @@ export const actions = {
 
   async deleteComponentSet({ state, commit, getters, dispatch }, id) {
     await deleteComponentSet({ id })
-    const node = state.componentsMap[id]
+    const node = state.nodesMap[id]
 
     traversalSelfAndChildren(node, child => {
       commit('VUE_DELETE', {
-        tree: state.componentsMap,
+        tree: state.nodesMap,
         key: child.id
       })
 

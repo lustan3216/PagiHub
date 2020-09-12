@@ -7,7 +7,9 @@ import asset from './modules/asset'
 import mode from './modules/mode'
 import user from './modules/user'
 import { isUndefined } from '../utils/tool'
-import draftState from '../utils/draftState'
+import draftStateUploader from '../utils/draftStateUploader'
+import inheritMapUploader from '../utils/inheritMapUploader'
+import { patchProject } from '@/api/node'
 
 Vue.use(Vuex)
 
@@ -60,7 +62,17 @@ const store = new Vuex.Store({
 
 store.watch(
   state => state.node.editingComponentSetId,
-  (newValue, oldValue) => draftState.requestImmediately(oldValue)
+  (newValue, oldValue) => {
+    draftStateUploader.requestImmediately(oldValue)
+  }
+)
+
+store.watch(
+  state => state.node.editingProjectId,
+  newValue => {
+    const project = store.state.node.nodesMap[newValue]
+    inheritMapUploader.init(project.inheritMap)
+  }
 )
 
 export default store

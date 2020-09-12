@@ -26,8 +26,6 @@ import childrenMixin from '@/components/Templates/mixins/children'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import GridGeneratorInner from './GridGeneratorInner'
 import { defaultSetting } from '../Setup/EditorSetting/SettingGridGenerator'
-import { isGridItem } from '@/utils/node'
-import { updateWrapperStyle } from '@/utils/quickFunction'
 
 export default {
   defaultSetting,
@@ -36,14 +34,6 @@ export default {
     GridGeneratorInner,
     ControllerLayer
   },
-  mixins: [nodeMixin, childrenMixin],
-  computed: {
-    isGridItemParent() {
-      return isGridItem(this.node.parentNode)
-    }
-  },
-  methods: {
-    onScroll: updateWrapperStyle
-  }
+  mixins: [nodeMixin, childrenMixin]
 }
 </script>

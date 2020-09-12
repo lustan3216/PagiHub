@@ -65,7 +65,7 @@ export default {
   computed: {
     ...mapGetters('app', ['selectedComponentNode']),
     node() {
-      return this.componentsMap[this.id]
+      return this.nodesMap[this.id]
     },
     masterId() {
       return getMasterId(this.node)

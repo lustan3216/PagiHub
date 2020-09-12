@@ -1,11 +1,11 @@
-import { patchComponentSetChildren } from '@/api/node'
 import jsonHistory from '@/store/jsonHistory'
 import { findLastIndex } from '@/utils/array'
+import { patchComponentSetChildren } from '@/api/node'
 
 const DEBOUNCE_TIME = 1500
 const INIT_TIME = +new Date()
 
-class DraftState {
+class DraftStateUploader {
   remoteRecordTime = INIT_TIME
   timerId = null
   requesting = false
@@ -125,11 +125,12 @@ class DraftState {
         action,
         componentSetId
       })
+
       this.remoteRecordTime = requestDeltaTime
       this.requestPutDeltas(componentSetId) // to check any new record is created when requesting
     }
     catch (e) {
-      // should save in localstroage for tmp
+      // should save in localstroage for tmp and update whole json to remote
       throw e
     }
     finally {
@@ -137,21 +138,6 @@ class DraftState {
       this.requesting = false
     }
   }
-
-  transformDeltas(index, index2) {
-    // const deltas = []
-    // jsonHistory.deltas.slice(index, index2).forEach(group => {
-    //   const newGroup = []
-    //   group.forEach(delta => {
-    //     newGroup.push({
-    //       delta,
-    //       rootComponentSetId: getRootComponentSetId(objectFirstKey(delta))
-    //     })
-    //   })
-    //   deltas.push(newGroup)
-    // })
-    return jsonHistory.deltas.slice(index, index2)
-  }
 }
 
-export default new DraftState()
+export default new DraftStateUploader()

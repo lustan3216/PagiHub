@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     websites() {
-      return Object.values(this.componentsMap).filter(node => isWebsite(node))
+      return Object.values(this.nodesMap).filter(node => isWebsite(node))
     }
   },
   created() {

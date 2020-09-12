@@ -5,9 +5,10 @@ import {
   patchProject
 } from '@/api/node'
 import { isComponentSet, isProject } from '@/utils/node'
+import jsonHistory from '@/store/jsonHistory'
 
 export const actions = {
-  async getProjects({ commit }) {
+  async getProjects({ state, commit }) {
     const { data: nodes } = await getProjects()
     const projectIds = []
     const rootComponentSetIds = []
@@ -21,6 +22,7 @@ export const actions = {
       }
     })
 
+    jsonHistory.tree = state.nodesMap
     commit('SET_NODES_TO_MAP', { nodes })
     commit('SET', { projectIds, rootComponentSetIds })
   },
@@ -42,7 +44,7 @@ export const actions = {
     commit('APPEND_NODE', {
       id,
       node: {
-        ...state.componentsMap[id],
+        ...state.nodesMap[id],
         parentId
       }
     })

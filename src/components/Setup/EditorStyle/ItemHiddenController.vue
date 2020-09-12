@@ -27,7 +27,7 @@
 <script>
 import { mapMutations, mapGetters } from 'vuex'
 import { Divider } from 'element-ui'
-import { BREAK_POINTS } from '@/const'
+import { BREAK_POINTS, STYLES } from '@/const'
 import { getValueByPath } from '@/utils/tool'
 
 export default {
@@ -103,7 +103,7 @@ export default {
 
       this.selectedComponentNodes.forEach(node => {
         records.push({
-          path: `${node.id}.style.${name}.hidden`,
+          path: `${node.id}.${STYLES}.${name}.hidden`,
           value: hidden || undefined
         })
       })

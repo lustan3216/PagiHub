@@ -1,11 +1,15 @@
-import { getValueByPath, setValueByPath } from '@/utils/tool'
-import { ID, MASTER_ID } from '@/const'
-import { getNode } from '@/utils/node'
-import { appendIds } from '@/utils/nodeId'
+import { getValueByPath, isUndefined, setValueByPath } from '@/utils/tool'
+import { objectHasAnyKey } from '@/utils/object'
 
 export function isMasterParent(node) {
   if (node) {
     return node.inheritance && node.inheritance.isMasterParent
+  }
+}
+
+export function isInstance(node) {
+  if (node) {
+    return node.inheritance && node.inheritance.masterId
   }
 }
 
@@ -21,8 +25,15 @@ export function canInherit(node) {
   }
 }
 
-const PATH = ['inheritance', 'masterId']
+const MASTER_ID_PATH = ['inheritance', 'masterId']
 export function getMasterId(node) {
+  if (node) {
+    return getValueByPath(node, MASTER_ID_PATH)
+  }
+}
+
+const PATH = ['deletedInheritance', 'masterId']
+export function getDeletedMasterId(node) {
   if (node) {
     return getValueByPath(node, PATH)
   }
@@ -30,20 +41,16 @@ export function getMasterId(node) {
 
 export function setMasterId(node, id) {
   if (node) {
-    setValueByPath(node, PATH, getMasterId(node) || id)
+    setValueByPath(node, MASTER_ID_PATH, getMasterId(node) || id)
   }
 }
 
-export function appendIdsInherited(nodes, parentId) {
-  if (canInherit(nodes)) {
-    const { rootComponentSetId } = getNode(nodes.id, false)
-    nodes.inheritance = {
-      isInstanceParent: true,
-      masterComponentSetId: rootComponentSetId
-    }
-  }
+export function isMasterHasAnyInstance(node) {
+  const inheritMap = getValueByPath(
+    node.projectNode.inheritMap,
+    node.id
+  )
 
-  appendIds(nodes, parentId, node => {
-    setMasterId(node, node[ID])
-  })
+  return objectHasAnyKey(inheritMap)
 }
+

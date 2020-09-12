@@ -2,7 +2,7 @@ import { mapMutations, mapGetters } from 'vuex'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
-import { STYLE } from '@/const'
+import { STYLES } from '@/const'
 
 export default function(attr) {
   return {
@@ -42,7 +42,7 @@ export default function(attr) {
 
           this.nodes.forEach(node => {
             records.push({
-              path: `${node.id}.${STYLE}.${this.state}.${key}`,
+              path: `${node.id}.${STYLES}.${this.state}.${key}`,
               value
             })
           })
@@ -58,7 +58,7 @@ export default function(attr) {
 
           this.nodes.forEach(node => {
             records.push({
-              path: `${node.id}.${STYLE}.${this.state}.${key}`,
+              path: `${node.id}.${STYLES}.${this.state}.${key}`,
               value
             })
           })

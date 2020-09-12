@@ -2,10 +2,29 @@ import { off, on } from 'element-ui/src/utils/dom'
 import { isUndefined } from 'element-ui/src/utils/types'
 import getValueByPath from 'lodash.get'
 import setValueByPath from 'lodash.set'
+import unsetValueByPath from 'lodash.unset'
 import { isArray } from '@/utils/array'
 import DeepMerge from 'deepmerge'
+import { objectHasAnyKey } from '@/utils/object'
 
-export { getValueByPath, setValueByPath, on, off, isUndefined }
+export {
+  getValueByPath,
+  setValueByPath,
+  unsetValueByPath,
+  on,
+  off,
+  isUndefined
+}
+
+export function unsetValueByPathNested(object, path) {
+  unsetValueByPath(object, path)
+  path.pop()
+  const prevObject = getValueByPath(object, path)
+
+  if (path.length && !objectHasAnyKey(prevObject)) {
+    unsetValueByPathNested(object, path)
+  }
+}
 
 export function deepMerge(a = {}, b = {}, c) {
   return DeepMerge(a, b, c)

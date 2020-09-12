@@ -18,6 +18,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import { getValueByPath } from '@/utils/tool'
+import { STYLES } from '@/const'
 
 export default {
   name: 'Hidden',
@@ -35,10 +36,10 @@ export default {
   computed: {
     ...mapState('app', ['breakpoint']),
     node() {
-      return this.componentsMap[this.id]
+      return this.nodesMap[this.id]
     },
     hidden() {
-      return getValueByPath(this.node, ['style', this.breakpoint, 'hidden'])
+      return getValueByPath(this.node, [STYLES, this.breakpoint, 'hidden'])
     }
   },
   methods: {
@@ -46,7 +47,7 @@ export default {
     record() {
       if (this.hidden) {
         this.RECORD({
-          path: `${this.id}.style.${this.breakpoint}.hidden`,
+          path: `${this.id}.${STYLES}.${this.breakpoint}.hidden`,
           value: undefined
         })
       }

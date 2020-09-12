@@ -2,21 +2,70 @@ import { ID, PARENT_ID, MASTER_ID } from '../const'
 import { toArray } from './array'
 import { ulid } from 'ulid'
 import { isComponent, traversalSelfAndChildren } from '@/utils/node'
+import { isUndefined } from '@/utils/tool'
+import { rootComponentSetIdMap } from '@/utils/rootComponentSetId'
+import { canInherit, getMasterId, setMasterId } from '@/utils/inheritance'
 
-export function appendIds(nodes, parentId, fn) {
+export function appendIds(
+  nodes,
+  parentId,
+  canSetMasterIdForInstance = false,
+  callbacks = {}
+) {
+  const { instanceBeforeAppend } = callbacks
+  const inheritParentIds = []
+
   if (parentId) {
     toArray(nodes).forEach(node => (node[PARENT_ID] = parentId))
   }
 
   traversalSelfAndChildren(nodes, (node, parentNode) => {
-    if (isComponent(node)) {
-      fn && fn(node)
-      node[ID] = ulid()
+    const inheritLoop = inheritParentIds.includes(node.id)
 
-      if (parentNode) {
-        node[PARENT_ID] = parentNode[ID]
-      }
+    if (inheritLoop) {
+      appendIdsWithoutInherit(node, parentNode.id)
+      return false
     }
+
+    if (canInherit(node)) {
+      node.inheritance = {
+        isInstanceParent: true,
+        masterComponentSetId: rootComponentSetIdMap[node.id]
+      }
+
+      const masterId = getMasterId(node)
+      if (masterId) {
+        inheritParentIds.push(masterId)
+      }
+
+      inheritParentIds.push(node.id)
+
+      canSetMasterIdForInstance = true
+    }
+
+    if (canSetMasterIdForInstance) {
+      instanceBeforeAppend && instanceBeforeAppend(node)
+      setMasterId(node, node[ID])
+    }
+
+    // set ulid 一定要在 setMasterId 後面
+    node[ID] = ulid()
+
+    if (parentNode) {
+      node[PARENT_ID] = parentNode[ID]
+    }
+  })
+}
+
+// master 底下新增 新component
+// master 底下新增 新component + masterComponent
+// instance 底下新增 新component + masterComponent
+// instance 底下新增 新component + instanceComponent
+
+export function appendIdsWithoutInherit(nodes, parentId) {
+  appendIds(nodes, parentId, node => {
+    delete node[MASTER_ID]
+    delete node.inheritance
   })
 }
 
@@ -25,7 +74,7 @@ export function appendIds(nodes, parentId, fn) {
 // 3. searchPanel引用來的, 可能是自己的可能是別人的
 // 4. 根據 3情況 又複製的
 // 5. style component找masterId
-// 6. id 要考慮componentsMap會不會重複
+// 6. id 要考慮nodesMap會不會重複
 // 7. form 裡面或是link做連結，被複製時不可以亂掉
 // example = [
 //   {

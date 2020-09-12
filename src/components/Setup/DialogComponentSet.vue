@@ -92,9 +92,9 @@ export default {
     }
   },
   data() {
-    const { componentsMap } = this.$store.state.node
+    const { nodesMap } = this.$store.state.node
 
-    const node = componentsMap[this.id]
+    const node = nodesMap[this.id]
 
     return {
       loading: false,

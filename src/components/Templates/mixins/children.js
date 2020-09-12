@@ -1,11 +1,13 @@
 import { mapMutations, mapState } from 'vuex'
-import { CHILDREN, STYLE, SORT_INDEX, PROPS, GRID } from '@/const'
-import { arrayLast } from '@/utils/array'
-import { cloneJson, deepMerge, getValueByPath } from '@/utils/tool'
+import { CHILDREN, STYLES, SORT_INDEX, PROPS, GRID, SOFT_DELETE } from '@/const'
+import { arrayLast, isArray } from '@/utils/array'
+import { cloneJson, deepMerge, getValueByPath, isUndefined } from '@/utils/tool'
 import {
-  canInherit,
-  appendIdsInherited,
-  getMasterId
+  isMasterHasAnyInstance,
+  getMasterId,
+  getDeletedMasterId,
+  isInstanceParent,
+  isMasterParent
 } from '@/utils/inheritance'
 import { appendIds } from '@/utils/nodeId'
 import {
@@ -14,12 +16,15 @@ import {
   traversalSelfAndChildren,
   isLayers,
   isCarousel,
-  isGridItem
+  isGridItem,
+  cloneJsonWithoutChildren
 } from '@/utils/node'
 import * as basicTemplates from '@/templateJson/basic'
 import { camelCase } from '@/utils/string'
 import { arraySubtract } from '@/utils/array'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
+import { inheritPath } from '@/utils/inheritMapUploader'
+import { objectHasAnyKey } from '@/utils/object'
 
 export default {
   props: {
@@ -40,52 +45,54 @@ export default {
       return getNode(this.id)
     },
     masterId() {
-      return getMasterId(this.node)
-    },
-    masterNode() {
-      return getNode(this.masterId) || {}
+      return getMasterId(this.node) || getDeletedMasterId(this.node)
     },
     children() {
-      return (this.node && this.node.children) || []
+      const children = (this.node && this.node.children) || []
+      return children.filter(node => !node[SOFT_DELETE])
     },
     innerChildren() {
       // 這裡沒必要排序，index 在各自component選擇性處理就可以
       // appendNestedIds(innerChildren)
-      // children 因為每次更新 draft componentsMap，如果innerChildren用computed會所有的component都被更新
+      // children 因為每次更新 draft nodesMap，如果innerChildren用computed會所有的component都被更新
       return this.children.map(({ [CHILDREN]: _, ...node }) => node)
     },
     masterChildren() {
-      return getValueByPath(this.masterNode, 'children')
-    },
-    masterChildrenChanged() {
-      return getValueByPath(this.masterChildren, 'length')
+      return getValueByPath(getNode(this.masterId), 'children', [])
     },
     sameComponentSet() {
       return this.node.rootComponentSetId === this.editingComponentSetId
     }
   },
   watch: {
-    masterChildrenChanged(value, oldValue) {
-      this.updateChildrenWithMaster(value, oldValue)
+    // 不要watch masterChildren的方式更新節點，不然redo undo會有bug
+    'masterChildren.length'() {
+      this.updateChildrenWithMaster()
+    },
+    masterId() {
+      this.updateChildrenWithMaster()
     }
   },
-  created() {
-    this.updateChildrenWithMaster(this.masterChildren, this.children)
-  },
   activated() {
-    this.updateChildrenWithMaster(this.masterChildren, this.children)
+    this.updateChildrenWithMaster()
   },
   methods: {
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'CLEAN_SELECTED_COMPONENT_ID'
     ]),
-    ...mapMutations('node', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
+    ...mapMutations('node', [
+      'RECORD',
+      'IRREVERSIBLE_RECORD',
+      'SET_EDITING_COMPONENT_SET_ID'
+    ]),
 
-    updateChildrenWithMaster(newChildren = [], oldChildren = []) {
-      const diff = newChildren.length - oldChildren.length
+    updateChildrenWithMaster() {
+      const diff = this.masterChildren.length - this.children.length
       if (
+        this.isExample ||
         !this.inheritance.loaded ||
+        !this.isDraftMode ||
         !this.masterId ||
         !this.sameComponentSet ||
         !diff
@@ -93,17 +100,29 @@ export default {
         return
       }
 
-      if (diff === 1) {
-        const newItem = arraySubtract(newChildren, oldChildren)
-        this.addNodesToParentAndRecord(newItem)
+      const records = []
+      if (diff > 0) {
+        arraySubtract(this.masterChildren, this.children).forEach(newItem => {
+          records.push(...this.addNodeToParentRecords(newItem))
+        })
       }
-      else if (diff === -1) {
-        const deleteItem = arraySubtract(oldChildren, newChildren)
-        this.removeNodes(deleteItem)
+      else if (diff < 0) {
+        arraySubtract(this.children, this.masterChildren).forEach(
+          deleteItem => {
+            records.push(...this.removeNodeRecords(deleteItem))
+          }
+        )
+      }
+
+      if (this.sameComponentSet) {
+        this.RECORD(records)
+      }
+      else {
+        this.IRREVERSIBLE_RECORD(records)
       }
     },
 
-    addNodesToParentAndRecord(nodeTree = {}) {
+    addNodeToParentRecords(nodeTree = {}) {
       // nodeTree should be single node instead of an array
       // could be triggered by copy, delete
 
@@ -114,57 +133,40 @@ export default {
       if (isGridItem(this.node)) {
         // 加入的時候都把gridItem 的 style 放到nodeTree上，比較好管理style才不會兩邊放，直接merge兩邊style
         // 可解決的場景是，master都是最低的，但有可能gridItem 都無法編輯到所以master永遠被蓋過
-        nodeTree[STYLE] = deepMerge(this.node[STYLE], nodeTree[STYLE])
+        nodeTree[STYLES] = deepMerge(this.node[STYLES], nodeTree[STYLES])
         records.push({
-          path: `${this.id}.${STYLE}`,
+          path: `${this.id}.${STYLES}`,
           value: undefined
         })
       }
-      let isInherited = false
 
-      if (canInherit(nodeTree) || this.inheritance.inheritParentId) {
-        isInherited = true
-        appendIdsInherited(nodeTree, this.id)
-      }
-      else if (isGridItem(nodeTree) && canInherit(nodeTree.children[0])) {
-        // this.node 會是grid
-        // 當gridItem 裡面的first children 自己複製自己的時候
-        isInherited = true
-        appendIdsInherited(nodeTree, this.id)
-      }
-      else {
-        appendIds(nodeTree, this.id)
-      }
+      appendIds(nodeTree, this.id, isInstanceParent(nodeTree), {
+        instanceBeforeAppend: node => {
+          const firstTimeInit = !getMasterId(node)
+          if (firstTimeInit) {
+            delete node[PROPS]
+            delete node[STYLES]
+            delete node[GRID]
+          }
+        }
+      })
 
       if (isLayers(this.node)) {
         nodeTree[SORT_INDEX] = this.children.length
       }
 
-      traversalSelfAndChildren(nodeTree, (_node, _parentNode) => {
-        let node
-        if (isInherited) {
-          // eslint-disable-next-line
-          // 清空 instance上所有的設定，這樣才能知道拿的是master還是要覆蓋
-          const {
-            [CHILDREN]: _1,
-            [STYLE]: _2,
-            [PROPS]: _3,
-            [GRID]: _4,
-            ...newNode
-          } = _node
-          node = newNode
-        }
-        else {
-          // eslint-disable-next-line
-          const { [CHILDREN]: _, ...newNode } = _node
-          node = newNode
-        }
+      traversalSelfAndChildren(nodeTree, node => {
         records.push({
           path: node.id,
-          value: { ...node, parentId: node.parentId }
+          value: cloneJsonWithoutChildren(node)
         })
       })
 
+      return records
+    },
+
+    addNodeToParent(nodeTree = {}) {
+      const records = this.addNodeToParentRecords(nodeTree)
       this.RECORD(records)
     },
 
@@ -187,27 +189,43 @@ export default {
         emptyItem[SORT_INDEX] = currentMaxIndex + 1
       }
 
-      this.addNodesToParentAndRecord(emptyItem)
+      this.addNodeToParent(emptyItem)
     },
 
-    removeNodes(theNodeGonnaRemove) {
+    removeNodeRecords(theNodeGonnaRemove) {
       if (this.isExample) {
         return
       }
       // should use vmMap method to call to keep consistency
-      const records = [
-        {
-          path: theNodeGonnaRemove.id,
-          value: undefined
-        }
-      ]
+      const records = []
 
-      traversalChildren(theNodeGonnaRemove, child => {
-        records.unshift({
-          path: child.id,
-          value: undefined
+      function traversal(node) {
+        traversalSelfAndChildren(node, child => {
+          if (isMasterParent(child) && isMasterHasAnyInstance(child)) {
+            traversalSelfAndChildren(child, child => {
+              if (isInstanceParent(child)) {
+                traversal(child)
+                return false
+              }
+              else {
+                records.unshift({
+                  path: `${child.id}.${SOFT_DELETE}`,
+                  value: true
+                })
+              }
+            })
+
+            return false
+          }
+
+          records.unshift({
+            path: child.id,
+            value: undefined
+          })
         })
-      })
+      }
+
+      traversal(theNodeGonnaRemove)
 
       if (this.children.length > 1 && isLayers(this.node)) {
         const children = this.children.filter(
@@ -220,8 +238,6 @@ export default {
           })
         })
       }
-
-      const stopNodeId = this.id
 
       if (isLayers(this.node) || isCarousel(this.node)) {
         if (this.node.children.length === 1) {
@@ -257,10 +273,15 @@ export default {
       //   }
       // )
 
+      return records
+    },
+
+    removeNodeFromParent(theNodeGonnaRemove) {
+      const records = this.removeNodeRecords(theNodeGonnaRemove)
+
       const ids = records.map(x => x.path)
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
       this.RECORD(records)
-      return stopNodeId
     }
   }
 }

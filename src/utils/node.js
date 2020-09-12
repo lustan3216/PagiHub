@@ -34,7 +34,7 @@ export function findFirstCommonParentTree(ids) {
   // ]
   let familyPaths = ids.map(id => [
     ...store.getters['node/parentPath'](id),
-    store.state.node.componentsMap[id]
+    store.state.node.nodesMap[id]
   ])
 
   familyPaths = cloneJson(familyPaths)
@@ -76,48 +76,54 @@ export function sortByIndex(children, asc = true) {
 }
 
 export function getNode(id) {
-  return (
-    store.state.example.exampleComponentsMap[id] ||
-    store.state.node.componentsMap[id]
-  )
-}
+  if (id) {
+    const node = store.state.node.nodesMap[id]
 
-export function traversalAncestorAndSelf(node, fn = () => {}) {
-  const findPath = parent => {
-    const { parentNode } = parent
-    if (!parentNode) {
-      return
-    }
+    return (
+      node ||
+      store.state.example.exampleNodesMap[id]
 
-    const stop = fn(parentNode)
-    if (!stop) {
-      findPath(parentNode)
-    }
-  }
-
-  const stop = fn(node)
-  if (!stop) {
-    findPath(node)
+    )
   }
 }
 
-export function traversalSelfAndChildren(nodes, fn, parentNode) {
+export function traversalAncestorAndSelf(node, fn) {
+  if (!fn) {
+    return
+  }
+
+  const go = fn(node)
+  if (node.parentNode && (go || isUndefined(go))) {
+    traversalAncestorAndSelf(node.parentNode, fn)
+  }
+}
+
+export function traversalSelfAndChildren(nodes = [], fn, parentNode) {
+  if (!fn) {
+    return
+  }
+
   toArray(nodes).forEach(node => {
-    const stop = fn(node, parentNode)
+    const go = fn(node, parentNode)
 
-    if (!stop) {
-      node.children &&
-        node.children.length &&
-        traversalSelfAndChildren(node.children, fn, node)
+    if (go || isUndefined(go)) {
+      traversalSelfAndChildren(node.children, fn, node)
     }
   })
 }
 
 export function traversalChildren(node, fn) {
+  if (!fn) {
+    return
+  }
+
   const { children = [] } = node
   children.forEach(child => {
-    fn(child)
-    traversalChildren(child, fn)
+    const go = fn(child)
+
+    if (go || isUndefined(go)) {
+      traversalChildren(child, fn)
+    }
   })
 }
 

@@ -73,7 +73,7 @@ export default {
       }
     },
     node() {
-      return this.componentsMap[this.id]
+      return this.nodesMap[this.id]
     },
     children() {
       return this.node.children

@@ -81,8 +81,8 @@ export default {
     }
   },
   data() {
-    const { componentsMap } = this.$store.state.node
-    const node = componentsMap[this.id]
+    const { nodesMap } = this.$store.state.node
+    const node = nodesMap[this.id]
     return {
       visible: false,
       dirty: false,

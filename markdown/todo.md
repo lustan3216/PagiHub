@@ -12,7 +12,8 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-shadows 的softrecord 有bug, 不應該去改 componentsMap, 直接去動style就好 
+lyaer 可以controller gridlayout不要 
+shadows 的softrecord 有bug, 不應該去改 nodesMap, 直接去動style就好 
 grditem新增小孩時，把grid搬到child上，如果刪除再搬回item, 值變動也在child上變動
 grid 最好columns 都不一樣，當寬度變時，item會扁掉，修bug
 因為 把 text editor 在async component 的key拿掉了，應該會有沒有re-render的bug
@@ -103,3 +104,8 @@ Webflow Desktop / Offline Application https://wishlist.webflow.com/ideas/DESIGNE
 
 </ol>
 https://github.com/probil/vue-moveable
+
+只要碰到 MasterParent 就代表將要複製小孩出去，都下 masterId & instanceParent
+master 頭的小孩不用動 不用加任何東西
+master 頭裡面可以任意放 instance or master,
+小孩裡面不能直接創造 master component

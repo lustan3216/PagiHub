@@ -115,7 +115,7 @@ import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
 import { Divider } from 'element-ui'
-import { COLUMNS, GRID, STYLE } from '@/const'
+import { COLUMNS, GRID, STYLES } from '@/const'
 import { isGrid, isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
@@ -133,7 +133,7 @@ export default {
     ...mapState('app', ['breakpoint', 'selectedComponentIds']),
     selectedComponentNodes() {
       return this.selectedComponentIds
-        .map(id => this.componentsMap[id])
+        .map(id => this.nodesMap[id])
         .filter(node => node && !isGrid(node))
     },
     vms() {
@@ -185,12 +185,16 @@ export default {
       )
     },
     allW() {
-      return this.gridItemVms.map(vm => vm.innerGrid[this.breakpoint].w)
+      return this.gridItemVms.map(vm =>
+        getValueByPath(vm, ['innerGrid', this.breakpoint, 'w'])
+      )
     },
     allH() {
       return this.gridItemVms.map(vm => {
         const prop = vm.innerGrid[this.breakpoint]
-        return (prop.h || '').toString() + (prop.hUnit || 'px')
+        if (prop) {
+          return (prop.h || '').toString() + (prop.hUnit || 'px')
+        }
       })
     },
     verticalCompact: {
@@ -202,7 +206,7 @@ export default {
 
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${STYLE}.verticalCompact`,
+            path: `${node.id}.${STYLES}.verticalCompact`,
             value: value || undefined
           })
         })
@@ -268,7 +272,7 @@ export default {
 
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${STYLE}.ratioW`,
+            path: `${node.id}.${STYLES}.ratioW`,
             value: value || undefined
           })
         })
@@ -288,7 +292,7 @@ export default {
 
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${STYLE}.ratioH`,
+            path: `${node.id}.${STYLES}.ratioH`,
             value: value || undefined
           })
         })

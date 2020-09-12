@@ -10,11 +10,31 @@ export function defineProperties(node, rootComponentSetId) {
 
   const defined = 'parentNode' in node
   if (!defined) {
-    const { componentsMap } = store.state.node
+    const { nodesMap } = store.state.node
+
+    // Object.defineProperty(node, 'uniqId', {
+    //   get() {
+    //     if (node.inheritance && node.inheritance.masterId) {
+    //       let inheritParentId
+    //       traversalAncestorAndSelf(node, node => {
+    //         const { isInstanceParent, isMasterParent } = node.inheritance
+    //         if (isInstanceParent || isMasterParent) {
+    //           inheritParentId = node.id
+    //           return 'stop'
+    //         }
+    //       })
+    //       return `${inheritParentId}-${node.id}`
+    //     }
+    //     else {
+    //       return node.id
+    //     }
+    //   },
+    //   enumerable: false
+    // })
 
     Object.defineProperty(node, 'parentNode', {
       get() {
-        return this.parentId && componentsMap[this.parentId]
+        return node.parentId && nodesMap[node.parentId]
       },
       enumerable: false
     })
@@ -26,10 +46,24 @@ export function defineProperties(node, rootComponentSetId) {
       enumerable: false
     })
 
+    Object.defineProperty(node, 'projectId', {
+      get() {
+        return node.rootComponentSet.parentId
+      },
+      enumerable: false
+    })
+
+    Object.defineProperty(node, 'projectNode', {
+      get() {
+        return node.projectId && nodesMap[node.projectId]
+      },
+      enumerable: false
+    })
+
     Object.defineProperty(node, 'rootComponentSet', {
       get() {
         const id = getRootComponentSetId(node.id)
-        return componentsMap[id]
+        return nodesMap[id]
       },
       enumerable: false
     })

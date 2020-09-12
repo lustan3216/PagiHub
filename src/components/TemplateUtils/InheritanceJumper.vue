@@ -68,10 +68,10 @@ export default {
       return getMasterId(this.node)
     },
     instanceComponentSetName() {
-      return shortTagName(this.componentsMap[originalEditing.componentSetId])
+      return shortTagName(this.nodesMap[originalEditing.componentSetId])
     },
     instanceName() {
-      return shortTagName(this.componentsMap[originalEditing.componentId])
+      return shortTagName(this.nodesMap[originalEditing.componentId])
     },
     notice() {
       return this.canBackToInstance

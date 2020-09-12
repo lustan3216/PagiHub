@@ -67,7 +67,7 @@ export default {
       return this.innerProps.buttonCanCloseId
     },
     theButtonNodeCanClose() {
-      return this.componentsMap[this.buttonCanCloseId]
+      return this.nodesMap[this.buttonCanCloseId]
     }
   },
   watch: {

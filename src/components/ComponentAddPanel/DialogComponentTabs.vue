@@ -136,6 +136,7 @@ import ComponentCard from './ComponentCard'
 import CardLocalComponent from './CardLocalComponent'
 import CardPublicComponent from './CardPublicComponent'
 import { vmGet } from '@/utils/vmMap'
+import { STYLES } from '@/const'
 
 export default {
   name: 'DialogComponentTabs',
@@ -213,7 +214,7 @@ export default {
     },
     componentsSets() {
       return this.rootComponentSetIds
-        .map(id => this.componentsMap[id])
+        .map(id => this.nodesMap[id])
         .filter(node => node.id !== this.editingComponentSetId)
     },
     components() {
@@ -230,19 +231,19 @@ export default {
     humanize,
     isComponentSet,
     addTemplate(template) {
-      const node = this.componentsMap[this.beingAddedComponentId]
+      const node = this.nodesMap[this.beingAddedComponentId]
 
       if (isComponentSet(template)) {
         // 為了不拿到componentSet
         template = template.children[0]
 
         this.RECORD({
-          path: `${node.id}.style.default.overflow`,
+          path: `${node.id}.${STYLES}.default.overflow`,
           value: 'scroll'
         })
       }
 
-      vmGet(node.id).addNodesToParentAndRecord(cloneJson(template))
+      vmGet(node.id).addNodeToParent(cloneJson(template))
       this.$dialog.close()
     },
     quickSelect() {}

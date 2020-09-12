@@ -63,7 +63,7 @@
 import { mapState, mapMutations } from 'vuex'
 import { isGridItem } from '@/utils/node'
 import { isMac } from '@/utils/device'
-import { vmPasteNode, vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
+import { vmPasteNode, vmPasteNodes, vmRemoveNode, vmBecomeMaster } from '@/utils/vmMap'
 import ComponentMove from './ComponentMove'
 import { getValueByPath } from '@/utils/tool'
 import { COMPONENT_SET } from '@/const'
@@ -87,14 +87,14 @@ export default {
       'gridResizing'
     ]),
     node() {
-      return this.componentsMap[this.id]
+      return this.nodesMap[this.id]
     },
     metaKey() {
       return isMac() ? '&#8984;' : '&#8963;'
     },
     theOnlyCopyNodeAndNotGridItem() {
       if (this.copyComponentIds.length === 1) {
-        const node = this.componentsMap[this.copyComponentIds[0]]
+        const node = this.nodesMap[this.copyComponentIds[0]]
         return node && !isGridItem(node)
       }
     },
@@ -174,10 +174,7 @@ export default {
           vmRemoveNode(this.node)
           break
         case 'Make Master Component':
-          this.RECORD({
-            path: `${this.id}.inheritance.isMasterParent`,
-            value: true
-          })
+          vmBecomeMaster(this.node)
           break
       }
     }

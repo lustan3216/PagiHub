@@ -19,6 +19,7 @@ import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import { updateWrapperStyle } from '@/utils/quickFunction'
 import { getValueByPath } from '@/utils/tool'
+import { AUTO_HEIGHT, GRID, STYLES } from '@/const'
 
 export default {
   name: 'GridGeneratorItem',
@@ -38,14 +39,15 @@ export default {
     },
     fitContainer() {
       return (
-        getValueByPath(this.child, 'style.default.overflow') === 'fitContainer'
+        getValueByPath(this.child, [STYLES, 'default', 'overflow']) ===
+        'fitContainer'
       )
     },
     data() {
       return {
-        style: this.innerStyles,
-        grid: this.innerGrid,
-        autoHeight: this.fitContainer
+        [STYLES]: this.innerStyles,
+        [GRID]: this.innerGrid,
+        [AUTO_HEIGHT]: this.fitContainer
       }
     }
   },

@@ -92,7 +92,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds', 'gridResizing']),
-    ...mapState('example', ['exampleComponentsMap']),
+    ...mapState('example', ['exampleNodesMap']),
     node() {
       return getNode(this.id)
     },

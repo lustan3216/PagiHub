@@ -53,7 +53,7 @@ import { Divider } from 'element-ui'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { mapMutations, mapGetters } from 'vuex'
-import { STYLE } from '@/const'
+import { STYLES } from '@/const'
 import { vmGet } from '@/utils/vmMap'
 
 export default {
@@ -186,7 +186,7 @@ export default {
 
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${STYLE}.${this.state}.${key}`,
+            path: `${node.id}.${STYLES}.${this.state}.${key}`,
             value
           })
         })

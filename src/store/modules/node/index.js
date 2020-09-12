@@ -4,11 +4,9 @@ import { deleteBy, findBy, toArray } from '@/utils/array'
 import Vue from 'vue'
 import { defineProperties } from '@/utils/nodeProperties'
 import { isComponentSet, isProject } from '@/utils/node'
-import { objectFirstKey } from '@/utils/object'
 import { cloneJson, setValueByPath } from '@/utils/tool'
-import { getRootComponentSetId } from '@/utils/rootComponentSetId'
+import inheritMapUploader from '@/utils/inheritMapUploader'
 import jsonHistory from '@/store/jsonHistory'
-import app from '@/main'
 
 let childrenOf = {}
 let tmpChildrenOf = {}
@@ -16,7 +14,7 @@ let tmpChildrenOf = {}
 const state = {
   editingProjectId: null,
   editingComponentSetId: null,
-  componentsMap: {},
+  nodesMap: {},
   tmpComponentsMap: {},
   projectIds: [],
   rootComponentSetIds: []
@@ -26,7 +24,7 @@ const mutations = {
   SET,
 
   // only for component or component attrs
-  VUE_DELETE({ componentsMap }, { tree, key }) {
+  VUE_DELETE({ nodesMap }, { tree, key }) {
     const node = tree[key]
     // 有id 代表component 沒有代表attr
     if (node && node[ID]) {
@@ -37,9 +35,10 @@ const mutations = {
         deleteBy(state.rootComponentSetIds, node.id)
       }
 
-      delete childrenOf[node[ID]]
-      const parentId = componentsMap[key][PARENT_ID]
-      const parentNode = componentsMap[parentId]
+      inheritMapUploader.remove(node)
+
+      const parentId = nodesMap[key][PARENT_ID]
+      const parentNode = nodesMap[parentId]
 
       if (parentNode && parentNode[CHILDREN]) {
         deleteBy(parentNode[CHILDREN], 'id', key)
@@ -49,7 +48,7 @@ const mutations = {
     Vue.delete(tree, key)
   },
   // only for component or component attrs
-  VUE_SET({ componentsMap, editingComponentSetId }, { tree, key, value }) {
+  VUE_SET({ nodesMap, editingComponentSetId }, { tree, key, value }) {
     value = cloneJson(value)
     // 這裡一定要 cloneJson, 不然deltas裡面的值會被改掉
     // VUE_DELETE delete childrenOf[node[ID]] 和 value = cloneJson(value) 一定要 不然會有reference loop bug
@@ -63,15 +62,20 @@ const mutations = {
 
         const parentId = value[PARENT_ID]
         childrenOf[parentId] = childrenOf[parentId] || []
-        childrenOf[parentId].push(value)
+
+        const isExist = findBy(childrenOf[parentId], 'id', value[ID])
+        if (!isExist) {
+          childrenOf[parentId].push(value)
+        }
 
         defineProperties(value, editingComponentSetId)
-        Vue.set(componentsMap, key, value)
+        inheritMapUploader.add(value)
+        Vue.set(nodesMap, key, value)
       }
       else {
         if (key === 'parentId') {
           const currentParentId = value
-          childrenOf[currentParentId].push(componentsMap[tree.id])
+          childrenOf[currentParentId].push(nodesMap[tree.id])
           const originalParentId = tree[key]
           deleteBy(childrenOf[originalParentId], 'id', tree.id)
         }
@@ -107,7 +111,7 @@ const mutations = {
 
   // only for project and componentSet
   SET_NODES_TO_MAP(state, { nodes, rootComponentSetId }) {
-    const { rootComponentSetIds, projectIds, componentsMap } = state
+    const { rootComponentSetIds, projectIds, nodesMap } = state
 
     toArray(nodes).forEach(node => {
       const id = node[ID]
@@ -134,7 +138,7 @@ const mutations = {
         }
       }
 
-      Vue.set(componentsMap, id, node)
+      Vue.set(nodesMap, id, node)
       defineProperties(node, rootComponentSetId)
     })
   },
@@ -148,28 +152,20 @@ const mutations = {
   },
   SOFT_RECORD(state, payLoad) {
     // update tree directly without jsonHistory
-    const set = ({ path, value }) =>
-      setValueByPath(state.componentsMap, path, value)
+    const set = ({ path, value }) => setValueByPath(state.nodesMap, path, value)
     Array.isArray(payLoad) ? payLoad.forEach(set) : set(payLoad)
   },
   RECORD(state, payLoad) {
     jsonHistory.debounceRecord(payLoad, 300)
   },
+  IRREVERSIBLE_RECORD(state, payLoad) {
+    jsonHistory.irreversibleRecord(payLoad)
+  },
   REDO() {
-    const done = rollbackSelectedComponentSet(jsonHistory.nextRedoDeltaGroup)
-    if (done) {
-      app.$nextTick(() => {
-        jsonHistory.redo()
-      })
-    }
+    jsonHistory.redo()
   },
   UNDO() {
-    const done = rollbackSelectedComponentSet(jsonHistory.nextUndoDeltaGroup)
-    if (done) {
-      app.$nextTick(() => {
-        jsonHistory.undo()
-      })
-    }
+    jsonHistory.undo()
   },
   SET_EDITING_COMPONENT_SET_ID(state, id) {
     state.editingComponentSetId = id
@@ -177,7 +173,7 @@ const mutations = {
   INIT(state) {
     state.editingProjectId = null
     state.editingComponentSetId = null
-    state.componentsMap = {}
+    state.nodesMap = {}
     state.projectIds = []
     state.rootComponentSetIds = []
 
@@ -189,27 +185,8 @@ const mutations = {
 
 const getters = {
   projectNodes(state) {
-    return state.projectIds
-      .map(id => state.componentsMap[id])
-      .filter(node => node)
+    return state.projectIds.map(id => state.nodesMap[id]).filter(node => node)
   }
-}
-
-function rollbackSelectedComponentSet(deltaGroup) {
-  if (!deltaGroup) {
-    return false
-  }
-
-  const id = objectFirstKey(deltaGroup.group[0])
-  const { editingProjectId } = store.state.node
-  const rootComponentSetId = getRootComponentSetId(id)
-  if (rootComponentSetId !== editingProjectId) {
-    store.commit('node/SET_EDITING_COMPONENT_SET_ID', rootComponentSetId, {
-      root: true
-    })
-  }
-
-  return true
 }
 
 export default {

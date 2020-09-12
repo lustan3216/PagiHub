@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     currentProps() {
-      return deepMerge(defaultSetting, this.componentsMap[this.id].props)
+      return deepMerge(defaultSetting, this.nodesMap[this.id].props)
     },
     responsive() {
       return this.currentProps.responsive === true

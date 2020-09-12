@@ -1,8 +1,10 @@
-export const STYLE = 'style'
-
 export const CHILDREN = 'children'
 export const GRID = 'grid'
 export const PROPS = 'props'
+export const STYLES = 'styles'
+export const MASTER_PROPS = 'masterProps'
+export const MASTER_STYLES = 'masterStyles'
+export const MASTER_VALUE = 'masterValue'
 export const VALIDATE = 'validate'
 export const PARENT_ID = 'parentId'
 export const COMPONENT_SET_ID = 'componentSetId'
@@ -64,7 +66,7 @@ export const NODE_TYPE = {
   COMPONENT: undefined
 }
 
-export const STYLE_STATE = {
+export const STYLES_STATE = {
   none: 0,
   hover: 1,
   click: 2

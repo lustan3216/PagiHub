@@ -23,10 +23,7 @@
       @moveStart="itemUpdating"
       @moved="itemUpdated"
     >
-      <component-giver
-        :key="child.id"
-        :id="child.id"
-      />
+      <component-giver :id="child.id" />
     </vue-grid-item>
   </vue-grid-generator>
 </template>
@@ -86,7 +83,7 @@ export default {
       'artBoardWidth',
       'artBoardHeight'
     ]),
-    ...mapState('node', ['componentsMap']),
+    ...mapState('node', ['nodesMap']),
     currentBreakPoint() {
       return this.isExample ? this.exampleBoundary : this.breakpoint
     },
@@ -116,19 +113,19 @@ export default {
           return layouts.push(data)
         }
 
-        const { style = {}, grid, autoHeight } = this.gridItemsData[id]
+        const { styles = {}, grid, autoHeight } = this.gridItemsData[id]
 
-        if (!grid[breakPoint]) {
+        if (!grid || !grid[breakPoint]) {
           return layouts.push(data)
         }
 
-        if (getValueByPath(style, [breakPoint, 'hidden'])) {
+        if (getValueByPath(styles, [breakPoint, 'hidden'])) {
           return
         }
 
         let w = 0
         let h = 0
-        const { ratioW, ratioH, verticalCompact } = style
+        const { ratioW, ratioH, verticalCompact } = styles
 
         if (grid && grid[breakPoint]) {
           w = grid[breakPoint].w

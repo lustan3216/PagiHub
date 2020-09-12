@@ -60,12 +60,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('node', ['componentsMap']),
+    ...mapState('node', ['nodesMap']),
     selection() {
       const yetSelectedNodes = []
       const beSelectedNodes = []
 
-      Object.values(this.componentsMap).forEach(node => {
+      Object.values(this.nodesMap).forEach(node => {
         const validInput =
           node.tag.includes('form') &&
           !node.tag.includes('submit')

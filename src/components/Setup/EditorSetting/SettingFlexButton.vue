@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     linkableComponentSet() {
-      return Object.values(this.componentsMap).filter(
+      return Object.values(this.nodesMap).filter(
         node => isComponentSet(node)
       )
     },
@@ -40,7 +40,7 @@ export default {
         })
       ]
 
-      if (!this.componentsMap[this.id][CHILDREN].length) {
+      if (!this.nodesMap[this.id][CHILDREN].length) {
         const redirectTo = select(REDIRECT_TO, {
           options: this.linkableComponentSet.map(node => ({
             label: `${node.label || node.tag} ${node.id}`,

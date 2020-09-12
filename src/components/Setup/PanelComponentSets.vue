@@ -101,12 +101,12 @@ export default {
   computed: {
     ...mapState('node', ['editingProjectId', 'editingComponentSetId']),
     componentSets() {
-      return Object.values(this.componentsMap)
+      return Object.values(this.nodesMap)
         .filter(node => node.parentId === this.editingProjectId)
         .map(node => cloneJsonWithoutChildren(node))
     },
     projectName() {
-      return this.componentsMap[this.editingProjectId].label
+      return this.nodesMap[this.editingProjectId].label
     }
   },
   watch: {

@@ -38,7 +38,7 @@ export default {
     ...mapState('app', ['scaleRatio']),
     ...mapState('node', ['editingComponentSetId']),
     node() {
-      return this.componentsMap[this.editingComponentSetId]
+      return this.nodesMap[this.editingComponentSetId]
     }
   },
   watch: {

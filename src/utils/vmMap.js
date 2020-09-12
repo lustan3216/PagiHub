@@ -31,9 +31,9 @@ export function vmCreateEmptyItem(node) {
     traversalAncestorAndSelf(node, node => {
       if (isGridItem(node)) {
         store.commit('app/SET', { copyComponentIds: [node.id] })
-        const { children, masterId, ...emptyGridItem } = node
-        vmGet(node.parentId).addNodesToParentAndRecord(emptyGridItem)
-        return 'stop'
+        const { children, inheritance, ...emptyGridItem } = node
+        vmGet(node.parentId).addNodeToParent(emptyGridItem)
+        return false
       }
     })
   }
@@ -60,21 +60,21 @@ export async function vmPasteNodes() {
 }
 
 export function vmPasteInside(theOneCopyNode) {
-  const { componentsMap } = store.state.node
+  const { nodesMap } = store.state.node
   const { selectedComponentIds } = store.state.app
 
   selectedComponentIds.forEach(selectedId => {
-    const selectedNode = componentsMap[selectedId]
+    const selectedNode = nodesMap[selectedId]
     if (theOneCopyNode.id === selectedId) {
       vmPasteNode(theOneCopyNode)
     }
     else if (theOneCopyNode && !isGridItem(theOneCopyNode)) {
       if (isGridItem(selectedNode)) {
-        vmAddNodesToParentAndRecord(selectedId, theOneCopyNode)
+        vmAddNodeToParent(selectedId, theOneCopyNode)
       }
       else {
-        const stopNodeId = vmRemoveNode(selectedNode)
-        vmAddNodesToParentAndRecord(stopNodeId, theOneCopyNode)
+        vmRemoveNode(selectedNode)
+        vmAddNodeToParent(selectedNode.parentId, theOneCopyNode)
       }
     }
   })
@@ -85,20 +85,23 @@ export function vmPasteNode(node) {
 
   if (parentNode[CAN_NEW_ITEM]) {
     // if parentNode can new item, it means the node is one of layer-item, grid-item, carousel-item, form-item
-    vmAddNodesToParentAndRecord(parentId, node)
+    vmAddNodeToParent(parentId, node)
   }
   else {
     // if parentNode can not new item, it means the node is a child of layer-item, grid-item, carousel-item, form-item
     const grandParentId = parentNode.parentId
-    vmAddNodesToParentAndRecord(grandParentId, node.parentNode)
+    vmAddNodeToParent(grandParentId, node.parentNode)
   }
 }
 
 export function vmRemoveNode(node) {
-  const stopNodeId = vmGet(node.parentId).removeNodes(node)
-  return stopNodeId
+  vmGet(node.parentId).removeNodeFromParent(node)
 }
 
-export function vmAddNodesToParentAndRecord(id, nodes) {
-  vmGet(id).addNodesToParentAndRecord(nodes)
+export function vmAddNodeToParent(id, nodes) {
+  vmGet(id).addNodeToParent(nodes)
+}
+
+export function vmBecomeMaster(node) {
+  vmGet(node.id).becomeMaster()
 }

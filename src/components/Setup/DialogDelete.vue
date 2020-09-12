@@ -51,7 +51,7 @@ export default {
     }
   },
   data() {
-    const node = this.$store.state.node.componentsMap[this.id]
+    const node = this.$store.state.node.nodesMap[this.id]
     const { label } = node
 
     return {

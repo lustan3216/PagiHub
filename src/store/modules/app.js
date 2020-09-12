@@ -80,7 +80,7 @@ const actions = {
     })
   },
   setCopySelectedNodeId({ commit, state, rootState }, ids) {
-    const { rootComponentSetIds, componentsMap } = rootState.node
+    const { rootComponentSetIds, nodesMap } = rootState.node
     const copyComponentIds = ids
       ? toArray(ids)
       : state.selectedComponentIds.filter(
@@ -90,15 +90,16 @@ const actions = {
     // the top component under rootComponentSet should not be copied
     const copyNodeArray = []
     copyComponentIds.forEach(id => {
-      const node = componentsMap[id]
+      const node = nodesMap[id]
       traversalAncestorAndSelf(node, node => {
-        // don't return, otherwise it will stop
         if (isComponent(node)) {
           copyNodeArray.push(node)
         }
+        else {
+          return false
+        }
       })
       traversalChildren(node, node => {
-        // don't return, otherwise it will stop
         copyNodeArray.push(node)
       })
     })
@@ -145,12 +146,12 @@ const getters = {
   },
   selectedComponentNode(state, getters, rootState) {
     if (getters.theOnlySelectedComponentId) {
-      return rootState.node.componentsMap[getters.theOnlySelectedComponentId]
+      return rootState.node.nodesMap[getters.theOnlySelectedComponentId]
     }
   },
   selectedComponentNodes(state, getters, rootState) {
     return state.selectedComponentIds
-      .map(id => rootState.node.componentsMap[id])
+      .map(id => rootState.node.nodesMap[id])
       .filter(node => node)
   }
 }

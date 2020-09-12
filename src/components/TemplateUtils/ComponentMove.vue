@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     node() {
-      return this.componentsMap[this.id]
+      return this.nodesMap[this.id]
     },
     gridParent() {
       return this.node.parentNode
@@ -35,7 +35,7 @@ export default {
       traversalAncestorAndSelf(this.node, parent => {
         if (isOverlapComponent(parent)) {
           canOverlapComponent = parent
-          return 'stop'
+          return false
         }
       })
       return canOverlapComponent

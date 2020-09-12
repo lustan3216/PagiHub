@@ -10,7 +10,7 @@ import {
   CAN_BE_EDITED,
   CAN_NOT_DELETE,
   CAN_NOT_COPY,
-  STYLE,
+  STYLES,
   LABEL,
   GRID,
   SOFT_DELETE,
@@ -114,7 +114,7 @@ export const textEditor = function() {
   return {
     [TAG]: TEXT_EDITOR,
     [CAN_BE_EDITED]: true,
-    [STYLE]: { default: { overflow: 'fitContainer' }}
+    [STYLES]: { default: { overflow: 'fitContainer' }}
   }
 }
 
@@ -122,7 +122,7 @@ export const flexButton = function() {
   return {
     [TAG]: 'flex-button',
     [LABEL]: 'link',
-    [STYLE]: {
+    [STYLES]: {
       default: { border: '1px solid #dcdfe6' }
     },
     [CAN_BE_EDITED]: true
@@ -140,7 +140,7 @@ export const videoPlayer = function() {
   return {
     [TAG]: 'video-player',
     [CAN_BE_EDITED]: true,
-    [STYLE]: { ratioW: 16, ratioH: 9}
+    [STYLES]: { ratioW: 16, ratioH: 9}
   }
 }
 
@@ -150,7 +150,7 @@ export const drawer = function() {
   button[CHILDREN] = [
     {
       [TAG]: 'drawer',
-      [STYLE]: { background: '#fff' },
+      [STYLES]: { background: '#fff' },
       [CHILDREN]: gridGeneratorItems()
     }
   ]

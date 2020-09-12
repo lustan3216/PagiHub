@@ -17,9 +17,9 @@ export function createProject({ label, description, tags }) {
   })
 }
 
-export function patchProject({ id, label, description, tags }) {
+export function patchProject({ id, label, description, tags, inheritMap }) {
   return API.patch('staging', `/projects/${id}`, {
-    body: { label, description, tags }
+    body: { label, description, tags, inheritMap }
   })
 }
 

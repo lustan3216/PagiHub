@@ -1,5 +1,5 @@
 // why we need to record, because there's a special case which requests componentSet children
-// the deleted component can not find rootComponentSetId in componentsMap.
+// the deleted component can not find rootComponentSetId in nodesMap.
 
 // import store from '@/store'
 
@@ -32,7 +32,7 @@ export function getRootComponentSetId(componentId) {
 //
 // export const getRootComponentSetId = nodeId => {
 //   familyTreeIds.push(nodeId)
-//   const { componentsMap, rootComponentSetIds } = store.state.node
+//   const { nodesMap, rootComponentSetIds } = store.state.node
 //
 //   if (rootComponentSetIdMap[nodeId]) {
 //     familyTreeIds.forEach(
@@ -42,8 +42,8 @@ export function getRootComponentSetId(componentId) {
 //     return rootComponentSetIdMap[nodeId]
 //   }
 //   else {
-//     const { parentId } = componentsMap[nodeId]
-//     const parentNode = componentsMap[parentId]
+//     const { parentId } = nodesMap[nodeId]
+//     const parentNode = nodesMap[parentId]
 //
 //     if (rootComponentSetIds.includes(parentNode.id)) {
 //       familyTreeIds.forEach(id => (rootComponentSetIdMap[id] = parentNode.id))

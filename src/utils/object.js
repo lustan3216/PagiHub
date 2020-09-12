@@ -51,7 +51,7 @@ export function objectFirstKey(e) {
 }
 
 export function objectHasAnyKey(e) {
-  return Boolean(objectFirstKey(e))
+  return Boolean(isPlainObject(e) && objectFirstKey(e))
 }
 
 export function nestedToLinerObject(nestedObject, key = 'children') {
