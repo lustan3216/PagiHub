@@ -5,7 +5,10 @@ import { PROPS, VALUE, STYLES, SOFT_DELETE } from '@/const'
 import FreeStyle from '@/directive/freeStyle'
 import { getNode, isGrid, isGridItem, isLayers } from '@/utils/node'
 import { arrayFirst } from '@/utils/array'
-import { getMasterId, getDeletedMasterId } from '@/utils/inheritance'
+import {
+  getMasterId,
+  isInstanceChild
+} from '@/utils/inheritance'
 import { objectHasAnyKey } from '@/utils/object'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
 import { mapMutations } from 'vuex'
@@ -48,7 +51,7 @@ export default {
       return this.masterNode.value || this.node[VALUE]
     },
     masterId() {
-      return getMasterId(this.node) || getDeletedMasterId(this.node)
+      return getMasterId(this.node)
     },
     masterNode() {
       return getNode(this.masterId) || {}
@@ -73,13 +76,13 @@ export default {
       return deepMerge.all([setting, this.masterNode[PROPS], this.selfProps])
     },
     innerGrid() {
-      if (isGridItem(this.node)) {
+      if (isInstanceChild(this.node)) {
+        return this.masterNode.grid
+      }
+      else if (isGridItem(this.node)) {
         return deepMerge(this.masterNode.grid, this.node.grid)
       }
     }
-    // asd() {
-    //   return this.masterNode[SOFT_DELETE]
-    // }
   },
   // watch: {
   //   'masterNode.softDelete': {

@@ -86,7 +86,7 @@ import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import gsap from 'gsap'
-import { getMasterId } from '@/utils/inheritance'
+import { getMasterId, isInstance } from '@/utils/inheritance'
 
 let topShared = window.innerHeight / 2
 let leftShared = window.innerWidth / 2
@@ -171,7 +171,7 @@ export default {
       return isGridItem(this.node)
     },
     isInstance() {
-      return getMasterId(this.node)
+      return isInstance(this.node)
     },
     isLastOne() {
       return arrayLast(this.selectedComponentIds) === this.id

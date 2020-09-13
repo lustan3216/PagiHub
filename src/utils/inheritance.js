@@ -1,21 +1,43 @@
-import { getValueByPath, isUndefined, setValueByPath } from '@/utils/tool'
+import store from '@/store'
+import { getNode, isNodeExist } from '@/utils/node'
+import { getValueByPath, setValueByPath } from '@/utils/tool'
 import { objectHasAnyKey } from '@/utils/object'
+import { SOFT_DELETE } from '@/const'
 
 export function isMasterParent(node) {
   if (node) {
-    return node.inheritance && node.inheritance.isMasterParent
+    return (
+      node.inheritance && node.inheritance.isMasterParent && isMasterExist(node)
+    )
   }
 }
 
-export function isInstance(node) {
-  if (node) {
-    return node.inheritance && node.inheritance.masterId
-  }
+export function isMasterExist(node) {
+  const masterId = getMasterId(node)
+  return isNodeExist(masterId)
 }
 
 export function isInstanceParent(node) {
   if (node) {
-    return node.inheritance && node.inheritance.isInstanceParent
+    return (
+      node.inheritance &&
+      node.inheritance.isInstanceParent &&
+      isMasterExist(node)
+    )
+  }
+}
+
+export function isInstanceChild(node) {
+  const masterId = getMasterId(node)
+  if (masterId) {
+    return isMasterExist(node) && !isInstanceParent(node)
+  }
+}
+
+export function isInstance(node) {
+  const masterId = getMasterId(node)
+  if (masterId) {
+    return isMasterExist(node)
   }
 }
 
@@ -32,13 +54,6 @@ export function getMasterId(node) {
   }
 }
 
-const PATH = ['deletedInheritance', 'masterId']
-export function getDeletedMasterId(node) {
-  if (node) {
-    return getValueByPath(node, PATH)
-  }
-}
-
 export function setMasterId(node, id) {
   if (node) {
     setValueByPath(node, MASTER_ID_PATH, getMasterId(node) || id)
@@ -46,11 +61,7 @@ export function setMasterId(node, id) {
 }
 
 export function isMasterHasAnyInstance(node) {
-  const inheritMap = getValueByPath(
-    node.projectNode.inheritMap,
-    node.id
-  )
+  const inheritMap = getValueByPath(node.projectNode.inheritMap, node.id)
 
   return objectHasAnyKey(inheritMap)
 }
-

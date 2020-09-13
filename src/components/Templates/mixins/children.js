@@ -1,17 +1,18 @@
 import { mapMutations, mapState } from 'vuex'
 import { CHILDREN, STYLES, SORT_INDEX, PROPS, GRID, SOFT_DELETE } from '@/const'
 import { arrayLast, isArray } from '@/utils/array'
+import { vmRemoveNode } from '@/utils/vmMap'
 import { cloneJson, deepMerge, getValueByPath, isUndefined } from '@/utils/tool'
 import {
   isMasterHasAnyInstance,
   getMasterId,
-  getDeletedMasterId,
   isInstanceParent,
-  isMasterParent
+  isMasterParent,
+  isInstance,
+  isInstanceChild
 } from '@/utils/inheritance'
 import { appendIds } from '@/utils/nodeId'
 import {
-  traversalChildren,
   getNode,
   traversalSelfAndChildren,
   isLayers,
@@ -23,8 +24,6 @@ import * as basicTemplates from '@/templateJson/basic'
 import { camelCase } from '@/utils/string'
 import { arraySubtract } from '@/utils/array'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
-import { inheritPath } from '@/utils/inheritMapUploader'
-import { objectHasAnyKey } from '@/utils/object'
 
 export default {
   props: {
@@ -45,7 +44,7 @@ export default {
       return getNode(this.id)
     },
     masterId() {
-      return getMasterId(this.node) || getDeletedMasterId(this.node)
+      return getMasterId(this.node)
     },
     children() {
       const children = (this.node && this.node.children) || []
@@ -103,7 +102,7 @@ export default {
       const records = []
       if (diff > 0) {
         arraySubtract(this.masterChildren, this.children).forEach(newItem => {
-          records.push(...this.addNodeToParentRecords(newItem))
+          records.push(...this.addNodeToParentRecords(newItem, true))
         })
       }
       else if (diff < 0) {
@@ -122,7 +121,7 @@ export default {
       }
     },
 
-    addNodeToParentRecords(nodeTree = {}) {
+    addNodeToParentRecords(nodeTree = {}, isUnderInstanceParent) {
       // nodeTree should be single node instead of an array
       // could be triggered by copy, delete
 
@@ -131,25 +130,36 @@ export default {
       nodeTree = cloneJson(nodeTree)
 
       if (isGridItem(this.node)) {
-        // 加入的時候都把gridItem 的 style 放到nodeTree上，比較好管理style才不會兩邊放，直接merge兩邊style
-        // 可解決的場景是，master都是最低的，但有可能gridItem 都無法編輯到所以master永遠被蓋過
-        nodeTree[STYLES] = deepMerge(this.node[STYLES], nodeTree[STYLES])
-        records.push({
-          path: `${this.id}.${STYLES}`,
-          value: undefined
-        })
+        if (isGridItem(nodeTree)) {
+          nodeTree.grid = this.node.grid
+          vmRemoveNode(this.node)
+        }
+        else {
+          // 加入的時候都把gridItem 的 style 放到nodeTree上，比較好管理style才不會兩邊放，直接merge兩邊style
+          // 可解決的場景是，master都是最低的，但有可能gridItem 都無法編輯到所以master永遠被蓋過
+          nodeTree[STYLES] = deepMerge(this.node[STYLES], nodeTree[STYLES])
+          records.push({
+            path: `${this.id}.${STYLES}`,
+            value: undefined
+          })
+        }
       }
 
-      appendIds(nodeTree, this.id, isInstanceParent(nodeTree), {
-        instanceBeforeAppend: node => {
-          const firstTimeInit = !getMasterId(node)
-          if (firstTimeInit) {
-            delete node[PROPS]
-            delete node[STYLES]
-            delete node[GRID]
+      appendIds(
+        nodeTree,
+        this.id,
+        isInstanceParent(nodeTree) || isUnderInstanceParent,
+        {
+          instanceBeforeAppend: node => {
+            const firstTimeInit = !getMasterId(node)
+            if (firstTimeInit) {
+              delete node[PROPS]
+              delete node[STYLES]
+              delete node[GRID]
+            }
           }
         }
-      })
+      )
 
       if (isLayers(this.node)) {
         nodeTree[SORT_INDEX] = this.children.length
@@ -166,11 +176,18 @@ export default {
     },
 
     addNodeToParent(nodeTree = {}) {
+      if (this.isExample) {
+        return
+      }
+
       const records = this.addNodeToParentRecords(nodeTree)
       this.RECORD(records)
     },
 
     createEmptyItem() {
+      if (this.isExample) {
+        return
+      }
       // should use vmMap method to call to keep consistency
 
       // 這裏拿到的example有可能有deep children
@@ -193,9 +210,6 @@ export default {
     },
 
     removeNodeRecords(theNodeGonnaRemove) {
-      if (this.isExample) {
-        return
-      }
       // should use vmMap method to call to keep consistency
       const records = []
 
@@ -277,6 +291,10 @@ export default {
     },
 
     removeNodeFromParent(theNodeGonnaRemove) {
+      if (this.isExample || isInstanceChild(theNodeGonnaRemove)) {
+        return
+      }
+
       const records = this.removeNodeRecords(theNodeGonnaRemove)
 
       const ids = records.map(x => x.path)

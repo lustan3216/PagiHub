@@ -54,7 +54,7 @@
 
     <effect :state="state" />
 
-    <transform :state="state" />
+    <!--    <transform :state="state" />-->
 
     <!--      <transitions-->
     <!--        :disabled="!isDefaultState"-->

@@ -28,6 +28,14 @@ const callbacks = {
   componentDelete(node) {
     inheritMapUploader.remove(node)
     this._vm.$bus.$emit('component-delete', node)
+  },
+  componentUpdate(tree, key, value) {
+    if (key === 'inheritance' && value) {
+      inheritMapUploader.setComponentSet(tree)
+    }
+    else if (key === 'inheritance' && !value) {
+      inheritMapUploader.unsetComponentSet(tree)
+    }
   }
 }
 
@@ -56,6 +64,12 @@ const mutations = {
       callbacks.componentDelete.call(this, node)
     }
 
+    if (key === SOFT_DELETE) {
+      // 這裡是把 SOFT_DELETE 拿掉，代表node復活的意思
+      callbacks.componentAddNew.call(this, tree)
+    }
+
+    callbacks.componentUpdate.call(this, tree, key)
     Vue.delete(tree, key)
   },
   // only for component or component attrs
@@ -66,7 +80,6 @@ const mutations = {
     if (tree[key] && tree[key].__ob__) {
       tree[key] = value
     }
-
     else if (value[ID]) {
       childrenOf[key] = value[CHILDREN] =
         childrenOf[key] || value[CHILDREN] || []
@@ -83,7 +96,6 @@ const mutations = {
       callbacks.componentAddNew.call(this, value)
       Vue.set(nodesMap, key, value)
     }
-
     else if (key === 'parentId') {
       const currentParentId = value
       childrenOf[currentParentId].push(nodesMap[tree.id])
@@ -91,7 +103,6 @@ const mutations = {
       deleteBy(childrenOf[originalParentId], 'id', tree.id)
       Vue.set(tree, key, value)
     }
-
     else {
       Vue.set(tree, key, value)
     }
@@ -99,6 +110,8 @@ const mutations = {
     if (key === SOFT_DELETE && value) {
       callbacks.componentDelete.call(this, tree)
     }
+
+    callbacks.componentUpdate.call(this, tree, key, value)
   },
 
   // only for component used to be paste

@@ -63,10 +63,16 @@
 import { mapState, mapMutations } from 'vuex'
 import { isGridItem } from '@/utils/node'
 import { isMac } from '@/utils/device'
-import { vmPasteNode, vmPasteNodes, vmRemoveNode, vmBecomeMaster } from '@/utils/vmMap'
+import {
+  vmAddNode,
+  vmPasteNodes,
+  vmRemoveNode,
+  vmBecomeMaster
+} from '@/utils/vmMap'
 import ComponentMove from './ComponentMove'
 import { getValueByPath } from '@/utils/tool'
 import { COMPONENT_SET } from '@/const'
+import { isInstance } from '@/utils/inheritance'
 
 export default {
   name: 'ContextMenu',
@@ -140,7 +146,8 @@ export default {
         { name: 'Duplicate' },
         {
           name: 'Delete',
-          shortKey: ['&#9003;']
+          shortKey: ['&#9003;'],
+          disabled: isInstance(this.node)
         },
         {
           name: 'Make Master Component',
@@ -168,7 +175,7 @@ export default {
           break
         case 'Duplicate':
           this.APP_SET({ copyComponentIds: [this.id] })
-          vmPasteNode(this.node)
+          vmAddNode(this.node)
           break
         case 'Delete':
           vmRemoveNode(this.node)

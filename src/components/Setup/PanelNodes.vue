@@ -103,7 +103,9 @@ export default {
     selectedComponentIds(ids) {
       ids.forEach(id => {
         const treeNode = this.$refs.tree.getNode(id)
-        treeNode.expand(() => {}, true)
+        if (treeNode) {
+          treeNode.expand(() => {}, true)
+        }
       })
     }
   },

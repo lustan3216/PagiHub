@@ -22,9 +22,7 @@ grid 最好columns 都不一樣，當寬度變時，item會扁掉，修bug
 grid layout 要100%
 
 text / article style inheritance 要分開, button 裡面的要是可以 inherit 的
-快捷跳到前後一個 componentSet
 Reset to Master State
-style 點名字，可以連結回 master style
 softRecord 應該是有問題，因為 record 紀錄的會不一樣
 instance 可以直接複製，跟著王 copy 父曾是 master 就直接 copy ，但也要做一個按鈕控制分離，當 copy 進 page record 一個值紀錄此 page 有用該 component
 
@@ -33,13 +31,9 @@ panel node 會一直被關起來
 
 layer 裡面層級的 css 看要不要要處理，css 要放在哪一個 grid
 
-pages 系統
-page 還要做路由
-
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 button 要可以連結路由
 
-5<li>弄個 panel 可以快速顯示 master instance & 顯示切換版本</li>
 10<li>每個 button 都可以點了 連結到 page / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
 5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li> 合併 grid item 跟 component 的 style, style 應該有辦法合併獲優先顯示 component 的
 5<li>search panel</li>

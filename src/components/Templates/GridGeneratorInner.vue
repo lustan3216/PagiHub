@@ -4,8 +4,8 @@
     v-bind="innerProps"
     :layout="layouts"
     :margin="[0, 0]"
-    :is-draggable="isDraftMode && !isInstance"
-    :is-resizable="isDraftMode && !isInstance"
+    :is-draggable="isDraftMode && !isInstanceChild"
+    :is-resizable="isDraftMode && !isInstanceChild"
     @layout-updated="layoutUpdated($event)"
   >
     <vue-grid-item
@@ -37,9 +37,8 @@ import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
 import { getBreakpoint } from '@/utils/layout'
-import { debounce } from 'throttle-debounce'
 import { getValueByPath } from '@/utils/tool'
-import { getMasterId } from '@/utils/inheritance'
+import { isInstanceChild } from '@/utils/inheritance'
 
 export default {
   name: 'GridGeneratorInner',
@@ -87,8 +86,8 @@ export default {
     currentBreakPoint() {
       return this.isExample ? this.exampleBoundary : this.breakpoint
     },
-    isInstance() {
-      return getMasterId(this.node)
+    isInstanceChild() {
+      return isInstanceChild(this.node)
     },
     computedLayouts() {
       const breakPoint = this.currentBreakPoint
@@ -194,15 +193,19 @@ export default {
       const records = []
 
       newChildren.forEach((child, index) => {
-        if (!this.innerChildren[index] || !this.innerChildren[index][GRID]) {
-          return
-        }
-        const oldChild = this.innerChildren[index][GRID][this.breakpoint]
+        // if (!this.innerChildren[index] || !this.innerChildren[index][GRID]) {
+        //   return
+        // }
+        const oldGrid = getValueByPath(this.innerChildren, [
+          index,
+          GRID,
+          this.breakpoint
+        ])
         const oldValue = {
-          x: oldChild.x,
-          y: oldChild.y,
-          h: oldChild.h,
-          w: oldChild.w
+          x: oldGrid && oldGrid.x,
+          y: oldGrid && oldGrid.y,
+          h: oldGrid && oldGrid.h,
+          w: oldGrid && oldGrid.w
         }
 
         let h = child.h

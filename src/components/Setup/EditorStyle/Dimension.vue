@@ -177,7 +177,7 @@ export default {
       return nodes
     },
     gridItemVms() {
-      return this.gridItemNodes.map(node => vmGet(node.id))
+      return this.gridItemNodes.map(node => vmGet(node.id)).filter(x => x)
     },
     allVerticalCompact() {
       return this.vms.map(vm =>

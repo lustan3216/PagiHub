@@ -46,30 +46,42 @@ export async function vmPasteNodes() {
 
   if (copyComponentIds.length === 1) {
     const node = tmpComponentsMap[copyComponentIds[0]]
-
-    if (isGridItem(node)) {
-      vmPasteNode(node)
-    }
-    else {
-      vmPasteInside(node)
-    }
+    vmPasteInside(node)
   }
   else if (copyComponentIds.length > 1) {
-    copyComponentIds.forEach(id => vmPasteNode(tmpComponentsMap[id]))
+    copyComponentIds.forEach(id => vmAddNode(tmpComponentsMap[id]))
   }
 }
 
 export function vmPasteInside(theOneCopyNode) {
+  if (!theOneCopyNode) {
+    return
+  }
+
   const { nodesMap } = store.state.node
   const { selectedComponentIds } = store.state.app
 
   selectedComponentIds.forEach(selectedId => {
     const selectedNode = nodesMap[selectedId]
     if (theOneCopyNode.id === selectedId) {
-      vmPasteNode(theOneCopyNode)
+      vmAddNode(theOneCopyNode)
     }
-    else if (theOneCopyNode && !isGridItem(theOneCopyNode)) {
+    else if (isGridItem(theOneCopyNode) && !theOneCopyNode.children.length) {
+      return
+    }
+    else if (isGridItem(theOneCopyNode)) {
       if (isGridItem(selectedNode)) {
+        vmRemoveNode(selectedNode)
+        vmAddNodeToParent(selectedNode.parentId, theOneCopyNode)
+      }
+      else {
+        vmRemoveNode(selectedNode)
+        vmAddNodeToParent(selectedNode.parentId, theOneCopyNode.children[0])
+      }
+    }
+    else {
+      if (isGridItem(selectedNode)) {
+        vmCleanChildren(selectedNode)
         vmAddNodeToParent(selectedId, theOneCopyNode)
       }
       else {
@@ -80,7 +92,15 @@ export function vmPasteInside(theOneCopyNode) {
   })
 }
 
-export function vmPasteNode(node) {
+export function vmCleanChildren(node) {
+  node.children.forEach(child => vmRemoveNode(child))
+}
+
+export function vmAddNode(node) {
+  if (!node) {
+    return
+  }
+
   const { parentId, parentNode } = node
 
   if (parentNode[CAN_NEW_ITEM]) {

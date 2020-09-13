@@ -11,7 +11,7 @@
       v-if="!isLayers(node)"
       type="text"
       icon="el-icon-copy-document"
-      @click.stop="() => vmPasteNode(node)"
+      @click.stop="() => vmAddNode(node)"
     />
 
     <el-button
@@ -40,7 +40,7 @@ import { isMac } from '@/utils/device'
 import { getValueByPath } from '@/utils/tool'
 import { isGridItem, isLayers } from '@/utils/node'
 
-import { vmCreateEmptyItem, vmPasteNode, vmRemoveNode } from '@/utils/vmMap'
+import { vmCreateEmptyItem, vmAddNode, vmRemoveNode } from '@/utils/vmMap'
 import { COMPONENT_SET } from '@/const'
 
 export default {
@@ -90,7 +90,7 @@ export default {
     isMac,
     isLayers,
     vmCreateEmptyItem,
-    vmPasteNode,
+    vmAddNode,
     vmRemoveNode
   }
 }

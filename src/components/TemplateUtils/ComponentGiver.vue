@@ -80,11 +80,9 @@ export default {
     isLayers() {
       return isLayers(this.node)
     },
-    isGridItemWithChild() {
-      return this.isGridItem && arrayFirst(this.node.children)
-    },
-    canInherit() {
-      return canInherit(this.node)
+    isPossibleInherit() {
+      // no matter the master is softDelete or not
+      return getValueByPath(this.node, 'inheritance.isInstanceParent')
     },
     isGridItem() {
       return isGridItem(this.node)
@@ -132,7 +130,7 @@ export default {
       })
     }
 
-    if (this.canInherit) {
+    if (this.isPossibleInherit) {
       vnode = h(
         InheritanceController,
         {

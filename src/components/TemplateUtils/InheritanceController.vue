@@ -1,7 +1,7 @@
 <script>
 import { getNode } from '@/utils/node'
 import { mapActions } from 'vuex'
-import { getValueByPath } from '@/utils/tool'
+import { getMasterComponentSetIdFromInheritMap } from '@/utils/inheritMapUploader'
 
 export const inheritanceObject = () => {
   return {
@@ -36,11 +36,8 @@ export default {
     node() {
       return getNode(this.id)
     },
-    masterParentNode() {
-      return this.nodesMap[this.masterComponentSetId]
-    },
     masterComponentSetId() {
-      return getValueByPath(this.node, 'inheritance.masterComponentSetId')
+      return getMasterComponentSetIdFromInheritMap(this.node)
     }
   },
   watch: {
@@ -60,8 +57,6 @@ export default {
     })
 
     if (this.masterComponentSetId) {
-      // 這裏需要同步，讓下面的 instance node 拿資料比較好判斷，像是nodeMixin裡面的computed的children
-      // 不然因為request非同步，會不知道一開始是沒有後面有，還是本來就沒有
       await this.getComponentSetChildren(this.masterComponentSetId)
     }
   },

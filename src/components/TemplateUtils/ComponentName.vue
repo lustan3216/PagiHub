@@ -42,7 +42,7 @@ import { LABEL } from '@/const'
 import {
   isMasterParent,
   isInstanceParent,
-  getMasterId
+  getMasterId, isInstance
 } from '@/utils/inheritance'
 
 const observable = Vue.observable({ editingId: null })
@@ -87,7 +87,7 @@ export default {
       return isInstanceParent(this.node)
     },
     isInstance() {
-      return getMasterId(this.node)
+      return isInstance(this.node)
     },
     isComponent() {
       return isComponent(this.node)

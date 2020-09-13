@@ -48,7 +48,7 @@
 
   <div
     v-else-if="node"
-    :class="{ 'h-100': !isTextEditor }"
+    :class="{ 'h-100': canFullHeight }"
   >
     <slot />
   </div>
@@ -61,7 +61,7 @@ import { isMac } from '@/utils/device'
 import { getNode, isTextEditor } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
 import clickOutside from '@/utils/clickOutside'
-import { getMasterId } from '@/utils/inheritance'
+import { getMasterId, isInstance } from '@/utils/inheritance'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
 
 export default {
@@ -105,7 +105,7 @@ export default {
       return this.selectedComponentIds.includes(this.id)
     },
     isInstance() {
-      return getMasterId(this.node)
+      return isInstance(this.node)
     },
     canBeEdited() {
       return this.node && this.node[CAN_BE_EDITED]

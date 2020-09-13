@@ -11,7 +11,8 @@ import {
   POLYMORPHISM,
   GRID_GENERATOR,
   SORT_INDEX,
-  CAROUSEL
+  CAROUSEL,
+  SOFT_DELETE
 } from '@/const'
 
 export function cloneJsonWithoutChildren(tree) {
@@ -79,12 +80,13 @@ export function getNode(id) {
   if (id) {
     const node = store.state.node.nodesMap[id]
 
-    return (
-      node ||
-      store.state.example.exampleNodesMap[id]
-
-    )
+    return node || store.state.example.exampleNodesMap[id]
   }
+}
+
+export function isNodeExist(id) {
+  const node = store.state.node.nodesMap[id]
+  return node && !node[SOFT_DELETE]
 }
 
 export function traversalAncestorAndSelf(node, fn) {

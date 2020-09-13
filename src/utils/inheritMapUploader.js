@@ -1,29 +1,74 @@
 import store from '@/store'
 import RequestQueue from '@/utils/requestQueue'
 import { patchProject } from '@/api/node'
-import { getMasterId, isInstanceParent } from '@/utils/inheritance'
-import { setValueByPath, unsetValueByPathNested } from '@/utils/tool'
+import {
+  isInstanceParent,
+  isMasterParent,
+  getMasterId
+} from '@/utils/inheritance'
+import {
+  getValueByPath,
+  setValueByPath,
+  unsetValueByPath,
+  unsetValueByPathNested
+} from '@/utils/tool'
 
 const DEBOUNCE_TIME = 500
 
-export function inheritPath(node) {
+export function inheritMapPath(node) {
   const masterId = getMasterId(node)
-  return [masterId, node.rootComponentSetId, node.id]
+  return ['inheritMap', masterId, 'usedBy', node.rootComponentSetId, node.id]
+}
+
+export function masterComponentSetPath(node) {
+  return ['inheritMap', node.id, 'componentSet']
+}
+
+export function getMasterComponentSetIdFromInheritMap(node) {
+  return getValueByPath(node.projectNode, [
+    'inheritMap',
+    getMasterId(node),
+    'componentSet'
+  ])
 }
 
 class InheritMapUploader {
-  map = {}
+  inheritMap = {}
   timerId = null
   queue = new RequestQueue()
 
   init(map) {
-    this.map = map || {}
+    this.inheritMap = map || {}
   }
 
   add(node) {
     if (isInstanceParent(node)) {
       this.cleanTime()
-      setValueByPath(this.map, inheritPath(node), 1)
+      setValueByPath(this, inheritMapPath(node), 1)
+      this.setStore()
+      this.startTime()
+    }
+  }
+
+  setComponentSet(node) {
+    if (isMasterParent(node)) {
+      this.cleanTime()
+
+      setValueByPath(
+        this,
+        masterComponentSetPath(node),
+        node.rootComponentSetId
+      )
+      this.setStore()
+      this.startTime()
+    }
+  }
+
+  unsetComponentSet(node) {
+    if (isMasterParent(node)) {
+      this.cleanTime()
+
+      unsetValueByPath(this.inheritMap, node.id)
       this.setStore()
       this.startTime()
     }
@@ -34,7 +79,7 @@ class InheritMapUploader {
       'node/SOFT_RECORD',
       {
         path: `${this.projectId}.inheritMap`,
-        value: this.map
+        value: this.inheritMap
       },
       { root: true }
     )
@@ -43,7 +88,7 @@ class InheritMapUploader {
   remove(node) {
     if (isInstanceParent(node)) {
       this.cleanTime()
-      unsetValueByPathNested(this.map, inheritPath(node))
+      unsetValueByPathNested(this, inheritMapPath(node))
       this.setStore(node)
       this.startTime()
     }
@@ -56,7 +101,10 @@ class InheritMapUploader {
 
   startTime() {
     this.timerId = setTimeout(() => {
-      this.queue.add(patchProject, { id: this.projectId, inheritMap: this.map })
+      this.queue.add(patchProject, {
+        id: this.projectId,
+        inheritMap: this.inheritMap
+      })
     }, DEBOUNCE_TIME)
   }
 

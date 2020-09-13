@@ -1,9 +1,7 @@
 import { ID, PARENT_ID, MASTER_ID } from '../const'
 import { toArray } from './array'
 import { ulid } from 'ulid'
-import { isComponent, traversalSelfAndChildren } from '@/utils/node'
-import { isUndefined } from '@/utils/tool'
-import { rootComponentSetIdMap } from '@/utils/rootComponentSetId'
+import { traversalSelfAndChildren } from '@/utils/node'
 import { canInherit, getMasterId, setMasterId } from '@/utils/inheritance'
 
 export function appendIds(
@@ -27,10 +25,10 @@ export function appendIds(
       return false
     }
 
-    if (canInherit(node)) {
+    const inheritable = canInherit(node)
+    if (inheritable) {
       node.inheritance = {
-        isInstanceParent: true,
-        masterComponentSetId: rootComponentSetIdMap[node.id]
+        isInstanceParent: true
       }
 
       const masterId = getMasterId(node)
@@ -46,6 +44,9 @@ export function appendIds(
     if (canSetMasterIdForInstance) {
       instanceBeforeAppend && instanceBeforeAppend(node)
       setMasterId(node, node[ID])
+    }
+    else if (!inheritable) {
+      delete node.inheritance
     }
 
     // set ulid 一定要在 setMasterId 後面
