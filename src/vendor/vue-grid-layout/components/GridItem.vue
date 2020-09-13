@@ -876,7 +876,6 @@ import { debounce } from "throttle-debounce"
         }
       },
       autoSize: debounce(150, function() {
-
         // ok here we want to calculate if a resize is needed
         this.previousW = this.innerW
         this.previousH = this.innerH

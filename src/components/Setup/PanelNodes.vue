@@ -3,18 +3,18 @@
     <el-tree
       ref="tree"
       :filter-node-method="filterTagBySearching"
-      :data="innerTree"
+      :data="tree"
       :indent="12"
       :allow-drop="allowDrop"
       class="tree"
       node-key="id"
       draggable
-      default-expand-all
       @node-drop="layerIndexChange"
     >
       <template v-slot="{ data }">
         <div
           v-if="data && data.id"
+          :id="`tree-node-${data.id}`"
           class="relative w-100 over-hidden"
           @mouseenter.stop="hoverNode(data.id)"
           @mouseleave.stop="hoverLeaveNode(data.id)"
@@ -58,25 +58,17 @@
 </template>
 
 <script>
-import { Tree } from 'element-ui'
+import Tree from '@/vendor/element-ui/tree'
 import { SORT_INDEX, SOFT_DELETE, STYLES } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { arrayUniq, deleteBy, findIndexBy } from '@/utils/array'
 import { cloneJson } from '@/utils/tool'
 import ComponentController from '../TemplateUtils/ComponentController'
 import ComponentName from '../TemplateUtils/ComponentName'
 import Touchable from '../TemplateUtils/Touchable'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
-import {
-  isDesign,
-  isGridItem,
-  isLayers,
-  isPage,
-  shortTagName,
-  sortByIndex,
-  traversalSelfAndChildren
-} from '@/utils/node'
+import { isLayers, sortByIndex, traversalSelfAndChildren } from '@/utils/node'
+import { arrayLast } from '@/utils/array'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -93,7 +85,8 @@ export default {
   data() {
     return {
       hoverId: null,
-      filterText: ''
+      filterText: '',
+      tree: []
     }
   },
   computed: {
@@ -101,8 +94,36 @@ export default {
     ...mapState('node', ['editingComponentSetId']),
     componentSetNode() {
       return this.nodesMap[this.editingComponentSetId]
+    }
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val)
     },
-    innerTree() {
+    selectedComponentIds(ids) {
+      ids.forEach(id => {
+        const treeNode = this.$refs.tree.getNode(id)
+        treeNode.expand(() => {}, true)
+      })
+    }
+  },
+  created() {
+    this.renderTree()
+    this.$bus.$on('component-add-new', this.renderTree)
+    this.$bus.$on('component-delete', this.renderTree)
+  },
+  beforeDestroy() {
+    this.$bus.$off('component-add-new', this.renderTree)
+    this.$bus.$off('component-delete', this.renderTree)
+  },
+  methods: {
+    ...mapActions('app', ['resizeNodeQuickFn']),
+    ...mapMutations('app', [
+      'TOGGLE_SELECTED_COMPONENT_IN_IDS',
+      'TOGGLE_SELECTED_COMPONENT_ID'
+    ]),
+    ...mapMutations('node', ['RECORD']),
+    renderTree() {
       const tree = this.componentSetNode
 
       if (!tree) {
@@ -116,55 +137,10 @@ export default {
         if (isLayers(node)) {
           parentNode.children = sortByIndex(node.children, false)
         }
-
-        if (isGridItem(node)) {
-          const index = parentNode.children.findIndex(x => x.id === node.id)
-          if (index >= 0 && node.children[0]) {
-            parentNode.children[index] = node.children[0]
-          }
-        }
-
-        delete node[STYLES]
       })
 
-      return cloneTree.children
-    }
-    // editingNode() {
-    //   return this.nodesMap[this.editingComponentSetId]
-    // },
-    // editingNodeName() {
-    //   return shortTagName(this.editingNode)
-    // },
-    // editingPath() {
-    //   if (isDesign(this.editingNode)) {
-    //     return this.editingNodeName
-    //   }
-    //   else if (isPage(this.editingNode)) {
-    //     const { parentNode } = this.editingNode
-    //     return [parentNode.label, this.editingNodeName].join(' > ')
-    //   }
-    // },
-    // pathIcon() {
-    //   if (isDesign(this.editingNode)) {
-    //     return 'el-icon-news'
-    //   }
-    //   else if (isPage(this.editingNode)) {
-    //     return 'el-icon-files'
-    //   }
-    // }
-  },
-  watch: {
-    filterText(val) {
-      this.$refs.tree.filter(val)
-    }
-  },
-  methods: {
-    ...mapActions('app', ['resizeNodeQuickFn']),
-    ...mapMutations('app', [
-      'TOGGLE_SELECTED_COMPONENT_IN_IDS',
-      'TOGGLE_SELECTED_COMPONENT_ID'
-    ]),
-    ...mapMutations('node', ['RECORD']),
+      this.tree = cloneTree.children
+    },
     allowDrop(drag, drop, action) {
       const sameLayer = drag.parent === drop.parent
       return sameLayer && ['prev', 'next'].includes(action)

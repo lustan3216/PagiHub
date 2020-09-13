@@ -199,6 +199,12 @@ export function isGrid(node) {
   }
 }
 
+export function isTextEditor(node) {
+  if (node) {
+    return node.tag === 'text-editor'
+  }
+}
+
 export function isProject(node) {
   if (node) {
     return node.tag === NODE_TYPE.PROJECT

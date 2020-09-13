@@ -65,15 +65,14 @@ const getPropertyFromData = function(node, prop) {
 }
 
 let nodeIdSeed = 0
+const expendMap = {}
 
 export default class Node {
   constructor(options) {
-    this.id = nodeIdSeed++
     this.text = null
     this.checked = false
     this.indeterminate = false
     this.data = null
-    this.expanded = false
     this.parent = null
     this.visible = true
     this.isCurrent = false
@@ -83,6 +82,11 @@ export default class Node {
         this[name] = options[name]
       }
     }
+    if (options.data.id) {
+      this.id = options.data.id
+    }
+
+    this.expanded = expendMap[this.id]
 
     // internal
     this.level = 0
@@ -310,10 +314,12 @@ export default class Node {
       if (expandParent) {
         let parent = this.parent
         while (parent.level > 0) {
+          expendMap[parent.id] = true
           parent.expanded = true
           parent = parent.parent
         }
       }
+      expendMap[this.id] = true
       this.expanded = true
       if (callback) callback()
     }
@@ -343,6 +349,7 @@ export default class Node {
   }
 
   collapse() {
+    expendMap[this.id] = false
     this.expanded = false
   }
 

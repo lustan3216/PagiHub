@@ -2,7 +2,7 @@
   <div ref="item" class="vue-grid-layout h-100">
     <slot></slot>
     <grid-item class="vue-grid-placeholder"
-               v-show="showPlaceHolder && isDragging"
+               v-show="isDragging"
                :x="placeholder.x"
                :y="placeholder.y"
                :w="placeholder.w"

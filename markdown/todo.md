@@ -12,6 +12,7 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
+grid layout 應該 根據自己的寬度當breakpoint 
 lyaer 可以controller gridlayout不要 
 shadows 的softrecord 有bug, 不應該去改 nodesMap, 直接去動style就好 
 grditem新增小孩時，把grid搬到child上，如果刪除再搬回item, 值變動也在child上變動

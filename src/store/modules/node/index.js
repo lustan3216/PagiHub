@@ -1,5 +1,5 @@
-import store, { SET } from '@/store'
-import { CHILDREN, ID, PARENT_ID } from '@/const'
+import { SET } from '@/store'
+import { CHILDREN, ID, PARENT_ID, SOFT_DELETE } from '@/const'
 import { deleteBy, findBy, toArray } from '@/utils/array'
 import Vue from 'vue'
 import { defineProperties } from '@/utils/nodeProperties'
@@ -20,6 +20,17 @@ const state = {
   rootComponentSetIds: []
 }
 
+const callbacks = {
+  componentAddNew(node) {
+    inheritMapUploader.add(node)
+    this._vm.$bus.$emit('component-add-new', node)
+  },
+  componentDelete(node) {
+    inheritMapUploader.remove(node)
+    this._vm.$bus.$emit('component-delete', node)
+  }
+}
+
 const mutations = {
   SET,
 
@@ -35,14 +46,14 @@ const mutations = {
         deleteBy(state.rootComponentSetIds, node.id)
       }
 
-      inheritMapUploader.remove(node)
-
       const parentId = nodesMap[key][PARENT_ID]
       const parentNode = nodesMap[parentId]
 
       if (parentNode && parentNode[CHILDREN]) {
         deleteBy(parentNode[CHILDREN], 'id', key)
       }
+
+      callbacks.componentDelete.call(this, node)
     }
 
     Vue.delete(tree, key)
@@ -55,33 +66,38 @@ const mutations = {
     if (tree[key] && tree[key].__ob__) {
       tree[key] = value
     }
+
+    else if (value[ID]) {
+      childrenOf[key] = value[CHILDREN] =
+        childrenOf[key] || value[CHILDREN] || []
+
+      const parentId = value[PARENT_ID]
+      childrenOf[parentId] = childrenOf[parentId] || []
+
+      const isExist = findBy(childrenOf[parentId], 'id', value[ID])
+      if (!isExist) {
+        childrenOf[parentId].push(value)
+      }
+
+      defineProperties(value, editingComponentSetId)
+      callbacks.componentAddNew.call(this, value)
+      Vue.set(nodesMap, key, value)
+    }
+
+    else if (key === 'parentId') {
+      const currentParentId = value
+      childrenOf[currentParentId].push(nodesMap[tree.id])
+      const originalParentId = tree[key]
+      deleteBy(childrenOf[originalParentId], 'id', tree.id)
+      Vue.set(tree, key, value)
+    }
+
     else {
-      if (value[ID]) {
-        childrenOf[key] = value[CHILDREN] =
-          childrenOf[key] || value[CHILDREN] || []
+      Vue.set(tree, key, value)
+    }
 
-        const parentId = value[PARENT_ID]
-        childrenOf[parentId] = childrenOf[parentId] || []
-
-        const isExist = findBy(childrenOf[parentId], 'id', value[ID])
-        if (!isExist) {
-          childrenOf[parentId].push(value)
-        }
-
-        defineProperties(value, editingComponentSetId)
-        inheritMapUploader.add(value)
-        Vue.set(nodesMap, key, value)
-      }
-      else {
-        if (key === 'parentId') {
-          const currentParentId = value
-          childrenOf[currentParentId].push(nodesMap[tree.id])
-          const originalParentId = tree[key]
-          deleteBy(childrenOf[originalParentId], 'id', tree.id)
-        }
-
-        Vue.set(tree, key, value)
-      }
+    if (key === SOFT_DELETE && value) {
+      callbacks.componentDelete.call(this, tree)
     }
   },
 

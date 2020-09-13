@@ -3,7 +3,13 @@ import InheritanceController from '@/components/TemplateUtils/InheritanceControl
 import ControllerLayer from '@/components/TemplateUtils/ControllerLayer'
 import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
 import { ObserveVisibility } from 'vue-observe-visibility'
-import { getNode, isComponentSet, isGridItem, isLayers } from '@/utils/node'
+import {
+  getNode,
+  isComponentSet,
+  isGrid,
+  isGridItem,
+  isLayers
+} from '@/utils/node'
 import { canInherit } from '@/utils/inheritance'
 import { getValueByPath } from '@/utils/tool'
 import { mapState } from 'vuex'
@@ -82,6 +88,9 @@ export default {
     },
     isGridItem() {
       return isGridItem(this.node)
+    },
+    isGrid() {
+      return isGrid(this.node)
     }
   },
   render(h) {
@@ -89,7 +98,8 @@ export default {
       return
     }
     let vnode = null
-    if (!this.controller || this.isLayers || this.isGridItemWithChild) {
+
+    if (!this.controller || this.isGrid || this.isLayers) {
       vnode = h(AsyncComponent, {
         props: {
           id: this.id

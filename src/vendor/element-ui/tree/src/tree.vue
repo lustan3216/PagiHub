@@ -183,7 +183,6 @@ export default {
       this.store.checkStrictly = newVal
     }
   },
-
   created() {
     this.isTree = true
 

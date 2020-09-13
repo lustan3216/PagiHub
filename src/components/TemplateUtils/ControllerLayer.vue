@@ -2,8 +2,8 @@
   <!-- id here is for selection using, can not delete -->
   <div
     v-if="isDraftMode && node"
-    :class="{ 'h-100': !isTextEditor }"
-    @click.stop="singleClick"
+    :class="{ 'h-100': canFullHeight }"
+    @mouseup.stop="singleClick"
     @dblclick.stop="dblclick"
   >
     <portal
@@ -55,10 +55,11 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import { CAN_BE_EDITED } from '@/const'
 import { isMac } from '@/utils/device'
-import { getNode } from '@/utils/node'
+import { getNode, isTextEditor } from '@/utils/node'
+import { getValueByPath } from '@/utils/tool'
 import clickOutside from '@/utils/clickOutside'
 import { getMasterId } from '@/utils/inheritance'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
@@ -76,7 +77,8 @@ export default {
   },
   components: {
     ComponentQuickFunctions: () => import('./ComponentQuickFunctions'),
-    SettingInheritance: () => import('@/components/Setup/EditorSetting/SettingInheritance')
+    SettingInheritance: () =>
+      import('@/components/Setup/EditorSetting/SettingInheritance')
   },
   props: {
     id: {
@@ -108,17 +110,24 @@ export default {
     canBeEdited() {
       return this.node && this.node[CAN_BE_EDITED]
     },
-    isTextEditor() {
-      return this.node.tag === 'text-editor'
+    canFullHeight() {
+      return (
+        !isTextEditor(this.node) &&
+        !isTextEditor(getValueByPath(this.node, 'children[0]'))
+      )
     }
   },
   methods: {
     isMac,
+    ...mapMutations('app', {
+      APP_SET: 'SET'
+    }),
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
+    ...mapActions('app', ['resizeNodeQuickFn']),
     clickOutside(event) {
       const insideArea = [
         '#sidebar-right',
@@ -182,7 +191,12 @@ export default {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)
       }
       else {
+        this.APP_SET({ gridResizing: false })
         this.SET_SELECTED_COMPONENT_ID(this.id)
+        this.resizeNodeQuickFn()
+        setTimeout(() => {
+          document.getElementById(`tree-node-${this.id}`).scrollIntoView(false)
+        }, 100)
       }
     }
   }

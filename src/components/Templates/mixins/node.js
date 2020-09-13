@@ -3,7 +3,7 @@ import { cloneJson, deepMerge } from '@/utils/tool'
 
 import { PROPS, VALUE, STYLES, SOFT_DELETE } from '@/const'
 import FreeStyle from '@/directive/freeStyle'
-import { getNode, isGrid, isGridItem } from '@/utils/node'
+import { getNode, isGrid, isGridItem, isLayers } from '@/utils/node'
 import { arrayFirst } from '@/utils/array'
 import { getMasterId, getDeletedMasterId } from '@/utils/inheritance'
 import { objectHasAnyKey } from '@/utils/object'
@@ -57,7 +57,11 @@ export default {
       return isGridItem(this.node) && arrayFirst(this.innerChildren)
     },
     innerStyles() {
-      if (isGridItem(this.node) && this.gridItemHasChild) {
+      if (
+        isGridItem(this.node) &&
+        this.gridItemHasChild &&
+        !isLayers(this.gridItemHasChild)
+      ) {
         return this.childStyles
       }
       else {

@@ -180,7 +180,6 @@ export default {
   },
   methods: {
     ...mapMutations('app', { APP_SET: 'SET' }),
-    ...mapActions('app', ['resizeNodeQuickFn', 'artBoardResizing']),
     lock(id) {
       this.lockIds.push(id)
     },
@@ -234,10 +233,9 @@ export default {
       // this.closestBoundaryEl.classList.add('border-pulse')
       this.APP_SET({ gridResizing: true })
     },
-    itemUpdated: debounce(150, function() {
-      // this.closestBoundaryEl.classList.remove('border-pulse')
+    itemUpdated() {
       this.APP_SET({ gridResizing: false })
-    })
+    }
   }
 }
 </script>

@@ -37,16 +37,22 @@
       </template>
 
       <template slot="paneR">
-        <panel-nodes />
+        <keep-alive>
+          <panel-nodes
+            v-if="componentSetLoaded"
+            :key="editingComponentSetId"
+          />
+        </keep-alive>
       </template>
     </split-pane>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import SplitPane from 'vue-splitpane'
 import DialogComponentSet from '../Setup/DialogComponentSet'
+import { getValueByPath } from '@/utils/tool'
 
 export default {
   name: 'SidebarLeft',
@@ -71,6 +77,14 @@ export default {
   },
   computed: {
     ...mapGetters('user', ['isLogin']),
+    ...mapState('node', ['editingComponentSetId']),
+    componentSetLoaded() {
+      return getValueByPath(this.nodesMap, [
+        this.editingComponentSetId,
+        'children',
+        0
+      ])
+    },
     editingAsset() {
       return this.activePanel === 'PanelAsset'
     },

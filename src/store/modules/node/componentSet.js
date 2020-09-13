@@ -2,7 +2,6 @@ import {
   createComponentSet,
   deleteComponentSet,
   getComponentSetChildren,
-  getComponentSets,
   patchComponentSet,
   publishComponentSet
 } from '@/api/node'
