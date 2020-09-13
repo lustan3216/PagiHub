@@ -232,9 +232,7 @@ export default {
           bounderNode = element.closest('.card')
         }
         else {
-          const layout = element.closest('.vue-grid-layout')
-          bounderNode = layout && layout.closest('.vue-grid-item')
-          bounderNode = bounderNode || document.getElementById('art-board')
+          bounderNode = document.getElementById('art-board')
         }
 
         const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()

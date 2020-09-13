@@ -2,7 +2,7 @@
   <!-- id here is for selection using, can not delete -->
   <div
     v-if="isDraftMode && node"
-    :class="{ 'h-100': canFullHeight }"
+    :class="{ 'h-100': !fitContainer }"
     @mouseup.stop="singleClick"
     @dblclick.stop="dblclick"
   >
@@ -36,9 +36,9 @@
       v-if="canBeEdited"
       :class="{
         'grid-item-fix': itemEditing,
-        'no-action': !itemEditing
+        'no-action': !itemEditing,
+        'h-100': !fitContainer
       }"
-      class="h-100"
     >
       <slot :item-editing="itemEditing" />
     </div>
@@ -48,7 +48,7 @@
 
   <div
     v-else-if="node"
-    :class="{ 'h-100': canFullHeight }"
+    :class="{ 'h-100': !fitContainer }"
   >
     <slot />
   </div>
@@ -56,12 +56,12 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { CAN_BE_EDITED } from '@/const'
+import { CAN_BE_EDITED, STYLES } from '@/const'
 import { isMac } from '@/utils/device'
-import { getNode, isTextEditor } from '@/utils/node'
-import { getValueByPath } from '@/utils/tool'
+import { getNode, isLayers, isTextEditor } from '@/utils/node'
+import { getValueByPath, isUndefined } from '@/utils/tool'
 import clickOutside from '@/utils/clickOutside'
-import { getMasterId, isInstance } from '@/utils/inheritance'
+import { isInstance } from '@/utils/inheritance'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
 
 export default {
@@ -110,11 +110,19 @@ export default {
     canBeEdited() {
       return this.node && this.node[CAN_BE_EDITED]
     },
-    canFullHeight() {
-      return (
-        !isTextEditor(this.node) &&
-        !isTextEditor(getValueByPath(this.node, 'children[0]'))
-      )
+    child() {
+      return this.node.children[0]
+    },
+    fitContainer() {
+      const overflow = getValueByPath(this.child, [
+        STYLES,
+        'default',
+        'overflow'
+      ])
+      return isUndefined(overflow) && this.canOverflow
+    },
+    canOverflow() {
+      return isTextEditor(this.child) || isLayers(this.child)
     }
   },
   methods: {

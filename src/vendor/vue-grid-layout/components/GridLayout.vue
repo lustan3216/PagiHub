@@ -1,5 +1,5 @@
 <template>
-  <div ref="item" class="vue-grid-layout h-100">
+  <div ref="item" class="vue-grid-layout" :style="mergedStyle">
     <slot></slot>
     <grid-item class="vue-grid-placeholder"
                v-show="isDragging"
@@ -204,7 +204,7 @@
           // lots-design
           // self.$emit('layout-updated', self.layout)
           // lots-design
-          // self.updateHeight()
+          self.updateHeight()
           self.$nextTick(function() {
             this.erd = elementResizeDetectorMaker({
               strategy: 'scroll', //<- For ultra performance.
@@ -250,8 +250,9 @@
               this.$emit('layout-ready', self.layout)
             })
           }
+
           // lots-design
-          // this.updateHeight()
+          this.updateHeight()
         })
       },
       layout: function() {
@@ -281,7 +282,7 @@
       },
       margin() {
         // lots-design
-        // this.updateHeight()
+        this.updateHeight()
       }
     },
     methods: {
@@ -312,7 +313,7 @@
           compact(this.layout, this.verticalCompact)
           this.eventBus.$emit('updateWidth', this.width)
           // lots-design
-          // this.updateHeight()
+          this.updateHeight()
 
           // lots-design
           // this.$emit('layout-updated', this.layout)
@@ -377,7 +378,7 @@
         // needed because vue can't detect changes on array element properties
         this.eventBus.$emit('compact')
         // lots-design
-        // this.updateHeight()
+        this.updateHeight()
         if (eventName === 'dragend') this.$emit('layout-updated', this.layout)
       },
       resizeEvent: function(eventName, id, x, y, h, w) {
@@ -439,7 +440,7 @@
         compact(this.layout, this.verticalCompact)
         this.eventBus.$emit('compact')
         // lots-design
-        // this.updateHeight()
+        this.updateHeight()
 
         if (eventName === 'resizeend') this.$emit('layout-updated', this.layout)
       },

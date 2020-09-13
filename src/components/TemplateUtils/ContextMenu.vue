@@ -72,7 +72,7 @@ import {
 import ComponentMove from './ComponentMove'
 import { getValueByPath } from '@/utils/tool'
 import { COMPONENT_SET } from '@/const'
-import { isInstance } from '@/utils/inheritance'
+import { isInstanceChild } from '@/utils/inheritance'
 
 export default {
   name: 'ContextMenu',
@@ -147,7 +147,7 @@ export default {
         {
           name: 'Delete',
           shortKey: ['&#9003;'],
-          disabled: isInstance(this.node)
+          disabled: isInstanceChild(this.node)
         },
         {
           name: 'Make Master Component',

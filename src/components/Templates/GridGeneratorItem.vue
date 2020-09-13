@@ -18,8 +18,9 @@ import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import { updateWrapperStyle } from '@/utils/quickFunction'
-import { getValueByPath } from '@/utils/tool'
-import { AUTO_HEIGHT, GRID, STYLES } from '@/const'
+import { getValueByPath, isUndefined } from '@/utils/tool'
+import { AUTO_HEIGHT, GRID, GRID_GENERATOR, STYLES, TEXT_EDITOR } from '@/const'
+import { isLayers, isTextEditor } from '@/utils/node'
 
 export default {
   name: 'GridGeneratorItem',
@@ -38,10 +39,15 @@ export default {
       return this.innerChildren[0]
     },
     fitContainer() {
-      return (
-        getValueByPath(this.child, [STYLES, 'default', 'overflow']) ===
-        'fitContainer'
-      )
+      const overflow = getValueByPath(this.child, [
+        STYLES,
+        'default',
+        'overflow'
+      ])
+      return isUndefined(overflow) && this.canOverflow
+    },
+    canOverflow() {
+      return isTextEditor(this.child) || isLayers(this.child)
     },
     data() {
       return {

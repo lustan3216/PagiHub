@@ -3,6 +3,7 @@ import { isUndefined } from 'element-ui/src/utils/types'
 import getValueByPath from 'lodash.get'
 import setValueByPath from 'lodash.set'
 import unsetValueByPath from 'lodash.unset'
+import debounce from 'lodash.debounce'
 import { isArray } from '@/utils/array'
 import DeepMerge from 'deepmerge'
 import { objectHasAnyKey } from '@/utils/object'
@@ -11,6 +12,7 @@ export {
   getValueByPath,
   setValueByPath,
   unsetValueByPath,
+  debounce,
   on,
   off,
   isUndefined

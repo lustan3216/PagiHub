@@ -32,6 +32,10 @@ export default {
       type: Boolean,
       default: true
     },
+    fitContainer: {
+      type: Boolean,
+      default: false
+    },
     controller: {
       type: Boolean,
       default: true

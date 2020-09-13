@@ -9,13 +9,13 @@
 
     <el-col :span="16">
       <el-select
-        :value="overflow || 'visible'"
+        :value="overflow || undefined"
+        :disabled="!canOverflow"
         @input="overflow = $event"
       >
         <el-option
-          v-if="canFitContainer"
+          :value="undefined"
           label="Fit Container"
-          value="fitContainer"
         />
         <el-option
           label="Visible"
@@ -36,14 +36,16 @@
 
 <script>
 import forNodeMixin from './mixins/forNode'
-import { TEXT_EDITOR } from '@/const'
+import { isLayers, isTextEditor } from '@/utils/node'
 
 export default {
   name: 'Overflow',
   mixins: [forNodeMixin('overflow')],
   computed: {
-    canFitContainer() {
-      return this.nodes.every(node => [TEXT_EDITOR].includes(node.tag))
+    canOverflow() {
+      return this.nodes.every(
+        node => isTextEditor(node) || isLayers(node.children[0])
+      )
     }
   }
 }
