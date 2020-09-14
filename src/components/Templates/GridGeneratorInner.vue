@@ -196,9 +196,6 @@ export default {
       const records = []
 
       newChildren.forEach((child, index) => {
-        // if (!this.innerChildren[index] || !this.innerChildren[index][GRID]) {
-        //   return
-        // }
         const oldGrid = getValueByPath(this.innerChildren, [
           index,
           GRID,
@@ -215,6 +212,9 @@ export default {
 
         if (child.hUnit === 'vh') {
           h = h / (this.artBoardHeight / 100)
+        }
+        if (child.w === 1) {
+          console.warn('wwww 1')
         }
 
         const newValue = {

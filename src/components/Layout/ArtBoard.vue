@@ -27,7 +27,6 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import ComponentSet from '../Templates/ComponentSet'
-import { updateWrapperStyle } from '@/utils/quickFunction'
 
 export default {
   name: 'ArtBoard',
@@ -42,15 +41,15 @@ export default {
     }
   },
   watch: {
-    editingComponentSetId(id) {
-      if (id) {
-        this.artBoardResizing(false)
-      }
+    editingComponentSetId() {
+      this.artBoardResizing()
     }
   },
   methods: {
-    ...mapActions('app', ['artBoardResizing']),
-    onScroll: updateWrapperStyle
+    ...mapActions('app', ['artBoardResizing', 'checkIsGridResizing']),
+    onScroll() {
+      this.checkIsGridResizing()
+    }
   }
 }
 </script>

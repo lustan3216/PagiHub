@@ -89,7 +89,7 @@ export default function freeView(baseElement, options = {}) {
           maxRatio
         )
 
-        assignStyle(self)
+        // assignStyle(self)
 
         if (scaleCallback) {
           scaleCallback(event, self)

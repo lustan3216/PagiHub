@@ -95,6 +95,7 @@
 </style>
 <script>
   import Vue from 'vue'
+  import { mapState } from 'vuex'
   import { setTopLeft, setTopRight, setTransformRtl, setTransform } from '../helpers/utils'
   import { getControlPosition, createCoreData } from '../helpers/draggableUtils'
   import { getDocumentDir } from '../helpers/DOM'
@@ -362,7 +363,7 @@
 
                 this.erd.listenTo(slot.elm, debounce(() => {
                   this.autoSize()
-                }, 20))
+                }, 50))
 
               }
             }
@@ -375,7 +376,13 @@
         immediate: true
       },
       isDragging: function(value) {
-        store.hideHandler = value
+        if (value) {
+          store.hideHandler = true
+        } else {
+          setTimeout(() => {
+            store.hideHandler = false
+          },510)
+        }
       },
       isDraggable: function() {
         this.draggable = this.isDraggable
@@ -452,6 +459,11 @@
       }
     },
     computed: {
+      ...mapState('app', ['scaleRatio']),
+      shouldAutoSize() {
+        const slot = this.$slots.default && this.$slots.default[0]
+        return slot && this.autoHeight
+      },
       hideHandler() {
         return store.hideHandler
       },
@@ -622,6 +634,7 @@
           this.$emit('resize', this.i, pos.h, pos.w, newSize.height, newSize.width)
         }
         if (event.type === 'resizeend' && (this.previousW !== this.innerW || this.previousH !== this.innerH)) {
+          // this.autoSize()
           this.$emit('resized', this.i, pos.h, pos.w, newSize.height, newSize.width)
         }
         if (event.type === 'resizestart') {
@@ -648,12 +661,13 @@
 
             let parentRect = event.target.offsetParent.getBoundingClientRect()
             let clientRect = event.target.getBoundingClientRect()
+
             if (this.renderRtl) {
               newPosition.left = (clientRect.right - parentRect.right) * -1
             } else {
-              newPosition.left = clientRect.left - parentRect.left
+              newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
             }
-            newPosition.top = clientRect.top - parentRect.top
+            newPosition.top = (clientRect.top - parentRect.top) / this.scaleRatio
             this.dragging = newPosition
             this.isDragging = true
             break
@@ -666,9 +680,9 @@
             if (this.renderRtl) {
               newPosition.left = (clientRect.right - parentRect.right) * -1
             } else {
-              newPosition.left = clientRect.left - parentRect.left
+              newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
             }
-            newPosition.top = clientRect.top - parentRect.top
+            newPosition.top = (clientRect.top - parentRect.top) / this.scaleRatio
             //                        console.log("### drag end => " + JSON.stringify(newPosition));
             //                        console.log("### DROP: " + JSON.stringify(newPosition));
             this.dragging = null
@@ -680,11 +694,11 @@
             const coreEvent = createCoreData(this.lastX, this.lastY, x, y)
             //                        Add rtl support
             if (this.renderRtl) {
-              newPosition.left = this.dragging.left - coreEvent.deltaX
+              newPosition.left = this.dragging.left - (coreEvent.deltaX) / this.scaleRatio
             } else {
-              newPosition.left = this.dragging.left + coreEvent.deltaX
+              newPosition.left = this.dragging.left + (coreEvent.deltaX) / this.scaleRatio
             }
-            newPosition.top = this.dragging.top + coreEvent.deltaY
+            newPosition.top = this.dragging.top + (coreEvent.deltaY) / this.scaleRatio
             //                        console.log("### drag => " + event.type + ", x=" + x + ", y=" + y);
             //                        console.log("### drag => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
             //                        console.log("### drag end => " + JSON.stringify(newPosition));
@@ -708,6 +722,7 @@
           this.$emit('move', this.i, pos.x, pos.y)
         }
         if (event.type === 'dragend' && (this.previousX !== this.innerX || this.previousY !== this.innerY)) {
+          // this.autoSize()
           this.$emit('moved', this.i, pos.x, pos.y)
         }
         if (event.type === 'dragstart') {
@@ -887,44 +902,51 @@
           })
         }
       },
+
       autoSize() {
-    // ok here we want to calculate if a resize is needed
-    this.previousW = this.innerW
-    this.previousH = this.innerH
+        // ok here we want to calculate if a resize is needed
+        this.$nextTick(() => {
+          if (!this.shouldAutoSize) {
+            return
+          }
 
-    let newSize = this.$slots.default[0].elm.getBoundingClientRect()
-    let pos = this.calcWH(newSize.height, newSize.width)
-    if (pos.w < this.minW) {
-      pos.w = this.minW
-    }
-    if (pos.w > this.maxW) {
-      pos.w = this.maxW
-    }
-    if (pos.h < this.minH) {
-      pos.h = this.minH
-    }
-    if (pos.h > this.maxH) {
-      pos.h = this.maxH
-    }
+          this.previousW = this.innerW
+          this.previousH = this.innerH
 
-    if (pos.h < 1) {
-      pos.h = 1
-    }
-    if (pos.w < 1) {
-      pos.w = 1
-    }
+          let newSize = this.$slots.default[0].elm.getBoundingClientRect()
+          let pos = this.calcWH(newSize.height / this.scaleRatio, newSize.width / this.scaleRatio)
+          if (pos.w < this.minW) {
+            pos.w = this.minW
+          }
+          if (pos.w > this.maxW) {
+            pos.w = this.maxW
+          }
+          if (pos.h < this.minH) {
+            pos.h = this.minH
+          }
+          if (pos.h > this.maxH) {
+            pos.h = this.maxH
+          }
 
-    // this.lastW = x; // basically, this is copied from resizehandler, but shouldn't be needed
-    // this.lastH = y;
+          if (pos.h < 1) {
+            pos.h = 1
+          }
+          if (pos.w < 1) {
+            pos.w = 1
+          }
 
-    if (this.innerW !== pos.w || this.innerH !== pos.h) {
-      this.$emit('resize', this.i, pos.h, pos.w, newSize.height, newSize.width)
-    }
-    if (this.previousW !== pos.w || this.previousH !== pos.h) {
-      this.$emit('resized', this.i, pos.h, pos.w, newSize.height, newSize.width)
-      this.eventBus.$emit('resizeEvent', 'resizeend', this.i, this.innerX, this.innerY, pos.h, pos.w)
-    }
-  }
+          // this.lastW = x; // basically, this is copied from resizehandler, but shouldn't be needed
+          // this.lastH = y;
+
+          if (this.innerW !== pos.w || this.innerH !== pos.h) {
+            this.$emit('resize', this.i, pos.h, pos.w, newSize.height, newSize.width)
+          }
+          if (this.previousW !== pos.w || this.previousH !== pos.h) {
+            this.$emit('resized', this.i, pos.h, pos.w, newSize.height, newSize.width)
+            this.eventBus.$emit('resizeEvent', 'resizeend', this.i, this.innerX, this.innerY, pos.h, pos.w)
+          }
+        })
+      }
     }
   }
 </script>

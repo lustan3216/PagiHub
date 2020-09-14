@@ -1,6 +1,7 @@
 <template>
   <div
     v-free-view="freeViewOptions"
+    id="view-port"
     :class="{ resizeBar, draft: isDraftMode }"
     class="fake-transform view-port"
   >
@@ -9,7 +10,7 @@
     <div class="h-100">
       <div
         ref="target"
-        class="target"
+        class="target free-view-target"
         style="height: 100%;"
       >
         <template v-if="resizeBar">
@@ -60,11 +61,14 @@
           size="small"
           split-button
           type
-          @click="reset"
+          @click="setBoundaryRect"
         >
           <i class="el-icon-refresh-left" />
-          <span class="grey-font">
-            {{ artBoardWidth }} X {{ artBoardHeight }}
+          <span
+            class="grey-font"
+            style="width: 75px; display: inline-block;"
+          >
+            {{ artBoardWidth }} x {{ artBoardHeight }}
           </span>
 
           <el-dropdown-menu slot="dropdown">
@@ -83,16 +87,15 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </div>
-    </portal>
 
-    <portal to="TopNav">
-      <el-button
-        size="small"
-        @click="scaleRollback"
-      >
-        {{ scalePercent }} %
-      </el-button>
+        <el-button
+          size="small"
+          icon="el-icon-refresh-left"
+          @click="style.scale = 1"
+        >
+          {{ scalePercent }} %
+        </el-button>
+      </div>
     </portal>
   </div>
 </template>
@@ -103,7 +106,9 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import ViewPortCover from './ViewPortCover'
 import { directive } from '@/directive/freeView'
 import { BREAK_POINTS } from '@/const'
-import { setTransform } from '@/utils/style'
+import { getRectWithoutPadding } from '@/utils/style'
+import gsap from 'gsap'
+import { toPrecision } from '@/utils/number'
 
 export default {
   name: 'ViewPort',
@@ -116,14 +121,16 @@ export default {
   data() {
     return {
       resizeBar: true,
-      scaleRatio: 1,
       freeViewOptions: {
         move: false,
         scaleCallback: this.scaleCallback,
         targetSelector: '.free-view-target'
       },
-      height: 0,
-      width: 0
+      style: {
+        h: 0,
+        w: 0,
+        scale: 1
+      }
     }
   },
   computed: {
@@ -133,7 +140,7 @@ export default {
       return BREAK_POINTS
     },
     scalePercent() {
-      return Math.ceil(+this.scaleRatio * 100)
+      return Math.ceil(+this.style.scale * 100)
     },
     targetEl() {
       return this.$refs.target
@@ -185,97 +192,108 @@ export default {
     }
   },
   watch: {
+    artBoardHeight(value) {
+      this.style.h = value
+    },
+    artBoardWidth(value) {
+      this.style.w = value
+    },
     isDraftMode(value) {
       if (value) {
         this.resizeBar = true
       }
+    },
+    style: {
+      handler(style) {
+        const { APP_SET } = this
+        gsap.to(this.targetEl, {
+          height: style.h,
+          width: style.w,
+          x: '-50%',
+          y: '-50%',
+          z: 0,
+          scale: style.scale,
+          top: '50%',
+          left: '50%',
+          onStart: () => {
+            APP_SET({ gridResizing: true })
+          },
+          onComplete: () => {
+            APP_SET({ gridResizing: false })
+          }
+        })
+
+        this.resizeNodeQuickFn()
+        this.APP_SET({
+          artBoardWidth: toPrecision(style.w, 0),
+          artBoardHeight: toPrecision(style.h, 0)
+        })
+      },
+      deep: true
+    },
+    'style.scale'(scaleRatio) {
+      this.APP_SET({ scaleRatio })
     }
   },
   mounted() {
-    this.interact
-      .resizable({
-        edges: { left: true, right: true, bottom: true, top: true },
-        allowFrom:
-          '.handler.top, .handler.bottom, .handler.right, .handler.left',
-        listeners: {
-          move: event => {
-            const target = event.target
+    this.interact.resizable({
+      edges: { left: true, right: true, bottom: true, top: true },
+      allowFrom: '.handler.top, .handler.bottom, .handler.right, .handler.left',
+      listeners: {
+        move: event => {
+          const { scale } = this.style
 
-            const h = event.rect.height / this.scaleRatio
-            const w = event.rect.width / this.scaleRatio
+          const h = (event.rect.height + event.deltaRect.top) / scale
+          const w = (event.rect.width + event.deltaRect.left) / scale
 
-            this.height = parseInt(h)
-            this.width = parseInt(w)
-
-            let { x, y } = event.target.dataset
-
-            x = parseFloat(x) || 0
-            y = parseFloat(y) || 0
-            x += event.deltaRect.left / this.scaleRatio
-            y += event.deltaRect.top / this.scaleRatio
-
-            Object.assign(target.style, {
-              height: h + 'px',
-              width: w + 'px',
-              ...setTransform({
-                top: y,
-                left: x
-              })
-            })
-
-            target.setAttribute('data-x', x)
-            target.setAttribute('data-y', y)
-
-            this.$emit('resize', event)
-          }
-        },
-        modifiers: [
-          // keep the edges inside the parent
-          interactjs.modifiers.restrictEdges({
-            outer: 'parent'
+          Object.assign(this.style, {
+            h,
+            w,
+            scale
           })
-        ],
 
-        inertia: true,
-        ...this.resizeOptions
-      })
-      .on(['resizemove'], () => {
-        this.artBoardResizing(true)
-      })
-      .on(['resizeend'], () => {
-        this.artBoardResizing(false)
-      })
+          this.$emit('resize', event)
+        }
+      },
+      modifiers: [
+        // keep the edges inside the parent
+        interactjs.modifiers.restrictEdges({
+          outer: 'parent'
+        })
+      ],
+
+      inertia: true,
+      ...this.resizeOptions
+    })
   },
   methods: {
     ...mapMutations('app', {
       APP_SET: 'SET'
     }),
-    ...mapActions('app', ['artBoardResizing']),
-    scaleRollback() {
-      this.targetEl.style.webkitTransform = this.targetEl.style.transform = null
-      this.scaleRatio = 1
-      this.APP_SET({ scaleRatio: 1 })
-      this.freeViewOptions.freeViewReset()
+    ...mapActions('app', ['checkIsGridResizing', 'resizeNodeQuickFn']),
+    setBoundaryRect() {
+      const { height, width } = getRectWithoutPadding(this.$el)
+
+      this.style.w = width
+      this.style.h = height
     },
     scaleCallback(event, { scaleRatio }) {
-      this.APP_SET({ scaleRatio })
-      this.scaleRatio = scaleRatio
-    },
-    reset() {
-      Object.assign(this.targetEl.style, {
-        ...setTransform(),
-        height: '100%',
-        width: null
-      })
-
-      this.$el.setAttribute('data-x', 0)
-      this.$el.setAttribute('data-y', 0)
+      this.style.scale = scaleRatio
     },
     setSize({ w, h }) {
-      Object.assign(this.targetEl.style, {
-        width: w + 'px',
-        height: h ? h + 'px' : '100%'
-      })
+      const { width, height } = getRectWithoutPadding(this.$el)
+      h = h || height
+
+      if (w > width || h > height) {
+        if (w - width > h - height) {
+          this.style.scale = width / w
+        }
+        else {
+          this.style.scale = height / h
+        }
+      }
+      this.style.w = w
+      this.style.h = h
     }
   }
 }
@@ -284,50 +302,45 @@ export default {
 <style scoped lang="scss">
 .handler {
   position: absolute;
-  border-radius: 7px;
-  opacity: 0;
-  transition: opacity 0.5s;
+  opacity: 0.7;
+  transition: opacity 1s;
+  background-color: rgba(169, 172, 179, 0.19);
+  border-radius: 3px;
+
   &:hover {
     opacity: 1;
-    background-color: rgba(169, 172, 179, 0.19);
+    background-color: rgba(169, 172, 179, 0.49);
   }
 }
 .top {
-  top: -9px;
-  left: 0;
-  right: 0;
+  top: -12px;
+  left: 40%;
+  right: 40%;
   height: 8px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
 }
 .right {
-  top: 0;
-  bottom: 0;
-  right: -9px;
+  top: 40%;
+  bottom: 40%;
+  right: -12px;
   width: 8px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
 }
 .bottom {
-  left: 0;
-  bottom: -9px;
-  right: 0;
+  left: 40%;
+  bottom: -12px;
+  right: 40%;
   height: 8px;
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
 }
 .left {
-  top: 0;
-  left: -9px;
-  bottom: 0;
+  top: 40%;
+  left: -12px;
+  bottom: 40%;
   width: 8px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
 }
 .target {
   box-sizing: border-box;
   touch-action: none;
   position: relative;
+  backface-visibility: hidden;
 }
 
 .shortcut-button {

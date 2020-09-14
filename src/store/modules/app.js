@@ -13,8 +13,8 @@ import { getBreakpoint } from '@/utils/layout'
 const state = {
   breakpoint: 'lg',
   gridResizing: false,
-  artBoardWidth: 1200,
-  artBoardHeight: 768,
+  artBoardWidth: 0,
+  artBoardHeight: 0,
   scaleRatio: 1,
 
   beingAddedComponentId: null,
@@ -59,6 +59,7 @@ const mutations = {
   }
 }
 
+let timer
 let tmpSelectedComponentIds
 const actions = {
   setBeingAddedComponentId({ commit, state }, id) {
@@ -113,7 +114,22 @@ const actions = {
     return copyComponentIds
   },
 
-  artBoardResizing({ state, commit, dispatch }, boolean) {
+  checkIsGridResizing({ rootGetters, commit }) {
+    if (!rootGetters['mode/isDraftMode']) {
+      return
+    }
+
+    commit('SET', { gridResizing: true })
+    if (timer !== null) {
+      clearTimeout(timer)
+    }
+
+    timer = setTimeout(() => {
+      commit('SET', { gridResizing: false })
+    }, 80)
+  },
+
+  artBoardResizing({ state, commit, dispatch }, boolean = false) {
     const element = document.getElementById('art-board')
     const { clientWidth, clientHeight } = element
 
@@ -121,7 +137,7 @@ const actions = {
       gridResizing: boolean,
       breakpoint: getBreakpoint(element),
       artBoardWidth: parseInt(clientWidth),
-      artBoardHeight: parseInt(clientHeight)
+      artBoardHeight: parseInt(clientHeight) - 2
     })
 
     if (!boolean) {

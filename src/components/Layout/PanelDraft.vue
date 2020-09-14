@@ -50,9 +50,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('mode', ['SET_DRAFT_MODE']),
     ...mapActions('example', ['initExamples']),
-    ...mapActions('node', ['getProject'])
   }
 }
 </script>

@@ -48,7 +48,7 @@ import { shortTagName } from '@/utils/node'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { Tag } from 'element-ui'
 import gsap from 'gsap'
-import { updateWrapperStyle } from '@/utils/quickFunction'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'ComponentCard',
@@ -88,8 +88,11 @@ export default {
     }, this.delay)
   },
   methods: {
+    ...mapActions('app', ['checkIsGridResizing']),
     shortTagName,
-    onScroll: updateWrapperStyle
+    onScroll() {
+      this.checkIsGridResizing()
+    }
   }
 }
 </script>

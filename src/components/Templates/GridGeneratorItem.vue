@@ -12,12 +12,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
-import { updateWrapperStyle } from '@/utils/quickFunction'
 import { getValueByPath, isUndefined } from '@/utils/tool'
 import { AUTO_HEIGHT, GRID, GRID_GENERATOR, STYLES, TEXT_EDITOR } from '@/const'
 import { isLayers, isTextEditor } from '@/utils/node'
@@ -67,7 +66,10 @@ export default {
     }
   },
   methods: {
-    onScroll: updateWrapperStyle
+    ...mapActions('app', ['checkIsGridResizing']),
+    onScroll() {
+      this.checkIsGridResizing()
+    }
   }
 }
 </script>

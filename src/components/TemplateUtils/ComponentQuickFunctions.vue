@@ -250,6 +250,10 @@ export default {
               ? rect.top + height - top1
               : height
 
+        if (height < 10 || width < 10) {
+          return
+        }
+
         gsap.fromTo(
           this.framer,
           {

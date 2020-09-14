@@ -29,39 +29,17 @@
       @shortkey="multiDelete"
     />
 
-    <el-tooltip
-      effect="light"
-      content="Undo"
-      placement="bottom"
-    >
-      <el-button
-        v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
-        type="text"
-        icon="el-icon-refresh-left"
-        @shortkey.native="UNDO"
-        @click="UNDO"
-      />
-    </el-tooltip>
+    <i
+      v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
+      @shortkey="UNDO"
+      @click="UNDO"
+    />
 
-    <el-tooltip
-      effect="light"
-      content="Redo"
-      placement="bottom"
-    >
-      <el-button
-        v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
-        type="text"
-        icon="el-icon-refresh-right"
-        @shortkey.native="REDO"
-        @click="REDO"
-      />
-    </el-tooltip>
-
-    <i class="dot" />
-
-    <portal-target name="ViewPortController" />
-
-    <i class="dot" />
+    <i
+      v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
+      @shortkey="REDO"
+      @click="REDO"
+    />
 
     <el-tooltip
       effect="light"
@@ -79,6 +57,8 @@
     </el-tooltip>
 
     <dialog-publish />
+
+    <portal-target name="ViewPortController" />
   </nav>
 </template>
 
