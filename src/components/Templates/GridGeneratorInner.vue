@@ -3,6 +3,7 @@
     ref="gridGenerator"
     v-bind="innerProps"
     :layout="layouts"
+    :responsive-layouts="responsiveLayouts"
     :margin="[0, 0]"
     :is-draggable="isDraftMode && !isInstanceChild"
     :is-resizable="isDraftMode && !isInstanceChild"
@@ -13,15 +14,10 @@
       v-bind="child"
       :ref="child.id"
       :key="child.id"
-      :class="{
-        'z-index1': selectedComponentIds.includes(child.id)
-      }"
       drag-ignore-from=".grid-item-fix"
       drag-allow-from="div"
       @resizeStart="itemUpdating"
-      @resized="itemUpdated"
       @moveStart="itemUpdating"
-      @moved="itemUpdated"
     >
       <component-giver :id="child.id" />
     </vue-grid-item>
@@ -29,15 +25,15 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
-import { COLUMNS, GRID } from '@/const'
+import { mapState, mapMutations } from 'vuex'
+import { COLUMNS, GRID, BREAK_POINTS } from '@/const'
 import { deleteBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
 import { getBreakpoint } from '@/utils/layout'
-import { getValueByPath } from '@/utils/tool'
+import { getValueByPath, throttle } from '@/utils/tool'
 import { isInstanceChild } from '@/utils/inheritance'
 
 export default {
@@ -69,7 +65,7 @@ export default {
   },
   data() {
     return {
-      layouts: [],
+      responsiveLayouts: [],
       lockIds: [], // touchable will use it
       gridItemsData: {},
       exampleBoundary: 'xs'
@@ -89,73 +85,80 @@ export default {
     isInstanceChild() {
       return isInstanceChild(this.node)
     },
+    layouts() {
+      return this.responsiveLayouts[this.currentBreakPoint]
+    },
     computedLayouts() {
-      const breakPoint = this.currentBreakPoint
       const { artBoardHeight } = this
-      const layouts = []
+      const layouts = {}
       let layoutW
 
-      this.children.forEach(({ id }, index) => {
-        const data = {
-          static: this.lockIds.includes(id),
-          id: id,
-          i: id || index, // should not happen, but just prevent crash in case
-          x: 0,
-          y: 0,
-          w: 0,
-          h: 0,
-          verticalCompact: false,
-          autoHeight: false
-        }
+      Object.keys(BREAK_POINTS).forEach(breakPoint => {
+        const layout = []
+        this.children.forEach(({ id }, index) => {
+          const data = {
+            static: this.lockIds.includes(id),
+            id: id,
+            i: id || index, // should not happen, but just prevent crash in case
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            verticalCompact: false,
+            autoHeight: false
+          }
 
-        if (!this.gridItemsData[id]) {
-          return layouts.push(data)
-        }
+          if (!this.gridItemsData[id]) {
+            return layout.push(data)
+          }
 
-        const { styles = {}, grid, autoHeight } = this.gridItemsData[id]
+          const { styles = {}, grid, autoHeight } = this.gridItemsData[id]
 
-        if (!grid || !grid[breakPoint]) {
-          return layouts.push(data)
-        }
+          if (!grid || !grid[breakPoint]) {
+            return layout.push(data)
+          }
 
-        if (getValueByPath(styles, [breakPoint, 'hidden'])) {
-          return
-        }
+          if (getValueByPath(styles, [breakPoint, 'hidden'])) {
+            return
+          }
 
-        let w = 0
-        let h = 0
-        const { ratioW, ratioH, verticalCompact } = styles
+          let w = 0
+          let h = 0
+          const { ratioW, ratioH, verticalCompact } = styles
 
-        if (grid && grid[breakPoint]) {
-          w = grid[breakPoint].w
-          h = grid[breakPoint].h
+          if (grid && grid[breakPoint]) {
+            w = grid[breakPoint].w
+            h = grid[breakPoint].h
 
-          if (!autoHeight) {
-            if (grid[breakPoint].hUnit === 'vh') {
-              h = (artBoardHeight / 100) * parseInt(h)
-            }
-            else if (ratioH && ratioW) {
-              layoutW = layoutW || this.$el.clientWidth
-              const itemWidth = (parseInt(layoutW) / COLUMNS) * w
-              h = (itemWidth / ratioW) * ratioH
-            }
-            else {
-              h = parseInt(h)
+            if (!autoHeight) {
+              if (grid[breakPoint].hUnit === 'vh') {
+                h = (artBoardHeight / 100) * parseInt(h)
+              }
+              else if (ratioH && ratioW) {
+                layoutW = layoutW || this.$el.clientWidth
+                const itemWidth = (parseInt(layoutW) / COLUMNS) * w
+                h = (itemWidth / ratioW) * ratioH
+              }
+              else {
+                h = parseInt(h)
+              }
             }
           }
-        }
 
-        layouts.push({
-          static: this.lockIds.includes(id),
-          id: id,
-          i: id || index, // should not happen, but just prevent crash in case
-          x: grid[breakPoint].x || 0,
-          y: grid[breakPoint].y || 0,
-          w,
-          h,
-          verticalCompact,
-          autoHeight
+          layout.push({
+            static: this.lockIds.includes(id),
+            id: id,
+            i: id || index, // should not happen, but just prevent crash in case
+            x: grid[breakPoint].x || 0,
+            y: grid[breakPoint].y || 0,
+            w,
+            h,
+            verticalCompact,
+            autoHeight
+          })
         })
+
+        layouts[breakPoint] = layout
       })
 
       return layouts
@@ -164,7 +167,7 @@ export default {
   watch: {
     computedLayouts: {
       handler(value) {
-        this.layouts = value
+        this.responsiveLayouts = value
       },
       deep: true,
       immediate: true
@@ -233,11 +236,7 @@ export default {
       }
     },
     itemUpdating() {
-      // this.closestBoundaryEl.classList.add('border-pulse')
       this.APP_SET({ gridResizing: true })
-    },
-    itemUpdated() {
-      this.APP_SET({ gridResizing: false })
     }
   }
 }

@@ -21,8 +21,6 @@ import { BREAK_POINTS, COLUMN_OBJECT } from '@/const'
 import { deepMerge } from '@/utils/tool'
 
 export const defaultSetting = {
-  isResizable: true,
-  isDraggable: true,
   preventCollision: false,
   verticalCompact: false,
   responsive: true,

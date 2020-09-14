@@ -5,7 +5,7 @@
        :style="style"
   >
     <slot></slot>
-    <span v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass"></span>
+    <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass"></span>
     <!--<span v-if="draggable" ref="dragHandle" class="vue-draggable-handle"></span>-->
   </div>
 </template>
@@ -13,6 +13,7 @@
   .vue-grid-item {
     transition: all 200ms ease;
     transition-property: left, top, right, width, height;
+    box-sizing: border-box;
     /* add right for rtl */
   }
 
@@ -93,6 +94,7 @@
   }
 </style>
 <script>
+  import Vue from 'vue'
   import { setTopLeft, setTopRight, setTransformRtl, setTransform } from '../helpers/utils'
   import { getControlPosition, createCoreData } from '../helpers/draggableUtils'
   import { getDocumentDir } from '../helpers/DOM'
@@ -100,6 +102,8 @@
   //    var eventBus = require('./eventBus');
   var elementResizeDetectorMaker = require('element-resize-detector')
   let interact = require('interactjs')
+
+  const store = Vue.observable({ hideHandler: false })
 
   export default {
     name: 'GridItem',
@@ -358,7 +362,7 @@
 
                 this.erd.listenTo(slot.elm, debounce(() => {
                   this.autoSize()
-                }, 50))
+                }, 20))
 
               }
             }
@@ -369,6 +373,9 @@
           })
         },
         immediate: true
+      },
+      isDragging: function(value) {
+        store.hideHandler = value
       },
       isDraggable: function() {
         this.draggable = this.isDraggable
@@ -445,6 +452,9 @@
       }
     },
     computed: {
+      hideHandler() {
+        return store.hideHandler
+      },
       classObj() {
         return {
           transition: this.transition,

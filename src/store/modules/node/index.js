@@ -74,6 +74,9 @@ const mutations = {
   },
   // only for component or component attrs
   VUE_SET({ nodesMap, editingComponentSetId }, { tree, key, value }) {
+    if (value === null) {
+      debugger
+    }
     value = cloneJson(value)
     // 這裡一定要 cloneJson, 不然deltas裡面的值會被改掉
     // VUE_DELETE delete childrenOf[node[ID]] 和 value = cloneJson(value) 一定要 不然會有reference loop bug

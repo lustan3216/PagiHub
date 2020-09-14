@@ -29,7 +29,7 @@
       TRANSFORM
     </el-divider>
 
-    <transform-origin :state="state" />
+<!--    <transform-origin :state="state" />-->
 
     <template v-for="(option, index) in transformArray">
       <portal
