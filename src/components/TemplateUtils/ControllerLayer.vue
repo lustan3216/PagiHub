@@ -111,7 +111,7 @@ export default {
       return this.node && this.node[CAN_BE_EDITED]
     },
     child() {
-      return this.node && this.node.children[0]
+      return getValueByPath(this.node, ['children', 0])
     },
     fitContainer() {
       const overflow = getValueByPath(this.child, [

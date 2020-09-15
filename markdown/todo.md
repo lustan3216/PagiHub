@@ -12,36 +12,26 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-grid layout 應該 根據自己的寬度當breakpoint 
-lyaer 可以controller gridlayout不要 
-shadows 的softrecord 有bug, 不應該去改 nodesMap, 直接去動style就好 
-grditem新增小孩時，把grid搬到child上，如果刪除再搬回item, 值變動也在child上變動
-grid 最好columns 都不一樣，當寬度變時，item會扁掉，修bug
-優化controller lyaer click outside, 一下子觸發太多node, 解決add完template, 鎖定會不見
-grid layout 要100%
-
+button可以轉跳
+預設是zindex行為
+text editor, p editor
+可設定breakpoint
+shadows 的 softrecord 有 bug, 不應該去改 nodesMap, 直接去動 style 就好
+優化 controller lyaer click outside, 一下子觸發太多 node, 解決 add 完 template, 鎖定會不見
 text / article style inheritance 要分開, button 裡面的要是可以 inherit 的
-Reset to Master State
-softRecord 應該是有問題，因為 record 紀錄的會不一樣
-instance 可以直接複製，跟著王 copy 父曾是 master 就直接 copy ，但也要做一個按鈕控制分離，當 copy 進 page record 一個值紀錄此 page 有用該 component
+icon
+可以右鍵
 
 刪除可以刪到底， 會出現加入 component 的按鈕，只能加入 componentet or gird
 panel node 會一直被關起來
-
-layer 裡面層級的 css 看要不要要處理，css 要放在哪一個 grid
-
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 button 要可以連結路由
 
-10<li>每個 button 都可以點了 連結到 page / link / 需用 state 的結構去做 click hover active 等等切換 componentSet，這個要去另一個版操作，向 XD 的 prototype</li>
-5<li>layer grid item(應該無法處理) 想辦法在 project node 拿掉</li> 合併 grid item 跟 component 的 style, style 應該有辦法合併獲優先顯示 component 的
 5<li>search panel</li>
 20<li>可瀏覽 production 版本</li>
 
 <li>need login when publishing </li>
 
-bug: grid 畫面縮小後會壞掉
-5<li>sreen size changer</li>
 background color
 font 的 padding
 

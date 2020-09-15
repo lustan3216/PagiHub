@@ -906,6 +906,7 @@
       autoSize() {
         // ok here we want to calculate if a resize is needed
         this.$nextTick(() => {
+          console.warn('autoSize')
           if (!this.shouldAutoSize) {
             return
           }
