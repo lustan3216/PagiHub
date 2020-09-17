@@ -66,7 +66,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('app', ['checkIsGridResizing']),
+    ...mapActions('layout', ['checkIsGridResizing']),
     onScroll() {
       this.checkIsGridResizing()
     }

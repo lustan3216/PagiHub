@@ -34,7 +34,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['breakpoint']),
+    ...mapState('layout', ['breakpoint']),
     node() {
       return this.nodesMap[this.id]
     },

@@ -135,7 +135,7 @@ export default {
   },
   computed: {
     ...mapState('mode', ['mode']),
-    ...mapState('app', ['breakpoint', 'artBoardWidth', 'artBoardHeight']),
+    ...mapState('layout', ['breakpoint', 'artBoardWidth', 'artBoardHeight']),
     breakpoints() {
       return BREAK_POINTS
     },
@@ -205,7 +205,7 @@ export default {
     },
     style: {
       handler(style) {
-        const { APP_SET } = this
+        const { LAYOUT_SET } = this
         gsap.to(this.targetEl, {
           height: style.h,
           width: style.w,
@@ -216,15 +216,15 @@ export default {
           top: '50%',
           left: '50%',
           onStart: () => {
-            APP_SET({ gridResizing: true })
+            LAYOUT_SET({ gridResizing: true })
           },
           onComplete: () => {
-            APP_SET({ gridResizing: false })
+            LAYOUT_SET({ gridResizing: false })
           }
         })
 
         this.resizeNodeQuickFn()
-        this.APP_SET({
+        this.LAYOUT_SET({
           artBoardWidth: toPrecision(style.w, 0),
           artBoardHeight: toPrecision(style.h, 0)
         })
@@ -232,7 +232,7 @@ export default {
       deep: true
     },
     'style.scale'(scaleRatio) {
-      this.APP_SET({ scaleRatio })
+      this.LAYOUT_SET({ scaleRatio })
     }
   },
   mounted() {
@@ -267,10 +267,10 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('app', {
-      APP_SET: 'SET'
+    ...mapMutations('layout', {
+      LAYOUT_SET: 'SET'
     }),
-    ...mapActions('app', ['checkIsGridResizing', 'resizeNodeQuickFn']),
+    ...mapActions('layout', ['checkIsGridResizing', 'resizeNodeQuickFn']),
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.$el)
 

@@ -90,7 +90,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds', 'breakpoint']),
+    ...mapState('app', ['selectedComponentIds']),
+    ...mapState('layout', ['breakpoint']),
     ...mapState('node', ['editingComponentSetId']),
     componentSetNode() {
       return this.nodesMap[this.editingComponentSetId]
@@ -119,7 +120,7 @@ export default {
     this.$bus.$off('component-delete', this.renderTree)
   },
   methods: {
-    ...mapActions('app', ['resizeNodeQuickFn']),
+    ...mapActions('layout', ['resizeNodeQuickFn']),
     ...mapMutations('app', [
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
       'TOGGLE_SELECTED_COMPONENT_ID'

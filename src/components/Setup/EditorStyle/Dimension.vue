@@ -130,7 +130,8 @@ export default {
   },
 
   computed: {
-    ...mapState('app', ['breakpoint', 'selectedComponentIds']),
+    ...mapState('app', ['selectedComponentIds']),
+    ...mapState('layout', ['breakpoint']),
     selectedComponentNodes() {
       return this.selectedComponentIds
         .map(id => this.nodesMap[id])

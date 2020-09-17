@@ -97,7 +97,9 @@ export default {
     ...mapState('app', [
       'copyComponentIds',
       'selectedComponentIds',
-      'selectedComponentNode',
+      'selectedComponentNode'
+    ]),
+    ...mapState('layout', [
       'gridResizing'
     ]),
     node() {

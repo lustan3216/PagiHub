@@ -88,7 +88,7 @@ export default {
     }, this.delay)
   },
   methods: {
-    ...mapActions('app', ['checkIsGridResizing']),
+    ...mapActions('layout', ['checkIsGridResizing']),
     shortTagName,
     onScroll() {
       this.checkIsGridResizing()

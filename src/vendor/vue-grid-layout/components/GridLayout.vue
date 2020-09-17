@@ -286,7 +286,7 @@
       }
     },
     methods: {
-      ...mapActions('app', ['resizeNodeQuickFn']),
+      ...mapActions('layout', ['resizeNodeQuickFn']),
       layoutUpdate() {
         if (this.layout !== undefined && this.originalLayout !== null) {
           if (this.layout.length !== this.originalLayout.length) {

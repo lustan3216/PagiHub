@@ -97,7 +97,7 @@ import { BREAK_POINTS } from '@/const'
 export default {
   name: 'ViewPortController',
   computed: {
-    ...mapState('app', ['breakpoint', 'artBoardHeight', 'artBoardWidth']),
+    ...mapState('layout', ['breakpoint', 'artBoardHeight', 'artBoardWidth']),
     breakpoints() {
       return BREAK_POINTS
     },

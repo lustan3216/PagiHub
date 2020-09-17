@@ -72,12 +72,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', [
-      'selectedComponentIds',
-      'breakpoint',
-      'artBoardWidth',
-      'artBoardHeight'
-    ]),
+    ...mapState('app', ['selectedComponentIds']),
+    ...mapState('layout', ['breakpoint', 'artBoardWidth', 'artBoardHeight']),
     ...mapState('node', ['nodesMap']),
     currentBreakPoint() {
       return this.isExample ? this.exampleBoundary : this.breakpoint
@@ -181,7 +177,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', { APP_SET: 'SET' }),
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     lock(id) {
       this.lockIds.push(id)
     },
@@ -236,7 +232,7 @@ export default {
       }
     },
     itemUpdating() {
-      this.APP_SET({ gridResizing: true })
+      this.LAYOUT_SET({ gridResizing: true })
     }
   }
 }

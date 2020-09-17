@@ -459,7 +459,7 @@
       }
     },
     computed: {
-      ...mapState('app', ['scaleRatio']),
+      ...mapState('layout', ['scaleRatio']),
       shouldAutoSize() {
         const slot = this.$slots.default && this.$slots.default[0]
         return slot && this.autoHeight

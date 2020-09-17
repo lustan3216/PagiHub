@@ -72,7 +72,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['breakpoint']),
+    ...mapState('layout', ['breakpoint']),
     visible() {
       const hidden =
         this.node && this.node.hidden && this.node.hidden[this.breakpoint]

@@ -117,7 +117,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds', 'gridResizing']),
+    ...mapState('app', ['selectedComponentIds']),
+    ...mapState('layout', ['gridResizing']),
     ...mapState('example', ['exampleNodesMap']),
     itemEditing() {
       return store.editingPath.includes(this.id)
@@ -154,15 +155,15 @@ export default {
   },
   methods: {
     isMac,
-    ...mapMutations('app', {
-      APP_SET: 'SET'
+    ...mapMutations('layout', {
+      LAYOUT_SET: 'SET'
     }),
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
-    ...mapActions('app', ['resizeNodeQuickFn']),
+    ...mapActions('layout', ['resizeNodeQuickFn']),
 
     finEditingPath() {
       const path = []
@@ -198,7 +199,7 @@ export default {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)
       }
       else {
-        this.APP_SET({ gridResizing: false })
+        this.LAYOUT_SET({ gridResizing: false })
         this.SET_SELECTED_COMPONENT_ID(this.id)
         this.resizeNodeQuickFn()
         setTimeout(() => {

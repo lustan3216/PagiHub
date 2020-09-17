@@ -62,7 +62,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('app', ['resizeNodeQuickFn']),
+    ...mapActions('layout', ['resizeNodeQuickFn']),
     shortTagName,
     scroll() {
       setTimeout(() => {

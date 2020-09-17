@@ -144,6 +144,8 @@ export default {
       'copyComponentIds',
       'selectedComponentIds',
       'selectedComponentNode',
+    ]),
+     ...mapState('layout', [
       'gridResizing'
     ]),
     newItemToolTip() {
@@ -199,9 +201,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', {
-      APP_SET: 'SET'
-    }),
     ...mapActions('app', ['setCopySelectedNodeId', 'setBeingAddedComponentId']),
     tryToAddComponent() {
       this.setBeingAddedComponentId(this.id)

@@ -34,7 +34,7 @@ export default {
     ComponentSet
   },
   computed: {
-    ...mapState('app', ['scaleRatio']),
+    ...mapState('layout', ['scaleRatio']),
     ...mapState('node', ['editingComponentSetId']),
     node() {
       return this.nodesMap[this.editingComponentSetId]
@@ -46,7 +46,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('app', ['artBoardResizing', 'checkIsGridResizing']),
+    ...mapActions('layout', ['artBoardResizing', 'checkIsGridResizing']),
     onScroll() {
       this.checkIsGridResizing()
     }
