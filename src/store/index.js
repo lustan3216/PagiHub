@@ -5,11 +5,11 @@ import example from './modules/example'
 import app from './modules/app'
 import asset from './modules/asset'
 import mode from './modules/mode'
+import layout from './modules/layout'
 import user from './modules/user'
 import { isUndefined } from '../utils/tool'
 import draftStateUploader from '../utils/draftStateUploader'
 import inheritMapUploader from '../utils/inheritMapUploader'
-import { patchProject } from '@/api/node'
 
 Vue.use(Vuex)
 
@@ -56,7 +56,8 @@ const store = new Vuex.Store({
     node,
     user,
     example,
-    asset
+    asset,
+    layout
   }
 })
 

@@ -351,8 +351,7 @@ export default {
     value: {
       default: `
           <h2>Hi there,</h2>
-          <p>this is a very <em>basic</em> example.</p>
-          <p>Try to enter a new line will have more magic.</p>
+          <p>Try to <em>enter</em> a new line will have more magic.</p>
           <pre><code>body { display: none; }</code></pre>
           <ul>
             <li>A regular list</li>

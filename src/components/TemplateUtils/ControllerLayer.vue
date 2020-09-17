@@ -3,9 +3,27 @@
   <div
     v-if="isDraftMode && node"
     :class="{ 'h-100': !fitContainer }"
+    @mousedown.stop="contextMenu = null"
     @mouseup.stop="singleClick"
     @dblclick.stop="dblclick"
+    @contextmenu="contextmenu($event)"
   >
+    <portal
+      v-if="selected && !gridResizing"
+      to="App"
+    >
+      <context-menu
+        v-if="contextMenu"
+        :style="{
+          top: contextMenu.y,
+          left: contextMenu.x
+        }"
+        :id="id"
+        class="absolute"
+        menu-only
+      />
+    </portal>
+
     <portal
       v-if="selected && !gridResizing"
       :to="`App-${id}`"
@@ -32,7 +50,6 @@
     </portal>
 
     <div
-      v-click-outside="clickOutside"
       v-if="canBeEdited"
       :class="{
         'grid-item-fix': itemEditing,
@@ -55,14 +72,23 @@
 </template>
 
 <script>
+import vue from 'vue'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { CAN_BE_EDITED, STYLES } from '@/const'
 import { isMac } from '@/utils/device'
-import { getNode, isLayers, isTextEditor } from '@/utils/node'
+import {
+  getNode,
+  isLayers,
+  isTextEditor,
+  traversalAncestorAndSelf
+} from '@/utils/node'
 import { getValueByPath, isUndefined } from '@/utils/tool'
-import clickOutside from '@/utils/clickOutside'
 import { isInstance } from '@/utils/inheritance'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
+import ContextMenu from '@/components/TemplateUtils/ContextMenu'
+import { findIndexBy } from '@/utils/array'
+
+const store = vue.observable({ editingPath: [] })
 
 export default {
   name: 'ControllerLayer',
@@ -72,10 +98,8 @@ export default {
       default: inheritanceObject()
     }
   },
-  directives: {
-    clickOutside
-  },
   components: {
+    ContextMenu,
     ComponentQuickFunctions: () => import('./ComponentQuickFunctions'),
     SettingInheritance: () =>
       import('@/components/Setup/EditorSetting/SettingInheritance')
@@ -89,12 +113,15 @@ export default {
   data() {
     // 有些component像是 text edit or video, 裡面有拖拉多種互動，需要用 itemEditing 判定需不需要鎖住，經由點兩下就可操作
     return {
-      itemEditing: false
+      contextMenu: null
     }
   },
   computed: {
     ...mapState('app', ['selectedComponentIds', 'gridResizing']),
     ...mapState('example', ['exampleNodesMap']),
+    itemEditing() {
+      return store.editingPath.includes(this.id)
+    },
     node() {
       return getNode(this.id)
     },
@@ -136,60 +163,32 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     ...mapActions('app', ['resizeNodeQuickFn']),
-    clickOutside(event) {
-      const insideArea = [
-        '#sidebar-right',
-        '#examples-dialog',
-        '#component-tabs',
-        '#menu-bubble',
-        '.el-select-dropdown__item',
-        '.el-tooltip__popper',
-        '.el-color-dropdown'
-      ]
-      let clickInside = false
 
-      loop1: for (let i = 0; i < event.path.length; i++) {
-        const element = event.path[i]
-
-        if (['HTML', 'BODY'].includes(element.tagName)) {
-          break loop1
-        }
-        else if (element.id === 'art-board') {
-          clickInside = false
-          break loop1
-        }
-
-        for (let ii = 0; ii < insideArea.length; ii++) {
-          const areaSelector = insideArea[ii]
-
-          if (areaSelector[0] === '.') {
-            if (element.classList.contains(areaSelector.replace('.', ''))) {
-              clickInside = true
-              break loop1
-            }
-          }
-          else if (areaSelector[0] === '#') {
-            if (element.id === areaSelector.replace('#', '')) {
-              clickInside = true
-              break loop1
-            }
-          }
-        }
-      }
-
-      if (!clickInside) {
-        this.itemEditing = false
-      }
+    finEditingPath() {
+      const path = []
+      traversalAncestorAndSelf(this.node, node => {
+        path.push(node.id)
+      })
+      store.editingPath = path
     },
+
     dblclick() {
+      if (!this.isExample) {
+        this.finEditingPath()
+      }
       if (this.canBeEdited) {
-        this.itemEditing = true
         this.SET_SELECTED_COMPONENT_ID(this.id)
       }
     },
+
     singleClick(event) {
       // don't change selected component ids when dragging item,
       // otherwise vue-resizable-handle will cause a bug here
+
+      if (!this.isExample && this.itemEditing) {
+        const index = findIndexBy(store.editingPath, this.id)
+        store.editingPath.splice(0, index)
+      }
 
       if (event.target.classList.contains('vue-resizable-handle')) {
         return
@@ -205,6 +204,14 @@ export default {
         setTimeout(() => {
           document.getElementById(`tree-node-${this.id}`).scrollIntoView(false)
         }, 100)
+      }
+    },
+    contextmenu(event) {
+      event.preventDefault()
+      event.stopPropagation()
+      this.contextMenu = {
+        x: `${event.clientX}px`,
+        y: `${event.clientY}px`
       }
     }
   }

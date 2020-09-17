@@ -469,7 +469,6 @@
       },
       classObj() {
         return {
-          transition: this.transition,
           'vue-resizable': this.resizableAndNotStatic,
           'static': this.static,
           'resizing': this.isResizing,

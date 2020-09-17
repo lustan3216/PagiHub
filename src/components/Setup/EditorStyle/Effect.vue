@@ -19,36 +19,21 @@
         </el-dropdown-menu>
       </el-dropdown>
 
-      <el-button
-        v-if="filterArray.find(x => !x.visible)"
-        icon="el-icon-delete"
-        class="m-l-0"
-        @click="clean"
-      />
-
       EFFECT
     </el-divider>
 
     <el-row
       v-for="(option, index) in filterArray"
       :key="option.name"
-      class="w-100"
+      :gutter="5"
       type="flex"
       align="middle"
     >
-      <el-col :span="2">
-        <el-checkbox
-          :value="option.visible"
-          style="margin-top: 7px;"
-          @input="visibleChange(index, $event)"
-        />
-      </el-col>
-
       <el-col :span="8">
         <span class="title">{{ humanize(option.name) }}</span>
       </el-col>
 
-      <el-col :span="14">
+      <el-col :span="13">
         <select-unit
           v-if="option.name"
           :value="option.value || options[option.name].default"
@@ -56,6 +41,13 @@
           :clearable="false"
           v-bind="options[option.name]"
           @input="onChange(index, $event)"
+        />
+      </el-col>
+
+      <el-col :span="3">
+        <el-button
+          icon="el-icon-delete"
+          @input="itemRemove(index)"
         />
       </el-col>
     </el-row>
@@ -66,7 +58,7 @@
 import SelectUnit from '@/components/Components/SelectUnit'
 import forNodeMixin from './mixins/forNode'
 import { Divider } from 'element-ui'
-import { arrayLast } from '@/utils/array'
+import { arrayLast, deleteBy } from '@/utils/array'
 import { humanize, splitAt } from '@/utils/string'
 
 export default {
@@ -202,8 +194,8 @@ export default {
         }
       })
     },
-    clean() {
-      this.filterArray = this.filterArray.filter(x => x.visible)
+    itemRemove(index) {
+      deleteBy(this.filterArray, index)
       this.recordStyles({ filter: this.filterArray })
     },
     visibleChange(index, value) {

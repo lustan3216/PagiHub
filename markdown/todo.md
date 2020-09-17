@@ -7,20 +7,17 @@ MVP
 
 ### Functionality
 
-https://github.com/pqina/vue-filepond
+https://uppy.io/docs/companion/
 https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-button可以轉跳
 預設是zindex行為
-text editor, p editor
-可設定breakpoint
-shadows 的 softrecord 有 bug, 不應該去改 nodesMap, 直接去動 style 就好
-優化 controller lyaer click outside, 一下子觸發太多 node, 解決 add 完 template, 鎖定會不見
-text / article style inheritance 要分開, button 裡面的要是可以 inherit 的
+
 icon
-可以右鍵
+button 可以轉跳
+可設定 breakpoint
+重疊時拖拉要 noaction 其他 conainer
 
 刪除可以刪到底， 會出現加入 component 的按鈕，只能加入 componentet or gird
 panel node 會一直被關起來

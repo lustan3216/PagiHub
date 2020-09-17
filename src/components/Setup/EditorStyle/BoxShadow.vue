@@ -6,13 +6,6 @@
         @click="addNew"
       />
 
-      <el-button
-        v-if="boxShadowArray.find(x => !x.visible)"
-        icon="el-icon-delete"
-        class="m-l-0"
-        @click="clean"
-      />
-
       SHADOW
     </el-divider>
 
@@ -37,14 +30,6 @@
             :gutter="2"
             class="flex inputs"
           >
-            <el-col :span="2">
-              <el-checkbox
-                :value="boxShadow.visible"
-                style="margin-top: 7px;"
-                @input="visibleChange(index, $event)"
-              />
-            </el-col>
-
             <el-col :span="5">
               <el-button
                 :type="boxShadow.inset ? 'primary' : ''"
@@ -95,7 +80,13 @@
                 @input="onChange(index, 'color', $event)"
               />
             </el-col>
-            <el-col :span="2">
+            <el-col :span="3">
+              <el-button
+                icon="el-icon-delete"
+                @input="itemRemove(index)"
+              />
+            </el-col>
+            <el-col :span="1">
               <i
                 class="el-icon-d-caret"
                 style="margin-top: 7px;"
@@ -148,7 +139,7 @@ import {
   parse,
   stringify
 } from '@/components/Setup/EditorStyle/utils/boxShadow'
-import { findIndexBy, arrayMove } from '../../../utils/array'
+import { findIndexBy, arrayMove, deleteBy } from '../../../utils/array'
 import forNodeMixin from './mixins/forNode'
 
 export default {
@@ -198,8 +189,8 @@ export default {
 
       this.boxShadowArray = boxShadowArray
     },
-    clean() {
-      this.boxShadowArray = this.boxShadowArray.filter(x => x.visible)
+    itemRemove(index) {
+      deleteBy(this.boxShadowArray, index)
       this.recordStyles({ boxShadow: stringify(this.boxShadowArray) })
     },
     itemMove({ detail }) {

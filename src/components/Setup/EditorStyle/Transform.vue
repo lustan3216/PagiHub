@@ -19,17 +19,10 @@
         </el-dropdown-menu>
       </el-dropdown>
 
-      <el-button
-        v-if="transformArray.find(x => !x.visible)"
-        icon="el-icon-delete"
-        class="m-l-0"
-        @click="clean"
-      />
-
       TRANSFORM
     </el-divider>
 
-<!--    <transform-origin :state="state" />-->
+    <!--    <transform-origin :state="state" />-->
 
     <template v-for="(option, index) in transformArray">
       <portal
@@ -59,23 +52,16 @@
       </portal>
       <el-row
         v-else
+        :gutter="5"
         :key="option.name"
         type="flex"
         align="middle"
       >
-        <el-col :span="2">
-          <el-checkbox
-            :value="option.visible"
-            style="margin-top: 7px;"
-            @input="visibleChange(index, $event)"
-          />
-        </el-col>
-
         <el-col :span="8">
           <span class="title">{{ humanize(option.name) }}</span>
         </el-col>
 
-        <el-col :span="14">
+        <el-col :span="13">
           <select-unit
             v-if="options[option.name]"
             :value="option.value || options[option.name].default"
@@ -83,6 +69,13 @@
             :key="option.name"
             v-bind="options[option.name]"
             @input="onChange(index, $event)"
+          />
+        </el-col>
+
+        <el-col :span="3">
+          <el-button
+            icon="el-icon-delete"
+            @input="itemRemove(index)"
           />
         </el-col>
       </el-row>
@@ -98,6 +91,7 @@ import forNodeMixins from './mixins/forNode'
 import { humanize } from '@/utils/string'
 import { cloneJson } from '@/utils/tool'
 import TransformOrigin from '@/components/Setup/EditorStyle/TransformOrigin'
+import { deleteBy } from '@/utils/array'
 
 export default {
   name: 'Transform',
@@ -216,9 +210,9 @@ export default {
       const skew = this.bindValue(skewX, skewY, 'skew')
       const translate = this.bindValue(translateX, translateY, 'translate')
       const scale =
-              scaleX === scaleY && scaleX === 1
-                ? ''
-                : this.bindValue(scaleX, scaleY, 'scale')
+        scaleX === scaleY && scaleX === 1
+          ? ''
+          : this.bindValue(scaleX, scaleY, 'scale')
 
       return [_rotate, skew, translate, scale]
         .filter(x => x)
@@ -288,8 +282,8 @@ export default {
         return `${attr}(${a},${b})`
       }
     },
-    clean() {
-      this.transformArray = this.transformArray.filter(x => x.visible)
+    itemRemove(index) {
+      deleteBy(this.transformArray, index)
     },
     add(name) {
       this.transformArray.push({
@@ -300,7 +294,9 @@ export default {
     },
     visibleChange(index, value) {
       this.transformArray[index].visible = value
-      const transform = this.stringify(this.transformArray.filter(x => x.visible))
+      const transform = this.stringify(
+        this.transformArray.filter(x => x.visible)
+      )
       this.softRecordStyles({ transform })
     }
   }

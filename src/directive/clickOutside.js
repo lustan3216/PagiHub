@@ -91,7 +91,7 @@ function init(el, binding, vnode) {
 }
 
 function findIndex(el) {
-  return nodeList.findIndex(node => node[ctx].id === el[ctx].id)
+  return nodeList.findIndex(node => node[ctx].id === el[ctx] && el[ctx].id)
 }
 
 function cleanEvent(el) {

@@ -1,10 +1,14 @@
 <template>
   <el-dropdown
-    trigger="click"
+    ref="dropdown"
+    trigger="hover"
     size="small"
     @command="handleCommand"
   >
-    <span class="icon">
+    <span
+      :class="{ hidden: menuOnly }"
+      class="icon"
+    >
       <i class="el-icon-more-outline" />
     </span>
 
@@ -60,7 +64,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import { isGridItem } from '@/utils/node'
 import { isMac } from '@/utils/device'
 import {
@@ -83,6 +87,10 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    menuOnly: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -156,8 +164,14 @@ export default {
       ]
     }
   },
+  mounted() {
+    if (this.menuOnly) {
+      this.$refs.dropdown.handleClick()
+    }
+  },
   methods: {
     ...mapMutations('node', ['RECORD']),
+    ...mapActions('app', ['setCopySelectedNodeId']),
     handleCommand(command) {
       switch (command) {
         case 'Copy':
