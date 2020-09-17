@@ -207,6 +207,12 @@ export function isTextEditor(node) {
   }
 }
 
+export function isParagraph(node) {
+  if (node) {
+    return node[POLYMORPHISM] === 'paragraph'
+  }
+}
+
 export function isProject(node) {
   if (node) {
     return node.tag === NODE_TYPE.PROJECT

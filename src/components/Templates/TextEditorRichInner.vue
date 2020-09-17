@@ -8,7 +8,7 @@
         v-if="canEditStyle"
         to="PanelStyles"
       >
-        <text-editor-style
+        <text-editor-rich-style
           :id="id"
           :editor="editor"
         />
@@ -53,6 +53,39 @@
             </form>
 
             <template v-else>
+              <div
+                :class="{ absolute: headingHover }"
+                class="heading flex"
+                @mouseenter="headingHover = true"
+                @mouseleave="headingHover = false"
+              >
+                <button
+                  :class="{
+                    'is-active': isActive.paragraph()
+                  }"
+                  class="menububble__button"
+                  @click="commands.paragraph"
+                >
+                  <img
+                    svg-inline
+                    src="icons/paragraph.svg"
+                  >
+                </button>
+
+                <button
+                  v-for="level in [1, 2, 3, 4, 5, 6]"
+                  :key="level"
+                  :class="{
+                    'is-active': isActive.heading({ level }),
+                    hidden: !headingHover && !isActive.heading({ level })
+                  }"
+                  class="menububble__button"
+                  @click="commands.heading({ level })"
+                >
+                  H{{ level }}
+                </button>
+              </div>
+
               <button
                 class="menububble__button"
                 @click="showLinkMenu(getMarkAttrs('link'))"
@@ -86,17 +119,6 @@
               </button>
 
               <button
-                :class="{ 'is-active': isActive.code() }"
-                class="menububble__button"
-                @click="commands.code"
-              >
-                <img
-                  svg-inline
-                  src="icons/code.svg"
-                >
-              </button>
-
-              <button
                 :class="{ 'is-active': isActive.strike() }"
                 class="menububble__button"
                 @click="commands.strike"
@@ -119,25 +141,31 @@
               </button>
 
               <button
-                :class="{ 'is-active': isActive.paragraph() }"
+                :class="{
+                  'is-active': getMarkAttrs('textAlign').textAlign === 'left'
+                }"
                 class="menububble__button"
-                @click="commands.paragraph"
+                @click="setAttribute('textAlign', 'left')"
               >
-                <img
-                  svg-inline
-                  src="icons/paragraph.svg"
-                >
+                <i class="el-icon-s-fold" />
               </button>
-
               <button
-                :class="{ 'is-active': isActive.blockquote() }"
+                :class="{
+                  'is-active': getMarkAttrs('textAlign').textAlign === 'center'
+                }"
                 class="menububble__button"
-                @click="commands.blockquote"
+                @click="setAttribute('textAlign', 'center')"
               >
-                <img
-                  svg-inline
-                  src="icons/quote.svg"
-                >
+                <i class="el-icon-s-unfold" />
+              </button>
+              <button
+                :class="{
+                  'is-active': getMarkAttrs('textAlign').textAlign === 'right'
+                }"
+                class="menububble__button"
+                @click="setAttribute('textAlign', 'right')"
+              >
+                <i class="el-icon-s-unfold" />
               </button>
 
               <button class="menububble__button">
@@ -183,6 +211,28 @@
           class="editor__floating-menu"
         >
           <button
+            :class="{ 'is-active': isActive.code() }"
+            class="menububble__button"
+            @click="commands.code"
+          >
+            <img
+              svg-inline
+              src="icons/code.svg"
+            >
+          </button>
+
+          <button
+            :class="{ 'is-active': isActive.blockquote() }"
+            class="menububble__button"
+            @click="commands.blockquote"
+          >
+            <img
+              svg-inline
+              src="icons/quote.svg"
+            >
+          </button>
+
+          <button
             :class="{ 'is-active': isActive.bullet_list() }"
             class="menububble__button"
             @click="commands.bullet_list"
@@ -225,60 +275,17 @@
               src="icons/checklist.svg"
             >
           </button>
-
-          <button
-            :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-            class="menububble__button"
-            @click="commands.heading({ level: 1 })"
-          >
-            H1
-          </button>
-
-          <button
-            :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-            class="menububble__button"
-            @click="commands.heading({ level: 2 })"
-          >
-            H2
-          </button>
-
-          <button
-            :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-            class="menububble__button"
-            @click="commands.heading({ level: 3 })"
-          >
-            H3
-          </button>
-
-          <button
-            :class="{ 'is-active': isActive.heading({ level: 4 }) }"
-            class="menububble__button"
-            @click="commands.heading({ level: 4 })"
-          >
-            H4
-          </button>
-
-          <button
-            :class="{ 'is-active': isActive.heading({ level: 5 }) }"
-            class="menububble__button"
-            @click="commands.heading({ level: 5 })"
-          >
-            H5
-          </button>
-
-          <button
-            :class="{ 'is-active': isActive.heading({ level: 6 }) }"
-            class="menububble__button"
-            @click="commands.heading({ level: 6 })"
-          >
-            H6
-          </button>
         </div>
       </editor-floating-menu>
     </template>
 
     <editor-content :editor="editor" />
   </div>
+  <div
+    v-else
+    class="editor ProseMirror"
+    v-html="value"
+  />
 </template>
 <script>
 import {
@@ -316,6 +323,7 @@ import {
 } from '../../vendor/tiptap'
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import { arrayUniq } from '../../utils/array'
+import { Popover } from 'element-ui'
 import WebFont from 'webfontloader'
 import ColorPicker from '@/components/Components/ColorPicker'
 import { TEXT_EDITOR } from '@/const'
@@ -324,11 +332,12 @@ export default {
   name: 'TextEditorInner',
   components: {
     ColorPicker,
+    ElPopover: Popover,
     EditorContent,
     EditorMenuBubble,
     EditorFloatingMenu,
-    TextEditorStyle: () =>
-      import('@/components/Setup/EditorStyle/TextEditorStyle')
+    TextEditorRichStyle: () =>
+      import('@/components/Setup/EditorStyle/TextEditorRichStyle')
   },
   inject: {
     isExample: { default: false }
@@ -343,6 +352,7 @@ export default {
       default: `
           <h2>Hi there,</h2>
           <p>this is a very <em>basic</em> example.</p>
+          <p>Try to enter a new line will have more magic.</p>
           <pre><code>body { display: none; }</code></pre>
           <ul>
             <li>A regular list</li>
@@ -362,7 +372,8 @@ export default {
     return {
       editor: null,
       linkUrl: null,
-      linkMenuIsActive: false
+      linkMenuIsActive: false,
+      headingHover: false
     }
   },
   computed: {
@@ -377,8 +388,46 @@ export default {
       return this.selectedComponentIds.includes(this.id)
     }
   },
+  watch: {
+    editing(value) {
+      if (value) {
+        this.editor = new Editor({
+          editable: this.isDraftMode,
+          extensions,
+          content: this.value,
+          onBlur: () => {
+            if (this.isExample || !this.id) {
+              return
+            }
+
+            const html = this.editor.getHTML()
+
+            const fonts = this.findFontNames(html)
+            const records = [
+              {
+                path: `${this.id}.value`,
+                value: html
+              }
+            ]
+
+            if (fonts && fonts.length) {
+              records.push({
+                path: `${this.id}.fonts`,
+                value: fonts
+              })
+            }
+
+            this.RECORD(records)
+          }
+        })
+      }
+      else if (this.editor) {
+        this.editor.destroy()
+        this.editor = null
+      }
+    }
+  },
   created() {
-    const self = this
     const families = this.findFontNames(this.value)
 
     if (families.length) {
@@ -390,38 +439,11 @@ export default {
         }
       })
     }
-
-    this.editor = new Editor({
-      editable: this.isDraftMode,
-      extensions,
-      content: this.value,
-      onBlur: () => {
-        if (self.isExample || !self.id) {
-          return
-        }
-
-        const json = self.editor.getJSON()
-        const fonts = this.findFontNames(json)
-        const records = [
-          {
-            path: `${self.id}.value`,
-            value: json
-          }
-        ]
-
-        if (fonts && fonts.length) {
-          records.push({
-            path: `${self.id}.fonts`,
-            value: fonts
-          })
-        }
-
-        self.RECORD(records)
-      }
-    })
   },
   beforeDestroy() {
-    this.editor.destroy()
+    if (this.editor) {
+      this.editor.destroy()
+    }
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
@@ -430,7 +452,7 @@ export default {
         string = JSON.stringify(string)
       }
 
-      const match = string.match(/fontFamily":"([\w|\s]*)/g)
+      const match = string.match(/fontFamily:([\w|\s]*)/g)
       if (match) {
         const fonts = match.map(x => x.replace(/fontFamily|[^\s\w]/g, ''))
         return arrayUniq(fonts)
@@ -495,6 +517,11 @@ $color-grey: #b2b2b2;
   fill: $color-black;
   padding-left: 0;
 }
+.heading {
+  background: white;
+  z-index: 10;
+}
+
 .menububble {
   transform: translateX(-50%);
   border: 1px solid $color-grey;
@@ -574,132 +601,6 @@ $color-grey: #b2b2b2;
 .editor {
   position: relative;
   overflow: hidden;
-  padding: 0 10px;
-}
-
-::v-deep .ProseMirror {
-  &__content {
-    word-wrap: break-word;
-  }
-
-  * {
-    caret-color: currentColor;
-  }
-
-  pre {
-    padding: 10px;
-    border-radius: 5px;
-    background: $color-black;
-    color: $color-white;
-    font-size: 14px;
-    overflow-x: auto;
-
-    code {
-      display: block;
-    }
-  }
-
-  p code {
-    display: inline-block;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: bold;
-    background: rgba($color-black, 0.1);
-    color: rgba($color-black, 0.8);
-  }
-
-  ul,
-  ol {
-    padding-left: 1rem;
-  }
-
-  li > p,
-  li > ol,
-  li > ul {
-    margin: 0;
-  }
-
-  a {
-    color: inherit;
-  }
-
-  blockquote {
-    border-left: 3px solid rgba($color-black, 0.1);
-    color: rgba($color-black, 0.8);
-    padding-left: 0.8rem;
-    font-style: italic;
-
-    p {
-      margin: 0;
-    }
-  }
-
-  img {
-    max-width: 100%;
-    border-radius: 3px;
-  }
-
-  &.resize-cursor {
-    cursor: ew-resize;
-    cursor: col-resize;
-  }
-
-  ul[data-type='todo_list'] {
-    padding-left: 0;
-  }
-
-  li[data-type='todo_item'] {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-  }
-
-  .todo-checkbox {
-    border: 2px solid $color-black;
-    height: 0.9em;
-    width: 0.9em;
-    box-sizing: border-box;
-    margin-right: 10px;
-    margin-top: 0.3rem;
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: pointer;
-    border-radius: 0.2em;
-    background-color: transparent;
-    transition: 0.4s background;
-  }
-
-  .todo-content {
-    flex: 1;
-
-    p {
-      margin-top: 0;
-    }
-
-    > p:last-of-type {
-      margin-bottom: 0;
-    }
-
-    > ul[data-type='todo_list'] {
-      margin: 0.5rem 0;
-    }
-  }
-
-  li[data-done='true'] {
-    > .todo-content {
-      > p {
-        text-decoration: line-through;
-      }
-    }
-
-    > .todo-checkbox {
-      background-color: $color-black;
-    }
-  }
-
-  li[data-done='false'] {
-    text-decoration: none;
-  }
+  padding: 0;
 }
 </style>

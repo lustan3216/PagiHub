@@ -1,12 +1,11 @@
 <template>
   <el-button
-
     v-if="isDraftMode"
     v-bind="innerProps"
     type="text"
     class="wh-100 m-0 button"
   >
-    <text-editor-inner
+    <text-editor-rich-inner
       :id="id"
       :editing="editing"
       :value="innerValue || 'I can link'"
@@ -35,7 +34,6 @@
   </el-button>
 
   <el-button
-
     v-else
     v-bind="innerProps"
     type
@@ -49,7 +47,7 @@
 import { Message } from 'element-ui'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
-import TextEditorInner from './TextEditorInner'
+import TextEditorRichInner from './TextEditorRichInner'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { REDIRECT_TO } from '../Setup/EditorSetting/SettingFlexButton'
@@ -59,7 +57,7 @@ export default {
   defaultSetting,
   name: 'FlexButton',
   components: {
-    TextEditorInner,
+    TextEditorRichInner,
     ComponentGiver
   },
   mixins: [nodeMixin, childrenMixin],

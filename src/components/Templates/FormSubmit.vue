@@ -44,13 +44,13 @@ import { MessageBox } from 'element-ui'
 import { isUndefined } from '@/utils/tool'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSubmit'
 import nodeMixin from '@/components/Templates/mixins/node'
-import EditorTextInner from '@/components/Templates/TextEditorInner'
+import TextEditorSimpleInner from '@/components/Templates/TextEditorSimpleInner'
 
 export default {
   defaultSetting,
   name: 'FormSubmit',
   components: {
-    EditorTextInner
+    TextEditorSimpleInner
   },
   mixins: [nodeMixin],
   props: {

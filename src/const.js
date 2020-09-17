@@ -14,6 +14,7 @@ export const FIELD = 'field'
 export const VALUE = 'value'
 // type and name are the reserved words of dynamoDB, so change to kind and label
 export const KIND = 'kind'
+export const HTML = 'html'
 
 export const TAG = 'tag' // 拿來找vueComponent用的
 export const POLYMORPHISM = 'polymorphism' // 有些vueComponent會被當曾別的應用，像是layer會被當曾artBoard, or grid 變成carousel indicator, 拿來特別辦事用
@@ -64,10 +65,4 @@ export const NODE_TYPE = {
   COMPONENT_SET: 'component-set',
   DESIGN: 'design',
   COMPONENT: undefined
-}
-
-export const STYLES_STATE = {
-  none: 0,
-  hover: 1,
-  click: 2
 }

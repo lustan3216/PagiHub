@@ -265,8 +265,8 @@ export default {
           {
             x: Math.round(left),
             y: Math.round(top),
-            width: Math.round(width - 2),
-            height: Math.round(height - 2),
+            width: Math.round(width),
+            height: Math.round(height),
             ease: 'ease',
             duration: 0.3,
             onUpdate() {

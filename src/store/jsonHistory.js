@@ -13,7 +13,7 @@ const jsonHistory = new JsonHistory({
       if (isProject(value) || isComponentSet(value)) {
         return {}
       }
-      else if (value['children']) {
+      else if (value && value['children']) {
         const { children, ...newObject } = value
         return newObject
       }

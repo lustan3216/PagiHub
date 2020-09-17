@@ -9,50 +9,6 @@
       >
         <el-col :span="8">
           <span class="title">
-            Align
-          </span>
-        </el-col>
-        <el-col :span="16">
-          <el-button-group class="flex">
-            <el-button
-              :type="
-                getMarkAttrs('textAlign').textAlign === 'left' ? 'primary' : ''
-              "
-              class="flex1"
-              plain
-              icon="el-icon-s-fold"
-              @click="setAttribute('textAlign', 'left')"
-            />
-            <el-button
-              :type="
-                getMarkAttrs('textAlign').textAlign === 'center'
-                  ? 'primary'
-                  : ''
-              "
-              class="flex1"
-              plain
-              icon="el-icon-s-unfold"
-              @click="setAttribute('textAlign', 'center')"
-            />
-            <el-button
-              :type="
-                getMarkAttrs('textAlign').textAlign === 'right' ? 'primary' : ''
-              "
-              class="flex1"
-              plain
-              icon="el-icon-s-unfold"
-              @click="setAttribute('textAlign', 'right')"
-            />
-          </el-button-group>
-        </el-col>
-      </el-row>
-
-      <el-row
-        type="flex"
-        align="middle"
-      >
-        <el-col :span="8">
-          <span class="title">
             Family
             <tip>
               You can enter the font name you like. Check more from
@@ -130,7 +86,7 @@ import FontSelector from '@/components/Components/FontSelector'
 import Tip from '@/components/Tutorial/Tip'
 
 export default {
-  name: 'TextEditorStyle',
+  name: 'TextEditorRichStyle',
   components: {
     EditorMenuBubble,
     SelectUnit,

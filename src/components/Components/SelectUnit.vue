@@ -4,13 +4,15 @@
     v-model="number"
     :class="{ 'ns-resize': resizeCursor }"
     :prefix-icon="prefixIcon"
-    :step="step"
+    :step="shiftPress ? step * 10 : step"
     :min="allowNegative ? Infinity : min"
     :max="max"
     :disabled="disabled"
     type="number"
     class="number"
     clearable
+    @keydown.shift.native="shiftPress = true"
+    @keyup.shift.native="shiftPress = false"
     @mousedown.native="clicking = true"
     @focus="resizeCursor = false"
     @blur="resizeCursor = true"
@@ -101,7 +103,8 @@ export default {
       resizeCursor: true,
       clicking: false,
       lastPosition: null,
-      innerValue: this.value
+      innerValue: this.value,
+      shiftPress: false
     }
   },
   computed: {
@@ -149,6 +152,7 @@ export default {
           result = toPrecision(number, this.precision) + this.unit
         }
 
+        this.innerValue = result
         this.$emit('input', result)
       }
     },
@@ -171,7 +175,9 @@ export default {
       },
       set(unit) {
         const number = unit === 'auto' ? '' : this.number || '0'
-        this.$emit('input', number + unit)
+
+        this.innerValue = number + unit
+        this.$emit('input', this.innerValue)
       }
     },
     isAuto() {

@@ -94,3 +94,6 @@ https://github.com/probil/vue-moveable
 master 頭的小孩不用動 不用加任何東西
 master 頭裡面可以任意放 instance or master,
 小孩裡面不能直接創造 master component
+
+協作 / 觀察 /註釋 Comment
+https://medium.com/as-a-product-designer/figma-design-tool-1c6542ae8dc1

@@ -110,11 +110,19 @@ export const carousel = function() {
   }
 }
 
-export const textEditor = function() {
+export const titleEditor = function() {
   return {
     [TAG]: TEXT_EDITOR,
     [CAN_BE_EDITED]: true,
-    [STYLES]: { default: { overflow: 'fitContainer' }}
+    [POLYMORPHISM]: 'title'
+  }
+}
+
+export const paragraphEditor = function() {
+  return {
+    [TAG]: TEXT_EDITOR,
+    [CAN_BE_EDITED]: true,
+    [POLYMORPHISM]: 'paragraph'
   }
 }
 
@@ -160,7 +168,8 @@ export const drawer = function() {
 
 export default [
   layers(),
-  textEditor(),
+  titleEditor(),
+  paragraphEditor(),
   flexImage(),
   carousel(),
   videoPlayer(),

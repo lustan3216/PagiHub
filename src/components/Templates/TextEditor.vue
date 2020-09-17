@@ -1,5 +1,12 @@
 <template>
-  <text-editor-inner
+  <text-editor-rich-inner
+    v-if="isParagraph"
+    :id="id"
+    :editing="editing"
+    :value="innerValue"
+  />
+  <text-editor-simple-inner
+    v-else
     :id="id"
     :editing="editing"
     :value="innerValue"
@@ -8,17 +15,26 @@
 
 <script>
 import nodeMixin from './mixins/node'
-import TextEditorInner from './TextEditorInner'
+import TextEditorRichInner from './TextEditorRichInner'
+import TextEditorSimpleInner from './TextEditorSimpleInner'
+import { isParagraph } from '@/utils/node'
+
 export default {
   name: 'TextEditor',
   components: {
-    TextEditorInner
+    TextEditorRichInner,
+    TextEditorSimpleInner
   },
   mixins: [nodeMixin],
   props: {
     editing: {
       type: Boolean,
       default: false
+    }
+  },
+  computed: {
+    isParagraph() {
+      return isParagraph(this.node)
     }
   }
 }
