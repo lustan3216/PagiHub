@@ -58,14 +58,13 @@
 </template>
 
 <script>
-import { Avatar, Divider } from 'element-ui'
+import { Avatar } from 'element-ui'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'DashboardVue',
   components: {
-    ElAvatar: Avatar,
-    ElDivider: Divider
+    ElAvatar: Avatar
   },
   computed: {
     ...mapState('user', ['email', 'username', 'coverPhoto']),

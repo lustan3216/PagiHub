@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import { Divider } from 'element-ui'
 import { mapMutations, mapGetters } from 'vuex'
 import { getNode, traversalSelfAndChildren, shortTagName } from '@/utils/node'
 import { getMasterId } from '@/utils/inheritance'
@@ -45,7 +44,6 @@ import InheritanceJumper from '@/components/TemplateUtils/InheritanceJumper'
 export default {
   name: 'Inheritance',
   components: {
-    ElDivider: Divider,
     InheritanceJumper
   },
   props: {

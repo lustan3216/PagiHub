@@ -1,14 +1,22 @@
 import { SET } from '../index'
+import { debounce } from '@/utils/tool'
+import { BREAK_POINT_KEYS } from '@/const'
 import { quickFnMap } from '@/components/TemplateUtils/ComponentQuickFunctions'
-import { debounce } from 'throttle-debounce'
-import { getBreakpoint } from '@/utils/layout'
 
 const state = {
-  breakpoint: 'lg',
   gridResizing: false,
   artBoardWidth: 0,
   artBoardHeight: 0,
-  scaleRatio: 1
+  scaleRatio: 1,
+  breakpoint: 'lg',
+  breakpointPixels: {
+    xl: 1440,
+    lg: 1200,
+    md: 992,
+    sm: 768,
+    xs: 576,
+    xxs: 320
+  }
 }
 
 const mutations = {
@@ -32,13 +40,16 @@ const actions = {
     }, 80)
   },
 
-  artBoardResizing({ state, commit, dispatch }, boolean = false) {
-    const element = document.getElementById('art-board')
-    const { clientWidth, clientHeight } = element
+  artBoardResizing({ state, getters, commit, dispatch }, boolean = false) {
+    const { clientWidth, clientHeight } = document.getElementById('art-board')
+    const breakpoint =
+      BREAK_POINT_KEYS.find(
+        key => clientWidth >= getters.validBreakpointPixels[key]
+      ) || 'xxs'
 
     commit('SET', {
+      breakpoint,
       gridResizing: boolean,
-      breakpoint: getBreakpoint(element),
       artBoardWidth: parseInt(clientWidth),
       artBoardHeight: parseInt(clientHeight) - 2
     })
@@ -48,16 +59,29 @@ const actions = {
     }
   },
 
-  resizeNodeQuickFn: debounce(310, function({ rootState }) {
+  resizeNodeQuickFn: debounce(function({ rootState }) {
     rootState.app.selectedComponentIds.forEach(id => {
       if (quickFnMap[id]) {
         quickFnMap[id].resize()
       }
     })
-  })
+  }, 320)
 }
 
-const getters = {}
+const getters = {
+  validBreakpointPixels(state) {
+    const object = {}
+
+    for (const key in state.breakpointPixels) {
+      const value = state.breakpointPixels[key]
+      if (value) {
+        object[key] = value
+      }
+    }
+
+    return object
+  }
+}
 
 export default {
   namespaced: true,

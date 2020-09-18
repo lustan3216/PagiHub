@@ -1,15 +1,14 @@
 <template>
-  <div>
-    <slider
+  <div :class="{ height: !vertical }">
+    <el-slider
       v-for="(point, index) in points"
-      v-bind="{ ...$props, ...$attrs }"
       :value="point"
       :key="index"
       :marks="index ? {} : marks"
       :min="min"
       :max="max"
       :class="{
-        width: !$attrs.vertical,
+        width: !vertical,
         zIndex100: index === points.length - 1
       }"
       :ref="index"
@@ -29,9 +28,13 @@ import { isPlainObject as _isPlainObject } from '@/utils/object'
 export default {
   name: 'SliderPoints',
   components: {
-    Slider
+    ElSlider: Slider
   },
   props: {
+    vertical: {
+      type: Boolean,
+      default: false
+    },
     min: {
       type: Number,
       required: true
@@ -106,6 +109,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.height {
+  height: 40px;
+}
 .width {
   width: calc(100% - 60px);
 }

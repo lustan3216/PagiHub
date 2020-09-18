@@ -84,6 +84,16 @@ export function getNode(id) {
   }
 }
 
+export function getClosetGrimItem(id) {
+  const node = getNode(id)
+  if (isGridItem(node)) {
+    return node
+  }
+  else if (node) {
+    return getClosetGrimItem(node.parentId)
+  }
+}
+
 export function isNodeExist(id) {
   const node = store.state.node.nodesMap[id]
   return node && !node[SOFT_DELETE]

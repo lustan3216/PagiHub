@@ -17,7 +17,7 @@
 <script>
 import RulesGenerator from './Common/RulesGenerator'
 import { boolean, assignDefaultValue, number } from './utils/ruleTool'
-import { BREAK_POINTS, COLUMN_OBJECT } from '@/const'
+import { COLUMN_OBJECT } from '@/const'
 import { deepMerge } from '@/utils/tool'
 
 export const defaultSetting = {
@@ -25,7 +25,6 @@ export const defaultSetting = {
   verticalCompact: false,
   responsive: true,
   rowHeight: 1,
-  breakpoints: BREAK_POINTS,
   cols: COLUMN_OBJECT
 }
 

@@ -35,6 +35,7 @@ Vue.mixin({
 })
 
 import {
+  Divider,
   Tooltip,
   Dialog,
   Dropdown,
@@ -80,6 +81,7 @@ if (process.env.NODE_ENV !== 'production') {
   Vue.config.devtools = true
 }
 
+Vue.use(Divider)
 Vue.use(Tooltip)
 Vue.use(Dialog)
 Vue.use(Dropdown)

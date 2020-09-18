@@ -25,6 +25,8 @@
 
     <portal to="ViewPortController">
       <div class="align-center">
+        <el-divider direction="vertical" />
+
         <el-tooltip
           v-if="isPreviewMode"
           content="Hide Resize bar"
@@ -42,6 +44,7 @@
 
         <el-tooltip
           v-for="button in shortCutButtons"
+          v-if="button.w"
           :content="`Set view port to ${button.w}px width`"
           :key="button.name"
           effect="light"
@@ -56,6 +59,10 @@
             @click="setSize({ w: button.w })"
           />
         </el-tooltip>
+
+        <setting-breakpoints />
+
+        <el-divider direction="vertical" />
 
         <el-dropdown
           size="small"
@@ -103,17 +110,16 @@
 <script>
 import interactjs from 'interactjs'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import ViewPortCover from './ViewPortCover'
+import SettingBreakpoints from '../Setup/EditorSetting/SettingBreakpoints'
 import { directive } from '@/directive/freeView'
-import { BREAK_POINTS } from '@/const'
 import { getRectWithoutPadding } from '@/utils/style'
-import gsap from 'gsap'
 import { toPrecision } from '@/utils/number'
+import gsap from 'gsap'
 
 export default {
   name: 'ViewPort',
   components: {
-    ViewPortCover
+    SettingBreakpoints
   },
   directives: {
     FreeView: directive
@@ -135,10 +141,12 @@ export default {
   },
   computed: {
     ...mapState('mode', ['mode']),
-    ...mapState('layout', ['breakpoint', 'artBoardWidth', 'artBoardHeight']),
-    breakpoints() {
-      return BREAK_POINTS
-    },
+    ...mapState('layout', [
+      'breakpoint',
+      'breakpointPixels',
+      'artBoardWidth',
+      'artBoardHeight'
+    ]),
     scalePercent() {
       return Math.ceil(+this.style.scale * 100)
     },
@@ -150,19 +158,19 @@ export default {
     },
     shortCutButtons() {
       return [
-        { name: 'xl', w: this.breakpoints.xl, icon: 'el-icon-data-line' },
-        { name: 'lg', w: this.breakpoints.lg, icon: 'el-icon-data-line' },
-        { name: 'md', w: this.breakpoints.md, icon: 'el-icon-monitor' },
-        { name: 'sm', w: this.breakpoints.sm, icon: 'el-icon-mobile' },
+        { name: 'xl', w: this.breakpointPixels.xl, icon: 'el-icon-data-line' },
+        { name: 'lg', w: this.breakpointPixels.lg, icon: 'el-icon-data-line' },
+        { name: 'md', w: this.breakpointPixels.md, icon: 'el-icon-monitor' },
+        { name: 'sm', w: this.breakpointPixels.sm, icon: 'el-icon-mobile' },
         {
           name: 'xs',
-          w: this.breakpoints.xs,
+          w: this.breakpointPixels.xs,
           icon: 'el-icon-mobile-phone',
           class: 'rotate90'
         },
         {
           name: 'xxs',
-          w: this.breakpoints.xxs,
+          w: this.breakpointPixels.xxs,
           icon: 'el-icon-mobile-phone'
         }
       ]

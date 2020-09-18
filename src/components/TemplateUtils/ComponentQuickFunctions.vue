@@ -80,13 +80,13 @@ import ComponentName from './ComponentName'
 import ContextMenu from './ContextMenu'
 import InheritanceJumper from './InheritanceJumper'
 import { Popover } from 'element-ui'
-import { isGridItem, getNode } from '@/utils/node'
+import { isGridItem, getNode, getClosetGrimItem } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import gsap from 'gsap'
-import { getMasterId, isInstance } from '@/utils/inheritance'
+import { isInstance } from '@/utils/inheritance'
 
 let topShared = window.innerHeight / 2
 let leftShared = window.innerWidth / 2
@@ -143,11 +143,9 @@ export default {
     ...mapState('app', [
       'copyComponentIds',
       'selectedComponentIds',
-      'selectedComponentNode',
+      'selectedComponentNode'
     ]),
-     ...mapState('layout', [
-      'gridResizing'
-    ]),
+    ...mapState('layout', ['gridResizing']),
     newItemToolTip() {
       if (this.node[CAN_NEW_ITEM]) {
         switch (this.node.tag) {
@@ -215,7 +213,8 @@ export default {
           return
         }
 
-        const vm = vmGet(this.node.id, this.isExample)
+        const gridItem = getClosetGrimItem(this.node.id)
+        const vm = vmGet(gridItem.id, this.isExample)
         const element = vm && vm.$el
 
         if (!element) {
@@ -264,10 +263,9 @@ export default {
           {
             x: Math.round(left),
             y: Math.round(top),
-            width: Math.round(width),
-            height: Math.round(height),
+            width: Math.round(width - 1),
+            height: Math.round(height - 1),
             ease: 'ease',
-            duration: 0.3,
             onUpdate() {
               const { width, height, x, y } = this.vars
               leftShared = x

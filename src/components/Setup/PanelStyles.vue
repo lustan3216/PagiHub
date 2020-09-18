@@ -86,7 +86,7 @@ import TransformOrigin from './EditorStyle/TransformOrigin'
 import Opacity from './EditorStyle/Opacity'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
-import { RadioGroup, RadioButton, Divider } from 'element-ui'
+import { RadioGroup, RadioButton } from 'element-ui'
 
 export default {
   name: 'PanelStyles',
@@ -104,7 +104,6 @@ export default {
     TransformOrigin,
     Transform,
     ItemHiddenController,
-    ElDivider: Divider,
     ElRadioGroup: RadioGroup,
     ElRadioButton: RadioButton
   },

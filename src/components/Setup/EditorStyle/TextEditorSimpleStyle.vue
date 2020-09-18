@@ -77,7 +77,6 @@
 </template>
 
 <script>
-import { Divider } from 'element-ui'
 import { EditorMenuBubble } from 'tiptap'
 import SelectUnit from '@/components/Components/SelectUnit'
 import FontSelector from '@/components/Components/FontSelector'
@@ -93,8 +92,7 @@ export default {
     EditorMenuBubble,
     SelectUnit,
     FontSelector,
-    Tip,
-    ElDivider: Divider
+    Tip
   },
   props: {
     id: {

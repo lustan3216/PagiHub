@@ -1,7 +1,7 @@
 <template>
   <span>
     <el-tooltip
-      :content="`Set the viewport to ${breakpoints.lg}px`"
+      :content="`Set the viewport to ${validBreakpointPixels.lg}px`"
       effect="light"
       placement="bottom"
     >
@@ -13,7 +13,7 @@
     </el-tooltip>
 
     <el-tooltip
-      :content="`Set the viewport to ${breakpoints.md}px`"
+      :content="`Set the viewport to ${validBreakpointPixels.md}px`"
       effect="light"
       placement="bottom"
     >
@@ -25,7 +25,7 @@
     </el-tooltip>
 
     <el-tooltip
-      :content="`Set the viewport to ${breakpoints.sm}px`"
+      :content="`Set the viewport to ${validBreakpointPixels.sm}px`"
       effect="light"
       placement="bottom"
     >
@@ -37,7 +37,7 @@
     </el-tooltip>
 
     <el-tooltip
-      :content="`Set the viewport to ${breakpoints.xs}px`"
+      :content="`Set the viewport to ${validBreakpointPixels.xs}px`"
       effect="light"
       placement="bottom"
     >
@@ -50,7 +50,7 @@
     </el-tooltip>
 
     <el-tooltip
-      :content="`Set the viewport to ${breakpoints.xxs}px`"
+      :content="`Set the viewport to ${validBreakpointPixels.xxs}px`"
       effect="light"
       placement="bottom"
     >
@@ -91,16 +91,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { BREAK_POINTS } from '@/const'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'ViewPortController',
   computed: {
     ...mapState('layout', ['breakpoint', 'artBoardHeight', 'artBoardWidth']),
-    breakpoints() {
-      return BREAK_POINTS
-    },
+    ...mapGetters('layout', ['validBreakpointPixels']),
     deviceOptions() {
       return [
         { name: 'iMac', w: 2560, h: 1440 },

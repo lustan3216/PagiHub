@@ -57,7 +57,6 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import forNodeMixin from './mixins/forNode'
-import { Divider } from 'element-ui'
 import { arrayLast, deleteBy } from '@/utils/array'
 import { humanize, splitAt } from '@/utils/string'
 
@@ -65,8 +64,7 @@ export default {
   name: 'Effect',
   mixins: [forNodeMixin('filter')],
   components: {
-    SelectUnit,
-    ElDivider: Divider
+    SelectUnit
   },
   data() {
     return {

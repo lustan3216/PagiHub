@@ -13,40 +13,38 @@ https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
 預設是zindex行為
-
+min-hieght, min-width in pixel
 icon
 button 可以轉跳
+看要不要 ricTexteditor 簡化，只剩ｌｉｓｔ,其他的用 titleditor 代替
+button linker 的 children 改成可自選
+debounce record 的 tree 每個 debounce 紀錄修改了哪些 key, 針對那些 key compare 就好
 可設定 breakpoint
 重疊時拖拉要 noaction 其他 conainer
-
 刪除可以刪到底， 會出現加入 component 的按鈕，只能加入 componentet or gird
 panel node 會一直被關起來
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
-button 要可以連結路由
-
-5<li>search panel</li>
-20<li>可瀏覽 production 版本</li>
-
-<li>need login when publishing </li>
+style default 改成 html, 剩下的 style 要包起來
 
 background color
+background image
 font 的 padding
 
-<li>style 有必要做到device可以區分嗎？</li>
-<li>SEO首頁</li>
-update children 要做 queue
-button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction在弄就好
+grid item 移動時，最外誆 要動畫
+
 <li>radius 可加增神奇第二元素</li>
-style 可以 checkbox 看 master 的 style 暫時不用做
-svg
+style reset to master
+upload svg, 看能不能svgo filter, 不然以後沒有svg少了很多動畫可以做
 </ol>
 
 ### Last
 
+<li>style 有必要做到device可以區分嗎？</li>
+button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction在弄就好
+update children 要做 queue
 要找機會刪除 softDelete master
 publish 除了第一版，之後的都要跟前一個版本做比較
-grid item 移動時，最外誆 要動畫
-folder System
+
 style 支援 每個 device 可客製化, hover click
 fingerprintjs2
 

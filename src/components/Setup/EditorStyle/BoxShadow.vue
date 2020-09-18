@@ -133,7 +133,6 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import { VueDraggableDirective } from 'vue-draggable'
-import { Divider } from 'element-ui'
 
 import {
   parse,
@@ -145,8 +144,7 @@ import forNodeMixin from './mixins/forNode'
 export default {
   name: 'BoxShadows',
   components: {
-    SelectUnit,
-    ElDivider: Divider
+    SelectUnit
   },
   mixins: [forNodeMixin('boxShadow')],
   directives: {

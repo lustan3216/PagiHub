@@ -9,13 +9,9 @@
 
 <script>
 import nodeMixin from '@/components/Templates/mixins/node'
-import { Divider } from 'element-ui'
 
 export default {
   name: 'Divider',
-  components: {
-    ElDivider: Divider
-  },
   mixins: [nodeMixin],
   data() {
     return {

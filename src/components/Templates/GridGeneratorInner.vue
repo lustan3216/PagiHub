@@ -26,14 +26,14 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { COLUMNS, GRID, BREAK_POINTS } from '@/const'
+import { COLUMNS, GRID, BREAK_POINT_KEYS } from '@/const'
 import { deleteBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
 import { getBreakpoint } from '@/utils/layout'
-import { getValueByPath, throttle } from '@/utils/tool'
+import { getValueByPath } from '@/utils/tool'
 import { isInstanceChild } from '@/utils/inheritance'
 
 export default {
@@ -87,9 +87,8 @@ export default {
     computedLayouts() {
       const { artBoardHeight } = this
       const layouts = {}
-      let layoutW
 
-      Object.keys(BREAK_POINTS).forEach(breakPoint => {
+      BREAK_POINT_KEYS.forEach(breakPoint => {
         const layout = []
         this.children.forEach(({ id }, index) => {
           const data = {
@@ -127,13 +126,11 @@ export default {
             h = grid[breakPoint].h
 
             if (!autoHeight) {
-              if (grid[breakPoint].hUnit === 'vh') {
-                h = (artBoardHeight / 100) * parseInt(h)
+              if (ratioH && ratioW) {
+                // solve by interactjs in griditem
               }
-              else if (ratioH && ratioW) {
-                layoutW = layoutW || this.$el.clientWidth
-                const itemWidth = (parseInt(layoutW) / COLUMNS) * w
-                h = (itemWidth / ratioW) * ratioH
+              else if (grid[breakPoint].hUnit === 'vh') {
+                h = (artBoardHeight / 100) * parseInt(h)
               }
               else {
                 h = parseInt(h)
@@ -150,7 +147,9 @@ export default {
             w,
             h,
             verticalCompact,
-            autoHeight
+            autoHeight,
+            ratioW,
+            ratioH
           })
         })
 
@@ -209,8 +208,9 @@ export default {
         if (child.hUnit === 'vh') {
           h = h / (this.artBoardHeight / 100)
         }
-        if (child.w === 1) {
-          console.warn('wwww 1')
+
+        if (process.env.NODE_ENV !== 'production' && child.w === 1) {
+          console.warn(`${this.id}.width === 1`)
         }
 
         const newValue = {

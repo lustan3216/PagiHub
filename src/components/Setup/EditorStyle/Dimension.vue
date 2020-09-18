@@ -114,7 +114,6 @@
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
-import { Divider } from 'element-ui'
 import { COLUMNS, GRID, STYLES } from '@/const'
 import { isGrid, isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
@@ -125,8 +124,7 @@ export default {
   name: 'Dimension',
   components: {
     SelectUnit,
-    Tip,
-    ElDivider: Divider
+    Tip
   },
 
   computed: {

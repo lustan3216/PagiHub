@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { InputNumber, Divider } from 'element-ui'
+import { InputNumber } from 'element-ui'
 import SelectUnit from '@/components/Components/SelectUnit'
 import InputUnit from '@/components/Components/InputUnit'
 import forNodeMixins from './mixins/forNode'
@@ -100,8 +100,7 @@ export default {
     TransformOrigin,
     ElInputNumber: InputNumber,
     SelectUnit,
-    InputUnit,
-    ElDivider: Divider
+    InputUnit
   },
   data() {
     return {

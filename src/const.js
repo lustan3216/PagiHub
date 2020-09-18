@@ -46,6 +46,9 @@ export const COLUMN_OBJECT = {
   xs: COLUMNS,
   xxs: COLUMNS
 }
+
+export const BREAK_POINT_KEYS = ['xl', 'lg', 'md', 'sm', 'xs', 'xxs']
+
 export const BREAK_POINTS = {
   xl: 1440,
   lg: 1200,

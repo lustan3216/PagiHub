@@ -7,6 +7,7 @@
     <el-button-group class="group">
       <el-tooltip
         v-for="button in buttons"
+        v-if="button.pixel"
         :content="button.content"
         effect="light"
         placement="top"
@@ -26,17 +27,14 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex'
-import { Divider } from 'element-ui'
-import { BREAK_POINTS, STYLES } from '@/const'
+import { STYLES } from '@/const'
 import { getValueByPath } from '@/utils/tool'
 
 export default {
   name: 'ItemHiddenController',
-  components: {
-    ElDivider: Divider
-  },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
+    ...mapGetters('layout', ['validBreakpointPixels']),
     buttons() {
       let xlHidden = false
       let lgHidden = false
@@ -57,39 +55,45 @@ export default {
 
       return [
         {
+          pixel: this.validBreakpointPixels.xl,
           name: 'xl',
-          content: `Hidden when screen larger than ${BREAK_POINTS.xl}px`,
+          content: `Hidden when screen larger than ${this.validBreakpointPixels.xl}px`,
           icon: 'el-icon-data-line',
           hidden: xlHidden
         },
         {
+          pixel: this.validBreakpointPixels.lg,
           name: 'lg',
-          content: `Hidden when screen larger than ${BREAK_POINTS.lg}px and smaller than ${BREAK_POINTS.xl}px`,
+          content: `Hidden when screen larger than ${this.validBreakpointPixels.lg}px and smaller than ${this.validBreakpointPixels.xl}px`,
           icon: 'el-icon-data-line',
           hidden: lgHidden
         },
         {
+          pixel: this.validBreakpointPixels.md,
           name: 'md',
-          content: `Hidden when screen larger than ${BREAK_POINTS.md}px and smaller than ${BREAK_POINTS.lg}px`,
+          content: `Hidden when screen larger than ${this.validBreakpointPixels.md}px and smaller than ${this.validBreakpointPixels.lg}px`,
           icon: 'el-icon-monitor',
           hidden: mdHidden
         },
         {
+          pixel: this.validBreakpointPixels.sm,
           name: 'sm',
-          content: `Hidden when screen larger than ${BREAK_POINTS.sm}px and smaller than ${BREAK_POINTS.md}px`,
+          content: `Hidden when screen larger than ${this.validBreakpointPixels.sm}px and smaller than ${this.validBreakpointPixels.md}px`,
           icon: 'el-icon-mobile',
           hidden: smHidden
         },
         {
+          pixel: this.validBreakpointPixels.xs,
           name: 'xs',
-          content: `Hidden when screen larger than ${BREAK_POINTS.xs}px and smaller than ${BREAK_POINTS.sm}px`,
+          content: `Hidden when screen larger than ${this.validBreakpointPixels.xs}px and smaller than ${this.validBreakpointPixels.sm}px`,
           icon: 'el-icon-mobile-phone',
           hidden: xsHidden,
           class: 'rotate90'
         },
         {
+          pixel: this.validBreakpointPixels.xxs,
           name: 'xxs',
-          content: `Hidden when screen larger than ${BREAK_POINTS.xxs}px and smaller than ${BREAK_POINTS.xs}px`,
+          content: `Hidden when screen larger than ${this.validBreakpointPixels.xxs}px and smaller than ${this.validBreakpointPixels.xs}px`,
           icon: 'el-icon-mobile-phone',
           hidden: xxsHidden
         }

@@ -57,7 +57,7 @@
     width: 20px;
     height: 20px;
     bottom: 2px;
-    right: 0;
+    right: 4px;
     background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg08IS0tIEdlbmVyYXRvcjogQWRvYmUgRmlyZXdvcmtzIENTNiwgRXhwb3J0IFNWRyBFeHRlbnNpb24gYnkgQWFyb24gQmVhbGwgKGh0dHA6Ly9maXJld29ya3MuYWJlYWxsLmNvbSkgLiBWZXJzaW9uOiAwLjYuMSAgLS0+DTwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DTxzdmcgaWQ9IlVudGl0bGVkLVBhZ2UlMjAxIiB2aWV3Qm94PSIwIDAgNiA2IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojZmZmZmZmMDAiIHZlcnNpb249IjEuMSINCXhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbDpzcGFjZT0icHJlc2VydmUiDQl4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjZweCIgaGVpZ2h0PSI2cHgiDT4NCTxnIG9wYWNpdHk9IjAuMzAyIj4NCQk8cGF0aCBkPSJNIDYgNiBMIDAgNiBMIDAgNC4yIEwgNCA0LjIgTCA0LjIgNC4yIEwgNC4yIDAgTCA2IDAgTCA2IDYgTCA2IDYgWiIgZmlsbD0iIzAwMDAwMCIvPg0JPC9nPg08L3N2Zz4=');
     background-position: bottom right;
     padding: 0 3px 3px 0;
@@ -174,11 +174,11 @@
         required: false,
         default: Infinity
       },
-      ratioX: {
+      ratioW: {
         type: Number,
         default: 0
       },
-      ratioY: {
+      ratioH: {
         type: Number,
         default: 0
       },
@@ -397,6 +397,12 @@
       isResizable: function() {
         this.resizable = this.isResizable
       },
+      ratioW() {
+        this.tryMakeResizable()
+      },
+      ratioH() {
+        this.tryMakeResizable()
+      },
       resizable: function() {
         this.tryMakeResizable()
       },
@@ -561,6 +567,7 @@
       handleResize: function(event) {
         if (this.static) return
         const position = getControlPosition(event)
+
         // Get the current drag point from the event. This is used as the offset.
         if (position == null) return // not possible but satisfies flow
         const { x, y } = position
@@ -796,12 +803,6 @@
        * @param  {Number} width  Width in pixels.
        * @return {Object} w, h as grid units.
        */
-      calcRatioH(width) {
-        let h = Math.round((width / this.ratioX * this.ratioY + this.margin[1]) / (this.rowHeight + this.margin[1]))
-        // Capping
-        h = Math.max(Math.min(h, this.maxRows - this.innerY), 0)
-        return h
-      },
       calcWH(height, width) {
         const colWidth = this.calcColWidth()
 
@@ -840,9 +841,7 @@
           if (!this.dragEventSet) {
             this.dragEventSet = true
             this.interactObj.on('dragstart dragmove dragend', function(event) {
-              requestAnimationFrame(() => {
-                self.handleDrag(event)
-              })
+              self.handleDrag(event)
             })
           }
         } else {
@@ -885,14 +884,27 @@
             }
           }
 
+          if (this.ratioW && this.ratioH) {
+            opts.modifiers = [
+              interact.modifiers.aspectRatio({
+                // make sure the width is always double the height
+                ratio: parseInt(this.ratioW) / parseInt(this.ratioH),
+                // also restrict the size by nesting another modifier
+                modifiers: [
+                  interact.modifiers.restrictSize({ max: 'parent' })
+                ]
+              })
+            ]
+          } else {
+            opts.modifiers = []
+          }
+
           this.interactObj.resizable(opts)
           if (!this.resizeEventSet) {
             this.resizeEventSet = true
             this.interactObj
               .on('resizestart resizemove resizeend', function(event) {
-                requestAnimationFrame(() => {
-                  self.handleResize(event)
-                })
+                self.handleResize(event)
               })
           }
         } else {
@@ -905,7 +917,10 @@
       autoSize() {
         // ok here we want to calculate if a resize is needed
         this.$nextTick(() => {
-          console.warn('autoSize')
+          if (process.env.NODE_ENV !== 'production') {
+            console.warn('autoSize')
+          }
+
           if (!this.shouldAutoSize) {
             return
           }

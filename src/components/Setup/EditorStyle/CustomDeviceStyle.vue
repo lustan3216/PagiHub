@@ -7,6 +7,7 @@
     <el-button-group class="group">
       <el-tooltip
         v-for="button in buttons"
+        v-if="button.pixel"
         :content="button.content"
         effect="light"
         placement="top"
@@ -26,16 +27,12 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex'
-import { Divider } from 'element-ui'
-import { BREAK_POINTS } from '@/const'
 
 export default {
   name: 'ItemHiddenController',
-  components: {
-    ElDivider: Divider
-  },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
+    ...mapGetters('layout', ['validBreakpointPixels']),
     buttons() {
       let lgHidden = false
       let mdHidden = false
@@ -54,33 +51,38 @@ export default {
 
       return [
         {
+          pixel: this.validBreakpointPixels.lg,
           name: 'lg',
-          content: `For Large Monitor, Only display when screen larger than ${BREAK_POINTS.lg}px`,
+          content: `For Large Monitor, Only display when screen larger than ${this.validBreakpointPixels.lg}px`,
           icon: 'el-icon-data-line',
           hidden: lgHidden
         },
         {
+          pixel: this.validBreakpointPixels.md,
           name: 'md',
-          content: `For Computer, Only display when screen larger than ${BREAK_POINTS.md}px`,
+          content: `For Computer, Only display when screen larger than ${this.validBreakpointPixels.md}px`,
           icon: 'el-icon-monitor',
           hidden: mdHidden
         },
         {
+          pixel: this.validBreakpointPixels.sm,
           name: 'sm',
-          content: `For Tablet, Only display when screen larger than ${BREAK_POINTS.sm}px`,
+          content: `For Tablet, Only display when screen larger than ${this.validBreakpointPixels.sm}px`,
           icon: 'el-icon-mobile',
           hidden: smHidden
         },
         {
+          pixel: this.validBreakpointPixels.xs,
           name: 'xs',
-          content: `For Phone, Only display when screen larger than ${BREAK_POINTS.xs}px`,
+          content: `For Phone, Only display when screen larger than ${this.validBreakpointPixels.xs}px`,
           icon: 'el-icon-mobile-phone',
           hidden: xsHidden,
           class: 'rotate90'
         },
         {
+          disabledpixel this.validBreakpointPixels.xxs,
           name: 'xxs',
-          content: `For Small Phone, Only display when screen larger than ${BREAK_POINTS.xxs}px`,
+          content: `For Small Phone, Only display when screen larger than ${this.validBreakpointPixels.xxs}px`,
           icon: 'el-icon-mobile-phone',
           hidden: xxsHidden
         }
