@@ -329,7 +329,7 @@ import ColorPicker from '@/components/Components/ColorPicker'
 import { TEXT_EDITOR } from '@/const'
 
 export default {
-  name: 'TextEditorInner',
+  name: 'TextEditorRichInner',
   components: {
     ColorPicker,
     ElPopover: Popover,

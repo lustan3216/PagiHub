@@ -182,7 +182,7 @@
     </template>
     <component
       :style="style"
-      :is="tag || 'span'"
+      :is="tag || 'div'"
       contenteditable="true"
       @input="onInput"
     >
@@ -201,7 +201,7 @@ import { getNode } from '@/utils/node'
 import { asyncGetValue, getValueByPath } from '@/utils/tool'
 
 export default {
-  name: 'TextEditorInner',
+  name: 'TextEditorSimpleInner',
   components: {
     ColorPicker,
     ElPopover: Popover,

@@ -1,18 +1,13 @@
 <template>
-  <el-button
-    v-if="isDraftMode"
-    v-bind="innerProps"
-    type="text"
-    class="wh-100 m-0 button"
+  <grid-generator-inner
+    :style="innerStyles.html"
+    :id="id"
+    :inner-props="innerProps"
+    :class="{ pointer: !isDraftMode }"
+    auto-height
   >
-    <text-editor-rich-inner
-      :id="id"
-      :editing="editing"
-      :value="innerValue || 'I can link'"
-    />
-
     <portal
-      v-if="availableEvents.length"
+      v-if="availableEvents.length && isDraftMode"
       :to="`QuickFunctions${id}`"
     >
       <el-tooltip
@@ -26,21 +21,7 @@
         />
       </el-tooltip>
     </portal>
-
-    <component-giver
-      v-if="firstChild"
-      :id="firstChild.id"
-    />
-  </el-button>
-
-  <el-button
-    v-else
-    v-bind="innerProps"
-    type
-    class="wh-100 m-0 button"
-    @click="onClick"
-    v-html="innerValue"
-  />
+  </grid-generator-inner>
 </template>
 
 <script>
@@ -48,6 +29,7 @@ import { Message } from 'element-ui'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import TextEditorRichInner from './TextEditorRichInner'
+import GridGeneratorInner from './GridGeneratorInner'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { REDIRECT_TO } from '../Setup/EditorSetting/SettingFlexButton'
@@ -57,6 +39,7 @@ export default {
   defaultSetting,
   name: 'FlexButton',
   components: {
+    GridGeneratorInner,
     TextEditorRichInner,
     ComponentGiver
   },

@@ -38,14 +38,14 @@ export const GRID_GENERATOR = 'grid-generator'
 export const GRID_GENERATOR_ITEM = 'grid-generator-item'
 
 export const COLUMNS = 72
-export const COLUMN_OBJECT = {
-  xl: COLUMNS,
-  lg: COLUMNS,
-  md: COLUMNS,
-  sm: COLUMNS,
-  xs: COLUMNS,
-  xxs: COLUMNS
-}
+// export const COLUMN_OBJECT = {
+//   xl: 72,
+//   lg: 72,
+//   md: 72,
+//   sm: 72,
+//   xs: 72,
+//   xxs: 72
+// }
 
 export const BREAK_POINT_KEYS = ['xl', 'lg', 'md', 'sm', 'xs', 'xxs']
 

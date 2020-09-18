@@ -21,11 +21,11 @@ import { COLUMN_OBJECT } from '@/const'
 import { deepMerge } from '@/utils/tool'
 
 export const defaultSetting = {
-  preventCollision: false,
-  verticalCompact: false,
-  responsive: true,
-  rowHeight: 1,
-  cols: COLUMN_OBJECT
+  // preventCollision: false,
+  // verticalCompact: false,
+  // responsive: true,
+  // rowHeight: 1,
+  // cols: COLUMN_OBJECT
 }
 
 export const rules = assignDefaultValue(

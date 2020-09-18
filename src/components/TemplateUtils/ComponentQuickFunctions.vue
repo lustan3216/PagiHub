@@ -214,7 +214,10 @@ export default {
         }
 
         const gridItem = getClosetGrimItem(this.node.id)
-        const vm = vmGet(gridItem.id, this.isExample)
+        const vm = vmGet(
+          (gridItem && gridItem.id) || this.node.id,
+          this.isExample
+        )
         const element = vm && vm.$el
 
         if (!element) {

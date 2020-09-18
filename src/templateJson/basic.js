@@ -15,7 +15,9 @@ import {
   GRID,
   SOFT_DELETE,
   TEXT_EDITOR,
-  SORT_INDEX
+  SORT_INDEX,
+  VALUE,
+  HTML
 } from '../const'
 
 const points = ['xl', 'lg', 'md', 'sm', 'xs', 'xxs']
@@ -110,19 +112,11 @@ export const carousel = function() {
   }
 }
 
-export const titleEditor = function() {
+export const textEditor = function(options) {
   return {
     [TAG]: TEXT_EDITOR,
     [CAN_BE_EDITED]: true,
-    [POLYMORPHISM]: 'title'
-  }
-}
-
-export const paragraphEditor = function() {
-  return {
-    [TAG]: TEXT_EDITOR,
-    [CAN_BE_EDITED]: true,
-    [POLYMORPHISM]: 'paragraph'
+    ...options
   }
 }
 
@@ -131,9 +125,19 @@ export const flexButton = function() {
     [TAG]: 'flex-button',
     [LABEL]: 'link',
     [STYLES]: {
-      default: { border: '1px solid #dcdfe6' }
+      [HTML]: { border: '1px solid #dcdfe6' }
     },
-    [CAN_BE_EDITED]: true
+    children: [
+      gridGeneratorItem({
+        [GRID]: mapPoints({ x: 0, y: 0, w: 72, h: 100 }),
+        children: [
+          textEditor({
+            [VALUE]: 'I can be anything',
+            [STYLES]: { [HTML]: { textAlign: 'center' }}
+          })
+        ]
+      })
+    ]
   }
 }
 
@@ -148,7 +152,7 @@ export const videoPlayer = function() {
   return {
     [TAG]: 'video-player',
     [CAN_BE_EDITED]: true,
-    [STYLES]: { ratioW: 16, ratioH: 9}
+    [STYLES]: { ratioW: 16, ratioH: 9 }
   }
 }
 
@@ -168,8 +172,7 @@ export const drawer = function() {
 
 export default [
   layers(),
-  titleEditor(),
-  paragraphEditor(),
+  textEditor(),
   flexImage(),
   carousel(),
   videoPlayer(),

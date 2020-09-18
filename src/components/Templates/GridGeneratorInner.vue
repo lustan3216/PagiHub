@@ -5,10 +5,24 @@
     :layout="layouts"
     :responsive-layouts="responsiveLayouts"
     :margin="[0, 0]"
+    :row-height="1"
+    :cols="{
+      xl: 72,
+      lg: 72,
+      md: 72,
+      sm: 72,
+      xs: 72,
+      xxs: 72
+    }"
+    :vertical-compact="false"
+    :prevent-collision="false"
+    :auto-height="autoHeight"
     :is-draggable="isDraftMode && !isInstanceChild"
     :is-resizable="isDraftMode && !isInstanceChild"
+    responsive
     @layout-updated="layoutUpdated($event)"
   >
+    <slot />
     <vue-grid-item
       v-for="child in layouts"
       v-bind="child"
@@ -57,6 +71,10 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    autoHeight: {
+      type: Boolean,
+      default: false
     },
     innerProps: {
       type: Object,
