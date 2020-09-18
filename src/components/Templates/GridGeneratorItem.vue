@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{ 'grid-item-border': isDraftMode, 'h-100': !fitContainer }"
-    :style="innerStyles.default"
+    :style="innerStyles.html"
     @scroll.passive="onScroll"
   >
     <component-giver

@@ -136,7 +136,7 @@ import ComponentCard from './ComponentCard'
 import CardLocalComponent from './CardLocalComponent'
 import CardPublicComponent from './CardPublicComponent'
 import { vmGet } from '@/utils/vmMap'
-import { STYLES } from '@/const'
+import { HTML, STYLES } from '@/const'
 
 export default {
   name: 'DialogComponentTabs',
@@ -238,7 +238,7 @@ export default {
         template = template.children[0]
 
         this.RECORD({
-          path: `${node.id}.${STYLES}.default.overflow`,
+          path: `${node.id}.${STYLES}.${HTML}.overflow`,
           value: 'scroll'
         })
       }

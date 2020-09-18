@@ -1,7 +1,7 @@
 <template>
   <!--  v-if="isGridItemParent"-->
   <grid-generator-inner
-    :style="innerStyles.default"
+    :style="innerStyles.html"
     :id="id"
     :inner-props="innerProps"
   />

@@ -114,7 +114,7 @@
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
-import { COLUMNS, GRID, STYLES } from '@/const'
+import { COLUMNS, GRID, HTML, STYLES } from '@/const'
 import { isGrid, isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
@@ -144,7 +144,7 @@ export default {
     fitContainer() {
       const result = this.vms.find(node => {
         return (
-          getValueByPath(node, 'innerStyles.default.overflow') ===
+          getValueByPath(node, `innerStyles.${HTML}.overflow`) ===
           'fitContainer'
         )
       })

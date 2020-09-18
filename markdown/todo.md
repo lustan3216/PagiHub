@@ -16,15 +16,13 @@ https://github.com/antonreshetov/vue-eva-icons
 min-hieght, min-width in pixel
 icon
 button 可以轉跳
-看要不要 ricTexteditor 簡化，只剩ｌｉｓｔ,其他的用 titleditor 代替
+看要不要 ricTexteditor 簡化，只剩list,其他的用 titleditor 代替
 button linker 的 children 改成可自選
 debounce record 的 tree 每個 debounce 紀錄修改了哪些 key, 針對那些 key compare 就好
 可設定 breakpoint
 重疊時拖拉要 noaction 其他 conainer
 刪除可以刪到底， 會出現加入 component 的按鈕，只能加入 componentet or gird
-panel node 會一直被關起來
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
-style default 改成 html, 剩下的 style 要包起來
 
 background color
 background image

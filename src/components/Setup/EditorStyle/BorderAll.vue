@@ -52,7 +52,7 @@ import Border from './Border'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { mapMutations, mapGetters } from 'vuex'
-import { STYLES } from '@/const'
+import { HTML, STYLES } from '@/const'
 import { vmGet } from '@/utils/vmMap'
 
 export default {
@@ -168,7 +168,7 @@ export default {
     },
     getValue(attr) {
       const values = this.vms.map(vm =>
-        getValueByPath(vm, ['innerStyles', this.state, attr])
+        getValueByPath(vm, ['innerStyles', HTML, attr])
       )
 
       return arrayLast(values) || ''
@@ -184,7 +184,7 @@ export default {
 
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${STYLES}.${this.state}.${key}`,
+            path: `${node.id}.${STYLES}.${HTML}.${key}`,
             value
           })
         })
