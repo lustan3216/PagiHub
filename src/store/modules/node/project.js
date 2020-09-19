@@ -27,16 +27,16 @@ export const actions = {
     commit('SET', { projectIds, rootComponentSetIds })
   },
 
-  async createProject({ commit }, form) {
-    const { data } = await createProject(form)
+  async createProject({ commit }, params) {
+    const { data } = await createProject(params)
 
     commit('SET', { editingProjectId: data.id })
     commit('SET_NODES_TO_MAP', { nodes: data })
     return data
   },
 
-  async patchProject({ commit }, { id, ...form }) {
-    const { data } = await patchProject({ id, ...form })
+  async patchProject({ commit }, params) {
+    const { data } = await patchProject(params)
     commit('SET_NODES_TO_MAP', { nodes: data })
   },
 

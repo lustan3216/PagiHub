@@ -6,14 +6,8 @@
     :responsive-layouts="responsiveLayouts"
     :margin="[0, 0]"
     :row-height="1"
-    :cols="{
-      xl: 72,
-      lg: 72,
-      md: 72,
-      sm: 72,
-      xs: 72,
-      xxs: 72
-    }"
+    :cols="cols"
+    :breakpoints="breakpointsObject"
     :vertical-compact="false"
     :prevent-collision="false"
     :auto-height="autoHeight"
@@ -39,9 +33,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import { COLUMNS, GRID, BREAK_POINT_KEYS } from '@/const'
-import { deleteBy } from '@/utils/array'
+import { mapState, mapMutations, mapGetters } from 'vuex'
+import { GRID } from '@/const'
+import { arrayAscSort, deleteBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -91,10 +85,26 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapState('layout', ['breakpoint', 'artBoardWidth', 'artBoardHeight']),
+    ...mapState('layout', ['breakpoints', 'artBoardWidth', 'artBoardHeight']),
     ...mapState('node', ['nodesMap']),
+    ...mapGetters('layout', ['currentBreakpoint']),
+
+    cols() {
+      const object = {}
+      this.breakpoints.forEach(point => {
+        object[point] = 72
+      })
+      return object
+    },
+    breakpointsObject() {
+      const object = {}
+      this.breakpoints.forEach(point => {
+        object[point] = parseInt(point)
+      })
+      return object
+    },
     currentBreakPoint() {
-      return this.isExample ? this.exampleBoundary : this.breakpoint
+      return this.isExample ? this.exampleBoundary : this.currentBreakpoint
     },
     isInstanceChild() {
       return isInstanceChild(this.node)
@@ -105,8 +115,8 @@ export default {
     computedLayouts() {
       const { artBoardHeight } = this
       const layouts = {}
-
-      BREAK_POINT_KEYS.forEach(breakPoint => {
+      let prevLayout
+      arrayAscSort(this.breakpoints).forEach((breakPoint, index) => {
         const layout = []
         this.children.forEach(({ id }, index) => {
           const data = {
@@ -128,7 +138,7 @@ export default {
           const { styles = {}, grid, autoHeight } = this.gridItemsData[id]
 
           if (!grid || !grid[breakPoint]) {
-            return layout.push(data)
+            return layout.push(prevLayout[index])
           }
 
           if (getValueByPath(styles, [breakPoint, 'hidden'])) {
@@ -171,7 +181,7 @@ export default {
           })
         })
 
-        layouts[breakPoint] = layout
+        layouts[breakPoint] = prevLayout = layout
       })
 
       return layouts

@@ -17,13 +17,12 @@ import {
   TEXT_EDITOR,
   SORT_INDEX,
   VALUE,
-  HTML
+  HTML,
+  DEFAULT_BREAKPOINTS
 } from '../const'
 
-const points = ['xl', 'lg', 'md', 'sm', 'xs', 'xxs']
-
 const mapPoints = object => {
-  return points.reduce((all, point) => {
+  return DEFAULT_BREAKPOINTS.reduce((all, point) => {
     all[point] = object
     return all
   }, {})

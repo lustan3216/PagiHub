@@ -29,7 +29,7 @@
 
     <portal-target name="PanelStyles" />
 
-    <item-hidden-controller />
+<!--    <item-hidden-controller />-->
 
     <dimension />
 
@@ -54,7 +54,7 @@
 
     <effect :state="state" />
 
-        <transform :state="state" />
+    <transform :state="state" />
 
     <!--      <transitions-->
     <!--        :disabled="!isDefaultState"-->

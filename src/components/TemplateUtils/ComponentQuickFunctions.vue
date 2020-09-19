@@ -265,9 +265,9 @@ export default {
           },
           {
             x: Math.round(left),
-            y: Math.round(top),
-            width: Math.round(width - 1),
-            height: Math.round(height - 1),
+            y: Math.round(top + 1),
+            width: Math.round(width - 2),
+            height: Math.round(height - 2),
             ease: 'ease',
             onUpdate() {
               const { width, height, x, y } = this.vars

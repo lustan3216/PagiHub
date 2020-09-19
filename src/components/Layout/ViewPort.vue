@@ -42,25 +42,27 @@
           />
         </el-tooltip>
 
-        <el-tooltip
-          v-for="button in shortCutButtons"
-          v-if="button.w"
-          :content="`Set view port to ${button.w}px width`"
-          :key="button.name"
-          effect="light"
-          placement="bottom"
-        >
-          <el-button
-            :type="breakpoint === button.name ? 'primary' : 'text'"
-            :class="button.class"
-            :icon="button.icon"
-            class="shortcut-button"
-            plain
-            @click="setSize({ w: button.w })"
-          />
-        </el-tooltip>
+        <button-device
+          v-for="point in sortBreakpoints"
+          :key="point"
+          :point="point"
+          @click="setSize({ w: point })"
+        />
 
-        <setting-breakpoints />
+        <el-popover
+          placement="bottom"
+          width="300"
+          trigger="click"
+        >
+          <setting-breakpoints />
+
+          <el-button
+            slot="reference"
+            class="m-r-10 m-l-15"
+            type="text"
+            icon="el-icon-more-outline"
+          />
+        </el-popover>
 
         <el-divider direction="vertical" />
 
@@ -110,16 +112,21 @@
 <script>
 import interactjs from 'interactjs'
 import { mapState, mapMutations, mapActions } from 'vuex'
+import { Popover } from 'element-ui'
 import SettingBreakpoints from '../Setup/EditorSetting/SettingBreakpoints'
+import ButtonDevice from '../Components/ButtonDevice'
 import { directive } from '@/directive/freeView'
 import { getRectWithoutPadding } from '@/utils/style'
 import { toPrecision } from '@/utils/number'
 import gsap from 'gsap'
+import { arrayDescSort } from '@/utils/array'
 
 export default {
   name: 'ViewPort',
   components: {
-    SettingBreakpoints
+    SettingBreakpoints,
+    ButtonDevice,
+    ElPopover: Popover
   },
   directives: {
     FreeView: directive
@@ -141,12 +148,10 @@ export default {
   },
   computed: {
     ...mapState('mode', ['mode']),
-    ...mapState('layout', [
-      'breakpoint',
-      'breakpointPixels',
-      'artBoardWidth',
-      'artBoardHeight'
-    ]),
+    ...mapState('layout', ['breakpoints', 'artBoardWidth', 'artBoardHeight']),
+    sortBreakpoints() {
+      return arrayDescSort(this.breakpoints).filter(x => x)
+    },
     scalePercent() {
       return Math.ceil(+this.style.scale * 100)
     },
@@ -155,25 +160,6 @@ export default {
     },
     interact() {
       return interactjs(this.targetEl)
-    },
-    shortCutButtons() {
-      return [
-        { name: 'xl', w: this.breakpointPixels.xl, icon: 'el-icon-data-line' },
-        { name: 'lg', w: this.breakpointPixels.lg, icon: 'el-icon-data-line' },
-        { name: 'md', w: this.breakpointPixels.md, icon: 'el-icon-monitor' },
-        { name: 'sm', w: this.breakpointPixels.sm, icon: 'el-icon-mobile' },
-        {
-          name: 'xs',
-          w: this.breakpointPixels.xs,
-          icon: 'el-icon-mobile-phone',
-          class: 'rotate90'
-        },
-        {
-          name: 'xxs',
-          w: this.breakpointPixels.xxs,
-          icon: 'el-icon-mobile-phone'
-        }
-      ]
     },
     deviceOptions() {
       return [

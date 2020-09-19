@@ -7,13 +7,14 @@ import {
 } from '@/api/node'
 
 import jsonHistory from '@/store/jsonHistory'
-import { getCopyComponentIds, getTmpComponentsArray } from '@/store'
 import { layers } from '@/templateJson/basic'
+import { getCopyComponentIds, getTmpComponentsArray } from '@/store'
 import { isComponentSet, traversalSelfAndChildren } from '@/utils/node'
 import { objectFirstKey } from '@/utils/object'
 import { cloneJson } from '@/utils/tool'
 import { appendIds } from '@/utils/nodeId'
 import draftState from '@/utils/draftStateUploader'
+import { DEFAULT_BREAKPOINTS } from '@/const'
 
 export const actions = {
   async getComponentSetChildren({ commit, state }, id) {
@@ -47,7 +48,8 @@ export const actions = {
       description,
       label,
       tags,
-      children: tree
+      children: tree,
+      breakpoints: DEFAULT_BREAKPOINTS
     })
 
     commit('SET', {
@@ -61,19 +63,18 @@ export const actions = {
     })
   },
 
-  async patchComponentSet(
-    { commit, state, dispatch },
-    { id, description, label, tags }
-  ) {
-    const { data } = await patchComponentSet({
-      id,
-      body: {
-        description,
-        label,
-        tags
-      }
-    })
+  async patchComponentSet({ commit, state, dispatch }, params) {
+    if (!state.editingComponentSetId) {
+      return
+    }
+
+    if (!params.id) {
+      params.id = state.editingComponentSetId
+    }
+
+    const { data } = await patchComponentSet(params)
     commit('SET_NODES_TO_MAP', { nodes: data })
+    dispatch('layout/initBreakpoints', data.id, { root: true })
   },
 
   async publishComponentSet({ commit, state }, description) {

@@ -1,22 +1,16 @@
 import { SET } from '../index'
 import { debounce } from '@/utils/tool'
-import { BREAK_POINT_KEYS } from '@/const'
 import { quickFnMap } from '@/components/TemplateUtils/ComponentQuickFunctions'
+import { arrayDescSort } from '@/utils/array'
+import { normalizeBreakpoint } from '@/utils/layout'
+import { DEFAULT_BREAKPOINTS } from '@/const'
 
 const state = {
   gridResizing: false,
   artBoardWidth: 0,
   artBoardHeight: 0,
   scaleRatio: 1,
-  breakpoint: 'lg',
-  breakpointPixels: {
-    xl: 1440,
-    lg: 1200,
-    md: 992,
-    sm: 768,
-    xs: 576,
-    xxs: 320
-  }
+  breakpoints: DEFAULT_BREAKPOINTS
 }
 
 const mutations = {
@@ -25,6 +19,16 @@ const mutations = {
 
 let timer
 const actions = {
+  initBreakpoints({ rootState, commit }, id) {
+    const { editingComponentSetId, nodesMap } = rootState.node
+
+    if (id || editingComponentSetId) {
+      const { breakpoints } = nodesMap[id || editingComponentSetId]
+      commit('SET', {
+        breakpoints: normalizeBreakpoint(breakpoints)
+      })
+    }
+  },
   checkIsGridResizing({ rootGetters, commit }) {
     if (!rootGetters['mode/isDraftMode']) {
       return
@@ -42,13 +46,8 @@ const actions = {
 
   artBoardResizing({ state, getters, commit, dispatch }, boolean = false) {
     const { clientWidth, clientHeight } = document.getElementById('art-board')
-    const breakpoint =
-      BREAK_POINT_KEYS.find(
-        key => clientWidth >= getters.validBreakpointPixels[key]
-      ) || 'xxs'
 
     commit('SET', {
-      breakpoint,
       gridResizing: boolean,
       artBoardWidth: parseInt(clientWidth),
       artBoardHeight: parseInt(clientHeight) - 2
@@ -69,17 +68,19 @@ const actions = {
 }
 
 const getters = {
-  validBreakpointPixels(state) {
-    const object = {}
-
-    for (const key in state.breakpointPixels) {
-      const value = state.breakpointPixels[key]
-      if (value) {
-        object[key] = value
+  currentBreakpoint({ breakpoints, artBoardWidth: width }) {
+    let currentPoint = 0
+    arrayDescSort(breakpoints).find((point, index) => {
+      if (
+        point === width ||
+        (width < breakpoints[index - 1] && width > point)
+      ) {
+        currentPoint = point
+        return true
       }
-    }
+    })
 
-    return object
+    return currentPoint
   }
 }
 

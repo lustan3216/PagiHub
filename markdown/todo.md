@@ -14,10 +14,8 @@ https://github.com/antonreshetov/vue-eva-icons
 <ol>
 預設是zindex行為
 min-hieght, min-width in pixel
-icon
 切換componentset時patchchildren有bug
 button 可以轉跳
-可設定 breakpoint
 重疊時拖拉要 noaction 其他 conainer
 刪除可以刪到底， 會出現加入 component 的按鈕，只能加入 componentet or gird
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
@@ -34,7 +32,10 @@ upload svg, 看能不能svgo filter, 不然以後沒有svg少了很多動畫可�
 </ol>
 
 ### Last
+
+icon
 container 對其功能
+
 <li>style 有必要做到device可以區分嗎？</li>
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction在弄就好
 update children 要做 queue

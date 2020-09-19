@@ -47,16 +47,7 @@ export const COLUMNS = 72
 //   xxs: 72
 // }
 
-export const BREAK_POINT_KEYS = ['xl', 'lg', 'md', 'sm', 'xs', 'xxs']
-
-export const BREAK_POINTS = {
-  xl: 1440,
-  lg: 1200,
-  md: 992,
-  sm: 768,
-  xs: 568,
-  xxs: 320
-}
+export const DEFAULT_BREAKPOINTS = [0, 576, 992]
 
 export const SORT_INDEX = 'sortIndex'
 export const PATH = 'path'

@@ -80,7 +80,8 @@ import {
   getNode,
   isLayers,
   isTextEditor,
-  traversalAncestorAndSelf
+  traversalAncestorAndSelf,
+  traversalChildren
 } from '@/utils/node'
 import { getValueByPath, isUndefined } from '@/utils/tool'
 import { isInstance } from '@/utils/inheritance'
@@ -88,7 +89,7 @@ import { inheritanceObject } from '@/components/TemplateUtils/InheritanceControl
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { findIndexBy } from '@/utils/array'
 
-const store = vue.observable({ editingPath: [] })
+const store = vue.observable({ editingPath: [], lastEditId: null })
 
 export default {
   name: 'ControllerLayer',
@@ -170,7 +171,9 @@ export default {
       traversalAncestorAndSelf(this.node, node => {
         path.push(node.id)
       })
+
       store.editingPath = path
+      store.lastEditId = this.node.id
     },
 
     dblclick() {
@@ -186,9 +189,25 @@ export default {
       // don't change selected component ids when dragging item,
       // otherwise vue-resizable-handle will cause a bug here
 
-      if (!this.isExample && this.itemEditing) {
-        const index = findIndexBy(store.editingPath, this.id)
-        store.editingPath.splice(0, index)
+      if (!this.isExample) {
+        if (this.itemEditing) {
+          const index = findIndexBy(store.editingPath, this.id)
+          store.editingPath.splice(0, index)
+        }
+        else {
+          let editingWithinChildren = false
+
+          traversalAncestorAndSelf(this.node, parent => {
+            editingWithinChildren = parent.id === store.lastEditId
+            if (editingWithinChildren) {
+              return false
+            }
+          })
+
+          if (!editingWithinChildren) {
+            store.editingPath = []
+          }
+        }
       }
 
       if (event.target.classList.contains('vue-resizable-handle')) {

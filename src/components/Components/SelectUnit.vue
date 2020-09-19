@@ -8,9 +8,9 @@
     :min="allowNegative ? Infinity : min"
     :max="max"
     :disabled="disabled"
+    :clearable="clearable"
     type="number"
     class="number"
-    clearable
     @keydown.shift.native="shiftPress = true"
     @keyup.shift.native="shiftPress = false"
     @mousedown.native="clicking = true"
@@ -63,6 +63,10 @@ export default {
     prefixIcon: {
       type: String,
       default: ''
+    },
+    clearable: {
+      type: Boolean,
+      default: true
     },
     hasAuto: {
       type: Boolean,

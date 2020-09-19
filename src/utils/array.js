@@ -12,6 +12,14 @@ export function arrayMove(arr, old_index, new_index) {
 
 export const isArray = Array.isArray
 
+export function arrayAscSort(children, asc = true) {
+  return Array.from(children).sort((a, b) => parseInt(a) - parseInt(b))
+}
+
+export function arrayDescSort(children) {
+  return Array.from(children).sort((a, b) => parseInt(b) - parseInt(a))
+}
+
 export function arrayFirst(e) {
   if (isArray(e)) {
     return e[0]
@@ -40,8 +48,12 @@ export function findLastIndex(array, fn) {
   return finalIndex
 }
 
-export function allEqual(arr) {
+export function arrayAllEqual(arr) {
   return arr.every(v => v === arr[0])
+}
+
+export function twoArrayEquals(arr1, arr2) {
+  return JSON.stringify(arr1) === JSON.stringify(arr2)
 }
 
 export function toArray(e) {

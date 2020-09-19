@@ -18,7 +18,7 @@ import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import { getValueByPath, isUndefined } from '@/utils/tool'
-import { AUTO_HEIGHT, GRID, GRID_GENERATOR, STYLES, TEXT_EDITOR } from '@/const'
+import { AUTO_HEIGHT, GRID, STYLES } from '@/const'
 import { isLayers, isTextEditor } from '@/utils/node'
 
 export default {

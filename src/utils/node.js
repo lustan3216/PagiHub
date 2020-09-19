@@ -1,5 +1,5 @@
 import store from '../store'
-import { allEqual, toArray } from './array'
+import { arrayAllEqual, toArray } from './array'
 import { isUndefined } from './tool'
 import { humanize } from './string'
 import { cloneJson } from './tool'
@@ -17,7 +17,7 @@ import {
 
 export function cloneJsonWithoutChildren(tree) {
   const string = JSON.stringify(tree, function(key, value) {
-    if (value['children']) {
+    if (value && value['children']) {
       const { children, ...newObject } = value
       return newObject
     }
@@ -45,7 +45,7 @@ export function findFirstCommonParentTree(ids) {
   let x = 0
   for (x; x < maxXLength; x++) {
     const sameYIds = familyPaths.map(path => path[x].id)
-    if (!allEqual(sameYIds)) {
+    if (!arrayAllEqual(sameYIds)) {
       break
     }
   }
@@ -68,11 +68,13 @@ export function findFirstCommonParentTree(ids) {
 }
 
 export function sortByIndex(children, asc = true) {
+  children = Array.from(children)
+
   if (asc) {
-    return Array.from(children).sort((a, b) => a[SORT_INDEX] - b[SORT_INDEX])
+    return children.sort((a, b) => a[SORT_INDEX] - b[SORT_INDEX])
   }
   else {
-    return Array.from(children).sort((a, b) => b[SORT_INDEX] - a[SORT_INDEX])
+    return children.sort((a, b) => b[SORT_INDEX] - a[SORT_INDEX])
   }
 }
 
@@ -125,7 +127,7 @@ export function traversalSelfAndChildren(nodes = [], fn, parentNode) {
 }
 
 export function traversalChildren(node, fn) {
-  if (!fn) {
+  if (!fn || !node) {
     return
   }
 

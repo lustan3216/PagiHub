@@ -1,5 +1,5 @@
 <template>
-  <nav class="align-center">
+  <nav>
     <i
       v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
       :disabled="!selectedComponentIds.length"
@@ -41,24 +41,30 @@
       @click="REDO"
     />
 
-    <el-tooltip
-      effect="light"
-      content="Preview"
-      placement="bottom"
+    <el-form
+      ref="form"
+      :disabled="!editingComponentSetId"
+      class="align-center"
     >
-      <el-button
-        v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
-        :disabled="!editingComponentSetId"
-        icon="el-icon-video-camera"
-        type="text"
-        @click="SET_PREVIEW_MODE"
-        @shortkey.native="SET_PREVIEW_MODE"
-      />
-    </el-tooltip>
+      <el-tooltip
+        effect="light"
+        content="Preview"
+        placement="bottom"
+      >
+        <el-button
+          v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
+          :disabled="!editingComponentSetId"
+          icon="el-icon-video-camera"
+          type="text"
+          @click="SET_PREVIEW_MODE"
+          @shortkey.native="SET_PREVIEW_MODE"
+        />
+      </el-tooltip>
 
-    <dialog-publish />
+      <dialog-publish />
 
-    <portal-target name="ViewPortController" />
+      <portal-target name="ViewPortController" />
+    </el-form>
   </nav>
 </template>
 

@@ -22,37 +22,6 @@
   flex: 2 !important;
 }
 
-.flex-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.justify-between {
-  display: flex;
-  justify-content: space-between;
-}
-
-.align-center {
-  display: flex;
-  align-items: center;
-}
-
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.vertical-center {
-  display: flex;
-  align-items: center;
-}
-
-.horizontal-center {
-  display: flex;
-  justify-content: center;
-}
-
 .w-100 {
   width: 100% !important;
 }

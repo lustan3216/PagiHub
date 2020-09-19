@@ -26,7 +26,6 @@ const mutations = {
     state.selectedComponentIds = []
     state.copyComponentIds = []
   },
-  SET_BEING_ADDED_COMPONENT_ID() {},
   CLEAN_SELECTED_COMPONENT_ID(state, ids) {
     state.selectedComponentIds = arraySubtract(state.selectedComponentIds, ids)
   },
@@ -50,7 +49,6 @@ const mutations = {
   }
 }
 
-let timer
 let tmpSelectedComponentIds
 const actions = {
   setBeingAddedComponentId({ commit, state }, id) {
