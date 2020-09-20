@@ -24,7 +24,7 @@ import { vmGet } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { arrayLast } from '@/utils/array'
-import { isLayers, isTextEditor } from '@/utils/node'
+import { isTextEditor } from '@/utils/node'
 
 export default {
   name: 'FitContainer',

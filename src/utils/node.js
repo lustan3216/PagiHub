@@ -162,9 +162,8 @@ export function shortTagName(node) {
   else {
     cache[tag] = tag
   }
-  if (isComponent(node)) {
-    cache[tag] = humanize(cache[tag]).replace('-', '')
-  }
+
+  cache[tag] = humanize(cache[tag]).replace('-', '')
 
   return cache[tag]
 }

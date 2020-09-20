@@ -39,7 +39,7 @@ export default {
     },
     fitContainer() {
       const fitContainer = getValueByPath(this.child, [
-        STYLES,
+        'innerStyles',
         'layout',
         'fitContainer'
       ])

@@ -10,7 +10,7 @@
     :breakpoints="breakpointsMap"
     :vertical-compact="false"
     :prevent-collision="false"
-    :auto-height="autoHeight"
+    :auto-height="!rootLayout"
     :is-draggable="isDraftMode && !isInstanceChild"
     :is-resizable="isDraftMode && !isInstanceChild"
     responsive
@@ -44,6 +44,7 @@ import { getBreakpoint, sortAscBreakpoint } from '@/utils/layout'
 import { getValueByPath } from '@/utils/tool'
 import { isInstanceChild } from '@/utils/inheritance'
 import { COLUMNS } from '@/const'
+import { isComponentSet } from '@/utils/node'
 
 export default {
   name: 'GridGeneratorInner',
@@ -67,10 +68,6 @@ export default {
       type: String,
       required: true
     },
-    autoHeight: {
-      type: Boolean,
-      default: false
-    },
     innerProps: {
       type: Object,
       default: () => ({})
@@ -93,7 +90,9 @@ export default {
       'breakpoints',
       'breakpointsMap'
     ]),
-
+    rootLayout() {
+      return isComponentSet(this.node.parentNode)
+    },
     cols() {
       const object = {}
       this.breakpoints.forEach(point => {
@@ -189,7 +188,8 @@ export default {
             autoHeight,
             ratioW,
             ratioH,
-            zIndex
+            zIndex,
+            lockInParent: !this.rootLayout
           })
         })
 

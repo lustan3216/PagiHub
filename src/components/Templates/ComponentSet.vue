@@ -1,6 +1,6 @@
 <template>
   <div
-    :style="innerStyles"
+    :style="innerStyles.html"
     class="wh-100"
   >
     <component-giver

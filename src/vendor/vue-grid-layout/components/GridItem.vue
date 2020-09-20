@@ -148,6 +148,10 @@
        required: true
        },
        */
+      lockInParent: {
+        type: Boolean,
+        default: true
+      },
       static: {
         type: Boolean,
         required: false,
@@ -661,6 +665,9 @@
         if (position === null) return // not possible but satisfies flow
         const { x, y } = position
 
+        let parentRect
+        let clientRect
+
         // let shouldUpdate = false;
         let newPosition = { top: 0, left: 0 }
         switch (event.type) {
@@ -668,8 +675,8 @@
             this.previousX = this.innerX
             this.previousY = this.innerY
 
-            let parentRect = event.target.offsetParent.getBoundingClientRect()
-            let clientRect = event.target.getBoundingClientRect()
+            parentRect = event.target.offsetParent.getBoundingClientRect()
+            clientRect = event.target.getBoundingClientRect()
 
             if (this.renderRtl) {
               newPosition.left = (clientRect.right - parentRect.right) * -1
@@ -683,8 +690,8 @@
           }
           case 'dragend': {
             if (!this.isDragging) return
-            let parentRect = event.target.offsetParent.getBoundingClientRect()
-            let clientRect = event.target.getBoundingClientRect()
+            parentRect = event.target.offsetParent.getBoundingClientRect()
+            clientRect = event.target.getBoundingClientRect()
             //                        Add rtl support
             if (this.renderRtl) {
               newPosition.left = (clientRect.right - parentRect.right) * -1
@@ -731,7 +738,9 @@
           this.$emit('move', this.i, pos.x, pos.y)
         }
         if (event.type === 'dragend' && (this.previousX !== this.innerX || this.previousY !== this.innerY)) {
-          // this.autoSize()
+          if (this.lockInParent && pos.y > parentRect.height - clientRect.height) {
+            pos.y = parentRect.height - clientRect.height
+          }
           this.$emit('moved', this.i, pos.x, pos.y)
         }
         if (event.type === 'dragstart') {
@@ -790,7 +799,7 @@
         // Capping
         x = Math.max(Math.min(x, this.cols - this.innerW), 0)
         y = Math.max(Math.min(y, this.maxRows - this.innerH), 0)
-
+        console.log(x, y)
         return { x, y }
       },
       // Helper for generating column width
@@ -891,11 +900,7 @@
             opts.modifiers = [
               interact.modifiers.aspectRatio({
                 // make sure the width is always double the height
-                ratio: parseInt(this.ratioW) / parseInt(this.ratioH),
-                // also restrict the size by nesting another modifier
-                modifiers: [
-                  interact.modifiers.restrictSize({ max: 'parent' })
-                ]
+                ratio: parseInt(this.ratioW) / parseInt(this.ratioH)
               })
             ]
           } else {

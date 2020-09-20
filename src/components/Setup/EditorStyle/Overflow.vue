@@ -31,7 +31,7 @@
 
 <script>
 import forNodeMixin from './mixins/forNode'
-import { isLayers, isTextEditor } from '@/utils/node'
+import { isGrid, isLayers, isTextEditor } from '@/utils/node'
 import { vmGet } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
 import { arrayLast } from '@/utils/array'
@@ -41,9 +41,7 @@ export default {
   mixins: [forNodeMixin('overflow')],
   computed: {
     canOverflow() {
-      return this.nodes.every(
-        node => isTextEditor(node) || isLayers(node.children[0])
-      )
+      return this.nodes.every(node => isTextEditor(node) || isGrid(node))
     },
     allFitContainer() {
       return this.nodes.map(node => {
@@ -52,7 +50,7 @@ export default {
       })
     },
     fitContainer() {
-      return arrayLast(this.allFitContainer) || ''
+      return arrayLast(this.allFitContainer)
     }
   }
 }

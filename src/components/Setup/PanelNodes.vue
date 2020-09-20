@@ -67,8 +67,13 @@ import ComponentName from '../TemplateUtils/ComponentName'
 import Touchable from '../TemplateUtils/Touchable'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
-import { isLayers, sortByIndex, traversalSelfAndChildren } from '@/utils/node'
-import { arrayLast } from '@/utils/array'
+import {
+  isGridItem,
+  isLayers,
+  sortByIndex,
+  traversalSelfAndChildren
+} from '@/utils/node'
+import { arrayLast, findIndexBy } from '@/utils/array'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -137,9 +142,12 @@ export default {
       traversalSelfAndChildren(cloneTree, (node, parentNode) => {
         node.children = node.children.filter(node => node && !node[SOFT_DELETE])
 
-        if (isLayers(node)) {
-          parentNode.children = sortByIndex(node.children, false)
-        }
+        // if (isGridItem(node)) {
+        //   const index = findIndexBy(parentNode.children, 'id', node.id)
+        //   if (Number.isInteger(index) && node.children[0]) {
+        //     parentNode.children[index] = node.children[0]
+        //   }
+        // }
       })
 
       this.tree = cloneTree.children

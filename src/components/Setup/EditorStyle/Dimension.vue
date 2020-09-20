@@ -15,7 +15,10 @@
         Sticky Top
       </el-col>
       <el-col :span="7">
-        <el-checkbox v-model="verticalCompact" />
+        <el-checkbox
+          :disabled="!canStickTop"
+          v-model="verticalCompact"
+        />
       </el-col>
     </el-row>
 
@@ -138,6 +141,11 @@ export default {
       return this.selectedComponentIds
         .map(id => this.nodesMap[id])
         .filter(node => node && !isGrid(node))
+    },
+    canStickTop() {
+      if (this.selectedComponentNodes.length) {
+        return this.selectedComponentNodes.every(node => isGridItem(node))
+      }
     },
     vms() {
       return this.selectedComponentNodes.map(node => vmGet(node.id))

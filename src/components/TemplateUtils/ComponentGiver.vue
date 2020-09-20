@@ -99,7 +99,7 @@ export default {
     }
     let vnode = null
 
-    if (!this.controller || this.isGrid || this.isLayers) {
+    if (!this.controller) {
       vnode = h(AsyncComponent, {
         props: {
           id: this.id

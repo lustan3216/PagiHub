@@ -93,9 +93,6 @@ export default {
     isInstance() {
       return isInstance(this.node)
     },
-    isComponent() {
-      return isComponent(this.node)
-    },
     nodeShortName() {
       return shortTagName(this.node)
     },

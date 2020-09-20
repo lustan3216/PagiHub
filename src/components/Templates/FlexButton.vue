@@ -5,7 +5,6 @@
     :id="id"
     :inner-props="innerProps"
     :class="{ pointer: !isDraftMode }"
-    auto-height
   >
     <portal
       v-if="link"
@@ -30,7 +29,6 @@
     :id="id"
     :inner-props="innerProps"
     :class="{ pointer: !isDraftMode }"
-    auto-height
     @click.native="onClick"
   />
 </template>
