@@ -12,7 +12,6 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-預設是zindex行為
 切換componentset時patchchildren有bug
 username
 add container 方式改得跟editor X一樣

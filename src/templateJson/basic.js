@@ -167,6 +167,7 @@ export const drawer = function() {
 }
 
 export default [
+  gridGenerator(),
   textEditor(),
   flexImage(),
   carousel(),
