@@ -1,6 +1,5 @@
 <template>
   <form-create
-    v-if="canShowSetting"
     ref="form"
     v-model="api"
     :rule="innerRules"
@@ -62,10 +61,7 @@ export default {
     this.innerRules = innerRules
   },
   computed: {
-    ...mapGetters('app', ['selectedComponentNodes']),
-    canShowSetting() {
-      return objectHasAnyKey(this.innerRules)
-    }
+    ...mapGetters('app', ['selectedComponentNodes'])
   },
   methods: {
     ...mapMutations('node', ['RECORD']),

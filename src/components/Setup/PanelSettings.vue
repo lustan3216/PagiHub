@@ -46,7 +46,7 @@ const self = {
     lastNode() {
       return arrayLast(this.selectedComponentNodes)
     },
-    hasVueComponent() {
+    hasVueSettingComponent() {
       // 有些component沒有設定，就不做vue component了，所以這裡要檢查
       return this.lastNode && Boolean(self.components[this.vueComponentTag])
     },
@@ -58,7 +58,7 @@ const self = {
       return arrayUniq(tags).length === 1
     },
     canSetUp() {
-      return this.areSameTag && this.hasVueComponent
+      return this.areSameTag && this.hasVueSettingComponent
     }
   }
 }
@@ -69,10 +69,18 @@ export default self
 <style scoped lang="scss">
 ::v-deep.settings {
   .el-col.el-col-24 {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+  }
+  .el-form-item {
+    display: flex;
+  }
+  .el-form-item__content {
+    margin-left: 0 !important;
   }
   .el-form-item__label {
-    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 }
 </style>

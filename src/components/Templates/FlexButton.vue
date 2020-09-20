@@ -1,5 +1,6 @@
 <template>
   <grid-generator-inner
+    v-if="isDraftMode"
     :style="innerStyles.html"
     :id="id"
     :inner-props="innerProps"
@@ -7,7 +8,7 @@
     auto-height
   >
     <portal
-      v-if="availableEvents.length && isDraftMode"
+      v-if="link"
       :to="`QuickFunctions${id}`"
     >
       <el-tooltip
@@ -22,6 +23,16 @@
       </el-tooltip>
     </portal>
   </grid-generator-inner>
+
+  <grid-generator-inner
+    v-else
+    :style="innerStyles.html"
+    :id="id"
+    :inner-props="innerProps"
+    :class="{ pointer: !isDraftMode }"
+    auto-height
+    @click.native="onClick"
+  />
 </template>
 
 <script>
@@ -32,7 +43,6 @@ import TextEditorRichInner from './TextEditorRichInner'
 import GridGeneratorInner from './GridGeneratorInner'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
-import { REDIRECT_TO } from '../Setup/EditorSetting/SettingFlexButton'
 import { deleteBy } from '@/utils/array'
 
 export default {
@@ -59,23 +69,29 @@ export default {
     firstChild() {
       return this.innerChildren[0]
     },
-    redirectComponentSet() {
-      const linkId = this.innerProps[REDIRECT_TO]
-      return linkId && this.nodesMap[linkId]
-    },
-    availableEvents() {
-      const events = this.clickEvents.map(x => x.fn)
-      if (this.firstChild || this.redirectComponentSet) {
-        return [...events, this.redirect]
-      }
-      else {
-        return events
-      }
+    link() {
+      return this.innerProps.link
     }
+    // availableEvents() {
+    //   const events = this.clickEvents.map(x => x.fn)
+    //   if (this.firstChild || this.redirectComponentSet) {
+    //     return [...events, this.redirect]
+    //   }
+    //   else {
+    //     return events
+    //   }
+    // }
   },
   methods: {
     onClick() {
-      this.availableEvents.forEach(event => event())
+      if (this.link) {
+        if (this.innerProps.newTab) {
+          window.open(this.link, '_blank')
+        }
+        else {
+          window.location.href = this.link
+        }
+      }
     },
     redirect() {
       if (this.redirectComponentSet) {

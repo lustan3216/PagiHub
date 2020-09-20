@@ -18,3 +18,14 @@
   opacity: 0;
   transform: translateX(30px);
 }
+
+.full-slide-enter-active,
+.full-slide-leave-active {
+  transition: opacity 0.19s, transform 0.19s;
+}
+
+.full-slide-enter,
+.full-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}

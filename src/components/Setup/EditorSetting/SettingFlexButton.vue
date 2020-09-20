@@ -6,16 +6,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
-import { select, assignDefaultValue } from './utils/ruleTool'
-import { CHILDREN, NODE_TYPE } from '@/const'
-import { isComponentSet } from '@/utils/node'
+import { select, assignDefaultValue, boolean } from './utils/ruleTool'
+import { getNode } from '@/utils/node'
 
-export const REDIRECT_TO = 'redirectTo'
+const LINK = 'link'
+const NEW_TAB = 'newTab'
 
 export const defaultSetting = {
-  icon: undefined,
-  type: 'primary'
+  [NEW_TAB]: true
 }
 
 export default {
@@ -28,28 +28,26 @@ export default {
     }
   },
   computed: {
+    ...mapState('node', ['editingProjectId']),
     linkableComponentSet() {
-      return Object.values(this.nodesMap).filter(
-        node => isComponentSet(node)
-      )
+      return this.nodesMap[this.editingProjectId].children
     },
     spec() {
+      const project = getNode(this.editingProjectId)
       const specArray = [
-        select('type', {
-          options: [{ label: 'Button', value: 'primary' }, 'text']
-        })
-      ]
-
-      if (!this.nodesMap[this.id][CHILDREN].length) {
-        const redirectTo = select(REDIRECT_TO, {
+        boolean(NEW_TAB),
+        select(LINK, {
+          props: {
+            allowCreate: true,
+            filterable: true,
+            placeholder: 'Can Create by typing'
+          },
           options: this.linkableComponentSet.map(node => ({
-            label: `${node.label || node.tag} ${node.id}`,
-            value: node.id
+            label: node.label,
+            value: `/${project.label}/${node.label}`
           }))
         })
-
-        specArray.push(redirectTo)
-      }
+      ]
 
       return assignDefaultValue(specArray, defaultSetting)
     }

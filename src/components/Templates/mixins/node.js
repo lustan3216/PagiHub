@@ -12,7 +12,6 @@ import {
 import { objectHasAnyKey } from '@/utils/object'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
 import { mapMutations } from 'vuex'
-import store from '@/store'
 
 let hoverNode = []
 

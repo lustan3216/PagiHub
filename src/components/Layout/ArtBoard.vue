@@ -14,10 +14,7 @@
         mode="out-in"
       >
         <keep-alive>
-          <component-set
-            :id="editingComponentSetId"
-            :key="editingComponentSetId"
-          />
+          <component-giver :id="editingComponentSetId" class="h-100"/>
         </keep-alive>
       </transition>
     </template>
@@ -26,12 +23,12 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import ComponentSet from '../Templates/ComponentSet'
+import ComponentGiver from '../TemplateUtils/ComponentGiver'
 
 export default {
   name: 'ArtBoard',
   components: {
-    ComponentSet
+    ComponentGiver
   },
   computed: {
     ...mapState('layout', ['scaleRatio']),

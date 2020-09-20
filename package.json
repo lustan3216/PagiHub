@@ -24,7 +24,7 @@
     "gsap": "^3.5.0",
     "interactjs": "1.9.22",
     "intersection-observer": "^0.7.0",
-    "json-history": "0.6.0",
+    "json-history": "0.6.1",
     "localforage": "^1.7.3",
     "lodash.debounce": "^4.0.8",
     "lodash.get": "^4.4.2",

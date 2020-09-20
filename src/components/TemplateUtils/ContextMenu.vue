@@ -1,52 +1,63 @@
 <template>
-  <el-dropdown
-    ref="dropdown"
-    trigger="hover"
-    size="small"
-    @command="handleCommand"
-  >
-    <span
-      :class="{ hidden: menuOnly }"
-      class="icon"
+  <component-move :id="id">
+    <template
+      v-slot="{
+        canMoveForward,
+        canMoveBackward,
+        moveForward,
+        moveToFront,
+        moveToBackward,
+        moveToEnd
+      }"
     >
-      <i class="el-icon-more-outline" />
-    </span>
+      <div class="el-dropdown-menu">
+        <div
+          :class="{ 'is-disabled': !canMoveForward }"
+          class="el-dropdown-menu__item"
+          type="text"
+          @click="moveToFront"
+        >
+          <span>Move to the front</span>
+        </div>
+        <div
+          :class="{ 'is-disabled': !canMoveForward }"
+          class="el-dropdown-menu__item"
+          type="text"
+          @click="moveForward"
+        >
+          <span>Move Forward</span>
+        </div>
+        <div
+          :class="{ 'is-disabled': !canMoveBackward }"
+          class="el-dropdown-menu__item"
+          type="text"
+          @click="moveToBackward"
+        >
+          <span>Move Backward</span>
+        </div>
+        <div
+          :class="{ 'is-disabled': !canMoveBackward }"
+          class="el-dropdown-menu__item"
+          type="text"
+          @click="moveToEnd"
+        >
+          <span>Move End</span>
+        </div>
 
-    <component-move :id="id">
-      <template
-        v-slot="{
-          canMoveForward,
-          canMoveBackward,
-          moveForward,
-          moveToFront,
-          moveToBackward,
-          moveToEnd
-        }"
-      >
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            :disabled="!canMoveForward"
-            @click.native="moveToFront"
-          >Move to the front</el-dropdown-item>
-          <el-dropdown-item
-            :disabled="!canMoveForward"
-            @click.native="moveForward"
-          >Move Forward</el-dropdown-item>
-          <el-dropdown-item
-            :disabled="!canMoveBackward"
-            @click.native="moveToBackward"
-          >Move Backward</el-dropdown-item>
-          <el-dropdown-item
-            :disabled="!canMoveBackward"
-            @click.native="moveToEnd"
-          >Move End</el-dropdown-item>
+        <template v-for="option in options">
+          <div
+            v-if="option.divided"
+            :key="`${option.name}-d`"
+            class="el-dropdown-menu__item--divided"
+          />
 
-          <el-dropdown-item
-            v-for="option in options"
+          <div
             :key="option.name"
-            :command="option.name"
             :divided="option.divided"
-            :disabled="option.disabled"
+            :class="{ 'is-disabled': option.disabled }"
+            class="el-dropdown-menu__item"
+            type="text"
+            @click="handleCommand(option.name)"
           >
             <div class="justify-between">
               <span>{{ option.name }}</span>
@@ -56,15 +67,15 @@
                 v-html="option.shortKey.join(' + ')"
               />
             </div>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </component-move>
-  </el-dropdown>
+          </div>
+        </template>
+      </div>
+    </template>
+  </component-move>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import { isGridItem } from '@/utils/node'
 import { isMac } from '@/utils/device'
 import {
@@ -87,10 +98,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-    menuOnly: {
-      type: Boolean,
-      default: false
     }
   },
   computed: {
@@ -99,9 +106,8 @@ export default {
       'selectedComponentIds',
       'selectedComponentNode'
     ]),
-    ...mapState('layout', [
-      'gridResizing'
-    ]),
+    ...mapState('layout', ['gridResizing']),
+    ...mapGetters('app', ['theOnlyCopyNodeAndNotGridItem']),
     node() {
       return this.nodesMap[this.id]
     },
@@ -166,11 +172,6 @@ export default {
       ]
     }
   },
-  mounted() {
-    if (this.menuOnly) {
-      this.$refs.dropdown.handleClick()
-    }
-  },
   methods: {
     ...mapMutations('node', ['RECORD']),
     ...mapActions('app', ['setCopySelectedNodeId']),
@@ -205,4 +206,16 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.el-dropdown-menu__item--divided {
+  padding: 0 20px;
+}
+.el-dropdown-menu {
+  z-index: 1000;
+}
+.el-dropdown-menu__item {
+  line-height: 27px;
+  font-size: 13px;
+  white-space: pre;
+}
+</style>

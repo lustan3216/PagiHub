@@ -10,10 +10,8 @@ import {
   isGridItem,
   isLayers
 } from '@/utils/node'
-import { canInherit } from '@/utils/inheritance'
 import { getValueByPath } from '@/utils/tool'
 import { mapState } from 'vuex'
-import { arrayFirst } from '@/utils/array'
 
 export default {
   name: 'ComponentGiver',

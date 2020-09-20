@@ -10,7 +10,10 @@
         {{ shortTagName(component) }}
       </b>
 
-      <el-button @click="$emit('add')">
+      <el-button
+        :disabled="canNotAdd"
+        @click="$emit('add')"
+      >
         ADD
       </el-button>
     </div>
@@ -21,6 +24,7 @@
         :style="{
           maxHeight
         }"
+        :class="{ 'no-action': canNotAdd }"
         class="example"
         @scroll.passive.native="onScroll"
       />
@@ -44,11 +48,11 @@
 </template>
 
 <script>
-import { shortTagName } from '@/utils/node'
+import { shortTagName, getNode, isComponentSet, isLayers } from '@/utils/node'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { Tag } from 'element-ui'
 import gsap from 'gsap'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'ComponentCard',
@@ -73,6 +77,15 @@ export default {
   data() {
     return {
       show: false
+    }
+  },
+  computed: {
+    ...mapState('app', ['beingAddedComponentId']),
+    node() {
+      return getNode(this.beingAddedComponentId)
+    },
+    canNotAdd() {
+      return isComponentSet(this.node) && !isLayers(this.component)
     }
   },
   mounted() {

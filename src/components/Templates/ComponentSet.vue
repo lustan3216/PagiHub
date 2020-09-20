@@ -1,14 +1,20 @@
 <template>
-  <component-giver
-    v-if="firstChild && firstChild.id"
-    :id="firstChild.id"
-  />
+  <div
+    :style="innerStyles"
+    class="wh-100"
+  >
+    <component-giver
+      v-if="firstChild && firstChild.id"
+      :id="firstChild.id"
+    />
+  </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import { ID } from '@/const'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
+import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { vmAppend } from '@/utils/vmMap'
 
@@ -17,7 +23,7 @@ export default {
   components: {
     ComponentGiver
   },
-  mixins: [childrenMixin],
+  mixins: [nodeMixin, childrenMixin],
   computed: {
     firstChild() {
       return this.innerChildren[0]

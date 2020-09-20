@@ -17,7 +17,6 @@
         }"
         :id="id"
         class="absolute"
-        menu-only
       />
     </portal>
 
@@ -75,8 +74,7 @@ import {
   getNode,
   isLayers,
   isTextEditor,
-  traversalAncestorAndSelf,
-  traversalChildren
+  traversalAncestorAndSelf
 } from '@/utils/node'
 import { getValueByPath, isUndefined } from '@/utils/tool'
 import { isInstance } from '@/utils/inheritance'
@@ -217,7 +215,10 @@ export default {
         this.SET_SELECTED_COMPONENT_ID(this.id)
         this.resizeNodeQuickFn()
         setTimeout(() => {
-          document.getElementById(`tree-node-${this.id}`).scrollIntoView(false)
+          const element = document.getElementById(`tree-node-${this.id}`)
+          if (element) {
+            element.scrollIntoView(false)
+          }
         }, 100)
       }
     },

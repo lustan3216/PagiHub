@@ -43,6 +43,7 @@ import { toPrecision } from '@/utils/number'
 import { getBreakpoint, sortAscBreakpoint } from '@/utils/layout'
 import { getValueByPath } from '@/utils/tool'
 import { isInstanceChild } from '@/utils/inheritance'
+import { COLUMNS } from '@/const'
 
 export default {
   name: 'GridGeneratorInner',
@@ -96,7 +97,7 @@ export default {
     cols() {
       const object = {}
       this.breakpoints.forEach(point => {
-        object[point] = 100
+        object[point] = COLUMNS
       })
       return object
     },

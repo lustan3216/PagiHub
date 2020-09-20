@@ -13,26 +13,23 @@ https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
 預設是zindex行為
-min-hieght, min-width in pixel
 切換componentset時patchchildren有bug
-button 可以轉跳
+username
+add container 方式改得跟editor X一樣
 重疊時拖拉要 noaction 其他 conainer
-刪除可以刪到底， 會出現加入 component 的按鈕，只能加入 componentet or gird
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
-
+grid item 移動時，最外誆 要動畫
+style reset to master
+font 的 padding
 background color
 background image
-font 的 padding
-
-grid item 移動時，最外誆 要動畫
-
-<li>radius 可加增神奇第二元素</li>
-style reset to master
 upload svg, 看能不能svgo filter, 不然以後沒有svg少了很多動畫可以做
 </ol>
 
 ### Last
 
+<li>radius 可加增神奇第二元素</li>
+min-hieght, min-width in pixel
 icon
 container 對其功能
 

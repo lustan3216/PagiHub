@@ -52,7 +52,7 @@
           :disabled="!gridItemNodes.length"
           v-model.number="w"
           :max="cols"
-          :units="['col']"
+          :units="['%']"
         />
       </el-col>
 

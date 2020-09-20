@@ -37,7 +37,7 @@ export const COMPONENT_SET = 'component-set'
 export const GRID_GENERATOR = 'grid-generator'
 export const GRID_GENERATOR_ITEM = 'grid-generator-item'
 
-export const COLUMNS = 72
+export const COLUMNS = 100
 // export const COLUMN_OBJECT = {
 //   xl: 72,
 //   lg: 72,

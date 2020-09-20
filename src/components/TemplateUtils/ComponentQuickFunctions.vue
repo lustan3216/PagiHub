@@ -11,7 +11,7 @@
     <el-button
       v-if="canAddComponent"
       icon="el-icon-circle-plus-outline"
-      style="font-size: 16px;"
+      style="font-size: 18px;"
       class="can-action"
       type="text"
       @click="tryToAddComponent"
@@ -21,18 +21,40 @@
       :class="[top > 100 ? 'top' : 'bottom']"
       class="wrapper flex"
     >
-      <component-name
-        :id="id"
-        :editable="false"
-        :is-example="isExample"
-        :inherit-parent-id="inheritParentId"
-        :master-component-set-id="masterComponentSetId"
-        class="component-name"
+      <div
+        class="flex"
+        @mouseenter="hovering = true"
+        @mouseleave="hovering = false"
       >
-        <i :class="[itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank']" />
-      </component-name>
+        <div class="component-name">
+          <transition-group name="full-slide">
+            <template v-for="(node, index) in parentNodes">
+              <i
+                v-if="hovering && index"
+                :key="node.id + 'i'"
+                class="el-icon-arrow-right"
+              />
+              <component-name
+                v-if="hovering || node.id === id"
+                :key="node.id"
+                :id="node.id"
+                :editable="false"
+                :is-example="isExample"
+                @click="SET_SELECTED_COMPONENT_ID(node.id)"
+              >
+                <i
+                  v-if="node.id === id"
+                  :class="[
+                    itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank'
+                  ]"
+                />
+              </component-name>
+            </template>
+          </transition-group>
+        </div>
+      </div>
 
-      <div class="button-group">
+      <el-button-group class="flex">
         <inheritance-jumper
           :id="id"
           :inherit-parent-id="inheritParentId"
@@ -44,49 +66,64 @@
           :name="`QuickFunctions${id}`"
           slim
         />
-      </div>
-    </div>
 
-    <div
-      v-if="!isExample && isLastOne"
-      class="left wrapper"
-    >
-      <el-tooltip
-        effect="light"
-        placement="left"
-      >
-        <div slot="content">
-          {{ newItemToolTip }}
-          <span
-            class="m-l-10"
-            v-html="metaKey"
-          /> + B
-        </div>
+        <el-tooltip
+          effect="light"
+          placement="top"
+        >
+          <div slot="content">
+            {{ newItemToolTip }}
+            <span
+              class="m-l-10"
+              v-html="metaKey"
+            /> + B
+          </div>
+
+          <el-button
+            icon="el-icon-plus"
+            class="icon"
+            @click="vmCreateEmptyItem"
+          />
+        </el-tooltip>
+
+        <el-Popover
+          ref="popover"
+          effect="light"
+          placement="right"
+          popper-class="transparent"
+        >
+          <context-menu :id="id" />
+        </el-Popover>
         <el-button
-          icon="el-icon-plus"
+          v-popover:popover
+          icon="el-icon-more"
           class="icon"
-          @click="vmCreateEmptyItem"
         />
-      </el-tooltip>
-
-      <context-menu :id="id" />
+      </el-button-group>
     </div>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import ComponentName from './ComponentName'
 import ContextMenu from './ContextMenu'
 import InheritanceJumper from './InheritanceJumper'
 import { Popover } from 'element-ui'
-import { isGridItem, getNode, getClosetGrimItem } from '@/utils/node'
+import {
+  isGridItem,
+  getNode,
+  getClosetGrimItem,
+  isComponentSet,
+  traversalAncestorAndSelf,
+  isComponent
+} from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
-import gsap from 'gsap'
 import { isInstance } from '@/utils/inheritance'
+import gsap from 'gsap'
 
 let topShared = window.innerHeight / 2
 let leftShared = window.innerWidth / 2
@@ -136,7 +173,8 @@ export default {
       width: widthShared,
       height: heightShared,
       animationId: null,
-      canGoBack: null
+      canGoBack: null,
+      hovering: false
     }
   },
   computed: {
@@ -146,6 +184,19 @@ export default {
       'selectedComponentNode'
     ]),
     ...mapState('layout', ['gridResizing']),
+    parentNodes() {
+      const nodes = []
+      traversalAncestorAndSelf(this.node, node => {
+        if (isComponent(node)) {
+          nodes.push(node)
+        }
+        else {
+          return false
+        }
+      })
+
+      return nodes
+    },
     newItemToolTip() {
       if (this.node[CAN_NEW_ITEM]) {
         switch (this.node.tag) {
@@ -176,8 +227,14 @@ export default {
     isLastOne() {
       return arrayLast(this.selectedComponentIds) === this.id
     },
+    isComponentSet() {
+      return isComponentSet(this.node)
+    },
     canAddComponent() {
-      if (!this.isExample && this.isGridItem && this.isLastOne) {
+      if (
+        (!this.isExample && this.isGridItem && this.isLastOne) ||
+        this.isComponentSet
+      ) {
         const { children = [] } = this.node
         return !children.length
       }
@@ -199,6 +256,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
     ...mapActions('app', ['setCopySelectedNodeId', 'setBeingAddedComponentId']),
     tryToAddComponent() {
       this.setBeingAddedComponentId(this.id)
@@ -289,7 +347,8 @@ export default {
 $activeColor: rgba(81, 117, 199, 0.68);
 $connectColor: rgba(135, 199, 124, 0.68);
 
-::v-deep.instance {
+::v-deep.instance,
+::v-deep .el-button {
   &.quick-functions,
   .wrapper > *,
   .button-group > * {
@@ -320,12 +379,7 @@ $connectColor: rgba(135, 199, 124, 0.68);
 
 .top {
   left: 0;
-  top: -30px;
-}
-
-.left {
-  left: -28px;
-  top: 5px;
+  top: -35px;
 }
 
 .bottom {
@@ -344,70 +398,32 @@ $connectColor: rgba(135, 199, 124, 0.68);
 
 .component-name {
   background-color: white;
-  padding: 5px;
+  white-space: pre;
+  padding-right: 5px;
+  padding-left: 5px;
   border: 1px solid $activeColor;
   border-radius: 5px;
   color: $activeColor !important;
   font-size: 12px;
   font-weight: 500;
+  height: 28px;
+  transition: all 0.5s ease;
 }
 
-.left.wrapper,
-.right.wrapper {
-  display: flex;
-  flex-direction: column;
-  & > * {
-    cursor: pointer;
-    background-color: white;
-    padding: 3px;
-    border: 1px solid $activeColor;
-    margin-top: -1px;
-  }
-
-  i {
-    color: $activeColor !important;
-  }
-  & > * {
-    border-radius: 0;
-  }
-
-  & > *:first-child {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-  }
-
-  & > *:last-child {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-  }
+::v-deep > .el-button {
+  color: $activeColor !important;
 }
 
-::v-deep.button-group {
-  margin-left: 5px;
-  display: flex;
-  & > * {
-    cursor: pointer;
-    background-color: white;
-    border: 1px solid $activeColor;
-    margin-left: -1px;
-  }
+::v-deep .el-button-group {
+  margin-left: 10px;
 
   button {
-    padding: 5px;
+    padding: 5px 8px;
+    border: 1px solid $activeColor;
   }
 
   i {
     color: $activeColor;
-  }
-
-  & > *:first-child {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-  }
-
-  & > *:last-child {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
   }
 }
 </style>

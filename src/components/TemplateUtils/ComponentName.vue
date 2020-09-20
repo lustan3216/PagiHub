@@ -28,7 +28,7 @@
       <i class="el-icon-medal" />
     </template>
 
-    <span> {{ nodeShortName }} - {{ shortId }} </span>
+    <span> {{ nodeShortName }}{{ shortId }} </span>
 
     <slot />
   </el-button>
@@ -42,7 +42,7 @@ import { LABEL } from '@/const'
 import {
   isMasterParent,
   isInstanceParent,
-  getMasterId, isInstance
+  isInstance
 } from '@/utils/inheritance'
 
 const observable = Vue.observable({ editingId: null })
@@ -67,6 +67,10 @@ export default {
       default: false
     },
     isExample: {
+      type: Boolean,
+      default: false
+    },
+    showParent: {
       type: Boolean,
       default: false
     }
@@ -96,11 +100,8 @@ export default {
       return shortTagName(this.node)
     },
     shortId() {
-      if (process.env.NODE_ENV === 'production' && this.isComponent) {
-        return shortId(this.id)
-      }
-      else {
-        return this.id.substring(23, 26)
+      if (process.env.NODE_ENV !== 'production') {
+        return `- ${this.id.substring(23, 26)}`
       }
     },
     editing() {
@@ -144,6 +145,13 @@ $connectColor: rgba(135, 199, 124, 0.68);
 .el-button {
   padding-left: 5px;
   padding-right: 5px;
+  span {
+    transition: color 300ms ease;
+  }
+
+  :hover {
+    color: rgba(39, 39, 79, 0.68);
+  }
 }
 .input {
   z-index: 2;

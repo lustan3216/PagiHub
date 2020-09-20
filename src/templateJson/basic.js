@@ -18,6 +18,7 @@ import {
   SORT_INDEX,
   VALUE,
   HTML,
+  COLUMNS,
   DEFAULT_BREAK_POINTS_MAP
 } from '../const'
 
@@ -131,11 +132,14 @@ export const flexButton = function() {
     },
     children: [
       gridGeneratorItem({
-        [GRID]: mapPoints({ x: 0, y: 0, w: 72, h: 100 }),
+        [GRID]: mapPoints({ x: 0, y: 0, w: COLUMNS, h: 100 }),
         children: [
           textEditor({
             [VALUE]: 'I can be anything',
-            [STYLES]: { [HTML]: { textAlign: 'center' }}
+            [STYLES]: {
+              layout: { fitContainer: true },
+              [HTML]: { textAlign: 'center' }
+            }
           })
         ]
       })
