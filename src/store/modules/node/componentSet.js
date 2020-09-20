@@ -14,7 +14,7 @@ import { objectFirstKey } from '@/utils/object'
 import { cloneJson } from '@/utils/tool'
 import { appendIds } from '@/utils/nodeId'
 import draftState from '@/utils/draftStateUploader'
-import { DEFAULT_BREAKPOINTS } from '@/const'
+import { DEFAULT_BREAK_POINTS_MAP } from '@/const'
 
 export const actions = {
   async getComponentSetChildren({ commit, state }, id) {
@@ -49,7 +49,7 @@ export const actions = {
       label,
       tags,
       children: tree,
-      breakpoints: DEFAULT_BREAKPOINTS
+      breakpointsMap: DEFAULT_BREAK_POINTS_MAP
     })
 
     commit('SET', {
@@ -74,7 +74,6 @@ export const actions = {
 
     const { data } = await patchComponentSet(params)
     commit('SET_NODES_TO_MAP', { nodes: data })
-    dispatch('layout/initBreakpoints', data.id, { root: true })
   },
 
   async publishComponentSet({ commit, state }, description) {

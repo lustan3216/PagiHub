@@ -8,12 +8,9 @@
     @dblclick.stop="dblclick"
     @contextmenu="contextmenu($event)"
   >
-    <portal
-      v-if="selected && !gridResizing"
-      to="App"
-    >
+    <portal to="App">
       <context-menu
-        v-if="contextMenu"
+        v-if="contextMenu && selected && !gridResizing"
         :style="{
           top: contextMenu.y,
           left: contextMenu.x
@@ -24,11 +21,9 @@
       />
     </portal>
 
-    <portal
-      v-if="selected && !gridResizing"
-      :to="`App-${id}`"
-    >
+    <portal :to="`App-${id}`">
       <component-quick-functions
+        v-if="selected && !gridResizing"
         :id="id"
         :is-example="isExample"
         :item-editing="itemEditing"

@@ -6,12 +6,6 @@ import { HTML, STYLES } from '@/const'
 
 export default function(attr) {
   return {
-    props: {
-      state: {
-        type: String,
-        default: 'default'
-      }
-    },
     computed: {
       ...mapGetters('app', ['selectedComponentNodes']),
       nodes() {
@@ -42,29 +36,13 @@ export default function(attr) {
 
           this.nodes.forEach(node => {
             records.push({
-              path: `${node.id}.${STYLES}.${HTML}.${key}`,
+              path: [node.id, STYLES, HTML, key],
               value
             })
           })
         }
 
         this.RECORD(records)
-      },
-      softRecordStyles(object) {
-        const records = []
-
-        for (const key in object) {
-          const value = object[key]
-
-          this.nodes.forEach(node => {
-            records.push({
-              path: `${node.id}.${STYLES}.${HTML}.${key}`,
-              value
-            })
-          })
-        }
-
-        this.SOFT_RECORD(records)
       }
     }
   }

@@ -6,126 +6,101 @@
       </h4>
 
       <el-button
-        :disabled="innerBreakpoints.length === 6"
         type="text"
         icon="el-icon-circle-plus-outline"
         size="large"
-        @click="add"
+        @click="adding = !adding"
       />
     </div>
 
     <el-divider />
 
     <el-row
-      v-for="(point, index) in innerBreakpoints"
-      :key="point"
+      v-for="(key, index) in originalBreakpoints"
+      v-if="adding || breakpoints.includes(key)"
+      :key="key"
       :gutter="5"
       style="height: 40px;"
       type="flex"
       align="middle"
       justify="space-between"
-      @mouseenter.native="hoverIndex = index"
     >
-      <el-col :span="8">
-        <el-button
-          v-if="point"
-          size="large"
-          type="text"
-          icon="el-icon-circle-close"
-          @click="remove(index)"
-        />
-
-        <el-button
-          v-if="point && !newPoints.includes(innerBreakpoints[index])"
-          size="large"
-          type="text"
-          icon="el-icon-edit"
-          @click="edit(index)"
-        />
-      </el-col>
-
       <el-col
         :span="16"
-        class="align-center justify-end font-spacing"
+        class="align-center font-spacing"
       >
-        <select-unit
-          v-if="
-            editingIndex === index ||
-              newPoints.includes(innerBreakpoints[index])
-          "
-          ref="input"
-          :clearable="false"
-          :value="innerBreakpoints[index]"
-          size="medium"
-          style="width: 105px;"
-          class="text-center m-r-5"
-          @change="change(index, $event)"
+        <button-device
+          :point-key="key"
+          icon-only
+          style="margin-top: 2px;"
+          size="large"
         />
 
         <span
-          v-else
+          :style="{ color: isEnable(key) ? '' : '#cccccc' }"
           style="width: 65px;"
-          class="text-center"
+          class="text-center font-12"
         >
-          {{ point }}px
+          {{ BREAK_POINTS_MAP[key] }}px
         </span>
 
         <span
-          style="width: 15px;"
+          :style="{ color: isEnable(key) ? '' : '#cccccc' }"
+          style="width: 10px;"
           class="text-center"
         >
           -
         </span>
 
         <span
+          :style="{ color: isEnable(key) ? '' : '#cccccc' }"
           style="width: 65px;"
-          class="text-center"
+          class="text-center font-12"
         >
-          <template v-if="index">
-            {{ innerBreakpoints[index - 1] - 1 }}px
+          <template v-if="isEnable(key)">
+            <template v-if="key === breakpoints[0]">
+              ∞
+            </template>
+            <template v-else>
+              {{ nextPixel(key) }}
+            </template>
           </template>
           <template v-else>
-            ∞
+            <template v-if="index">
+              {{ BREAK_POINTS_MAP[originalBreakpoints[index - 1]] - 1 }}px
+            </template>
+            <template v-else>
+              ∞
+            </template>
           </template>
         </span>
+      </el-col>
 
-        <button-device
-          :point="point"
-          icon-only
-          style="margin-top: 2px;"
-          size="large"
-        />
+      <el-col
+        :span="8"
+        class="justify-end"
+      >
+        <el-button
+          v-loading="key === loadingKey"
+          v-if="key !== 'xs'"
+          :type="isEnable(key) ? '' : 'primary'"
+          plain
+          @click="onclick(key, !isEnable(key))"
+        >
+          {{ isEnable(key) ? 'Disable' : 'Enable' }}
+        </el-button>
       </el-col>
     </el-row>
-
-    <el-divider />
-
-    <div class="justify-end">
-      <el-button
-        v-if="canSubmit"
-        size="medium"
-        type="text"
-        @click="cancel"
-      >Cancel</el-button>
-
-      <el-button
-        v-loading="loading"
-        :disabled="!canSubmit"
-        size="medium"
-        type="primary"
-        plain
-        @click="submit"
-      >Submit</el-button>
-    </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import SelectUnit from '@/components/Components/SelectUnit'
 import ButtonDevice from '@/components/Components/ButtonDevice'
-import { arrayDescSort, arraySubtract, twoArrayEquals } from '@/utils/array'
 import { cloneJson } from '@/utils/tool'
+import { BREAK_POINTS_MAP } from '@/const'
+import { findIndexBy } from '@/utils/array'
 
 export default {
   name: 'SettingBreakpoints',
@@ -135,62 +110,39 @@ export default {
   },
   data() {
     return {
-      editingIndex: null,
-      innerBreakpoints: [],
-      editingValue: 0,
-      loading: false
+      loadingKey: false,
+      adding: false
     }
   },
   computed: {
-    ...mapState('layout', ['breakpoints']),
-    sortBreakpoints() {
-      return arrayDescSort(this.breakpoints).map(x => parseInt(x))
+    ...mapGetters('layout', ['breakpoints', 'breakpointsMap']),
+    originalBreakpoints() {
+      return Object.keys(BREAK_POINTS_MAP)
     },
-    canSubmit() {
-      return !twoArrayEquals(this.innerBreakpoints, this.sortBreakpoints)
-    },
-    newPoints() {
-      return arraySubtract(this.innerBreakpoints, this.breakpoints)
+    BREAK_POINTS_MAP() {
+      return BREAK_POINTS_MAP
     }
-  },
-  created() {
-    this.innerBreakpoints = cloneJson(this.sortBreakpoints)
   },
   methods: {
     ...mapActions('node', ['patchComponentSet']),
-    edit(index) {
-      this.editingIndex = this.editingIndex === null ? index : null
-      this.editingValue = this.innerBreakpoints[this.editingIndex]
+    isEnable(key) {
+      return this.breakpoints.includes(key)
     },
-    remove(index) {
-      this.innerBreakpoints.splice(index, 1)
-      this.editingIndex = null
+    nextPixel(key) {
+      const index = findIndexBy(this.breakpoints, key)
+      return this.breakpointsMap[this.breakpoints[index - 1]] - 1
     },
-    add() {
-      const point = Math.max(...this.innerBreakpoints)
-      this.innerBreakpoints.unshift(point + 300)
-      this.editingIndex = 0
-    },
-    cancel() {
-      this.editingIndex = null
-      this.innerBreakpoints = cloneJson(this.sortBreakpoints)
-    },
-    change(index, value) {
-      this.innerBreakpoints.splice(index, 1, parseInt(value))
-      this.$nextTick(() => {
-        this.$refs.input[0].focus()
-      })
-    },
-    async submit() {
-      try {
-        this.loading = true
-        await this.patchComponentSet({ breakpoints: this.innerBreakpoints })
-        this.editingIndex = null
-        this.innerBreakpoints = cloneJson(this.sortBreakpoints)
+    async onclick(key, enable) {
+      const breakpointsMap = cloneJson(this.breakpointsMap)
+      if (enable) {
+        breakpointsMap[key] = BREAK_POINTS_MAP[key]
       }
-      finally {
-        this.loading = false
+      else {
+        delete breakpointsMap[key]
       }
+      this.loadingKey = key
+      await this.patchComponentSet({ breakpointsMap })
+      this.loadingKey = null
     }
   }
 }

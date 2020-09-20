@@ -1,6 +1,5 @@
 import localforage from 'localforage'
 import { isArray, toArray } from '@/utils/array'
-import { normalizeBreakpoint } from '@/utils/layout'
 import { queryString } from '@/utils/url'
 import { API } from 'aws-amplify'
 
@@ -63,14 +62,11 @@ export function patchComponentSet({
   label,
   description,
   tags,
-  breakpoints
+  breakpointsMap
 }) {
   if (id) {
-    if (isArray(breakpoints)) {
-      breakpoints = normalizeBreakpoint(breakpoints)
-    }
     return API.patch('staging', `/component-sets/${id}`, {
-      body: { label, description, tags, breakpoints }
+      body: { label, description, tags, breakpointsMap }
     })
   }
 }
@@ -81,12 +77,8 @@ export function createComponentSet({
   tags,
   children,
   parentId,
-  breakpoints
+  breakpointsMap
 }) {
-  if (isArray(breakpoints)) {
-    breakpoints = normalizeBreakpoint(breakpoints)
-  }
-
   return API.post('staging', `/component-sets`, {
     body: {
       parentId,
@@ -94,7 +86,7 @@ export function createComponentSet({
       label,
       tags,
       children: toArray(children),
-      breakpoints
+      breakpointsMap
     }
   })
   // if (children.length) {

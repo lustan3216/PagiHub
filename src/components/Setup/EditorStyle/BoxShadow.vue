@@ -209,11 +209,6 @@ export default {
         visible: true
       })
       this.recordStyles({ boxShadow: stringify(this.boxShadowArray) })
-    },
-    visibleChange(index, value) {
-      this.boxShadowArray[index].visible = value
-      const boxShadow = stringify(this.boxShadowArray.filter(x => x.visible))
-      this.softRecordStyles({ boxShadow })
     }
   }
 }

@@ -6,19 +6,22 @@
 
     <el-button-group class="group">
       <el-tooltip
-        v-for="button in buttons"
-        v-if="button.pixel"
-        :content="button.content"
+        v-for="(point, index) in breakpoints"
+        :content="content(point, index)"
+        :key="point"
         effect="light"
         placement="top"
       >
         <el-button
           :disabled="!selectedComponentNodes.length"
-          :type="button.hidden === true ? 'primary' : ''"
+          :type="isHidden(point) ? 'primary' : ''"
           plain
-          @click="click(button.name, !Boolean(button.hidden))"
+          @click="click(point, !isHidden(point))"
         >
-          <i :class="[button.icon, button.class]" />
+          <button-device
+            :point-key="point"
+            icon-only
+          />
         </el-button>
       </el-tooltip>
     </el-button-group>
@@ -27,87 +30,47 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex'
-import { STYLES } from '@/const'
+import { STYLES, BREAK_POINTS_MAP } from '@/const'
+import ButtonDevice from '@/components/Components/ButtonDevice'
 import { getValueByPath } from '@/utils/tool'
 
 export default {
   name: 'ItemHiddenController',
+  components: {
+    ButtonDevice
+  },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
-    ...mapGetters('layout', ['validBreakpointPixels']),
-    buttons() {
-      let xlHidden = false
-      let lgHidden = false
-      let mdHidden = false
-      let smHidden = false
-      let xsHidden = false
-      let xxsHidden = false
-
-      if (this.selectedComponentNodes.length === 1) {
-        const node = this.selectedComponentNodes[0]
-        xlHidden = getValueByPath(node, 'style.xl.hidden')
-        lgHidden = getValueByPath(node, 'style.lg.hidden')
-        mdHidden = getValueByPath(node, 'style.md.hidden')
-        smHidden = getValueByPath(node, 'style.sm.hidden')
-        xsHidden = getValueByPath(node, 'style.xs.hidden')
-        xxsHidden = getValueByPath(node, 'style.xxs.hidden')
-      }
-
-      return [
-        {
-          pixel: this.validBreakpointPixels.xl,
-          name: 'xl',
-          content: `Hidden when screen larger than ${this.validBreakpointPixels.xl}px`,
-          icon: 'el-icon-data-line',
-          hidden: xlHidden
-        },
-        {
-          pixel: this.validBreakpointPixels.lg,
-          name: 'lg',
-          content: `Hidden when screen larger than ${this.validBreakpointPixels.lg}px and smaller than ${this.validBreakpointPixels.xl}px`,
-          icon: 'el-icon-data-line',
-          hidden: lgHidden
-        },
-        {
-          pixel: this.validBreakpointPixels.md,
-          name: 'md',
-          content: `Hidden when screen larger than ${this.validBreakpointPixels.md}px and smaller than ${this.validBreakpointPixels.lg}px`,
-          icon: 'el-icon-monitor',
-          hidden: mdHidden
-        },
-        {
-          pixel: this.validBreakpointPixels.sm,
-          name: 'sm',
-          content: `Hidden when screen larger than ${this.validBreakpointPixels.sm}px and smaller than ${this.validBreakpointPixels.md}px`,
-          icon: 'el-icon-mobile',
-          hidden: smHidden
-        },
-        {
-          pixel: this.validBreakpointPixels.xs,
-          name: 'xs',
-          content: `Hidden when screen larger than ${this.validBreakpointPixels.xs}px and smaller than ${this.validBreakpointPixels.sm}px`,
-          icon: 'el-icon-mobile-phone',
-          hidden: xsHidden,
-          class: 'rotate90'
-        },
-        {
-          pixel: this.validBreakpointPixels.xxs,
-          name: 'xxs',
-          content: `Hidden when screen larger than ${this.validBreakpointPixels.xxs}px and smaller than ${this.validBreakpointPixels.xs}px`,
-          icon: 'el-icon-mobile-phone',
-          hidden: xxsHidden
-        }
-      ]
-    }
+    ...mapGetters('layout', ['breakpoints'])
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
-    click(name, hidden) {
+    content(key, index) {
+      return index
+        ? `Hidden when screen ${BREAK_POINTS_MAP[key]}px - ${
+          BREAK_POINTS_MAP[this.breakpoints[index - 1]]
+        }px`
+        : `Hidden when screen ${BREAK_POINTS_MAP[key]}px - ∞`
+    },
+
+    isHidden(point) {
+      if (this.selectedComponentNodes.length === 1) {
+        return getValueByPath(this.selectedComponentNodes[0], [
+          STYLES,
+          point,
+          'hidden'
+        ])
+      }
+      else {
+        return false
+      }
+    },
+    click(point, hidden) {
       const records = []
 
       this.selectedComponentNodes.forEach(node => {
         records.push({
-          path: `${node.id}.${STYLES}.${name}.hidden`,
+          path: [node.id, STYLES, point, 'hidden'],
           value: hidden || undefined
         })
       })

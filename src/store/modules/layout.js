@@ -1,16 +1,13 @@
 import { SET } from '../index'
 import { debounce } from '@/utils/tool'
 import { quickFnMap } from '@/components/TemplateUtils/ComponentQuickFunctions'
-import { arrayDescSort } from '@/utils/array'
-import { normalizeBreakpoint } from '@/utils/layout'
-import { DEFAULT_BREAKPOINTS } from '@/const'
+import { findBreakpoint, sortDescBreakpoint } from '@/utils/layout'
 
 const state = {
   gridResizing: false,
   artBoardWidth: 0,
   artBoardHeight: 0,
-  scaleRatio: 1,
-  breakpoints: DEFAULT_BREAKPOINTS
+  scaleRatio: 1
 }
 
 const mutations = {
@@ -19,16 +16,6 @@ const mutations = {
 
 let timer
 const actions = {
-  initBreakpoints({ rootState, commit }, id) {
-    const { editingComponentSetId, nodesMap } = rootState.node
-
-    if (id || editingComponentSetId) {
-      const { breakpoints } = nodesMap[id || editingComponentSetId]
-      commit('SET', {
-        breakpoints: normalizeBreakpoint(breakpoints)
-      })
-    }
-  },
   checkIsGridResizing({ rootGetters, commit }) {
     if (!rootGetters['mode/isDraftMode']) {
       return
@@ -68,19 +55,16 @@ const actions = {
 }
 
 const getters = {
-  currentBreakpoint({ breakpoints, artBoardWidth: width }) {
-    let currentPoint = 0
-    arrayDescSort(breakpoints).find((point, index) => {
-      if (
-        point === width ||
-        (width < breakpoints[index - 1] && width > point)
-      ) {
-        currentPoint = point
-        return true
-      }
-    })
-
-    return currentPoint
+  breakpointsMap(state, getters, rootState) {
+    const { nodesMap, editingComponentSetId } = rootState.node
+    const node = nodesMap[editingComponentSetId]
+    return (node && node.breakpointsMap) || {}
+  },
+  breakpoints(state, getters) {
+    return sortDescBreakpoint(Object.keys(getters.breakpointsMap))
+  },
+  currentBreakpoint({ artBoardWidth: width }, { breakpointsMap }) {
+    return findBreakpoint(breakpointsMap, width)
   }
 }
 

@@ -195,11 +195,6 @@ export default {
     itemRemove(index) {
       deleteBy(this.filterArray, index)
       this.recordStyles({ filter: this.filterArray })
-    },
-    visibleChange(index, value) {
-      this.filterArray[index].visible = value
-      const filter = this.stringify(this.filterArray.filter(x => x.visible))
-      this.softRecordStyles({ filter })
     }
   }
 }

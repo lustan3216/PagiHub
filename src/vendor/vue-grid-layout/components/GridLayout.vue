@@ -1,6 +1,7 @@
 <template>
   <div ref="item" class="vue-grid-layout" :style="autoHeight ? {} : mergedStyle" :class="{ 'h-100': autoHeight }">
     <slot></slot>
+<!--    v-show="showPlaceHolder && isDragging"-->
     <grid-item class="vue-grid-placeholder"
                v-show="isDragging"
                :x="placeholder.x"

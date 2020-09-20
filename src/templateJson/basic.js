@@ -18,11 +18,11 @@ import {
   SORT_INDEX,
   VALUE,
   HTML,
-  DEFAULT_BREAKPOINTS
+  DEFAULT_BREAK_POINTS_MAP
 } from '../const'
 
 const mapPoints = object => {
-  return DEFAULT_BREAKPOINTS.reduce((all, point) => {
+  return Object.keys(DEFAULT_BREAK_POINTS_MAP).reduce((all, point) => {
     all[point] = object
     return all
   }, {})
@@ -115,6 +115,9 @@ export const textEditor = function(options) {
   return {
     [TAG]: TEXT_EDITOR,
     [CAN_BE_EDITED]: true,
+    [STYLES]: {
+      layout: { fitContainer: true }
+    },
     ...options
   }
 }

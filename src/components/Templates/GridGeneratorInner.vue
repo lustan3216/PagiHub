@@ -7,7 +7,7 @@
     :margin="[0, 0]"
     :row-height="1"
     :cols="cols"
-    :breakpoints="breakpointsObject"
+    :breakpoints="breakpointsMap"
     :vertical-compact="false"
     :prevent-collision="false"
     :auto-height="autoHeight"
@@ -35,12 +35,12 @@
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import { GRID } from '@/const'
-import { arrayAscSort, deleteBy } from '@/utils/array'
+import { deleteBy, findBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
-import { getBreakpoint } from '@/utils/layout'
+import { getBreakpoint, sortAscBreakpoint } from '@/utils/layout'
 import { getValueByPath } from '@/utils/tool'
 import { isInstanceChild } from '@/utils/inheritance'
 
@@ -85,21 +85,18 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapState('layout', ['breakpoints', 'artBoardWidth', 'artBoardHeight']),
+    ...mapState('layout', ['artBoardWidth', 'artBoardHeight']),
     ...mapState('node', ['nodesMap']),
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapGetters('layout', [
+      'currentBreakpoint',
+      'breakpoints',
+      'breakpointsMap'
+    ]),
 
     cols() {
       const object = {}
       this.breakpoints.forEach(point => {
-        object[point] = 72
-      })
-      return object
-    },
-    breakpointsObject() {
-      const object = {}
-      this.breakpoints.forEach(point => {
-        object[point] = parseInt(point)
+        object[point] = 100
       })
       return object
     },
@@ -116,7 +113,8 @@ export default {
       const { artBoardHeight } = this
       const layouts = {}
       let prevLayout
-      arrayAscSort(this.breakpoints).forEach((breakPoint, index) => {
+
+      sortAscBreakpoint(this.breakpoints).forEach(breakpoint => {
         const layout = []
         this.children.forEach(({ id }, index) => {
           const data = {
@@ -137,27 +135,38 @@ export default {
 
           const { styles = {}, grid, autoHeight } = this.gridItemsData[id]
 
-          if (!grid || !grid[breakPoint]) {
-            return layout.push(prevLayout[index])
+          if (!grid) {
+            return layout.push(data)
           }
 
-          if (getValueByPath(styles, [breakPoint, 'hidden'])) {
+          const currentGrid = grid[breakpoint]
+
+          if (!currentGrid) {
+            return layout.push(findBy(prevLayout, 'id', id))
+          }
+
+          if (getValueByPath(styles, [breakpoint, 'hidden'])) {
             return
           }
 
           let w = 0
           let h = 0
-          const { ratioW, ratioH, verticalCompact } = styles
+          const ratioW = getValueByPath(styles, ['layout', 'ratioW'])
+          const ratioH = getValueByPath(styles, ['layout', 'ratioH'])
+          const verticalCompact = getValueByPath(styles, [
+            'layout',
+            'verticalCompact'
+          ])
 
-          if (grid && grid[breakPoint]) {
-            w = grid[breakPoint].w
-            h = grid[breakPoint].h
+          if (grid && currentGrid) {
+            w = currentGrid.w
+            h = currentGrid.h
 
             if (!autoHeight) {
               if (ratioH && ratioW) {
-                // solve by interactjs in griditem
+                // solve by interactjs in gridItem
               }
-              else if (grid[breakPoint].hUnit === 'vh') {
+              else if (currentGrid.hUnit === 'vh') {
                 h = (artBoardHeight / 100) * parseInt(h)
               }
               else {
@@ -170,8 +179,8 @@ export default {
             static: this.lockIds.includes(id),
             id: id,
             i: id || index, // should not happen, but just prevent crash in case
-            x: grid[breakPoint].x || 0,
-            y: grid[breakPoint].y || 0,
+            x: currentGrid.x || 0,
+            y: currentGrid.y || 0,
             w,
             h,
             verticalCompact,
@@ -181,7 +190,7 @@ export default {
           })
         })
 
-        layouts[breakPoint] = prevLayout = layout
+        layouts[breakpoint] = prevLayout = layout
       })
 
       return layouts

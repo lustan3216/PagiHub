@@ -120,7 +120,6 @@ export default {
     }),
     ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
     ...mapActions('node', ['getProjects', 'getComponentSets']),
-    ...mapActions('layout', ['initBreakpoints']),
     isProject,
     nodeClick(event, node) {
       if (isProject(node)) {
@@ -130,7 +129,6 @@ export default {
         this.APP_SET({ selectedComponentIds: [] })
         this.NODE_SET({ editingProjectId: node.parentId })
         this.SET_EDITING_COMPONENT_SET_ID(node.id)
-        this.initBreakpoints(node.id)
       }
     }
   }

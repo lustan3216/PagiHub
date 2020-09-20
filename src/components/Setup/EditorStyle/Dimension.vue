@@ -19,6 +19,8 @@
       </el-col>
     </el-row>
 
+    <fit-container />
+
     <el-row
       :gutter="10"
       type="flex"
@@ -111,9 +113,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
+import FitContainer from '@/components/Setup/EditorStyle/FitContainer'
 import { COLUMNS, GRID, HTML, STYLES } from '@/const'
 import { isGrid, isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
@@ -124,6 +127,7 @@ export default {
   name: 'Dimension',
   components: {
     SelectUnit,
+    FitContainer,
     Tip
   },
 
@@ -143,10 +147,7 @@ export default {
     },
     fitContainer() {
       const result = this.vms.find(node => {
-        return (
-          getValueByPath(node, `innerStyles.${HTML}.overflow`) ===
-          'fitContainer'
-        )
+        return getValueByPath(node, `innerStyles.layout.fitContainer`)
       })
 
       return Boolean(result)
@@ -180,7 +181,7 @@ export default {
     },
     allVerticalCompact() {
       return this.vms.map(vm =>
-        getValueByPath(vm, 'innerStyles.verticalCompact')
+        getValueByPath(vm, 'innerStyles.layout.verticalCompact')
       )
     },
     allW() {
@@ -205,7 +206,7 @@ export default {
 
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${STYLES}.verticalCompact`,
+            path: [node.id, STYLES, 'layout', 'verticalCompact'],
             value: value || undefined
           })
         })
@@ -254,10 +255,10 @@ export default {
       }
     },
     allRatioW() {
-      return this.vms.map(vm => getValueByPath(vm, 'innerStyles.ratioW'))
+      return this.vms.map(vm => getValueByPath(vm, 'innerStyles.layout.ratioW'))
     },
     allRatioH() {
-      return this.vms.map(vm => getValueByPath(vm, 'innerStyles.ratioH'))
+      return this.vms.map(vm => getValueByPath(vm, 'innerStyles.layout.ratioH'))
     },
     ratioW: {
       get() {
@@ -271,7 +272,7 @@ export default {
 
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${STYLES}.ratioW`,
+            path: [node.id, STYLES, 'layout', 'ratioW'],
             value: value || undefined
           })
         })
@@ -291,7 +292,7 @@ export default {
 
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${STYLES}.ratioH`,
+            path: [node.id, STYLES, 'layout', 'ratioH'],
             value: value || undefined
           })
         })

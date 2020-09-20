@@ -90,6 +90,7 @@ export function compact(layout: Layout, verticalCompact: Boolean): Layout {
     let l = sorted[i];
     // Don't move static elements
     if (!l.static) {
+
       // // lot-design 原本是下面這樣，但改成每個element可以自己控制 verticalCompact
       // l = compactItem(compareWith, l, verticalCompact);
       l = compactItem(compareWith, l, l.verticalCompact || verticalCompact);

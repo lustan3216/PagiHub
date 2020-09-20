@@ -43,18 +43,19 @@
         </el-tooltip>
 
         <button-device
-          v-for="point in sortBreakpoints"
+          v-for="point in breakpoints"
+          v-if="point !== 'xs'"
           :key="point"
-          :point="point"
-          @click="setSize({ w: point })"
+          :point-key="point"
+          @click="setSize({ w: $event })"
         />
 
         <el-popover
           placement="bottom"
-          width="300"
+          width="280"
           trigger="click"
         >
-          <setting-breakpoints />
+          <setting-breakpoints v-if="breakpoints && breakpoints.length" />
 
           <el-button
             slot="reference"
@@ -111,7 +112,7 @@
 
 <script>
 import interactjs from 'interactjs'
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import { Popover } from 'element-ui'
 import SettingBreakpoints from '../Setup/EditorSetting/SettingBreakpoints'
 import ButtonDevice from '../Components/ButtonDevice'
@@ -119,7 +120,6 @@ import { directive } from '@/directive/freeView'
 import { getRectWithoutPadding } from '@/utils/style'
 import { toPrecision } from '@/utils/number'
 import gsap from 'gsap'
-import { arrayDescSort } from '@/utils/array'
 
 export default {
   name: 'ViewPort',
@@ -148,10 +148,8 @@ export default {
   },
   computed: {
     ...mapState('mode', ['mode']),
-    ...mapState('layout', ['breakpoints', 'artBoardWidth', 'artBoardHeight']),
-    sortBreakpoints() {
-      return arrayDescSort(this.breakpoints).filter(x => x)
-    },
+    ...mapState('layout', ['artBoardWidth', 'artBoardHeight']),
+    ...mapGetters('layout', ['breakpoints']),
     scalePercent() {
       return Math.ceil(+this.style.scale * 100)
     },

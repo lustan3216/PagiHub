@@ -1,7 +1,7 @@
 <template>
   <i
     v-if="iconOnly"
-    :class="[currentButtonConfig.class, currentButtonConfig.icon]"
+    :class="[buttonConfig.class, buttonConfig.icon]"
   />
   <el-tooltip
     v-else
@@ -10,26 +10,26 @@
     placement="bottom"
   >
     <el-button
-      :type="type || (point === currentBreakpoint ? 'primary' : 'text')"
-      :class="currentButtonConfig.class"
-      :icon="currentButtonConfig.icon"
+      :type="type || (pointKey === currentBreakpoint ? 'primary' : 'text')"
+      :class="buttonConfig.class"
+      :icon="buttonConfig.icon"
       :size="size"
       class="shortcut-button"
       plain
-      @click="$emit('click')"
+      @click="$emit('click', point)"
     />
   </el-tooltip>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getValueByPath } from '@/utils/tool'
+import { BREAK_POINTS_MAP } from '@/const'
 
 export default {
   name: 'ButtonDevice',
   props: {
-    point: {
-      type: Number,
+    pointKey: {
+      type: String,
       required: true
     },
     type: {
@@ -47,35 +47,31 @@ export default {
   },
   computed: {
     ...mapGetters('layout', ['currentBreakpoint']),
-    buttonConfigs() {
-      return [
-        { width: 1440, icon: 'el-icon-data-line' },
-        { width: 1200, icon: 'el-icon-data-line' },
-        { width: 996, icon: 'el-icon-monitor' },
-        { width: 768, icon: 'el-icon-mobile' },
-        {
-          width: 576,
+    point() {
+      return BREAK_POINTS_MAP[this.pointKey]
+    },
+    buttonConfig() {
+      return {
+        xxl: {
+          icon: 'el-icon-data-line'
+        },
+        xl: {
+          icon: 'el-icon-data-line'
+        },
+        lg: {
+          icon: 'el-icon-monitor'
+        },
+        md: {
+          icon: 'el-icon-mobile'
+        },
+        sm: {
           icon: 'el-icon-mobile-phone',
           class: 'rotate90'
         },
-        {
-          width: 0,
+        xs: {
           icon: 'el-icon-mobile-phone'
         }
-      ]
-    },
-    currentButtonConfig() {
-      return (
-        this.buttonConfigs.find((config, index) => {
-          if (
-            this.point <
-              getValueByPath(this.buttonConfigs, [index - 1, 'width']) &&
-            this.point >= config.width
-          ) {
-            return config
-          }
-        }) || this.buttonConfigs[0]
-      )
+      }[this.pointKey]
     }
   }
 }

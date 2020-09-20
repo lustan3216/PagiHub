@@ -29,7 +29,7 @@
 
     <portal-target name="PanelStyles" />
 
-<!--    <item-hidden-controller />-->
+    <item-hidden-controller />
 
     <dimension />
 

@@ -38,12 +38,12 @@ export default {
       return this.innerChildren[0]
     },
     fitContainer() {
-      const overflow = getValueByPath(this.child, [
+      const fitContainer = getValueByPath(this.child, [
         STYLES,
-        'default',
-        'overflow'
+        'layout',
+        'fitContainer'
       ])
-      return isUndefined(overflow) && this.canOverflow
+      return fitContainer && this.canOverflow
     },
     canOverflow() {
       return isTextEditor(this.child) || isLayers(this.child)
