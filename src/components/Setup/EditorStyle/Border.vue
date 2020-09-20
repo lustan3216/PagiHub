@@ -43,7 +43,16 @@ const StyleSelect = {
   functional: true,
   render(h, context) {
     const { data, props } = context
-    const options = ['dashed', 'dotted', 'solid'].map((option, index) =>
+    const options = [
+      'inset',
+      'outset',
+      'dashed',
+      'dotted',
+      'solid',
+      'double',
+      'groove',
+      'ridge'
+    ].map((option, index) =>
       h('el-option', {
         key: index,
         props: {

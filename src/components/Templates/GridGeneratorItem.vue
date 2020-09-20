@@ -17,7 +17,7 @@ import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
-import { getValueByPath, isUndefined } from '@/utils/tool'
+import { getValueByPath } from '@/utils/tool'
 import { AUTO_HEIGHT, GRID, STYLES } from '@/const'
 import { isLayers, isTextEditor } from '@/utils/node'
 
