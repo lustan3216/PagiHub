@@ -2,7 +2,7 @@
   <div ref="item"
        class="vue-grid-item"
        :class="classObj"
-       :style="style"
+       :style="{ ...style, zIndex }"
   >
     <slot></slot>
     <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass"></span>
@@ -172,6 +172,10 @@
         type: Number,
         required: false,
         default: Infinity
+      },
+      zIndex: {
+        type: Number,
+        default: 0
       },
       ratioW: {
         type: Number,

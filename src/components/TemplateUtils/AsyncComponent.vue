@@ -23,7 +23,6 @@ export default {
     Carousel: () => import('../Templates/Carousel'),
     TextEditor: () => import('../Templates/TextEditor'),
 
-    Layers: () => import('../Templates/Layers'),
     GridGenerator: () => import('../Templates/GridGenerator'),
     GridGeneratorItem: () => import('../Templates/GridGeneratorItem'),
 

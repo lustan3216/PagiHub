@@ -107,7 +107,6 @@ export function traversalAncestorAndSelf(node, fn) {
   }
 
   const go = fn(node)
-  console.log(go)
   if (node.parentNode && (go || isUndefined(go))) {
     traversalAncestorAndSelf(node.parentNode, fn)
   }

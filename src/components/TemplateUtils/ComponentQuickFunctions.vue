@@ -67,6 +67,8 @@
           slim
         />
 
+        <z-index />
+
         <el-tooltip
           effect="light"
           placement="top"
@@ -107,6 +109,7 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import ComponentName from './ComponentName'
+import ZIndex from '@/components/Setup/EditorStyle/ZIndex'
 import ContextMenu from './ContextMenu'
 import InheritanceJumper from './InheritanceJumper'
 import { Popover } from 'element-ui'
@@ -141,6 +144,7 @@ export default {
   components: {
     InheritanceJumper,
     ComponentName,
+    ZIndex,
     ContextMenu,
     ElPopover: Popover
   },

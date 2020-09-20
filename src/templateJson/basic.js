@@ -52,18 +52,8 @@ export const gridGenerator = function(options) {
     [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
     [SORT_INDEX]: 0,
-    [LABEL]: 'layer',
+    [LABEL]: 'layout',
     [CHILDREN]: gridGeneratorItems(),
-    ...options
-  }
-}
-
-export const layers = function(options) {
-  return {
-    [TAG]: LAYERS,
-    [CAN_NEW_ITEM]: true,
-    [CHILDREN]: [gridGenerator()],
-    [LABEL]: 'magic-layout',
     ...options
   }
 }
@@ -105,9 +95,9 @@ export const carousel = function() {
           }
         ]
       }),
-      layers({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
-      layers({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
-      layers({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' })
+      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
+      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
+      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' })
     ]
   }
 }
@@ -177,7 +167,6 @@ export const drawer = function() {
 }
 
 export default [
-  layers(),
   textEditor(),
   flexImage(),
   carousel(),

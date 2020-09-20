@@ -154,6 +154,7 @@ export default {
           let h = 0
           const ratioW = getValueByPath(styles, ['layout', 'ratioW'])
           const ratioH = getValueByPath(styles, ['layout', 'ratioH'])
+          const zIndex = getValueByPath(styles, ['layout', 'zIndex'], 0)
           const verticalCompact = getValueByPath(styles, [
             'layout',
             'verticalCompact'
@@ -187,7 +188,8 @@ export default {
             verticalCompact,
             autoHeight,
             ratioW,
-            ratioH
+            ratioH,
+            zIndex
           })
         })
 
