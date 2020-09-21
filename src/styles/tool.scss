@@ -6,6 +6,10 @@
   display: none !important;
 }
 
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
 .inline-block {
   display: inline-block;
 }

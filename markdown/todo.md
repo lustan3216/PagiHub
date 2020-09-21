@@ -13,19 +13,22 @@ https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
 切換componentset時patchchildren有bug
+
 username
-add container 方式改得跟editor X一樣
-重疊時拖拉要 noaction 其他 conainer
+add container 方式改得跟 editor X 一樣
+
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 grid item 移動時，最外誆 要動畫
 style reset to master
-font 的 padding
 background color
 background image
-upload svg, 看能不能svgo filter, 不然以後沒有svg少了很多動畫可以做
+
 </ol>
 
 ### Last
+
+upload svg, 看能不能 svgo filter, 不然以後沒有 svg 少了很多動畫可以做
+重疊時拖拉要 noaction 其他 conainer
 
 <li>radius 可加增神奇第二元素</li>
 min-hieght, min-width in pixel

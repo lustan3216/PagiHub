@@ -6,7 +6,7 @@
       zIndex: isExample ? 3000 : 800
     }"
     :class="{ instance: isInstance }"
-    class="quick-functions flex-center"
+    class="quick-functions flex-center backface-hidden"
   >
     <el-button
       v-if="canAddComponent"
@@ -19,7 +19,7 @@
 
     <div
       :class="[top > 100 ? 'top' : 'bottom']"
-      class="wrapper flex"
+      class="wrapper flex backface-hidden"
     >
       <div
         class="flex"
@@ -32,7 +32,7 @@
               <i
                 v-if="hovering && index"
                 :key="node.id + 'i'"
-                class="el-icon-arrow-right"
+                class="el-icon-arrow-left"
               />
               <component-name
                 v-if="hovering || node.id === id"
@@ -199,7 +199,7 @@ export default {
         }
       })
 
-      return nodes
+      return nodes.slice(0, 4)
     },
     newItemToolTip() {
       if (this.node[CAN_NEW_ITEM]) {
@@ -419,6 +419,8 @@ $connectColor: rgba(135, 199, 124, 0.68);
 }
 
 ::v-deep .el-button-group {
+  border-radius: 5px;
+  background-color: white;
   margin-left: 10px;
 
   button {

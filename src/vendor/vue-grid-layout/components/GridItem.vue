@@ -610,7 +610,13 @@
             //console.log("### resize end => x=" +this.innerX + " y=" + this.innerY + " w=" + this.innerW + " h=" + this.innerH);
             pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH)
             newSize.width = pos.width
-            newSize.height = pos.height
+            const parentRect = event.target.offsetParent.getBoundingClientRect()
+            if (this.lockInParent && pos.height + pos.top > parentRect.height) {
+              newSize.height = parentRect.height - pos.top
+            } else {
+              newSize.height = pos.height
+            }
+
             //                        console.log("### resize end => " + JSON.stringify(newSize));
             this.resizing = null
             this.isResizing = false
@@ -646,8 +652,8 @@
         if (this.innerW !== pos.w || this.innerH !== pos.h) {
           this.$emit('resize', this.i, pos.h, pos.w, newSize.height, newSize.width)
         }
+
         if (event.type === 'resizeend' && (this.previousW !== this.innerW || this.previousH !== this.innerH)) {
-          // this.autoSize()
           this.$emit('resized', this.i, pos.h, pos.w, newSize.height, newSize.width)
         }
         if (event.type === 'resizestart') {
@@ -799,7 +805,7 @@
         // Capping
         x = Math.max(Math.min(x, this.cols - this.innerW), 0)
         y = Math.max(Math.min(y, this.maxRows - this.innerH), 0)
-        console.log(x, y)
+
         return { x, y }
       },
       // Helper for generating column width
