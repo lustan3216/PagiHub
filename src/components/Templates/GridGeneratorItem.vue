@@ -1,6 +1,11 @@
 <template>
   <div
-    :class="{ 'grid-item-border': isDraftMode, 'h-100': !fitContainer }"
+    :class="{
+      'grid-item-border': isDraftMode,
+      'border-pulse': parentGridItem.pulsing,
+      'h-100': !fitContainer,
+      stack: parentGridItem.pulsing && stack
+    }"
     :style="innerStyles.html"
     @scroll.passive="onScroll"
   >
@@ -30,7 +35,20 @@ export default {
   },
   mixins: [childrenMixin, nodeMixin],
   inject: {
+    // connect with GridGeneratorInner
     gridItemsData: { required: true }
+  },
+  provide() {
+    return {
+      parentGridItem: this.parentGridItem
+    }
+  },
+  data() {
+    return {
+      parentGridItem: {
+        pulsing: false
+      }
+    }
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
@@ -38,12 +56,13 @@ export default {
       return this.innerChildren[0]
     },
     fitContainer() {
-      const fitContainer = getValueByPath(this.child, [
-        'innerStyles',
-        'layout',
-        'fitContainer'
-      ])
-      return fitContainer && this.canOverflow
+      return (
+        getValueByPath(this.innerStyles, ['layout', 'fitContainer']) &&
+        this.canOverflow
+      )
+    },
+    stack() {
+      return getValueByPath(this.innerStyles, ['layout', 'stack'])
     },
     canOverflow() {
       return isTextEditor(this.child) || isLayers(this.child)
@@ -77,5 +96,24 @@ export default {
 <style scoped lang="scss">
 ::v-deep[data-invisible] + .vue-resizable-handle {
   display: none;
+}
+
+.stack {
+  border-color: #aeb4c2;
+}
+.border-pulse {
+  border-color: #9499a5;
+  animation: border-pulse 1s infinite;
+}
+@keyframes border-pulse {
+  0% {
+    border-color: #9499a5;
+  }
+  50% {
+    border-color: #50535b;
+  }
+  100% {
+    border-color: #9499a5;
+  }
 }
 </style>

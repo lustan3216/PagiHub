@@ -2,7 +2,7 @@
   <!-- id here is for selection using, can not delete -->
   <div
     v-if="isDraftMode && node"
-    :class="{ 'h-100': !fitContainer }"
+    :class="{ 'h-100': !fitContainer, 'no-action': lock }"
     @mousedown.stop="contextMenu = null"
     @mouseup.stop="singleClick"
     @dblclick.stop="dblclick"
@@ -114,6 +114,9 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     ...mapState('layout', ['gridResizing']),
     ...mapState('example', ['exampleNodesMap']),
+    lock() {
+      return this.node.lock
+    },
     itemEditing() {
       return store.editingPath.includes(this.id)
     },

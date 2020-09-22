@@ -133,7 +133,7 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import { VueDraggableDirective } from 'vue-draggable'
-
+import ColorPicker from '@/vendor/element-ui/color-picker'
 import {
   parse,
   stringify
@@ -144,7 +144,8 @@ import forNodeMixin from './mixins/forNode'
 export default {
   name: 'BoxShadows',
   components: {
-    SelectUnit
+    SelectUnit,
+    ElColorPicker: ColorPicker
   },
   mixins: [forNodeMixin('boxShadow')],
   directives: {

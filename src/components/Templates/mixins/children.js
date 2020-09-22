@@ -1,5 +1,5 @@
 import { mapMutations, mapState } from 'vuex'
-import { CHILDREN, STYLES, SORT_INDEX, PROPS, GRID, SOFT_DELETE } from '@/const'
+import { CHILDREN, STYLES, PROPS, GRID, SOFT_DELETE } from '@/const'
 import { arrayLast, isArray } from '@/utils/array'
 import { vmRemoveNode } from '@/utils/vmMap'
 import { cloneJson, deepMerge, getValueByPath, isUndefined } from '@/utils/tool'
@@ -102,7 +102,8 @@ export default {
       const records = []
       if (diff > 0) {
         arraySubtract(this.masterChildren, this.children).forEach(newItem => {
-          records.push(...this.addNodeToParentRecords(newItem, true))
+          const { records } = this.addNodeToParentRecords(newItem, true)
+          records.push(...records)
         })
       }
       else if (diff < 0) {
@@ -161,10 +162,6 @@ export default {
         }
       )
 
-      if (isLayers(this.node)) {
-        nodeTree[SORT_INDEX] = this.children.length
-      }
-
       traversalSelfAndChildren(nodeTree, node => {
         records.push({
           path: node.id,
@@ -172,7 +169,7 @@ export default {
         })
       })
 
-      return records
+      return { records, newNodeId: nodeTree.id }
     },
 
     addNodeToParent(nodeTree = {}) {
@@ -180,8 +177,12 @@ export default {
         return
       }
 
-      const records = this.addNodeToParentRecords(nodeTree)
+      const { records, newNodeId } = this.addNodeToParentRecords(nodeTree)
       this.RECORD(records)
+
+      this.$nextTick(() => {
+        this.SET_SELECTED_COMPONENT_ID(newNodeId)
+      })
     },
 
     createEmptyItem() {
@@ -198,13 +199,6 @@ export default {
       // eslint-disable-next-line
       const template = basicTemplates[camelCase(tag)]()
       const emptyItem = arrayLast(template[CHILDREN])
-
-      if (SORT_INDEX in emptyItem) {
-        // for layers, 新增加的item index 都比較高, 0是最底
-        const indexArray = this.innerChildren.map(node => node[SORT_INDEX])
-        const currentMaxIndex = Math.max(indexArray)
-        emptyItem[SORT_INDEX] = currentMaxIndex + 1
-      }
 
       this.addNodeToParent(emptyItem)
     },
@@ -240,18 +234,6 @@ export default {
       }
 
       traversal(theNodeGonnaRemove)
-
-      if (this.children.length > 1 && isLayers(this.node)) {
-        const children = this.children.filter(
-          child => child.id !== theNodeGonnaRemove.id
-        )
-        children.forEach((child, index) => {
-          records.unshift({
-            path: `${child.id}.${SORT_INDEX}`,
-            value: index
-          })
-        })
-      }
 
       if (isLayers(this.node) || isCarousel(this.node)) {
         if (this.node.children.length === 1) {

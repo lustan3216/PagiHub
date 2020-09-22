@@ -2,7 +2,6 @@ import {
   GRID_GENERATOR,
   POLYMORPHISM,
   GRID_GENERATOR_ITEM,
-  LAYERS,
   CAROUSEL,
   CAN_NEW_ITEM,
   TAG,
@@ -15,7 +14,6 @@ import {
   GRID,
   SOFT_DELETE,
   TEXT_EDITOR,
-  SORT_INDEX,
   VALUE,
   HTML,
   COLUMNS,
@@ -51,7 +49,6 @@ export const gridGenerator = function(options) {
   return {
     [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
-    [SORT_INDEX]: 0,
     [LABEL]: 'layout',
     [CHILDREN]: gridGeneratorItems(),
     ...options

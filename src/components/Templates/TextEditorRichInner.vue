@@ -325,7 +325,7 @@ import { mapState, mapMutations, mapGetters } from 'vuex'
 import { arrayUniq } from '../../utils/array'
 import { Popover } from 'element-ui'
 import WebFont from 'webfontloader'
-import ColorPicker from '@/components/Components/ColorPicker'
+import ColorPicker from '@/vendor/element-ui/color-picker'
 import { TEXT_EDITOR } from '@/const'
 
 export default {

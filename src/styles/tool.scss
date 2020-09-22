@@ -166,11 +166,6 @@
   }
 }
 
-[data-lock] {
-  @extend .no-action;
-  cursor: not-allowed !important;
-}
-
 .no-select {
   user-select: none !important;
 }

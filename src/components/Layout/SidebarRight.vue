@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
 import NodeInfo from '../TemplateUtils/ComponentName'

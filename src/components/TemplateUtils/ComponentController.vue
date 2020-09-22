@@ -25,7 +25,7 @@
       visible
     />
 
-    <touchable
+    <lock
       :id="id"
       visible
     />
@@ -34,7 +34,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import Touchable from './Touchable'
+import Lock from './Lock'
 import Visible from './Visible'
 import { isMac } from '@/utils/device'
 import { getValueByPath } from '@/utils/tool'
@@ -47,7 +47,7 @@ export default {
   name: 'ComponentController',
   components: {
     Visible,
-    Touchable
+    Lock
   },
   props: {
     id: {

@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { ColorPicker } from 'element-ui'
+import ColorPicker from '@/vendor/element-ui/color-picker'
 import { capitalize } from '@/utils/string'
 import SelectUnit from '@/components/Components/SelectUnit'
 

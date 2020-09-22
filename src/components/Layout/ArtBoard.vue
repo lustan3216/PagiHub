@@ -14,10 +14,7 @@
         mode="out-in"
       >
         <keep-alive>
-          <component-giver
-            :id="editingComponentSetId"
-            class="h-100 backface-hidden"
-          />
+          <component-giver :id="editingComponentSetId" class="h-100 "/>
         </keep-alive>
       </transition>
     </template>

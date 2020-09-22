@@ -16,7 +16,7 @@
     @mousedown.native="clicking = true"
     @focus="resizeCursor = false"
     @blur="resizeCursor = true"
-    @change="$emit('change', innerValue)"
+    @change="$emit('change', innerValue || deleteValue)"
   >
     <el-dropdown
       v-if="optionUnits.length > 1"
@@ -63,6 +63,10 @@ export default {
     prefixIcon: {
       type: String,
       default: ''
+    },
+    deleteValue: {
+      type: String,
+      default: null
     },
     clearable: {
       type: Boolean,
@@ -157,7 +161,7 @@ export default {
         }
 
         this.innerValue = result
-        this.$emit('input', result)
+        this.$emit('input', result || this.deleteValue)
       }
     },
     unit: {
@@ -181,7 +185,7 @@ export default {
         const number = unit === 'auto' ? '' : this.number || '0'
 
         this.innerValue = number + unit
-        this.$emit('input', this.innerValue)
+        this.$emit('input', this.innerValue, this.deleteValue)
       }
     },
     isAuto() {

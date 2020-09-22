@@ -1,8 +1,8 @@
 <template>
   <el-image
-
     v-bind="innerProps"
     class="wh-100"
+    lazy
   >
     <div
       slot="error"

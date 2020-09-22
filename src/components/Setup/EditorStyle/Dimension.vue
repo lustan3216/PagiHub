@@ -35,27 +35,16 @@
           style="align-items: baseline"
         >
           W
-          <tip class="m-l-5">
-            Use column to build the Responsive Web Design layout is the most
-            powerful implementation.
-            <br >
-            <br >
-            After decided how many columns, we will calculate the width to fit
-            any device automatically.
-            <br >
-            <br >
-            The grid system has <span class="crucial">{{ cols }}</span> columns
-            maximum on each device.
-          </tip>
         </span>
       </el-col>
 
       <el-col :span="12">
         <select-unit
           :disabled="!gridItemNodes.length"
-          v-model.number="w"
+          v-model="w"
           :max="cols"
-          :units="['%']"
+          :units="['%', 'px']"
+          delete-value=""
         />
       </el-col>
 
@@ -116,11 +105,11 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
 import FitContainer from '@/components/Setup/EditorStyle/FitContainer'
-import { COLUMNS, GRID, HTML, STYLES } from '@/const'
+import { COLUMNS, GRID, STYLES } from '@/const'
 import { isGrid, isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
@@ -136,7 +125,7 @@ export default {
 
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapState('layout', ['breakpoint']),
+    ...mapGetters('layout', ['currentBreakpoint']),
     selectedComponentNodes() {
       return this.selectedComponentIds
         .map(id => this.nodesMap[id])
@@ -193,15 +182,18 @@ export default {
       )
     },
     allW() {
-      return this.gridItemVms.map(vm =>
-        getValueByPath(vm, ['innerGrid', this.breakpoint, 'w'])
-      )
+      return this.gridItemVms.map(vm => {
+        const prop = vm.innerGrid[this.currentBreakpoint]
+        if (prop) {
+          return (prop.w || '0').toString() + (prop.unitW || '%')
+        }
+      })
     },
     allH() {
       return this.gridItemVms.map(vm => {
-        const prop = vm.innerGrid[this.breakpoint]
+        const prop = vm.innerGrid[this.currentBreakpoint]
         if (prop) {
-          return (prop.h || '').toString() + (prop.hUnit || 'px')
+          return (prop.h || '0').toString() + (prop.unitH || 'px')
         }
       })
     },
@@ -229,13 +221,19 @@ export default {
       set(value) {
         const records = []
 
+        const unitW = value.toString().replace(/\d/g, '')
+        value = parseInt(value)
         this.gridItemNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${GRID}.${this.breakpoint}.w`,
+            path: `${node.id}.${GRID}.${this.currentBreakpoint}.unitW`,
+            value: unitW === 'px' ? 'px' : undefined
+          })
+          records.push({
+            path: `${node.id}.${GRID}.${this.currentBreakpoint}.w`,
             value: value || 0
           })
         })
-
+        console.log(records, unitW)
         this.RECORD(records)
       }
     },
@@ -246,15 +244,15 @@ export default {
       set(value) {
         const records = []
 
-        const hUnit = value.toString().replace(/\d/g, '')
+        const unitH = value.toString().replace(/\d/g, '')
         value = parseInt(value)
         this.gridItemNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${GRID}.${this.breakpoint}.hUnit`,
-            value: hUnit === 'vh' ? 'vh' : undefined
+            path: `${node.id}.${GRID}.${this.currentBreakpoint}.unitH`,
+            value: unitH === 'vh' ? 'vh' : undefined
           })
           records.push({
-            path: `${node.id}.${GRID}.${this.breakpoint}.h`,
+            path: `${node.id}.${GRID}.${this.currentBreakpoint}.h`,
             value: value || 0
           })
         })

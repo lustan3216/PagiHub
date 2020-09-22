@@ -20,6 +20,7 @@
     <vue-grid-item
       v-for="child in layouts"
       v-bind="child"
+      :class="{ 'no-action': child.lock }"
       :ref="child.id"
       :key="child.id"
       drag-ignore-from=".grid-item-fix"
@@ -76,7 +77,6 @@ export default {
   data() {
     return {
       responsiveLayouts: [],
-      lockIds: [], // touchable will use it
       gridItemsData: {},
       exampleBoundary: 'xs'
     }
@@ -116,9 +116,9 @@ export default {
 
       sortAscBreakpoint(this.breakpoints).forEach(breakpoint => {
         const layout = []
-        this.children.forEach(({ id }, index) => {
+        this.children.forEach(({ id, lock }, index) => {
           const data = {
-            static: this.lockIds.includes(id),
+            static: false,
             id: id,
             i: id || index, // should not happen, but just prevent crash in case
             x: 0,
@@ -151,9 +151,6 @@ export default {
 
           let w = 0
           let h = 0
-          const ratioW = getValueByPath(styles, ['layout', 'ratioW'])
-          const ratioH = getValueByPath(styles, ['layout', 'ratioH'])
-          const zIndex = getValueByPath(styles, ['layout', 'zIndex'], 0)
           const verticalCompact = getValueByPath(styles, [
             'layout',
             'verticalCompact'
@@ -164,10 +161,7 @@ export default {
             h = currentGrid.h
 
             if (!autoHeight) {
-              if (ratioH && ratioW) {
-                // solve by interactjs in gridItem
-              }
-              else if (currentGrid.hUnit === 'vh') {
+              if (currentGrid.unitH === 'vh') {
                 h = (artBoardHeight / 100) * parseInt(h)
               }
               else {
@@ -177,19 +171,20 @@ export default {
           }
 
           layout.push({
-            static: this.lockIds.includes(id),
+            static: lock,
+            lock,
             id: id,
             i: id || index, // should not happen, but just prevent crash in case
             x: currentGrid.x || 0,
             y: currentGrid.y || 0,
             w,
             h,
+            unitH: currentGrid.unitH,
+            unitW: currentGrid.unitW,
             verticalCompact,
             autoHeight,
-            ratioW,
-            ratioH,
-            zIndex,
-            lockInParent: !this.rootLayout
+            lockInParent: !this.rootLayout,
+            ...styles.layout
           })
         })
 
@@ -217,12 +212,6 @@ export default {
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
-    lock(id) {
-      this.lockIds.push(id)
-    },
-    unlock(id) {
-      deleteBy(this.lockIds, id)
-    },
     layoutUpdated(newChildren) {
       if (this.isExample) {
         return
@@ -245,7 +234,7 @@ export default {
 
         let h = child.h
 
-        if (child.hUnit === 'vh') {
+        if (child.unitH === 'vh') {
           h = h / (this.artBoardHeight / 100)
         }
 

@@ -9,7 +9,6 @@
       class="tree"
       node-key="id"
       draggable
-      @node-drop="layerIndexChange"
     >
       <template v-slot="{ data }">
         <div
@@ -59,12 +58,12 @@
 
 <script>
 import Tree from '@/vendor/element-ui/tree'
-import { SORT_INDEX, SOFT_DELETE, STYLES } from '@/const'
+import { SOFT_DELETE, STYLES } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import ComponentController from '../TemplateUtils/ComponentController'
 import ComponentName from '../TemplateUtils/ComponentName'
-import Touchable from '../TemplateUtils/Touchable'
+import Touchable from '../TemplateUtils/Lock'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
 import {
@@ -155,16 +154,6 @@ export default {
     allowDrop(drag, drop, action) {
       const sameLayer = drag.parent === drop.parent
       return sameLayer && ['prev', 'next'].includes(action)
-    },
-    layerIndexChange(drag, drop) {
-      const records = drop.parent.childNodes.map(({ data }, index) => {
-        return {
-          path: `${data.id}.${SORT_INDEX}`,
-          value: index
-        }
-      })
-
-      this.RECORD(records)
     },
     filterTagBySearching(value, { label, tag }) {
       value = value.toLowerCase().toString()

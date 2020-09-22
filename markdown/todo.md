@@ -13,15 +13,10 @@ https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
 切換componentset時patchchildren有bug
-
 username
-add container 方式改得跟 editor X 一樣
-
+width px
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
-grid item 移動時，最外誆 要動畫
 style reset to master
-background color
-background image
 
 </ol>
 

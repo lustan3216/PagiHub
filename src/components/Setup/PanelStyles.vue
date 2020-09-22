@@ -35,26 +35,28 @@
 
     <el-divider content-position="left">STACK</el-divider>
 
-    <padding :state="state" />
+    <padding />
 
-    <radius :state="state" />
+    <radius />
 
-    <opacity :state="state" />
+    <opacity />
 
-    <overflow :state="state" />
+    <overflow />
 
     <portal-target
       name="Rotate"
       slim
     />
 
-    <border-all :state="state" />
+    <background-color />
 
-    <box-shadow :state="state" />
+    <border-all />
 
-    <effect :state="state" />
+    <box-shadow />
 
-    <transform :state="state" />
+    <effect />
+
+    <transform />
 
     <!--      <transitions-->
     <!--        :disabled="!isDefaultState"-->
@@ -67,15 +69,9 @@
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
 import { mapGetters } from 'vuex'
-import {
-  TEXT_EDITOR,
-  GRID_GENERATOR,
-  LAYERS,
-  GRID_GENERATOR_ITEM
-} from '@/const'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
-import Background from './EditorStyle/Background'
+import BackgroundColor from './EditorStyle/BackgroundColor'
 import Dimension from './EditorStyle/Dimension'
 import Effect from './EditorStyle/Effect'
 import Overflow from './EditorStyle/Overflow'
@@ -91,7 +87,7 @@ import { RadioGroup, RadioButton } from 'element-ui'
 export default {
   name: 'PanelStyles',
   components: {
-    Background,
+    BackgroundColor,
     Padding,
     Radius,
     Opacity,

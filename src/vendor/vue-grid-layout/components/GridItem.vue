@@ -181,6 +181,14 @@
         type: Number,
         default: 0
       },
+      unitW: {
+        type: String,
+        default: ''
+      },
+      unitH: {
+        type: String,
+        default: ''
+      },
       ratioW: {
         type: Number,
         default: 0
@@ -224,7 +232,14 @@
         default: 'a, button'
       }
     },
-    inject: ['eventBus'],
+    inject: {
+      eventBus: {
+        required: true
+      },
+      parentGridItem: {
+        default: null
+      }
+    },
     data: function() {
       return {
         cols: 1,
@@ -382,13 +397,22 @@
         },
         immediate: true
       },
-      isDragging: function(value) {
+      isDragging(value) {
+        if (this.parentGridItem) {
+          this.parentGridItem.pulsing = value
+        }
+
         if (value) {
           store.hideHandler = true
         } else {
           setTimeout(() => {
             store.hideHandler = false
           },510)
+        }
+      },
+      isResizing(value) {
+        if (this.parentGridItem) {
+          this.parentGridItem.pulsing = value
         }
       },
       isDraggable: function() {
@@ -403,6 +427,9 @@
       },
       isResizable: function() {
         this.resizable = this.isResizable
+      },
+      unitW() {
+        this.autoSize()
       },
       ratioW() {
         this.tryMakeResizable()

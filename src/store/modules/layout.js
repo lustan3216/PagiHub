@@ -45,13 +45,13 @@ const actions = {
     }
   },
 
-  resizeNodeQuickFn: debounce(function({ rootState }) {
+  resizeNodeQuickFn({ rootState }) {
     rootState.app.selectedComponentIds.forEach(id => {
       if (quickFnMap[id]) {
         quickFnMap[id].resize()
       }
     })
-  }, 320)
+  }
 }
 
 const getters = {

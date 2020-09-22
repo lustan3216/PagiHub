@@ -6,25 +6,26 @@
       zIndex: isExample ? 3000 : 800
     }"
     :class="{ instance: isInstance }"
-    class="quick-functions flex-center backface-hidden"
+    class="quick-functions flex-center"
   >
     <el-button
       v-if="canAddComponent"
-      icon="el-icon-circle-plus-outline"
+      icon="el-icon-circle-plus"
       style="font-size: 18px;"
       class="can-action"
       type="text"
+      size="mini"
       @click="tryToAddComponent"
     />
 
     <div
       :class="[top > 100 ? 'top' : 'bottom']"
-      class="wrapper flex backface-hidden"
+      class="wrapper flex"
     >
       <div
         class="flex"
-        @mouseenter="hovering = true"
-        @mouseleave="hovering = false"
+        @mouseenter="mouseenter"
+        @mouseleave="mouseleave"
       >
         <div class="component-name">
           <transition-group name="full-slide">
@@ -54,7 +55,10 @@
         </div>
       </div>
 
-      <el-button-group class="flex">
+      <el-button-group
+        v-if="isDraftMode && !isExample"
+        class="flex backface-hidden"
+      >
         <inheritance-jumper
           :id="id"
           :inherit-parent-id="inheritParentId"
@@ -67,26 +71,7 @@
           slim
         />
 
-        <z-index />
-
-        <el-tooltip
-          effect="light"
-          placement="top"
-        >
-          <div slot="content">
-            {{ newItemToolTip }}
-            <span
-              class="m-l-10"
-              v-html="metaKey"
-            /> + B
-          </div>
-
-          <el-button
-            icon="el-icon-plus"
-            class="icon"
-            @click="vmCreateEmptyItem"
-          />
-        </el-tooltip>
+        <stack />
 
         <el-Popover
           ref="popover"
@@ -96,11 +81,36 @@
         >
           <context-menu :id="id" />
         </el-Popover>
+
+        <lock
+          :id="id"
+          visible
+        />
+
         <el-button
           v-popover:popover
           icon="el-icon-more"
           class="icon"
         />
+
+        <el-tooltip
+          effect="light"
+          placement="top"
+        >
+          <div slot="content">
+            {{ newItemToolTip }} <span
+              class="m-l-10"
+              v-html="metaKey"
+            /> + B
+          </div>
+
+          <el-button
+            class="icon"
+            @click="vmCreateEmptyItem"
+          >
+            {{ newItemToolTip }}
+          </el-button>
+        </el-tooltip>
       </el-button-group>
     </div>
   </div>
@@ -110,8 +120,10 @@
 import { mapState, mapActions, mapMutations } from 'vuex'
 import ComponentName from './ComponentName'
 import ZIndex from '@/components/Setup/EditorStyle/ZIndex'
+import Stack from '@/components/Setup/EditorStyle/Stack'
 import ContextMenu from './ContextMenu'
 import InheritanceJumper from './InheritanceJumper'
+import Lock from './Lock'
 import { Popover } from 'element-ui'
 import {
   isGridItem,
@@ -127,6 +139,7 @@ import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import { isInstance } from '@/utils/inheritance'
 import gsap from 'gsap'
+import { debounce } from '@/utils/tool'
 
 let topShared = window.innerHeight / 2
 let leftShared = window.innerWidth / 2
@@ -139,12 +152,16 @@ if (process.env.NODE_ENV !== 'production') {
   window.quickFnMap = quickFnMap
 }
 
+let timeId
+
 export default {
   name: 'ComponentQuickFunctions',
   components: {
     InheritanceJumper,
     ComponentName,
     ZIndex,
+    Lock,
+    Stack,
     ContextMenu,
     ElPopover: Popover
   },
@@ -204,16 +221,14 @@ export default {
     newItemToolTip() {
       if (this.node[CAN_NEW_ITEM]) {
         switch (this.node.tag) {
-          case LAYERS:
-            return 'Create An New Layer'
           case GRID_GENERATOR:
-            return 'Create An Empty Grid Item'
+            return 'Add Container'
           case CAROUSEL:
-            return 'Create An Empty Slider'
+            return 'Add Slider'
         }
       }
       else {
-        return 'Copy An Empty Grid Item From It'
+        return 'Add Container'
       }
     },
     metaKey() {
@@ -268,7 +283,7 @@ export default {
     vmCreateEmptyItem() {
       vmCreateEmptyItem(this.node)
     },
-    resize() {
+    resize: debounce(function() {
       const self = this
       this.$nextTick(() => {
         if (!this.node) {
@@ -327,10 +342,11 @@ export default {
           },
           {
             x: Math.round(left),
-            y: Math.round(top + 1),
+            y: Math.round(top),
             width: Math.round(width - 2),
             height: Math.round(height - 2),
             ease: 'ease',
+            duration: 0,
             onUpdate() {
               const { width, height, x, y } = this.vars
               leftShared = x
@@ -342,6 +358,15 @@ export default {
           }
         )
       })
+    }, 220),
+    mouseenter() {
+      timeId = setTimeout(() => {
+        this.hovering = true
+      }, 100)
+    },
+    mouseleave() {
+      clearTimeout(timeId)
+      this.hovering = false
     }
   }
 }
@@ -382,13 +407,13 @@ $connectColor: rgba(135, 199, 124, 0.68);
 }
 
 .top {
-  left: 0;
-  top: -35px;
+  left: -1px;
+  top: -40px;
 }
 
 .bottom {
-  left: 5px;
-  top: 5px;
+  left: -1px;
+  bottom: -40px;
 }
 
 .right {

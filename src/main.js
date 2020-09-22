@@ -56,7 +56,6 @@ import {
   TabPane,
   Row,
   Col,
-  ColorPicker,
   Loading,
   Form,
   FormItem
@@ -102,7 +101,6 @@ Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(Row)
 Vue.use(Col)
-Vue.use(ColorPicker)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Loading.directive)
