@@ -228,7 +228,7 @@ export default {
         }
       }
       else {
-        return 'Add Container'
+        return 'Append Container'
       }
     },
     metaKey() {

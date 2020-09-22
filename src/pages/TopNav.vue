@@ -9,7 +9,7 @@
     </el-button>
 
     <div>
-      <portal-target name="nav-middle" />
+      <portal-target name="NavMiddle" />
     </div>
 
     <div class="right">

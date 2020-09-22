@@ -8,21 +8,23 @@
       type="flex"
       align="middle"
     >
+      <el-col :span="3">
+        <el-checkbox
+          :disabled="!canStickTop"
+          v-model="verticalCompact"
+        />
+      </el-col>
       <el-col
         :span="10"
         class="title"
       >
         Sticky Top
       </el-col>
-      <el-col :span="7">
-        <el-checkbox
-          :disabled="!canStickTop"
-          v-model="verticalCompact"
-        />
-      </el-col>
     </el-row>
 
     <fit-container />
+
+    <fix-when-scrolling />
 
     <el-row
       :gutter="10"
@@ -109,6 +111,7 @@ import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
 import FitContainer from '@/components/Setup/EditorStyle/FitContainer'
+import FixWhenScrolling from '@/components/Setup/EditorStyle/FixWhenScrolling'
 import { COLUMNS, GRID, STYLES } from '@/const'
 import { isGrid, isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
@@ -120,7 +123,8 @@ export default {
   components: {
     SelectUnit,
     FitContainer,
-    Tip
+    Tip,
+    FixWhenScrolling
   },
 
   computed: {

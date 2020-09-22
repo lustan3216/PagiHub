@@ -5,16 +5,15 @@
   >
     <el-col :span="3">
       <el-checkbox
-        :disabled="!canOverflow"
-        v-model="fitContainer"
+        v-model="fixWhenScrolling"
       />
     </el-col>
 
     <el-col
-      :span="10"
+      :span="16"
       class="title"
     >
-      Fit Container
+      Fix position when scrolling
     </el-col>
   </el-row>
 </template>
@@ -28,7 +27,7 @@ import { arrayLast } from '@/utils/array'
 import { isTextEditor } from '@/utils/node'
 
 export default {
-  name: 'FitContainer',
+  name: 'FixWhenScrolling',
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
     nodes() {
@@ -37,19 +36,20 @@ export default {
     allValues() {
       return this.nodes.map(node => {
         const vm = vmGet(node.id, this.isExample)
-        return getValueByPath(vm, ['innerStyles', 'layout', 'fitContainer'], '')
+        return getValueByPath(
+          vm,
+          ['innerStyles', 'layout', 'fixWhenScrolling'],
+          ''
+        )
       })
     },
-    fitContainer: {
+    fixWhenScrolling: {
       get() {
         return arrayLast(this.allValues) || ''
       },
       set(value) {
-        this.recordStyles({ fitContainer: value || undefined })
+        this.recordStyles({ fixWhenScrolling: value || undefined })
       }
-    },
-    canOverflow() {
-      return this.nodes.every(node => isTextEditor(node))
     }
   },
   methods: {

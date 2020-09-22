@@ -24,6 +24,15 @@
         Detach
       </el-button>
 
+      <el-button
+        type
+        icon="el-icon-refresh-left"
+        class="flex1"
+        @click="reset"
+      >
+        Reset
+      </el-button>
+
       <inheritance-jumper
         :id="id"
         :inherit-parent-id="inheritParentId"
@@ -40,6 +49,7 @@ import { mapMutations, mapGetters } from 'vuex'
 import { getNode, traversalSelfAndChildren, shortTagName } from '@/utils/node'
 import { getMasterId } from '@/utils/inheritance'
 import InheritanceJumper from '@/components/TemplateUtils/InheritanceJumper'
+import { GRID, PROPS, STYLES } from '@/const'
 
 export default {
   name: 'Inheritance',
@@ -91,6 +101,24 @@ export default {
           value: undefined
         })
       })
+
+      this.RECORD(records)
+    },
+    reset() {
+      const records = [
+        {
+          path: [this.node.id, STYLES],
+          value: undefined
+        },
+        {
+          path: [this.node.id, PROPS],
+          value: undefined
+        },
+        {
+          path: [this.node.id, GRID],
+          value: undefined
+        }
+      ]
 
       this.RECORD(records)
     }

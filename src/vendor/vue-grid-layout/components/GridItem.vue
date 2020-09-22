@@ -129,6 +129,10 @@
        type: Number,
        required: true
        },*/
+      fixWhenScrolling: {
+        type: Boolean,
+        default: false
+      },
       autoHeight: {
         type: Boolean,
         default: false

@@ -16,7 +16,6 @@ https://github.com/antonreshetov/vue-eva-icons
 username
 width px
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
-style reset to master
 
 </ol>
 

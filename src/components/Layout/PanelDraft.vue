@@ -6,7 +6,7 @@
   >
     <portal
       v-if="isDraftMode"
-      to="nav-middle"
+      to="NavMiddle"
     >
       <function-bar />
     </portal>
@@ -17,6 +17,7 @@
       :class="{ draft: isDraftMode }"
       style="flex: 1"
     >
+      <portal-target name="PanelDraft" />
       <art-board />
     </view-port>
 
@@ -50,7 +51,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('example', ['initExamples']),
+    ...mapActions('example', ['initExamples'])
   }
 }
 </script>
