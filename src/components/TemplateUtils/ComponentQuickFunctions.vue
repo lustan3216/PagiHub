@@ -19,7 +19,10 @@
     />
 
     <div
-      :class="[top > 100 ? 'top' : 'bottom']"
+      :class="[
+        top > 100 || top + height >= artBoardHeight - 100 ? 'top' : 'bottom'
+      ]"
+      :style="{ top: top + height >= artBoardHeight - 100 ? '5px' : '' }"
       class="wrapper flex"
     >
       <div
@@ -204,7 +207,7 @@ export default {
       'selectedComponentIds',
       'selectedComponentNode'
     ]),
-    ...mapState('layout', ['gridResizing']),
+    ...mapState('layout', ['gridResizing', 'artBoardHeight']),
     parentNodes() {
       const nodes = []
       traversalAncestorAndSelf(this.node, node => {
@@ -332,6 +335,15 @@ export default {
           return
         }
 
+        const styles = {
+          x: Math.round(left),
+          y: Math.round(top),
+          width: Math.round(width - 2),
+          height: Math.round(height - 2)
+        }
+
+        Object.assign(this.$data, styles)
+
         gsap.fromTo(
           this.framer,
           {
@@ -341,10 +353,7 @@ export default {
             height: heightShared
           },
           {
-            x: Math.round(left),
-            y: Math.round(top),
-            width: Math.round(width - 2),
-            height: Math.round(height - 2),
+            ...styles,
             ease: 'ease',
             duration: 0,
             onUpdate() {
@@ -407,7 +416,7 @@ $connectColor: rgba(135, 199, 124, 0.68);
 }
 
 .top {
-  left: -1px;
+  left: 5px;
   top: -40px;
 }
 

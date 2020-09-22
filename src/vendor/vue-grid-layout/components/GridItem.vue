@@ -1,8 +1,9 @@
 <template>
-  <div ref="item"
-       class="vue-grid-item"
-       :class="classObj"
-       :style="{ ...style, zIndex }"
+  <div
+    ref="item"
+    class="vue-grid-item"
+    :class="classObj"
+    :style="{ ...style, zIndex }"
   >
     <slot></slot>
     <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass"></span>
@@ -242,6 +243,9 @@
       },
       parentGridItem: {
         default: null
+      },
+      parent: {
+        required: true
       }
     },
     data: function() {
@@ -350,27 +354,27 @@
     },
     mounted: function() {
       // lots-design fix bug
-      if (this.$parent.responsive) {
-        this.cols = this.$parent.cols[this.$parent.lastBreakpoint]
+      if (this.parent.responsive) {
+        this.cols = this.parent.cols[this.parent.lastBreakpoint]
       } else {
-        this.cols = this.$parent.colNum
+        this.cols = this.parent.colNum
       }
 
-      this.rowHeight = this.$parent.rowHeight
-      this.containerWidth = this.$parent.width !== null ? this.$parent.width : 100
-      this.margin = this.$parent.margin !== undefined ? this.$parent.margin : [10, 10]
-      this.maxRows = this.$parent.maxRows
+      this.rowHeight = this.parent.rowHeight
+      this.containerWidth = this.parent.width !== null ? this.parent.width : 100
+      this.margin = this.parent.margin !== undefined ? this.parent.margin : [10, 10]
+      this.maxRows = this.parent.maxRows
       if (this.isDraggable === null) {
-        this.draggable = this.$parent.isDraggable
+        this.draggable = this.parent.isDraggable
       } else {
         this.draggable = this.isDraggable
       }
       if (this.isResizable === null) {
-        this.resizable = this.$parent.isResizable
+        this.resizable = this.parent.isResizable
       } else {
         this.resizable = this.isResizable
       }
-      this.useCssTransforms = this.$parent.useCssTransforms
+      this.useCssTransforms = this.parent.useCssTransforms
       this.createStyle()
       this.$nextTick(() => {
         this.transition = true
@@ -493,7 +497,7 @@
       maxW: function() {
         this.tryMakeResizable()
       },
-      '$parent.margin': function(margin) {
+      'parent.margin': function(margin) {
         if (!margin || (margin[0] == this.margin[0] && margin[1] == this.margin[1])) {
           return
         }
@@ -533,7 +537,7 @@
         return navigator.userAgent.toLowerCase().indexOf('android') !== -1
       },
       renderRtl() {
-        return (this.$parent.isMirrored) ? !this.rtl : this.rtl
+        return (this.parent.isMirrored) ? !this.rtl : this.rtl
       },
       resizableHandleClass() {
         if (this.renderRtl) {

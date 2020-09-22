@@ -17,18 +17,19 @@
     @layout-updated="layoutUpdated($event)"
   >
     <slot />
+
     <vue-grid-item
-      v-for="child in layouts"
-      v-bind="child"
-      :class="{ 'no-action': child.lock }"
-      :ref="child.id"
-      :key="child.id"
+      v-for="layout in layouts"
+      v-bind="layout"
+      :class="{ 'no-action': layout.lock }"
+      :ref="layout.id"
+      :key="layout.id"
       drag-ignore-from=".grid-item-fix"
       drag-allow-from="div"
       @resizeStart="itemUpdating"
       @moveStart="itemUpdating"
     >
-      <component-giver :id="child.id" />
+      <component-giver :id="layout.id" />
     </vue-grid-item>
   </vue-grid-generator>
 </template>
@@ -36,7 +37,7 @@
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import { GRID } from '@/const'
-import { deleteBy, findBy } from '@/utils/array'
+import { findBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'

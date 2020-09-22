@@ -45,7 +45,8 @@
     name: 'GridLayout',
     provide() {
       return {
-        eventBus: null
+        eventBus: null,
+        parent: this
       }
     },
     components: {
