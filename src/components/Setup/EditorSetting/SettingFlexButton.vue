@@ -20,7 +20,9 @@ export const defaultSetting = {
 
 export default {
   name: 'SettingFlexButton',
-  components: { RulesGenerator },
+  components: {
+    RulesGenerator
+  },
   props: {
     id: {
       type: String,
@@ -28,6 +30,12 @@ export default {
     }
   },
   computed: {
+    ...mapState('user', [
+      'username',
+      {
+        userId: 'id'
+      }
+    ]),
     ...mapState('node', ['editingProjectId']),
     linkableComponentSet() {
       return this.nodesMap[this.editingProjectId].children
@@ -44,7 +52,9 @@ export default {
           },
           options: this.linkableComponentSet.map(node => ({
             label: node.label,
-            value: `/${project.label}/${node.label}`
+            value: `/${this.username || this.userId}/${project.label}/${
+              node.label
+            }`
           }))
         })
       ]
