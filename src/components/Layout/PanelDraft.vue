@@ -1,4 +1,3 @@
-import localforage from "localforage"
 <template>
   <div
     ref="panelDraft"
@@ -18,8 +17,7 @@ import localforage from "localforage"
       :class="{ draft: isDraftMode }"
       style="flex: 1"
     >
-      <portal-target name="PanelDraft" />
-      <art-board />
+      <art-board v-if="editingComponentSetId" :id="editingComponentSetId" />
     </view-port>
 
     <sidebar-right v-if="isDraftMode" />
@@ -48,7 +46,7 @@ export default {
     PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
   computed: {
-    ...mapState('node', ['editingProjectId'])
+    ...mapState('node', ['editingProjectId', 'editingComponentSetId'])
   },
   async created() {
     const projectId = await localforage.getItem('currentProjectId')

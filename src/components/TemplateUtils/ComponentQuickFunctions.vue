@@ -310,7 +310,7 @@ export default {
 
         let bounderNode
         if (this.isExample) {
-          bounderNode = element.closest('.card')
+          bounderNode = element.closest('.example-card') || element.closest('#art-board')
         }
         else {
           bounderNode = document.getElementById('art-board')

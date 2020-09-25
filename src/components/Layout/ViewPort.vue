@@ -121,6 +121,28 @@ import { getRectWithoutPadding } from '@/utils/style'
 import { toPrecision } from '@/utils/number'
 import gsap from 'gsap'
 
+export const DEVICE_OPTIONS = [
+  { name: 'iMac', w: 2560, h: 1440 },
+  { name: 'MaxBook Pro', w: 1440, h: 900 },
+  { name: 'Surface Pro 4', w: 1368, h: 912 },
+  { name: 'Surface Pro 3', w: 1440, h: 960 },
+  { name: 'iPhone 11 Pro Max', w: 414, h: 896 },
+  { name: 'iPhone 11 Pro', w: 375, h: 812 },
+  { name: 'iPhone 11', w: 414, h: 896 },
+  { name: 'iPhone 8 Plus', w: 414, h: 736 },
+  { name: 'iPhone 8', w: 375, h: 667 },
+  { name: 'iPhone 8 SE', w: 320, h: 568 },
+  { name: 'Google Pixel 4 XL', w: 360, h: 760 },
+  { name: 'Google Pixel 4', w: 360, h: 769 },
+  { name: 'Google Pixel 3 XL', w: 411, h: 846 },
+  { name: 'Google Pixel 3', w: 411, h: 822 },
+  { name: 'iPad Pro 12.9"', w: 1024, h: 1366 },
+  { name: 'iPad Pro 11"', w: 834, h: 1194 },
+  { name: 'iPad Air 10.5"', w: 834, h: 1112 },
+  { name: 'iPad 10.2"', w: 810, h: 1080 },
+  { name: 'iPad Mini', w: 768, h: 1024 }
+]
+
 export default {
   name: 'ViewPort',
   components: {
@@ -147,7 +169,6 @@ export default {
     }
   },
   computed: {
-    ...mapState('mode', ['mode']),
     ...mapState('layout', ['artBoardWidth', 'artBoardHeight']),
     ...mapGetters('layout', ['breakpoints']),
     scalePercent() {
@@ -160,27 +181,7 @@ export default {
       return interactjs(this.targetEl)
     },
     deviceOptions() {
-      return [
-        { name: 'iMac', w: 2560, h: 1440 },
-        { name: 'MaxBook Pro', w: 1440, h: 900 },
-        { name: 'Surface Pro 4', w: 1368, h: 912 },
-        { name: 'Surface Pro 3', w: 1440, h: 960 },
-        { name: 'iPhone 11 Pro Max', w: 414, h: 896 },
-        { name: 'iPhone 11 Pro', w: 375, h: 812 },
-        { name: 'iPhone 11', w: 414, h: 896 },
-        { name: 'iPhone 8 Plus', w: 414, h: 736 },
-        { name: 'iPhone 8', w: 375, h: 667 },
-        { name: 'iPhone 8 SE', w: 320, h: 568 },
-        { name: 'Google Pixel 4 XL', w: 360, h: 760 },
-        { name: 'Google Pixel 4', w: 360, h: 769 },
-        { name: 'Google Pixel 3 XL', w: 411, h: 846 },
-        { name: 'Google Pixel 3', w: 411, h: 822 },
-        { name: 'iPad Pro 12.9"', w: 1024, h: 1366 },
-        { name: 'iPad Pro 11"', w: 834, h: 1194 },
-        { name: 'iPad Air 10.5"', w: 834, h: 1112 },
-        { name: 'iPad 10.2"', w: 810, h: 1080 },
-        { name: 'iPad Mini', w: 768, h: 1024 }
-      ]
+      return DEVICE_OPTIONS
     }
   },
   watch: {
@@ -277,7 +278,7 @@ export default {
       h = h || height
 
       if (w > width || h > height) {
-        if (w - width > h - height) {
+        if (w / width > h / height) {
           this.style.scale = width / w
         }
         else {

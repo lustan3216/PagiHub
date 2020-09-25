@@ -1,10 +1,11 @@
 <template>
   <div class="wh-100">
     <div class="justify-between align-center">
-      <b class="small-title">Pages</b>
+      <b class="small-title m-l-10">Pages</b>
       <dialog-component-set
         v-if="editingProjectId"
-        class="gray-font font-14"
+        style="font-size: 18px;"
+        size="mini"
       />
     </div>
 
@@ -99,12 +100,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', {
-      APP_SET: 'SET'
-    }),
-    ...mapMutations('node', {
-      NODE_SET: 'SET'
-    }),
+    ...mapMutations('app', { APP_SET: 'SET' }),
+    ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
     ...mapActions('node', ['getProject']),
     nodeClick(event, node) {

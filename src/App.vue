@@ -19,6 +19,7 @@
       name="App"
       multiple
     />
+
     <div id="fb-root" />
   </div>
 </template>
@@ -33,7 +34,7 @@ export default {
     TopNav,
     DialogLogin: () => import('@/pages/components/DialogLogin'),
     DialogComponentTabs: () =>
-      import('@/components/ComponentAddPanel/DialogComponentTabs')
+      import('@/components/ExampleAddPanel/DialogComponentTabs')
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),

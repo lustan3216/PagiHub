@@ -37,7 +37,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: 'Can select multiply tags'
+      default: 'Can select multiple tags'
     }
   },
   data() {

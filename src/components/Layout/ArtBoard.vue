@@ -8,13 +8,13 @@
     class="art-board"
     @scroll.passive="onScroll"
   >
-    <template v-if="editingComponentSetId">
+    <template v-if="id">
       <transition
         name="slide"
         mode="out-in"
       >
         <keep-alive>
-          <component-giver :id="editingComponentSetId" class="h-100 "/>
+          <component-giver :id="id" class="h-100 "/>
         </keep-alive>
       </transition>
     </template>
@@ -30,15 +30,19 @@ export default {
   components: {
     ComponentGiver
   },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   computed: {
-    ...mapState('layout', ['scaleRatio']),
-    ...mapState('node', ['editingComponentSetId']),
     node() {
-      return this.nodesMap[this.editingComponentSetId]
+      return this.nodesMap[this.id]
     }
   },
   watch: {
-    editingComponentSetId() {
+    id() {
       this.artBoardResizing()
     }
   },

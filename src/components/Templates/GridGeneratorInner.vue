@@ -10,8 +10,8 @@
     :breakpoints="breakpointsMap"
     :vertical-compact="false"
     :auto-height="!rootLayout"
-    :is-draggable="isDraftMode && !isInstanceChild"
-    :is-resizable="isDraftMode && !isInstanceChild"
+    :is-draggable="isDraftMode && !isInstanceChild && !isExample"
+    :is-resizable="isDraftMode && !isInstanceChild && !isExample"
     responsive
     @layout-updated="layoutUpdated($event)"
   >
@@ -205,9 +205,9 @@ export default {
   },
   mounted() {
     if (this.isExample) {
-      this.exampleBoundary = getBreakpoint(
-        this.$el.closest('.example-boundary')
-      )
+      const el =
+        this.$el.closest('.example-card') || this.$el.closest('#art-board')
+      this.exampleBoundary = getBreakpoint(el)
     }
   },
   methods: {
