@@ -1,136 +1,111 @@
 <template>
-  <div
-    v-if="editingProjectId"
-    class="flex-column wh-100"
-  >
-    <div class="m-b-10 justify-between">
-      <el-button
-        type="text"
-        class="no-border small-title"
-        icon="el-icon-arrow-left"
-        @click="$emit('update:visible', false)"
-      >
-        {{ projectName }}
-      </el-button>
-
+  <div class="wh-100">
+    <div class="justify-between align-center">
+      <b class="small-title">Pages</b>
       <dialog-component-set
-        :parent-id="editingProjectId"
-        button-text="Design"
-        button-type="primary"
+        v-if="editingProjectId"
+        class="gray-font font-14"
       />
     </div>
 
-    <el-tree
-      ref="tree"
-      :data="componentSets"
-      :indent="16"
-      class="tree"
-      node-key="id"
-      draggable
-      check-strictly
+    <div
+      v-for="componentSet in componentSets"
+      v-if="componentSet && componentSet.id"
+      :key="componentSet.id"
+      :class="{ selected: hoverId === componentSet.id }"
+      class="relative w-100 over-hidden border-box p-l-10"
+      style="transition: all 0.3s;"
+      @click="nodeClick($event, componentSet)"
+      @mouseenter="hoverId = componentSet.id"
     >
-      <template v-slot="{ data }">
+      <component-name
+        :id="componentSet.id"
+        class="w-100 text-left"
+      />
+
+      <transition name="fade">
         <div
-          v-if="data && data.id"
-          :class="{ selected: editingComponentSetId === data.id }"
-          class="relative w-100 over-hidden"
-          @click="nodeClick($event, data)"
-          @mouseenter="hoverId = data.id"
+          v-if="componentSet.id === hoverId"
+          class="controller"
         >
-          <component-name
-            :id="data.id"
-            class="w-100 text-left"
+          <dialog-delete :id="componentSet.id" />
+
+          <dialog-component-set
+            :key="componentSet.updatedAt"
+            :id="componentSet.id"
+            type="text"
           />
-
-          <transition name="fade">
-            <div
-              v-if="data.id === hoverId"
-              class="controller"
-            >
-              <dialog-delete :id="data.id" />
-
-              <dialog-component-set
-                :key="data.updatedAt"
-                :id="data.id"
-                :parent-id="editingProjectId"
-              />
-            </div>
-          </transition>
         </div>
-      </template>
-    </el-tree>
+      </transition>
+    </div>
   </div>
 </template>
 
 <script>
 import { Tree } from 'element-ui'
-import { mapState, mapActions, mapMutations } from 'vuex'
-import { NODE_TYPE } from '@/const'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import DialogProject from './DialogProject'
-import DialogComponentSet from './DialogComponentSet'
+import PanelComponentSets from './PanelComponentSets'
 import DialogDelete from './DialogDelete'
 import ComponentName from '../TemplateUtils/ComponentName'
-import { kebabCase } from '@/utils/string'
-import {
-  isComponentSet,
-  isProject,
-  cloneJsonWithoutChildren
-} from '@/utils/node'
+import DialogComponentSet from '@/components/Setup/DialogComponentSet'
+import { cloneJsonWithoutChildren, getNode } from '@/utils/node'
+import localforage from 'localforage'
 
 export default {
-  name: 'PanelPages',
+  name: 'PanelComponentSets',
   components: {
-    ElTree: Tree,
     DialogComponentSet,
+    ElTree: Tree,
     DialogProject,
+    PanelComponentSets,
     DialogDelete,
     ComponentName
   },
-  props: {
-    visible: {
-      type: Boolean,
-      required: true
-    }
-  },
   data() {
     return {
-      ...NODE_TYPE,
       hoverId: null
     }
   },
   computed: {
-    ...mapState('node', ['editingProjectId', 'editingComponentSetId']),
+    ...mapState('node', ['projectIds', 'editingProjectId']),
+    ...mapGetters('node', ['projectNodes']),
     componentSets() {
-      return Object.values(this.nodesMap)
-        .filter(node => node.parentId === this.editingProjectId)
-        .map(node => cloneJsonWithoutChildren(node))
-    },
-    projectName() {
-      return this.nodesMap[this.editingProjectId].label
+      const project = getNode(this.editingProjectId)
+      if (project) {
+        return cloneJsonWithoutChildren(project.children).sort(
+          (a, b) => b.label - a.label
+        )
+      }
     }
   },
-  watch: {
-    editingProjectId: {
-      handler(projectId) {
-        if (projectId) {
-          this.getComponentSets({ projectId })
-        }
-      },
-      immediate: true
+  async created() {
+    const currentProjectId = await localforage.getItem('currentProjectId')
+    const promise1 = localforage.getItem('currentComponentSetId')
+    const promise2 = this.getProject(currentProjectId)
+    const [componentSetId, _] = await Promise.all([promise1, promise2])
+
+    if (componentSetId) {
+      this.SET_EDITING_COMPONENT_SET_ID(componentSetId)
+    }
+    else {
+      this.$nextTick(() => {
+        this.SET_EDITING_COMPONENT_SET_ID(this.innerTree[0].id)
+      })
     }
   },
   methods: {
+    ...mapMutations('app', {
+      APP_SET: 'SET'
+    }),
     ...mapMutations('node', {
       NODE_SET: 'SET'
     }),
     ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
-    ...mapActions('node', ['getComponentSets']),
-    isProject,
-    kebabCase,
+    ...mapActions('node', ['getProject']),
     nodeClick(event, node) {
-      if (isComponentSet(node)) {
-        this.SET_EDITING_COMPONENT_SET_ID(node.id)
-      }
+      this.APP_SET({ selectedComponentIds: [] })
+      this.SET_EDITING_COMPONENT_SET_ID(node.id)
     }
   }
 }
@@ -159,7 +134,7 @@ export default {
   position: absolute;
   z-index: 1;
   right: 0;
-  top: 1px;
+  top: -1px;
   text-align: right;
   background: #f5f7fa;
   padding: 0 5px;

@@ -1,15 +1,17 @@
 <template>
   <el-button
     :icon="`el-icon-${isExist ? 's-tools' : 'circle-plus-outline'}`"
-    :type="buttonType"
+    :type="type"
+    :size="size"
     @click.stop="visible = !visible"
   >
-    {{ buttonText }}
+    {{ text }}
     <dialog-confirmable
       :visible.sync="visible"
+      :loading="loading"
       :disable-submit="!dirty"
-      title="Project"
-      width="50vw"
+      title="Now, about your project..."
+      width="80vw"
       class="dialog"
       @confirm="onSubmit"
     >
@@ -18,37 +20,63 @@
         :model="form"
         :rules="rules"
         label-width="110px"
+        label-position="top"
       >
-        <el-form-item
-          label="Name"
-          prop="label"
-        >
-          <el-input v-model="form.label" />
-        </el-form-item>
+        <el-row :gutter="30">
+          <el-col :span="10">
+            <el-form-item
+              label="Name"
+              prop="label"
+            >
+              <el-input
+                v-model="form.label"
+                placeholder="At least 6 letters"
+              />
+            </el-form-item>
 
-        <el-form-item
-          label="Description"
-          prop="description"
-        >
-          <el-input
-            :autosize="{ minRows: 3 }"
-            v-model="form.description"
-            type="textarea"
-          />
-        </el-form-item>
+            <p class="small-title">
+              The name will be used as part of url, it can be browsed once
+              publish.
+            </p>
+            <a
+              class="link font-13"
+            >https://lots.design/{{ username || userId }}/{{
+              form.label || 'project-name'
+            }}/page-name</a>
 
-        <template v-if="!isExist">
-          <el-form-item
-            label="Tag"
-            prop="tag"
+            <el-form-item
+              label="Tag"
+              prop="tag"
+              class="m-t-20"
+            >
+              <select-tag
+                v-model="form.tags"
+                class="w-100"
+              />
+            </el-form-item>
+            <p class="small-title">
+              Nice tags can be easier to search and categorize by you or others.
+            </p>
+          </el-col>
+
+          <el-col
+            :span="12"
+            :offset="2"
           >
-            <select-tag
-              v-model="form.tags"
-              class="w-100"
-            />
-          </el-form-item>
-          <span>You can create tag but limitation is 5.</span>
-        </template>
+            <el-form-item
+              label="Description"
+              prop="description"
+            >
+              <text-editor-rich
+                v-model="form.description"
+                class="description"
+              />
+              <p class="small-title">
+                Enter or select text has more functions.
+              </p>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </dialog-confirmable>
   </el-button>
@@ -57,25 +85,31 @@
 <script>
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
-import { mapActions } from 'vuex'
-import { label, required, min, max } from '@/validator'
+import TextEditorRich from '@/components/Components/TextEditorRich'
+import { mapActions, mapState } from 'vuex'
+import { label } from '@/validator'
 
 export default {
   name: 'DialogProject',
   components: {
     DialogConfirmable,
-    SelectTag
+    SelectTag,
+    TextEditorRich
   },
   props: {
     id: {
       type: String,
       default: ''
     },
-    buttonType: {
+    size: {
+      type: String,
+      default: 'small'
+    },
+    type: {
       type: String,
       default: 'text'
     },
-    buttonText: {
+    text: {
       type: String,
       default: ''
     }
@@ -92,13 +126,13 @@ export default {
         tags: node ? node.tags : []
       },
       rules: {
-        label,
-        description: [required],
-        tags: [required, min(1), max(5)]
-      }
+        label
+      },
+      loading: false
     }
   },
   computed: {
+    ...mapState('user', ['userId', 'username']),
     isExist() {
       return Boolean(this.id)
     }
@@ -116,55 +150,31 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async valid => {
         if (valid && this.dirty) {
-          if (this.isExist) {
-            this.patchProject({
-              id: this.id,
-              ...this.form
-            })
-          }
-          else {
-            await this.createProject(this.form)
-          }
+          try {
+            this.loading = true
+            if (this.isExist) {
+              this.patchProject({
+                id: this.id,
+                ...this.form
+              })
+            }
+            else {
+              await this.createProject(this.form)
+            }
 
-          this.form = {
-            label: '',
-            description: '',
-            tags: []
+            this.form = {
+              label: '',
+              description: '',
+              tags: []
+            }
+            this.visible = false
           }
-          this.visible = false
+          finally {
+            this.loading = false
+          }
         }
       })
     }
   }
 }
 </script>
-
-<style scoped lang="scss">
-::v-deep.dialog {
-  .el-dialog__header {
-    text-align: center;
-  }
-
-  .el-dialog__title {
-    font-size: 24px;
-    text-transform: uppercase;
-    text-align: center;
-  }
-
-  .el-form-item__content {
-    text-align: left;
-  }
-
-  .el-dialog {
-    border-radius: 5px;
-    overflow: hidden;
-  }
-
-  .el-dialog__footer {
-    padding: 0;
-  }
-}
-.flex1 {
-  padding: 15px;
-}
-</style>

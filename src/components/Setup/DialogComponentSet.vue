@@ -1,65 +1,89 @@
 <template>
   <el-button
     :icon="`el-icon-${isExist ? 's-tools' : 'circle-plus-outline'}`"
-    :type="buttonType"
+    :type="type"
+    :size="size"
     @click.stop="visible = !visible"
   >
-    {{ buttonText }}
+    {{ text }}
     <dialog-confirmable
-      :loading="loading"
       :visible.sync="visible"
+      :loading="loading"
       :disable-submit="!dirty"
-      width="50%"
-      title="Design"
+      title="A powerful page can reuse and share..."
+      width="80vw"
+      class="dialog"
       @confirm="onSubmit"
-      @close="initData"
     >
       <el-form
         ref="form"
-        :rules="rules"
         :model="form"
+        :rules="rules"
         label-width="110px"
+        label-position="top"
       >
-        <el-form-item
-          v-if="!isExist"
-          label="Project"
-          prop="parentId"
-        >
-          <el-select v-model="form.parentId">
-            <el-option
-              v-for="project in projectNodes"
-              :key="project.id"
-              :value="project.id"
-              :label="project.label"
-            />
-          </el-select>
-        </el-form-item>
+        <el-row :gutter="30">
+          <el-col :span="10">
+            <el-form-item
+              label="Name"
+              prop="label"
+            >
+              <el-input
+                v-model="form.label"
+                placeholder="At least 6 letters"
+              />
+            </el-form-item>
 
-        <el-form-item
-          label="Name"
-          prop="label"
-        >
-          <el-input v-model="form.label" />
-        </el-form-item>
+            <p class="small-title">
+              The name will be used as part of url, it can be browsed once
+              publish.
+            </p>
+            <a
+              class="link font-13"
+            >https://lots.design/{{ username || userId }}/{{
+              project && project.label
+            }}/{{ form.label || 'page-name' }}</a>
 
-        <el-form-item
-          label="Tag"
-          prop="tag"
-        >
-          <select-tag
-            v-model="form.tags"
-            class="w-100"
-          />
-        </el-form-item>
+            <el-form-item
+              label="Tag"
+              prop="tag"
+              class="m-t-20"
+            >
+              <select-tag
+                v-model="form.tags"
+                class="w-100"
+              />
+            </el-form-item>
+            <p class="small-title">
+              Nice tags can be easier to search and categorize by you or others.
+            </p>
+          </el-col>
 
-        <el-form-item label="Description">
-          <el-input
-            :autosize="{ minRows: 3 }"
-            v-model="form.description"
-            type="textarea"
-          />
-        </el-form-item>
+          <el-col
+            :span="12"
+            :offset="2"
+          >
+            <el-form-item
+              label="Description"
+              prop="description"
+            >
+              <text-editor-rich
+                v-model="form.description"
+                class="description"
+              />
+              <p class="small-title">
+                Enter or select text has more functions.
+              </p>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
+
+      <!--      <div>-->
+      <!--        <div>Tip</div>-->
+      <!--        You have not chosen username yet, it can make url prettier and easy-->
+      <!--        remember by changing user-id to username.-->
+      <!--      </div>-->
     </dialog-confirmable>
   </el-button>
 </template>
@@ -70,23 +94,29 @@ import { label, max, min, required } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
 import { Message } from 'element-ui'
-
+import TextEditorRich from '@/components/Components/TextEditorRich'
+import { getNode } from '@/utils/node'
 export default {
   name: 'DialogComponentSet',
   components: {
     DialogConfirmable,
-    SelectTag
+    SelectTag,
+    TextEditorRich
   },
   props: {
     // eslint-disable-next-line
     id: {
       type: String
     },
-    buttonType: {
+    size: {
+      type: String,
+      default: 'small'
+    },
+    type: {
       type: String,
       default: 'text'
     },
-    buttonText: {
+    text: {
       type: String,
       default: ''
     }
@@ -103,26 +133,19 @@ export default {
       form: {
         label: node ? node.label : '',
         description: node ? node.description : '',
-        tags: node ? node.tags : [],
-        parentId: null
+        tags: node ? node.tags : []
       },
-      categories: [
-        { id: 0, label: 'Button' },
-        { id: 1, label: 'Form' },
-        { id: 2, label: 'Layout' },
-        { id: 3, label: 'Card' }
-      ],
       rules: {
-        label,
-        parentId: [required],
-        description: [required],
-        tags: [required, min(1), max(5)]
+        label
       }
     }
   },
   computed: {
     ...mapState('node', ['editingProjectId']),
-    ...mapGetters('node', ['projectNodes']),
+    ...mapState('user', ['userId', 'username']),
+    project() {
+      return getNode(this.editingProjectId)
+    },
     isExist() {
       return Boolean(this.id)
     }

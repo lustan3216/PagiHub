@@ -5,16 +5,18 @@
   >
     <el-button-group class="flex">
       <el-button
-        icon="el-icon-files"
-        class="flex1"
-        @click="activePanel = 'PanelProject'"
-      />
+        class="flex1 small-title"
+        @click="activePanel = 'PanelComponentSets'"
+      >
+        Layers
+      </el-button>
 
       <el-button
-        icon="el-icon-picture-outline"
         class="flex1"
         @click="activePanel = 'PanelAsset'"
-      />
+      >
+        Asset
+      </el-button>
     </el-button-group>
 
     <panel-asset
@@ -38,7 +40,7 @@
 
       <template slot="paneR">
         <keep-alive>
-          <panel-nodes
+          <panel-components
             v-if="componentSetLoaded"
             :key="editingComponentSetId"
           />
@@ -49,24 +51,24 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import SplitPane from 'vue-splitpane'
-import DialogComponentSet from '../Setup/DialogComponentSet'
 import { getValueByPath } from '@/utils/tool'
+import PanelComponents from '@/components/Setup/PanelComponents'
+import PanelComponentSets from '@/components/Setup/PanelComponentSets'
+import PanelAsset from '@/components/Setup/PanelAsset'
 
 export default {
   name: 'SidebarLeft',
   components: {
-    PanelNodes: () => import('../Setup/PanelNodes'),
-    PanelProject: () => import('../Setup/PanelProjects'),
-    PanelPage: () => import('../Setup/PanelComponentSets'),
-    PanelAsset: () => import('../Setup/PanelAsset'),
-    DialogComponentSet,
+    PanelComponents,
+    PanelComponentSets,
+    PanelAsset,
     SplitPane
   },
   data() {
     return {
-      activePanel: 'PanelProject',
+      activePanel: 'PanelComponentSets',
       uploading: false
     }
   },

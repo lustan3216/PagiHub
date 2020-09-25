@@ -40,7 +40,15 @@ export const gridGeneratorItems = function() {
   return [
     gridGeneratorItem(),
     gridGeneratorItem({
-      [GRID]: mapPoints({ x: 22, y: 0, w: 44, h: 130 })
+      [GRID]: mapPoints({ x: 15, y: 0, w: 44, h: 130 })
+    }),
+    gridGeneratorItem({
+      [STYLES]: { layout: { stack: true }},
+      [GRID]: mapPoints({ x: 70, y: 0, w: 22, h: 65 })
+    }),
+    gridGeneratorItem({
+      [STYLES]: { layout: { stack: true }},
+      [GRID]: mapPoints({ x: 70, y: 44, w: 22, h: 65 })
     })
   ]
 }
@@ -122,7 +130,7 @@ export const flexButton = function() {
         [GRID]: mapPoints({ x: 0, y: 0, w: COLUMNS, h: 100 }),
         children: [
           textEditor({
-            [VALUE]: 'I can be anything',
+            [VALUE]: 'I can be changed to anything',
             [STYLES]: {
               layout: { fitContainer: true },
               [HTML]: { textAlign: 'center' }

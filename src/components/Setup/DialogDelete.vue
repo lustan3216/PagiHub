@@ -8,7 +8,7 @@
     <dialog-confirmable
       :loading="loading"
       :visible.sync="visible"
-      :title="`Delete ${type}`"
+      :title="`Bye ${type}`"
       width="30%"
       @confirm="onSubmit"
       @close="initData"
@@ -18,14 +18,18 @@
         :rules="rules"
         :model="form"
       >
-        <p>
-          Please enter
-          <b>{{ label }}</b>
-          to confirm the project you want to delete.
-        </p>
         <el-form-item prop="label">
-          <el-input v-model="form.label" />
+          <el-input
+            v-model="form.label"
+            :placeholder="label"
+          />
         </el-form-item>
+
+        <p>
+          Please enter project name
+          <b>{{ label }}</b>
+          to confirm delete.
+        </p>
       </el-form>
     </dialog-confirmable>
   </el-button>
@@ -75,7 +79,7 @@ export default {
   },
   computed: {
     type() {
-      return capitalize(this.node[KIND])
+      return capitalize(this.node.tag)
     }
   },
   methods: {

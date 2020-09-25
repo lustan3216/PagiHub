@@ -378,7 +378,9 @@
       this.createStyle()
       this.$nextTick(() => {
         this.transition = true
+
       })
+
     },
     watch: {
       autoHeight: {

@@ -22,19 +22,19 @@ export default new VueRouter({
       component: () => import('@/pages/HomePage')
     },
     {
+      path: '/login',
+      name: 'Login',
+      component: () => import('@/pages/Login')
+    },
+    {
       path: '/dashboard',
       name: 'Dashboard',
       component: () => import('@/pages/Dashboard'),
       children: [
         {
-          path: 'designs',
-          name: 'Designs',
-          component: () => import('@/pages/Designs')
-        },
-        {
-          path: 'websites',
-          name: 'Websites',
-          component: () => import('@/pages/Websites')
+          path: 'projects',
+          name: 'Projects',
+          component: () => import('@/pages/Projects')
         }
       ]
     },
@@ -44,14 +44,30 @@ export default new VueRouter({
       component: () => import('@/pages/Help')
     },
     {
-      path: '/404',
-      name: 'NotFound',
-      component: () => import('@/pages/Designs')
+      path: '/about',
+      name: 'About',
+      children: [
+        {
+          path: 'terms',
+          name: 'Terms',
+          component: () => import('@/pages/Terms')
+        },
+        {
+          path: 'privacy',
+          name: 'Privacy',
+          component: () => import('@/pages/Privacy')
+        }
+      ]
     },
     {
-      path: '/work-board',
-      name: 'WorkBoard',
+      path: '/workboard',
+      name: 'Workboard',
       component: () => import('@/components/Layout/PanelDraft')
+    },
+    {
+      path: '*',
+      name: 'NotFound',
+      component: () => import('@/pages/NotFound')
     }
   ]
 })

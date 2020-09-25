@@ -15,7 +15,6 @@ import { appendIds } from '@/utils/nodeId'
 import {
   getNode,
   traversalSelfAndChildren,
-  isLayers,
   isCarousel,
   isGridItem,
   cloneJsonWithoutChildren
@@ -235,7 +234,7 @@ export default {
 
       traversal(theNodeGonnaRemove)
 
-      if (isLayers(this.node) || isCarousel(this.node)) {
+      if (isCarousel(this.node)) {
         if (this.node.children.length === 1) {
           records.unshift({
             path: this.node.id,

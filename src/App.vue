@@ -1,8 +1,8 @@
 <template>
   <div>
-    <top-nav v-if="hasNavBar" />
+    <top-nav v-if="needNavBar" />
 
-    <router-view :style="{ paddingTop: hasNavBar ? '50px' : '0' }" />
+    <router-view :style="{ paddingTop: needNavBar ? '50px' : '0' }" />
 
     <transition name="fade">
       <component :is="dialog" />
@@ -19,6 +19,7 @@
       name="App"
       multiple
     />
+    <div id="fb-root" />
   </div>
 </template>
 
@@ -39,9 +40,9 @@ export default {
     ...mapState('app', ['dialog']),
     ...mapGetters('user', ['isLogin']),
     inDashboard() {
-      return this.$route.path.indexOf('/dashboard/') === 0
+      return this.$route.path.indexOf('/dashboard') === 0
     },
-    hasNavBar() {
+    needNavBar() {
       return !this.inDashboard && !this.isPreviewMode
     }
   },

@@ -32,9 +32,7 @@ export default {
   computed: {
     ...mapState('user', [
       'username',
-      {
-        userId: 'id'
-      }
+      'userId'
     ]),
     ...mapState('node', ['editingProjectId']),
     linkableComponentSet() {

@@ -3,13 +3,7 @@ import InheritanceController from '@/components/TemplateUtils/InheritanceControl
 import ControllerLayer from '@/components/TemplateUtils/ControllerLayer'
 import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
 import { ObserveVisibility } from 'vue-observe-visibility'
-import {
-  getNode,
-  isComponentSet,
-  isGrid,
-  isGridItem,
-  isLayers
-} from '@/utils/node'
+import { getNode, isComponentSet, isGrid, isGridItem } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
 import { mapState } from 'vuex'
 
@@ -44,7 +38,7 @@ export default {
     const node = getNode(this.id)
 
     const options = {
-      once: this.onceObserve && !this.isExample,
+      once: this.onceObserve || this.isExample,
       callback: isVisible => {
         this.vIf = isVisible
       },
@@ -78,9 +72,6 @@ export default {
     },
     node() {
       return getNode(this.id)
-    },
-    isLayers() {
-      return isLayers(this.node)
     },
     isPossibleInherit() {
       // no matter the master is softDelete or not

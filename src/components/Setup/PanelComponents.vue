@@ -4,7 +4,7 @@
       ref="tree"
       :filter-node-method="filterTagBySearching"
       :data="tree"
-      :indent="12"
+      :indent="20"
       :allow-drop="allowDrop"
       class="tree"
       node-key="id"
@@ -15,10 +15,12 @@
           v-if="data && data.id"
           :id="`tree-node-${data.id}`"
           class="relative w-100 over-hidden"
+          style="margin-left: -6px;"
           @mouseenter.stop="hoverNode(data.id)"
           @mouseleave.stop="hoverLeaveNode(data.id)"
         >
           <hidden :id="data.id" />
+
           <component-name
             :id="data.id"
             :class="{ active: selectedComponentIds.includes(data.id) }"
@@ -27,20 +29,20 @@
             @click="nodeClick($event, data.id)"
           />
 
-          <transition name="fade">
-            <component-controller
-              v-if="data.id === hoverId"
-              :id="data.id"
-              class="controller hover-color"
-            />
-          </transition>
-
           <div
-            v-if="data.id !== hoverId"
             class="controller"
+            style="width: 48px;"
           >
-            <visible :id="data.id" />
-            <touchable :id="data.id" />
+            <visible
+              :id="data.id"
+              :visible="data.id === hoverId"
+              class="absolute"
+              style="left: 15px;"
+            />
+            <touchable
+              :id="data.id"
+              :visible="data.id === hoverId"
+            />
           </div>
         </div>
       </template>
@@ -58,7 +60,7 @@
 
 <script>
 import Tree from '@/vendor/element-ui/tree'
-import { SOFT_DELETE, STYLES } from '@/const'
+import { SOFT_DELETE } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import ComponentController from '../TemplateUtils/ComponentController'
@@ -66,18 +68,12 @@ import ComponentName from '../TemplateUtils/ComponentName'
 import Touchable from '../TemplateUtils/Lock'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
-import {
-  isGridItem,
-  isLayers,
-  sortByIndex,
-  traversalSelfAndChildren
-} from '@/utils/node'
-import { arrayLast, findIndexBy } from '@/utils/array'
+import { traversalSelfAndChildren } from '@/utils/node'
 
 require('smoothscroll-polyfill').polyfill()
 
 export default {
-  name: 'PanelNodes',
+  name: 'PanelComponents',
   components: {
     ElTree: Tree,
     ComponentController,
@@ -204,11 +200,19 @@ export default {
   background: #f5f7fa;
 }
 .active {
-  background-color: #f0f7ff;
+  background: #f0f7ff;
 }
 
 .small-title {
   display: block;
   margin: 5px 10px;
+}
+::v-deep {
+  .el-tree-node__content {
+    height: 30px;
+  }
+  /*.el-tree-node__expand-icon {*/
+  /*  padding-right: 0;*/
+  /*}*/
 }
 </style>

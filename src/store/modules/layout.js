@@ -48,7 +48,9 @@ const actions = {
   resizeNodeQuickFn({ rootState }) {
     rootState.app.selectedComponentIds.forEach(id => {
       if (quickFnMap[id]) {
-        quickFnMap[id].resize()
+        this._vm.$nextTick(() => {
+          quickFnMap[id].resize()
+        })
       }
     })
   }

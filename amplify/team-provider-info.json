@@ -13,7 +13,7 @@
         },
         "categories": {
             "auth": {
-                "asd6d86e773": {
+                "asda5136f17": {
                     "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"288537955865523\",\"client_secret\":\"655f5b8177f489731d44dd3830cd3ab1\"},{\"ProviderName\":\"Google\",\"client_id\":\"84801854201-g0m8froqlojl3co61pi7gvjkbvq69clk.apps.googleusercontent.com\",\"client_secret\":\"fvTnVruhxUwWOoqFkIya2AKa\"}]"
                 }
             }

@@ -6,7 +6,7 @@
     :multiple-limit="5"
     :allow-create="allowCreate"
     v-bind="$attrs"
-    :placeholder="allowCreate ? 'Can create new tag.' : placeholder"
+    :placeholder="allowCreate ? 'All to create new tag.' : placeholder"
     multiple
     filterable
     remote

@@ -75,7 +75,7 @@
         >
           <i class="el-icon-refresh-left" />
           <span
-            class="grey-font"
+            class="grey-font font-12"
             style="width: 75px; display: inline-block;"
           >
             {{ artBoardWidth }} x {{ artBoardHeight }}
@@ -357,7 +357,7 @@ export default {
   }
 }
 
-.el-dropdown {
+::v-deep.el-dropdown {
   margin-right: 10px;
   margin-left: 10px;
 }

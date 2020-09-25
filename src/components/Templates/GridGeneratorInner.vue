@@ -12,7 +12,6 @@
     :auto-height="!rootLayout"
     :is-draggable="isDraftMode && !isInstanceChild"
     :is-resizable="isDraftMode && !isInstanceChild"
-    prevent-collision
     responsive
     @layout-updated="layoutUpdated($event)"
   >

@@ -2,10 +2,12 @@ import {
   createProject,
   deleteProject,
   getProjects,
-  patchProject
+  patchProject,
+  getProject
 } from '@/api/node'
 import { isComponentSet, isProject } from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
+import inheritMapUploader from '@/utils/inheritMapUploader'
 
 export const actions = {
   async getProjects({ state, commit }) {
@@ -32,6 +34,16 @@ export const actions = {
 
     commit('SET', { editingProjectId: data.id })
     commit('SET_NODES_TO_MAP', { nodes: data })
+    return data
+  },
+
+  async getProject({ commit, state }, id) {
+    const { data } = await getProject({ id })
+
+    commit('SET_NODES_TO_MAP', { nodes: data })
+    commit('SET', { editingProjectId: id })
+
+    inheritMapUploader.init(data.inheritMap)
     return data
   },
 

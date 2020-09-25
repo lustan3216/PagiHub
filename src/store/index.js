@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import localforage from 'localforage'
 import node from './modules/node/index'
 import example from './modules/example'
 import app from './modules/app'
@@ -7,9 +8,7 @@ import asset from './modules/asset'
 import mode from './modules/mode'
 import layout from './modules/layout'
 import user from './modules/user'
-import { isUndefined } from '../utils/tool'
 import draftStateUploader from '../utils/draftStateUploader'
-import inheritMapUploader from '../utils/inheritMapUploader'
 
 Vue.use(Vuex)
 
@@ -17,9 +16,7 @@ export function SET(state, data) {
   const keys = Object.keys(data)
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]
-    if (!isUndefined(state[key])) {
-      state[key] = data[key]
-    }
+    state[key] = data[key]
   }
 }
 
@@ -65,14 +62,19 @@ store.watch(
   state => state.node.editingComponentSetId,
   (newValue, oldValue) => {
     draftStateUploader.requestImmediately(oldValue)
+
+    if (newValue) {
+      localforage.setItem('currentComponentSetId', newValue)
+    }
   }
 )
 
 store.watch(
   state => state.node.editingProjectId,
   newValue => {
-    const project = store.state.node.nodesMap[newValue]
-    inheritMapUploader.init(project.inheritMap)
+    if (newValue) {
+      localforage.setItem('currentProjectId', newValue)
+    }
   }
 )
 

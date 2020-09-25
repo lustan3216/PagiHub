@@ -72,7 +72,6 @@ import { CAN_BE_EDITED, STYLES } from '@/const'
 import { isMac } from '@/utils/device'
 import {
   getNode,
-  isLayers,
   isTextEditor,
   traversalAncestorAndSelf
 } from '@/utils/node'
@@ -147,7 +146,7 @@ export default {
       return isUndefined(overflow) && this.canOverflow
     },
     canOverflow() {
-      return isTextEditor(this.child) || isLayers(this.child)
+      return isTextEditor(this.child)
     }
   },
   methods: {

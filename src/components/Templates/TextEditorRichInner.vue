@@ -43,7 +43,7 @@
               <button
                 class="menububble__button"
                 type="button"
-                @click="setLinkUrl(commands.link, null)"
+                @click.prevent="setLinkUrl(commands.link, null)"
               >
                 <img
                   svg-inline
@@ -52,151 +52,136 @@
               </button>
             </form>
 
-            <template v-else>
-              <div
-                :class="{ absolute: headingHover }"
-                class="heading flex"
-                @mouseenter="headingHover = true"
-                @mouseleave="headingHover = false"
-              >
+            <div
+              v-else
+              class="flex-column"
+            >
+              <div class="heading flex">
                 <button
                   :class="{
                     'is-active': isActive.paragraph()
                   }"
                   class="menububble__button"
-                  @click="commands.paragraph"
+                  @click.prevent="commands.paragraph"
                 >
-                  <img
-                    svg-inline
-                    src="icons/paragraph.svg"
-                  >
+                  P
                 </button>
 
                 <button
                   v-for="level in [1, 2, 3, 4, 5, 6]"
                   :key="level"
                   :class="{
-                    'is-active': isActive.heading({ level }),
-                    hidden: !headingHover && !isActive.heading({ level })
+                    'is-active': isActive.heading({ level })
                   }"
                   class="menububble__button"
-                  @click="commands.heading({ level })"
+                  @click.prevent="commands.heading({ level })"
                 >
                   H{{ level }}
                 </button>
+
+                <button class="menububble__button">
+                  <span
+                    :style="{
+                      color: getMarkAttrs('color').color
+                    }"
+                    style="margin-left: 2px;margin-top: -2px;font-size: 16px;"
+                  >A</span>
+                  <color-picker
+                    :value="getMarkAttrs('color').color"
+                    show-alpha
+                    @change="setAttribute('color', $event)"
+                  />
+                </button>
+
+                <button class="menububble__button">
+                  <i
+                    :style="{
+                      color: getMarkAttrs('backgroundColor').backgroundColor
+                    }"
+                    style="font-size: 14px;"
+                    class="el-icon-s-opportunity"
+                  />
+                  <color-picker
+                    :value="getMarkAttrs('backgroundColor').backgroundColor"
+                    show-alpha
+                    @change="setAttribute('backgroundColor', $event)"
+                  />
+                </button>
               </div>
 
-              <button
-                class="menububble__button"
-                @click="showLinkMenu(getMarkAttrs('link'))"
-              >
-                <img
-                  svg-inline
-                  src="icons/link.svg"
+              <div class="flex">
+                <button
+                  class="menububble__button"
+                  @click.prevent="showLinkMenu(getMarkAttrs('link'))"
                 >
-              </button>
+                  <img
+                    svg-inline
+                    src="icons/link.svg"
+                  >
+                </button>
 
-              <button
-                :class="{ 'is-active': isActive.bold() }"
-                class="menububble__button"
-                @click="commands.bold"
-              >
-                <img
-                  svg-inline
-                  src="icons/bold.svg"
+                <button
+                  :class="{ 'is-active': isActive.bold() }"
+                  class="menububble__button"
+                  @click.prevent="commands.bold"
                 >
-              </button>
+                  <span style="font-weight: bold;">B</span>
+                </button>
 
-              <button
-                :class="{ 'is-active': isActive.italic() }"
-                class="menububble__button"
-                @click="commands.italic"
-              >
-                <img
-                  svg-inline
-                  src="icons/italic.svg"
+                <button
+                  :class="{ 'is-active': isActive.italic() }"
+                  class="menububble__button"
+                  @click.prevent="commands.italic"
                 >
-              </button>
+                  <span style="fontStyle: italic">I</span>
+                </button>
 
-              <button
-                :class="{ 'is-active': isActive.strike() }"
-                class="menububble__button"
-                @click="commands.strike"
-              >
-                <img
-                  svg-inline
-                  src="icons/strike.svg"
+                <button
+                  :class="{ 'is-active': isActive.strike() }"
+                  class="menububble__button"
+                  @click.prevent="commands.strike"
                 >
-              </button>
+                  <span style="textDecoration: line-through;">S</span>
+                </button>
 
-              <button
-                :class="{ 'is-active': isActive.underline() }"
-                class="menububble__button"
-                @click="commands.underline"
-              >
-                <img
-                  svg-inline
-                  src="icons/underline.svg"
+                <button
+                  :class="{ 'is-active': isActive.underline() }"
+                  class="menububble__button"
+                  @click.prevent="commands.underline"
                 >
-              </button>
+                  }
+                </button>
 
-              <button
-                :class="{
-                  'is-active': getMarkAttrs('textAlign').textAlign === 'left'
-                }"
-                class="menububble__button"
-                @click="setAttribute('textAlign', 'left')"
-              >
-                <i class="el-icon-s-fold" />
-              </button>
-              <button
-                :class="{
-                  'is-active': getMarkAttrs('textAlign').textAlign === 'center'
-                }"
-                class="menububble__button"
-                @click="setAttribute('textAlign', 'center')"
-              >
-                <i class="el-icon-s-unfold" />
-              </button>
-              <button
-                :class="{
-                  'is-active': getMarkAttrs('textAlign').textAlign === 'right'
-                }"
-                class="menububble__button"
-                @click="setAttribute('textAlign', 'right')"
-              >
-                <i class="el-icon-s-unfold" />
-              </button>
-
-              <button class="menububble__button">
-                <span
-                  :style="{
-                    color: getMarkAttrs('color').color
+                <button
+                  :class="{
+                    'is-active': getMarkAttrs('textAlign').textAlign === 'left'
                   }"
-                  style="margin-left: 2px;margin-top: -2px;font-size: 16px;"
-                >A</span>
-                <color-picker
-                  :value="getMarkAttrs('color').color"
-                  show-alpha
-                  @change="setAttribute('color', $event)"
-                />
-              </button>
-
-              <button class="menububble__button">
-                <i
-                  :style="{
-                    color: getMarkAttrs('backgroundColor').backgroundColor
+                  class="menububble__button"
+                  @click.prevent="setAttribute('textAlign', 'left')"
+                >
+                  <i class="el-icon-s-fold" />
+                </button>
+                <button
+                  :class="{
+                    'is-active':
+                      getMarkAttrs('textAlign').textAlign === 'center'
                   }"
-                  style="font-size: 14px;"
-                  class="el-icon-s-opportunity"
-                />
-                <color-picker
-                  :value="getMarkAttrs('backgroundColor').backgroundColor"
-                  show-alpha
-                  @change="setAttribute('backgroundColor', $event)"
-                />
-              </button>
-            </template>
+                  class="menububble__button"
+                  @click.prevent="setAttribute('textAlign', 'center')"
+                >
+                  <i class="el-icon-s-unfold" />
+                </button>
+                <button
+                  :class="{
+                    'is-active': getMarkAttrs('textAlign').textAlign === 'right'
+                  }"
+                  class="menububble__button"
+                  @click.prevent="setAttribute('textAlign', 'right')"
+                >
+                  <i class="el-icon-s-unfold" />
+                </button>
+              </div>
+            </div>
           </div>
         </editor-menu-bubble>
       </portal>
@@ -557,7 +542,6 @@ $color-grey: #b2b2b2;
   }
 
   &__button {
-    display: inline-flex;
     background: transparent;
     border: 0;
     color: $color-black;
@@ -566,9 +550,13 @@ $color-grey: #b2b2b2;
     margin-right: 0.2rem;
     border-radius: 3px;
     cursor: pointer;
-    width: 30px;
+    width: 35px;
     height: 20px;
     overflow: hidden;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:last-child {
       margin-right: 0;

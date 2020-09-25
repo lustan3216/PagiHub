@@ -1,9 +1,10 @@
 import { SET } from '../index'
 import { Auth } from 'aws-amplify'
 import router from '@/router'
+import { patchCurrentUser } from '@/api/user'
 
 const state = {
-  id: null,
+  userId: null,
   email: null,
   coverPhoto: null,
   username: null,
@@ -27,17 +28,16 @@ const mutations = {
 const actions = {
   async getCurrentUser({ commit }) {
     try {
-      window.Auth = Auth
-      const user = await Auth.currentAuthenticatedUser()
+      const user = await Auth.currentUserInfo()
       const { attributes } = user
-      const id = JSON.parse(attributes.identities)[0].userId
+      const { userId } = JSON.parse(attributes.identities)[0]
 
       commit('SET', {
-        id,
+        userId,
         user,
         email: attributes.email,
         coverPhoto: attributes['custom:coverPhoto'],
-        username: attributes['custom:username'],
+        username: attributes.preferred_username,
         description: attributes['custom:description'],
         facebookId: attributes['custom:facebookId'],
         instagramId: attributes['custom:instagramId']
@@ -48,15 +48,16 @@ const actions = {
       commit('INIT')
     }
   },
-  updateUser({ state, commit }, {}) {
-    state.user.updateAttributes([{ Name: 'custom:description', Value: '1' }], () => {
-
+  async patchUser({ state, commit }, { username }) {
+    const { data } = await patchCurrentUser({ username })
+    commit('SET', {
+      username: data.username
     })
   },
   async logout({ commit }) {
     try {
-      await Auth.signOut()
       commit('INIT')
+      await Auth.signOut()
     }
     catch (error) {
       console.log('error signing out: ', error)
@@ -66,7 +67,7 @@ const actions = {
 
 const getters = {
   isLogin(state) {
-    return state.id
+    return state.userId
   }
 }
 

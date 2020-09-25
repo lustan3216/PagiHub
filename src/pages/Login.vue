@@ -1,5 +1,5 @@
 <template>
-  <dialog-shadow>
+  <div class="wrapper">
     <h1
       class="login-title"
       style="margin-bottom: 70px;"
@@ -18,10 +18,10 @@
           svg-inline
           class="icon"
           src="svgs/facebook.svg"
-          style="width: 16px;"
+          style="width: 12px;"
         >
       </span>
-      <div class="flex1">
+      <div class="flex1 text-center">
         <span class="span">Sign in with Facebook</span>
       </div>
     </div>
@@ -42,7 +42,7 @@
           style="width: 20px;"
         >
       </span>
-      <div class="flex1">
+      <div class="flex1 text-center">
         <span class="span">Sign in with Google</span>
       </div>
     </div>
@@ -53,23 +53,19 @@
       <router-link :to="{ name: 'Terms' }">Terms of Use</router-link> and to
       receive LotsDesign emails & updates and acknowledge that you read our
     <router-link :to="{ name: 'Privacy' }">Privacy Policy</router-link>.</span>
-  </dialog-shadow>
+  </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { Auth, Hub } from 'aws-amplify'
-import DialogShadow from './DialogShadow'
 
 export default {
-  name: 'DialogLogin',
-  components: {
-    DialogShadow
-  },
+  name: 'Login',
   computed: {
     ...mapGetters('user', ['isLogin'])
   },
-  created() {
+  mounted() {
     Hub.listen('auth', ({ payload: { event, data }}) => {
       switch (event) {
         case 'signIn':
@@ -95,6 +91,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  transform: translate(-50%, -50%);
+  padding: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
 .login-title {
   font-size: 50px;
   color: $color-black;
@@ -118,13 +125,15 @@ export default {
   margin-top: 60px;
   font-size: 14px;
   line-height: 28px;
-  max-width: 360px;
+  max-width: 500px;
+  display: block;
 }
 .icon {
   width: 46px;
   height: 46px;
   display: inline-block;
   background-color: white;
+  text-align: center;
 }
 a {
   text-decoration: none;

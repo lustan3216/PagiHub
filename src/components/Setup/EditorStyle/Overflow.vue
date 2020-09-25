@@ -31,7 +31,7 @@
 
 <script>
 import forNodeMixin from './mixins/forNode'
-import { isGrid, isLayers, isTextEditor } from '@/utils/node'
+import { isGrid, isTextEditor } from '@/utils/node'
 import { vmGet } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
 import { arrayLast } from '@/utils/array'

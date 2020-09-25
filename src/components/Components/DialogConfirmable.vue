@@ -9,12 +9,12 @@
     @close="$emit('update:visible', false)"
   >
     <template #title>
-      <span
+      <b
         v-if="title"
         class="el-dialog__title"
       >
         {{ title }}
-      </span>
+      </b>
     </template>
 
     <slot />
@@ -23,28 +23,25 @@
       v-if="showFooter"
       #footer
     >
-      <div class="flex">
-        <slot name="footer">
-          <el-button
-            size="large"
-            style="margin-right: -1px;"
-            class="flex1 no-radius"
-            @click="$emit('update:visible', false)"
-          >
-            Cancel
-          </el-button>
+      <slot name="footer">
+        <el-button
+          size="small"
+          type="text"
+          class="m-r-15"
+          @click="$emit('update:visible', false)"
+        >
+          Cancel
+        </el-button>
 
-          <el-button
-            :disabled="disableSubmit"
-            size="large"
-            class="flex1 no-radius m-0"
-            plain
-            @click="confirm"
-          >
-            {{ confirmText }}
-          </el-button>
-        </slot>
-      </div>
+        <el-button
+          :disabled="disableSubmit"
+          size="small"
+          type="primary"
+          @click="confirm"
+        >
+          {{ confirmText }}
+        </el-button>
+      </slot>
     </template>
   </el-dialog>
 </template>
@@ -76,7 +73,7 @@ export default {
     },
     confirmText: {
       type: String,
-      default: 'Connfirm'
+      default: 'Confirm'
     }
   },
   computed: {
@@ -109,28 +106,33 @@ export default {
 
 <style scoped lang="scss">
 .el-dialog__title {
-  font-size: 24px;
-  text-transform: uppercase;
-  text-align: center;
+  font-size: 30px;
+  line-height: 35px;
 }
 
 ::v-deep.dialog {
-  .el-dialog__header {
-    text-align: center;
-  }
-
   .el-form-item__content {
     text-align: left;
   }
+  .el-form-item__label {
+    font-weight: bold;
+    padding-bottom: 0;
+  }
+  .el-input__inner {
+    background: #fafbfb;
+  }
 
   .el-dialog {
-    max-width: 500px;
-    border-radius: 5px;
     overflow: hidden;
+    padding: 50px;
+    max-width: 1000px;
+    min-width: 600px;
+    width: 100%;
+    border-radius: 5px;
   }
 
   .el-dialog__footer {
-    padding: 0;
+    padding-top: 0;
   }
 }
 .flex1 {

@@ -184,12 +184,6 @@ export function closestGridItem(node, fn) {
   return find(node)
 }
 
-export function isLayers(node) {
-  if (node) {
-    return node.tag === LAYERS && isUndefined(node[POLYMORPHISM])
-  }
-}
-
 export function isOverlapComponent(node) {
   return [LAYERS].includes(node.tag)
 }

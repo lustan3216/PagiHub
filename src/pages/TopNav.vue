@@ -21,33 +21,24 @@
         Help
       </el-button>
 
-      <template v-if="isLogin">
-        <el-button
-          type="text"
-          icon="el-icon-files"
-          @click="$router.push('/dashboard/designs')"
-        >
-          Dashboard
-        </el-button>
+      <el-button
+        v-if="isLogin && $route.name !== 'Dashboard'"
+        type="text"
+        icon="el-icon-files"
+        @click="$router.push({ name: 'Dashboard' })"
+      >
+        Dashboard
+      </el-button>
 
-        <el-button
-          type="text"
-          icon="el-icon-files"
-          @click="$router.push({ name: 'WorkBoard' })"
-        >
-          Wrokboard
-        </el-button>
-      </template>
-
-      <!--      <el-button-->
-      <!--        v-else-->
-      <!--        type="text"-->
-      <!--        class="p-10"-->
-      <!--        icon="el-icon-s-promotion"-->
-      <!--        @click="$dialog.open('login')"-->
-      <!--      >-->
-      <!--        LOGIN-->
-      <!--      </el-button>-->
+      <el-button
+        v-else
+        type="text"
+        class="p-10"
+        icon="el-icon-s-promotion"
+        @click="$router.push({ name: 'Login' })"
+      >
+        LOGIN
+      </el-button>
     </div>
   </nav>
 </template>

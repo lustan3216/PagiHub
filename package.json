@@ -16,6 +16,7 @@
     "aws-sdk": "^2.693.0",
     "axios": "^0.19.2",
     "compressorjs": "^1.0.6",
+    "dayjs": "^1.8.36",
     "element-ui": "^2.11.1",
     "filepond": "^4.19.2",
     "filepond-plugin-file-validate-size": "^2.2.1",

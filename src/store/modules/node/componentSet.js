@@ -3,7 +3,9 @@ import {
   deleteComponentSet,
   getComponentSetChildren,
   patchComponentSet,
-  publishComponentSet
+  publishComponentSet,
+  getComponentSets,
+  getProject
 } from '@/api/node'
 
 import jsonHistory from '@/store/jsonHistory'
@@ -17,6 +19,15 @@ import draftState from '@/utils/draftStateUploader'
 import { DEFAULT_BREAK_POINTS_MAP } from '@/const'
 
 export const actions = {
+  async getComponentSets({ commit, state }) {
+    const { data } = await getComponentSets({
+      parentId: state.editingProjectId
+    })
+
+    commit('SET_NODES_TO_MAP', { nodes: data })
+    return data
+  },
+
   async getComponentSetChildren({ commit, state }, id) {
     const nodes = Object.values(state.nodesMap)
     const imported = nodes.find(node => node.parentId === id)

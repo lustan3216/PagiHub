@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { shortTagName, getNode, isComponentSet, isLayers } from '@/utils/node'
+import { shortTagName, getNode, isComponentSet } from '@/utils/node'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { Tag } from 'element-ui'
 import gsap from 'gsap'
@@ -85,7 +85,7 @@ export default {
       return getNode(this.beingAddedComponentId)
     },
     canNotAdd() {
-      return isComponentSet(this.node) && !isLayers(this.component)
+      return isComponentSet(this.node)
     }
   },
   mounted() {

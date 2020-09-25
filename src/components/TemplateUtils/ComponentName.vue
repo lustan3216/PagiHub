@@ -7,7 +7,7 @@
   >
     <el-button
       slot="append"
-      icon="el-icon-circle-check"
+      icon="el-icon-check"
       @click="enter"
     />
   </el-input>
@@ -37,7 +37,7 @@
 <script>
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import { shortTagName, shortId, isComponent, getNode } from '@/utils/node'
+import { shortTagName, getNode } from '@/utils/node'
 import { LABEL } from '@/const'
 import {
   isMasterParent,
@@ -155,5 +155,6 @@ $connectColor: rgba(135, 199, 124, 0.68);
 }
 ::v-deep.input > input {
   height: 26px;
+  padding-left: 6px;
 }
 </style>

@@ -7,149 +7,67 @@
       >
         <text-editor-simple-style :id="id" />
       </portal>
+    </template>
 
-      <portal :to="`QuickFunctions${id}`">
-        <div
-          id="menu-bubble"
-          class="menububble"
+    <el-popover
+      ref="popover"
+      :value="editing"
+      popper-class="p-0"
+      placement="right"
+      trigger="manual"
+    >
+      <div
+        id="menu-bubble"
+        class="menububble"
+      >
+        <form
+          v-if="linkMenuIsActive"
+          class="menububble__form"
+          @submit.prevent="linkMenuIsActive = false"
         >
-          <form
-            v-if="linkMenuIsActive"
-            class="menububble__form"
-            @submit.prevent="linkMenuIsActive = false"
+          <input
+            ref="linkInput"
+            v-model="link"
+            class="menububble__input"
+            type="text"
+            placeholder="https://"
+            @keydown.esc="linkMenuIsActive = false"
           >
-            <input
-              ref="linkInput"
-              v-model="link"
-              class="menububble__input"
-              type="text"
-              placeholder="https://"
-              @keydown.esc="linkMenuIsActive = false"
+          <button
+            class="menububble__button"
+            type="button"
+            @click="removeLink"
+          >
+            <img
+              svg-inline
+              src="icons/remove.svg"
             >
+          </button>
+        </form>
+
+        <div
+          v-else
+          class="flex-column"
+        >
+          <div class="heading flex">
             <button
+              :class="{ 'is-active': tag === 'p' }"
               class="menububble__button"
-              type="button"
-              @click="removeLink"
+              @click="tag = tag === 'p' ? undefined : 'p'"
             >
-              <img
-                svg-inline
-                src="icons/remove.svg"
-              >
-            </button>
-          </form>
-
-          <template v-else>
-            <div
-              :class="{ absolute: headingHover }"
-              class="heading flex"
-              @mouseenter="headingHover = true"
-              @mouseleave="headingHover = false"
-            >
-              <button
-                :class="{ 'is-active': tag === 'p' }"
-                class="menububble__button"
-                @click="tag = tag === 'p' ? undefined : 'p'"
-              >
-                <img
-                  svg-inline
-                  src="icons/paragraph.svg"
-                >
-              </button>
-
-              <button
-                v-for="level in [1, 2, 3, 4, 5, 6]"
-                :key="level"
-                :class="{
-                  'is-active': tag === `h${level}`,
-                  hidden: !headingHover && tag !== `h${level}`
-                }"
-                class="menububble__button"
-                @click="tag = tag === `h${level}` ? undefined : `h${level}`"
-              >
-                H{{ level }}
-              </button>
-            </div>
-
-            <button
-              class="menububble__button"
-              @click="showLinkMenu"
-            >
-              <img
-                svg-inline
-                src="icons/link.svg"
-              >
+              P
             </button>
 
             <button
-              :class="{ 'is-active': fontWeight === 'bold' }"
+              v-for="level in [1, 2, 3, 4, 5, 6]"
+              :key="level"
+              :class="{
+                'is-active': tag === `h${level}`
+              }"
               class="menububble__button"
-              @click="fontWeight = fontWeight === 'bold' ? undefined : 'bold'"
+              @click="tag = tag === `h${level}` ? undefined : `h${level}`"
             >
-              <img
-                svg-inline
-                src="icons/bold.svg"
-              >
-            </button>
-
-            <button
-              :class="{ 'is-active': fontStyle === 'italic' }"
-              class="menububble__button"
-              @click="fontStyle = fontStyle === 'italic' ? undefined : 'italic'"
-            >
-              <img
-                svg-inline
-                src="icons/italic.svg"
-              >
-            </button>
-
-            <button
-              :class="{ 'is-active': textDecoration === 'line-through' }"
-              class="menububble__button"
-              @click="
-                textDecoration =
-                  textDecoration === 'line-through' ? undefined : 'line-through'
-              "
-            >
-              <img
-                svg-inline
-                src="icons/strike.svg"
-              >
-            </button>
-
-            <button
-              :class="{ 'is-active': textDecoration === 'underline' }"
-              class="menububble__button"
-              @click="
-                textDecoration =
-                  textDecoration === 'underline' ? undefined : 'underline'
-              "
-            >
-              <img
-                svg-inline
-                src="icons/underline.svg"
-              >
-            </button>
-
-            <button
-              :class="{ 'is-active': textAlign === 'left' }"
-              class="menububble__button"
-              @click="textAlign = textAlign === 'left' ? undefined : 'left'"
-            >
-              <i class="el-icon-s-fold" />
-            </button>
-            <button
-              :class="{ 'is-active': textAlign === 'center' }"
-              class="menububble__button"
-              @click="textAlign = textAlign === 'center' ? undefined : 'center'"
-            >
-              <i class="el-icon-s-unfold" />
-            </button>
-            <button
-              :class="{ 'is-active': textAlign === 'right' }"
-              class="menububble__button"
-              @click="textAlign = textAlign === 'right' ? undefined : 'right'"
-            >
-              <i class="el-icon-s-unfold" />
+              H{{ level }}
             </button>
 
             <button class="menububble__button">
@@ -176,22 +94,96 @@
                 @change="backgroundColor = $event"
               />
             </button>
-          </template>
+          </div>
+
+          <div class="flex">
+            <button
+              class="menububble__button"
+              @click="showLinkMenu"
+            >
+              <img
+                svg-inline
+                src="icons/link.svg"
+              >
+            </button>
+
+            <button
+              :class="{ 'is-active': fontWeight === 'bold' }"
+              class="menububble__button"
+              @click="fontWeight = fontWeight === 'bold' ? undefined : 'bold'"
+            >
+              <span style="font-weight: bold;">B</span>
+            </button>
+
+            <button
+              :class="{ 'is-active': fontStyle === 'italic' }"
+              class="menububble__button"
+              @click="fontStyle = fontStyle === 'italic' ? undefined : 'italic'"
+            >
+              <span style="fontStyle: italic">I</span>
+            </button>
+
+            <button
+              :class="{ 'is-active': textDecoration === 'line-through' }"
+              class="menububble__button"
+              @click="
+                textDecoration =
+                  textDecoration === 'line-through' ? undefined : 'line-through'
+              "
+            >
+              <span style="textDecoration: line-through;">S</span>
+            </button>
+
+            <button
+              :class="{ 'is-active': textDecoration === 'underline' }"
+              class="menububble__button"
+              @click="
+                textDecoration =
+                  textDecoration === 'underline' ? undefined : 'underline'
+              "
+            >
+              <span style="textDecoration: underline;">U</span>
+            </button>
+
+            <button
+              :class="{ 'is-active': textAlign === 'left' }"
+              class="menububble__button"
+              @click="textAlign = textAlign === 'left' ? undefined : 'left'"
+            >
+              <i class="el-icon-s-fold" />
+            </button>
+            <button
+              :class="{ 'is-active': textAlign === 'center' }"
+              class="menububble__button"
+              @click="textAlign = textAlign === 'center' ? undefined : 'center'"
+            >
+              <i class="el-icon-s-unfold" />
+            </button>
+            <button
+              :class="{ 'is-active': textAlign === 'right' }"
+              class="menububble__button"
+              @click="textAlign = textAlign === 'right' ? undefined : 'right'"
+            >
+              <i class="el-icon-s-unfold" />
+            </button>
+          </div>
         </div>
-      </portal>
-    </template>
-    <component
-      :style="style"
-      :is="tag || 'div'"
-      contenteditable="true"
-      @input="onInput"
-    >
-      {{ text }}
-    </component>
+      </div>
+
+      <component
+        slot="reference"
+        :style="style"
+        :is="tag || 'div'"
+        contenteditable="true"
+        @input="onInput"
+      >
+        {{ text }}
+      </component>
+    </el-popover>
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 import { arrayUniq } from '../../utils/array'
 import { Popover } from 'element-ui'
 import WebFont from 'webfontloader'
@@ -358,6 +350,7 @@ export default {
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
+    ...mapActions('layout', ['resizeNodeQuickFn']),
     findFontNames(string) {
       if (typeof string === 'object') {
         string = JSON.stringify(string)
@@ -385,6 +378,8 @@ export default {
         path: `${this.id}.value`,
         value
       })
+
+      this.resizeNodeQuickFn()
     }
   }
 }
@@ -405,9 +400,7 @@ $color-grey: #b2b2b2;
 }
 
 .menububble {
-  border: 1px solid $color-grey;
   padding: 0.3rem;
-  margin-bottom: 0.5rem;
 }
 
 .el-color-picker {
@@ -418,12 +411,9 @@ $color-grey: #b2b2b2;
 }
 
 ::v-deep.menububble {
-  position: absolute;
   font-size: 12px;
   display: flex;
   z-index: 900;
-  background: white;
-  border-radius: 5px;
   transition: all 0.3s;
 
   &.is-active {
@@ -432,7 +422,6 @@ $color-grey: #b2b2b2;
   }
 
   &__button {
-    display: inline-flex;
     background: transparent;
     border: 0;
     color: $color-black;
@@ -441,9 +430,13 @@ $color-grey: #b2b2b2;
     margin-right: 0.2rem;
     border-radius: 3px;
     cursor: pointer;
-    width: 30px;
+    width: 35px;
     height: 20px;
     overflow: hidden;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:last-child {
       margin-right: 0;

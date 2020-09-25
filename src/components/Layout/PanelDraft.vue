@@ -1,3 +1,4 @@
+import localforage from "localforage"
 <template>
   <div
     ref="panelDraft"
@@ -28,10 +29,11 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
 import ComponentSet from '../Templates/ComponentSet'
+import localforage from 'localforage'
 
 export default {
   name: 'PanelDraft',
@@ -45,12 +47,25 @@ export default {
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
     PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
-  created() {
+  computed: {
+    ...mapState('node', ['editingProjectId'])
+  },
+  async created() {
+    const projectId = await localforage.getItem('currentProjectId')
+
+    if (projectId) {
+      this.NODE_SET({ editingProjectId: projectId })
+    }
+    else if (!this.editingProjectId) {
+      this.$router.push({ name: 'Dashboard' })
+    }
+
     if (this.isDraftMode) {
       this.initExamples()
     }
   },
   methods: {
+    ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapActions('example', ['initExamples'])
   }
 }

@@ -3,13 +3,13 @@ import awsconfig from '@/aws-exports'
 
 let url
 if (process.env.NODE_ENV === 'production') {
-  url = 'https://staging.lots.design/'
+  url = 'https://staging.lots.design/dashboard/'
 }
 else {
   url = 'https://localhost:8080/'
 }
 
-awsconfig.oauth.redirectSignIn = url
+awsconfig.oauth.redirectSignIn = url + 'dashboard/'
 awsconfig.oauth.redirectSignOut = url
 
 Amplify.configure({

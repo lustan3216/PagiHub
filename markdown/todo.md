@@ -7,6 +7,9 @@ MVP
 
 ### Functionality
 
+https://github.com/niklasramo/mezr
+http://fabricjs.com/
+https://github.com/anseki/leader-line
 https://uppy.io/docs/companion/
 https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons

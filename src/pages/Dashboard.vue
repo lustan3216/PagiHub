@@ -1,54 +1,45 @@
 <template>
   <div class="flex">
-    <div class="sidebar">
+    <div class="sidebar gradient-gray">
       <el-avatar
         :src="coverPhoto"
         :size="50"
       />
 
       <h4 class="p">Sign in as</h4>
-      <div class="name">
-        {{ username || email }}
+
+      <div class="name" v-if="username">
+        {{ username }}
+      </div>
+
+      <div class="name m-t-10">
+        {{ email }}
       </div>
 
       <el-divider />
 
       <div class="flex-column">
-        <el-button
-          type="text"
-          icon="el-icon-camera"
-          size="medium"
+        <router-link
+          :to="{ name: 'Projects' }"
           class="link-li"
-          @click="$router.push({ name: 'Designs' })"
-        >Design</el-button>
-        <el-button
-          type="text"
-          icon="el-icon-picture-outline-round"
-          size="medium"
+        >
+          <i class="el-icon-picture-outline-round" /> Projects
+        </router-link>
+
+        <router-link
+          :to="{ name: 'Help' }"
           class="link-li"
-          @click="$router.push({ name: 'Websites' })"
-        >Website</el-button>
-        <!--        <el-button-->
-        <!--          type="text"-->
-        <!--          icon="el-icon-picture-outline-round"-->
-        <!--          size="medium"-->
-        <!--          class="link-li"-->
-        <!--          @click="$router.push({ name: 'Profile' })"-->
-        <!--        >Profile</el-button>-->
-        <el-button
-          type="text"
-          icon="el-icon-help"
-          size="medium"
+        >
+          <i class="el-icon-help" /> Help
+        </router-link>
+
+        <router-link
+          to="/"
           class="link-li"
-          @click="$router.push({ name: 'Help' })"
-        >Help</el-button>
-        <el-button
-          type="text"
-          icon="el-icon-picture-outline-round"
-          size="medium"
-          class="link-li"
-          @click="logout"
-        >Logout</el-button>
+          @click.native="logout"
+        >
+          <i class="el-icon-switch-button" /> Logout
+        </router-link>
       </div>
     </div>
     <div class="view">
@@ -70,6 +61,9 @@ export default {
     ...mapState('user', ['email', 'username', 'coverPhoto']),
     ...mapGetters('user', ['isLogin'])
   },
+  created() {
+    this.$router.push({ name: 'Projects' })
+  },
   methods: {
     ...mapActions('user', ['logout'])
   }
@@ -80,7 +74,6 @@ export default {
 .sidebar {
   padding: 30px;
   flex: 1;
-  background-color: #f9f9f9;
 }
 .link-li {
   text-align: left;
@@ -88,12 +81,14 @@ export default {
   font-size: 14px;
   color: $color-black;
   font-weight: normal;
+  margin-bottom: 20px;
 }
 .name {
   color: #909399;
   font-size: 14px;
 }
 .view {
+  padding: 15px;
   flex: 6;
   @include calc-vh('height', '100vh');
   overflow: scroll;

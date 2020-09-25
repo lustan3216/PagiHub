@@ -24,7 +24,7 @@ import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import { getValueByPath } from '@/utils/tool'
 import { AUTO_HEIGHT, GRID, STYLES } from '@/const'
-import { isLayers, isTextEditor } from '@/utils/node'
+import { isTextEditor } from '@/utils/node'
 
 export default {
   name: 'GridGeneratorItem',
@@ -65,7 +65,7 @@ export default {
       return getValueByPath(this.innerStyles, ['layout', 'stack'])
     },
     canOverflow() {
-      return isTextEditor(this.child) || isLayers(this.child)
+      return isTextEditor(this.child)
     },
     data() {
       return {

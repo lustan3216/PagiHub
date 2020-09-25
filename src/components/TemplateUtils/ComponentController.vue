@@ -8,7 +8,6 @@
     />
 
     <el-button
-      v-if="!isLayers(node)"
       type="text"
       icon="el-icon-copy-document"
       @click.stop="() => vmAddNode(node)"
@@ -38,7 +37,7 @@ import Lock from './Lock'
 import Visible from './Visible'
 import { isMac } from '@/utils/device'
 import { getValueByPath } from '@/utils/tool'
-import { isGridItem, isLayers } from '@/utils/node'
+import { isGridItem } from '@/utils/node'
 
 import { vmCreateEmptyItem, vmAddNode, vmRemoveNode } from '@/utils/vmMap'
 import { COMPONENT_SET } from '@/const'
@@ -88,7 +87,6 @@ export default {
   methods: {
     ...mapMutations('node', ['RECORD']),
     isMac,
-    isLayers,
     vmCreateEmptyItem,
     vmAddNode,
     vmRemoveNode

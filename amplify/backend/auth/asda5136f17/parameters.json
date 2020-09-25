@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "asd6d86e773_identitypool_6d86e773",
+    "identityPoolName": "asda5136f17_identitypool_a5136f17",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "asd6d86e773",
-    "userPoolName": "asd6d86e773_userpool_6d86e773",
+    "resourceNameTruncated": "asda5136f17",
+    "userPoolName": "asda5136f17_userpool_a5136f17",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "asd6d86d86e773_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "asda51a5136f17_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "6d86e773",
-    "resourceName": "asd6d86e773",
+    "sharedId": "a5136f17",
+    "resourceName": "asda5136f17",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -45,16 +45,15 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
+    "useDefault": "defaultSocial",
     "hostedUI": true,
-    "usernameAttributes": [
-        "email"
+    "hostedUIDomainName": "lots-design",
+    "authProvidersUserPool": [
+        "Facebook",
+        "Google"
     ],
-    "triggers": "{}",
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://localhost:8080/\"],\"LogoutURLs\":[\"https://localhost:8080/\"]}",
     "userPoolGroupList": [],
-    "parentStack": {
-        "Ref": "AWS::StackId"
-    },
-    "permissions": [],
     "dependsOn": []
 }
