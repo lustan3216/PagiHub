@@ -50,6 +50,7 @@ import DialogDelete from './DialogDelete'
 import ComponentName from '../TemplateUtils/ComponentName'
 import DialogComponentSet from '@/components/Setup/DialogComponentSet'
 import { cloneJsonWithoutChildren, getNode } from '@/utils/node'
+import { getValueByPath } from '@/utils/tool'
 import localforage from 'localforage'
 
 export default {
@@ -90,7 +91,10 @@ export default {
     }
     else {
       this.$nextTick(() => {
-        this.SET_EDITING_COMPONENT_SET_ID(this.innerTree[0].id)
+        const id = getValueByPath(this.componentSets, [0, 'id'])
+        if (id) {
+          this.SET_EDITING_COMPONENT_SET_ID(id)
+        }
       })
     }
   },
