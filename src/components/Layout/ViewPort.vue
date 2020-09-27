@@ -262,7 +262,10 @@ export default {
     ...mapMutations('layout', {
       LAYOUT_SET: 'SET'
     }),
-    ...mapActions('layout', ['checkIsGridResizing', 'resizeNodeQuickFn']),
+    ...mapActions('layout', [
+      'checkIsGridResizing',
+      'resizeNodeQuickFn'
+    ]),
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.$el)
 

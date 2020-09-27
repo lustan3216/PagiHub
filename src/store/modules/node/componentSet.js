@@ -31,6 +31,7 @@ export const actions = {
   async getComponentSetChildren({ commit, state }, id) {
     const nodes = Object.values(state.nodesMap)
     const imported = nodes.find(node => node.parentId === id)
+
     if (imported) {
       return
     }

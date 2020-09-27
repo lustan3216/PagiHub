@@ -14,7 +14,10 @@
         mode="out-in"
       >
         <keep-alive>
-          <component-giver :id="id" class="h-100 "/>
+          <component-giver
+            :id="id"
+            class="h-100 "
+          />
         </keep-alive>
       </transition>
     </template>
@@ -22,7 +25,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 
 export default {
@@ -42,7 +45,7 @@ export default {
     }
   },
   watch: {
-    id() {
+    node() {
       this.artBoardResizing()
     }
   },

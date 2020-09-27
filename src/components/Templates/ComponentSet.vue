@@ -32,6 +32,9 @@ export default {
   created() {
     this.getComponentSetChildren(this[ID])
   },
+  updated() {
+    this.getComponentSetChildren(this[ID])
+  },
   mounted() {
     // Don't put in created to prevent some component fail before mount
     if (this.isDraftMode) {

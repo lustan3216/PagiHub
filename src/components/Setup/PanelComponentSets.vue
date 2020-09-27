@@ -15,8 +15,8 @@
         v-if="componentSet && componentSet.id"
         :key="componentSet.id"
         :class="{ selected: hoverId === componentSet.id }"
-        class="relative w-100 over-hidden border-box p-l-10"
-        style="transition: all 0.3s;"
+        class="relative w-100 over-hidden border-box"
+        style="transition: all 0.3s; padding-left: 15px;"
         @click="nodeClick($event, componentSet)"
         @mouseenter="hoverId = componentSet.id"
       >
