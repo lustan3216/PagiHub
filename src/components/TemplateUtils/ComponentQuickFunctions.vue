@@ -76,14 +76,14 @@
 
         <stack />
 
-        <el-Popover
+        <el-popover
           ref="popover"
           effect="light"
           placement="right"
           popper-class="transparent"
         >
           <context-menu :id="id" />
-        </el-Popover>
+        </el-popover>
 
         <lock
           :id="id"
@@ -137,7 +137,7 @@ import {
   isComponent
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
-import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR, LAYERS } from '@/const'
+import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR } from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import { isInstance } from '@/utils/inheritance'

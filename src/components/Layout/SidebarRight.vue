@@ -23,12 +23,10 @@
 <script>
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
-import NodeInfo from '../TemplateUtils/ComponentName'
 
 export default {
   name: 'SidebarRight',
   components: {
-    NodeInfo,
     PanelStyles,
     PanelSettings
   },
@@ -83,6 +81,7 @@ export default {
     padding: 0 10px 10px;
     @include calc-vh('max-height', '100vh - 100px');
     overflow: scroll;
+    height: 100%;
 
     .el-button--mini,
     .el-button--mini.is-round {

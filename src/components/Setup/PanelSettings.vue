@@ -1,10 +1,18 @@
 <template>
-  <component
-    v-if="canSetUp"
-    :is="vueComponentTag"
-    :id="lastNode.id"
-    class="m-t-10 settings"
-  />
+  <div class="h-100">
+    <component
+      v-if="canSetUp"
+      :is="vueComponentTag"
+      :id="lastNode.id"
+      class="m-t-10 settings"
+    />
+    <div
+      v-else
+      class="h-100 flex-center"
+    >
+      <p class="small-title">No Settings</p>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -16,7 +24,7 @@ const self = {
   name: 'PanelSettings',
   components: {
     // SettingDrawer: () => import('./EditorSetting/SettingDrawer'),
-    // SettingDivider: () => import('./EditorSetting/SettingDivider'),
+
     SettingFlexButton: () => import('./EditorSetting/SettingFlexButton'),
     SettingFlexImage: () => import('./EditorSetting/SettingFlexImage'),
     // SettingGridGenerator: () => import('./EditorSetting/SettingGridGenerator'),
@@ -51,7 +59,9 @@ const self = {
       return this.lastNode && Boolean(self.components[this.vueComponentTag])
     },
     vueComponentTag() {
-      return `Setting${bigCamelCase(this.lastNode.tag)}`
+      if (this.lastNode) {
+        return `Setting${bigCamelCase(this.lastNode.tag)}`
+      }
     },
     areSameTag() {
       const tags = this.selectedComponentNodes.map(node => node.tag)
