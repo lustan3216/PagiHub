@@ -73,6 +73,7 @@ store.watch(
   state => state.node.editingProjectId,
   newValue => {
     if (newValue) {
+      localforage.removeItem('currentComponentSetId')
       localforage.setItem('currentProjectId', newValue)
     }
   }

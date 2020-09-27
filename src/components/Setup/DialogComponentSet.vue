@@ -1,11 +1,12 @@
 <template>
   <el-button
-    :icon="`el-icon-${isExist ? 's-tools' : 'circle-plus-outline'}`"
+    :icon="`el-icon-${isExist ? 's-tools' : 'circle-plus'}`"
     :type="type"
     :size="size"
     @click.stop="visible = !visible"
   >
     {{ text }}
+
     <dialog-confirmable
       :visible.sync="visible"
       :loading="loading"
@@ -13,6 +14,7 @@
       title="A powerful page can reuse and share..."
       width="80vw"
       class="dialog"
+      @close="initData"
       @confirm="onSubmit"
     >
       <el-form
@@ -40,7 +42,7 @@
             </p>
             <a
               class="link font-13"
-            >https://lots.design/{{ username || userId }}/{{
+            >https://lots.design/{{ username || 'username' }}/{{
               project && project.label
             }}/{{ form.label || 'page-name' }}</a>
 
@@ -54,9 +56,6 @@
                 class="w-100"
               />
             </el-form-item>
-            <p class="small-title">
-              Nice tags can be easier to search and categorize by you or others.
-            </p>
           </el-col>
 
           <el-col
@@ -79,29 +78,27 @@
         </el-row>
       </el-form>
 
-      <!--      <div>-->
-      <!--        <div>Tip</div>-->
-      <!--        You have not chosen username yet, it can make url prettier and easy-->
-      <!--        remember by changing user-id to username.-->
-      <!--      </div>-->
+      <tip-tag-desc />
     </dialog-confirmable>
   </el-button>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
-import { label, max, min, required } from '@/validator'
+import { mapActions, mapState } from 'vuex'
+import { label } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
 import { Message } from 'element-ui'
 import TextEditorRich from '@/components/Components/TextEditorRich'
+import TipTagDesc from '@/components/Tip/TipTagDesc'
 import { getNode } from '@/utils/node'
 export default {
   name: 'DialogComponentSet',
   components: {
     DialogConfirmable,
     SelectTag,
-    TextEditorRich
+    TextEditorRich,
+    TipTagDesc
   },
   props: {
     // eslint-disable-next-line
@@ -157,9 +154,6 @@ export default {
       },
       deep: true
     }
-  },
-  created() {
-    this.form.parentId = this.editingProjectId
   },
   methods: {
     ...mapActions('node', ['createComponentSet', 'patchComponentSet']),

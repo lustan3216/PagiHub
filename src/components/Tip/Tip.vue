@@ -3,7 +3,6 @@
     :closable="closeable"
     class="tip"
     type="warning"
-    @close="close"
   >
     <div
       class="m-r-15 el-button el-button--primary el-button--mini"

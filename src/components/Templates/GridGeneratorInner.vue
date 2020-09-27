@@ -10,8 +10,9 @@
     :breakpoints="breakpointsMap"
     :vertical-compact="false"
     :auto-height="!rootLayout"
-    :is-draggable="isDraftMode && !isInstanceChild && !isExample"
-    :is-resizable="isDraftMode && !isInstanceChild && !isExample"
+    :is-draggable="isDraftMode && !isInstanceChild"
+    :is-resizable="isDraftMode && !isInstanceChild"
+    prevent-collision
     responsive
     @layout-updated="layoutUpdated($event)"
   >

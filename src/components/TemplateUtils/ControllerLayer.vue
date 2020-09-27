@@ -47,7 +47,7 @@
       v-if="canBeEdited"
       :class="{
         'grid-item-fix': itemEditing,
-        'no-action': !itemEditing,
+        'no-action': !itemEditing && !isExample,
         'h-100': !fitContainer
       }"
     >
@@ -70,11 +70,7 @@ import vue from 'vue'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { CAN_BE_EDITED, STYLES } from '@/const'
 import { isMac } from '@/utils/device'
-import {
-  getNode,
-  isTextEditor,
-  traversalAncestorAndSelf
-} from '@/utils/node'
+import { getNode, isTextEditor, traversalAncestorAndSelf } from '@/utils/node'
 import { getValueByPath, isUndefined } from '@/utils/tool'
 import { isInstance } from '@/utils/inheritance'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'

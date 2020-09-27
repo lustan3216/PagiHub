@@ -2,22 +2,24 @@
   <div>
     <div
       v-for="category in categories"
+      :key="category.name"
       @mouseenter="hoverId = category.name"
       @mouseleave="hoverId = null"
     >
-      <b
+      <div
         v-if="category.divider"
         :key="category.name"
-        class="subtitle m-t-20 m-l-10"
+        class="subtitle m-t-20 m-l-10 bold m-b-5"
       >
         {{ humanize(category.name) }}
-      </b>
+      </div>
+
       <div
         v-else
         :key="category.name"
-        :class="{ active: value === category.name }"
+        :class="{ active: value.name === category.name }"
         class="button"
-        @click="$emit('input', category.name)"
+        @click="$emit('input', category)"
       >
         <b class="title">{{ humanize(category.name) }}</b>
         <span class="subtitle">{{ category.subtitle }}</span>
@@ -38,18 +40,14 @@ const BASIC_COMPONENTS = 'basicComponents'
 const LOCAL_PAGES = 'localPages'
 const PUBLIC_PAGES = 'publicPages'
 
-export {
-  BASIC_COMPONENTS,
-  LOCAL_PAGES,
-  PUBLIC_PAGES
-}
+export { BASIC_COMPONENTS, LOCAL_PAGES, PUBLIC_PAGES }
 
 export default {
   name: 'MenuCategories',
   props: {
     value: {
-      type: String,
-      default: null
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -78,23 +76,28 @@ export default {
         },
         {
           name: 'Article',
-          subtitle: 'Versatile third party service or embed website'
+          subtitle: 'Versatile third party service or embed website',
+          tags: ['article']
         },
         {
-          name: 'Iframer',
-          subtitle: 'Can embed versatile third party service or website'
+          name: 'Service',
+          subtitle: 'Can embed versatile third party service or website',
+          tags: ['iframer']
         },
         {
           name: 'Layout',
-          subtitle: 'Can embed versatile third party service or website'
+          subtitle: 'Can embed versatile third party service or website',
+          tags: ['layout']
         },
         {
           name: 'Resume',
-          subtitle: 'Can embed versatile third party service or website'
+          subtitle: 'Can embed versatile third party service or website',
+          tags: ['resume']
         },
         {
-          name: 'Landing page',
-          subtitle: 'Can embed versatile third party service or website'
+          name: 'Landing Page',
+          subtitle: 'Can embed versatile third party service or website',
+          tags: ['landing page']
         }
       ]
     }

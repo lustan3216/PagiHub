@@ -132,7 +132,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$activeColor: rgba(81, 117, 199, 0.68);
+$color-active: rgba(81, 117, 199, 0.68);
 $connectColor: rgba(135, 199, 124, 0.68);
 
 ::v-deep.instance {

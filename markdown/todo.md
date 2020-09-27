@@ -1,9 +1,9 @@
-MVP
+Road map
 
-1. style 能用
-2. component 能連結
-3. componentset 引用都正常
-4. 可外連 不用 domain 沒關係
+SEO
+Interaction / animation
+Form
+Style component
 
 ### Functionality
 
@@ -15,8 +15,10 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
+每個用戶都有一個 playground 進去可以馬上玩
+seo
+要稍微解釋 page 可以幹嘛
 切換componentset時patchchildren有bug
-username
 
 width px
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
@@ -25,6 +27,7 @@ position fixed (might be a checkbox) // 如果是這個可能多出 top left
 
 ### Last
 
+a function to support client user can edit the draft
 upload svg, 看能不能 svgo filter, 不然以後沒有 svg 少了很多動畫可以做
 重疊時拖拉要 noaction 其他 conainer
 

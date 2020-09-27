@@ -6,7 +6,7 @@
     append-to-body
     destroy-on-close
     class="dialog"
-    @close="$emit('update:visible', false)"
+    @close="close"
   >
     <template #title>
       <b
@@ -28,7 +28,7 @@
           size="small"
           type="text"
           class="m-r-15"
-          @click="$emit('update:visible', false)"
+          @click="close"
         >
           Cancel
         </el-button>
@@ -97,6 +97,10 @@ export default {
     }
   },
   methods: {
+    close() {
+      this.$emit('close')
+      this.$emit('update:visible', false)
+    },
     confirm() {
       this.$emit('confirm')
     }

@@ -3,7 +3,7 @@
     v-if="node"
     :id="`quick-fn-${id}`"
     :style="{
-      zIndex: isExample ? 3000 : 800
+      zIndex: isExample ? 2005 : 800
     }"
     :class="{ instance: isInstance }"
     class="quick-functions flex-center"
@@ -310,7 +310,8 @@ export default {
 
         let bounderNode
         if (this.isExample) {
-          bounderNode = element.closest('.example-card') || element.closest('#art-board')
+          bounderNode =
+            element.closest('.example-card') || element.closest('#art-board')
         }
         else {
           bounderNode = document.getElementById('art-board')
@@ -382,30 +383,27 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$activeColor: rgba(81, 117, 199, 0.68);
-$connectColor: rgba(135, 199, 124, 0.68);
-
 ::v-deep.instance,
 ::v-deep .el-button {
   &.quick-functions,
   .wrapper > *,
   .button-group > * {
-    border-color: $connectColor !important;
-    color: $connectColor !important;
+    border-color: $color-inherit !important;
+    color: $color-inherit !important;
   }
 
   .button-group i {
-    color: $connectColor;
+    color: $color-inherit;
   }
   .can-action {
-    color: $connectColor;
+    color: $color-inherit;
   }
 }
 
 .quick-functions {
   position: absolute;
   pointer-events: none;
-  border: 1px dashed $activeColor;
+  border: 1px dashed $color-active;
   top: 0;
   left: 0;
 }
@@ -439,9 +437,9 @@ $connectColor: rgba(135, 199, 124, 0.68);
   white-space: pre;
   padding-right: 5px;
   padding-left: 5px;
-  border: 1px solid $activeColor;
+  border: 1px solid $color-active;
   border-radius: 5px;
-  color: $activeColor !important;
+  color: $color-active !important;
   font-size: 12px;
   font-weight: 500;
   height: 28px;
@@ -449,7 +447,7 @@ $connectColor: rgba(135, 199, 124, 0.68);
 }
 
 ::v-deep > .el-button {
-  color: $activeColor !important;
+  color: $color-active !important;
 }
 
 ::v-deep .el-button-group {
@@ -459,11 +457,11 @@ $connectColor: rgba(135, 199, 124, 0.68);
 
   button {
     padding: 5px 8px;
-    border: 1px solid $activeColor;
+    border: 1px solid $color-active;
   }
 
   i {
-    color: $activeColor;
+    color: $color-active;
   }
 }
 </style>

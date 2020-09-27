@@ -246,7 +246,7 @@ export default {
 }
 
 .el-carousel__item {
-  background-color: #bbbec1;
+  background-color: #9c9c9c;
 }
 
 ::v-deep {

@@ -5,7 +5,6 @@
     :class="currentCategory"
     visible
     class="dialog"
-    destroy-on-close
     top="5vh"
     width="80vw"
     @close="removeBeingAddedComponentId"
@@ -26,6 +25,8 @@
 
       <el-col :span="9">
         <select-tag
+          :disabled="isBasic"
+          v-model="tags"
           :allow-create="false"
           placeholder="Can select multiple tags to search"
           size="small"
@@ -44,44 +45,29 @@
         style="width: 225px;"
       />
 
-      <div
+      <menu-examples
         v-if="isBasic"
+        :search="search"
         style="flex: 7.5"
         class="over-scroll p-15"
-      >
-        <el-row
-          :gutter="25"
-          type="flex"
-          style="flex-wrap: wrap"
-        >
-          <el-col
-            v-for="(component, index) in basicExamples"
-            :key="component.id"
-            :span="8"
-            style="margin-bottom: 35px;"
-          >
-            <card-example
-              :delay="index * 100"
-              :id="component.id"
-              @add="addTemplate(component)"
-            >
-              <component-giver
-                :id="component.id"
-                class="outer"
-              />
-            </card-example>
-          </el-col>
-        </el-row>
-      </div>
+        @add="addTemplate"
+      />
 
       <template v-else>
-        <menu-components
-          v-model="currentComponentId"
-          :except-ids="[editingComponentSetId]"
-          :category="currentCategory"
-          class="flex-column over-scroll"
-          style="flex: 1.5;"
-        />
+        <keep-alive>
+          <menu-component-sets
+            v-model="currentComponentId"
+            :except-ids="[editingComponentSetId]"
+            :category="currentCategory.name"
+            :key="currentCategory.name"
+            :text="search"
+            :tags="tags"
+            :default-tags="defaultTags"
+            class="flex-column over-scroll"
+            style="flex: 1.5;"
+            @add="addTemplate"
+          />
+        </keep-alive>
 
         <div
           style="flex: 6"
@@ -90,12 +76,15 @@
           <card-component-set
             v-if="currentComponentId"
             :id="currentComponentId"
-            :delay="100"
+            @add="addTemplate"
+          />
+
+          <div
+            v-else
+            class="flex-center h-100"
           >
-            <art-board
-              :id="currentComponentId"
-            />
-          </card-component-set>
+            <p>Please select a page to review</p>
+          </div>
         </div>
       </template>
     </div>
@@ -111,47 +100,46 @@ import { vmGet } from '@/utils/vmMap'
 import { HTML, STYLES } from '@/const'
 import Tip from '@/components/Tutorial/Tip'
 import SelectTag from '@/components/Components/SelectTag'
-import ComponentGiver from '@/components/TemplateUtils/ComponentGiver'
-import CardExample from './CardExample'
 import CardComponentSet from './CardComponentSet'
-import ArtBoard from '../Layout/ArtBoard'
 import MenuCategories, { BASIC_COMPONENTS } from './MenuCategories'
-import MenuComponents from './MenuComponents'
+import MenuComponentSets from './MenuComponentSets'
+import MenuExamples from './MenuExamples'
 
 export default {
   name: 'DialogComponentTabs',
   provide() {
     return {
-      isExample: this.isExample
+      isExample: true
     }
   },
   components: {
-    ArtBoard,
+    MenuExamples,
     MenuCategories,
-    MenuComponents,
-    CardExample,
+    MenuComponentSets,
     CardComponentSet,
-    ComponentGiver,
     Tip,
     SelectTag,
     ElTag: Tag
   },
   data() {
     return {
-      isExample: true,
-      currentCategory: BASIC_COMPONENTS,
+      currentCategory: { name: BASIC_COMPONENTS },
       currentComponentId: null,
-      options: [],
       search: '',
-      reviewingId: null
+      tags: [],
+      defaultTags: []
     }
   },
   computed: {
     ...mapState('node', ['editingComponentSetId', 'rootComponentSetIds']),
     ...mapState('app', ['beingAddedComponentId']),
-    ...mapState('example', ['basicExamples']),
     isBasic() {
-      return this.currentCategory === 'basicComponents'
+      return this.currentCategory.name === BASIC_COMPONENTS
+    }
+  },
+  watch: {
+    currentCategory(value) {
+      this.defaultTags = value.tags || []
     }
   },
   methods: {

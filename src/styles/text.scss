@@ -1,5 +1,5 @@
 .link {
-  color: blue;
+  color: $color-active;
   text-decoration-line: none;
   cursor: pointer;
 }
@@ -138,6 +138,7 @@ div.ProseMirror {
     display: flex;
     align-items: center;
     flex-direction: row;
+    margin-top: 0.3rem;
   }
 
   .todo-checkbox {
@@ -146,7 +147,6 @@ div.ProseMirror {
     width: 0.9em;
     box-sizing: border-box;
     margin-right: 10px;
-    margin-top: 0.3rem;
     user-select: none;
     -webkit-user-select: none;
     cursor: pointer;

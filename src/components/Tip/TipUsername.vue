@@ -1,6 +1,6 @@
 <template>
   <tip>
-    Choose a <b>username</b> to make public url prettier.
+    Choose a <b>username</b> to have ability to publish projects and pages.
     <dialog-username
       text="Choose here"
       type="text"

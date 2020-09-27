@@ -6,13 +6,16 @@
         :size="50"
       />
 
-      <h4 class="p">Sign in as</h4>
+      <h4 class="p m-b-10">Sign in as</h4>
 
-      <div class="name" v-if="username">
+      <div
+        v-if="username"
+        class="name"
+      >
         {{ username }}
       </div>
 
-      <div class="name m-t-10">
+      <div class="name" style="margin-top: 30px;">
         {{ email }}
       </div>
 

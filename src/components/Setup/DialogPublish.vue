@@ -26,11 +26,14 @@
         </el-form-item>
 
         <el-form-item label="Description">
-          <el-input
-            :autosize="{ minRows: 5 }"
+          <text-editor-rich
             v-model="form.description"
-            type="textarea"
+            class="description"
           />
+
+          <p class="small-title">
+            It is private for note.
+          </p>
         </el-form-item>
       </el-form>
     </dialog-confirmable>
@@ -40,23 +43,21 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
+import TextEditorRich from '@/components/Components/TextEditorRich'
 import { Message } from 'element-ui'
 
 export default {
   name: 'DialogPublish',
   components: {
-    DialogConfirmable
+    DialogConfirmable,
+    TextEditorRich
   },
   data() {
-    const { nodesMap } = this.$store.state.node
-
-    const node = nodesMap[this.id]
-
     return {
       visible: false,
       loading: false,
       form: {
-        description: node ? node.description : ''
+        description: ''
       }
     }
   },
@@ -70,6 +71,11 @@ export default {
     }
   },
   watch: {
+    visible(value) {
+      if (value) {
+        this.form.description = this.node.publishDescription || ''
+      }
+    },
     form: {
       handler() {
         this.dirty = true

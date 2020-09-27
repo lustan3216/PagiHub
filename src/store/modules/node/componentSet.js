@@ -48,14 +48,14 @@ export const actions = {
 
   async createComponentSet(
     { commit, state, dispatch },
-    { parentId, label, description, tags }
+    { label, description, tags }
   ) {
     const tree = gridGenerator()
     appendIds(tree)
     const {
       data: { children, ...componentSet }
     } = await createComponentSet({
-      parentId,
+      parentId: state.editingProjectId,
       description,
       label,
       tags,
@@ -64,7 +64,7 @@ export const actions = {
     })
 
     commit('SET', {
-      editingProjectId: parentId,
+      editingProjectId: componentSet.parentId,
       editingComponentSetId: componentSet.id
     })
 
@@ -89,17 +89,21 @@ export const actions = {
 
   async publishComponentSet({ commit, state }, description) {
     const node = state.nodesMap[state.editingComponentSetId]
-    const tree = cloneJson(node)
+    // avoid to get the componentS
+    const tree = cloneJson(node.children)
     await draftState.publish(state.editingComponentSetId, tree)
     const { data: versionNode } = await publishComponentSet({
       id: state.editingComponentSetId,
       tree,
       description
     })
-    commit('SOFT_RECORD', {
-      path: `${versionNode.id}.version`,
-      value: versionNode.version
-    })
+
+    for (const key in versionNode) {
+      commit('SOFT_RECORD', {
+        path: [state.editingComponentSetId, key],
+        value: versionNode[key]
+      })
+    }
   },
 
   async deleteComponentSet({ state, commit, getters, dispatch }, id) {

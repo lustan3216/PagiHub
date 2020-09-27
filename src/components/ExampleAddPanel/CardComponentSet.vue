@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="component"
     :id="`example-${component.id}`"
     class="example-card"
   >
@@ -14,7 +15,7 @@
       <el-button
         :disabled="canNotAdd"
         type="primary"
-        @click="$emit('add')"
+        @click="$emit('add', component)"
       >
         ADD
       </el-button>
@@ -22,7 +23,7 @@
 
     <div class="relative z-index1 p-1">
       <example-view-port :id="id">
-        <slot />
+        <art-board :id="id" />
       </example-view-port>
     </div>
 
@@ -57,13 +58,14 @@ import { shortTagName, getNode, isComponentSet } from '@/utils/node'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import TipCopy from '../Tip/TipCopy'
 import { Tag } from 'element-ui'
-import gsap from 'gsap'
 import { mapState, mapActions } from 'vuex'
 import ExampleViewPort from './ExampleViewPort'
+import ArtBoard from '@/components/Layout/ArtBoard'
 
 export default {
   name: 'CardComponentSet',
   components: {
+    ArtBoard,
     TipCopy,
     ComponentGiver,
     ElTag: Tag,
@@ -72,10 +74,6 @@ export default {
   props: {
     id: {
       type: String,
-      required: true
-    },
-    delay: {
-      type: Number,
       required: true
     }
   },
@@ -90,23 +88,6 @@ export default {
     canNotAdd() {
       return isComponentSet(this.node)
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.$nextTick(() => {
-        gsap.fromTo(
-          this.$el,
-          {
-            opacity: 0
-          },
-          {
-            opacity: 1,
-            duration: 3,
-            ease: 'elastic'
-          }
-        )
-      })
-    }, this.delay)
   },
   methods: {
     ...mapActions('layout', ['checkIsGridResizing']),

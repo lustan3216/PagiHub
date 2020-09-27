@@ -1,6 +1,6 @@
 <template>
   <el-button
-    :icon="`el-icon-${isExist ? 's-tools' : 'circle-plus-outline'}`"
+    :icon="`el-icon-${isExist ? 's-tools' : 'circle-plus'}`"
     :type="type"
     :size="size"
     @click.stop="visible = !visible"
@@ -40,7 +40,7 @@
             </p>
             <a
               class="link font-13"
-            >https://lots.design/{{ username || userId }}/{{
+            >https://lots.design/{{ username || 'username' }}/{{
               form.label || 'project-name'
             }}/page-name</a>
 
@@ -54,9 +54,6 @@
                 class="w-100"
               />
             </el-form-item>
-            <p class="small-title">
-              Nice tags can be easier to search and categorize by you or others.
-            </p>
           </el-col>
 
           <el-col
@@ -77,6 +74,7 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <tip-tag-desc />
       </el-form>
     </dialog-confirmable>
   </el-button>
@@ -86,6 +84,7 @@
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
 import TextEditorRich from '@/components/Components/TextEditorRich'
+import TipTagDesc from '@/components/Tip/TipTagDesc'
 import { mapActions, mapState } from 'vuex'
 import { label } from '@/validator'
 
@@ -94,6 +93,7 @@ export default {
   components: {
     DialogConfirmable,
     SelectTag,
+    TipTagDesc,
     TextEditorRich
   },
   props: {

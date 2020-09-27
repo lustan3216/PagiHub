@@ -1,43 +1,45 @@
 <template>
-  <div class="wh-100">
+  <div class="wh-100 flex-column">
     <div class="justify-between align-center">
       <b class="small-title m-l-10">Pages</b>
       <dialog-component-set
         v-if="editingProjectId"
-        style="font-size: 18px;"
+        style="font-size: 18px; color: #409EFF;"
         size="mini"
       />
     </div>
 
-    <div
-      v-for="componentSet in componentSets"
-      v-if="componentSet && componentSet.id"
-      :key="componentSet.id"
-      :class="{ selected: hoverId === componentSet.id }"
-      class="relative w-100 over-hidden border-box p-l-10"
-      style="transition: all 0.3s;"
-      @click="nodeClick($event, componentSet)"
-      @mouseenter="hoverId = componentSet.id"
-    >
-      <component-name
-        :id="componentSet.id"
-        class="w-100 text-left"
-      />
+    <div class="over-scroll">
+      <div
+        v-for="componentSet in componentSets"
+        v-if="componentSet && componentSet.id"
+        :key="componentSet.id"
+        :class="{ selected: hoverId === componentSet.id }"
+        class="relative w-100 over-hidden border-box p-l-10"
+        style="transition: all 0.3s;"
+        @click="nodeClick($event, componentSet)"
+        @mouseenter="hoverId = componentSet.id"
+      >
+        <component-name
+          :id="componentSet.id"
+          class="w-100 text-left"
+        />
 
-      <transition name="fade">
-        <div
-          v-if="componentSet.id === hoverId"
-          class="controller"
-        >
-          <dialog-delete :id="componentSet.id" />
+        <transition name="fade">
+          <div
+            v-if="componentSet.id === hoverId"
+            class="controller"
+          >
+            <dialog-delete :id="componentSet.id" />
 
-          <dialog-component-set
-            :key="componentSet.updatedAt"
-            :id="componentSet.id"
-            type="text"
-          />
-        </div>
-      </transition>
+            <dialog-component-set
+              :key="componentSet.updatedAt"
+              :id="componentSet.id"
+              type="text"
+            />
+          </div>
+        </transition>
+      </div>
     </div>
   </div>
 </template>
@@ -75,9 +77,10 @@ export default {
     componentSets() {
       const project = getNode(this.editingProjectId)
       if (project) {
-        return cloneJsonWithoutChildren(project.children).sort(
-          (a, b) => b.label - a.label
-        )
+        return cloneJsonWithoutChildren(project.children)
+          .sort((a, b) => b.label - a.label)
+          .filter(node => node.parentId === this.editingProjectId)
+        // components可能會因為Example裡面的跟當下project的混在一起
       }
     }
   },

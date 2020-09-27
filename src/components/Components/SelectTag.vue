@@ -3,7 +3,6 @@
     v-model="innerValue"
     :remote-method="remoteMethod"
     :loading="loading"
-    :multiple-limit="5"
     :allow-create="allowCreate"
     v-bind="$attrs"
     :placeholder="allowCreate ? 'All to create new tag.' : placeholder"

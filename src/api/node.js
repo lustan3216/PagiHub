@@ -32,6 +32,25 @@ export function getComponentSets({ parentId }) {
   return API.get('staging', `/component-sets?${_queryString}`, {})
 }
 
+export function searchComponentSets({
+  from,
+  size,
+  text,
+  tags,
+  except,
+  isPublic
+}) {
+  const _queryString = queryString({
+    from,
+    size,
+    text,
+    tags: toArray(tags),
+    except: toArray(except),
+    isPublic
+  })
+  return API.get('staging', `/component-sets/search?${_queryString}`, {})
+}
+
 export function getComponentSetChildren({ id }) {
   return API.get('staging', `/component-sets/${id}/children`, {})
 }

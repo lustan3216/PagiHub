@@ -6,8 +6,9 @@
   >
     <el-button
       :type="isStack ? 'primary' : 'text'"
+      :class="{ isStack }"
       plain
-      icon="el-icon-s-opportunity"
+      icon="el-icon-s-grid"
       @click="click"
     />
   </el-tooltip>
@@ -58,4 +59,11 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+::v-deep.isStack:hover,
+::v-deep.isStack:focus {
+  .el-icon-s-grid {
+    color: #fff !important;
+  }
+}
+</style>
