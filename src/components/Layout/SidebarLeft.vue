@@ -1,6 +1,6 @@
 <template>
   <div
-    :style="{ width: editingAsset ? '400px' : '260px' }"
+    :style="{ width: width + 'px' }"
     class="sidebar-left"
   >
     <el-button-group class="flex">
@@ -57,6 +57,7 @@ import { getValueByPath } from '@/utils/tool'
 import PanelComponents from '@/components/Setup/PanelComponents'
 import PanelComponentSets from '@/components/Setup/PanelComponentSets'
 import PanelAsset from '@/components/Setup/PanelAsset'
+import interactjs from 'interactjs'
 
 export default {
   name: 'SidebarLeft',
@@ -69,12 +70,24 @@ export default {
   data() {
     return {
       activePanel: 'PanelComponentSets',
-      uploading: false
+      uploading: false,
+      width: 260
     }
   },
   created() {
     this.$bus.$on('open-panel-asset', () => {
       this.activePanel = 'PanelAsset'
+    })
+  },
+  mounted() {
+    interactjs(this.$el).resizable({
+      edges: { left: false, right: true, bottom: false, top: false },
+      listeners: {
+        move: event => {
+          this.width = event.rect.width + event.deltaRect.left
+        }
+      },
+      inertia: true
     })
   },
   computed: {
@@ -108,8 +121,8 @@ export default {
 .sidebar-left {
   background-color: white;
   border-right: 1px solid $color-grey;
-  transition: width 0.2s ease;
   height: 100%;
+  overflow: hidden;
 }
 
 ::v-deep {

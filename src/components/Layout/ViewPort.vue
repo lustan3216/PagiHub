@@ -255,8 +255,7 @@ export default {
         })
       ],
 
-      inertia: true,
-      ...this.resizeOptions
+      inertia: true
     })
   },
   methods: {
