@@ -26,22 +26,22 @@
             class="subtitle"
             autoresize
           >
-            {{ description(item) }}
+            {{ item.projectLabel }}
           </div>
 
-          <el-button
-            v-if="hoverId === item.id"
-            type="primary"
-            style="color: white;"
-            class="float-icon z-index1"
-            @click.stop="$emit('add', item)"
-          >
-            ADD
-          </el-button>
+          <!--          <el-button-->
+          <!--            v-if="hoverId === item.id"-->
+          <!--            type="primary"-->
+          <!--            style="color: white;"-->
+          <!--            class="float-icon z-index1"-->
+          <!--            @click.stop="$emit('add', item)"-->
+          <!--          >-->
+          <!--            ADD-->
+          <!--          </el-button>-->
 
           <i
-            v-if="value === item.id"
-            class="el-icon-arrow-right float-icon"
+            v-if="value === item.id || hoverId === item.id"
+            class="el-icon-arrow-right absolute"
           />
         </dynamic-scroller-item>
       </template>
@@ -145,11 +145,11 @@ export default {
   methods: {
     ...mapMutations('node', ['SET_NODES_TO_MAP']),
     shortTagName,
-    description(component) {
-      const div = document.createElement('div')
-      div.innerHTML = component.description
-      return div.textContent || div.innerText || ''
-    },
+    // description(component) {
+    //   const div = document.createElement('div')
+    //   div.innerHTML = component.description
+    //   return div.textContent || div.innerText || ''
+    // },
     initSearch: debounce(async function() {
       this.currentSize = 0
 
@@ -194,8 +194,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.float-icon {
-  position: absolute;
+.el-icon-arrow-right {
   top: 50%;
   transform: translateY(-50%);
   right: 8px;
@@ -205,11 +204,11 @@ export default {
 
 @keyframes go-right {
   from {
-    opacity: 0;
+    transform: translate(-20%, -50%);
   }
 
   to {
-    opacity: 1;
+    transform: translate(0, -50%);
   }
 }
 

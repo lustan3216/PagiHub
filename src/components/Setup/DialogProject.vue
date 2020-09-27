@@ -30,13 +30,14 @@
             >
               <el-input
                 v-model="form.label"
+                :disabled="isExist"
                 placeholder="At least 6 letters"
               />
             </el-form-item>
 
             <p class="small-title">
-              The name will be used as part of url, it can be browsed once
-              publish.
+              The project name will be part of url which is <b>unchangeable</b>.
+              Furthermore, it can be browsed when published.
             </p>
             <a
               class="link font-13"

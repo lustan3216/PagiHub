@@ -96,6 +96,7 @@ export function createComponentSet({
   tags,
   children,
   parentId,
+  projectLabel,
   breakpointsMap
 }) {
   return API.post('staging', `/component-sets`, {
@@ -104,6 +105,7 @@ export function createComponentSet({
       description,
       label,
       tags,
+      projectLabel,
       children: toArray(children),
       breakpointsMap
     }

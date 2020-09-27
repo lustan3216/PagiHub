@@ -36,7 +36,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: 'Can select multiple tags'
+      default: 'Allow to select multiple tags'
     }
   },
   data() {
@@ -52,7 +52,7 @@ export default {
     }
   },
   created() {
-    getTags({ size: 10 }).then(({ data }) => {
+    getTags({ size: 30 }).then(({ data }) => {
       this.options = data.map(tag => ({ ...tag, value: tag.label }))
     })
   },
@@ -60,7 +60,7 @@ export default {
     async remoteMethod(query) {
       if (query !== '') {
         this.loading = true
-        const { data } = await getTags({ query })
+        const { data } = await getTags({ query, size: 30 })
         this.options = data.map(tag => ({ ...tag, value: tag.label }))
         this.loading = false
       }

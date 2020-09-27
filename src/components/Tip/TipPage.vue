@@ -1,6 +1,7 @@
 <template>
-  <tip>Copy is also powerful here, you can copy everything then back to artboard
-  to paste it it.</tip>
+  <tip>Once published, it will become public page that people can reuse your any
+  component.
+  </tip>
 </template>
 
 <script>

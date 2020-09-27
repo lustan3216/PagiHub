@@ -78,7 +78,7 @@
         </el-row>
       </el-form>
 
-      <tip-tag-desc />
+      <tip-page />
     </dialog-confirmable>
   </el-button>
 </template>
@@ -90,7 +90,7 @@ import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
 import { Message } from 'element-ui'
 import TextEditorRich from '@/components/Components/TextEditorRich'
-import TipTagDesc from '@/components/Tip/TipTagDesc'
+import TipPage from '@/components/Tip/TipPage'
 import { getNode } from '@/utils/node'
 export default {
   name: 'DialogComponentSet',
@@ -98,7 +98,7 @@ export default {
     DialogConfirmable,
     SelectTag,
     TextEditorRich,
-    TipTagDesc
+    TipPage
   },
   props: {
     // eslint-disable-next-line

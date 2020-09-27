@@ -61,6 +61,7 @@ export const actions = {
       label,
       tags,
       children: tree,
+      projectLabel: state.nodesMap[state.editingProjectId].label,
       breakpointsMap: DEFAULT_BREAK_POINTS_MAP
     })
 

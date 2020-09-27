@@ -28,7 +28,7 @@
           :disabled="isBasic"
           v-model="tags"
           :allow-create="false"
-          placeholder="Can select multiple tags to search"
+          placeholder="Select tags to search"
           size="small"
           class="w-100"
         />
@@ -72,6 +72,7 @@
         <div
           style="flex: 6"
           class="content"
+          @scroll="checkIsGridResizing"
         >
           <card-component-set
             v-if="currentComponentId"
@@ -145,6 +146,7 @@ export default {
   methods: {
     ...mapMutations('node', ['RECORD']),
     ...mapActions('app', ['removeBeingAddedComponentId']),
+    ...mapActions('layout', ['checkIsGridResizing']),
     addTemplate(template) {
       const node = this.nodesMap[this.beingAddedComponentId]
 
@@ -208,6 +210,9 @@ export default {
 ::v-deep > .el-dialog {
   border-radius: 5px;
   overflow: hidden;
+}
+::v-deep .el-dialog__headerbtn {
+  z-index: 15;
 }
 .component {
   height: 200px;
