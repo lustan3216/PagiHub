@@ -77,30 +77,28 @@ export default {
     componentSets() {
       const project = getNode(this.editingProjectId)
       if (project) {
-        return cloneJsonWithoutChildren(project.children)
-          .sort((a, b) => b.label - a.label)
-          .filter(node => node.parentId === this.editingProjectId)
+        return cloneJsonWithoutChildren(project.children).sort(
+          (a, b) => b.label - a.label
+        )
         // components可能會因為Example裡面的跟當下project的混在一起
       }
     }
   },
   async created() {
-    const currentProjectId = await localforage.getItem('currentProjectId')
-    const promise1 = localforage.getItem('currentComponentSetId')
-    const promise2 = this.getProject(currentProjectId)
-    const [componentSetId, _] = await Promise.all([promise1, promise2])
+    const { projectId } = this.$route.params
 
-    if (componentSetId) {
-      this.SET_EDITING_COMPONENT_SET_ID(componentSetId)
+    if (!projectId) {
+      this.$router.push({ name: 'Projects' })
     }
-    else {
-      this.$nextTick(() => {
-        const id = getValueByPath(this.componentSets, [0, 'id'])
-        if (id) {
-          this.SET_EDITING_COMPONENT_SET_ID(id)
-        }
-      })
-    }
+
+    await this.getProject(projectId)
+
+    this.$nextTick(() => {
+      const id = getValueByPath(this.componentSets, [0, 'id'])
+      if (id) {
+        this.SET_EDITING_COMPONENT_SET_ID(id)
+      }
+    })
   },
   methods: {
     ...mapMutations('app', { APP_SET: 'SET' }),

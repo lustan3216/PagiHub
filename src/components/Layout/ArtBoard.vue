@@ -16,7 +16,7 @@
         <keep-alive>
           <component-giver
             :id="id"
-            class="h-100 "
+            class="h-100"
           />
         </keep-alive>
       </transition>

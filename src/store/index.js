@@ -62,21 +62,12 @@ store.watch(
   state => state.node.editingComponentSetId,
   (newValue, oldValue) => {
     draftStateUploader.requestImmediately(oldValue)
-
-    if (newValue) {
-      localforage.setItem('currentComponentSetId', newValue)
-    }
   }
 )
 
 store.watch(
   state => state.node.editingProjectId,
-  newValue => {
-    if (newValue) {
-      localforage.removeItem('currentComponentSetId')
-      localforage.setItem('currentProjectId', newValue)
-    }
-  }
+  newValue => {}
 )
 
 export default store

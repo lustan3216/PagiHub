@@ -60,7 +60,7 @@ export default new VueRouter({
       ]
     },
     {
-      path: '/workboard',
+      path: '/workboard/:projectId',
       name: 'Workboard',
       component: () => import('@/components/Layout/PanelDraft')
     },

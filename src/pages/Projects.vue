@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <tip-username v-if="!username"/>
+    <tip-username v-if="!username" />
 
     <el-row
       class="justify-between"
@@ -106,7 +106,7 @@ export default {
     },
     redirect(id) {
       this.NODE_SET({ editingProjectId: id })
-      this.$router.push({ name: 'Workboard' })
+      this.$router.push(`/workboard/${id}`)
     }
   }
 }
