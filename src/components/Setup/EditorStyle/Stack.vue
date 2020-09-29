@@ -51,9 +51,7 @@ export default {
         value: this.isStack ? undefined : true
       })
 
-      this.$nextTick(() => {
-        this.resizeNodeQuickFn()
-      })
+      this.resizeNodeQuickFn()
     }
   }
 }

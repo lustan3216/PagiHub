@@ -57,7 +57,7 @@ export default {
     },
     fitContainer() {
       return (
-        getValueByPath(this.innerStyles, ['layout', 'fitContainer']) &&
+        getValueByPath(this.innerStyles, ['layout', 'autoHeight']) &&
         this.canOverflow
       )
     },
@@ -71,7 +71,7 @@ export default {
       return {
         [STYLES]: this.innerStyles,
         [GRID]: this.innerGrid,
-        [AUTO_HEIGHT]: this.fitContainer
+        [AUTO_HEIGHT]: this.autoHeight
       }
     }
   },

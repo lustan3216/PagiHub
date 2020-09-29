@@ -3,7 +3,7 @@
     ref="item"
     class="vue-grid-item"
     :class="classObj"
-    :style="{ ...style, zIndex, position: fixWhenScrolling ? 'fixed' : 'absolute'  }"
+    :style="{ ...style, zIndex, position: fixItem ? 'fixed' : 'absolute'  }"
   >
     <slot/>
     <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass"/>
@@ -130,7 +130,11 @@
        type: Number,
        required: true
        },*/
-      fixWhenScrolling: {
+      fixed: {
+        type: Boolean,
+        default: false
+      },
+      fixedBottom: {
         type: Boolean,
         default: false
       },
@@ -387,6 +391,11 @@
 
     },
     watch: {
+      fixedBottom(value) {
+        if (value) {
+          this.eventBus.$emit('correctFixItemsBound')
+        }
+      },
       autoHeight: {
         handler(value) {
           this.$nextTick(() => {
@@ -511,6 +520,9 @@
     },
     computed: {
       ...mapState('layout', ['scaleRatio']),
+      fixItem() {
+        return this.fixed || this.fixedBottom
+      },
       boundaryElement() {
         return getBoundaryEl(this.$el.parentNode)
       },
@@ -658,7 +670,7 @@
 
             let parentRect
             let clientRect
-            if (this.fixWhenScrolling) {
+            if (this.fixItem) {
               parentRect = this.boundaryElement.getBoundingClientRect()
               clientRect = event.target.getBoundingClientRect()
             }
@@ -666,7 +678,7 @@
               parentRect = event.target.parentNode.getBoundingClientRect()
             }
 
-            if (this.fixWhenScrolling && clientRect.top + clientRect.height > parentRect.top + parentRect.height) {
+            if (this.fixItem && clientRect.top + clientRect.height > parentRect.top + parentRect.height) {
               newSize.height = parentRect.height - (clientRect.top - parentRect.top)
             }
             else if (this.lockInParent && pos.height + pos.top > parentRect.height) {
@@ -749,7 +761,7 @@
             else {
               newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
             }
-            if (this.fixWhenScrolling) {
+            if (this.fixItem) {
               parentRect = this.boundaryElement.getBoundingClientRect()
             }
 
@@ -768,7 +780,7 @@
             } else {
               newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
             }
-            if (this.fixWhenScrolling) {
+            if (this.fixItem) {
               parentRect = this.boundaryElement.getBoundingClientRect()
             }
 
@@ -812,7 +824,7 @@
           this.$emit('move', this.i, pos.x, pos.y)
         }
         if (event.type === 'dragend' && (this.previousX !== this.innerX || this.previousY !== this.innerY)) {
-          if ((this.lockInParent || this.fixWhenScrolling) && pos.y > parentRect.height - clientRect.height) {
+          if ((this.lockInParent || this.fixItem) && pos.y > parentRect.height - clientRect.height) {
             pos.y = (parentRect.height - clientRect.height) / this.scaleRatio
           }
           this.$emit('moved', this.i, pos.x, pos.y)

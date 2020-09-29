@@ -155,7 +155,8 @@
         },
         layouts: {}, // array to store all layouts from different breakpoints
         lastBreakpoint: null, // store last active breakpoint
-        originalLayout: null // store original Layout
+        originalLayout: null, // store original Layout
+        boundaryElement: null
       }
     },
     created() {
@@ -174,10 +175,12 @@
       self.eventBus = self._provided.eventBus
       self.eventBus.$on('resizeEvent', self.resizeEventHandler)
       self.eventBus.$on('dragEvent', self.dragEventHandler)
+      self.eventBus.$on('correctFixItemsBound', self.correctFixItemsBound)
       self.$emit('layout-created', self.layout)
     },
     beforeDestroy: function() {
       //Remove listeners
+      this.eventBus.$off('correctFixItemsBound', this.correctFixItemsBound)
       this.eventBus.$off('resizeEvent', this.resizeEventHandler)
       this.eventBus.$off('dragEvent', this.dragEventHandler)
       this.eventBus.$destroy()
@@ -222,12 +225,12 @@
             this.erd.listenTo(self.$refs.item, debounce(() => {
               self.onWindowResize()
             }, 50))
-
-            const boundaryElement = getBoundaryEl(self.$refs.item)
-            this.erd.listenTo(boundaryElement, debounce(() => {
-              correctFixItemsBound(this.layout, boundaryElement.clientHeight)
-            }, 50))
             self.onWindowResize()
+
+            this.boundaryElement = getBoundaryEl(self.$refs.item)
+            this.erd.listenTo(this.boundaryElement, debounce(() => {
+              self.correctFixItemsBound()
+            }, 50))
           })
         })
       })
@@ -300,6 +303,11 @@
     },
     methods: {
       ...mapActions('layout', ['resizeNodeQuickFn']),
+      correctFixItemsBound() {
+        if (this.boundaryElement) {
+          correctFixItemsBound(this.layout, this.boundaryElement.clientHeight)
+        }
+      },
       layoutUpdate() {
         if (this.layout !== undefined && this.originalLayout !== null) {
           if (this.layout.length !== this.originalLayout.length) {

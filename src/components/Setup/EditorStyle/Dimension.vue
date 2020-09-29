@@ -4,27 +4,7 @@
       DIMENSION
     </el-divider>
 
-    <el-row
-      type="flex"
-      align="middle"
-    >
-      <el-col :span="3">
-        <el-checkbox
-          :disabled="!canStickTop"
-          v-model="verticalCompact"
-        />
-      </el-col>
-      <el-col
-        :span="10"
-        class="title"
-      >
-        Sticky Top
-      </el-col>
-    </el-row>
-
     <fit-container />
-
-    <fix-when-scrolling />
 
     <el-row
       :gutter="10"

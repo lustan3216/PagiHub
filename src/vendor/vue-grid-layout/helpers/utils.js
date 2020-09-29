@@ -60,7 +60,10 @@ export function cloneLayoutItem(layoutItem: LayoutItem): LayoutItem {
  * @return {Boolean}   True if colliding.
  */
 export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
-  if (l1.stack && l2.stack || (l1.fixWhenScrolling && l2.fixWhenScrolling)) {
+  const fix1 = l1.fixed || l1.fixedBottom
+  const fix2 = l2.fixed || l2.fixedBottom
+
+  if (l1.stack && l2.stack && ((fix1 && fix2) || (!fix1 && !fix2))) {
     if (l1 === l2) return false; // same element
     if (l1.x + l1.w <= l2.x) return false; // l1 is left of l2
     if (l1.x >= l2.x + l2.w) return false; // l1 is right of l2
@@ -77,14 +80,13 @@ export function getBoundaryEl(el) {
 export function correctFixItemsBound(layout: Layout, height) {
   for (let i = 0, len = layout.length; i < len; i++) {
     let l = layout[i]
-    if (!l.fixWhenScrolling) return
 
-    l.originalY = l.y
+    if (l.fixedBottom) {
+      l.y = height - l.h
 
-    if (l.y + l.h < height) l.y = l.originalY
-    if (l.y + l.h > height) l.y = height - l.h
+      l.moved = false;
+    }
 
-    l.moved = false;
   }
 }
 

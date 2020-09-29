@@ -4,6 +4,7 @@
     :style="innerStyles.html"
     :id="id"
     :inner-props="innerProps"
+    :inner-styles="innerStyles"
   />
   <!--  <div-->
   <!--    v-else-->

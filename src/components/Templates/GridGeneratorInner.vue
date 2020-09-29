@@ -47,6 +47,7 @@ import { getValueByPath } from '@/utils/tool'
 import { isInstanceChild } from '@/utils/inheritance'
 import { COLUMNS } from '@/const'
 import { isComponentSet } from '@/utils/node'
+import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'GridGeneratorInner',
@@ -71,6 +72,10 @@ export default {
       required: true
     },
     innerProps: {
+      type: Object,
+      default: () => ({})
+    },
+    innerStyles: {
       type: Object,
       default: () => ({})
     }
@@ -152,10 +157,6 @@ export default {
 
           let w = 0
           let h = 0
-          const verticalCompact = getValueByPath(styles, [
-            'layout',
-            'verticalCompact'
-          ])
 
           if (grid && currentGrid) {
             w = currentGrid.w
@@ -171,6 +172,10 @@ export default {
             }
           }
 
+          const styleLayout = getValueByPath(styles, ['layout'], {})
+          const canScroll =
+            getValueByPath(this, 'innerStyles.html.overflow') === 'scroll'
+
           layout.push({
             static: lock,
             lock,
@@ -182,14 +187,12 @@ export default {
             h,
             unitH: currentGrid.unitH,
             unitW: currentGrid.unitW,
-            verticalCompact,
+            lockInParent: !this.rootLayout && !canScroll,
             autoHeight,
-            lockInParent: !this.rootLayout,
-            ...styles.layout,
-            fixWhenScrolling: getValueByPath(styles, [
-              'layout',
-              'fixWhenScrolling'
-            ])
+            fixed: styleLayout.position === 'fixed',
+            fixedBottom: styleLayout.position === 'fixedBottom',
+            verticalCompact: styleLayout.position === 'verticalCompact',
+            isDraggable: styleLayout.position !== 'fixedBottom'
           })
         })
 

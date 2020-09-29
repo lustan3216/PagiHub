@@ -35,6 +35,8 @@
 
     <el-divider content-position="left">STACK</el-divider>
 
+    <position />
+
     <padding />
 
     <radius />
@@ -83,10 +85,12 @@ import Opacity from './EditorStyle/Opacity'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
 import { RadioGroup, RadioButton } from 'element-ui'
+import Position from '@/components/Setup/EditorStyle/Position'
 
 export default {
   name: 'PanelStyles',
   components: {
+    Position,
     BackgroundColor,
     Padding,
     Radius,
