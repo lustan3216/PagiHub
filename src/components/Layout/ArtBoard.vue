@@ -1,10 +1,6 @@
 <template>
-  <!--  padding: 1px; 很重要，因為grid item -1px, 如果item貼齊上邊，會因為上面看不到虛線下面看得到虛線-->
   <div
     id="art-board"
-    :style="{
-      padding: isDraftMode ? '1px' : false
-    }"
     class="art-board"
     @scroll.passive="onScroll"
   >

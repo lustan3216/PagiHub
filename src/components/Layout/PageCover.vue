@@ -1,7 +1,6 @@
 <template>
   <vue-grid-generator
     ref="gridGenerator"
-    v-bind="innerProps"
     :layout="layouts"
     :responsive-layouts="responsiveLayouts"
     :margin="[0, 0]"
@@ -9,9 +8,9 @@
     :cols="cols"
     :breakpoints="breakpointsMap"
     :vertical-compact="false"
-    :auto-height="!rootLayout"
-    :is-draggable="isDraftMode && !isInstanceChild"
-    :is-resizable="isDraftMode && !isInstanceChild"
+    :auto-height="false"
+    :is-draggable="isDraftMode"
+    :is-resizable="isDraftMode"
     prevent-collision
     responsive
     @layout-updated="layoutUpdated($event)"
@@ -40,23 +39,19 @@ import { GRID } from '@/const'
 import { findBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
 import { getBreakpoint, sortAscBreakpoint } from '@/utils/layout'
 import { getValueByPath } from '@/utils/tool'
-import { isInstanceChild } from '@/utils/inheritance'
 import { COLUMNS } from '@/const'
-import { isComponentSet } from '@/utils/node'
 
 export default {
-  name: 'GridGeneratorInner',
+  name: 'PageCover',
   components: {
     VueGridGenerator: GridLayout,
     VueGridItem: GridItem,
     // 因為lopp call AsyncComponent, 這裏不用 async import 會噴bug
     ComponentGiver: () => import('../TemplateUtils/ComponentGiver')
   },
-  mixins: [childrenMixin],
   provide() {
     return {
       gridItemsData: this.gridItemsData
@@ -65,35 +60,20 @@ export default {
   inject: {
     isExample: { default: false }
   },
-  props: {
-    id: {
-      type: String,
-      required: true
-    },
-    innerProps: {
-      type: Object,
-      default: () => ({})
-    }
-  },
   data() {
     return {
       responsiveLayouts: [],
-      gridItemsData: {},
       exampleBoundary: 'xs'
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
-    ...mapState('layout', ['artBoardWidth', 'artBoardHeight']),
-    ...mapState('node', ['nodesMap']),
+    ...mapState('app', ['fixedComponentIds']),
+    ...mapState('layout', ['artBoardHeight']),
     ...mapGetters('layout', [
       'currentBreakpoint',
       'breakpoints',
       'breakpointsMap'
     ]),
-    rootLayout() {
-      return isComponentSet(this.node.parentNode)
-    },
     cols() {
       const object = {}
       this.breakpoints.forEach(point => {
@@ -104,11 +84,11 @@ export default {
     currentBreakPoint() {
       return this.isExample ? this.exampleBoundary : this.currentBreakpoint
     },
-    isInstanceChild() {
-      return isInstanceChild(this.node)
-    },
     layouts() {
       return this.responsiveLayouts[this.currentBreakPoint]
+    },
+    nodes() {
+      return this.fixedComponentIds.forEach(id => this.nodesMap[id])
     },
     computedLayouts() {
       const { artBoardHeight } = this
@@ -117,7 +97,8 @@ export default {
 
       sortAscBreakpoint(this.breakpoints).forEach(breakpoint => {
         const layout = []
-        this.children.forEach(({ id, lock }, index) => {
+
+        this.nodes.forEach(({ id, lock }, index) => {
           const data = {
             static: false,
             id: id,
@@ -130,11 +111,11 @@ export default {
             autoHeight: false
           }
 
-          if (!this.gridItemsData[id]) {
-            return layout.push(data)
-          }
-
           const { styles = {}, grid, autoHeight } = this.gridItemsData[id]
+
+          if (getValueByPath(styles, ['layout', 'fixWhenScrolling'])) {
+            return
+          }
 
           if (!grid) {
             return layout.push(data)
@@ -185,11 +166,7 @@ export default {
             verticalCompact,
             autoHeight,
             lockInParent: !this.rootLayout,
-            ...styles.layout,
-            fixWhenScrolling: getValueByPath(styles, [
-              'layout',
-              'fixWhenScrolling'
-            ])
+            ...styles.layout
           })
         })
 

@@ -7,6 +7,8 @@ Style component
 
 ### Functionality
 
+https://github.com/girliemac/Filterous
+http://camanjs.com/examples/
 https://github.com/niklasramo/mezr
 http://fabricjs.com/
 https://github.com/anseki/leader-line
@@ -17,9 +19,8 @@ https://github.com/antonreshetov/vue-eva-icons
 <ol>
 每個用戶都有一個 playground 進去可以馬上玩
 seo
-要稍微解釋 page 可以幹嘛
 切換componentset時patchchildren有bug
-
+優改style 應該是改"除了griditem以外的元素"，如果有小孩，就改小孩，沒小孩就改自己，又因為複製貼上時，style都會轉移到元素上 就沒問題了，這樣可以確保所有style都在小孩或是griitem，不會兩邊有，就不用拿innerStyleㄊ˙
 width px
 position fixed (might be a checkbox) // 如果是這個可能多出 top left
 

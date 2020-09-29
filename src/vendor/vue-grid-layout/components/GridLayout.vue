@@ -29,7 +29,9 @@
     moveElement,
     validateLayout,
     cloneLayout,
-    getAllCollisions
+    getAllCollisions,
+    correctFixItemsBound,
+    getBoundaryEl
   } from '../helpers/utils'
   import {
     getBreakpointFromWidth,
@@ -40,6 +42,7 @@
 
   import GridItem from './GridItem.vue'
   import { addWindowEventListener, removeWindowEventListener } from '../helpers/DOM'
+  import { debounce } from '@/utils/tool'
 
   export default {
     name: 'GridLayout',
@@ -216,9 +219,14 @@
               // See https://github.com/wnr/element-resize-detector/issues/110 about callOnAdd.
               callOnAdd: false
             })
-            this.erd.listenTo(self.$refs.item, function() {
+            this.erd.listenTo(self.$refs.item, debounce(() => {
               self.onWindowResize()
-            })
+            }, 50))
+
+            const boundaryElement = getBoundaryEl(self.$refs.item)
+            this.erd.listenTo(boundaryElement, debounce(() => {
+              correctFixItemsBound(this.layout, boundaryElement.clientHeight)
+            }, 50))
             self.onWindowResize()
           })
         })

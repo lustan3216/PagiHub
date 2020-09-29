@@ -60,14 +60,31 @@ export function cloneLayoutItem(layoutItem: LayoutItem): LayoutItem {
  * @return {Boolean}   True if colliding.
  */
 export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
-  if (l1.fixWhenScrolling || l2.fixWhenScrolling) return
-  if (l1.stack && l2.stack) {
+  if (l1.stack && l2.stack || (l1.fixWhenScrolling && l2.fixWhenScrolling)) {
     if (l1 === l2) return false; // same element
     if (l1.x + l1.w <= l2.x) return false; // l1 is left of l2
     if (l1.x >= l2.x + l2.w) return false; // l1 is right of l2
     if (l1.y + l1.h <= l2.y) return false; // l1 is above l2
     if (l1.y >= l2.y + l2.h) return false; // l1 is below l2
     return true; // boxes overlap
+  }
+}
+
+export function getBoundaryEl(el) {
+  return el.closest('.vue-grid-item') || el.closest('#art-board')
+}
+
+export function correctFixItemsBound(layout: Layout, height) {
+  for (let i = 0, len = layout.length; i < len; i++) {
+    let l = layout[i]
+    if (!l.fixWhenScrolling) return
+
+    l.originalY = l.y
+
+    if (l.y + l.h < height) l.y = l.originalY
+    if (l.y + l.h > height) l.y = height - l.h
+
+    l.moved = false;
   }
 }
 

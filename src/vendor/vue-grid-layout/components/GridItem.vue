@@ -3,10 +3,10 @@
     ref="item"
     class="vue-grid-item"
     :class="classObj"
-    :style="{ ...style, zIndex }"
+    :style="{ ...style, zIndex, position: fixWhenScrolling ? 'fixed' : 'absolute'  }"
   >
-    <slot></slot>
-    <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass"></span>
+    <slot/>
+    <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass"/>
     <!--<span v-if="draggable" ref="dragHandle" class="vue-draggable-handle"></span>-->
   </div>
 </template>
@@ -96,7 +96,7 @@
 <script>
   import Vue from 'vue'
   import { mapState } from 'vuex'
-  import { setTopLeft, setTopRight, setTransformRtl, setTransform } from '../helpers/utils'
+  import { setTopLeft, setTopRight, setTransformRtl, setTransform, getBoundaryEl } from '../helpers/utils'
   import { getControlPosition, createCoreData } from '../helpers/draggableUtils'
   import { getDocumentDir } from '../helpers/DOM'
   import { debounce } from '@/utils/tool'
@@ -351,6 +351,10 @@
       if (this.interactObj) {
         this.interactObj.unset() // destroy interact intance
       }
+
+      if (this.erd) {
+        this.erd.uninstall(this.slotElement)
+      }
     },
     mounted: function() {
       // lots-design fix bug
@@ -386,21 +390,18 @@
       autoHeight: {
         handler(value) {
           this.$nextTick(() => {
-            const slot = this.$slots.default && this.$slots.default[0]
-            if (value) {
-              if (this.autoHeight && slot) {
-                this.erd = elementResizeDetectorMaker({
-                  strategy: 'scroll' //<- For ultra performance.
-                })
+            if (value && this.slotElement) {
+              this.erd = elementResizeDetectorMaker({
+                strategy: 'scroll', //<- For ultra performance.
+                callOnAdd: false
+              })
 
-                this.erd.listenTo(slot.elm, debounce(() => {
-                  this.autoSize()
-                }, 50))
-
-              }
+              this.erd.listenTo(this.slotElement, debounce(() => {
+                this.autoSize()
+              }, 50))
             }
             else if (this.erd) {
-              this.erd.removeListener(slot.elm, this.autoSize)
+              this.erd.removeListener(this.slotElement, this.autoSize)
               this.erd = null
             }
           })
@@ -510,6 +511,13 @@
     },
     computed: {
       ...mapState('layout', ['scaleRatio']),
+      boundaryElement() {
+        return getBoundaryEl(this.$el.parentNode)
+      },
+      slotElement() {
+        const slot = this.$slots.default && this.$slots.default[0]
+        return slot && slot.elm
+      },
       shouldAutoSize() {
         const slot = this.$slots.default && this.$slots.default[0]
         return slot && this.autoHeight
@@ -647,10 +655,24 @@
             //console.log("### resize end => x=" +this.innerX + " y=" + this.innerY + " w=" + this.innerW + " h=" + this.innerH);
             pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH)
             newSize.width = pos.width
-            const parentRect = event.target.offsetParent.getBoundingClientRect()
-            if (this.lockInParent && pos.height + pos.top > parentRect.height) {
+
+            let parentRect
+            let clientRect
+            if (this.fixWhenScrolling) {
+              parentRect = this.boundaryElement.getBoundingClientRect()
+              clientRect = event.target.getBoundingClientRect()
+            }
+            else if (this.lockInParent) {
+              parentRect = event.target.parentNode.getBoundingClientRect()
+            }
+
+            if (this.fixWhenScrolling && clientRect.top + clientRect.height > parentRect.top + parentRect.height) {
+              newSize.height = parentRect.height - (clientRect.top - parentRect.top)
+            }
+            else if (this.lockInParent && pos.height + pos.top > parentRect.height) {
               newSize.height = parentRect.height - pos.top
-            } else {
+            }
+            else {
               newSize.height = pos.height
             }
 
@@ -718,14 +740,19 @@
             this.previousX = this.innerX
             this.previousY = this.innerY
 
-            parentRect = event.target.offsetParent.getBoundingClientRect()
+            parentRect = event.target.parentNode.getBoundingClientRect()
             clientRect = event.target.getBoundingClientRect()
 
             if (this.renderRtl) {
               newPosition.left = (clientRect.right - parentRect.right) * -1
-            } else {
+            }
+            else {
               newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
             }
+            if (this.fixWhenScrolling) {
+              parentRect = this.boundaryElement.getBoundingClientRect()
+            }
+
             newPosition.top = (clientRect.top - parentRect.top) / this.scaleRatio
             this.dragging = newPosition
             this.isDragging = true
@@ -733,7 +760,7 @@
           }
           case 'dragend': {
             if (!this.isDragging) return
-            parentRect = event.target.offsetParent.getBoundingClientRect()
+            parentRect = event.target.parentNode.getBoundingClientRect()
             clientRect = event.target.getBoundingClientRect()
             //                        Add rtl support
             if (this.renderRtl) {
@@ -741,6 +768,10 @@
             } else {
               newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
             }
+            if (this.fixWhenScrolling) {
+              parentRect = this.boundaryElement.getBoundingClientRect()
+            }
+
             newPosition.top = (clientRect.top - parentRect.top) / this.scaleRatio
             //                        console.log("### drag end => " + JSON.stringify(newPosition));
             //                        console.log("### DROP: " + JSON.stringify(newPosition));
@@ -781,8 +812,8 @@
           this.$emit('move', this.i, pos.x, pos.y)
         }
         if (event.type === 'dragend' && (this.previousX !== this.innerX || this.previousY !== this.innerY)) {
-          if (this.lockInParent && pos.y > parentRect.height - clientRect.height) {
-            pos.y = parentRect.height - clientRect.height
+          if ((this.lockInParent || this.fixWhenScrolling) && pos.y > parentRect.height - clientRect.height) {
+            pos.y = (parentRect.height - clientRect.height) / this.scaleRatio
           }
           this.$emit('moved', this.i, pos.x, pos.y)
         }
@@ -791,6 +822,7 @@
         }
         this.eventBus.$emit('dragEvent', event.type, this.i, pos.x, pos.y, this.innerH, this.innerW)
       },
+
       calcPosition: function(x, y, w, h) {
         const colWidth = this.calcColWidth()
         // add rtl support

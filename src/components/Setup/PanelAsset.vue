@@ -165,7 +165,7 @@ export default {
       return this.folderParser.nodeTree
     }
   },
-  created() {
+  mounted() {
     this.getAssets()
     setOptions({
       server: {
