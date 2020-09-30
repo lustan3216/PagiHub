@@ -1,6 +1,6 @@
 <template>
   <div class="editor ProseMirror">
-    <template v-if="isDraftMode && editing">
+    <template v-if="isDraftMode">
       <portal
         v-if="canEditStyle"
         to="PanelStyles"

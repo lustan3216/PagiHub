@@ -17,17 +17,20 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
+字體要可以搜尋
 每個用戶都有一個 playground 進去可以馬上玩
-seo
-切換componentset時patchchildren有bug
-優改style 應該是改"除了griditem以外的元素"，如果有小孩，就改小孩，沒小孩就改自己，又因為複製貼上時，style都會轉移到元素上 就沒問題了，這樣可以確保所有style都在小孩或是griitem，不會兩邊有，就不用拿innerStyleㄊ˙
+
+切換 componentset 時 patchchildren 有 bug
+優改 style 應該是改"除了 griditem 以外的元素"，如果有小孩，就改小孩，沒小孩就改自己，又因為複製貼上時，style 都會轉移到元素上 就沒問題了，這樣可以確保所有 style 都在小孩或是 griitem，不會兩邊有，就不用拿 innerStyle ㄊ ˙
 width px
-position fixed (might be a checkbox) // 如果是這個可能多出 top left
 
 </ol>
 
 ### Last
 
+asset 裡面可以放照片，區分 master component
+container align , 距離輔助
+seo
 component 都可以有自己的 style state
 a function to support client user can edit the draft
 upload svg, 看能不能 svgo filter, 不然以後沒有 svg 少了很多動畫可以做

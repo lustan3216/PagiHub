@@ -130,7 +130,7 @@
        type: Number,
        required: true
        },*/
-      isPixel: {
+      canScroll: {
         type: Boolean,
         default: false
       },
@@ -756,7 +756,12 @@
             this.previousX = this.innerX
             this.previousY = this.innerY
 
-            parentRect = this.getParent(event.target).getBoundingClientRect()
+            if (this.fixItem) {
+              parentRect = this.boundaryElement.getBoundingClientRect()
+            }
+            else {
+              parentRect = this.getParent(event.target).getBoundingClientRect()
+            }
             clientRect = event.target.getBoundingClientRect()
 
             if (this.renderRtl) {
@@ -765,27 +770,27 @@
             else {
               newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
             }
-            if (this.fixItem) {
-              parentRect = this.boundaryElement.getBoundingClientRect()
-            }
 
             newPosition.top = (clientRect.top - parentRect.top) / this.scaleRatio
+
             this.dragging = newPosition
             this.isDragging = true
             break
           }
           case 'dragend': {
             if (!this.isDragging) return
-            parentRect = this.getParent(event.target).getBoundingClientRect()
+            if (this.fixItem) {
+              parentRect = this.boundaryElement.getBoundingClientRect()
+            }
+            else {
+              parentRect = this.getParent(event.target).getBoundingClientRect()
+            }
             clientRect = event.target.getBoundingClientRect()
             //                        Add rtl support
             if (this.renderRtl) {
               newPosition.left = (clientRect.right - parentRect.right) * -1
             } else {
               newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
-            }
-            if (this.fixItem) {
-              parentRect = this.boundaryElement.getBoundingClientRect()
             }
 
             newPosition.top = (clientRect.top - parentRect.top) / this.scaleRatio

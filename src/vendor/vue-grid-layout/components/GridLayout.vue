@@ -1,5 +1,5 @@
 <template>
-  <div ref="item" class="vue-grid-layout" :style="autoHeight ? {} : mergedStyle" :class="{ 'h-100': autoHeight }">
+  <div ref="item" class="vue-grid-layout" :style="mergedStyle">
     <slot></slot>
     <grid-item class="vue-grid-placeholder"
                v-if="showPlaceHolder && isDragging"
@@ -92,10 +92,6 @@
         default: true
       },
       isMirrored: {
-        type: Boolean,
-        default: false
-      },
-      autoHeight: {
         type: Boolean,
         default: false
       },
@@ -343,10 +339,6 @@
         }
       },
       updateHeight: function() {
-        // lots-design
-        if (this.autoHeight) {
-          return
-        }
         this.mergedStyle = {
           height: this.containerHeight()
         }

@@ -9,7 +9,6 @@
     :cols="cols"
     :breakpoints="breakpointsMap"
     :vertical-compact="false"
-    :auto-height="!rootLayout"
     :is-draggable="isDraftMode && !isInstanceChild"
     :is-resizable="isDraftMode && !isInstanceChild"
     prevent-collision
@@ -173,8 +172,7 @@ export default {
           }
 
           const styleLayout = getValueByPath(styles, ['layout'], {})
-          const canScroll =
-            getValueByPath(this, 'innerStyles.html.overflow') === 'scroll'
+          const overflow = getValueByPath(this, 'innerStyles.html.overflow')
 
           layout.push({
             static: lock,
@@ -187,9 +185,10 @@ export default {
             h,
             unitH: currentGrid.unitH,
             unitW: currentGrid.unitW,
-            lockInParent: !this.rootLayout && !canScroll,
+            lockInParent:
+              !this.rootLayout && !['scroll', 'hidden'].includes(overflow),
             autoHeight,
-            isResizable: !autoHeight,
+            canScroll: overflow === 'scroll',
             fixed: styleLayout.position === 'fixed',
             fixedBottom: styleLayout.position === 'fixedBottom',
             verticalCompact: styleLayout.position === 'verticalCompact',

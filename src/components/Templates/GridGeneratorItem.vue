@@ -6,12 +6,16 @@
       'h-100': !isTextEditor,
       stack: parentGridItem.pulsing && stack
     }"
-    :style="innerStyles.html"
   >
-    <component-giver
-      v-if="child"
-      :id="child.id"
-    />
+    <div
+      :style="innerStyles.html"
+      class="h-100"
+    >
+      <component-giver
+        v-if="child"
+        :id="child.id"
+      />
+    </div>
   </div>
 </template>
 
@@ -85,22 +89,27 @@ export default {
   display: none;
 }
 
+.grid-item-border {
+  border: 1px dashed #bcbcbc;
+  box-sizing: border-box;
+}
+
 .stack {
-  border-color: #aeb4c2;
+  border-color: #6c717c;
 }
 .border-pulse {
-  border-color: #9499a5;
   animation: border-pulse 1s infinite;
 }
+
 @keyframes border-pulse {
   0% {
-    border-color: #9499a5;
+    border-color: #005aad;
   }
-  50% {
-    border-color: #50535b;
+  40% {
+    border-color: rgb(0, 154, 255);
   }
   100% {
-    border-color: #9499a5;
+    border-color: #0065ae;
   }
 }
 </style>
