@@ -338,28 +338,19 @@ export default {
 
         Object.assign(this.$data, styles)
 
-        gsap.fromTo(
-          this.framer,
-          {
-            x: leftShared,
-            y: topShared,
-            width: widthShared,
-            height: heightShared
-          },
-          {
-            ...styles,
-            ease: 'ease',
-            duration: 0,
-            onUpdate() {
-              const { width, height, x, y } = this.vars
-              leftShared = x
-              topShared = y
-              widthShared = width
-              heightShared = height
-              self.top = y
-            }
+        gsap.to(this.framer, {
+          ...styles,
+          ease: 'ease',
+          duration: 0,
+          onUpdate() {
+            const { width, height, x, y } = this.vars
+            leftShared = x
+            topShared = y
+            widthShared = width
+            heightShared = height
+            self.top = y
           }
-        )
+        })
       })
     }, 220),
     mouseenter() {
