@@ -20,13 +20,16 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 
 export default {
   name: 'ArtBoard',
   components: {
     ComponentGiver
+  },
+  inject: {
+    isExample: { default: false }
   },
   props: {
     id: {
@@ -41,17 +44,19 @@ export default {
   },
   watch: {
     node() {
-      const { clientWidth, clientHeight } = this.$el
+      if (!this.isExample) {
+        const { clientWidth, clientHeight } = this.$el
 
-      this.LAYOUT_SET({
-        gridResizing: false,
-        artBoardWidth: parseInt(clientWidth),
-        artBoardHeight: parseInt(clientHeight) - 2
-      })
+        this.LAYOUT_SET({
+          gridResizing: false,
+          artBoardWidth: parseInt(clientWidth),
+          artBoardHeight: parseInt(clientHeight) - 2
+        })
+      }
     }
   },
   methods: {
-    ...mapMutations('layout', { 'LAYOUT_SET': 'SET' })
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' })
   }
 }
 </script>
