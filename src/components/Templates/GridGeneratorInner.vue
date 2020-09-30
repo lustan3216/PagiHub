@@ -189,11 +189,13 @@ export default {
             unitW: currentGrid.unitW,
             lockInParent: !this.rootLayout && !canScroll,
             autoHeight,
+            isResizable: !autoHeight,
             fixed: styleLayout.position === 'fixed',
             fixedBottom: styleLayout.position === 'fixedBottom',
             verticalCompact: styleLayout.position === 'verticalCompact',
             isDraggable: styleLayout.position !== 'fixedBottom',
-            stack: styleLayout.stack
+            stack: styleLayout.stack,
+            isPixel: currentGrid.unitW === 'px'
           })
         })
 

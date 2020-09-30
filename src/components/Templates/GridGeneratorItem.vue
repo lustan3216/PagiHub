@@ -3,7 +3,7 @@
     :class="{
       'grid-item-border': isDraftMode,
       'border-pulse': parentGridItem.pulsing,
-      'h-100': !fitContainer,
+      'h-100': !isTextEditor,
       stack: parentGridItem.pulsing && stack
     }"
     :style="innerStyles.html"
@@ -54,23 +54,17 @@ export default {
     child() {
       return this.innerChildren[0]
     },
-    fitContainer() {
-      return (
-        getValueByPath(this.innerStyles, ['layout', 'autoHeight']) &&
-        this.canOverflow
-      )
-    },
     stack() {
       return getValueByPath(this.innerStyles, ['layout', 'stack'])
     },
-    canOverflow() {
+    isTextEditor() {
       return isTextEditor(this.child)
     },
     data() {
       return {
         [STYLES]: this.innerStyles,
         [GRID]: this.innerGrid,
-        [AUTO_HEIGHT]: this.autoHeight
+        [AUTO_HEIGHT]: this.isTextEditor
       }
     }
   },

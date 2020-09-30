@@ -130,6 +130,10 @@
        type: Number,
        required: true
        },*/
+      isPixel: {
+        type: Boolean,
+        default: false
+      },
       fixed: {
         type: Boolean,
         default: false
@@ -895,9 +899,14 @@
       },
       // Helper for generating column width
       calcColWidth() {
-        const colWidth = (this.containerWidth - (this.margin[0] * (this.cols + 1))) / this.cols
-        // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
-        return colWidth
+        if (this.isPixel) {
+          // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+          return 1
+        } else {
+          const colWidth = (this.containerWidth - (this.margin[0] * (this.cols + 1))) / this.cols
+          // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+          return colWidth
+        }
       },
 
       /**

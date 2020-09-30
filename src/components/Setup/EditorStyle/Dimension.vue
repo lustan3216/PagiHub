@@ -4,8 +4,6 @@
       DIMENSION
     </el-divider>
 
-    <fit-container />
-
     <el-row
       :gutter="10"
       type="flex"
@@ -90,8 +88,6 @@
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tutorial/Tip'
 import SelectUnit from '@/components/Components/SelectUnit'
-import FitContainer from '@/components/Setup/EditorStyle/FitContainer'
-import FixWhenScrolling from '@/components/Setup/EditorStyle/FixWhenScrolling'
 import { COLUMNS, GRID, STYLES } from '@/const'
 import { isGrid, isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
@@ -102,9 +98,7 @@ export default {
   name: 'Dimension',
   components: {
     SelectUnit,
-    FitContainer,
-    Tip,
-    FixWhenScrolling
+    Tip
   },
 
   computed: {
@@ -114,11 +108,6 @@ export default {
       return this.selectedComponentIds
         .map(id => this.nodesMap[id])
         .filter(node => node && !isGrid(node))
-    },
-    canStickTop() {
-      if (this.selectedComponentNodes.length) {
-        return this.selectedComponentNodes.every(node => isGridItem(node))
-      }
     },
     vms() {
       return this.selectedComponentNodes.map(node => vmGet(node.id))
@@ -217,7 +206,7 @@ export default {
             value: value || 0
           })
         })
-        console.log(records, unitW)
+
         this.RECORD(records)
       }
     },
