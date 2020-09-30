@@ -17,7 +17,10 @@
       :class="{ draft: isDraftMode }"
       style="flex: 1"
     >
-      <art-board v-if="editingComponentSetId" :id="editingComponentSetId" />
+      <art-board
+        v-if="editingComponentSetId"
+        :id="editingComponentSetId"
+      />
     </view-port>
 
     <sidebar-right v-if="isDraftMode" />
@@ -62,9 +65,20 @@ export default {
       this.initExamples()
     }
   },
+  mounted() {
+    document.addEventListener(
+      'scroll',
+      e => {
+        this.checkIsGridResizing()
+        this.resizeNodeQuickFn()
+      },
+      true
+    )
+  },
   methods: {
     ...mapMutations('node', { NODE_SET: 'SET' }),
-    ...mapActions('example', ['initExamples'])
+    ...mapActions('example', ['initExamples']),
+    ...mapActions('layout', ['resizeNodeQuickFn', 'checkIsGridResizing'])
   }
 }
 </script>

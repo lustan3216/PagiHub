@@ -216,7 +216,6 @@ export default {
           }
         })
 
-        this.resizeNodeQuickFn()
         this.LAYOUT_SET({
           artBoardWidth: toPrecision(style.w, 0),
           artBoardHeight: toPrecision(style.h, 0)
@@ -263,8 +262,7 @@ export default {
       LAYOUT_SET: 'SET'
     }),
     ...mapActions('layout', [
-      'checkIsGridResizing',
-      'resizeNodeQuickFn'
+      'checkIsGridResizing'
     ]),
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.$el)

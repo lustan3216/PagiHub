@@ -31,25 +31,10 @@ const actions = {
     }, 80)
   },
 
-  artBoardResizing({ state, getters, commit, dispatch }, boolean = false) {
-    const { clientWidth, clientHeight } = document.getElementById('art-board')
-
-    commit('SET', {
-      gridResizing: boolean,
-      artBoardWidth: parseInt(clientWidth),
-      artBoardHeight: parseInt(clientHeight) - 2
-    })
-
-    if (!boolean) {
-      dispatch('resizeNodeQuickFn')
-    }
-  },
-
   resizeNodeQuickFn({ rootState }) {
     rootState.app.selectedComponentIds.forEach(id => {
       if (quickFnMap[id]) {
         this._vm.$nextTick(() => {
-          console.log(123)
           quickFnMap[id].resize()
         })
       }

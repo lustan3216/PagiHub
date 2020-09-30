@@ -224,12 +224,14 @@
             })
             this.erd.listenTo(self.$refs.item, debounce(() => {
               self.onWindowResize()
+              self.resizeNodeQuickFn()
             }, 50))
             self.onWindowResize()
 
             this.boundaryElement = getBoundaryEl(self.$refs.item)
             this.erd.listenTo(this.boundaryElement, debounce(() => {
               self.correctFixItemsBound()
+              self.resizeNodeQuickFn()
             }, 50))
           })
         })
@@ -356,9 +358,6 @@
         }
 
         this.eventBus.$emit('resizeEvent')
-
-        // lots-design
-        this.resizeNodeQuickFn()
       },
        containerHeight: function() {
         if (!this.autoSize) return

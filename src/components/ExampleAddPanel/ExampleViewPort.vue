@@ -149,8 +149,6 @@ export default {
             LAYOUT_SET({ gridResizing: false })
           }
         })
-
-        this.resizeNodeQuickFn()
       },
       deep: true
     }
@@ -176,7 +174,7 @@ export default {
     ...mapMutations('layout', {
       LAYOUT_SET: 'SET'
     }),
-    ...mapActions('layout', ['checkIsGridResizing', 'resizeNodeQuickFn']),
+    ...mapActions('layout', ['checkIsGridResizing']),
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.targetEl.parentNode)
       this.style.scale = 1

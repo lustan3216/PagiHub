@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 
 export default {
@@ -42,14 +42,18 @@ export default {
   },
   watch: {
     node() {
-      this.artBoardResizing()
+      const { clientWidth, clientHeight } = this.$el
+
+      this.LAYOUT_SET({
+        gridResizing: false,
+        artBoardWidth: parseInt(clientWidth),
+        artBoardHeight: parseInt(clientHeight) - 2
+      })
     }
   },
   methods: {
-    ...mapActions('layout', ['artBoardResizing', 'checkIsGridResizing']),
-    onScroll() {
-      this.checkIsGridResizing()
-    }
+    ...mapMutations('layout', { 'LAYOUT_SET': 'SET' }),
+    ...mapActions('layout', ['checkIsGridResizing'])
   }
 }
 </script>

@@ -1,7 +1,7 @@
+import Vue from 'vue'
 import store, { SET } from '@/store'
 import { CHILDREN, ID, PARENT_ID, SOFT_DELETE } from '@/const'
 import { deleteBy, findBy, toArray } from '@/utils/array'
-import Vue from 'vue'
 import { defineProperties } from '@/utils/nodeProperties'
 import { isComponentSet, isProject } from '@/utils/node'
 import { cloneJson, setValueByPath } from '@/utils/tool'
