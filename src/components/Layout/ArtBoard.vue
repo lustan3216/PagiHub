@@ -2,7 +2,6 @@
   <div
     id="art-board"
     class="art-board"
-    @scroll.passive="onScroll"
   >
     <template v-if="id">
       <transition
@@ -52,8 +51,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('layout', { 'LAYOUT_SET': 'SET' }),
-    ...mapActions('layout', ['checkIsGridResizing'])
+    ...mapMutations('layout', { 'LAYOUT_SET': 'SET' })
   }
 }
 </script>

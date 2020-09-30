@@ -174,7 +174,6 @@ export default {
     ...mapMutations('layout', {
       LAYOUT_SET: 'SET'
     }),
-    ...mapActions('layout', ['checkIsGridResizing']),
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.targetEl.parentNode)
       this.style.scale = 1

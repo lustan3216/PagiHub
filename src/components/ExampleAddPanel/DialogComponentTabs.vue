@@ -72,7 +72,6 @@
         <div
           style="flex: 6"
           class="content"
-          @scroll="checkIsGridResizing"
         >
           <card-component-set
             v-if="currentComponentId"
@@ -146,7 +145,6 @@ export default {
   methods: {
     ...mapMutations('node', ['RECORD']),
     ...mapActions('app', ['removeBeingAddedComponentId']),
-    ...mapActions('layout', ['checkIsGridResizing']),
     addTemplate(template) {
       const node = this.nodesMap[this.beingAddedComponentId]
 

@@ -7,7 +7,6 @@
       stack: parentGridItem.pulsing && stack
     }"
     :style="innerStyles.html"
-    @scroll.passive="onScroll"
   >
     <component-giver
       v-if="child"
@@ -17,7 +16,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
@@ -82,12 +81,6 @@ export default {
       },
       immediate: true,
       deep: true
-    }
-  },
-  methods: {
-    ...mapActions('layout', ['checkIsGridResizing']),
-    onScroll() {
-      this.checkIsGridResizing()
     }
   }
 }

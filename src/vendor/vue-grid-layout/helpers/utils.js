@@ -74,7 +74,7 @@ export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
 }
 
 export function getBoundaryEl(el) {
-  return el.closest('.vue-grid-item') || el.closest('#art-board')
+  return el.closest('.vue-grid-item') || el.closest('.art-board')
 }
 
 export function correctFixItemsBound(layout: Layout, height) {

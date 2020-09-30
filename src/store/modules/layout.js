@@ -14,30 +14,16 @@ const mutations = {
   SET
 }
 
-let timer
 const actions = {
-  checkIsGridResizing({ rootGetters, commit }) {
-    if (!rootGetters['mode/isDraftMode']) {
-      return
-    }
-
-    commit('SET', { gridResizing: true })
-    if (timer !== null) {
-      clearTimeout(timer)
-    }
-
-    timer = setTimeout(() => {
-      commit('SET', { gridResizing: false })
-    }, 80)
-  },
-
-  resizeNodeQuickFn({ rootState }) {
-    rootState.app.selectedComponentIds.forEach(id => {
-      if (quickFnMap[id]) {
-        this._vm.$nextTick(() => {
+  resizeNodeQuickFn({ rootState, commit }) {
+    this._vm.$nextTick(() => {
+      rootState.app.selectedComponentIds.forEach(id => {
+        if (quickFnMap[id]) {
           quickFnMap[id].resize()
-        })
-      }
+        }
+      })
+
+      commit('SET', { gridResizing: false })
     })
   }
 }

@@ -188,7 +188,7 @@ export default {
   mounted() {
     if (this.isExample) {
       const el =
-        this.$el.closest('.example-card') || this.$el.closest('#art-board')
+        this.$el.closest('.art-board')
       this.exampleBoundary = getBreakpoint(el)
     }
   },

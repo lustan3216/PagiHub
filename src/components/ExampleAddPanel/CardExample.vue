@@ -1,9 +1,7 @@
 <template>
-  <!-- example-card can not delete, GridGeneratorInner is using it -->
   <div
     v-if="show"
     :id="`example-${component.id}`"
-    class="example-card"
   >
     <div class="p-10 justify-between">
       <span style="visibility: hidden">ADD</span>
@@ -21,7 +19,10 @@
     </div>
 
     <div class="relative z-index1 p-1">
-      <slot />
+      <art-board
+        :id="id"
+        class="outer"
+      />
     </div>
 
     <div
@@ -53,15 +54,15 @@
 
 <script>
 import { shortTagName, getNode, isComponentSet } from '@/utils/node'
-import ComponentGiver from '../TemplateUtils/ComponentGiver'
+import ArtBoard from '../Layout/ArtBoard'
 import { Tag } from 'element-ui'
 import gsap from 'gsap'
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'CardExample',
   components: {
-    ComponentGiver,
+    ArtBoard,
     ElTag: Tag
   },
   props: {
@@ -110,11 +111,16 @@ export default {
     }, this.delay)
   },
   methods: {
-    ...mapActions('layout', ['checkIsGridResizing']),
-    shortTagName,
-    onScroll() {
-      this.checkIsGridResizing()
-    }
+    shortTagName
   }
 }
 </script>
+
+<style scoped lang="scss">
+.outer {
+  padding: 5px;
+  height: 200px;
+  border-radius: 3px;
+  border: 1px solid $color-grey;
+}
+</style>

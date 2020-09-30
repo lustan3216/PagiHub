@@ -69,7 +69,11 @@ export default {
     document.addEventListener(
       'scroll',
       e => {
-        this.checkIsGridResizing()
+        if (!this.isDraftMode) {
+          return
+        }
+
+        this.LAYOUT_SET({ gridResizing: true })
         this.resizeNodeQuickFn()
       },
       true
@@ -77,8 +81,9 @@ export default {
   },
   methods: {
     ...mapMutations('node', { NODE_SET: 'SET' }),
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('example', ['initExamples']),
-    ...mapActions('layout', ['resizeNodeQuickFn', 'checkIsGridResizing'])
+    ...mapActions('layout', ['resizeNodeQuickFn'])
   }
 }
 </script>

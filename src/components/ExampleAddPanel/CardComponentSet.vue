@@ -90,11 +90,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('layout', ['checkIsGridResizing']),
-    shortTagName,
-    onScroll() {
-      this.checkIsGridResizing()
-    }
+    shortTagName
   }
 }
 </script>

@@ -308,14 +308,7 @@ export default {
 
         let { x: left, y: top, width, height } = rect
 
-        let bounderNode
-        if (this.isExample) {
-          bounderNode =
-            element.closest('.example-card') || element.closest('#art-board')
-        }
-        else {
-          bounderNode = document.getElementById('art-board')
-        }
+        const bounderNode = element.closest('.art-board')
 
         const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()
 
