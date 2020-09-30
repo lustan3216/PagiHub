@@ -223,7 +223,7 @@
               self.resizeNodeQuickFn()
             }, 50))
             self.onWindowResize()
-
+            
             this.boundaryElement = getBoundaryEl(self.$refs.item)
             this.erd.listenTo(this.boundaryElement, debounce(() => {
               self.correctFixItemsBound()

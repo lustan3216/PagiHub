@@ -15,21 +15,36 @@
         Color
       </el-col>
       <el-col :span="16">
-        <color-picker v-model="backgroundColor" />
+        <color-picker v-model="backgroundImage" />
       </el-col>
+    </el-row>
+
+    <el-row
+      type="flex"
+      align="middle"
+    >
+      <el-col
+        :span="8"
+        class="title"
+      >
+        Gradient Color
+      </el-col>
+      <el-col :span="16"/>
     </el-row>
   </div>
 </template>
 
 <script>
-import ColorPicker from '@/vendor/element-ui/color-picker'
+import ColorPicker from '@/components/Components/ColorPicker'
+import ColorPickerGradient from '@/components/Components/ColorPickerGradient'
 import forNode from '@/components/Setup/EditorStyle/mixins/forNode'
 
 export default {
   name: 'BackgroundColor',
-  mixins: [forNode('backgroundColor')],
+  mixins: [forNode('backgroundImage')],
   components: {
-    ColorPicker
+    ColorPicker,
+    ColorPickerGradient
   }
 }
 </script>

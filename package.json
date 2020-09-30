@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@form-create/element-ui": "^1.0.10",
+    "@simonwep/pickr": "^1.7.4",
     "aws-amplify": "^3.0.17",
     "aws-sdk": "^2.693.0",
     "axios": "^0.19.2",
@@ -92,7 +93,8 @@
     "vue-svg-inline-loader": "^1.5.0",
     "vue-svg-loader": "^0.15.0",
     "vue-template-compiler": "^2.6.10",
-    "webpack-bundle-analyzer": "^3.6.1"
+    "webpack-bundle-analyzer": "^3.6.1",
+    "sassyfication": "^0.2.0"
   },
   "postcss": {
     "plugins": {

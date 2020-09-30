@@ -1,209 +1,103 @@
 <template>
   <div
-    v-clickoutside="hide"
-    :class="[
-      'el-color-picker',
-      colorDisabled ? 'is-disabled' : '',
-      colorSize ? `el-color-picker--${colorSize}` : ''
-    ]"
+    v-if="gradient"
+    v-model="visible"
+    placement="left"
+    width="100%"
+    trigger="manual"
+    popper-class="p-0"
   >
     <div
-      v-if="colorDisabled"
-      class="el-color-picker__mask"
+      ref="panel"
+      class="color-picker"
     />
-    <div
-      class="el-color-picker__trigger"
-      @click="handleTrigger"
-    >
-      <span
-        :class="{ 'is-alpha': showAlpha }"
-        class="el-color-picker__color"
-      >
-        <span
-          :style="{
-            backgroundColor: displayedColor
-          }"
-          class="el-color-picker__color-inner"
-        />
-        <span
-          v-if="!value && !showPanelColor"
-          class="el-color-picker__empty el-icon-close"
-        />
-      </span>
-      <span
-        v-show="value || showPanelColor"
-        class="el-color-picker__icon el-icon-arrow-down"
-      />
-    </div>
-    <picker-dropdown
-      ref="dropdown"
-      :class="['el-color-picker__panel', popperClass || '']"
-      v-model="showPicker"
-      :color="color"
-      :show-alpha="showAlpha"
-      :predefine="predefine"
-      @pick="confirmValue"
-      @clear="clearValue"
+    <el-button
+      slot="reference"
+      type="primary"
+      @click="visible = !visible"
     />
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import Color from 'element-ui/packages/color-picker/src/color'
-import PickerDropdown from 'element-ui/packages/color-picker/src/components/picker-dropdown.vue'
-import Clickoutside from 'element-ui/src/utils/clickoutside'
-import Emitter from 'element-ui/src/mixins/emitter'
+import { Popover } from 'element-ui'
+import '@simonwep/pickr/dist/themes/classic.min.css' // 'classic' theme
+import GPickr from '@/vendor/gpickr/js/gpickr'
+// Modern or es5 bundle (pay attention to the note below!)
+import Pickr from '@simonwep/pickr'
 
 export default {
   name: 'ElColorPicker',
 
-  directives: { Clickoutside },
-
   components: {
-    PickerDropdown
+    ElPopover: Popover
   },
-
-  mixins: [Emitter],
 
   props: {
-    value: null,
-    showAlpha: Boolean,
-    colorFormat: String,
-    disabled: Boolean,
-    size: String,
-    popperClass: String,
-    predefine: Array
-  },
-
-  inject: {
-    elForm: {
-      default: ''
+    gradient: {
+      type: Boolean,
+      default: true
     },
-    elFormItem: {
+    value: {
+      type: String,
       default: ''
     }
   },
 
   data() {
-    const color = new Color({
-      enableAlpha: this.showAlpha,
-      format: this.colorFormat
-    })
-
     return {
-      color,
-      showPicker: false,
-      showPanelColor: false
+      pickr: null,
+      visible: false
     }
   },
-
-  computed: {
-    displayedColor() {
-      if (!this.value && !this.showPanelColor) {
-        return 'transparent'
-      }
-
-      return this.displayedRgb(this.color, this.showAlpha)
-    },
-
-    _elFormItemSize() {
-      return (this.elFormItem || {}).elFormItemSize
-    },
-
-    colorSize() {
-      return this.size || this._elFormItemSize || (this.$ELEMENT || {}).size
-    },
-
-    colorDisabled() {
-      return this.disabled || (this.elForm || {}).disabled
-    }
-  },
-
   watch: {
-    value(val) {
-      if (!val) {
-        this.showPanelColor = false
-      } else if (val && val !== this.color.value) {
-        this.color.fromString(val)
-      }
-    },
-    color: {
-      deep: true,
-      handler() {
-        this.showPanelColor = true
-      }
-    },
-    displayedColor(val) {
-      if (!this.showPicker) return
-      const currentValueColor = new Color({
-        enableAlpha: this.showAlpha,
-        format: this.colorFormat
-      })
-      currentValueColor.fromString(this.value)
+    visible(value) {
+      if (value && !this.pickr) {
+        if (this.gradient) {
+          this.pickr = new GPickr({
+            el: '.color-picker'
+          })
 
-      const currentValueColorRgb = this.displayedRgb(
-        currentValueColor,
-        this.showAlpha
-      )
-      if (val !== currentValueColorRgb) {
-        this.$emit('active-change', val)
-      }
-    }
-  },
+          this.pickr.setGradient(this.value)
 
-  mounted() {
-    const value = this.value
-    if (value) {
-      this.color.fromString(value)
-    }
-    this.popperElm = this.$refs.dropdown.$el
-  },
-
-  methods: {
-    handleTrigger() {
-      if (this.colorDisabled) return
-      this.showPicker = !this.showPicker
-    },
-    confirmValue() {
-      const value = this.color.value
-      this.$emit('input', value)
-      this.$emit('change', value)
-      this.dispatch('ElFormItem', 'el.form.change', value)
-      this.showPicker = false
-    },
-    clearValue() {
-      this.$emit('input', null)
-      this.$emit('change', null)
-      if (this.value !== null) {
-        this.dispatch('ElFormItem', 'el.form.change', null)
-      }
-      this.showPanelColor = false
-      this.showPicker = false
-      this.resetColor()
-    },
-    hide() {
-      this.showPicker = false
-      this.resetColor()
-    },
-    resetColor() {
-      this.$nextTick(_ => {
-        if (this.value) {
-          this.color.fromString(this.value)
+          this.pickr.on('change', pickr => {
+            this.$emit('input', pickr.getGradient())
+          })
         } else {
-          this.showPanelColor = false
-        }
-      })
-    },
-    displayedRgb(color, showAlpha) {
-      if (!(color instanceof Color)) {
-        throw Error('color should be instance of Color Class')
-      }
+          this.pickr = Pickr.create({
+            el: '.color-picker',
+            theme: 'classic', // or 'monolith', or 'nano'
+            default: '#42445a',
+            components: {
+              // Main components
+              preview: true,
+              opacity: true,
+              hue: true,
 
-      const { r, g, b } = color.toRgb()
-      return showAlpha
-        ? `rgba(${r}, ${g}, ${b}, ${color.get('alpha') / 100})`
-        : `rgb(${r}, ${g}, ${b})`
+              // Input / output Options
+              interaction: {
+                hex: true,
+                rgba: true,
+                hsla: true,
+                input: true,
+                clear: true,
+                save: true
+              }
+            }
+          })
+
+          this.pickr.on('change', pickr => {
+            this.$emit('input', pickr.getColor())
+          })
+        }
+      } else if (this.pickr) {
+        if (this.gradient) {
+          this.pickr._pickr.destroy()
+        } else {
+          this.pickr.destroy()
+        }
+      }
     }
   }
 }
