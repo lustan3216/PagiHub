@@ -155,7 +155,6 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
-    ...mapActions('layout', ['resizeNodeQuickFn']),
 
     finEditingPath() {
       const path = []
@@ -211,7 +210,6 @@ export default {
       else {
         this.LAYOUT_SET({ gridResizing: false })
         this.SET_SELECTED_COMPONENT_ID(this.id)
-        this.resizeNodeQuickFn()
         setTimeout(() => {
           const element = document.getElementById(`tree-node-${this.id}`)
           if (element) {

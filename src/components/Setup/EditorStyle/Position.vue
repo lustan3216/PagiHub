@@ -22,7 +22,7 @@
           value="fixedBottom"
         />
         <el-option
-          label="Stick to upper container"
+          label="Stick to top"
           value="verticalCompact"
         />
       </el-select>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { vmGet } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
@@ -56,13 +56,11 @@ export default {
       },
       set(value) {
         this.recordStyles({ position: value || undefined })
-        this.resizeNodeQuickFn()
       }
     }
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
-    ...mapActions('node', ['resizeNodeQuickFn']),
     recordStyles(object) {
       const records = []
 

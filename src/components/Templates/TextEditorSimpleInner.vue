@@ -350,7 +350,6 @@ export default {
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
-    ...mapActions('layout', ['resizeNodeQuickFn']),
     findFontNames(string) {
       if (typeof string === 'object') {
         string = JSON.stringify(string)
@@ -378,8 +377,6 @@ export default {
         path: `${this.id}.value`,
         value
       })
-
-      this.resizeNodeQuickFn()
     }
   }
 }

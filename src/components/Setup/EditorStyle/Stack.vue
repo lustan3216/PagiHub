@@ -44,14 +44,11 @@ export default {
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
-    ...mapActions('layout', ['resizeNodeQuickFn']),
     click() {
       this.RECORD({
         path: [this.lastId, STYLES, 'layout', 'stack'],
         value: this.isStack ? undefined : true
       })
-
-      this.resizeNodeQuickFn()
     }
   }
 }

@@ -675,7 +675,7 @@
               clientRect = event.target.getBoundingClientRect()
             }
             else if (this.lockInParent) {
-              parentRect = event.target.parentNode.getBoundingClientRect()
+              parentRect = this.getParent(event.target).getBoundingClientRect()
             }
 
             if (this.fixItem && clientRect.top + clientRect.height > parentRect.top + parentRect.height) {
@@ -752,7 +752,7 @@
             this.previousX = this.innerX
             this.previousY = this.innerY
 
-            parentRect = event.target.parentNode.getBoundingClientRect()
+            parentRect = this.getParent(event.target).getBoundingClientRect()
             clientRect = event.target.getBoundingClientRect()
 
             if (this.renderRtl) {
@@ -772,7 +772,7 @@
           }
           case 'dragend': {
             if (!this.isDragging) return
-            parentRect = event.target.parentNode.getBoundingClientRect()
+            parentRect = this.getParent(event.target).getBoundingClientRect()
             clientRect = event.target.getBoundingClientRect()
             //                        Add rtl support
             if (this.renderRtl) {
@@ -833,6 +833,10 @@
           this.$emit('moveStart', this.i, pos.x, pos.y)
         }
         this.eventBus.$emit('dragEvent', event.type, this.i, pos.x, pos.y, this.innerH, this.innerW)
+      },
+
+      getParent(element) {
+        return element.offsetParent || element.parentNode
       },
 
       calcPosition: function(x, y, w, h) {

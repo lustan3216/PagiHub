@@ -120,7 +120,6 @@ export default {
     this.$bus.$off('component-delete', this.renderTree)
   },
   methods: {
-    ...mapActions('layout', ['resizeNodeQuickFn']),
     ...mapMutations('app', [
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
       'TOGGLE_SELECTED_COMPONENT_ID'
@@ -162,7 +161,6 @@ export default {
       else {
         this.TOGGLE_SELECTED_COMPONENT_ID(id)
       }
-      this.resizeNodeQuickFn()
       this.scrollIntoView(id)
     },
     hoverNode(id) {

@@ -28,6 +28,7 @@ position fixed (might be a checkbox) // 如果是這個可能多出 top left
 
 ### Last
 
+component 都可以有自己的 style state
 a function to support client user can edit the draft
 upload svg, 看能不能 svgo filter, 不然以後沒有 svg 少了很多動畫可以做
 重疊時拖拉要 noaction 其他 conainer

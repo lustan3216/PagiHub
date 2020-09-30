@@ -66,8 +66,10 @@ store.watch(
 )
 
 store.watch(
-  state => state.node.editingProjectId,
-  newValue => {}
+  state => state.app.selectedComponentIds,
+  newValue => {
+    store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
+  }
 )
 
 export default store

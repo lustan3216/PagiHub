@@ -1,4 +1,4 @@
-import { SET } from '@/store'
+import store, { SET } from '@/store'
 import { CHILDREN, ID, PARENT_ID, SOFT_DELETE } from '@/const'
 import { deleteBy, findBy, toArray } from '@/utils/array'
 import Vue from 'vue'
@@ -24,10 +24,12 @@ const callbacks = {
   componentAddNew(node) {
     inheritMapUploader.add(node)
     this._vm.$bus.$emit('component-add-new', node)
+    store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   },
   componentDelete(node) {
     inheritMapUploader.remove(node)
     this._vm.$bus.$emit('component-delete', node)
+    store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   },
   componentUpdate(tree, key, value) {
     if (key === 'inheritance' && value) {
@@ -36,6 +38,7 @@ const callbacks = {
     else if (key === 'inheritance' && !value) {
       inheritMapUploader.unsetComponentSet(tree)
     }
+    store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   }
 }
 

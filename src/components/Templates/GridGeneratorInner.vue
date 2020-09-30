@@ -192,7 +192,8 @@ export default {
             fixed: styleLayout.position === 'fixed',
             fixedBottom: styleLayout.position === 'fixedBottom',
             verticalCompact: styleLayout.position === 'verticalCompact',
-            isDraggable: styleLayout.position !== 'fixedBottom'
+            isDraggable: styleLayout.position !== 'fixedBottom',
+            stack: styleLayout.stack
           })
         })
 
