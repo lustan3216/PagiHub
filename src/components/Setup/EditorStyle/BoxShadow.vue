@@ -76,7 +76,6 @@
             <el-col :span="3">
               <el-color-picker
                 :value="boxShadow.color"
-                show-alpha
                 @input="onChange(index, 'color', $event)"
               />
             </el-col>
@@ -133,19 +132,19 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import { VueDraggableDirective } from 'vue-draggable'
-import ColorPicker from '@/vendor/element-ui/color-picker'
+import ColorPicker from '@/components/Components/ColorPicker'
 import {
   parse,
   stringify
 } from '@/components/Setup/EditorStyle/utils/boxShadow'
-import { findIndexBy, arrayMove, deleteBy } from '../../../utils/array'
+import { findIndexBy, arrayMove, deleteBy } from '@/utils/array'
 import forNodeMixin from './mixins/forNode'
 
 export default {
-  name: 'BoxShadows',
+  name: 'BoxShadow',
   components: {
     SelectUnit,
-    ElColorPicker: ColorPicker
+    ColorPicker
   },
   mixins: [forNodeMixin('boxShadow')],
   directives: {

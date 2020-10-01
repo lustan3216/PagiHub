@@ -3,8 +3,7 @@
   <div
     v-if="isDraftMode && node"
     :class="{ 'h-100': !fitContainer, 'no-action': lock }"
-    @mousedown.stop="contextMenu = null"
-    @mouseup.stop="singleClick"
+    @mousedown.stop="singleClick"
     @dblclick.stop="dblclick"
     @contextmenu="contextmenu($event)"
   >
@@ -176,6 +175,7 @@ export default {
     },
 
     singleClick(event) {
+      this.contextMenu = null
       // don't change selected component ids when dragging item,
       // otherwise vue-resizable-handle will cause a bug here
 

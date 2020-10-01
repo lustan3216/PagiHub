@@ -71,28 +71,22 @@
             </button>
 
             <button class="menububble__button">
-              <span
-                :style="{ color }"
-                style="margin-left: 2px;margin-top: -2px;font-size: 16px;"
-              >A</span>
-              <color-picker
-                :value="color"
-                show-alpha
-                @change="color = $event"
-              />
+              <color-picker v-model="color">
+                <span
+                  :style="{ color }"
+                  style="margin-left: 2px;margin-top: -2px;font-size: 16px;"
+                >A</span>
+              </color-picker>
             </button>
 
             <button class="menububble__button">
-              <i
-                :style="{ color: backgroundColor }"
-                style="font-size: 14px;"
-                class="el-icon-s-opportunity"
-              />
-              <color-picker
-                :value="backgroundColor"
-                show-alpha
-                @change="backgroundColor = $event"
-              />
+              <color-picker v-model="backgroundColor">
+                <i
+                  :style="{ color: backgroundColor }"
+                  style="font-size: 14px;"
+                  class="el-icon-s-opportunity"
+                />
+              </color-picker>
             </button>
           </div>
 
@@ -183,11 +177,11 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
-import { arrayUniq } from '../../utils/array'
+import { mapState, mapMutations, mapGetters } from 'vuex'
+import { arrayUniq } from '@/utils/array'
 import { Popover } from 'element-ui'
 import WebFont from 'webfontloader'
-import ColorPicker from '@/vendor/element-ui/color-picker'
+import ColorPicker from '@/components/Components/ColorPicker'
 import { HTML, STYLES, TEXT_EDITOR } from '@/const'
 import { getNode } from '@/utils/node'
 import { asyncGetValue, getValueByPath } from '@/utils/tool'

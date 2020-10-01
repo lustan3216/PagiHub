@@ -2,7 +2,6 @@ import '../scss/_main.scss';
 
 import Pickr from '@simonwep/pickr';
 
-import interactjs   from 'interactjs';
 import buildGPickr   from './template';
 import simplifyEvent from './utils/simplifyEvent';
 import parseGradient from './utils/parseGradient';
@@ -46,13 +45,14 @@ class GPickr {
         init: [],
         change: []
     };
+    _defaultStops = [
+      ['#42445a', 0],
+      ['#20b6dd', 1]
+    ]
 
     constructor(opt) {
         opt = Object.assign({
-            stops: [
-                ['#42445a', 0],
-                ['#20b6dd', 1]
-            ]
+            stops: this._defaultStops
         }, opt);
 
         // Build dom
@@ -63,10 +63,10 @@ class GPickr {
             this._modes.push('conic');
         }
 
-        opt.el = opt.el.split(/>>/g).reduce((pv, cv, ci, a) => {
-            pv = pv.querySelector(cv);
-            return ci < a.length - 1 ? pv.shadowRoot : pv;
-        }, document);
+        // opt.el = opt.el.split(/>>/g).reduce((pv, cv, ci, a) => {
+        //     pv = pv.querySelector(cv);
+        //     return ci < a.length - 1 ? pv.shadowRoot : pv;
+        // }, document);
 
         opt.el.parentElement.replaceChild(this._root.root, opt.el);
 
@@ -100,18 +100,27 @@ class GPickr {
         }).on('init', () => {
 
             // Add pre-defined swatches
-            for (const [color, loc] of opt.stops) {
-                this.addStop(color, loc, true);
-            }
+           if (!this._stops.length) {
+             for (const [color, loc] of opt.stops) {
+               this.addStop(color, loc, true);
+             }
+           }
 
             this._bindEvents();
             this._emit('init', this);
         }).on('clear', instance => {
           if (this._stops.length > 2) {
             this.removeStop(this._focusedStop)
+          }
+          else {
+            this._stops.forEach(stop => {
+              this.removeStop(stop)
+            })
+
             this._render();
           }
         });
+
     }
 
     _bindEvents() {
@@ -123,7 +132,7 @@ class GPickr {
             this._mode = this._modes[nextIndex === this._modes.length ? 0 : nextIndex];
 
             // Repaint
-            this._render(true);
+            this._render();
 
             // Prevent some things
             e.stopPropagation();
@@ -179,7 +188,6 @@ class GPickr {
     }
 
     _render(silent = false) {
-        const _prevGradiant = this.getGradient()
         const {stops: {preview}, result, arrow, angle, pos, mode} = this._root.gradient;
         const {_stops, _mode, _angle} = this;
         _stops.sort((a, b) => a.loc - b.loc);
@@ -223,6 +231,13 @@ class GPickr {
         return loc;
     }
 
+    destroyAndRemove() {
+        this._pickr.destroyAndRemove()
+        this._stops.forEach(() => {
+          off(...stop.listener)
+        })
+    }
+
     /**
      * Adds a stop
      * @param color Stop color
@@ -251,11 +266,10 @@ class GPickr {
                 // Listen for mouse / touch movements
                 const m = on(document, ['mousemove', 'touchmove'], e => {
                     const {x, y} = simplifyEvent(e);
-                  console.log(y - markersbcr.y)
                     const rootDistance = Math.abs(y - markersbcr.y);
 
                     // Allow the user to remove the current stop with trying to drag the stop away
-                    hidden = rootDistance > 20 && this._stops.length > 2;
+                    hidden = rootDistance > 10 && this._stops.length > 2;
                     el.style.opacity = hidden ? '0' : '1';
 
                     if (!hidden) {
@@ -266,7 +280,6 @@ class GPickr {
 
                 // Clear up after interaction endet
                 const s = on(document, ['mouseup', 'touchend', 'touchcancel'], () => {
-                  console.log(2)
                     off(...m);
                     off(...s);
 
@@ -331,7 +344,6 @@ class GPickr {
         }
 
         const {type, stops, modifier} = parsed;
-      console.log(str, stops)
         const oldStops = [...this._stops];
         if (this._modes.includes(type)) {
             this._mode = type;
@@ -384,10 +396,18 @@ class GPickr {
      * @returns {{color: *, location: *}[]}
      */
     getStops() {
-        const stops = this._stops.map(v => ({
-            color: v.color,
-            location: v.loc
+        let stops
+      if (this._stops.length < 2) {
+        stops = this._defaultStops.map(x => ({
+          color: x[0],
+          location: x[1]
+        }))
+      } else {
+        stops = this._stops.map(v => ({
+          color: v.color,
+          location: v.loc
         }));
+      }
 
         const mode = this._mode;
         stops.toString = function (type = mode) {

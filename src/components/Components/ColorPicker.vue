@@ -1,34 +1,35 @@
 <template>
-  <div
-    v-if="gradient"
-    v-model="visible"
-    placement="left"
-    width="100%"
-    trigger="manual"
+  <el-popover
+    :width="gradient ? 395 : 420"
+    :placement="placement"
+    trigger="click"
     popper-class="p-0"
+    @after-enter="create"
   >
     <div
       ref="panel"
       class="color-picker"
     />
-    <el-button
-      slot="reference"
-      type="primary"
-      @click="visible = !visible"
-    />
-  </div>
+
+    <div slot="reference" class="pointer">
+      <slot>
+        <div class="wrapper">
+          <span class="button">
+            <div :style="buttonStyle" class="inner"/>
+          </span>
+        </div>
+      </slot>
+    </div>
+  </el-popover>
 </template>
 
 <script>
-/* eslint-disable */
 import { Popover } from 'element-ui'
-import '@simonwep/pickr/dist/themes/classic.min.css' // 'classic' theme
 import GPickr from '@/vendor/gpickr/js/gpickr'
-// Modern or es5 bundle (pay attention to the note below!)
 import Pickr from '@simonwep/pickr'
-
+import '@simonwep/pickr/dist/themes/classic.min.css'
 export default {
-  name: 'ElColorPicker',
+  name: 'ColorPicker',
 
   components: {
     ElPopover: Popover
@@ -37,68 +38,124 @@ export default {
   props: {
     gradient: {
       type: Boolean,
-      default: true
+      default: false
     },
     value: {
       type: String,
       default: ''
+    },
+    placement: {
+      type: String,
+      default: 'left-end'
     }
   },
 
   data() {
     return {
       pickr: null,
-      visible: false
+      visible: false,
+      key: 0
     }
   },
-  watch: {
-    visible(value) {
-      if (value && !this.pickr) {
-        if (this.gradient) {
-          this.pickr = new GPickr({
-            el: '.color-picker'
-          })
+  computed: {
+    buttonStyle() {
+      if (this.gradient) {
+        return { backgroundImage: this.value }
+      }
+      else {
+        return { backgroundColor: this.value }
+      }
+    }
+  },
+  methods: {
+    create() {
+      if (this.pickr) {
+        return
+      }
 
-          this.pickr.setGradient(this.value)
+      if (this.gradient) {
+        this.pickr = new GPickr({
+          el: this.$refs.panel
+        })
 
-          this.pickr.on('change', pickr => {
+        this.pickr.setGradient(this.value)
+
+        this.pickr.on('change', pickr => {
+          if (pickr._stops.length < 2) {
+            this.$emit('input', '')
+          }
+          else {
             this.$emit('input', pickr.getGradient())
-          })
-        } else {
-          this.pickr = Pickr.create({
-            el: '.color-picker',
-            theme: 'classic', // or 'monolith', or 'nano'
-            default: '#42445a',
-            components: {
-              // Main components
-              preview: true,
-              opacity: true,
-              hue: true,
+          }
+        })
+      }
+      else {
+        this.pickr = Pickr.create({
+          el: this.$refs.panel,
+          theme: 'classic', // or 'monolith', or 'nano'
+          default: '#42445a',
+          inline: true,
+          useAsButton: true,
+          showAlways: true,
+          components: {
+            // Main components
+            preview: true,
+            opacity: true,
+            hue: true,
 
-              // Input / output Options
-              interaction: {
-                hex: true,
-                rgba: true,
-                hsla: true,
-                input: true,
-                clear: true,
-                save: true
-              }
+            // Input / output Options
+            interaction: {
+              hex: true,
+              rgba: true,
+              hsla: true,
+              input: true,
+              clear: true
             }
-          })
+          }
+        }).on('change', pickr => {
+          this.$emit('input', pickr.toHEXA().toString())
+        }).on('clear', pickr => {
+          this.$emit('input', '')
+        })
 
-          this.pickr.on('change', pickr => {
-            this.$emit('input', pickr.getColor())
-          })
-        }
-      } else if (this.pickr) {
-        if (this.gradient) {
-          this.pickr._pickr.destroy()
-        } else {
-          this.pickr.destroy()
-        }
+        this.pickr.setColor(this.value)
       }
     }
   }
 }
 </script>
+
+<style scoped>
+ .button {
+   background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+   position: relative;
+   display: block;
+   box-sizing: border-box;
+   border: 1px solid #999;
+   border-radius: 2px;
+   width: 100%;
+   height: 100%;
+   text-align: center;
+   cursor: pointer;
+ }
+ .wrapper {
+   height: 28px;
+   width: 28px;
+   display: inline-block;
+   box-sizing: border-box;
+   padding: 4px;
+   border: 1px solid #e6e6e6;
+   border-radius: 4px;
+   font-size: 0;
+   position: relative;
+   cursor: pointer;
+ }
+ .inner {
+   position: absolute;
+   left: 0;
+   top: 0;
+   right: 0;
+   bottom: 0;
+ }
+</style>
+

@@ -22,9 +22,8 @@
     </el-col>
 
     <el-col :span="3">
-      <el-color-picker
+      <color-picker
         :value="innerValue[2]"
-        show-alpha
         style="margin-top: 1px;"
         @input="emit({ color: $event })"
       />
@@ -33,7 +32,7 @@
 </template>
 
 <script>
-import ColorPicker from '@/vendor/element-ui/color-picker'
+import ColorPicker from '@/components/Components/ColorPicker'
 import { capitalize } from '@/utils/string'
 import SelectUnit from '@/components/Components/SelectUnit'
 
@@ -80,7 +79,7 @@ export default {
   components: {
     SelectUnit,
     StyleSelect,
-    ElColorPicker: ColorPicker
+    ColorPicker
   },
   props: {
     value: {
