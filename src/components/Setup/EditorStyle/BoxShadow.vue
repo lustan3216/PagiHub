@@ -74,7 +74,7 @@
               />
             </el-col>
             <el-col :span="3">
-              <el-color-picker
+              <color-picker
                 :value="boxShadow.color"
                 @input="onChange(index, 'color', $event)"
               />

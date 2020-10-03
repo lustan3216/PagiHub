@@ -60,16 +60,18 @@ export function cloneLayoutItem(layoutItem: LayoutItem): LayoutItem {
  * @return {Boolean}   True if colliding.
  */
 export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
-  const fix1 = l1.fixed || l1.fixedBottom
-  const fix2 = l2.fixed || l2.fixedBottom
+  if (l1.stack && l2.stack) {
+    const fix1 = l1.fixed || l1.fixedBottom
+    const fix2 = l2.fixed || l2.fixedBottom
 
-  if (l1.stack && l2.stack && ((fix1 && fix2) || (!fix1 && !fix2))) {
-    if (l1 === l2) return false; // same element
-    if (l1.x + l1.w <= l2.x) return false; // l1 is left of l2
-    if (l1.x >= l2.x + l2.w) return false; // l1 is right of l2
-    if (l1.y + l1.h <= l2.y) return false; // l1 is above l2
-    if (l1.y >= l2.y + l2.h) return false; // l1 is below l2
-    return true; // boxes overlap
+    if ((fix1 && fix2) || (!fix1 && !fix2)) {
+      if (l1 === l2) return false; // same element
+      if (l1.x + l1.w <= l2.x) return false; // l1 is left of l2
+      if (l1.x >= l2.x + l2.w) return false; // l1 is right of l2
+      if (l1.y + l1.h <= l2.y) return false; // l1 is above l2
+      if (l1.y >= l2.y + l2.h) return false; // l1 is below l2
+      return true; // boxes overlap
+    }
   }
 }
 
