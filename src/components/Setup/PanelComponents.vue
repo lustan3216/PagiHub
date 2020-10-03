@@ -18,6 +18,7 @@
           class="relative w-100 over-hidden align-center"
           style="margin-left: -6px;"
           @mouseenter.stop="hoverNode(data.id)"
+          @mouseleave.stop="hoverLeaveNode(data.id)"
         >
           <div class="m-l-5">
             <b-icon-fonts class="gray-font" v-if="data.tag === 'text-editor'"/>
