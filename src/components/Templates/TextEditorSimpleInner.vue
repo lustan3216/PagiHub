@@ -170,6 +170,7 @@
         :is="tag || 'div'"
         contenteditable="true"
         @input="onInput"
+        @keydown.delete.stop
       >
         {{ text }}
       </component>

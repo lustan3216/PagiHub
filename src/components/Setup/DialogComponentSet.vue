@@ -91,7 +91,7 @@
         </el-row>
       </el-form>
 
-      <tip-page />
+      <tip-page v-if="!node || !node.version"/>
     </dialog-confirmable>
   </el-button>
 </template>

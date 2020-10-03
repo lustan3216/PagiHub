@@ -28,7 +28,12 @@
       <i class="el-icon-medal" />
     </template>
 
-    <span> {{ nodeShortName }}{{ shortId }} </span>
+    <template v-if="textShowContent && isTextEditor">
+      <span> {{ node.value ? node.value.slice(0, 15) : 'TextEditor' }}{{ shortId }} </span>
+    </template>
+    <template v-else>
+      <span> {{ nodeShortName }}{{ shortId }} </span>
+    </template>
 
     <slot />
   </el-button>
@@ -37,14 +42,13 @@
 <script>
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import { shortTagName, getNode } from '@/utils/node'
+import { shortTagName, getNode, isTextEditor } from '@/utils/node'
 import { LABEL } from '@/const'
 import {
   isMasterParent,
   isInstanceParent,
   isInstance
 } from '@/utils/inheritance'
-
 const observable = Vue.observable({ editingId: null })
 
 export default {
@@ -63,6 +67,10 @@ export default {
       default: ''
     },
     editable: {
+      type: Boolean,
+      default: false
+    },
+    textShowContent: {
       type: Boolean,
       default: false
     },
@@ -92,6 +100,9 @@ export default {
     },
     isInstance() {
       return isInstance(this.node)
+    },
+    isTextEditor() {
+      return isTextEditor(this.node)
     },
     nodeShortName() {
       return shortTagName(this.node)

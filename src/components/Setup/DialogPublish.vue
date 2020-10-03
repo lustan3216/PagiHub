@@ -1,10 +1,11 @@
 <template>
   <el-button
     :disabled="!editingComponentSetId"
-    icon="el-icon-upload"
     type="text"
     @click.stop="visible = !visible"
   >
+    <b-icon-cloud-upload/>
+
     <dialog-confirmable
       :loading="loading"
       :visible.sync="visible"
@@ -44,13 +45,15 @@
 import { mapActions, mapState } from 'vuex'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import TextEditorRich from '@/components/Components/TextEditorRich'
+import { BIconCloudUpload } from 'bootstrap-vue'
 import { Message } from 'element-ui'
 
 export default {
   name: 'DialogPublish',
   components: {
     DialogConfirmable,
-    TextEditorRich
+    TextEditorRich,
+    BIconCloudUpload
   },
   data() {
     return {

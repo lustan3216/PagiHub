@@ -14,18 +14,29 @@
         <div
           v-if="data && data.id"
           :id="`tree-node-${data.id}`"
-          class="relative w-100 over-hidden"
+          :class="{ active: selectedComponentIds.includes(data.id) }"
+          class="relative w-100 over-hidden align-center"
           style="margin-left: -6px;"
           @mouseenter.stop="hoverNode(data.id)"
-          @mouseleave.stop="hoverLeaveNode(data.id)"
         >
+          <div class="m-l-5">
+            <b-icon-fonts class="gray-font" v-if="data.tag === 'text-editor'"/>
+            <b-icon-image class="gray-font" v-if="data.tag === 'flex-image'"/>
+            <b-icon-aspect-ratio class="gray-font" v-if="data.tag === 'grid-generator-item'"/>
+            <b-icon-columns class="gray-font" v-if="data.tag === 'grid-generator'"/>
+            <b-icon-camera-video class="gray-font" v-if="data.tag === 'video-player'"/>
+            <b-icon-calendar3-event class="gray-font" v-if="data.tag === 'iframer'"/>
+            <b-icon-layout-sidebar-inset-reverse class="gray-font" v-if="data.tag === 'carousel'"/>
+            <b-icon-link class="gray-font" v-if="data.tag === 'flex-button'"/>
+          </div>
+
           <hidden :id="data.id" />
 
           <component-name
             :id="data.id"
-            :class="{ active: selectedComponentIds.includes(data.id) }"
             class="text-left"
             editable
+            text-show-content
             @click="nodeClick($event, data.id)"
           />
 
@@ -61,7 +72,7 @@
 <script>
 import Tree from '@/vendor/element-ui/tree'
 import { SOFT_DELETE } from '@/const'
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import ComponentController from '../TemplateUtils/ComponentController'
 import ComponentName from '../TemplateUtils/ComponentName'
@@ -69,6 +80,7 @@ import Touchable from '../TemplateUtils/Lock'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
 import { traversalSelfAndChildren } from '@/utils/node'
+import { BIconFonts, BIconImage, BIconAspectRatio, BIconColumns, BIconCameraVideo, BIconCalendar3Event, BIconLayoutSidebarInsetReverse, BIconLink } from 'bootstrap-vue'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -80,7 +92,8 @@ export default {
     ComponentName,
     Touchable,
     Visible,
-    Hidden
+    Hidden,
+    BIconFonts, BIconImage, BIconAspectRatio, BIconColumns, BIconCameraVideo, BIconCalendar3Event, BIconLayoutSidebarInsetReverse, BIconLink
   },
   data() {
     return {
@@ -150,9 +163,9 @@ export default {
       const sameLayer = drag.parent === drop.parent
       return sameLayer && ['prev', 'next'].includes(action)
     },
-    filterTagBySearching(value, { label, tag }) {
-      value = value.toLowerCase().toString()
-      return (label || tag).toLowerCase().indexOf(value) !== -1
+    filterTagBySearching(serachText, { label, tag, value }) {
+      serachText = serachText.toLowerCase().toString()
+      return `${label}${tag}${value}`.toLowerCase().indexOf(serachText) !== -1
     },
     nodeClick(event, id) {
       if (event.metaKey || event.ctrlKey) {
@@ -194,9 +207,7 @@ export default {
   text-align: right;
   padding: 0 5px;
 }
-.hover-color {
-  background: #f5f7fa;
-}
+
 .active {
   background: #f0f7ff;
 }
@@ -208,6 +219,9 @@ export default {
 ::v-deep {
   .el-tree-node__content {
     height: 30px;
+  }
+  .el-tree-node__content:hover > * > .controller{
+    background: #f5f7fa;
   }
   /*.el-tree-node__expand-icon {*/
   /*  padding-right: 0;*/

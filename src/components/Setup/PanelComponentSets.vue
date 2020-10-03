@@ -14,12 +14,19 @@
         v-for="componentSet in componentSets"
         v-if="componentSet && componentSet.id"
         :key="componentSet.id"
-        :class="{ selected: hoverId === componentSet.id }"
-        class="relative w-100 over-hidden border-box"
-        style="transition: all 0.3s; padding-left: 15px;"
+        :class="{
+          selected: hoverId === componentSet.id,
+          active: editingComponentSetId === componentSet.id
+        }"
+        class="relative w-100 over-hidden border-box flex-center"
+        style="transition: all 0.3s;"
         @click="nodeClick($event, componentSet)"
         @mouseenter="hoverId = componentSet.id"
       >
+        <div style="width: 18px;">
+          <b-icon-cloud-upload v-if="componentSet.version" class="gray-font font-13"/>
+        </div>
+
         <component-name
           :id="componentSet.id"
           class="w-100 text-left"
@@ -54,7 +61,7 @@ import ComponentName from '../TemplateUtils/ComponentName'
 import DialogComponentSet from '@/components/Setup/DialogComponentSet'
 import { cloneJsonWithoutChildren, getNode } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
-import localforage from 'localforage'
+import { BIconCloudUpload } from 'bootstrap-vue'
 
 export default {
   name: 'PanelComponentSets',
@@ -64,7 +71,8 @@ export default {
     DialogProject,
     PanelComponentSets,
     DialogDelete,
-    ComponentName
+    ComponentName,
+    BIconCloudUpload
   },
   data() {
     return {
@@ -72,7 +80,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('node', ['projectIds', 'editingProjectId']),
+    ...mapState('node', ['projectIds', 'editingProjectId', 'editingComponentSetId']),
     ...mapGetters('node', ['projectNodes']),
     componentSets() {
       const project = getNode(this.editingProjectId)
@@ -114,6 +122,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.active {
+  background: #f0f7ff;
+}
 .selected {
   background: #f5f7fa;
   border-radius: 3px;
