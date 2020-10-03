@@ -75,7 +75,7 @@
         >
           <i class="el-icon-refresh-left" />
           <span
-            class="grey-font font-12"
+            class="gray-font font-12"
             style="width: 75px; display: inline-block;"
           >
             {{ artBoardWidth }} x {{ artBoardHeight }}
@@ -89,9 +89,9 @@
               @click.native="setSize({ w: option.w, h: option.h })"
             >
               <div class="justify-between">
-                <span class="grey-font">{{ option.name }}</span>
+                <span class="gray-font">{{ option.name }}</span>
                 <span
-                  class="m-l-15 grey-font"
+                  class="m-l-15 gray-font"
                 >{{ option.w }} X {{ option.h }}</span>
               </div>
             </el-dropdown-item>

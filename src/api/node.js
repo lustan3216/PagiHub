@@ -81,11 +81,12 @@ export function patchComponentSet({
   label,
   description,
   tags,
+  isPrivate,
   breakpointsMap
 }) {
   if (id) {
     return API.patch('staging', `/component-sets/${id}`, {
-      body: { label, description, tags, breakpointsMap }
+      body: { label, description, tags, breakpointsMap, isPrivate }
     })
   }
 }
@@ -97,7 +98,7 @@ export function createComponentSet({
   children,
   parentId,
   projectLabel,
-  breakpointsMap
+  breakpointsMap, isPrivate
 }) {
   return API.post('staging', `/component-sets`, {
     body: {
@@ -106,6 +107,7 @@ export function createComponentSet({
       label,
       tags,
       projectLabel,
+      isPrivate,
       children: toArray(children),
       breakpointsMap
     }

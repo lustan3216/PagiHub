@@ -41,7 +41,8 @@
               publish.
             </p>
             <a
-              class="link font-13"
+              :class="[node && node.version ? 'link' : 'gray-font']"
+              class="font-13"
             >https://lots.design/{{ username || 'username' }}/{{
               project && project.label
             }}/{{ form.label || 'page-name' }}</a>
@@ -55,6 +56,18 @@
                 v-model="form.tags"
                 class="w-100"
               />
+            </el-form-item>
+
+            <el-form-item
+              label="Is private"
+              prop="isPrivate"
+              class="m-t-20"
+            >
+              <el-checkbox v-model="form.isPrivate" />
+
+              <span>
+                Make url private and unsharable
+              </span>
             </el-form-item>
           </el-col>
 
@@ -119,27 +132,35 @@ export default {
     }
   },
   data() {
-    const { nodesMap } = this.$store.state.node
-
-    const node = nodesMap[this.id]
-
     return {
       loading: false,
       visible: false,
       dirty: false,
       form: {
-        label: node ? node.label : '',
-        description: node ? node.description : '',
-        tags: node ? node.tags : []
+        label: '',
+        description: '',
+        tags: [],
+        isPrivate: false
       },
       rules: {
         label
       }
     }
   },
+  created() {
+    if (this.node) {
+      this.form.label = this.node.label
+      this.form.description = this.node.description
+      this.form.tags = this.node.tags
+      this.form.isPrivate = this.node.isPrivate
+    }
+  },
   computed: {
     ...mapState('node', ['editingProjectId']),
     ...mapState('user', ['userId', 'username']),
+    node() {
+      return this.nodesMap[this.id]
+    },
     project() {
       return getNode(this.editingProjectId)
     },
