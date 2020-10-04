@@ -1,24 +1,16 @@
 import { Amplify, Auth } from 'aws-amplify'
 import awsconfig from '@/aws-exports'
 
-let url
-if (process.env.NODE_ENV === 'production') {
-  url = 'https://staging.lots.design/'
-}
-else {
-  url = 'https://localhost:8080/'
-}
-
-awsconfig.oauth.redirectSignIn = url + 'dashboard/'
-awsconfig.oauth.redirectSignOut = url
+awsconfig.oauth.redirectSignIn = process.env.VUE_APP_REDIRECT_SIGN_IN
+awsconfig.oauth.redirectSignOut = process.env.VUE_APP_REDIRECT_SIGN_OUT
 
 Amplify.configure({
   ...awsconfig,
   API: {
     endpoints: [
       {
-        name: 'staging',
-        endpoint: 'https://staging-api.lots.design',
+        name: 'jwt',
+        endpoint: process.env.VUE_APP_API_ENDPOINT,
         custom_header: async() => {
           const session = await Auth.currentSession()
           return {

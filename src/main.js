@@ -13,6 +13,8 @@ import PortalVue from 'portal-vue'
 import formCreate from '@form-create/element-ui'
 import vmMap from '@/utils/vmMap'
 import jsonHistory from '@/store/jsonHistory'
+import Rollbar from 'rollbar'
+
 jsonHistory.tree = store.state.node.nodesMap
 
 import vhCheck from 'vh-check'
@@ -30,7 +32,7 @@ Vue.mixin({
     isDraftMode: () => store.getters['mode/isDraftMode'],
     nodesMap: () => store.state.node.nodesMap,
     vmMap: () => vmMap,
-    assetHost: () => 'https://staging-asset.lots.design/'
+    assetHost: () => process.env.VUE_APP_ASSET_HOST
   }
 })
 
@@ -80,6 +82,25 @@ if (process.env.NODE_ENV !== 'production') {
   Vue.config.devtools = true
 }
 
+if (process.env.NODE_ENV !== 'development') {
+  Vue.prototype.$rollbar = new Rollbar({
+    accessToken: process.env.VUE_APP_ROLLBAR_KEY,
+    captureUncaught: true,
+    captureUnhandledRejections: true,
+    enabled: true,
+    source_map_enabled: process.env.NODE_ENV === 'staging',
+    environment: location.host,
+    payload: {
+      environment: process.env.NODE_ENV
+    }
+  })
+
+  Vue.config.errorHandler = (err, vm, info) => {
+    vm.$rollbar.error(err)
+    throw err
+  }
+}
+
 Vue.use(Divider)
 Vue.use(Tooltip)
 Vue.use(Dialog)
@@ -107,6 +128,8 @@ Vue.use(Loading.directive)
 
 Vue.prototype.$ELEMENT = { size: 'mini' }
 Vue.prototype.$loading = Loading.service
+
+
 
 const app = new Vue({
   render: h => h(App),

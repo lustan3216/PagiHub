@@ -1,8 +1,9 @@
 const path = require('path')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
-
-// const isDev = process.env.NODE_ENV === 'development'
-// const isProd = process.env.NODE_ENV === 'production'
+const isDev = process.env.NODE_ENV === 'development'
+const isTest = process.env.NODE_ENV === 'test'
+const isStaging = process.env.NODE_ENV === 'staging'
+const isProd = process.env.NODE_ENV === 'production'
 const fs = require('fs')
 
 module.exports = {
@@ -36,18 +37,26 @@ module.exports = {
       .set('images', path.resolve(__dirname, 'src/assets/images'))
       .set('svgs', path.resolve(__dirname, 'src/assets/svgs'))
 
-    config.resolve.alias.set(
-      'shared/util',
-      path.resolve(__dirname, 'node_modules/vue/src/shared/util')
-    )
-    config.resolve.alias.set(
-      'web/util/style',
-      path.resolve(__dirname, 'node_modules/vue/src/platforms/web/util/style')
-    )
-
     config.resolve.alias.set('@', path.resolve(__dirname, 'src'))
 
-    config.plugin('cache').use(HardSourceWebpackPlugin)
+    config.mode(isDev ? 'development' : 'production')
+    config.plugins.delete('preload') // TODO: need test
+    config.plugins.delete('prefetch') // TODO: need test
+    config
+      .when(!isProd,
+        config => {
+          config.plugin('cache').use(HardSourceWebpackPlugin)
+        }
+      )
+
+    config
+      .when((isProd || isStaging),
+        config => {
+          config.devtool(isProd ? 'hidden-source-map' : 'source-map')
+          config.plugins.delete('hmr')
+          config.output.filename('[name].[contenthash:8].js')
+        }
+      )
 
     config.module
       .rule('vue')
@@ -77,9 +86,9 @@ module.exports = {
       awsProfile: 'northeast-2',
       overrideEndpoint: false,
       region: 'ap-northeast-2',
-      bucket: 'lots.design',
+      bucket: isProd ? 'lots.design' : 'staging.lots.design',
       createBucket: true,
-      staticHosting: true,
+      staticHosting: false,
       staticIndexPage: 'index.html',
       staticErrorPage: 'index.html',
       assetPath: 'dist',
@@ -88,7 +97,7 @@ module.exports = {
       acl: 'public-read',
       pwa: false,
       enableCloudfront: true,
-      cloudfrontId: 'EVKEO76ZHMB01',
+      cloudfrontId: isProd ? 'ESPDCBGELU41H' : 'EVKEO76ZHMB01',
       pluginVersion: '4.0.0-rc3',
       uploadConcurrency: 10,
       gzip: true

@@ -6,7 +6,7 @@ const CancelToken = axios.CancelToken
 const source = CancelToken.source()
 
 export function getAssets({ projectId }) {
-  return API.get('staging', `/projects/${projectId}/asset`, {})
+  return API.get('jwt', `/projects/${projectId}/asset`, {})
 }
 
 export function postAsset(
@@ -69,5 +69,5 @@ export function postAsset(
 }
 
 export function deleteAsset({ id }) {
-  return API.del('staging', `/assets/${id}`, {})
+  return API.del('jwt', `/assets/${id}`, {})
 }

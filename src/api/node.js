@@ -4,32 +4,32 @@ import { queryString } from '@/utils/url'
 import { API } from 'aws-amplify'
 
 export function getProjects() {
-  return API.get('staging', '/projects', {})
+  return API.get('jwt', '/projects', {})
 }
 
 export function getProject({ id }) {
-  return API.get('staging', `/projects/${id}`, {})
+  return API.get('jwt', `/projects/${id}`, {})
 }
 
 export function createProject({ label, description, tags }) {
-  return API.post('staging', `/projects`, {
+  return API.post('jwt', `/projects`, {
     body: { label, description, tags }
   })
 }
 
 export function patchProject({ id, label, description, tags, inheritMap }) {
-  return API.patch('staging', `/projects/${id}`, {
+  return API.patch('jwt', `/projects/${id}`, {
     body: { label, description, tags, inheritMap }
   })
 }
 
 export function deleteProject({ id }) {
-  return API.del('staging', `/projects/${id}`, {})
+  return API.del('jwt', `/projects/${id}`, {})
 }
 
 export function getComponentSets({ parentId }) {
   const _queryString = queryString({ parentId })
-  return API.get('staging', `/component-sets?${_queryString}`, {})
+  return API.get('jwt', `/component-sets?${_queryString}`, {})
 }
 
 export function searchComponentSets({
@@ -48,26 +48,26 @@ export function searchComponentSets({
     except: toArray(except),
     isPublic
   })
-  return API.get('staging', `/component-sets/search?${_queryString}`, {})
+  return API.get('jwt', `/component-sets/search?${_queryString}`, {})
 }
 
 export function getComponentSetChildren({ id }) {
-  return API.get('staging', `/component-sets/${id}/children`, {})
+  return API.get('jwt', `/component-sets/${id}/children`, {})
 }
 
 export function getComponentSetPublicChildren({ userLabel, projectLabel, componentSetLabel }) {
   const _queryString = queryString({ userLabel, projectLabel, componentSetLabel })
-  return API.get('staging', `/public?${_queryString}`, {})
+  return API.get('jwt', `/public?${_queryString}`, {})
 }
 
 export function publishComponentSet({ id, tree, description }) {
-  return API.post('staging', `/component-sets/${id}/publish`, {
+  return API.post('jwt', `/component-sets/${id}/publish`, {
     body: { tree, description }
   })
 }
 
 export function deleteComponentSet({ id }) {
-  return API.del('staging', `/component-sets/${id}`, {})
+  return API.del('jwt', `/component-sets/${id}`, {})
 }
 
 export function patchComponentSetChildren({
@@ -76,7 +76,7 @@ export function patchComponentSetChildren({
   action,
   tree
 }) {
-  return API.patch('staging', `/component-sets/${componentSetId}/children`, {
+  return API.patch('jwt', `/component-sets/${componentSetId}/children`, {
     body: { deltas, action, tree }
   })
 }
@@ -90,7 +90,7 @@ export function patchComponentSet({
   breakpointsMap
 }) {
   if (id) {
-    return API.patch('staging', `/component-sets/${id}`, {
+    return API.patch('jwt', `/component-sets/${id}`, {
       body: { label, description, tags, breakpointsMap, isPrivate }
     })
   }
@@ -105,7 +105,7 @@ export function createComponentSet({
   projectLabel,
   breakpointsMap, isPrivate
 }) {
-  return API.post('staging', `/component-sets`, {
+  return API.post('jwt', `/component-sets`, {
     body: {
       parentId,
       description,

@@ -14,5 +14,5 @@ export function getTags({ query, size }) {
     return array
   }, []).join('&')
 
-  return API.get('staging', `/tags?${paramsString}`, {})
+  return API.get('jwt', `/tags?${paramsString}`, {})
 }

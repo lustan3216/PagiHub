@@ -2,16 +2,16 @@ import { API } from 'aws-amplify'
 import { queryString } from '@/utils/url'
 
 export function getCurrentUser() {
-  return API.get('staging', '/users/me', {})
+  return API.get('jwt', '/users/me', {})
 }
 
 export function patchCurrentUser(data) {
-  return API.patch('staging', '/users/me', {
+  return API.patch('jwt', '/users/me', {
     body: data
   })
 }
 
 export function usernameCheck({ username }) {
   const _queryString = queryString({ username })
-  return API.get('staging', `/username-check?${_queryString}`, {})
+  return API.get('jwt', `/username-check?${_queryString}`, {})
 }
