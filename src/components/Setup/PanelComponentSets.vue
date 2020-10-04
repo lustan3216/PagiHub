@@ -23,8 +23,8 @@
         @click="nodeClick($event, componentSet)"
         @mouseenter="hoverId = componentSet.id"
       >
-        <div style="width: 18px;">
-          <b-icon-cloud-upload v-if="componentSet.version" class="gray-font font-13"/>
+        <div class="upload-icon">
+          <b-icon-cloud-upload v-if="componentSet.version" class="gray-font-2 font-13"/>
         </div>
 
         <component-name
@@ -152,5 +152,9 @@ export default {
   background: #f5f7fa;
   padding: 0 5px;
   height: 26px;
+}
+.upload-icon {
+  width: 23px;
+  text-align: center;
 }
 </style>

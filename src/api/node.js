@@ -55,6 +55,11 @@ export function getComponentSetChildren({ id }) {
   return API.get('staging', `/component-sets/${id}/children`, {})
 }
 
+export function getComponentSetPublicChildren({ userLabel, projectLabel, componentSetLabel }) {
+  const _queryString = queryString({ userLabel, projectLabel, componentSetLabel })
+  return API.get('staging', `/public?${_queryString}`, {})
+}
+
 export function publishComponentSet({ id, tree, description }) {
   return API.post('staging', `/component-sets/${id}/publish`, {
     body: { tree, description }

@@ -44,7 +44,7 @@ export default {
       return this.$route.path.indexOf('/dashboard') === 0
     },
     needNavBar() {
-      return !this.inDashboard && !this.isPreviewMode
+      return !this.inDashboard && !this.isPreviewMode && !this.isProductionMode
     }
   },
   created() {

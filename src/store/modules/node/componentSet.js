@@ -4,8 +4,7 @@ import {
   getComponentSetChildren,
   patchComponentSet,
   publishComponentSet,
-  getComponentSets,
-  getProject
+  getComponentSets
 } from '@/api/node'
 
 import jsonHistory from '@/store/jsonHistory'

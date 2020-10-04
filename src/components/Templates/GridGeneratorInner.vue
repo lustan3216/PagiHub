@@ -93,7 +93,8 @@ export default {
     ...mapGetters('layout', [
       'currentBreakpoint',
       'breakpoints',
-      'breakpointsMap'
+      'breakpointsMap',
+      'vh'
     ]),
     rootLayout() {
       return isComponentSet(this.node.parentNode)
@@ -115,7 +116,6 @@ export default {
       return this.responsiveLayouts[this.currentBreakPoint]
     },
     computedLayouts() {
-      const { artBoardHeight } = this
       const layouts = {}
       let prevLayout
 
@@ -163,7 +163,7 @@ export default {
 
             if (!autoHeight) {
               if (currentGrid.unitH === 'vh') {
-                h = (artBoardHeight / 100) * parseInt(h)
+                h = (this.vh / 100) * parseInt(h)
               }
               else {
                 h = parseInt(h)
@@ -244,7 +244,7 @@ export default {
         let h = child.h
 
         if (child.unitH === 'vh') {
-          h = h / (this.artBoardHeight / 100)
+          h = h / (this.vh / 100)
         }
 
         if (process.env.NODE_ENV !== 'production' && child.w === 1) {

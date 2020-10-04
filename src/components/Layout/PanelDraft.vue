@@ -52,6 +52,7 @@ export default {
     ...mapState('node', ['editingProjectId', 'editingComponentSetId'])
   },
   async created() {
+    this.SET_DRAFT_MODE()
     const projectId = await localforage.getItem('currentProjectId')
 
     if (projectId) {
@@ -82,6 +83,7 @@ export default {
   methods: {
     ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    ...mapMutations('mode', ['SET_DRAFT_MODE']),
     ...mapActions('example', ['initExamples']),
     ...mapActions('layout', ['resizeNodeQuickFn'])
   }

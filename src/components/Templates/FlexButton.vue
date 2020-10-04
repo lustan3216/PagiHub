@@ -86,6 +86,9 @@ export default {
         if (this.innerProps.newTab) {
           window.open(this.link, '_blank')
         }
+        else if (this.link.indexOf('/') === 0) {
+          this.$router.push(this.link)
+        }
         else {
           window.location.href = this.link
         }

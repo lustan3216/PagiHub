@@ -1,54 +1,35 @@
 <template>
-  <view-port class="view-port interact-view">
-    <art-board />
-  </view-port>
+  <art-board
+    v-if="editingComponentSetId"
+    :id="editingComponentSetId"
+  />
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import ViewPort from './ViewPort'
+import { mapActions, mapState, mapMutations } from 'vuex'
 import ArtBoard from './ArtBoard'
-import ComponentSet from '../Templates/ComponentSet'
+import localforage from 'localforage'
 
 export default {
-  name: 'PanelDraft',
+  name: 'PanelProduction',
   components: {
-    ArtBoard,
-    ViewPort,
-    ComponentSet,
-    PanelDraft: () => import('@/components/Layout/PanelDraft')
+    ArtBoard
   },
-  created() {
-    // if (this.$route.params.projectId) {
-    //   this.getProject(this.$route.params.projectId).then(project => {
-    //     if (project) {
-    //       this.getAssets()
-    //       this.initExamples()
-    //     }
-    //     else {
-    //       this.$router.push('/projects')
-    //     }
-    //   })
-    // }
+  async created() {
   },
   methods: {
+    ...mapActions('layout', [''])
   }
 }
 </script>
 
 <style scoped lang="scss">
 .editor {
-  @include calc-vh('height', '100vh - 50px');
   display: flex;
   overflow: hidden;
   background-color: $color-grey;
 }
-.view-port {
-  overflow: hidden;
-  position: relative;
-  flex: 1;
-}
-.interact-view {
-  @include calc-vh('height', '100vh - 80px');
+.draft.editor {
+  @include calc-vh('height', '100vh - 50px');
 }
 </style>

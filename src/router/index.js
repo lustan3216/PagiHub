@@ -65,6 +65,11 @@ export default new VueRouter({
       component: () => import('@/components/Layout/PanelDraft')
     },
     {
+      path: '/:userLabel/:projectLabel/:componentSetLabel',
+      name: 'PanelProduction',
+      component: () => import('@/components/Layout/PanelProduction')
+    },
+    {
       path: '*',
       name: 'NotFound',
       component: () => import('@/pages/NotFound')

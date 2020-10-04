@@ -28,6 +28,7 @@
               label="Name"
               prop="label"
             >
+              <!-- componentSet裡面有記錄 projectName，為了懶惰不更改所以這邊暫時鎖住 -->
               <el-input
                 v-model="form.label"
                 :disabled="isExist"

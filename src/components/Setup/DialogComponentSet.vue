@@ -40,12 +40,14 @@
               The name will be used as part of url, it can be browsed once
               publish.
             </p>
-            <a
+            <component
+              :is="node && node.version ? 'router-link' : 'span'"
+              :to="`/${username}/${project && project.label}/${form.label}`"
               :class="[node && node.version ? 'link' : 'gray-font']"
               class="font-13"
-            >https://lots.design/{{ username || 'username' }}/{{
-              project && project.label
-            }}/{{ form.label || 'page-name' }}</a>
+            >
+              {{ origin }}/{{ username || 'username' }}/{{ project && project.label }}/{{ form.label || 'page-name' }}
+            </component>
 
             <el-form-item
               label="Tag"
@@ -158,6 +160,9 @@ export default {
   computed: {
     ...mapState('node', ['editingProjectId']),
     ...mapState('user', ['userId', 'username']),
+    origin() {
+      return location.origin
+    },
     node() {
       return this.nodesMap[this.id]
     },

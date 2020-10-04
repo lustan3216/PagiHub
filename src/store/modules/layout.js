@@ -1,5 +1,4 @@
 import { SET } from '../index'
-import { debounce } from '@/utils/tool'
 import { quickFnMap } from '@/components/TemplateUtils/ComponentQuickFunctions'
 import { findBreakpoint, sortDescBreakpoint } from '@/utils/layout'
 
@@ -39,6 +38,9 @@ const getters = {
   },
   currentBreakpoint({ artBoardWidth: width }, { breakpointsMap }) {
     return findBreakpoint(breakpointsMap, width)
+  },
+  vh(state) {
+    return state.artBoardHeight / 100
   }
 }
 
