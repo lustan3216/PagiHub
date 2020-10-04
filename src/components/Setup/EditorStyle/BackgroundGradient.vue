@@ -10,7 +10,11 @@
       Gradient Color
     </el-col>
     <el-col :span="16">
-      <color-picker :key="selectedComponentIds.join()"  gradient v-model="backgroundImage" />
+      <color-picker
+        :key="selectedComponentIds.join()"
+        v-model="backgroundImage"
+        gradient
+      />
     </el-col>
   </el-row>
 </template>

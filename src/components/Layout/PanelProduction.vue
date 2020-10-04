@@ -7,8 +7,8 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import { getComponentSetPublicChildren } from "@/api/node"
-import ArtBoard from "@/components/Layout/ArtBoard"
+import { getComponentSetPublicChildren } from '@/api/node'
+import ArtBoard from '@/components/Layout/ArtBoard'
 
 export default {
   name: 'PanelProduction',

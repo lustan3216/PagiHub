@@ -28,7 +28,7 @@ const mutations = {
 const actions = {
   async getCurrentUser({ commit }) {
     try {
-      const user = await Auth.currentUserInfo()
+      const user = await Auth.currentAuthenticatedUser()
       const { attributes } = user
       const { userId } = JSON.parse(attributes.identities)[0]
 

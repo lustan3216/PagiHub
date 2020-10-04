@@ -24,7 +24,10 @@
         @mouseenter="hoverId = componentSet.id"
       >
         <div class="upload-icon">
-          <b-icon-cloud-upload v-if="componentSet.version" class="gray-font-2 font-13"/>
+          <b-icon-cloud-upload
+            v-if="componentSet.version"
+            class="gray-font-2 font-13"
+          />
         </div>
 
         <component-name

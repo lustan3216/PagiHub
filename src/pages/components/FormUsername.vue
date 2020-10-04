@@ -1,13 +1,11 @@
 <template>
-  <form>
-
-  </form>
+  <form/>
 </template>
 
 <script>
-  export default {
-    name: 'FormUsername'
-  }
+export default {
+  name: 'FormUsername'
+}
 </script>
 
 <style scoped lang="scss">

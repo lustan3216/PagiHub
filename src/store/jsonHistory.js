@@ -57,14 +57,12 @@ if (process.env.NODE_ENV !== 'production') {
   window.jsonHistory = jsonHistory
 }
 
-export default jsonHistory
-
 function rollbackSelectedComponentSet(deltaGroup) {
   if (!deltaGroup) {
     return false
   }
-
   const id = objectFirstKey(deltaGroup[0])
+
   const { editingProjectId } = store.state.node
   const rootComponentSetId = getRootComponentSetId(id)
   if (rootComponentSetId !== editingProjectId) {
@@ -75,3 +73,5 @@ function rollbackSelectedComponentSet(deltaGroup) {
 
   return true
 }
+
+export default jsonHistory

@@ -1,10 +1,6 @@
 import { API } from 'aws-amplify'
 import { queryString } from '@/utils/url'
 
-export function getCurrentUser() {
-  return API.get('jwt', '/users/me', {})
-}
-
 export function patchCurrentUser(data) {
   return API.patch('jwt', '/users/me', {
     body: data

@@ -15,7 +15,10 @@
         {{ username }}
       </div>
 
-      <div class="name" style="margin-top: 30px;">
+      <div
+        class="name"
+        style="margin-top: 30px;"
+      >
         {{ email }}
       </div>
 

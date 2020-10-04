@@ -32,7 +32,6 @@ export default {
   name: 'App',
   components: {
     TopNav,
-    DialogLogin: () => import('@/pages/components/DialogLogin'),
     DialogComponentTabs: () =>
       import('@/components/ExampleAddPanel/DialogComponentTabs')
   },

@@ -10,7 +10,7 @@ import RulesGenerator from './Common/RulesGenerator'
 import { select, string, assignDefaultValue } from './utils/ruleTool'
 
 export const defaultSetting = {
-  src: 'https://staging.lots.design',
+  src: location.host,
   scrolling: 'auto'
 }
 

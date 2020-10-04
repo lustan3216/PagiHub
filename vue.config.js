@@ -43,7 +43,7 @@ module.exports = {
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
     config
-      .when(!isProd,
+      .when(isDev,
         config => {
           config.plugin('cache').use(HardSourceWebpackPlugin)
         }
@@ -54,7 +54,6 @@ module.exports = {
         config => {
           config.devtool(isProd ? 'hidden-source-map' : 'source-map')
           config.plugins.delete('hmr')
-          config.output.filename('[name].[contenthash:8].js')
         }
       )
 
@@ -88,7 +87,7 @@ module.exports = {
       region: 'ap-northeast-2',
       bucket: isProd ? 'lots.design' : 'staging.lots.design',
       createBucket: true,
-      staticHosting: false,
+      staticHosting: true,
       staticIndexPage: 'index.html',
       staticErrorPage: 'index.html',
       assetPath: 'dist',

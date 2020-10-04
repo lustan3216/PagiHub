@@ -21,14 +21,38 @@
           @mouseleave.stop="hoverLeaveNode(data.id)"
         >
           <div class="m-l-10 m-r-5">
-            <b-icon-fonts class="gray-font-2" v-if="data.tag === 'text-editor'"/>
-            <b-icon-image class="gray-font-2" v-if="data.tag === 'flex-image'"/>
-            <b-icon-aspect-ratio class="gray-font-2" v-if="data.tag === 'grid-generator-item'"/>
-            <b-icon-columns class="gray-font-2" v-if="data.tag === 'grid-generator'"/>
-            <b-icon-camera-video class="gray-font-2" v-if="data.tag === 'video-player'"/>
-            <b-icon-calendar3-event class="gray-font-2" v-if="data.tag === 'iframer'"/>
-            <b-icon-layout-sidebar-inset-reverse class="gray-font-2" v-if="data.tag === 'carousel'"/>
-            <b-icon-link class="gray-font-2" v-if="data.tag === 'flex-button'"/>
+            <b-icon-fonts
+              v-if="data.tag === 'text-editor'"
+              class="gray-font-2"
+            />
+            <b-icon-image
+              v-if="data.tag === 'flex-image'"
+              class="gray-font-2"
+            />
+            <b-icon-aspect-ratio
+              v-if="data.tag === 'grid-generator-item'"
+              class="gray-font-2"
+            />
+            <b-icon-columns
+              v-if="data.tag === 'grid-generator'"
+              class="gray-font-2"
+            />
+            <b-icon-camera-video
+              v-if="data.tag === 'video-player'"
+              class="gray-font-2"
+            />
+            <b-icon-calendar3-event
+              v-if="data.tag === 'iframer'"
+              class="gray-font-2"
+            />
+            <b-icon-layout-sidebar-inset-reverse
+              v-if="data.tag === 'carousel'"
+              class="gray-font-2"
+            />
+            <b-icon-link
+              v-if="data.tag === 'flex-button'"
+              class="gray-font-2"
+            />
           </div>
 
           <hidden :id="data.id" />

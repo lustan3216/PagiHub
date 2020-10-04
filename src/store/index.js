@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import localforage from 'localforage'
 import node from './modules/node/index'
 import example from './modules/example'
 import app from './modules/app'

@@ -3,9 +3,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'Terms'
-  }
+export default {
+  name: 'Terms'
+}
 </script>
 
 <style scoped lang="scss">

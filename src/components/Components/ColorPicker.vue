@@ -11,11 +11,17 @@
       class="color-picker"
     />
 
-    <div slot="reference" class="pointer">
+    <div
+      slot="reference"
+      class="pointer"
+    >
       <slot>
         <div class="wrapper">
           <span class="button">
-            <div :style="buttonStyle" class="inner"/>
+            <div
+              :style="buttonStyle"
+              class="inner"
+            />
           </span>
         </div>
       </slot>
