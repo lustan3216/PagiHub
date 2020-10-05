@@ -37,6 +37,7 @@
           :disabled="disableSubmit"
           size="small"
           type="primary"
+          data-cy="dialog-confirm"
           @click="confirm"
         >
           {{ confirmText }}

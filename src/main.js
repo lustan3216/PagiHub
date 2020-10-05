@@ -1,4 +1,7 @@
-// require('./mock')
+if (process.env.NODE_ENV === 'test') {
+  require('./mock')
+}
+
 import 'normalize.css'
 import '@/styles/index.scss'
 import 'intersection-observer'
@@ -25,10 +28,6 @@ import HotjarInstall from './install/hotjar'
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
   RollbarInstall(Vue)
   HotjarInstall()
-}
-
-if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
-
 }
 
 jsonHistory.tree = store.state.node.nodesMap
@@ -69,9 +68,9 @@ const app = new Vue({
   router
 }).$mount('#app')
 
-if (process.env.NODE_ENV !== 'production') {
+if (window.Cypress || process.env.NODE_ENV !== 'production') {
   window.store = store
-  window.Vue = Vue
+  window.app = app
   Vue.config.devtools = true
 }
 

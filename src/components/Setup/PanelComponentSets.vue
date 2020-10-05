@@ -24,7 +24,7 @@
         @mouseenter="hoverId = componentSet.id"
       >
         <div class="upload-icon">
-          <b-icon-cloud-upload
+          <b-icon-cloud-arrow-up
             v-if="componentSet.version"
             class="gray-font-2 font-13"
           />
@@ -64,7 +64,7 @@ import ComponentName from '../TemplateUtils/ComponentName'
 import DialogComponentSet from '@/components/Setup/DialogComponentSet'
 import { cloneJsonWithoutChildren, getNode } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
-import { BIconCloudUpload } from 'bootstrap-vue'
+import { BIconCloudArrowUp } from 'bootstrap-vue'
 
 export default {
   name: 'PanelComponentSets',
@@ -75,7 +75,7 @@ export default {
     PanelComponentSets,
     DialogDelete,
     ComponentName,
-    BIconCloudUpload
+    BIconCloudArrowUp
   },
   data() {
     return {

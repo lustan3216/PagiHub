@@ -19,6 +19,7 @@
           text="New Project"
           type="primary"
           size="small"
+          data-cy="project-create"
         />
       </el-col>
     </el-row>
@@ -29,6 +30,7 @@
       v-for="project in projects"
       :key="project.label"
       :gutter="10"
+      :data-cy="`project-${project.label}`"
       class="project pointer relative"
       @click.native="redirect(project.id)"
     >

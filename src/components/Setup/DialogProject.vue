@@ -32,6 +32,7 @@
               <el-input
                 v-model="form.label"
                 :disabled="isExist"
+                data-cy="project-name-input"
                 placeholder="At least 6 letters"
               />
             </el-form-item>
@@ -42,9 +43,9 @@
             </p>
             <a
               class="link font-13"
-            >https://lots.design/{{ username || 'username' }}/{{
-              form.label || 'project-name'
-            }}/page-name</a>
+            >
+              {{ exampleUrl }}
+            </a>
 
             <el-form-item
               label="Tag"
@@ -68,6 +69,7 @@
             >
               <text-editor-rich
                 v-model="form.description"
+                data-cy="project-description-input"
                 class="description"
               />
               <p class="small-title">
@@ -135,6 +137,9 @@ export default {
   },
   computed: {
     ...mapState('user', ['userId', 'username']),
+    exampleUrl() {
+      return `https://lots.design/${this.username || 'username'}/${this.form.label || 'project-name'}/page-name`
+    },
     isExist() {
       return Boolean(this.id)
     }

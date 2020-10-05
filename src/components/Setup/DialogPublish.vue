@@ -4,7 +4,7 @@
     type="text"
     @click.stop="visible = !visible"
   >
-    <b-icon-cloud-upload/>
+    <b-icon-cloud-arrow-up/>
 
     <dialog-confirmable
       :loading="loading"
@@ -45,7 +45,7 @@
 import { mapActions, mapState } from 'vuex'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import TextEditorRich from '@/components/Components/TextEditorRich'
-import { BIconCloudUpload } from 'bootstrap-vue'
+import { BIconCloudArrowUp } from 'bootstrap-vue'
 import { Message } from 'element-ui'
 
 export default {
@@ -53,7 +53,7 @@ export default {
   components: {
     DialogConfirmable,
     TextEditorRich,
-    BIconCloudUpload
+    BIconCloudArrowUp
   },
   data() {
     return {

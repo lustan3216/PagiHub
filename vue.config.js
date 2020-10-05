@@ -15,7 +15,6 @@ module.exports = {
     // 'vue-observe-visibility',
     // 'vue'
   ],
-  runtimeCompiler: true,
   productionSourceMap: false,
   devServer: {
     https: true
@@ -39,15 +38,10 @@ module.exports = {
 
     config.resolve.alias.set('@', path.resolve(__dirname, 'src'))
 
-    config.mode(isDev ? 'development' : 'production')
+    config.mode(isDev || isTest ? 'development' : 'production')
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
-    config
-      .when(isDev,
-        config => {
-          config.plugin('cache').use(HardSourceWebpackPlugin)
-        }
-      )
+    config.plugin('cache').use(HardSourceWebpackPlugin)
 
     config
       .when((isProd || isStaging),
@@ -65,6 +59,28 @@ module.exports = {
       .loader('vue-svg-inline-loader')
       .options({
         addAttributes: { class: 'svg-inline' }
+      })
+
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap(options => {
+        options.compilerOptions.modules = [
+          {
+            preTransformNode(astEl) {
+              if (process.env.NODE_ENV !== 'test') {
+                const { attrsMap, attrsList } = astEl
+                if (attrsMap['data-cy']) {
+                  delete attrsMap['data-cy']
+                  const index = attrsList.findIndex(x => x.name === 'data-cy')
+                  attrsList.splice(index, 1)
+                }
+              }
+              return astEl
+            }
+          }
+        ]
+        return options
       })
     // config.plugin('circular').use(CircularDependencyPlugin)
 

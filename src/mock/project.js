@@ -1,7 +1,7 @@
 const Mock = require('better-mock')
 const Random = Mock.Random
 
-Mock.mock(/\/projects/, 'get', () => {
+Mock.mock(/\/projects$/, 'get', () => {
   return {
     'data': [{
       'createdAt': 1601167686555,
@@ -14,5 +14,14 @@ Mock.mock(/\/projects/, 'get', () => {
       'tags': ['form'],
       'updatedAt': 1601167686555
     }]
+  }
+})
+
+Mock.mock(/\/projects$/, 'post', ({ label, description, tags }) => {
+  console.log(label, description, tags)
+  return {
+    data: {
+      label, description, tags
+    }
   }
 })
