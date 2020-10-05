@@ -10,17 +10,17 @@ module.exports = {
   transpileDependencies: [
     // 'element-ui',
     // 'vue-grid-layout',
-    'vue-clamp',
-    'resize-detector',
-    'vue-observe-visibility',
-    'vue'
+    // 'vue-clamp',
+    // 'resize-detector',
+    // 'vue-observe-visibility',
+    // 'vue'
   ],
   runtimeCompiler: true,
   productionSourceMap: false,
   devServer: {
-    https: true,
-    key: fs.readFileSync('./localhost.key'),
-    cert: fs.readFileSync('./localhost.crt')
+    https: true
+    // key: fs.readFileSync('./localhost.key'),
+    // cert: fs.readFileSync('./localhost.crt')
   },
   css: {
     extract: false,
@@ -54,6 +54,8 @@ module.exports = {
         config => {
           config.devtool(isProd ? 'hidden-source-map' : 'source-map')
           config.plugins.delete('hmr')
+          config.output.filename('[name].[contenthash:8].js')
+          config.output.chunkFilename('js/[name].[contenthash:8].js')
         }
       )
 
@@ -83,7 +85,7 @@ module.exports = {
     s3Deploy: {
       registry: undefined,
       awsProfile: 'northeast-2',
-      overrideEndpoint: false,
+      overrideEndpoint: true,
       region: 'ap-northeast-2',
       bucket: isProd ? 'lots.design' : 'staging.lots.design',
       createBucket: true,
@@ -93,12 +95,12 @@ module.exports = {
       assetPath: 'dist',
       assetMatch: '**',
       deployPath: '/',
-      acl: 'public-read',
+      acl: 'private',
       pwa: false,
       enableCloudfront: true,
       cloudfrontId: isProd ? 'ESPDCBGELU41H' : 'EVKEO76ZHMB01',
       pluginVersion: '4.0.0-rc3',
-      uploadConcurrency: 10,
+      uploadConcurrency: 80,
       gzip: true
     }
   }
