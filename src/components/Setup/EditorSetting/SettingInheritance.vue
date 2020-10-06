@@ -71,7 +71,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('app', ['selectedComponentNode']),
     node() {
       return this.nodesMap[this.id]
     },

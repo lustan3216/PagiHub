@@ -9,10 +9,7 @@
         mode="out-in"
       >
         <keep-alive>
-          <component-giver
-            :id="id"
-            class="h-100"
-          />
+          <component-giver :id="id" />
         </keep-alive>
       </transition>
     </template>
@@ -50,7 +47,7 @@ export default {
         this.LAYOUT_SET({
           gridResizing: false,
           artBoardWidth: parseInt(clientWidth),
-          artBoardHeight: parseInt(clientHeight) - 2
+          artBoardHeight: parseInt(clientHeight)
         })
       }
     }

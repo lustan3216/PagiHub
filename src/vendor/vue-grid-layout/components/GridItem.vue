@@ -3,7 +3,7 @@
     ref="item"
     class="vue-grid-item"
     :class="classObj"
-    :style="{ ...style, zIndex, position: fixItem ? 'fixed' : 'absolute'  }"
+    :style="styleObj"
   >
     <slot/>
     <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass"/>
@@ -414,7 +414,7 @@
 
               this.erd.listenTo(this.slotElement, debounce(() => {
                 this.autoSize()
-              }, 50))
+              }, 80))
             }
             else if (this.erd) {
               this.erd.removeListener(this.slotElement, this.autoSize)
@@ -543,6 +543,17 @@
       },
       hideHandler() {
         return store.hideHandler
+      },
+      styleObj() {
+        const object = {
+          ...this.style,
+          position: this.fixItem ? 'fixed' : 'absolute'
+        }
+        if (this.zIndex) {
+          object.zIndex = this.zIndex
+        }
+
+        return object
       },
       classObj() {
         return {

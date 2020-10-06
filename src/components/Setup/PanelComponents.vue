@@ -104,7 +104,7 @@ import ComponentName from '../TemplateUtils/ComponentName'
 import Touchable from '../TemplateUtils/Lock'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
-import { traversalSelfAndChildren } from '@/utils/node'
+import { traversalSelfAndChildren, isGrid, isBackground } from '@/utils/node'
 import { BIconFonts, BIconImage, BIconAspectRatio, BIconColumns, BIconCameraVideo, BIconCalendar3Event, BIconLayoutSidebarInsetReverse, BIconLink } from 'bootstrap-vue'
 
 require('smoothscroll-polyfill').polyfill()
@@ -173,12 +173,9 @@ export default {
       traversalSelfAndChildren(cloneTree, (node, parentNode) => {
         node.children = node.children.filter(node => node && !node[SOFT_DELETE])
 
-        // if (isGridItem(node)) {
-        //   const index = findIndexBy(parentNode.children, 'id', node.id)
-        //   if (Number.isInteger(index) && node.children[0]) {
-        //     parentNode.children[index] = node.children[0]
-        //   }
-        // }
+        if (isGrid(node)) {
+          parentNode.children = node.children
+        }
       })
 
       this.tree = cloneTree.children

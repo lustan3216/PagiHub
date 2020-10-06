@@ -1,77 +1,79 @@
 <template>
-  <component-move :id="id">
-    <template
-      v-slot="{
-        canMoveForward,
-        canMoveBackward,
-        moveForward,
-        moveToFront,
-        moveToBackward,
-        moveToEnd
-      }"
-    >
-      <div class="el-dropdown-menu">
-        <div
-          :class="{ 'is-disabled': !canMoveForward }"
-          class="el-dropdown-menu__item"
-          type="text"
-          @click="moveToFront"
-        >
-          <span>Move to the front</span>
-        </div>
-        <div
-          :class="{ 'is-disabled': !canMoveForward }"
-          class="el-dropdown-menu__item"
-          type="text"
-          @click="moveForward"
-        >
-          <span>Move Forward</span>
-        </div>
-        <div
-          :class="{ 'is-disabled': !canMoveBackward }"
-          class="el-dropdown-menu__item"
-          type="text"
-          @click="moveToBackward"
-        >
-          <span>Move Backward</span>
-        </div>
-        <div
-          :class="{ 'is-disabled': !canMoveBackward }"
-          class="el-dropdown-menu__item"
-          type="text"
-          @click="moveToEnd"
-        >
-          <span>Move End</span>
-        </div>
-
-        <template v-for="option in options">
+  <div class="el-dropdown-menu">
+    <component-move>
+      <template
+        v-slot="{
+          canMoveForward,
+          canMoveBackward,
+          moveForward,
+          moveToFront,
+          moveToBackward,
+          moveToEnd
+        }"
+      >
+        <div>
           <div
-            v-if="option.divided"
-            :key="`${option.name}-d`"
-            class="el-dropdown-menu__item--divided"
-          />
-
-          <div
-            :key="option.name"
-            :divided="option.divided"
-            :class="{ 'is-disabled': option.disabled }"
+            :class="{ 'is-disabled': !canMoveForward }"
             class="el-dropdown-menu__item"
             type="text"
-            @click="handleCommand(option.name)"
+            @click="close(moveToFront)"
           >
-            <div class="justify-between">
-              <span>{{ option.name }}</span>
-              <span
-                v-if="option.shortKey"
-                class="m-l-15"
-                v-html="option.shortKey.join(' + ')"
-              />
-            </div>
+            <span>Move to the front</span>
           </div>
-        </template>
+          <div
+            :class="{ 'is-disabled': !canMoveForward }"
+            class="el-dropdown-menu__item"
+            type="text"
+            @click="close(moveForward)"
+          >
+            <span>Move Forward</span>
+          </div>
+          <div
+            :class="{ 'is-disabled': !canMoveBackward }"
+            class="el-dropdown-menu__item"
+            type="text"
+            @click="close(moveToBackward)"
+          >
+            <span>Move Backward</span>
+          </div>
+          <div
+            :class="{ 'is-disabled': !canMoveBackward }"
+            class="el-dropdown-menu__item"
+            type="text"
+            @click="close(moveToEnd)"
+          >
+            <span>Move End</span>
+          </div>
+        </div>
+      </template>
+    </component-move>
+
+    <template v-for="option in options">
+      <div
+        v-if="option.divided"
+        :key="`${option.name}-d`"
+        class="el-dropdown-menu__item--divided"
+      />
+
+      <div
+        :key="option.name"
+        :divided="option.divided"
+        :class="{ 'is-disabled': option.disabled }"
+        class="el-dropdown-menu__item"
+        type="text"
+        @click="handleCommand(option.name)"
+      >
+        <div class="justify-between">
+          <span>{{ option.name }}</span>
+          <span
+            v-if="option.shortKey"
+            class="m-l-15"
+            v-html="option.shortKey.join(' + ')"
+          />
+        </div>
       </div>
     </template>
-  </component-move>
+  </div>
 </template>
 
 <script>
@@ -88,29 +90,34 @@ import ComponentMove from './ComponentMove'
 import { getValueByPath } from '@/utils/tool'
 import { COMPONENT_SET } from '@/const'
 import { isInstanceChild } from '@/utils/inheritance'
+import ClickOutside from '@/directive/clickOutside'
 
 export default {
   name: 'ContextMenu',
   components: {
     ComponentMove
   },
+  directives: {
+    ClickOutside
+  },
+
   props: {
-    id: {
-      type: String,
-      required: true
+    left: {
+      type: Number,
+      default: 0
+    },
+    top: {
+      type: Number,
+      default: 0
     }
   },
   computed: {
     ...mapState('app', [
       'copyComponentIds',
-      'selectedComponentIds',
-      'selectedComponentNode'
+      'selectedComponentIds'
     ]),
+    ...mapGetters('app', ['selectedComponentNodes', 'theOnlySelectedComponentId']),
     ...mapState('layout', ['gridResizing']),
-    ...mapGetters('app', ['theOnlyCopyNodeAndNotGridItem']),
-    node() {
-      return this.nodesMap[this.id]
-    },
     metaKey() {
       return isMac() ? '&#8984;' : '&#8963;'
     },
@@ -146,13 +153,12 @@ export default {
         {
           name: 'Paste Inside',
           shortKey: [this.metaKey, 'V'],
-          disabled:
-            !this.theOnlyCopyNodeAndNotGridItem || !isGridItem(this.node)
+          disabled: isGridItem(this.node)
         },
         {
           name: 'Replace',
           shortKey: [this.metaKey, 'V'],
-          disabled: !this.theOnlyCopyNodeAndNotGridItem || isGridItem(this.node)
+          disabled: !isGridItem(this.node)
         },
         {
           name: 'Cut',
@@ -174,33 +180,45 @@ export default {
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
+    ...mapMutations('app', { 'APP_SET': 'SET' }),
     ...mapActions('app', ['setCopySelectedNodeId']),
+    close(fn) {
+      fn()
+      this.$emit('close')
+    },
     handleCommand(command) {
       switch (command) {
         case 'Copy':
-          this.setCopySelectedNodeId(this.id)
-          break
-        case 'Paste Inside':
-          vmPasteNodes()
-          break
-        case 'Replace':
-          vmPasteNodes()
+          this.setCopySelectedNodeId(this.selectedComponentIds)
           break
         case 'Cut':
-          this.setCopySelectedNodeId(this.id)
-          vmRemoveNode(this.node)
+          this.setCopySelectedNodeId(this.selectedComponentIds)
+          this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
           break
-        case 'Duplicate':
-          this.APP_SET({ copyComponentIds: [this.id] })
-          vmAddNode(this.node)
-          break
-        case 'Delete':
-          vmRemoveNode(this.node)
-          break
-        case 'Make Master Component':
-          vmBecomeMaster(this.node)
-          break
+        default:
+          this.selectedComponentNodes.forEach(node => {
+            switch (command) {
+              case 'Paste Inside':
+                vmPasteNodes()
+                break
+              case 'Replace':
+                vmPasteNodes()
+                break
+              case 'Duplicate':
+                this.APP_SET({ copyComponentIds: [node.id] })
+                vmAddNode(node)
+                break
+              case 'Delete':
+                vmRemoveNode(node)
+                break
+              case 'Make Master Component':
+                vmBecomeMaster(node)
+                break
+            }
+          })
       }
+
+      this.$emit('close')
     }
   }
 }

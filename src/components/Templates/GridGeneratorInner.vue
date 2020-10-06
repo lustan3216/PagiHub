@@ -26,7 +26,6 @@
       :data-cy="`grid-item-${index}`"
       drag-ignore-from=".grid-item-fix"
       drag-allow-from="div"
-      @mousedown.native.stop
       @resizeStart="itemUpdating"
       @moveStart="itemUpdating"
     >
@@ -189,6 +188,7 @@ export default {
             lockInParent:
               !this.rootLayout && !['scroll', 'hidden'].includes(overflow),
             autoHeight,
+            zIndex: styleLayout.zIndex,
             canScroll: overflow === 'scroll',
             fixed: styleLayout.position === 'fixed',
             fixedBottom: styleLayout.position === 'fixedBottom',

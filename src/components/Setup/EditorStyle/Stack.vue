@@ -17,38 +17,36 @@
 
 <script>
 import { Tooltip } from 'element-ui'
-import { mapActions, mapMutations, mapState } from 'vuex'
-import { arrayLast } from '@/utils/array'
-import { getNode } from '@/utils/node'
+import { mapMutations, mapState } from 'vuex'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
+import { vmGet } from '@/utils/vmMap'
 
 export default {
-  name: 'ZIndex',
+  name: 'Stack',
   components: {
     ElTooltip: Tooltip
   },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    lastId() {
-      return arrayLast(this.selectedComponentIds)
-    },
-    isLastOne() {
-      return this.lastId === this.id
-    },
-    node() {
-      return getNode(this.lastId)
-    },
     isStack() {
-      return getValueByPath(this.node, [STYLES, 'layout', 'stack'])
+      return getValueByPath(vmGet(this.id), ['innerStyles', 'layout', 'stack'])
     }
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
     click() {
-      this.RECORD({
-        path: [this.lastId, STYLES, 'layout', 'stack'],
-        value: this.isStack ? undefined : true
+      this.selectedComponentIds.forEach(id => {
+        this.RECORD({
+          path: [id, STYLES, 'layout', 'stack'],
+          value: this.isStack ? undefined : true
+        })
       })
     }
   }

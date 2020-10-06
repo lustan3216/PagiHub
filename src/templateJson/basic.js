@@ -111,9 +111,6 @@ export const textEditor = function(options) {
   return {
     [TAG]: TEXT_EDITOR,
     [CAN_BE_EDITED]: true,
-    [STYLES]: {
-      layout: { fitContainer: true }
-    },
     ...options
   }
 }
@@ -132,7 +129,6 @@ export const flexButton = function() {
           textEditor({
             [VALUE]: 'I can be changed to anything',
             [STYLES]: {
-              layout: { fitContainer: true },
               [HTML]: { textAlign: 'center' }
             }
           })

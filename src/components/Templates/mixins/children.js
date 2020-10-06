@@ -17,7 +17,7 @@ import {
   traversalSelfAndChildren,
   isCarousel,
   isGridItem,
-  cloneJsonWithoutChildren
+  cloneJsonWithoutChildren, isGrid
 } from '@/utils/node'
 import * as basicTemplates from '@/templateJson/basic'
 import { camelCase } from '@/utils/string'
@@ -126,11 +126,12 @@ export default {
       // could be triggered by copy, delete
 
       const records = []
-
+      let parentId = this.id
       nodeTree = cloneJson(nodeTree)
 
       if (isGridItem(this.node)) {
         if (isGridItem(nodeTree)) {
+          parentId = this.node.parentId
           nodeTree.grid = this.node.grid
           vmRemoveNode(this.node)
         }
@@ -147,7 +148,7 @@ export default {
 
       appendIds(
         nodeTree,
-        this.id,
+        parentId,
         isInstanceParent(nodeTree) || isUnderInstanceParent,
         {
           instanceBeforeAppend: node => {
@@ -234,7 +235,7 @@ export default {
 
       traversal(theNodeGonnaRemove)
 
-      if (isCarousel(this.node)) {
+      if (isCarousel(this.node) || isGrid(this.node)) {
         if (this.node.children.length === 1) {
           records.unshift({
             path: this.node.id,
@@ -242,7 +243,6 @@ export default {
           })
         }
       }
-
       // traversalAncestorAndSelf(
       //   this.node,
       //   ({ id, tag, children, parentNode }) => {

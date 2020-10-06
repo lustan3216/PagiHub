@@ -1,5 +1,5 @@
 <template>
-  <div ref="item" class="vue-grid-layout" :style="mergedStyle">
+  <div ref="item" class="vue-grid-layout" :style="mergedStyle" style="z-index: 0;">
     <slot></slot>
     <grid-item class="vue-grid-placeholder"
                v-if="showPlaceHolder && isDragging"
@@ -221,14 +221,14 @@
             this.erd.listenTo(self.$refs.item, debounce(() => {
               self.onWindowResize()
               self.resizeNodeQuickFn()
-            }, 50))
+            }, 80))
             self.onWindowResize()
-            
+
             this.boundaryElement = getBoundaryEl(self.$refs.item)
             this.erd.listenTo(this.boundaryElement, debounce(() => {
               self.correctFixItemsBound()
               self.resizeNodeQuickFn()
-            }, 50))
+            }, 80))
           })
         })
       })

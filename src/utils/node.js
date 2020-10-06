@@ -1,8 +1,11 @@
 import store from '../store'
-import { arrayAllEqual, toArray } from './array'
-import { isUndefined } from './tool'
+import { toArray } from './array'
+import { getValueByPath, isUndefined } from './tool'
 import { humanize } from './string'
 import { cloneJson } from './tool'
+import { cleanInherit } from './inheritance'
+import listToTree from './listToTree'
+import { gridGenerator } from '../templateJson/basic'
 import {
   NODE_TYPE,
   LABEL,
@@ -14,6 +17,38 @@ import {
   CAROUSEL,
   SOFT_DELETE
 } from '@/const'
+import { vmGet } from '@/utils/vmMap'
+
+export function wrapByGrid(nodesMap, ids) {
+  const childrenArray = []
+
+  ids.forEach(id => {
+    const node = nodesMap[id]
+
+    traversalAncestorAndSelf(node, (node) => {
+      const pureNode = cleanInherit(cloneJsonWithoutChildren(node))
+
+      if (isGridItem(node)) {
+        delete pureNode.parentId
+        childrenArray.push(pureNode)
+        return false
+      }
+      else if (node.id === id) {
+        traversalSelfAndChildren(node, node => {
+          const pureNode = cleanInherit(cloneJsonWithoutChildren(node))
+          childrenArray.push(pureNode)
+        })
+      }
+      else {
+        childrenArray.push(pureNode)
+      }
+    })
+  })
+
+  return gridGenerator({
+    children: listToTree(childrenArray).tree
+  })
+}
 
 export function cloneJsonWithoutChildren(tree) {
   const string = JSON.stringify(tree, function(key, value) {
@@ -27,54 +62,18 @@ export function cloneJsonWithoutChildren(tree) {
   return JSON.parse(string)
 }
 
-export function findFirstCommonParentTree(ids) {
-  // familyPaths = [
-  //   [1,2,3,4,5]
-  //   [1,4,5,6,7,8]
-  //   [1,8,9]
-  // ]
-  let familyPaths = ids.map(id => [
-    ...store.getters['node/parentPath'](id),
-    store.state.node.nodesMap[id]
-  ])
-
-  familyPaths = cloneJson(familyPaths)
-
-  const maxXLength = Math.max(...familyPaths.map(path => path.length))
-
-  let x = 0
-  for (x; x < maxXLength; x++) {
-    const sameYIds = familyPaths.map(path => path[x].id)
-    if (!arrayAllEqual(sameYIds)) {
-      break
-    }
-  }
-  // 假如 index 1 開始都不一樣，所以都一樣的index 就是 x--
-  const commonTree = familyPaths[0][x - 1]
-
-  familyPaths.forEach(path => {
-    path.slice(x).reduce((tree, node) => {
-      if (tree.children) {
-        tree.children.push(node)
-      }
-      else {
-        tree.children = [node]
-      }
-      return node
-    }, commonTree)
-  })
-
-  return commonTree
-}
-
-export function sortByIndex(children, asc = true) {
+export function sortByZIndex(children, asc = true) {
   children = Array.from(children)
 
+  const getZIndex = node => {
+    const vm = vmGet(node.id)
+    return getValueByPath(vm, ['innerStyles', 'layout', 'zIndex'])
+  }
   if (asc) {
-    return children.sort((a, b) => a[SORT_INDEX] - b[SORT_INDEX])
+    return children.sort((a, b) => getZIndex(a) - getZIndex(b))
   }
   else {
-    return children.sort((a, b) => b[SORT_INDEX] - a[SORT_INDEX])
+    return children.sort((a, b) => getZIndex(b) - getZIndex(a))
   }
 }
 
@@ -203,6 +202,12 @@ export function isCarousel(node) {
 export function isGrid(node) {
   if (node) {
     return node.tag === GRID_GENERATOR
+  }
+}
+
+export function isBackground(node) {
+  if (node) {
+    return node[POLYMORPHISM] === 'background'
   }
 }
 

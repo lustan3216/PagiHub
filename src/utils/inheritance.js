@@ -4,6 +4,11 @@ import { getValueByPath, setValueByPath } from '@/utils/tool'
 import { objectHasAnyKey } from '@/utils/object'
 import { SOFT_DELETE } from '@/const'
 
+export function cleanInherit(node) {
+  delete node.inheritance
+  return node
+}
+
 export function isMasterParent(node) {
   if (node) {
     return (

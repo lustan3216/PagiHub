@@ -48,12 +48,8 @@ export function findLastIndex(array, fn) {
   return finalIndex
 }
 
-export function arrayAllEqual(arr) {
-  return arr.every(v => v === arr[0])
-}
-
-export function twoArrayEquals(arr1, arr2) {
-  return JSON.stringify(arr1) === JSON.stringify(arr2)
+export function arrayEquals(arr1, arr2) {
+  return JSON.stringify(arrayAscSort(arr1)) === JSON.stringify(arrayAscSort(arr2))
 }
 
 export function toArray(e) {

@@ -1,6 +1,7 @@
 import store from '../store'
 import { CAN_NEW_ITEM } from '../const'
-import { isGridItem, traversalAncestorAndSelf } from '@/utils/node'
+import { isGridItem, traversalAncestorAndSelf, wrapByGrid } from '@/utils/node'
+import { arrayEquals } from '@/utils/array'
 
 const vmMap = {}
 
@@ -43,50 +44,53 @@ export async function vmPasteNodes() {
   // the component should get from tmpComponentsMap to prevent data modified after copy or cross browser
   const { tmpComponentsMap } = store.state.node
   const { copyComponentIds } = store.state.app
+  const { selectedComponentIds } = store.state.app
+
+  const shouldDuplicate = arrayEquals(selectedComponentIds, copyComponentIds)
 
   if (copyComponentIds.length === 1) {
     const node = tmpComponentsMap[copyComponentIds[0]]
     vmPasteInside(node)
   }
-  else if (copyComponentIds.length > 1) {
+  else if (copyComponentIds.length > 1 && shouldDuplicate) {
     copyComponentIds.forEach(id => vmAddNode(tmpComponentsMap[id]))
+  }
+  else if (copyComponentIds.length > 1) {
+    const nodeTree = wrapByGrid(tmpComponentsMap, copyComponentIds)
+    vmPasteInside(nodeTree)
   }
 }
 
-export function vmPasteInside(theOneCopyNode) {
-  if (!theOneCopyNode) {
+export function vmPasteInside(sourceNode) {
+  if (!sourceNode) {
     return
   }
 
   const { nodesMap } = store.state.node
   const { selectedComponentIds } = store.state.app
 
-  selectedComponentIds.forEach(selectedId => {
-    const selectedNode = nodesMap[selectedId]
-    if (theOneCopyNode.id === selectedId) {
-      vmAddNode(theOneCopyNode)
+  selectedComponentIds.forEach(targetId => {
+    const targetNode = nodesMap[targetId]
+    if (sourceNode.id === targetId) {
+      vmAddNode(sourceNode)
     }
-    else if (isGridItem(theOneCopyNode) && !theOneCopyNode.children.length) {
-      return
-    }
-    else if (isGridItem(theOneCopyNode)) {
-      if (isGridItem(selectedNode)) {
-        vmRemoveNode(selectedNode)
-        vmAddNodeToParent(selectedNode.parentId, theOneCopyNode)
+    else if (isGridItem(sourceNode)) {
+      if (isGridItem(targetNode)) {
+        vmAddNodeToParent(targetId, sourceNode)
       }
       else {
-        vmRemoveNode(selectedNode)
-        vmAddNodeToParent(selectedNode.parentId, theOneCopyNode.children[0])
+        vmRemoveNode(targetNode)
+        vmAddNodeToParent(targetNode.parentId, sourceNode)
       }
     }
     else {
-      if (isGridItem(selectedNode)) {
-        vmCleanChildren(selectedNode)
-        vmAddNodeToParent(selectedId, theOneCopyNode)
+      if (isGridItem(targetNode)) {
+        vmCleanChildren(targetNode)
+        vmAddNodeToParent(targetId, sourceNode)
       }
       else {
-        vmRemoveNode(selectedNode)
-        vmAddNodeToParent(selectedNode.parentId, theOneCopyNode)
+        vmRemoveNode(targetNode)
+        vmAddNodeToParent(targetNode.parentId, sourceNode)
       }
     }
   })

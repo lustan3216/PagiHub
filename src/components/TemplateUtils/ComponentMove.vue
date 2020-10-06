@@ -1,14 +1,18 @@
 <script>
 import {
+  closestGridItem,
+  isGridItem,
   isOverlapComponent,
-  sortByIndex,
+  sortByZIndex,
   traversalAncestorAndSelf
 } from '@/utils/node'
-import { deleteBy, findIndexBy } from '@/utils/array'
+import { arrayAscSort, arrayDescSort, arrayUniq, deleteBy, findIndexBy } from '@/utils/array'
 import { appendIds } from '@/utils/nodeId'
-import { CHILDREN, SORT_INDEX } from '@/const'
-import { mapMutations } from 'vuex'
+import { CHILDREN, SORT_INDEX, STYLES } from '@/const'
+import { mapMutations, mapGetters } from 'vuex'
 import { gridGenerator } from '@/templateJson/basic'
+import { vmGet } from '@/utils/vmMap'
+import { getValueByPath } from '@/utils/tool'
 
 const emptyGird = () =>
   gridGenerator({
@@ -17,74 +21,128 @@ const emptyGird = () =>
 
 export default {
   name: 'ComponentMove',
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
   computed: {
+    ...mapGetters('app', ['theOnlySelectedComponentId']),
     node() {
-      return this.nodesMap[this.id]
+      const node = this.nodesMap[this.theOnlySelectedComponentId]
+
+      if (isGridItem(node)) {
+        return node
+      }
+      else {
+        return closestGridItem(node)
+      }
+    },
+    stack() {
+      const vm = vmGet(this.node.id)
+      return getValueByPath(vm, ['innerStyles', 'layout', 'stack'])
     },
     gridParent() {
       return this.node.parentNode
     },
-    canOverlapComponent() {
-      let canOverlapComponent = null
-      traversalAncestorAndSelf(this.node, parent => {
-        if (isOverlapComponent(parent)) {
-          canOverlapComponent = parent
-          return false
-        }
-      })
-      return canOverlapComponent
+    isFront() {
+      return this.maxIndex === this.currentIndex
     },
-    isGridFront() {
-      const { children } = this.canOverlapComponent
-      const index = findIndexBy(children, 'id', this.gridParent.id)
-      return children.length - 1 === index
-    },
-    isGridEnd() {
-      return (
-        findIndexBy(
-          this.canOverlapComponent.children,
-          'id',
-          this.gridParent.id
-        ) === 0
-      )
+    isEnd() {
+      return this.minIndex === this.currentIndex
     },
     hasSibling() {
       return this.gridParent.children.length > 1
     },
-    gridHasSibling() {
-      return this.canOverlapComponent.children.length > 1
-    },
-    canNotMoveForward() {
-      return (
-        !this.canOverlapComponent ||
-        (!this.hasSibling && !this.gridHasSibling) ||
-        (!this.hasSibling && this.isGridFront)
-      )
-    },
     canMoveForward() {
-      return !this.canNotMoveForward
+      return this.node && this.hasSibling && !this.stack
     },
     canMoveBackward() {
-      return !this.canNotMoveBackward
+      return this.node && this.hasSibling && !this.stack
     },
-    canNotMoveBackward() {
-      return (
-        !this.canOverlapComponent ||
-        (!this.hasSibling && !this.gridHasSibling) ||
-        (!this.hasSibling && this.isGridEnd)
-      )
+    zIndexMap() {
+      return this.gridParent.children.reduce((map, node) => {
+        const index = this.getZIndex(node)
+        map[index] = map[index] || []
+        map[index].push(node.id)
+        return map
+      }, {})
     },
-    gridIds() {
-      return sortByIndex(this.canOverlapComponent.children).map(node => node.id)
+    zIndexs() {
+      return Object.keys(this.zIndexMap)
     },
-    currentPosition() {
-      return findIndexBy(this.gridIds, this.gridParent.id)
+    maxIndex() {
+      return Math.max(...this.zIndexs)
+    },
+    minIndex() {
+      return Math.min(...this.zIndexs)
+    },
+    currentIndex() {
+      return this.getZIndex(this.node)
+    }
+  },
+  methods: {
+    ...mapMutations('node', ['RECORD']),
+    getZIndex(node) {
+      const vm = vmGet(node.id)
+      return getValueByPath(vm, ['innerStyles', 'layout', 'zIndex'], 0)
+    },
+    cleanGap() {
+      const positive = arrayAscSort(this.zIndexs.filter(x => x >= 0))
+      positive.forEach((zI, i) => {
+        const ids = this.zIndexMap[zI]
+        ids.forEach(id => {
+          this.RECORD({
+            path: [id, STYLES, 'layout', 'zIndex'],
+            value: i || undefined
+          })
+        })
+      })
+
+      const negative = arrayDescSort(this.zIndexs.filter(x => x <= 0))
+      negative.forEach((zI, i) => {
+        const ids = this.zIndexMap[zI]
+        ids.forEach(id => {
+          this.RECORD({
+            path: [id, STYLES, 'layout', 'zIndex'],
+            value: -i || undefined
+          })
+        })
+      })
+    },
+    record(value) {
+      const child = this.node.children && this.node.children[0]
+      if (child) {
+        this.RECORD({
+          path: [child.id, STYLES, 'layout', 'zIndex'],
+          value
+        })
+      }
+      else {
+        this.RECORD({
+          path: [this.node.id, STYLES, 'layout', 'zIndex'],
+          value
+        })
+      }
+    },
+    moveForward() {
+      if (this.canMoveForward) {
+        this.cleanGap()
+        this.record(this.currentIndex + 1)
+      }
+    },
+    moveToFront() {
+      if (this.canMoveForward) {
+        this.cleanGap()
+        this.record(this.maxIndex + 1)
+      }
+    },
+    moveToBackward() {
+      if (this.canMoveBackward) {
+        this.cleanGap()
+        this.record(this.currentIndex - 1)
+      }
+    },
+    moveToEnd() {
+      if (this.canMoveBackward) {
+        this.cleanGap()
+        this.record(this.minIndex - 1)
+      }
     }
   },
   render() {
@@ -96,77 +154,6 @@ export default {
       moveToBackward: this.moveToBackward,
       moveToEnd: this.moveToEnd
     })
-  },
-  methods: {
-    ...mapMutations('node', ['RECORD']),
-    record(newGridPosition) {
-      const newGrid = emptyGird()
-
-      newGrid[SORT_INDEX] = newGridPosition
-      appendIds(newGrid, this.canOverlapComponent.id)
-      const ids = Array.from(this.gridIds)
-      ids.splice(newGridPosition, 0, newGrid.id)
-
-      const shouldDeleteCurrentGrid = this.gridParent.children.length === 1
-
-      if (shouldDeleteCurrentGrid) {
-        deleteBy(ids, this.gridParent.id)
-      }
-
-      const records = []
-      ids.forEach((id, index) => {
-        if (id === newGrid.id) {
-          records.push({
-            path: newGrid.id,
-            value: newGrid
-          })
-        }
-        else {
-          records.push({
-            path: `${id}.${SORT_INDEX}`,
-            value: index
-          })
-        }
-      })
-
-      records.push({
-        path: `${this.node.id}.parentId`,
-        value: newGrid.id
-      })
-
-      if (shouldDeleteCurrentGrid) {
-        records.push({
-          path: this.gridParent.id,
-          value: undefined
-        })
-      }
-
-      this.RECORD(records)
-    },
-    moveForward() {
-      if (this.canMoveForward) {
-        this.record(
-          this.isGridFront ? this.currentPosition + 1 : this.currentPosition + 2
-        )
-      }
-    },
-    moveToFront() {
-      if (this.canMoveForward) {
-        this.record(this.gridIds.length)
-      }
-    },
-    moveToBackward() {
-      if (this.canMoveBackward) {
-        this.record(
-          this.isGridEnd ? this.currentPosition - 2 : this.currentPosition - 1
-        )
-      }
-    },
-    moveToEnd() {
-      if (this.canMoveBackward) {
-        this.record(0)
-      }
-    }
   }
 }
 </script>

@@ -86,7 +86,7 @@ export default {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
     ...mapState('node', ['editingComponentSetId']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
-    ...mapGetters('app', ['selectedComponentNodes', 'selectedComponentNode']),
+    ...mapGetters('app', ['selectedComponentNodes', 'theOnlySelectedComponentId']),
     selected() {
       return this.selectedComponentIds.includes(this.id)
     }
@@ -96,20 +96,16 @@ export default {
     ...mapMutations('mode', ['SET_PREVIEW_MODE']),
     ...mapMutations('node', ['REDO', 'UNDO']),
     isMac,
-    publish() {},
     vmPasteNodes,
     vmCreateEmptyItem() {
       vmCreateEmptyItem(arrayLast(this.selectedComponentNodes))
     },
     multiDelete() {
-      console.log(123)
       this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
     },
     cut() {
-      if (this.selectedComponentNode) {
-        this.setCopySelectedNodeId(this.selectedComponentNode.id)
-        vmRemoveNode(this.selectedComponentNode)
-      }
+      this.setCopySelectedNodeId(this.selectedComponentIds)
+      this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
     }
   }
 }

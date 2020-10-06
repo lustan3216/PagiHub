@@ -24,10 +24,6 @@ export default {
       type: Boolean,
       default: true
     },
-    fitContainer: {
-      type: Boolean,
-      default: false
-    },
     controller: {
       type: Boolean,
       default: true
@@ -90,7 +86,7 @@ export default {
     }
     let vnode = null
 
-    if (!this.controller) {
+    if (!this.controller || isGrid(this.node)) {
       vnode = h(AsyncComponent, {
         props: {
           id: this.id

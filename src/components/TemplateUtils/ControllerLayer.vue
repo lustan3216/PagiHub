@@ -1,11 +1,10 @@
 <template>
-  <!-- id here is for selection using, can not delete -->
   <div
     v-if="isDraftMode && node"
     :class="{ 'h-100': !fitContainer, 'no-action': lock }"
-    @mousedown="singleClick"
+    @mousedown.stop="singleClick"
     @dblclick.stop="dblclick"
-    @contextmenu="contextmenu($event)"
+    @contextmenu.stop.prevent="contextmenu($event)"
   >
     <portal to="App">
       <context-menu
@@ -14,8 +13,8 @@
           top: contextMenu.y,
           left: contextMenu.x
         }"
-        :id="id"
         class="absolute"
+        @close="closeContextmenu"
       />
     </portal>
 
@@ -66,7 +65,7 @@
 
 <script>
 import vue from 'vue'
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { CAN_BE_EDITED, STYLES } from '@/const'
 import { isMac } from '@/utils/device'
 import { getNode, isTextEditor, traversalAncestorAndSelf } from '@/utils/node'
@@ -76,7 +75,7 @@ import { inheritanceObject } from '@/components/TemplateUtils/InheritanceControl
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { findIndexBy } from '@/utils/array'
 
-const store = vue.observable({ editingPath: [], lastEditId: null })
+const store = vue.observable({ editingPath: [], lastEditId: null, contextMenu: null })
 
 export default {
   name: 'ControllerLayer',
@@ -96,12 +95,6 @@ export default {
     id: {
       type: String,
       required: true
-    }
-  },
-  data() {
-    // 有些component像是 text edit or video, 裡面有拖拉多種互動，需要用 itemEditing 判定需不需要鎖住，經由點兩下就可操作
-    return {
-      contextMenu: null
     }
   },
   computed: {
@@ -135,13 +128,16 @@ export default {
     fitContainer() {
       const overflow = getValueByPath(this.child, [
         STYLES,
-        'default',
+        'html',
         'overflow'
       ])
       return isUndefined(overflow) && this.canOverflow
     },
     canOverflow() {
       return isTextEditor(this.child)
+    },
+    contextMenu() {
+      return store.contextMenu
     }
   },
   methods: {
@@ -175,7 +171,10 @@ export default {
     },
 
     singleClick(event) {
-      this.contextMenu = null
+      if (this.isRightCheck(event)) {
+        return
+      }
+      this.closeContextmenu()
       // don't change selected component ids when dragging item,
       // otherwise vue-resizable-handle will cause a bug here
 
@@ -218,12 +217,23 @@ export default {
         }, 100)
       }
     },
+    closeContextmenu() {
+      store.contextMenu = null
+    },
     contextmenu(event) {
-      event.preventDefault()
-      event.stopPropagation()
-      this.contextMenu = {
-        x: `${event.clientX}px`,
-        y: `${event.clientY}px`
+      const y = window.innerHeight > event.clientY + 400 ? event.clientY : window.innerHeight - 400
+      store.contextMenu = {
+        x: `${event.clientX + 10}px`,
+        y: `${y}px`
+      }
+    },
+    isRightCheck(e) {
+      e = e || window.event
+      if ('which' in e) {
+        return e.which === 3
+      }
+      else if ('button' in e) {
+        return e.button === 2
       }
     }
   }

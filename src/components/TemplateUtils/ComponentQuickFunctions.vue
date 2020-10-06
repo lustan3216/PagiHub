@@ -23,7 +23,7 @@
       :class="[
         top > 100 || top + height >= artBoardHeight - 100 ? 'top' : 'bottom'
       ]"
-      :style="{ top: top + height >= artBoardHeight - 100 ? '5px' : '' }"
+      :style="{ top: top + height >= artBoardHeight - 100 && artBoardHeight - height < 100 ? '5px' : '' }"
       class="wrapper flex"
     >
       <div
@@ -33,7 +33,7 @@
       >
         <div class="component-name">
           <transition-group name="full-slide">
-            <template v-for="(node, index) in parentNodes">
+            <template v-for="(node, index) in nodesPath">
               <i
                 v-if="hovering && index"
                 :key="node.id + 'i'"
@@ -60,7 +60,7 @@
       </div>
 
       <el-button-group
-        v-if="isDraftMode && !isExample"
+        v-if="isDraftMode && !isExample && isLastOne"
         class="flex backface-hidden"
       >
         <inheritance-jumper
@@ -75,27 +75,19 @@
           slim
         />
 
-        <stack />
-
-        <el-popover
-          ref="popover"
-          effect="light"
-          placement="right"
-          popper-class="transparent"
-        >
-          <context-menu :id="id" />
-        </el-popover>
+        <stack :id="id" />
 
         <lock
           :id="id"
           visible
+          allow-multi
         />
 
-        <el-button
-          v-popover:popover
-          icon="el-icon-more"
-          class="icon"
-        />
+        <!--        <el-button-->
+        <!--          v-popover:popover-->
+        <!--          icon="el-icon-more"-->
+        <!--          class="icon"-->
+        <!--        />-->
 
         <el-tooltip
           effect="light"
@@ -125,7 +117,6 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import ComponentName from './ComponentName'
 import ZIndex from '@/components/Setup/EditorStyle/ZIndex'
 import Stack from '@/components/Setup/EditorStyle/Stack'
-import ContextMenu from './ContextMenu'
 import InheritanceJumper from './InheritanceJumper'
 import Lock from './Lock'
 import { Popover } from 'element-ui'
@@ -135,7 +126,7 @@ import {
   getClosetGrimItem,
   isComponentSet,
   traversalAncestorAndSelf,
-  isComponent
+  isComponent, isGrid
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR } from '@/const'
@@ -166,7 +157,6 @@ export default {
     ZIndex,
     Lock,
     Stack,
-    ContextMenu,
     ElPopover: Popover
   },
   props: {
@@ -205,21 +195,18 @@ export default {
   computed: {
     ...mapState('app', [
       'copyComponentIds',
-      'selectedComponentIds',
-      'selectedComponentNode'
+      'selectedComponentIds'
     ]),
     ...mapState('layout', ['gridResizing', 'artBoardHeight']),
-    parentNodes() {
+    nodesPath() {
       const nodes = []
       traversalAncestorAndSelf(this.node, node => {
-        if (isComponent(node)) {
+        if (!isGrid(node)) {
           nodes.push(node)
         }
-        else {
-          return false
-        }
-      })
 
+        return !isComponentSet(node)
+      })
       return nodes.slice(0, 4)
     },
     newItemToolTip() {

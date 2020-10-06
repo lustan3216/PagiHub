@@ -110,11 +110,6 @@ const getters = {
       return state.selectedComponentIds[0]
     }
   },
-  selectedComponentNode(state, getters, rootState) {
-    if (getters.theOnlySelectedComponentId) {
-      return rootState.node.nodesMap[getters.theOnlySelectedComponentId]
-    }
-  },
   selectedComponentNodes(state, getters, rootState) {
     return state.selectedComponentIds
       .map(id => rootState.node.nodesMap[id])
