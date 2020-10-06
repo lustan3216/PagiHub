@@ -53,12 +53,12 @@ export default {
   },
   async created() {
     this.SET_DRAFT_MODE()
-    const projectId = await localforage.getItem('currentProjectId')
+    const { projectId } = this.$route.params
 
     if (projectId) {
       this.NODE_SET({ editingProjectId: projectId })
     }
-    else if (!this.editingProjectId) {
+    else {
       this.$router.push({ name: 'Dashboard' })
     }
 

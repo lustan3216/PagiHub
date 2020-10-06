@@ -88,6 +88,7 @@ export default {
     componentSets() {
       const project = getNode(this.editingProjectId)
       if (project) {
+
         return cloneJsonWithoutChildren(project.children).sort(
           (a, b) => b.label - a.label
         )

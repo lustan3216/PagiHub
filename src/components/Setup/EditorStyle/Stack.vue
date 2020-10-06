@@ -7,6 +7,7 @@
     <el-button
       :type="isStack ? 'primary' : 'text'"
       :class="{ isStack }"
+      data-cy="stack"
       plain
       icon="el-icon-s-grid"
       @click="click"

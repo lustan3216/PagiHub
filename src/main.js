@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV === 'test') {
-  require('./mock')
+  require('./apiMock')
 }
 
 import 'normalize.css'

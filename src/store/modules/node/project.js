@@ -31,7 +31,7 @@ export const actions = {
 
   async createProject({ commit }, params) {
     const { data } = await createProject(params)
-    console.log(data)
+
     commit('SET', { editingProjectId: data.id })
     commit('SET_NODES_TO_MAP', { nodes: data })
     return data

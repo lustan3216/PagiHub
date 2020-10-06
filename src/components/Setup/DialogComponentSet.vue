@@ -3,6 +3,7 @@
     :icon="`el-icon-${isExist ? 's-tools' : 'circle-plus'}`"
     :type="type"
     :size="size"
+    data-cy="component-set-create"
     @click.stop="visible = !visible"
   >
     {{ text }}
@@ -32,6 +33,7 @@
             >
               <el-input
                 v-model="form.label"
+                data-cy="component-set-name-input"
                 placeholder="At least 6 letters"
               />
             </el-form-item>
@@ -83,6 +85,7 @@
             >
               <text-editor-rich
                 v-model="form.description"
+                data-cy="component-set-desc-input"
                 class="description"
               />
               <p class="small-title">
@@ -204,6 +207,9 @@ export default {
           }
           catch (e) {
             Message.warning(e.message)
+            if (e instanceof Error) {
+              throw e
+            }
           }
           finally {
             this.loading = false

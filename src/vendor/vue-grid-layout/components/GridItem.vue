@@ -12,10 +12,13 @@
 </template>
 <style>
   .vue-grid-item {
-    transition: all 200ms ease;
     transition-property: left, top, right, width, height;
     box-sizing: border-box;
     /* add right for rtl */
+  }
+
+  .transition {
+    transition: all 200ms ease;
   }
 
   .vue-grid-item.no-touch {
@@ -550,7 +553,8 @@
           'cssTransforms': this.useCssTransforms,
           'render-rtl': this.renderRtl,
           'disable-userselect': this.isDragging,
-          'no-touch': this.isAndroid && this.draggableOrResizableAndNotStatic
+          'no-touch': this.isAndroid && this.draggableOrResizableAndNotStatic,
+          transition: process.env.NODE_ENV !== 'test'
         }
       },
       resizableAndNotStatic() {

@@ -53,6 +53,8 @@ module.exports = {
         }
       )
 
+    config.when((isTest), config => config.devtool('cheap-module-eval-source-map'))
+
     config.module
       .rule('vue')
       .use('vue-svg-inline-loader')

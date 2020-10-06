@@ -1,4 +1,4 @@
-import { API } from 'aws-amplify'
+import { API } from './request'
 import { isUndefined } from '@/utils/tool'
 
 export function getTags({ query, size }) {

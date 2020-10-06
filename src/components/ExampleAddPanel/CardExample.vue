@@ -12,6 +12,7 @@
       <el-button
         :disabled="canNotAdd"
         type="primary"
+        data-cy="add-component-button"
         @click="$emit('add')"
       >
         ADD

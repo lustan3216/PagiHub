@@ -3,7 +3,7 @@
   <div
     v-if="isDraftMode && node"
     :class="{ 'h-100': !fitContainer, 'no-action': lock }"
-    @mousedown.stop="singleClick"
+    @mousedown="singleClick"
     @dblclick.stop="dblclick"
     @contextmenu="contextmenu($event)"
   >

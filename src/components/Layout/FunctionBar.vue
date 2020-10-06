@@ -102,6 +102,7 @@ export default {
       vmCreateEmptyItem(arrayLast(this.selectedComponentNodes))
     },
     multiDelete() {
+      console.log(123)
       this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
     },
     cut() {

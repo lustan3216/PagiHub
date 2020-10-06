@@ -15,6 +15,7 @@
       class="can-action"
       type="text"
       size="mini"
+      data-cy="add-panel-button"
       @click="tryToAddComponent"
     />
 

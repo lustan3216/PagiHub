@@ -51,7 +51,7 @@ export default {
       this.$emit('input', value)
     }
   },
-  created() {
+  beforeMount() {
     getTags({ size: 30 }).then(({ data }) => {
       this.options = data.map(tag => ({ ...tag, value: tag.label }))
     })

@@ -129,7 +129,6 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapState('layout', ['breakpoint']),
     ...mapState('node', ['editingComponentSetId']),
     componentSetNode() {
       return this.nodesMap[this.editingComponentSetId]

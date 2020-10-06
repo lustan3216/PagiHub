@@ -1,7 +1,7 @@
 import localforage from 'localforage'
-import { isArray, toArray } from '@/utils/array'
+import { toArray } from '@/utils/array'
 import { queryString } from '@/utils/url'
-import { API } from 'aws-amplify'
+import { API } from './request'
 
 export function getProjects() {
   return API.get('jwt', '/projects', {})

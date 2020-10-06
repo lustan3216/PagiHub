@@ -18,13 +18,15 @@
     <slot />
 
     <vue-grid-item
-      v-for="layout in layouts"
+      v-for="(layout, index) in layouts"
       v-bind="layout"
       :class="{ 'no-action': layout.lock }"
       :ref="layout.id"
       :key="layout.id"
+      :data-cy="`grid-item-${index}`"
       drag-ignore-from=".grid-item-fix"
       drag-allow-from="div"
+      @mousedown.native.stop
       @resizeStart="itemUpdating"
       @moveStart="itemUpdating"
     >
@@ -42,11 +44,10 @@ import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
 import { getBreakpoint, sortAscBreakpoint } from '@/utils/layout'
-import { getValueByPath } from '@/utils/tool'
+import { getValueByPath, cloneJson } from '@/utils/tool'
 import { isInstanceChild } from '@/utils/inheritance'
 import { COLUMNS } from '@/const'
 import { isComponentSet } from '@/utils/node'
-import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'GridGeneratorInner',
@@ -207,6 +208,7 @@ export default {
   watch: {
     computedLayouts: {
       handler(value) {
+        cloneJson(value)
         this.responsiveLayouts = value
       },
       deep: true,
