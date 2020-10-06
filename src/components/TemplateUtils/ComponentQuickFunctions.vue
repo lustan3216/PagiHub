@@ -339,12 +339,8 @@ export default {
             self.top = y
           }
         })
-
-        setTimeout(() => {
-          this.resize()
-        }, 220)
       })
-    }, 220),
+    }, 300),
     mouseenter() {
       timeId = setTimeout(() => {
         this.hovering = true
