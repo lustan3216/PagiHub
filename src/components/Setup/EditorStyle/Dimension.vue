@@ -115,23 +115,15 @@ export default {
     cols() {
       return COLUMNS
     },
-    fitContainer() {
-      const result = this.vms.find(node => {
-        return getValueByPath(node, `innerStyles.layout.fitContainer`)
-      })
-
-      return Boolean(result)
-    },
     heightDisabled() {
       const result =
         !this.selectedComponentNodes.length ||
-        Boolean(this.ratioH && this.ratioW) ||
-        this.fitContainer
+        Boolean(this.ratioH && this.ratioW)
       return Boolean(result)
     },
     ratioDisabled() {
       // const hasInvalidComponent = this.selectedComponentNodes.find(node => 'video-player' === node.tag)
-      return !this.selectedComponentNodes.length || this.fitContainer
+      return !this.selectedComponentNodes.length
     },
     gridItemNodes() {
       const nodes = []

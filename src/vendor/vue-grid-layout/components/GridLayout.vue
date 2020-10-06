@@ -57,6 +57,10 @@
     },
     props: {
       // If true, the container height swells and contracts to fit contents
+      heightAsParent: {
+        type: Boolean,
+        default: true
+      },
       autoSize: {
         type: Boolean,
         default: true
@@ -339,9 +343,8 @@
         }
       },
       updateHeight: function() {
-        this.mergedStyle = {
-          height: this.containerHeight()
-        }
+        const height = this.heightAsParent ? '100%' : this.containerHeight()
+        this.mergedStyle = { height }
       },
       // autoSize() {},
       onWindowResize: function() {

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isDraftMode && node"
-    :class="{ 'h-100': !fitContainer, 'no-action': lock }"
+    :class="{ 'h-100': !isTextEditor, 'no-action': lock }"
     @mousedown.stop="singleClick"
     @dblclick.stop="dblclick"
     @contextmenu.stop.prevent="contextmenu($event)"
@@ -46,7 +46,7 @@
       :class="{
         'grid-item-fix': itemEditing,
         'no-action': !itemEditing && !isExample,
-        'h-100': !fitContainer
+        'h-100': !isTextEditor
       }"
     >
       <slot :item-editing="itemEditing" />
@@ -57,7 +57,7 @@
 
   <div
     v-else-if="node"
-    :class="{ 'h-100': !fitContainer }"
+    :class="{ 'h-100': !isTextEditor }"
   >
     <slot />
   </div>
@@ -125,15 +125,7 @@ export default {
     child() {
       return getValueByPath(this.node, ['children', 0])
     },
-    fitContainer() {
-      const overflow = getValueByPath(this.child, [
-        STYLES,
-        'html',
-        'overflow'
-      ])
-      return isUndefined(overflow) && this.canOverflow
-    },
-    canOverflow() {
+    isTextEditor() {
       return isTextEditor(this.child)
     },
     contextMenu() {

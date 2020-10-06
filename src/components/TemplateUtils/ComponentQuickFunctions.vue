@@ -339,6 +339,10 @@ export default {
             self.top = y
           }
         })
+
+        setTimeout(() => {
+          this.resize()
+        }, 220)
       })
     }, 220),
     mouseenter() {

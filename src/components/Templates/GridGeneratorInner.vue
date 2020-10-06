@@ -9,6 +9,7 @@
     :cols="cols"
     :breakpoints="breakpointsMap"
     :vertical-compact="false"
+    :height-as-parent="itemCannotExtendHeight"
     :is-draggable="isDraftMode && !isInstanceChild"
     :is-resizable="isDraftMode && !isInstanceChild"
     prevent-collision
@@ -96,6 +97,12 @@ export default {
       'breakpointsMap',
       'vh'
     ]),
+    itemCannotExtendHeight() {
+      return !this.rootLayout && !['scroll', 'hidden'].includes(this.overflow)
+    },
+    overflow() {
+      return getValueByPath(this, 'innerStyles.html.overflow')
+    },
     rootLayout() {
       return isComponentSet(this.node.parentNode)
     },
@@ -172,7 +179,6 @@ export default {
           }
 
           const styleLayout = getValueByPath(styles, ['layout'], {})
-          const overflow = getValueByPath(this, 'innerStyles.html.overflow')
 
           layout.push({
             static: lock,
@@ -185,11 +191,10 @@ export default {
             h,
             unitH: currentGrid.unitH,
             unitW: currentGrid.unitW,
-            lockInParent:
-              !this.rootLayout && !['scroll', 'hidden'].includes(overflow),
+            lockInParent: this.itemCannotExtendHeight,
             autoHeight,
             zIndex: styleLayout.zIndex,
-            canScroll: overflow === 'scroll',
+            canScroll: this.overflow === 'scroll',
             fixed: styleLayout.position === 'fixed',
             fixedBottom: styleLayout.position === 'fixedBottom',
             verticalCompact: styleLayout.position === 'verticalCompact',
