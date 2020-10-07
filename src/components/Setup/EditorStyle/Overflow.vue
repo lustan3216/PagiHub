@@ -10,7 +10,6 @@
     <el-col :span="16">
       <el-select
         v-model="overflow"
-        :disabled="!canOverflow"
       >
         <el-option
           label="Visible"
@@ -35,12 +34,7 @@ import { isGrid, isTextEditor } from '@/utils/node'
 
 export default {
   name: 'Overflow',
-  mixins: [forNodeMixin('overflow')],
-  computed: {
-    canOverflow() {
-      return this.nodes.every(node => isTextEditor(node) || isGrid(node))
-    }
-  }
+  mixins: [forNodeMixin('overflow')]
 }
 </script>
 

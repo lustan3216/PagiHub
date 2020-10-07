@@ -34,7 +34,6 @@ import { mapActions, mapState, mapMutations } from 'vuex'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
 import ComponentSet from '../Templates/ComponentSet'
-import localforage from 'localforage'
 
 export default {
   name: 'PanelDraft',

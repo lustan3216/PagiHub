@@ -54,7 +54,7 @@ export default {
   components: {
     VueGridGenerator: GridLayout,
     VueGridItem: GridItem,
-    // 因為lopp call AsyncComponent, 這裏不用 async import 會噴bug
+    // 因為loop call AsyncComponent, 這裏不用 async import 會噴bug
     ComponentGiver: () => import('../TemplateUtils/ComponentGiver')
   },
   mixins: [childrenMixin],
@@ -191,14 +191,17 @@ export default {
             h,
             unitH: currentGrid.unitH,
             unitW: currentGrid.unitW,
+            ratioH: styleLayout.ratioH,
+            ratioW: styleLayout.ratioW,
             lockInParent: this.itemCannotExtendHeight,
             autoHeight,
+            fixOnParentBottom: styleLayout.fixOnParentBottom,
             zIndex: styleLayout.zIndex,
             canScroll: this.overflow === 'scroll',
             fixed: styleLayout.position === 'fixed',
-            fixedBottom: styleLayout.position === 'fixedBottom',
+            fixOnParentBottom: styleLayout.position === 'fixOnParentBottom',
             verticalCompact: styleLayout.position === 'verticalCompact',
-            isDraggable: styleLayout.position !== 'fixedBottom',
+            isDraggable: this.isDraftMode && styleLayout.position !== 'fixOnParentBottom',
             stack: styleLayout.stack,
             isPixel: currentGrid.unitW === 'px'
           })

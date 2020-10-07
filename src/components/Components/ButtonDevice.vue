@@ -1,6 +1,10 @@
 <template>
+  <b-icon-laptop
+    v-if="iconOnly && buttonConfig.icon === 'laptop'"
+    style="margin-bottom: -2px;"
+  />
   <i
-    v-if="iconOnly"
+    v-else-if="iconOnly"
     :class="[buttonConfig.class, buttonConfig.icon]"
   />
   <el-tooltip
@@ -9,24 +13,37 @@
     effect="light"
     placement="bottom"
   >
+
     <el-button
       :type="type || (pointKey === currentBreakpoint ? 'primary' : 'text')"
       :class="buttonConfig.class"
-      :icon="buttonConfig.icon"
       :size="size"
       class="shortcut-button"
       plain
       @click="$emit('click', point)"
-    />
+    >
+      <b-icon-laptop
+        v-if="buttonConfig.icon === 'laptop'"
+        style="margin-bottom: -2px;"
+      />
+      <i
+        v-else
+        :class="buttonConfig.icon"
+      />
+    </el-button>
   </el-tooltip>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { BREAK_POINTS_MAP } from '@/const'
+import { BIconLaptop } from 'bootstrap-vue'
 
 export default {
   name: 'ButtonDevice',
+  components: {
+    BIconLaptop
+  },
   props: {
     pointKey: {
       type: String,
@@ -48,7 +65,7 @@ export default {
   computed: {
     ...mapGetters('layout', ['currentBreakpoint']),
     point() {
-      return BREAK_POINTS_MAP[this.pointKey]
+      return BREAK_POINTS_MAP[this.pointKey] || 320
     },
     buttonConfig() {
       return {
@@ -56,10 +73,10 @@ export default {
           icon: 'el-icon-data-line'
         },
         xl: {
-          icon: 'el-icon-data-line'
+          icon: 'el-icon-monitor'
         },
         lg: {
-          icon: 'el-icon-monitor'
+          icon: 'laptop'
         },
         md: {
           icon: 'el-icon-mobile'

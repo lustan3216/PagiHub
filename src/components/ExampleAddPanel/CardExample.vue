@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { shortTagName, getNode, isComponentSet } from '@/utils/node'
+import { shortTagName, getNode, isComponentSet, isGrid } from '@/utils/node'
 import ArtBoard from '../Layout/ArtBoard'
 import { Tag } from 'element-ui'
 import gsap from 'gsap'
@@ -90,7 +90,7 @@ export default {
       return getNode(this.beingAddedComponentId)
     },
     canNotAdd() {
-      return isComponentSet(this.node)
+      return isComponentSet(this.node) && !isGrid(this.component)
     }
   },
   mounted() {

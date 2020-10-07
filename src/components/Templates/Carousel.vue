@@ -70,11 +70,14 @@
       @change="checkSelectedComponent"
     >
       <el-carousel-item
-        v-for="child in gridGenerators"
+        v-for="(child, index) in gridGenerators"
         :key="child.id"
         :class="`carousel-item-${id}`"
       >
-        <component-giver :id="child.id" />
+        <component-giver
+          v-if="index === currentIndex"
+          :id="child.id"
+        />
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -91,6 +94,7 @@ import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, POLYMORPHISM } from '@/const'
 import { CarouselItem, Carousel } from 'element-ui'
 import { traversalSelfAndChildren } from '@/utils/node'
+import { vmRemoveNode } from '@/utils/vmMap'
 import ComponentGiver from '@/components/TemplateUtils/ComponentGiver'
 
 export default {
@@ -225,10 +229,14 @@ export default {
       const { id } = this.gridGenerators[oldIndex]
       const node = this.nodesMap[id]
       const ids = []
-
+      this.currentIndex = index
       traversalSelfAndChildren(node, ({ id }) => ids.push(id))
 
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
+    },
+    removeCurrentSlider() {
+      const node = this.children[this.currentIndex]
+      vmRemoveNode(node)
     }
   }
 }

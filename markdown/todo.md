@@ -21,6 +21,7 @@ https://github.com/antonreshetov/vue-eva-icons
 每個用戶都有一個 playground 進去可以馬上玩
 切換 componentset 時 patchchildren 有 bug
 優改 style 應該是改"除了 griditem 以外的元素"，如果有小孩，就改小孩，沒小孩就改自己，又因為複製貼上時，style 都會轉移到元素上 就沒問題了，這樣可以確保所有 style 都在小孩或是 griitem，不會兩邊有，就不用拿 innerStyle ㄊ ˙
+trnasofrm 要修改個別的component，不然像是rotate跟backgrpund會重疊
 width px, grid layout 底城如果用每單位 用px 計算搞不好有機會
 <li>road map</li>
 </ol>

@@ -234,15 +234,6 @@ export default {
       }
 
       traversal(theNodeGonnaRemove)
-
-      if (isCarousel(this.node) || isGrid(this.node)) {
-        if (this.node.children.length === 1) {
-          records.unshift({
-            path: this.node.id,
-            value: undefined
-          })
-        }
-      }
       // traversalAncestorAndSelf(
       //   this.node,
       //   ({ id, tag, children, parentNode }) => {
@@ -281,6 +272,17 @@ export default {
       const ids = records.map(x => x.path)
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
       this.RECORD(records)
+
+      this.$nextTick(() => {
+        if (isCarousel(this.node) || isGrid(this.node)) {
+          if (this.node.children.length === 0) {
+            this.RECORD({
+              path: this.node.id,
+              value: undefined
+            })
+          }
+        }
+      })
     }
   }
 }

@@ -46,11 +46,12 @@ export default {
       }
     }
 
+    const thirdLayer = getValueByPath(node, 'parentNode.parentNode.parentNode')
+    const isThirdLayer = isComponentSet(thirdLayer)
+
     return {
-      vIf: isComponentSet(
-        getValueByPath(node, 'parentNode.parentNode.parentNode')
-      ),
-      options
+      vIf: !isThirdLayer,
+      options: isThirdLayer ? options : false
     }
   },
   created() {

@@ -5,17 +5,20 @@ export function getControlPosition(e) {
 
 
 // Get from offsetParent
+const parentMap = {}
 export function offsetXYFromParentOf(evt) {
+  // console.time(12)
     const offsetParent = evt.target.offsetParent || document.body;
     const offsetParentRect = evt.offsetParent === document.body ? {left: 0, top: 0} : offsetParent.getBoundingClientRect();
 
+  // console.timeEnd(12)
     const x = evt.clientX + offsetParent.scrollLeft - offsetParentRect.left;
     const y = evt.clientY + offsetParent.scrollTop - offsetParentRect.top;
 
     /*const x = Math.round(evt.clientX + offsetParent.scrollLeft - offsetParentRect.left);
     const y = Math.round(evt.clientY + offsetParent.scrollTop - offsetParentRect.top);*/
 
-
+  // console.log({x, y})
     return {x, y};
 }
 

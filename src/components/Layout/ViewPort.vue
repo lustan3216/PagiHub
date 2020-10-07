@@ -44,7 +44,6 @@
 
         <button-device
           v-for="point in breakpoints"
-          v-if="point !== 'xs'"
           :key="point"
           :point-key="point"
           @click="setSize({ w: $event })"
@@ -59,7 +58,7 @@
 
           <el-button
             slot="reference"
-            class="m-r-10 m-l-15"
+            class="p-10"
             type="text"
             icon="el-icon-more-outline"
           />
@@ -185,6 +184,13 @@ export default {
     }
   },
   watch: {
+    resizeBar(value) {
+      if (value && this.style.w === this.artBoardWidth) {
+        this.$nextTick(() => {
+          this.setBoundaryRect()
+        })
+      }
+    },
     artBoardHeight(value) {
       this.style.h = value
     },

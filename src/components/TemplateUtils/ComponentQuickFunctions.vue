@@ -107,6 +107,14 @@
             {{ newItemToolTip }}
           </el-button>
         </el-tooltip>
+
+        <el-button
+          v-if="isCarousel"
+          class="icon"
+          @click="deleteSlider"
+        >
+          Delete Slider
+        </el-button>
       </el-button-group>
     </div>
   </div>
@@ -126,11 +134,11 @@ import {
   getClosetGrimItem,
   isComponentSet,
   traversalAncestorAndSelf,
-  isComponent, isGrid
+  isCarousel, isGrid
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR } from '@/const'
-import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
+import { vmCreateEmptyItem, vmGet, vmRemoveNode } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import { isInstance } from '@/utils/inheritance'
 import gsap from 'gsap'
@@ -228,6 +236,9 @@ export default {
     node() {
       return getNode(this.id)
     },
+    isCarousel() {
+      return isCarousel(this.node)
+    },
     isGridItem() {
       return isGridItem(this.node)
     },
@@ -273,6 +284,9 @@ export default {
     },
     vmCreateEmptyItem() {
       vmCreateEmptyItem(this.node)
+    },
+    deleteSlider() {
+      vmGet(this.node.id).removeCurrentSlider()
     },
     resize: debounce(function() {
       const self = this

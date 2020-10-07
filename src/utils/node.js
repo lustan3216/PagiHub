@@ -205,9 +205,9 @@ export function isGrid(node) {
   }
 }
 
-export function isBackground(node) {
+export function isSlider(node) {
   if (node) {
-    return node[POLYMORPHISM] === 'background'
+    return node[POLYMORPHISM] === 'slider'
   }
 }
 

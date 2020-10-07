@@ -175,12 +175,10 @@
       self.eventBus = self._provided.eventBus
       self.eventBus.$on('resizeEvent', self.resizeEventHandler)
       self.eventBus.$on('dragEvent', self.dragEventHandler)
-      self.eventBus.$on('correctFixItemsBound', self.correctFixItemsBound)
       self.$emit('layout-created', self.layout)
     },
     beforeDestroy: function() {
       //Remove listeners
-      this.eventBus.$off('correctFixItemsBound', this.correctFixItemsBound)
       this.eventBus.$off('resizeEvent', this.resizeEventHandler)
       this.eventBus.$off('dragEvent', this.dragEventHandler)
       this.eventBus.$destroy()
@@ -462,6 +460,7 @@
         this.updateHeight()
 
         if (eventName === 'resizeend') this.$emit('layout-updated', this.layout)
+
       },
 
       // finds or generates new layouts for set breakpoints

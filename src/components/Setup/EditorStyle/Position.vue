@@ -19,7 +19,7 @@
         />
         <el-option
           label="Fix on parent's bottom"
-          value="fixedBottom"
+          value="fixOnParentBottom"
         />
         <el-option
           label="Stick to top"

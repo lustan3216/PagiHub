@@ -61,8 +61,8 @@ export function cloneLayoutItem(layoutItem: LayoutItem): LayoutItem {
  */
 export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
   if (l1.stack && l2.stack) {
-    const fix1 = l1.fixed || l1.fixedBottom
-    const fix2 = l2.fixed || l2.fixedBottom
+    const fix1 = l1.fixed || l1.fixOnParentBottom
+    const fix2 = l2.fixed || l2.fixOnParentBottom
 
     if ((fix1 && fix2) || (!fix1 && !fix2)) {
       if (l1 === l2) return false; // same element
@@ -83,7 +83,7 @@ export function correctFixItemsBound(layout: Layout, height) {
   for (let i = 0, len = layout.length; i < len; i++) {
     let l = layout[i]
 
-    if (l.fixedBottom) {
+    if (l.fixOnParentBottom) {
       l.y = height - l.h
 
       l.moved = false;

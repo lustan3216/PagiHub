@@ -8,7 +8,6 @@
       :allow-drop="allowDrop"
       class="tree"
       node-key="id"
-      draggable
     >
       <template v-slot="{ data }">
         <div
@@ -104,7 +103,7 @@ import ComponentName from '../TemplateUtils/ComponentName'
 import Touchable from '../TemplateUtils/Lock'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
-import { traversalSelfAndChildren, isGrid, isBackground } from '@/utils/node'
+import { traversalSelfAndChildren, isGrid } from '@/utils/node'
 import { BIconFonts, BIconImage, BIconAspectRatio, BIconColumns, BIconCameraVideo, BIconCalendar3Event, BIconLayoutSidebarInsetReverse, BIconLink } from 'bootstrap-vue'
 
 require('smoothscroll-polyfill').polyfill()
@@ -190,6 +189,8 @@ export default {
     },
     nodeClick(event, id) {
       if (event.metaKey || event.ctrlKey) {
+        event.preventDefault()
+        event.stopPropagation()
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(id)
       }
       else {

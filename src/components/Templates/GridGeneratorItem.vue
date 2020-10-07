@@ -9,7 +9,7 @@
   >
     <div
       :style="innerStyles.html"
-      class="h-100"
+      class="h-100 border-box"
     >
       <component-giver
         v-if="child"

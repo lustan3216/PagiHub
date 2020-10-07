@@ -3,7 +3,11 @@
     ref="item"
     class="vue-grid-item"
     :class="classObj"
-    :style="styleObj"
+    :style="{
+          ...this.style,
+          zIndex,
+          position: this.fixItem ? 'fixed' : 'absolute'
+        }"
   >
     <slot/>
     <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass"/>
@@ -133,15 +137,11 @@
        type: Number,
        required: true
        },*/
-      canScroll: {
-        type: Boolean,
-        default: false
-      },
       fixed: {
         type: Boolean,
         default: false
       },
-      fixedBottom: {
+      fixOnParentBottom: {
         type: Boolean,
         default: false
       },
@@ -398,9 +398,9 @@
 
     },
     watch: {
-      fixedBottom(value) {
+      fixOnParentBottom(value) {
         if (value) {
-          this.eventBus.$emit('correctFixItemsBound')
+          this.parent.correctFixItemsBound()
         }
       },
       autoHeight: {
@@ -528,7 +528,7 @@
     computed: {
       ...mapState('layout', ['scaleRatio']),
       fixItem() {
-        return this.fixed || this.fixedBottom
+        return this.fixed || this.fixOnParentBottom
       },
       boundaryElement() {
         return getBoundaryEl(this.$el.parentNode)
@@ -543,17 +543,6 @@
       },
       hideHandler() {
         return store.hideHandler
-      },
-      styleObj() {
-        const object = {
-          ...this.style,
-          position: this.fixItem ? 'fixed' : 'absolute'
-        }
-        if (this.zIndex) {
-          object.zIndex = this.zIndex
-        }
-
-        return object
       },
       classObj() {
         return {
@@ -649,11 +638,11 @@
       },
       handleResize: function(event) {
         if (this.static) return
-        const position = getControlPosition(event)
+        // const position = getControlPosition(event)
 
         // Get the current drag point from the event. This is used as the offset.
-        if (position == null) return // not possible but satisfies flow
-        const { x, y } = position
+        // if (position == null) return // not possible but satisfies flow
+        // const { x, y } = position
 
         const newSize = { width: 0, height: 0 }
         let pos
@@ -670,13 +659,15 @@
           }
           case 'resizemove': {
             // console.log("### resize => " + event.type + ", lastW=" + this.lastW + ", lastH=" + this.lastH);
-            const coreEvent = createCoreData(this.lastW, this.lastH, x, y)
+            // const coreEvent = createCoreData(this.lastW, this.lastH, x, y)
+            // console.log(event)
+            // console.log(coreEvent.deltaX)
             if (this.renderRtl) {
-              newSize.width = this.resizing.width - coreEvent.deltaX
+              newSize.width = this.resizing.width - event.delta.x
             } else {
-              newSize.width = this.resizing.width + coreEvent.deltaX
+              newSize.width = this.resizing.width + event.delta.x
             }
-            newSize.height = this.resizing.height + coreEvent.deltaY
+            newSize.height = this.resizing.height + event.delta.y
 
             ///console.log("### resize => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
             this.resizing = newSize
@@ -736,8 +727,8 @@
           pos.w = 1
         }
 
-        this.lastW = x
-        this.lastH = y
+        // this.lastW = x
+        // this.lastH = y
 
         if (this.innerW !== pos.w || this.innerH !== pos.h) {
           this.$emit('resize', this.i, pos.h, pos.w, newSize.height, newSize.width)
@@ -755,11 +746,11 @@
         if (this.static) return
         if (this.isResizing) return
 
-        const position = getControlPosition(event)
+        // const position = getControlPosition(event)
 
         // Get the current drag point from the event. This is used as the offset.
-        if (position === null) return // not possible but satisfies flow
-        const { x, y } = position
+        // if (position === null) return // not possible but satisfies flow
+        // const { x, y } = position
 
         let parentRect
         let clientRect
@@ -817,14 +808,14 @@
             break
           }
           case 'dragmove': {
-            const coreEvent = createCoreData(this.lastX, this.lastY, x, y)
+            // const coreEvent = createCoreData(this.lastX, this.lastY, x, y)
             //                        Add rtl support
             if (this.renderRtl) {
-              newPosition.left = this.dragging.left - (coreEvent.deltaX) / this.scaleRatio
+              newPosition.left = this.dragging.left - (event.delta.x) / this.scaleRatio
             } else {
-              newPosition.left = this.dragging.left + (coreEvent.deltaX) / this.scaleRatio
+              newPosition.left = this.dragging.left + (event.delta.x) / this.scaleRatio
             }
-            newPosition.top = this.dragging.top + (coreEvent.deltaY) / this.scaleRatio
+            newPosition.top = this.dragging.top + (event.delta.y) / this.scaleRatio
             //                        console.log("### drag => " + event.type + ", x=" + x + ", y=" + y);
             //                        console.log("### drag => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
             //                        console.log("### drag end => " + JSON.stringify(newPosition));
@@ -841,8 +832,8 @@
           pos = this.calcXY(newPosition.top, newPosition.left)
         }
 
-        this.lastX = x
-        this.lastY = y
+        // this.lastX = x
+        // this.lastY = y
 
         if (this.innerX !== pos.x || this.innerY !== pos.y) {
           this.$emit('move', this.i, pos.x, pos.y)

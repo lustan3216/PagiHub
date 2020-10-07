@@ -33,10 +33,6 @@ export default {
         return closestGridItem(node)
       }
     },
-    stack() {
-      const vm = vmGet(this.node.id)
-      return getValueByPath(vm, ['innerStyles', 'layout', 'stack'])
-    },
     gridParent() {
       return this.node.parentNode
     },
@@ -50,10 +46,10 @@ export default {
       return this.gridParent.children.length > 1
     },
     canMoveForward() {
-      return this.node && this.hasSibling && !this.stack
+      return this.node && this.hasSibling
     },
     canMoveBackward() {
-      return this.node && this.hasSibling && !this.stack
+      return this.node && this.hasSibling
     },
     zIndexMap() {
       return this.gridParent.children.reduce((map, node) => {
