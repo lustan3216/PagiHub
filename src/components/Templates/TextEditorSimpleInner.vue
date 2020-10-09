@@ -169,6 +169,7 @@
         :style="style"
         :is="tag || 'div'"
         contenteditable="true"
+        style="white-space: pre-line;"
         @input="onInput"
         @keydown.delete.stop
       >

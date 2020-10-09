@@ -118,9 +118,12 @@ export const slider = (field, extraOptions = {}) => {
 
 export const boolean = (field, extraOptions = {}) => ({
   field,
-  type: 'switch',
+  type: 'checkbox',
   ...extraOptions,
-  title: humanize(extraOptions.title || field)
+  title: humanize(extraOptions.title || field),
+  options: [
+    { value: true, label: true }
+  ]
 })
 
 export const color = (field, extraOptions = {}) => ({

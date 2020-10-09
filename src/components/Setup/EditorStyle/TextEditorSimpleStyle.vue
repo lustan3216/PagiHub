@@ -77,7 +77,6 @@
 </template>
 
 <script>
-import { EditorMenuBubble } from 'tiptap'
 import SelectUnit from '@/components/Components/SelectUnit'
 import FontSelector from '@/components/Components/FontSelector'
 import Tip from '@/components/Tutorial/Tip'
@@ -89,7 +88,6 @@ import { getNode } from '@/utils/node'
 export default {
   name: 'TextEditorRichStyle',
   components: {
-    EditorMenuBubble,
     SelectUnit,
     FontSelector,
     Tip

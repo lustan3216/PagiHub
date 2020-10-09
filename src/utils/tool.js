@@ -18,6 +18,10 @@ export {
   isUndefined
 }
 
+export function isBoolean(value) {
+  return typeof value === 'boolean'
+}
+
 export function unsetValueByPathNested(object, path) {
   unsetValueByPath(object, path)
   path.pop()

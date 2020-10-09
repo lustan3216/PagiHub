@@ -1,15 +1,19 @@
 <template>
   <div>
-    <el-divider
-      content-position="left"
-      class="m-b-20"
-    >
-      <el-button
-        icon="el-icon-plus"
-        @click="changeUniq(!isUniq)"
-      />
-      {{ isUniq ? 'BORDERS' : 'EACH BORDER' }}
-    </el-divider>
+    <div class="divider-with-button">
+      <el-divider
+        content-position="left"
+        class="m-b-20"
+      >
+        {{ isUniq ? 'BORDERS' : 'EACH BORDER' }}
+      </el-divider>
+      <div class="el-dropdown">
+        <el-button
+          icon="el-icon-plus"
+          @click="changeUniq(!isUniq)"
+        />
+      </div>
+    </div>
 
     <div
       v-if="isUniq"
@@ -96,8 +100,9 @@ export default {
         borderLeft: this.borderLeft
       }
     },
-    vms() {
-      return this.selectedComponentNodes.map(node => vmGet(node.id))
+    lastVm() {
+      const node = arrayLast(this.selectedComponentNodes)
+      return node && vmGet(node.id)
     }
   },
   watch: {
@@ -167,11 +172,7 @@ export default {
       }
     },
     getValue(attr) {
-      const values = this.vms.map(vm =>
-        getValueByPath(vm, ['innerStyles', HTML, attr])
-      )
-
-      return arrayLast(values) || ''
+      return getValueByPath(this.lastVm, ['innerStyles', HTML, attr], '')
     },
     checkIsUniq(borders = this.borders) {
       return arrayUniq(Object.values(borders)).length === 1

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-divider content-position="left">
+    <div class="divider-with-button">
+      <el-divider content-position="left">
+        EFFECT
+      </el-divider>
+
       <el-dropdown
         size="small"
         @command="filterArray.push({ name: $event, value: 0, visible: true })"
@@ -18,9 +22,7 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-
-      EFFECT
-    </el-divider>
+    </div>
 
     <el-row
       v-for="(option, index) in filterArray"
@@ -47,7 +49,7 @@
       <el-col :span="3">
         <el-button
           icon="el-icon-delete"
-          @input="itemRemove(index)"
+          @click="itemRemove(index)"
         />
       </el-col>
     </el-row>
@@ -57,7 +59,7 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import forNodeMixin from './mixins/forNode'
-import { arrayLast, deleteBy } from '@/utils/array'
+import { deleteBy } from '@/utils/array'
 import { humanize, splitAt } from '@/utils/string'
 
 export default {
@@ -151,9 +153,6 @@ export default {
       return Object.keys(this.options).filter(
         name => !this.filterArray.map(x => x.name).includes(name)
       )
-    },
-    filter() {
-      return arrayLast(this.allValues) || ''
     }
   },
   watch: {
@@ -194,7 +193,7 @@ export default {
     },
     itemRemove(index) {
       deleteBy(this.filterArray, index)
-      this.recordStyles({ filter: this.filterArray })
+      this.recordStyles({ filter: this.stringify(this.filterArray) })
     }
   }
 }

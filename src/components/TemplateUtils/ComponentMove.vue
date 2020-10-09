@@ -102,19 +102,12 @@ export default {
       })
     },
     record(value) {
-      const child = this.node.children && this.node.children[0]
-      if (child) {
-        this.RECORD({
-          path: [child.id, STYLES, 'layout', 'zIndex'],
-          value
-        })
-      }
-      else {
-        this.RECORD({
-          path: [this.node.id, STYLES, 'layout', 'zIndex'],
-          value
-        })
-      }
+      const griItem = closestGridItem(this.node)
+
+      this.RECORD({
+        path: [griItem.id, STYLES, 'layout', 'zIndex'],
+        value
+      })
     },
     moveForward() {
       if (this.canMoveForward) {

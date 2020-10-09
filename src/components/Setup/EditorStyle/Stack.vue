@@ -17,10 +17,12 @@
 
 <script>
 import { Tooltip } from 'element-ui'
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { vmGet } from '@/utils/vmMap'
+import { closestGridItem } from '@/utils/node'
+import { arrayLast } from '@/utils/array'
 
 export default {
   name: 'Stack',
@@ -34,17 +36,20 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
+    ...mapGetters('app', ['selectedComponentNodes']),
     isStack() {
-      return getValueByPath(vmGet(this.id), ['innerStyles', 'layout', 'stack'])
+      const lastNode = arrayLast(this.selectedComponentNodes)
+      const grid = closestGridItem(lastNode)
+      return getValueByPath(vmGet(grid.id), ['innerStyles', 'layout', 'stack'])
     }
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
     click() {
-      this.selectedComponentIds.forEach(id => {
+      this.selectedComponentNodes.forEach(node => {
+        const grid = closestGridItem(node)
         this.RECORD({
-          path: [id, STYLES, 'layout', 'stack'],
+          path: [grid.id, STYLES, 'layout', 'stack'],
           value: this.isStack ? undefined : true
         })
       })

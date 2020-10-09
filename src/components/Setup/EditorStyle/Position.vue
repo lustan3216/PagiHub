@@ -41,18 +41,17 @@ export default {
   name: 'Position',
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
-    nodes() {
-      return this.selectedComponentNodes
-    },
     allValues() {
-      return this.nodes.map(node => {
+      return this.selectedComponentNodes.map(node => {
         const vm = vmGet(node.id, this.isExample)
         return getValueByPath(vm, ['innerStyles', 'layout', 'position'], '')
       })
     },
     position: {
       get() {
-        return arrayLast(this.allValues) || ''
+        const node = arrayLast(this.selectedComponentNodes)
+        const vm = vmGet(node.id, this.isExample)
+        return getValueByPath(vm, ['innerStyles', 'layout', 'position'], '')
       },
       set(value) {
         this.recordStyles({ position: value || undefined })
@@ -67,7 +66,7 @@ export default {
       for (const key in object) {
         const value = object[key]
 
-        this.nodes.forEach(node => {
+        this.selectedComponentNodes.forEach(node => {
           records.push({
             path: [node.id, STYLES, 'layout', key],
             value

@@ -8,14 +8,15 @@
       />
 
       <el-button
-        icon="el-icon-setting"
+        icon="el-icon-picture-outline"
         class="flex1"
-        @click="activePanel = 'PanelSettings'"
+        @click="activePanel = 'PanelFiles'"
       />
     </el-button-group>
 
     <div class="sidebar-right-content">
-      <component :is="activePanel" />
+      <panel-styles />
+      <panel-settings />
     </div>
   </div>
 </template>
@@ -23,12 +24,14 @@
 <script>
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
+import PanelFiles from '../Setup/PanelFiles'
 
 export default {
   name: 'SidebarRight',
   components: {
     PanelStyles,
-    PanelSettings
+    PanelSettings,
+    PanelFiles
   },
   data() {
     return {
@@ -43,6 +46,7 @@ export default {
   width: 260px;
   background-color: white;
   border-left: 1px solid $color-grey;
+  user-select: none;
 }
 
 ::v-deep {
@@ -87,6 +91,30 @@ export default {
     .el-button--mini.is-round {
       padding: 7px;
     }
+  }
+}
+
+::v-deep {
+  .divider-with-button {
+    display: flex;
+    & > .el-dropdown{
+      margin-top: 6px;
+      margin-left: 10px;
+    }
+
+    .el-button {
+      border-color: transparent;
+      padding: 3px !important;
+    }
+  }
+
+  .el-divider--horizontal {
+    margin: 15px 0 15px;
+  }
+
+  .el-divider__text {
+    font-size: 12px;
+    left: -20px;
   }
 }
 </style>

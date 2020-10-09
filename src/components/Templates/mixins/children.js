@@ -129,21 +129,10 @@ export default {
       let parentId = this.id
       nodeTree = cloneJson(nodeTree)
 
-      if (isGridItem(this.node)) {
-        if (isGridItem(nodeTree)) {
-          parentId = this.node.parentId
-          nodeTree.grid = this.node.grid
-          vmRemoveNode(this.node)
-        }
-        else {
-          // 加入的時候都把gridItem 的 style 放到nodeTree上，比較好管理style才不會兩邊放，直接merge兩邊style
-          // 可解決的場景是，master都是最低的，但有可能gridItem 都無法編輯到所以master永遠被蓋過
-          nodeTree[STYLES] = deepMerge(this.node[STYLES], nodeTree[STYLES])
-          records.push({
-            path: `${this.id}.${STYLES}`,
-            value: undefined
-          })
-        }
+      if (isGridItem(this.node) && isGridItem(nodeTree)) {
+        parentId = this.node.parentId
+        nodeTree.grid = this.node.grid
+        vmRemoveNode(this.node)
       }
 
       appendIds(

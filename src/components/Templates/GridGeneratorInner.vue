@@ -195,7 +195,6 @@ export default {
             ratioW: styleLayout.ratioW,
             lockInParent: this.itemCannotExtendHeight,
             autoHeight,
-            fixOnParentBottom: styleLayout.fixOnParentBottom,
             zIndex: styleLayout.zIndex,
             canScroll: this.overflow === 'scroll',
             fixed: styleLayout.position === 'fixed',

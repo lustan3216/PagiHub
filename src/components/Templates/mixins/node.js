@@ -37,9 +37,6 @@ export default {
     node() {
       return getNode(this.id, this.isExample)
     },
-    selfStyles() {
-      return this.node[STYLES] || {}
-    },
     selfProps() {
       return this.node[PROPS] || {}
     },
@@ -56,12 +53,7 @@ export default {
       return isGridItem(this.node) && arrayFirst(this.innerChildren)
     },
     innerStyles() {
-      if (isGridItem(this.node) && this.gridItemHasChild) {
-        return this.childStyles
-      }
-      else {
-        return deepMerge(this.masterNode[STYLES], this.selfStyles)
-      }
+      return deepMerge(this.masterNode[STYLES], this.node[STYLES] || {})
     },
     innerProps() {
       const setting = cloneJson(this.$options.defaultSetting || {})

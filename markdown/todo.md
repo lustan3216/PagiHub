@@ -17,6 +17,8 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
+font 還是需要fit container, 行為都要一致，做成checkbox
+grid item 用繼承的方式，不要每個breakpoint 都不一樣
 字體要可以搜尋
 每個用戶都有一個 playground 進去可以馬上玩
 切換 componentset 時 patchchildren 有 bug

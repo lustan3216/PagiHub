@@ -1,13 +1,17 @@
 <template>
   <div>
-    <el-divider content-position="left">
-      <el-button
-        icon="el-icon-plus"
-        @click="addNew"
-      />
+    <div class="divider-with-button">
+      <el-divider content-position="left">
+        SHADOW
+      </el-divider>
 
-      SHADOW
-    </el-divider>
+      <div class="el-dropdown">
+        <el-button
+          icon="el-icon-plus"
+          @click="addNew"
+        />
+      </div>
+    </div>
 
     <div
       v-drag-and-drop:options="{
@@ -18,7 +22,7 @@
       }"
     >
       <ul
-        style="margin-bottom: 0;"
+        class="m-0"
         @reordered="itemMove"
       >
         <li
@@ -82,7 +86,7 @@
             <el-col :span="3">
               <el-button
                 icon="el-icon-delete"
-                @input="itemRemove(index)"
+                @click="itemRemove(index)"
               />
             </el-col>
             <el-col :span="1">
@@ -101,7 +105,7 @@
       :gutter="2"
     >
       <el-col
-        :offset="10"
+        :offset="5"
         :span="3"
         class="sub-title"
       >
@@ -234,5 +238,8 @@ export default {
 ul {
   list-style-type: none;
   padding: 0;
+}
+.sub-title {
+  text-align: center;
 }
 </style>

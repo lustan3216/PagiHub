@@ -30,7 +30,6 @@
 
 <script>
 import forNodeMixin from './mixins/forNode'
-import { isGrid, isTextEditor } from '@/utils/node'
 
 export default {
   name: 'Overflow',

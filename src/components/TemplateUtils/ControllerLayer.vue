@@ -74,6 +74,7 @@ import { isInstance } from '@/utils/inheritance'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { findIndexBy } from '@/utils/array'
+import { vmGet } from '@/utils/vmMap'
 
 const store = vue.observable({ editingPath: [], lastEditId: null, contextMenu: null })
 
@@ -154,10 +155,11 @@ export default {
     },
 
     dblclick() {
-      if (!this.isExample) {
-        this.finEditingPath()
-      }
       if (this.canBeEdited) {
+        if (!this.isExample) {
+          this.finEditingPath()
+        }
+
         this.SET_SELECTED_COMPONENT_ID(this.id)
       }
     },

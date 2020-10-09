@@ -54,11 +54,12 @@ export default {
             info: '',
             control: [
               {
-                handle: x => x,
+                handle: x => x[0],
                 rule: [number('interval', { info: '', step: 100 })]
               }
             ]
           }),
+          select('direction', { info: '', options: ['horizontal', 'vertical'] }),
           select('indicatorPosition', {
             options,
             info: '',
@@ -78,12 +79,11 @@ export default {
           select('arrow', {
             info: '',
             options: ['always', 'hover', 'never', 'custom']
-          }),
+          })
           // select('type', {
           //   info: '',
           //   options: [{ label: 'General', value: '' }, 'card']
           // }),
-          select('direction', { info: '', options: ['horizontal', 'vertical'] })
         ],
         defaultSetting
       )

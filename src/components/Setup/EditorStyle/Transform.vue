@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-divider content-position="left">
+    <div class="divider-with-button">
+      <el-divider content-position="left">
+        TRANSFORM
+      </el-divider>
+
       <el-dropdown
         size="small"
         @command="add"
@@ -18,9 +22,7 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-
-      TRANSFORM
-    </el-divider>
+    </div>
 
     <!--    <transform-origin :state="state" />-->
 
@@ -75,7 +77,7 @@
         <el-col :span="3">
           <el-button
             icon="el-icon-delete"
-            @input="itemRemove(index)"
+            @click="itemRemove(index)"
           />
         </el-col>
       </el-row>
@@ -249,7 +251,7 @@ export default {
       ]
 
       for (const key in map) {
-        if (map[key]) {
+        if (map[key] && map[key] !== '0') {
           const detail = this.options[key]
           detail.value = map[key]
           transformArray.push(cloneJson(detail))
@@ -283,6 +285,7 @@ export default {
     },
     itemRemove(index) {
       deleteBy(this.transformArray, index)
+      this.recordStyles({ transform: this.stringify(this.transformArray) })
     },
     add(name) {
       this.transformArray.push({
@@ -290,6 +293,7 @@ export default {
         value: this.options[name].default,
         visible: true
       })
+      this.recordStyles({ transform: this.stringify(this.transformArray) })
     }
   }
 }

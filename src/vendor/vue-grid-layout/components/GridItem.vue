@@ -537,10 +537,6 @@
         const slot = this.$slots.default && this.$slots.default[0]
         return slot && slot.elm
       },
-      shouldAutoSize() {
-        const slot = this.$slots.default && this.$slots.default[0]
-        return slot && this.autoHeight
-      },
       hideHandler() {
         return store.hideHandler
       },
@@ -667,7 +663,12 @@
             } else {
               newSize.width = this.resizing.width + event.delta.x
             }
-            newSize.height = this.resizing.height + event.delta.y
+            if (this.autoHeight) {
+              pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH)
+              newSize.height = pos.height
+            } else {
+              newSize.height = this.resizing.height + event.delta.y
+            }
 
             ///console.log("### resize => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
             this.resizing = newSize
@@ -726,9 +727,6 @@
         if (pos.w < 1) {
           pos.w = 1
         }
-
-        // this.lastW = x
-        // this.lastH = y
 
         if (this.innerW !== pos.w || this.innerH !== pos.h) {
           this.$emit('resize', this.i, pos.h, pos.w, newSize.height, newSize.width)
@@ -1040,15 +1038,16 @@
             console.warn('autoSize')
           }
 
-          if (!this.shouldAutoSize) {
+          if (!this.autoHeight) {
             return
           }
 
           this.previousW = this.innerW
           this.previousH = this.innerH
 
-          let newSize = this.$slots.default[0].elm.getBoundingClientRect()
-          let pos = this.calcWH(newSize.height / this.scaleRatio, newSize.width / this.scaleRatio)
+          let { elm } = this.$slots.default[0]
+          const { clientHeight, clientWidth } = elm
+          let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
           if (pos.w < this.minW) {
             pos.w = this.minW
           }
@@ -1073,10 +1072,10 @@
           // this.lastH = y;
 
           if (this.innerW !== pos.w || this.innerH !== pos.h) {
-            this.$emit('resize', this.i, pos.h, pos.w, newSize.height, newSize.width)
+            this.$emit('resize', this.i, pos.h, pos.w, clientHeight, clientWidth)
           }
           if (this.previousW !== pos.w || this.previousH !== pos.h) {
-            this.$emit('resized', this.i, pos.h, pos.w, newSize.height, newSize.width)
+            this.$emit('resized', this.i, pos.h, pos.w, clientHeight, clientWidth)
             this.eventBus.$emit('resizeEvent', 'resizeend', this.i, this.innerX, this.innerY, pos.h, pos.w)
           }
         })

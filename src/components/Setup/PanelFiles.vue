@@ -130,7 +130,7 @@ const FilePond = vueFilePond(
 )
 
 export default {
-  name: 'PanelAsset',
+  name: 'PanelFiles',
   components: {
     ElTree: Tree,
     ElAvatar: Avatar,

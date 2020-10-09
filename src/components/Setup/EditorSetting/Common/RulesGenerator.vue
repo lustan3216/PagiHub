@@ -11,8 +11,9 @@
 <script>
 import formCreate from '@form-create/element-ui'
 import { Switch, Tooltip, InputNumber } from 'element-ui'
-import { getValueByPath } from '@/utils/tool'
-import { cloneObject, objectHasAnyKey } from '@/utils/object'
+import { getValueByPath, isBoolean } from '@/utils/tool'
+import { isArray } from '@/utils/array'
+import { cloneObject } from '@/utils/object'
 import { vmGet } from '@/utils/vmMap'
 import { mapGetters, mapMutations } from 'vuex'
 import { PROPS } from '@/const'
@@ -45,7 +46,7 @@ export default {
     return {
       api: {},
       option: {
-        form: { labelPosition: 'right', size: 'mini', labelWidth: '100px' },
+        form: { labelPosition: 'left', size: 'mini', labelWidth: '85px' },
         info: { type: 'tooltip' },
         submitBtn: { show: false }
       },
@@ -71,12 +72,24 @@ export default {
 
       defaultValueCache[rule.field] = rule.value
       rule.value = getValueByPath(vmProps, path, rule.value)
+
+      if (this.isBooleanType(rule)) {
+        rule.value = [rule.value]
+      }
+
       rule.on = {
         change: value => this.updateRecord(rule, value)
       }
     },
+    isBooleanType(rule) {
+      return rule.type === 'checkbox'
+    },
     updateRecord(rule, value) {
       this.api.setValue(rule.field, value)
+
+      if (this.isBooleanType(rule)) {
+        value = value[0]
+      }
 
       // same as default, thus delete the setting
       if (defaultValueCache[rule.field] === value) {

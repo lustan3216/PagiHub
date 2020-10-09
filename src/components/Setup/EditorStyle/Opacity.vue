@@ -10,7 +10,7 @@
     <el-col :span="16">
       <select-unit
         :units="[]"
-        v-model="opacity"
+        v-model="innerOpacity"
         :min="0"
         :max="100"
         :step="1"
@@ -23,7 +23,6 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import forNode from './mixins/forNode'
-import { arrayLast } from '@/utils/array'
 
 export default {
   name: 'Opacity',
@@ -32,9 +31,9 @@ export default {
     SelectUnit
   },
   computed: {
-    opacity: {
+    innerOpacity: {
       get() {
-        const value = arrayLast(this.allValues)
+        const value = this.opacity
         if (value === '') {
           return 100
         }

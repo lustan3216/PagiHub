@@ -286,7 +286,7 @@ export default {
       vmCreateEmptyItem(this.node)
     },
     deleteSlider() {
-      vmGet(this.node.id).removeCurrentSlider()
+      vmGet(this.node.id, this.isExample).removeCurrentSlider()
     },
     resize: debounce(function() {
       const self = this

@@ -27,30 +27,28 @@
     <!--      </el-radio-group>-->
     <!--    </div>-->
 
-    <portal-target name="PanelStyles" />
-
     <item-hidden-controller />
 
-    <dimension />
+    <dimension v-if="isAllGridItem"/>
 
     <el-divider content-position="left">STACK</el-divider>
 
-    <position />
+    <position v-if="isAllGridItem"/>
 
-    <padding />
+    <padding v-if="isAllGridItem"/>
 
     <radius />
 
     <opacity />
 
-    <overflow />
+    <overflow v-if="isAllGridItem" />
 
     <portal-target
       name="Rotate"
       slim
     />
 
-    <background-color />
+    <background-color v-if="isAllGridItem" />
 
     <border-all />
 
@@ -59,6 +57,8 @@
     <effect />
 
     <transform />
+
+    <portal-target name="PanelStyles" />
 
     <!--      <transitions-->
     <!--        :disabled="!isDefaultState"-->
@@ -70,7 +70,8 @@
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { RadioGroup, RadioButton } from 'element-ui'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
 import BackgroundColor from './EditorStyle/BackgroundColor'
@@ -84,8 +85,8 @@ import TransformOrigin from './EditorStyle/TransformOrigin'
 import Opacity from './EditorStyle/Opacity'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
-import { RadioGroup, RadioButton } from 'element-ui'
 import Position from '@/components/Setup/EditorStyle/Position'
+import { isGridItem } from '@/utils/node'
 
 export default {
   name: 'PanelStyles',
@@ -113,7 +114,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('app', ['selectedComponentNodes'])
+    ...mapGetters('app', ['selectedComponentNodes']),
+    isAllGridItem() {
+      const nodes = this.selectedComponentNodes.filter(node => isGridItem(node))
+      const allGridItem = nodes.length === this.selectedComponentNodes.length
+      return this.selectedComponentNodes.length && allGridItem
+    }
   }
 }
 </script>
@@ -132,17 +138,6 @@ export default {
   }
   .el-form-item {
     text-align: center;
-  }
-  .el-divider--horizontal {
-    margin: 24px 0 14px;
-  }
-  .el-divider__text {
-    font-size: 12px;
-    left: -20px;
-    button {
-      margin-right: 10px;
-      padding: 3px !important;
-    }
   }
 }
 </style>

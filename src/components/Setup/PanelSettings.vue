@@ -1,17 +1,14 @@
 <template>
-  <div class="h-100">
+  <div v-if="canSetUp">
+    <el-divider content-position="left">
+      SETTINGS
+    </el-divider>
+
     <component
-      v-if="canSetUp"
       :is="vueComponentTag"
       :id="lastNode.id"
       class="m-t-10 settings"
     />
-    <div
-      v-else
-      class="h-100 flex-center"
-    >
-      <p class="small-title">No Settings</p>
-    </div>
   </div>
 </template>
 
@@ -79,7 +76,7 @@ export default self
 <style scoped lang="scss">
 ::v-deep.settings {
   .el-col.el-col-24 {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
   .el-form-item {
     display: flex;
@@ -90,7 +87,16 @@ export default self
   .el-form-item__label {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    line-height: 14px;
+  }
+
+  .el-checkbox {
+    .el-checkbox__input {
+      line-height: 0;
+    }
+    .el-checkbox__label{
+      display: none;
+    }
   }
 }
 </style>

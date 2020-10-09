@@ -30,7 +30,9 @@ export function arrayFirst(e) {
 }
 
 export function arrayLast(e) {
-  return e[e.length - 1]
+  if (isArray(e)) {
+    return e[e.length - 1]
+  }
 }
 
 export function arrayUniq(e) {

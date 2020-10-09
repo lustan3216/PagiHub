@@ -20,7 +20,7 @@
 
       <el-col :span="12">
         <select-unit
-          :disabled="!gridItemNodes.length"
+          :disabled="!selectedComponentNodes.length"
           v-model="w"
           :max="cols"
           :units="['%', 'px']"
@@ -67,7 +67,6 @@
 
       <el-col :span="12">
         <select-unit
-          :disabled="ratioDisabled"
           v-model.number="ratioW"
           :units="['W']"
         />
@@ -75,7 +74,6 @@
 
       <el-col :span="12">
         <select-unit
-          :disabled="ratioDisabled"
           v-model.number="ratioH"
           :units="['H']"
         />
@@ -93,6 +91,7 @@ import { isGrid, isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
+import { array } from "@/validator"
 
 export default {
   name: 'Dimension',
@@ -103,68 +102,26 @@ export default {
 
   computed: {
     ...mapState('app', ['selectedComponentIds']),
+    ...mapGetters('app', ['selectedComponentNodes']),
     ...mapGetters('layout', ['currentBreakpoint']),
-    selectedComponentNodes() {
-      return this.selectedComponentIds
-        .map(id => this.nodesMap[id])
-        .filter(node => node && !isGrid(node))
-    },
     vms() {
       return this.selectedComponentNodes.map(node => vmGet(node.id))
     },
     cols() {
       return COLUMNS
     },
+    lastVm() {
+      return arrayLast(this.vms)
+    },
+    lastInnerStyles() {
+      return getValueByPath(this.lastVm, 'innerStyles')
+    },
     heightDisabled() {
-      const result =
-        !this.selectedComponentNodes.length ||
-        Boolean(this.ratioH && this.ratioW)
-      return Boolean(result)
-    },
-    ratioDisabled() {
-      // const hasInvalidComponent = this.selectedComponentNodes.find(node => 'video-player' === node.tag)
-      return !this.selectedComponentNodes.length
-    },
-    gridItemNodes() {
-      const nodes = []
-      this.selectedComponentNodes.filter(node => {
-        if (isGridItem(node)) {
-          nodes.push(node)
-        }
-        else if (isGridItem(node.parentNode)) {
-          nodes.push(node.parentNode)
-        }
-      })
-
-      return nodes
-    },
-    gridItemVms() {
-      return this.gridItemNodes.map(node => vmGet(node.id)).filter(x => x)
-    },
-    allVerticalCompact() {
-      return this.vms.map(vm =>
-        getValueByPath(vm, 'innerStyles.layout.verticalCompact')
-      )
-    },
-    allW() {
-      return this.gridItemVms.map(vm => {
-        const prop = vm.innerGrid[this.currentBreakpoint]
-        if (prop) {
-          return (prop.w || '0').toString() + (prop.unitW || '%')
-        }
-      })
-    },
-    allH() {
-      return this.gridItemVms.map(vm => {
-        const prop = vm.innerGrid[this.currentBreakpoint]
-        if (prop) {
-          return (prop.h || '0').toString() + (prop.unitH || 'px')
-        }
-      })
+      return Boolean(this.ratioH && this.ratioW)
     },
     verticalCompact: {
       get() {
-        return arrayLast(this.allVerticalCompact)
+        return getValueByPath(this.lastInnerStyles, 'layout.verticalCompact')
       },
       set(value) {
         const records = []
@@ -181,14 +138,17 @@ export default {
     },
     w: {
       get() {
-        return arrayLast(this.allW)
+        const prop = this.lastVm.innerGrid[this.currentBreakpoint]
+        if (prop) {
+          return (prop.w || '0').toString() + (prop.unitW || '%')
+        }
       },
       set(value) {
         const records = []
 
         const unitW = value.toString().replace(/\d/g, '')
         value = parseInt(value)
-        this.gridItemNodes.forEach(node => {
+        this.selectedComponentNodes.forEach(node => {
           records.push({
             path: `${node.id}.${GRID}.${this.currentBreakpoint}.unitW`,
             value: unitW === 'px' ? 'px' : undefined
@@ -204,14 +164,17 @@ export default {
     },
     h: {
       get() {
-        return arrayLast(this.allH)
+        const prop = this.lastVm.innerGrid[this.currentBreakpoint]
+        if (prop) {
+          return (prop.h || '0').toString() + (prop.unitH || 'px')
+        }
       },
       set(value) {
         const records = []
 
         const unitH = value.toString().replace(/\d/g, '')
         value = parseInt(value)
-        this.gridItemNodes.forEach(node => {
+        this.selectedComponentNodes.forEach(node => {
           records.push({
             path: `${node.id}.${GRID}.${this.currentBreakpoint}.unitH`,
             value: unitH === 'vh' ? 'vh' : undefined
@@ -225,18 +188,9 @@ export default {
         this.RECORD(records)
       }
     },
-    allRatioW() {
-      return this.vms.map(vm => getValueByPath(vm, 'innerStyles.layout.ratioW'))
-    },
-    allRatioH() {
-      return this.vms.map(vm => getValueByPath(vm, 'innerStyles.layout.ratioH'))
-    },
     ratioW: {
       get() {
-        const allSame = arrayUniq(this.allRatioW).length === 1
-        if (allSame) {
-          return this.allRatioW[0]
-        }
+        return getValueByPath(this.lastInnerStyles, 'layout.ratioW')
       },
       set(value) {
         const records = []
@@ -253,10 +207,7 @@ export default {
     },
     ratioH: {
       get() {
-        const allSame = arrayUniq(this.allRatioH).length === 1
-        if (allSame) {
-          return this.allRatioH[0]
-        }
+        return getValueByPath(this.lastInnerStyles, 'layout.ratioH')
       },
       set(value) {
         const records = []

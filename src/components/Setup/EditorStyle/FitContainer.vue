@@ -4,17 +4,14 @@
     align="middle"
   >
     <el-col :span="3">
-      <el-checkbox
-        :disabled="!canOverflow"
-        v-model="autoHeight"
-      />
+      <el-checkbox v-model="autoResize" />
     </el-col>
 
     <el-col
-      :span="10"
+      :span="21"
       class="title"
     >
-      Fit Container
+      Auto resize height to fit container
     </el-col>
   </el-row>
 </template>
@@ -25,31 +22,21 @@ import { vmGet } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { arrayLast } from '@/utils/array'
-import { isTextEditor } from '@/utils/node'
 
 export default {
   name: 'FitContainer',
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
-    nodes() {
-      return this.selectedComponentNodes
-    },
-    allValues() {
-      return this.nodes.map(node => {
-        const vm = vmGet(node.id, this.isExample)
-        return getValueByPath(vm, ['innerStyles', 'layout', 'autoHeight'], '')
-      })
-    },
-    autoHeight: {
+    autoResize: {
       get() {
-        return arrayLast(this.allValues) || ''
+        const node = arrayLast(this.selectedComponentNodes)
+        if (!node) return ''
+        const vm = vmGet(node.id)
+        return getValueByPath(vm, ['innerStyles', 'layout', 'autoResize'], '')
       },
       set(value) {
-        this.recordStyles({ autoHeight: value || undefined })
+        this.recordStyles({ autoResize: value || undefined })
       }
-    },
-    canOverflow() {
-      return this.nodes.every(node => isTextEditor(node))
     }
   },
   methods: {
@@ -60,7 +47,7 @@ export default {
       for (const key in object) {
         const value = object[key]
 
-        this.nodes.forEach(node => {
+        this.selectedComponentNodes.forEach(node => {
           records.push({
             path: [node.id, STYLES, 'layout', key],
             value
