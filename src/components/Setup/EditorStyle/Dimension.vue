@@ -84,7 +84,7 @@
 
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
-import Tip from '@/components/Tutorial/Tip'
+import Tip from '@/components/Tip/TipPopper'
 import SelectUnit from '@/components/Components/SelectUnit'
 import { COLUMNS, GRID, STYLES } from '@/const'
 import { isGrid, isGridItem } from '@/utils/node'

@@ -55,10 +55,6 @@ Vue.prototype.$t = key => i18n[key]
 Vue.prototype.$Log = console.log
 Vue.prototype.$log = console.log
 Vue.prototype.$bus = new Vue()
-Vue.prototype.$dialog = {
-  close: () => store.commit('app/DIALOG_CLOSE'),
-  open: name => store.commit('app/DIALOG_OPEN', name)
-}
 
 Vue.config.productionTip = false
 

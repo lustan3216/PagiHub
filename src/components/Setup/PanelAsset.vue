@@ -108,7 +108,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import { Tree, Avatar } from 'element-ui'
-import Tip from '@/components/Tutorial/Tip'
+import Tip from '@/components/Tip/TipPopper'
 import SplitPane from 'vue-splitpane'
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
@@ -130,7 +130,7 @@ const FilePond = vueFilePond(
 )
 
 export default {
-  name: 'PanelFiles',
+  name: 'PanelAsset',
   components: {
     ElTree: Tree,
     ElAvatar: Avatar,

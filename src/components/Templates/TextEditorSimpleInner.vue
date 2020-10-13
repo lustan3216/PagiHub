@@ -243,7 +243,7 @@ export default {
         return this.style.color
       },
       set(value) {
-        this.RECORD({
+        this.record({
           path: `${this.id}.${STYLES}.${HTML}.color`,
           value
         })
@@ -254,7 +254,7 @@ export default {
         return this.style.backgroundColor
       },
       set(value) {
-        this.RECORD({
+        this.record({
           path: `${this.id}.${STYLES}.${HTML}.backgroundColor`,
           value
         })
@@ -265,7 +265,7 @@ export default {
         return this.style.textAlign
       },
       set(value) {
-        this.RECORD({
+        this.record({
           path: `${this.id}.${STYLES}.${HTML}.textAlign`,
           value
         })
@@ -276,7 +276,7 @@ export default {
         return this.style.textDecoration
       },
       set(value) {
-        this.RECORD({
+        this.record({
           path: `${this.id}.${STYLES}.${HTML}.textDecoration`,
           value
         })
@@ -287,7 +287,7 @@ export default {
         return this.style.fontWeight
       },
       set(value) {
-        this.RECORD({
+        this.record({
           path: `${this.id}.${STYLES}.${HTML}.fontWeight`,
           value
         })
@@ -298,7 +298,7 @@ export default {
         return this.style.fontStyle
       },
       set(value) {
-        this.RECORD({
+        this.record({
           path: `${this.id}.${STYLES}.${HTML}.fontStyle`,
           value
         })
@@ -312,7 +312,7 @@ export default {
         return this.props.tag
       },
       set(value) {
-        this.RECORD({
+        this.record({
           path: `${this.id}.props.tag`,
           value
         })
@@ -323,7 +323,7 @@ export default {
         return this.props.link
       },
       set(value) {
-        this.RECORD({
+        this.record({
           path: `${this.id}.props.link`,
           value
         })
@@ -346,6 +346,12 @@ export default {
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
+    record(object) {
+      if (this.isExample) {
+        return
+      }
+      this.record(object)
+    },
     findFontNames(string) {
       if (typeof string === 'object') {
         string = JSON.stringify(string)
@@ -369,7 +375,7 @@ export default {
     onInput(event) {
       const value = event.target.innerText
 
-      this.RECORD({
+      this.record({
         path: `${this.id}.value`,
         value
       })

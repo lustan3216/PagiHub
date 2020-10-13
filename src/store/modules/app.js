@@ -16,12 +16,6 @@ const state = {
 
 const mutations = {
   SET,
-  DIALOG_OPEN(state, name) {
-    state.dialog = `dialog-${name}`
-  },
-  DIALOG_CLOSE(state) {
-    state.dialog = null
-  },
   RESET(state) {
     state.selectedComponentIds = []
     state.copyComponentIds = []
@@ -52,7 +46,6 @@ const mutations = {
 let tmpSelectedComponentIds
 const actions = {
   setBeingAddedComponentId({ commit, state }, id) {
-    commit('DIALOG_OPEN', 'ComponentTabs')
     // 打開DialogComponentTabs 新增example時，原本draft上的selected component會跟example裡面的混在一起
     // 打開時先暫時刪除，關掉時存回去
     tmpSelectedComponentIds = state.selectedComponentIds
@@ -62,8 +55,6 @@ const actions = {
     })
   },
   removeBeingAddedComponentId({ commit }) {
-    commit('DIALOG_CLOSE')
-
     commit('SET', {
       beingAddedComponentId: null,
       selectedComponentIds: tmpSelectedComponentIds

@@ -19,23 +19,15 @@
       </el-button>
     </el-button-group>
 
-    <panel-asset
-      v-show="editingAsset"
-      v-if="editingAsset || uploading"
-      @processStart="uploading = true"
-      @processEnd="uploading = false"
-    />
+    <panel-asset v-if="editingAsset" />
 
     <split-pane
-      v-if="!editingAsset"
+      v-else
       :default-percent="40"
       split="horizontal"
     >
       <template slot="paneL">
-        <component
-          v-if="isLogin"
-          :is="activePanel"
-        />
+        <panel-component-sets v-if="isLogin" />
       </template>
 
       <template slot="paneR">
@@ -56,7 +48,7 @@ import SplitPane from 'vue-splitpane'
 import { getValueByPath } from '@/utils/tool'
 import PanelComponents from '@/components/Setup/PanelComponents'
 import PanelComponentSets from '@/components/Setup/PanelComponentSets'
-import PanelAsset from '@/components/Setup/PanelFiles'
+import PanelAsset from '@/components/Setup/PanelAsset'
 import interactjs from 'interactjs'
 
 export default {
@@ -70,7 +62,6 @@ export default {
   data() {
     return {
       activePanel: 'PanelComponentSets',
-      uploading: false,
       width: 260
     }
   },

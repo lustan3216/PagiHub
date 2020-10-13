@@ -82,7 +82,7 @@
 import { EditorMenuBubble } from 'tiptap'
 import SelectUnit from '@/components/Components/SelectUnit'
 import FontSelector from '@/components/Components/FontSelector'
-import Tip from '@/components/Tutorial/Tip'
+import Tip from '@/components/Tip/TipPopper'
 
 export default {
   name: 'TextEditorRichStyle',

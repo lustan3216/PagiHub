@@ -37,10 +37,11 @@
 import { humanize } from '@/utils/string'
 
 const BASIC_COMPONENTS = 'basicComponents'
+const IMAGE_ASSET = 'imageAsset'
 const LOCAL_PAGES = 'localPages'
 const PUBLIC_PAGES = 'publicPages'
 
-export { BASIC_COMPONENTS, LOCAL_PAGES, PUBLIC_PAGES }
+export { BASIC_COMPONENTS, LOCAL_PAGES, PUBLIC_PAGES, IMAGE_ASSET }
 
 export default {
   name: 'MenuCategories',
@@ -61,6 +62,10 @@ export default {
         {
           name: BASIC_COMPONENTS,
           subtitle: 'The basic UI kit'
+        },
+        {
+          name: IMAGE_ASSET,
+          subtitle: 'Image or svg management'
         },
         {
           name: LOCAL_PAGES,

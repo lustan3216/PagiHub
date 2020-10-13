@@ -5,7 +5,7 @@
       size="small"
     >
       <el-button class="w-100">
-        Select Image From Asset
+        Select Uploaded Images
         <i class="el-icon-arrow-down el-icon--right" />
       </el-button>
       <el-dropdown-menu

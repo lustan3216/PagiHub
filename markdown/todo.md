@@ -17,28 +17,32 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-font 還是需要fit container, 行為都要一致，做成checkbox
-grid item 用繼承的方式，不要每個breakpoint 都不一樣
+
+grid item 用繼承的方式，不要每個 breakpoint 都不一樣
 字體要可以搜尋
 每個用戶都有一個 playground 進去可以馬上玩
 切換 componentset 時 patchchildren 有 bug
-優改 style 應該是改"除了 griditem 以外的元素"，如果有小孩，就改小孩，沒小孩就改自己，又因為複製貼上時，style 都會轉移到元素上 就沒問題了，這樣可以確保所有 style 都在小孩或是 griitem，不會兩邊有，就不用拿 innerStyle ㄊ ˙
-trnasofrm 要修改個別的component，不然像是rotate跟backgrpund會重疊
-width px, grid layout 底城如果用每單位 用px 計算搞不好有機會
+trnasofrm 要修改個別的 component，不然像是 rotate 跟 backgrpund 會重疊
+width px, grid layout 底城如果用每單位 用 px 計算搞不好有機會
+
 <li>road map</li>
 </ol>
 
 ### Last
+
+font 還是需要 fit container, 行為都要一致，做成 checkbox
+等 stylecomponent 好了，把 master style 放左邊一蘭
 可以 shift 拉出來複製,拉出來的應該可以改成 stack false
 asset 裡面可以放照片，區分 master component
 container 對其功能 , 距離輔助
 seo
 5<li>project's favicon and SEO can be edited in the project modal</li>
-5<li>seo sitemap page要可以挑選</li>
+5<li>seo sitemap page 要可以挑選</li>
 component 都可以有自己的 style state
 icon
 a function to support client user can edit the draft
 upload svg, 看能不能 svgo filter, 不然以後沒有 svg 少了很多動畫可以做
+
 <li>radius 可加增神奇第二元素</li>
 <li>style 有必要做到device可以區分嗎？</li>
 update children 要做 queue

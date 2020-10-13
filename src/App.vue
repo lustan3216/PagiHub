@@ -4,9 +4,11 @@
 
     <router-view :style="{ paddingTop: needNavBar ? '50px' : '0' }" />
 
-    <transition name="fade">
-      <component :is="dialog" />
-    </transition>
+    <dialog-component-tabs
+      :visible="Boolean(beingAddedComponentId)"
+      @uploading="uploading = true"
+      @uploaded="uploading = false"
+    />
 
     <portal-target
       v-for="id in selectedComponentIds"
@@ -35,9 +37,14 @@ export default {
     DialogComponentTabs: () =>
       import('@/components/ExampleAddPanel/DialogComponentTabs')
   },
+  data() {
+    return {
+      uploading: false
+    }
+  },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapState('app', ['dialog']),
+    ...mapState('app', ['beingAddedComponentId']),
     ...mapGetters('user', ['isLogin']),
     inDashboard() {
       return this.$route.path.indexOf('/dashboard') === 0

@@ -1,19 +1,5 @@
 <template>
   <div id="sidebar-right">
-    <el-button-group class="flex">
-      <el-button
-        icon="el-icon-brush"
-        class="flex1"
-        @click="activePanel = 'PanelStyles'"
-      />
-
-      <el-button
-        icon="el-icon-picture-outline"
-        class="flex1"
-        @click="activePanel = 'PanelFiles'"
-      />
-    </el-button-group>
-
     <div class="sidebar-right-content">
       <panel-styles />
       <panel-settings />
@@ -24,14 +10,12 @@
 <script>
 import PanelStyles from '../Setup/PanelStyles'
 import PanelSettings from '../Setup/PanelSettings'
-import PanelFiles from '../Setup/PanelFiles'
 
 export default {
   name: 'SidebarRight',
   components: {
     PanelStyles,
-    PanelSettings,
-    PanelFiles
+    PanelSettings
   },
   data() {
     return {
@@ -97,7 +81,7 @@ export default {
 ::v-deep {
   .divider-with-button {
     display: flex;
-    & > .el-dropdown{
+    & > .el-dropdown {
       margin-top: 6px;
       margin-left: 10px;
     }

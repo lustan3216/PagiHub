@@ -79,7 +79,7 @@
 <script>
 import SelectUnit from '@/components/Components/SelectUnit'
 import FontSelector from '@/components/Components/FontSelector'
-import Tip from '@/components/Tutorial/Tip'
+import Tip from '@/components/Tip/TipPopper'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES, HTML } from '@/const'
 import { mapMutations } from 'vuex'

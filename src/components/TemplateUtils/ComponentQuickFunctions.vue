@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="node"
+    v-if="node && visible"
     :id="`quick-fn-${id}`"
     :style="{
       zIndex: isExample ? 2005 : 800
@@ -23,7 +23,12 @@
       :class="[
         top > 100 || top + height >= artBoardHeight - 100 ? 'top' : 'bottom'
       ]"
-      :style="{ top: top + height >= artBoardHeight - 100 && artBoardHeight - height < 100 ? '5px' : '' }"
+      :style="{
+        top:
+          top + height >= artBoardHeight - 100 && artBoardHeight - height < 100
+            ? '5px'
+            : ''
+      }"
       class="wrapper flex"
     >
       <div
@@ -134,7 +139,8 @@ import {
   getClosetGrimItem,
   isComponentSet,
   traversalAncestorAndSelf,
-  isCarousel, isGrid
+  isCarousel,
+  isGrid
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR } from '@/const'
@@ -197,14 +203,12 @@ export default {
       height: heightShared,
       animationId: null,
       canGoBack: null,
-      hovering: false
+      hovering: false,
+      visible: true
     }
   },
   computed: {
-    ...mapState('app', [
-      'copyComponentIds',
-      'selectedComponentIds'
-    ]),
+    ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
     ...mapState('layout', ['gridResizing', 'artBoardHeight']),
     nodesPath() {
       const nodes = []
@@ -292,6 +296,7 @@ export default {
       const self = this
       this.$nextTick(() => {
         if (!this.node) {
+          this.visible = false
           return
         }
 
@@ -303,6 +308,7 @@ export default {
         const element = vm && vm.$el
 
         if (!element) {
+          this.visible = false
           return
         }
 
@@ -328,6 +334,7 @@ export default {
               : height
 
         if (height < 10 || width < 10) {
+          this.visible = false
           return
         }
 
@@ -351,8 +358,11 @@ export default {
             widthShared = width
             heightShared = height
             self.top = y
+            self.left = x
           }
         })
+
+        this.visible = true
       })
     }, 300),
     mouseenter() {

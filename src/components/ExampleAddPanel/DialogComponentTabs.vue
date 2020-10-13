@@ -3,7 +3,7 @@
     id="examples-dialog"
     ref="dialog"
     :class="currentCategory"
-    visible
+    :visible="visible"
     class="dialog"
     top="5vh"
     width="80vw"
@@ -25,7 +25,7 @@
 
       <el-col :span="9">
         <select-tag
-          :disabled="isBasic"
+          :disabled="isBasic || isAsset"
           v-model="tags"
           :allow-create="false"
           placeholder="Select tags to search"
@@ -45,48 +45,57 @@
         style="width: 225px;"
       />
 
-      <menu-examples
-        v-if="isBasic"
-        :search="search"
-        style="flex: 7.5"
-        class="over-scroll p-15"
-        @add="addTemplate"
-      />
+      <keep-alive>
+        <menu-examples
+          v-if="isBasic"
+          :search="search"
+          style="flex: 7.5"
+          class="over-scroll p-15"
+          @add="addTemplate"
+        />
 
-      <template v-else>
-        <keep-alive>
-          <menu-component-sets
-            v-model="currentComponentId"
-            :except-ids="[editingComponentSetId]"
-            :category="currentCategory.name"
-            :key="currentCategory.name"
-            :text="search"
-            :tags="tags"
-            :default-tags="defaultTags"
-            class="flex-column over-scroll"
-            style="flex: 1.5;"
-            @add="addTemplate"
-          />
-        </keep-alive>
+        <menu-images
+          v-else-if="isAsset"
+          :search="search"
+          style="flex: 7.5"
+          @uploading="$emit('uploading')"
+          @uploaded="$emit('uploaded')"
+          @add="addTemplate"
+        />
+
+        <menu-component-sets
+          v-else
+          v-model="currentComponentId"
+          :except-ids="[editingComponentSetId]"
+          :category="currentCategory.name"
+          :key="currentCategory.name"
+          :text="search"
+          :tags="tags"
+          :default-tags="defaultTags"
+          class="flex-column over-scroll"
+          style="flex: 1.5;"
+          @add="addTemplate"
+        />
+      </keep-alive>
+
+      <div
+        v-if="!isBasic && !isAsset"
+        style="flex: 6"
+        class="content"
+      >
+        <card-component-set
+          v-if="currentComponentId"
+          :id="currentComponentId"
+          @add="addTemplate"
+        />
 
         <div
-          style="flex: 6"
-          class="content"
+          v-else
+          class="flex-center h-100"
         >
-          <card-component-set
-            v-if="currentComponentId"
-            :id="currentComponentId"
-            @add="addTemplate"
-          />
-
-          <div
-            v-else
-            class="flex-center h-100"
-          >
-            <p>Please select a page to review</p>
-          </div>
+          <p>Please select a page to review</p>
         </div>
-      </template>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -98,12 +107,13 @@ import { isComponentSet } from '@/utils/node'
 import { Tag } from 'element-ui'
 import { vmGet } from '@/utils/vmMap'
 import { HTML, STYLES } from '@/const'
-import Tip from '@/components/Tutorial/Tip'
+import Tip from '@/components/Tip/TipPopper'
 import SelectTag from '@/components/Components/SelectTag'
 import CardComponentSet from './CardComponentSet'
-import MenuCategories, { BASIC_COMPONENTS } from './MenuCategories'
+import MenuCategories, { BASIC_COMPONENTS, IMAGE_ASSET } from './MenuCategories'
 import MenuComponentSets from './MenuComponentSets'
 import MenuExamples from './MenuExamples'
+import MenuImages from './MenuImages'
 
 export default {
   name: 'DialogComponentTabs',
@@ -116,10 +126,17 @@ export default {
     MenuExamples,
     MenuCategories,
     MenuComponentSets,
+    MenuImages,
     CardComponentSet,
     Tip,
     SelectTag,
     ElTag: Tag
+  },
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -135,16 +152,24 @@ export default {
     ...mapState('app', ['beingAddedComponentId']),
     isBasic() {
       return this.currentCategory.name === BASIC_COMPONENTS
+    },
+    isAsset() {
+      return this.currentCategory.name === IMAGE_ASSET
     }
   },
   watch: {
     currentCategory(value) {
       this.defaultTags = value.tags || []
+      this.resizeNodeQuickFn()
+    },
+    currentComponentId() {
+      this.resizeNodeQuickFn()
     }
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
     ...mapActions('app', ['removeBeingAddedComponentId']),
+    ...mapActions('layout', ['resizeNodeQuickFn']),
     addTemplate(template) {
       const node = this.nodesMap[this.beingAddedComponentId]
 
@@ -159,7 +184,7 @@ export default {
       }
 
       vmGet(node.id).addNodeToParent(cloneJson(template))
-      this.$dialog.close()
+      this.removeBeingAddedComponentId()
     }
   }
 }

@@ -1,6 +1,7 @@
 <template>
   <div
     v-observe-visibility="options"
+    :style="innerStyles.html"
     class="h-100"
   >
     <template v-if="inViewPort && innerProps.keyboard">

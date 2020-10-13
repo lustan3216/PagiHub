@@ -2,6 +2,7 @@
   <text-editor-simple-inner
     :id="id"
     :editing="editing"
+    :style="innerStyles.html"
     :value="innerValue"
   />
 </template>

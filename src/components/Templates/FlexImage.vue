@@ -1,5 +1,6 @@
 <template>
   <el-image
+    :style="innerStyles.html"
     v-bind="innerProps"
     class="wh-100"
     lazy

@@ -1,6 +1,7 @@
 <template>
   <vue-plyr
     ref="plyr"
+    :style="innerStyles.html"
     :options="innerProps"
     :key="JSON.stringify(innerProps)"
     class="h-100"

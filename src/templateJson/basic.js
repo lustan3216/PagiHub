@@ -57,7 +57,7 @@ export const gridGenerator = function(options) {
   return {
     [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
-    [LABEL]: 'layout',
+    [LABEL]: 'containers',
     [CHILDREN]: gridGeneratorItems(),
     ...options
   }
@@ -118,7 +118,7 @@ export const textEditor = function(options) {
 export const flexButton = function() {
   return {
     [TAG]: 'flex-button',
-    [LABEL]: 'link',
+    [LABEL]: 'button',
     [STYLES]: {
       [HTML]: { border: '1px solid #dcdfe6' }
     },
@@ -141,6 +141,7 @@ export const flexButton = function() {
 export const flexImage = function(props) {
   return {
     [TAG]: 'flex-image',
+    [LABEL]: 'image',
     ...props
   }
 }
