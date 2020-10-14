@@ -18,7 +18,7 @@ import { SOFT_DELETE, CHILDREN, POLYMORPHISM } from '@/const'
 //   parallax: true,
 // el: '.swiper-pagination-v', 要+id 因為會卡到nested問題
 export const defaultSetting = {
-  trigger: 'hover',
+  trigger: 'click',
   autoplay: false,
   interval: 3000,
   indicatorPosition: 'bottom',
@@ -59,26 +59,20 @@ export default {
               }
             ]
           }),
-          select('direction', { info: '', options: ['horizontal', 'vertical'] }),
-          select('indicatorPosition', {
-            options,
+          select('direction', {
             info: '',
-            control: [
-              {
-                handle: x => x !== 'none',
-                rule: [
-                  select('trigger', {
-                    info: '',
-                    title: 'indicatorTrigger',
-                    options: ['hover', 'click']
-                  })
-                ]
-              }
-            ]
+            options: ['horizontal', 'vertical']
+          }),
+          select('trigger', {
+            title: 'indicatorTrigger',
+            options: ['hover', 'click']
+          }),
+          select('indicatorPosition', {
+            options
           }),
           select('arrow', {
             info: '',
-            options: ['always', 'hover', 'never', 'custom']
+            options: ['always', 'hover', 'never']
           })
           // select('type', {
           //   info: '',

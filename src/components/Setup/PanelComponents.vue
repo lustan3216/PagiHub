@@ -19,41 +19,6 @@
           @mouseenter.stop="hoverNode(data.id)"
           @mouseleave.stop="hoverLeaveNode(data.id)"
         >
-          <div class="m-l-10 m-r-5">
-            <b-icon-fonts
-              v-if="data.tag === 'text-editor'"
-              class="gray-font-2"
-            />
-            <b-icon-image
-              v-if="data.tag === 'flex-image'"
-              class="gray-font-2"
-            />
-            <b-icon-aspect-ratio
-              v-if="data.tag === 'grid-generator-item'"
-              class="gray-font-2"
-            />
-            <b-icon-columns
-              v-if="data.tag === 'grid-generator'"
-              class="gray-font-2"
-            />
-            <b-icon-camera-video
-              v-if="data.tag === 'video-player'"
-              class="gray-font-2"
-            />
-            <b-icon-calendar3-event
-              v-if="data.tag === 'iframer'"
-              class="gray-font-2"
-            />
-            <b-icon-layout-sidebar-inset-reverse
-              v-if="data.tag === 'carousel'"
-              class="gray-font-2"
-            />
-            <b-icon-link
-              v-if="data.tag === 'flex-button'"
-              class="gray-font-2"
-            />
-          </div>
-
           <hidden :id="data.id" />
 
           <component-name
@@ -62,7 +27,42 @@
             editable
             text-show-content
             @click="nodeClick($event, data.id)"
-          />
+          >
+            <template slot="icon">
+              <b-icon-fonts
+                v-if="data.tag === 'text-editor'"
+                class="gray-font-2"
+              />
+              <b-icon-image
+                v-if="data.tag === 'flex-image'"
+                class="gray-font-2"
+              />
+              <b-icon-aspect-ratio
+                v-if="data.tag === 'grid-generator-item'"
+                class="gray-font-2"
+              />
+              <b-icon-columns
+                v-if="data.tag === 'grid-generator'"
+                class="gray-font-2"
+              />
+              <b-icon-camera-video
+                v-if="data.tag === 'video-player'"
+                class="gray-font-2"
+              />
+              <b-icon-calendar3-event
+                v-if="data.tag === 'iframer'"
+                class="gray-font-2"
+              />
+              <b-icon-layout-sidebar-inset-reverse
+                v-if="data.tag === 'carousel'"
+                class="gray-font-2"
+              />
+              <b-icon-link
+                v-if="data.tag === 'flex-button'"
+                class="gray-font-2"
+              />
+            </template>
+          </component-name>
 
           <div
             class="controller"
@@ -71,12 +71,14 @@
             <visible
               :id="data.id"
               :visible="data.id === hoverId"
-              class="absolute"
+              class="absolute icon"
               style="left: 15px;"
             />
+
             <touchable
               :id="data.id"
               :visible="data.id === hoverId"
+              class="icon"
             />
           </div>
         </div>
@@ -103,8 +105,17 @@ import ComponentName from '../TemplateUtils/ComponentName'
 import Touchable from '../TemplateUtils/Lock'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
-import { traversalSelfAndChildren, isGrid } from '@/utils/node'
-import { BIconFonts, BIconImage, BIconAspectRatio, BIconColumns, BIconCameraVideo, BIconCalendar3Event, BIconLayoutSidebarInsetReverse, BIconLink } from 'bootstrap-vue'
+import { traversalSelfAndChildren, isGrid, isSlider } from '@/utils/node'
+import {
+  BIconFonts,
+  BIconImage,
+  BIconAspectRatio,
+  BIconColumns,
+  BIconCameraVideo,
+  BIconCalendar3Event,
+  BIconLayoutSidebarInsetReverse,
+  BIconLink
+} from 'bootstrap-vue'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -117,7 +128,14 @@ export default {
     Touchable,
     Visible,
     Hidden,
-    BIconFonts, BIconImage, BIconAspectRatio, BIconColumns, BIconCameraVideo, BIconCalendar3Event, BIconLayoutSidebarInsetReverse, BIconLink
+    BIconFonts,
+    BIconImage,
+    BIconAspectRatio,
+    BIconColumns,
+    BIconCameraVideo,
+    BIconCalendar3Event,
+    BIconLayoutSidebarInsetReverse,
+    BIconLink
   },
   data() {
     return {
@@ -172,7 +190,7 @@ export default {
       traversalSelfAndChildren(cloneTree, (node, parentNode) => {
         node.children = node.children.filter(node => node && !node[SOFT_DELETE])
 
-        if (isGrid(node)) {
+        if (isGrid(node) && !isSlider(node)) {
           parentNode.children = node.children
         }
       })
@@ -225,7 +243,7 @@ export default {
   position: absolute;
   z-index: 1;
   right: 0;
-  top: -1px;
+  top: 1px;
   text-align: right;
   padding: 0 5px;
 }
@@ -242,11 +260,12 @@ export default {
   .el-tree-node__content {
     height: 30px;
   }
-  .el-tree-node__content:hover > * > .controller{
+  .el-tree-node__content:hover > * > .controller {
     background: #f5f7fa;
   }
-  /*.el-tree-node__expand-icon {*/
-  /*  padding-right: 0;*/
-  /*}*/
+}
+
+.icon {
+  font-size: 14px;
 }
 </style>

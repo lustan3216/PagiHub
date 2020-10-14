@@ -13,14 +13,16 @@
 <style>
   .vue-grid-layout {
     position: relative;
-    transition: height 200ms ease;
+    /*transition: height 200ms ease;*/
   }
 </style>
 <script>
   import { mapActions } from 'vuex'
   import Vue from 'vue'
 
-  var elementResizeDetectorMaker = require('element-resize-detector')
+  import {
+    resizeListener
+  } from '@/utils/tool'
 
   import {
     bottom,
@@ -156,7 +158,8 @@
         layouts: {}, // array to store all layouts from different breakpoints
         lastBreakpoint: null, // store last active breakpoint
         originalLayout: null, // store original Layout
-        boundaryElement: null
+        boundaryElement: null,
+        offListeners: []
       }
     },
     created() {
@@ -183,9 +186,7 @@
       this.eventBus.$off('dragEvent', this.dragEventHandler)
       this.eventBus.$destroy()
       removeWindowEventListener('resize', this.onWindowResize)
-      if (this.erd) {
-        this.erd.uninstall(this.$refs.item)
-      }
+      this.offListeners.forEach(off => off())
     },
     beforeMount: function() {
       this.$emit('layout-before-mount', this.layout)
@@ -215,22 +216,23 @@
           // lots-design
           self.updateHeight()
           self.$nextTick(function() {
-            this.erd = elementResizeDetectorMaker({
-              strategy: 'scroll', //<- For ultra performance.
-              // See https://github.com/wnr/element-resize-detector/issues/110 about callOnAdd.
-              callOnAdd: false
-            })
-            this.erd.listenTo(self.$refs.item, debounce(() => {
+
+            self.onWindowResize()
+
+            const off1 = resizeListener(self.$refs.item, debounce(() => {
               self.onWindowResize()
               self.resizeNodeQuickFn()
             }, 80))
-            self.onWindowResize()
 
-            this.boundaryElement = getBoundaryEl(self.$refs.item)
-            this.erd.listenTo(this.boundaryElement, debounce(() => {
+            this.offListeners.push(off1)
+
+            self.boundaryElement = getBoundaryEl(self.$refs.item)
+            const off2 = resizeListener(self.boundaryElement, debounce(() => {
               self.correctFixItemsBound()
               self.resizeNodeQuickFn()
             }, 80))
+
+            this.offListeners.push(off2)
           })
         })
       })

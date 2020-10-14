@@ -111,6 +111,17 @@ export function traversalAncestorAndSelf(node, fn) {
   }
 }
 
+export function traversalAncestor(node, fn) {
+  if (!fn || !node.parentNode) {
+    return
+  }
+
+  const go = fn(node.parentNode)
+  if ((go || isUndefined(go))) {
+    traversalAncestorAndSelf(node.parentNode, fn)
+  }
+}
+
 export function traversalSelfAndChildren(nodes = [], fn, parentNode) {
   if (!fn) {
     return

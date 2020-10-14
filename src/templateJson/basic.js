@@ -16,7 +16,6 @@ import {
   TEXT_EDITOR,
   VALUE,
   HTML,
-  COLUMNS,
   DEFAULT_BREAK_POINTS_MAP
 } from '../const'
 
@@ -123,16 +122,11 @@ export const flexButton = function() {
       [HTML]: { border: '1px solid #dcdfe6' }
     },
     children: [
-      gridGeneratorItem({
-        [GRID]: mapPoints({ x: 0, y: 0, w: COLUMNS, h: 100 }),
-        children: [
-          textEditor({
-            [VALUE]: 'I can be changed to anything',
-            [STYLES]: {
-              [HTML]: { textAlign: 'center' }
-            }
-          })
-        ]
+      textEditor({
+        [VALUE]: 'I can be changed to anything',
+        [STYLES]: {
+          [HTML]: { textAlign: 'center' }
+        }
       })
     ]
   }

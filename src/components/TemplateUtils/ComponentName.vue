@@ -20,16 +20,25 @@
     @click="click"
     @dblclick.native="dblclick"
   >
-    <template v-if="isMasterParent">
-      <i class="el-icon-medal-1" />
-    </template>
-
-    <template v-else-if="isInstanceParent">
-      <i class="el-icon-medal" />
-    </template>
+    <span class="icon">
+      <b-icon-x-diamond-fill
+        v-if="isMasterParent"
+        class="master-icon"
+      />
+      <b-icon-x-diamond
+        v-else-if="isInstanceParent"
+        class="master-icon"
+      />
+      <slot
+        v-else
+        name="icon"
+      />
+    </span>
 
     <template v-if="textShowContent && isTextEditor">
-      <span> {{ node.value ? node.value.slice(0, 15) : 'TextEditor' }}{{ shortId }} </span>
+      <span>
+        {{ node.value ? node.value.slice(0, 15) : 'TextEditor' }}{{ shortId }}
+      </span>
     </template>
     <template v-else>
       <span> {{ nodeShortName }}{{ shortId }} </span>
@@ -44,6 +53,7 @@ import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import { shortTagName, getNode, isTextEditor } from '@/utils/node'
 import { LABEL } from '@/const'
+import { BIconXDiamond, BIconXDiamondFill } from 'bootstrap-vue'
 import {
   isMasterParent,
   isInstanceParent,
@@ -53,6 +63,10 @@ const observable = Vue.observable({ editingId: null })
 
 export default {
   name: 'ComponentName',
+  components: {
+    BIconXDiamond,
+    BIconXDiamondFill
+  },
   props: {
     id: {
       type: String,
@@ -150,7 +164,7 @@ $connectColor: rgba(135, 199, 124, 0.68);
   color: $connectColor !important;
 }
 
-.el-button {
+::v-deep.el-button {
   padding-left: 5px;
   padding-right: 5px;
   span {
@@ -160,6 +174,16 @@ $connectColor: rgba(135, 199, 124, 0.68);
   :hover {
     color: rgba(39, 39, 79, 0.68);
   }
+
+  svg {
+    font-size: 15px;
+    margin-right: 5px;
+  }
+
+  & > span {
+    display: flex;
+    align-items: center;
+  }
 }
 .input {
   z-index: 2;
@@ -167,5 +191,10 @@ $connectColor: rgba(135, 199, 124, 0.68);
 ::v-deep.input > input {
   height: 26px;
   padding-left: 6px;
+}
+
+.master-icon {
+  margin-top: -5px;
+  transform: translateY(3px);
 }
 </style>

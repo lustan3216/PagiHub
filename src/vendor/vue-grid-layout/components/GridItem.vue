@@ -22,7 +22,7 @@
   }
 
   .transition {
-    transition: all 200ms ease;
+    /*transition: all 200ms ease;*/
   }
 
   .vue-grid-item.no-touch {
@@ -104,11 +104,12 @@
   import Vue from 'vue'
   import { mapState } from 'vuex'
   import { setTopLeft, setTopRight, setTransformRtl, setTransform, getBoundaryEl } from '../helpers/utils'
-  import { getControlPosition, createCoreData } from '../helpers/draggableUtils'
   import { getDocumentDir } from '../helpers/DOM'
   import { debounce } from '@/utils/tool'
   //    var eventBus = require('./eventBus');
-  var elementResizeDetectorMaker = require('element-resize-detector')
+  import {
+    resizeListener
+  } from '@/utils/tool'
   let interact = require('interactjs')
 
   const store = Vue.observable({ hideHandler: false })
@@ -293,7 +294,7 @@
         innerW: this.w,
         innerH: this.h,
 
-        erd: null
+        offResizeListener: null
       }
     },
     created() {
@@ -363,8 +364,8 @@
         this.interactObj.unset() // destroy interact intance
       }
 
-      if (this.erd) {
-        this.erd.uninstall(this.slotElement)
+      if (this.offResizeListener) {
+        this.offResizeListener()
       }
     },
     mounted: function() {
@@ -407,18 +408,12 @@
         handler(value) {
           this.$nextTick(() => {
             if (value && this.slotElement) {
-              this.erd = elementResizeDetectorMaker({
-                strategy: 'scroll', //<- For ultra performance.
-                callOnAdd: false
-              })
-
-              this.erd.listenTo(this.slotElement, debounce(() => {
+              this.offResizeListener = resizeListener(this.slotElement, debounce(() => {
                 this.autoSize()
               }, 80))
             }
-            else if (this.erd) {
-              this.erd.removeListener(this.slotElement, this.autoSize)
-              this.erd = null
+            else if (this.offResizeListener) {
+              this.offResizeListener()
             }
           })
         },

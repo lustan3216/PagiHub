@@ -17,7 +17,8 @@ import {
   traversalSelfAndChildren,
   isCarousel,
   isGridItem,
-  cloneJsonWithoutChildren, isGrid
+  cloneJsonWithoutChildren,
+  isGrid
 } from '@/utils/node'
 import * as basicTemplates from '@/templateJson/basic'
 import { camelCase } from '@/utils/string'
@@ -86,7 +87,8 @@ export default {
     ]),
 
     updateChildrenWithMaster() {
-      const diff = this.masterChildren.length - this.children.length
+      const realChildren = this.node.children || []
+      const diff = this.masterChildren.length - realChildren.length
       if (
         this.isExample ||
         !this.inheritance.loaded ||
@@ -100,17 +102,18 @@ export default {
 
       const records = []
       if (diff > 0) {
-        arraySubtract(this.masterChildren, this.children).forEach(newItem => {
-          const { records } = this.addNodeToParentRecords(newItem, true)
-          records.push(...records)
+        arraySubtract(this.masterChildren, realChildren).forEach(newItem => {
+          const { records: newRecords } = this.addNodeToParentRecords(
+            newItem,
+            true
+          )
+          records.push(...newRecords)
         })
       }
       else if (diff < 0) {
-        arraySubtract(this.children, this.masterChildren).forEach(
-          deleteItem => {
-            records.push(...this.removeNodeRecords(deleteItem))
-          }
-        )
+        arraySubtract(realChildren, this.masterChildren).forEach(deleteItem => {
+          records.push(...this.removeNodeRecords(deleteItem))
+        })
       }
 
       if (this.sameComponentSet) {

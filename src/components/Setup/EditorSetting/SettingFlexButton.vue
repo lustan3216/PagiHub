@@ -1,8 +1,13 @@
 <template>
-  <rules-generator
-    :id="id"
-    :rules="spec"
-  />
+  <div>
+    <p class="font-12 gray-font-2 m-b-5">
+      Allow to enter a new external link
+    </p>
+    <rules-generator
+      :id="id"
+      :rules="spec"
+    />
+  </div>
 </template>
 
 <script>
@@ -30,10 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', [
-      'username',
-      'userId'
-    ]),
+    ...mapState('user', ['username', 'userId']),
     ...mapState('node', ['editingProjectId']),
     linkableComponentSet() {
       return this.nodesMap[this.editingProjectId].children
@@ -41,7 +43,6 @@ export default {
     spec() {
       const project = getNode(this.editingProjectId)
       const specArray = [
-        boolean(NEW_TAB),
         select(LINK, {
           props: {
             allowCreate: true,
@@ -54,7 +55,8 @@ export default {
               node.label
             }`
           }))
-        })
+        }),
+        boolean(NEW_TAB)
       ]
 
       return assignDefaultValue(specArray, defaultSetting)

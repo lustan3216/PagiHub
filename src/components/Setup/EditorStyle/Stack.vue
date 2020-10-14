@@ -40,7 +40,9 @@ export default {
     isStack() {
       const lastNode = arrayLast(this.selectedComponentNodes)
       const grid = closestGridItem(lastNode)
-      return getValueByPath(vmGet(grid.id), ['innerStyles', 'layout', 'stack'])
+      if (grid) {
+        return getValueByPath(vmGet(grid.id), ['innerStyles', 'layout', 'stack'])
+      }
     }
   },
   methods: {

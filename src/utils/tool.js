@@ -8,6 +8,11 @@ import { isArray } from '@/utils/array'
 import DeepMerge from 'deepmerge'
 import { objectHasAnyKey } from '@/utils/object'
 
+import {
+  addResizeListener,
+  removeResizeListener
+} from 'element-ui/src/utils/resize-event'
+
 export {
   getValueByPath,
   setValueByPath,
@@ -16,6 +21,11 @@ export {
   on,
   off,
   isUndefined
+}
+
+export function resizeListener(element, fn) {
+  addResizeListener(element, fn)
+  return () => removeResizeListener(element, fn)
 }
 
 export function isBoolean(value) {
@@ -32,11 +42,16 @@ export function unsetValueByPathNested(object, path) {
   }
 }
 
+const dontMerge = (destination, source) => source
 export function deepMerge(a = {}, b = {}, c) {
-  return DeepMerge(a, b, c)
+  return DeepMerge(a, b, { ...c, arrayMerge: dontMerge })
 }
 
-deepMerge.all = array => DeepMerge.all(array.filter(x => x))
+deepMerge.all = array =>
+  DeepMerge.all(
+    array.filter(x => x),
+    { arrayMerge: dontMerge }
+  )
 
 export function cloneJson(e) {
   return JSON.parse(JSON.stringify(e))

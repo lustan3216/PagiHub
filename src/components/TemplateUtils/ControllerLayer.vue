@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isDraftMode && node"
-    :class="{ 'h-100': !isTextEditor, 'no-action': lock }"
+    :class="{ 'h-100': !noHeight, 'no-action': lock }"
     @mousedown.stop="singleClick"
     @dblclick.stop="dblclick"
     @contextmenu.stop.prevent="contextmenu($event)"
@@ -46,7 +46,7 @@
       :class="{
         'grid-item-fix': itemEditing,
         'no-action': !itemEditing && !isExample,
-        'h-100': !isTextEditor
+        'h-100': !noHeight
       }"
     >
       <slot :item-editing="itemEditing" />
@@ -57,7 +57,7 @@
 
   <div
     v-else-if="node"
-    :class="{ 'h-100': !isTextEditor }"
+    :class="{ 'h-100': !noHeight }"
   >
     <slot />
   </div>
@@ -68,7 +68,13 @@ import vue from 'vue'
 import { mapState, mapMutations } from 'vuex'
 import { CAN_BE_EDITED, STYLES } from '@/const'
 import { isMac } from '@/utils/device'
-import { getNode, isTextEditor, traversalAncestorAndSelf } from '@/utils/node'
+import {
+  getNode,
+  isGrid,
+  isGridItem,
+  isTextEditor,
+  traversalAncestorAndSelf
+} from '@/utils/node'
 import { getValueByPath, isUndefined } from '@/utils/tool'
 import { isInstance } from '@/utils/inheritance'
 import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
@@ -76,7 +82,11 @@ import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { findIndexBy } from '@/utils/array'
 import { vmGet } from '@/utils/vmMap'
 
-const store = vue.observable({ editingPath: [], lastEditId: null, contextMenu: null })
+const store = vue.observable({
+  editingPath: [],
+  lastEditId: null,
+  contextMenu: null
+})
 
 export default {
   name: 'ControllerLayer',
@@ -126,8 +136,11 @@ export default {
     child() {
       return getValueByPath(this.node, ['children', 0])
     },
-    isTextEditor() {
-      return isTextEditor(this.child)
+    noHeight() {
+      return (
+        (isTextEditor(this.child) && isGridItem(this.node)) ||
+        isTextEditor(this.node)
+      )
     },
     contextMenu() {
       return store.contextMenu
@@ -215,7 +228,10 @@ export default {
       store.contextMenu = null
     },
     contextmenu(event) {
-      const y = window.innerHeight > event.clientY + 400 ? event.clientY : window.innerHeight - 400
+      const y =
+        window.innerHeight > event.clientY + 400
+          ? event.clientY
+          : window.innerHeight - 400
       store.contextMenu = {
         x: `${event.clientX + 10}px`,
         y: `${y}px`

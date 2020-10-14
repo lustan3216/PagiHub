@@ -67,7 +67,7 @@ export default {
 
   &.sidebar-right-content {
     padding: 0 10px 10px;
-    @include calc-vh('max-height', '100vh - 100px');
+    @include calc-vh('max-height', '100vh - 60px');
     overflow: scroll;
     height: 100%;
 
@@ -82,7 +82,7 @@ export default {
   .divider-with-button {
     display: flex;
     & > .el-dropdown {
-      margin-top: 6px;
+      margin-top: 15px;
       margin-left: 10px;
     }
 
@@ -93,7 +93,7 @@ export default {
   }
 
   .el-divider--horizontal {
-    margin: 15px 0 15px;
+    margin: 25px 0 15px;
   }
 
   .el-divider__text {

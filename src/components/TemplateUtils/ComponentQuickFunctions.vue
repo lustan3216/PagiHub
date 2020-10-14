@@ -37,7 +37,10 @@
         @mouseleave="mouseleave"
       >
         <div class="component-name">
-          <transition-group name="full-slide">
+          <transition-group
+            name="full-slide"
+            class="align-center"
+          >
             <template v-for="(node, index) in nodesPath">
               <i
                 v-if="hovering && index"
@@ -57,6 +60,7 @@
                   :class="[
                     itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank'
                   ]"
+                  class="m-l-5"
                 />
               </component-name>
             </template>
@@ -80,7 +84,10 @@
           slim
         />
 
-        <stack :id="id" />
+        <stack
+          v-if="!isInstance"
+          :id="id"
+        />
 
         <lock
           :id="id"
@@ -95,6 +102,7 @@
         <!--        />-->
 
         <el-tooltip
+          v-if="!isInstance"
           effect="light"
           placement="top"
         >
@@ -114,7 +122,7 @@
         </el-tooltip>
 
         <el-button
-          v-if="isCarousel"
+          v-if="isCarousel && !isInstance"
           class="icon"
           @click="deleteSlider"
         >
@@ -144,7 +152,7 @@ import {
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR } from '@/const'
-import { vmCreateEmptyItem, vmGet, vmRemoveNode } from '@/utils/vmMap'
+import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import { isInstance } from '@/utils/inheritance'
 import gsap from 'gsap'
@@ -255,9 +263,14 @@ export default {
     isComponentSet() {
       return isComponentSet(this.node)
     },
+    isButton() {
+      return this.node.tag === 'flex-button'
+    },
     canAddComponent() {
       if (
-        (!this.isExample && this.isGridItem && this.isLastOne) ||
+        (!this.isExample &&
+          (this.isGridItem || this.isButton) &&
+          this.isLastOne) ||
         this.isComponentSet
       ) {
         const { children = [] } = this.node
@@ -333,7 +346,7 @@ export default {
               ? rect.top + height - top1
               : height
 
-        if (height < 10 || width < 10) {
+        if (height < 5) {
           this.visible = false
           return
         }

@@ -1,32 +1,38 @@
 <template>
   <div>
-    <el-dropdown
-      class="m-b-10 w-100"
-      size="small"
-    >
-      <el-button class="w-100">
-        Select Uploaded Images
-        <i class="el-icon-arrow-down el-icon--right" />
-      </el-button>
-      <el-dropdown-menu
-        slot="dropdown"
-        class="font-spacing"
-      >
-        <el-dropdown-item
-          v-for="option in imageOptions"
-          :key="option.url"
-          @click.native="recordStyles(option)"
-        >
-          {{ option.label }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+    <p class="font-12 gray-font-2 m-b-5">
+      Allow to enter a new external link
+    </p>
 
-    <rules-generator
-      ref="spec2Api"
-      :id="id"
-      :rules="spec2"
-    />
+    <div class="el-form-item el-form-item--mini">
+      <label
+        class="el-form-item__label"
+        style="width: 90px;"
+      >
+        <span>Src</span>
+      </label>
+      <div
+        class="el-form-item__content"
+        style="margin-left: 90px;"
+      >
+        <el-select
+          :value="src"
+          allow-create
+          filterable
+          class="m-b-10 w-100"
+          size="small"
+          @inout="recordStyles($event)"
+        >
+          <el-option
+            v-for="option in imageOptions"
+            :key="option.url"
+            :label="option.url"
+            :value="option.value"
+          />
+        </el-select>
+      </div>
+    </div>
+
     <rules-generator
       :id="id"
       :rules="spec1"
@@ -38,6 +44,8 @@
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { select, string, assignDefaultValue } from './utils/ruleTool'
+import { arrayLast } from '@/utils/array'
+import { vmGet } from '@/utils/vmMap'
 
 const SRC = 'src'
 const FIT = 'fit'
@@ -60,7 +68,6 @@ export default {
   },
   data() {
     return {
-      spec2Api: null,
       spec1: assignDefaultValue(
         [
           select(FIT, {
@@ -75,25 +82,18 @@ export default {
           })
         ],
         defaultSetting
-      ),
-      spec2: assignDefaultValue(
-        [
-          string(SRC, {
-            validate: [{ type: 'url', message: '需選擇正確的網址' }],
-            props: {
-              type: 'textarea',
-              rows: 5,
-              resize: 'vertical'
-            }
-          })
-        ],
-        defaultSetting
       )
     }
   },
   computed: {
     ...mapState('asset', ['images']),
     ...mapGetters('app', ['selectedComponentNodes']),
+    src() {
+      const node = arrayLast(this.selectedComponentNodes)
+      if (!node) return
+      const vm = vmGet(node.id)
+      return vm.innerProps.src
+    },
     imageOptions() {
       return this.images.map(image => {
         return {
@@ -105,14 +105,13 @@ export default {
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
-    recordStyles(option) {
+    recordStyles(value) {
       const records = []
 
-      this.$refs.spec2Api.api.setValue('src', option.value)
       this.selectedComponentNodes.forEach(node => {
         records.push({
           path: `${node.id}.props.src`,
-          value: option.value
+          value
         })
       })
 

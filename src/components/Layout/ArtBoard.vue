@@ -3,16 +3,18 @@
     id="art-board"
     class="art-board"
   >
-    <template v-if="id">
-      <transition
-        name="slide"
-        mode="out-in"
-      >
-        <keep-alive>
-          <component-giver :id="id" />
-        </keep-alive>
-      </transition>
-    </template>
+    <transition
+      name="slide"
+      mode="out-in"
+    >
+      <keep-alive>
+        <component-giver
+          v-if="id"
+          :id="id"
+          :key="id"
+        />
+      </keep-alive>
+    </transition>
   </div>
 </template>
 

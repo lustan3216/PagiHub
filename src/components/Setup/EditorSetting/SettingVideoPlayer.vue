@@ -36,7 +36,6 @@ export const defaultSetting = {
   disableContextMenu: true,
   hideControls: true,
   resetOnEnd: false,
-  displayDuration: false,
   // ratio: { w: 16, h: 9 },
   fullscreen: { enabled: true, fallback: true, iosNative: true }
 }
@@ -71,21 +70,12 @@ export default {
               multiple: true
             }
           }),
-          select('settings', {
-            options: defaultSetting.settings,
-            props: {
-              multiple: true
-            }
-          }),
           // url('iconUrl'),
           boolean('autoplay'),
-          boolean('volume'),
           boolean('muted'),
           boolean('clickToPlay'),
-          boolean('disableContextMenu'),
           boolean('hideControls'),
-          boolean('resetOnEnd'),
-          boolean('displayDuration')
+          boolean('resetOnEnd')
         ],
         defaultSetting
       )

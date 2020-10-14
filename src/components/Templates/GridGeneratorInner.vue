@@ -9,9 +9,7 @@
     :cols="cols"
     :breakpoints="breakpointsMap"
     :vertical-compact="false"
-    :height-as-parent="itemCannotExtendHeight"
-    :is-draggable="isDraftMode && !isInstanceChild"
-    :is-resizable="isDraftMode && !isInstanceChild"
+    :height-as-parent="autoUpdateHeight"
     prevent-collision
     responsive
     @layout-updated="layoutUpdated($event)"
@@ -97,7 +95,7 @@ export default {
       'breakpointsMap',
       'vh'
     ]),
-    itemCannotExtendHeight() {
+    autoUpdateHeight() {
       return !this.rootLayout && !['scroll', 'hidden'].includes(this.overflow)
     },
     overflow() {
@@ -193,14 +191,18 @@ export default {
             unitW: currentGrid.unitW,
             ratioH: styleLayout.ratioH,
             ratioW: styleLayout.ratioW,
-            lockInParent: this.itemCannotExtendHeight,
+            lockInParent: this.autoUpdateHeight,
             autoHeight,
             zIndex: styleLayout.zIndex,
             canScroll: this.overflow === 'scroll',
             fixed: styleLayout.position === 'fixed',
             fixOnParentBottom: styleLayout.position === 'fixOnParentBottom',
             verticalCompact: styleLayout.position === 'verticalCompact',
-            isDraggable: this.isDraftMode && styleLayout.position !== 'fixOnParentBottom',
+            isDraggable:
+              this.isDraftMode &&
+              styleLayout.position !== 'fixOnParentBottom' &&
+              !this.isInstanceChild,
+            isResizable: this.isDraftMode && !this.isInstanceChild,
             stack: styleLayout.stack,
             isPixel: currentGrid.unitW === 'px'
           })

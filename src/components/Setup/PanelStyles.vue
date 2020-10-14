@@ -27,17 +27,19 @@
     <!--      </el-radio-group>-->
     <!--    </div>-->
 
+    <portal-target name="PanelStyles" />
+
     <item-hidden-controller />
 
-    <dimension v-if="isAllGridItem"/>
+    <dimension v-if="isAllGridItem" />
 
     <el-divider content-position="left">STACK</el-divider>
 
-    <position v-if="isAllGridItem"/>
+    <position v-if="isAllGridItem" />
 
-    <padding v-if="isAllGridItem"/>
+    <padding v-if="isAllGridItem" />
 
-    <radius />
+    <radius v-if="!isTextEditor" />
 
     <opacity />
 
@@ -57,8 +59,6 @@
     <effect />
 
     <transform />
-
-    <portal-target name="PanelStyles" />
 
     <!--      <transitions-->
     <!--        :disabled="!isDefaultState"-->
@@ -86,7 +86,7 @@ import Opacity from './EditorStyle/Opacity'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
 import Position from '@/components/Setup/EditorStyle/Position'
-import { isGridItem } from '@/utils/node'
+import { isGridItem, isTextEditor } from '@/utils/node'
 
 export default {
   name: 'PanelStyles',
@@ -119,6 +119,12 @@ export default {
       const nodes = this.selectedComponentNodes.filter(node => isGridItem(node))
       const allGridItem = nodes.length === this.selectedComponentNodes.length
       return this.selectedComponentNodes.length && allGridItem
+    },
+    isTextEditor() {
+      const nodes = this.selectedComponentNodes.filter(node =>
+        isTextEditor(node)
+      )
+      return nodes.length
     }
   }
 }

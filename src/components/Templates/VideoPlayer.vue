@@ -1,26 +1,32 @@
 <template>
-  <vue-plyr
-    ref="plyr"
+  <div
     :style="innerStyles.html"
-    :options="innerProps"
-    :key="JSON.stringify(innerProps)"
-    class="h-100"
-    @mouseleave="mouseleave"
+    class="h-100 over-hidden"
   >
-    <div
-      :data-plyr-provider="innerProps.provider"
-      :data-plyr-embed-id="innerProps.embedId"
-    />
-  </vue-plyr>
+    <vue-plyr
+      ref="plyr"
+      :options="{ ...innerProps, ratio }"
+      :key="JSON.stringify({ ...innerProps, ratio })"
+      class="h-100"
+      @mouseleave="mouseleave"
+    >
+      <div
+        :data-plyr-provider="innerProps.provider"
+        :data-plyr-embed-id="innerProps.embedId"
+      />
+    </vue-plyr>
+  </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
-import { getValueByPath } from '@/utils/tool'
 import nodeMixin from '@/components/Templates/mixins/node'
 import { defaultSetting } from '../Setup/EditorSetting/SettingVideoPlayer'
 import VuePlyr from 'vue-plyr'
-import { STYLES } from '@/const'
+import {
+  addResizeListener,
+  removeResizeListener
+} from 'element-ui/src/utils/resize-event'
 
 export default {
   defaultSetting,
@@ -29,24 +35,37 @@ export default {
     VuePlyr
   },
   mixins: [nodeMixin],
+  data() {
+    return {
+      width: 16,
+      height: 9
+    }
+  },
   computed: {
     player() {
       return this.$refs.plyr.player
     },
     ratio() {
-      const w = getValueByPath(this.node, ['parentNode', STYLES, 'ratioW'])
-      const h = getValueByPath(this.node, ['parentNode', STYLES, 'ratioH'])
-      return w && h ? `${w}:${h}` : '16:9'
-    },
-    innerProps() {
-      const props = nodeMixin.computed.innerProps.call(this)
-      return { ...props, ratio: this.ratio }
+      return this.width + ':' + this.height
     }
+  },
+  mounted() {
+    this.updateRatio()
+    addResizeListener(this.$el, this.updateRatio)
+  },
+  beforeDestroy() {
+    removeResizeListener(this.$el, this.updateRatio)
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
+    updateRatio() {
+      this.height = this.$el.clientHeight
+      this.width = this.$el.clientWidth
+    },
     mouseleave() {
-      this.player.pause()
+      if (this.isDraftMode) {
+        this.player.pause()
+      }
     }
   }
 }

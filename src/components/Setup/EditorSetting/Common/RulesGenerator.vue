@@ -88,7 +88,7 @@ export default {
       this.api.setValue(rule.field, value)
 
       if (this.isBooleanType(rule)) {
-        value = value[0]
+        value = value[0] || false
       }
 
       // same as default, thus delete the setting

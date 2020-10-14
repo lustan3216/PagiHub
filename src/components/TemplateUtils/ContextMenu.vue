@@ -91,6 +91,7 @@ import { getValueByPath } from '@/utils/tool'
 import { COMPONENT_SET } from '@/const'
 import { isInstanceChild } from '@/utils/inheritance'
 import ClickOutside from '@/directive/clickOutside'
+import { arrayLast } from '@/utils/array'
 
 export default {
   name: 'ContextMenu',
@@ -112,36 +113,17 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', [
-      'copyComponentIds',
-      'selectedComponentIds'
+    ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
+    ...mapGetters('app', [
+      'selectedComponentNodes',
+      'theOnlySelectedComponentId'
     ]),
-    ...mapGetters('app', ['selectedComponentNodes', 'theOnlySelectedComponentId']),
     ...mapState('layout', ['gridResizing']),
+    node() {
+      return arrayLast(this.selectedComponentNodes)
+    },
     metaKey() {
       return isMac() ? '&#8984;' : '&#8963;'
-    },
-    theOnlyCopyNodeAndNotGridItem() {
-      if (this.copyComponentIds.length === 1) {
-        const node = this.nodesMap[this.copyComponentIds[0]]
-        return node && !isGridItem(node)
-      }
-    },
-    canNotDelete() {
-      const { parentNode } = this.node
-      if (
-        getValueByPath(parentNode, 'parentNode.tag') === COMPONENT_SET &&
-        parentNode.children.length === 1
-      ) {
-        return true
-      }
-      else if (
-        getValueByPath(parentNode, 'parentNode.parentNode.tag') ===
-          COMPONENT_SET &&
-        parentNode.children.length === 1
-      ) {
-        return true
-      }
     },
     options() {
       return [
@@ -180,7 +162,7 @@ export default {
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
-    ...mapMutations('app', { 'APP_SET': 'SET' }),
+    ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapActions('app', ['setCopySelectedNodeId']),
     close(fn) {
       fn()

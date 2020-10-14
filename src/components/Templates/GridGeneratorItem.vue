@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
 import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
@@ -28,6 +28,7 @@ import ComponentController from '../TemplateUtils/ComponentController'
 import { getValueByPath } from '@/utils/tool'
 import { AUTO_HEIGHT, GRID, STYLES } from '@/const'
 import { isTextEditor } from '@/utils/node'
+import { findBy } from '@/utils/array'
 
 export default {
   name: 'GridGeneratorItem',

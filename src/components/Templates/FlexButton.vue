@@ -1,10 +1,10 @@
 <template>
-  <grid-generator-inner
+  <div
     v-if="isDraftMode"
     :style="innerStyles.html"
-    :id="id"
-    :inner-props="innerProps"
     :class="{ pointer: !isDraftMode }"
+    class="flex-center h-100"
+    @click.prevent="onClick"
   >
     <portal
       v-if="link"
@@ -21,16 +21,13 @@
         />
       </el-tooltip>
     </portal>
-  </grid-generator-inner>
 
-  <grid-generator-inner
-    v-else
-    :style="innerStyles.html"
-    :id="id"
-    :inner-props="innerProps"
-    :class="{ pointer: !isDraftMode }"
-    @click.native="onClick"
-  />
+    <component-giver
+      v-if="firstChild"
+      :id="firstChild.id"
+      class="w-100"
+    />
+  </div>
 </template>
 
 <script>
@@ -82,6 +79,8 @@ export default {
   },
   methods: {
     onClick() {
+      if (this.isDraftMode) return
+
       if (this.link) {
         if (this.innerProps.newTab) {
           window.open(this.link, '_blank')

@@ -38,6 +38,9 @@ export default {
     },
     masterComponentSetId() {
       return getMasterComponentSetIdFromInheritMap(this.node)
+    },
+    masterParentNode() {
+      return this.nodesMap[this.masterComponentSetId]
     }
   },
   watch: {

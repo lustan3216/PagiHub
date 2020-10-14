@@ -5,6 +5,7 @@
     </el-divider>
 
     <component
+      v-if="visible"
       :is="vueComponentTag"
       :id="lastNode.id"
       class="m-t-10 settings"
@@ -46,6 +47,11 @@ const self = {
     SettingFormTextarea: () => import('./EditorSetting/SettingFormTextarea'),
     SettingFormTimePicker: () => import('./EditorSetting/SettingFormTimePicker')
   },
+  data() {
+    return {
+      visible: true
+    }
+  },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
     lastNode() {
@@ -66,6 +72,18 @@ const self = {
     },
     canSetUp() {
       return this.areSameTag && this.hasVueSettingComponent
+    }
+  },
+  watch: {
+    vueComponentTag(tag) {
+      this.visible = false
+      if (tag) {
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.visible = true
+          }, 50)
+        })
+      }
     }
   }
 }
@@ -94,7 +112,7 @@ export default self
     .el-checkbox__input {
       line-height: 0;
     }
-    .el-checkbox__label{
+    .el-checkbox__label {
       display: none;
     }
   }

@@ -10,11 +10,9 @@
     </template>
 
     <el-popover
-      ref="popover"
-      :value="editing"
       popper-class="p-0"
       placement="right"
-      trigger="manual"
+      trigger="hover"
     >
       <div
         id="menu-bubble"
@@ -164,17 +162,14 @@
         </div>
       </div>
 
-      <component
+      <content-editable
+        ref="content"
         slot="reference"
-        :style="style"
-        :is="tag || 'div'"
-        contenteditable="true"
-        style="white-space: pre-line;"
-        @input="onInput"
-        @keydown.delete.stop
-      >
-        {{ text }}
-      </component>
+        :style="styles"
+        :tag="tag || 'div'"
+        v-model="text"
+        :content-editable="isDraftMode && !isExample"
+      />
     </el-popover>
   </div>
 </template>
@@ -186,13 +181,15 @@ import WebFont from 'webfontloader'
 import ColorPicker from '@/components/Components/ColorPicker'
 import { HTML, STYLES, TEXT_EDITOR } from '@/const'
 import { getNode } from '@/utils/node'
-import { asyncGetValue, getValueByPath } from '@/utils/tool'
+import { asyncGetValue } from '@/utils/tool'
+import ContentEditable from '@/components/Components/ContentEditable'
 
 export default {
   name: 'TextEditorSimpleInner',
   components: {
     ColorPicker,
     ElPopover: Popover,
+    ContentEditable,
     TextEditorSimpleStyle: () =>
       import('@/components/Setup/EditorStyle/TextEditorSimpleStyle')
   },
@@ -208,17 +205,21 @@ export default {
     value: {
       default: 'Title'
     },
-    editing: {
-      type: Boolean,
-      default: false
+    // eslint-disable-next-line
+    styles: {
+      type: Object,
+      default: () => ({})
+    },
+    props: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
     return {
       editor: null,
       linkMenuIsActive: false,
-      headingHover: false,
-      text: ''
+      headingHover: false
     }
   },
   computed: {
@@ -235,12 +236,20 @@ export default {
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },
-    style() {
-      return getValueByPath(this.node, [STYLES, HTML]) || {}
+    text: {
+      get() {
+        return this.value
+      },
+      set(value) {
+        this.record({
+          path: `${this.id}.value`,
+          value
+        })
+      }
     },
     color: {
       get() {
-        return this.style.color
+        return this.styles.color
       },
       set(value) {
         this.record({
@@ -251,7 +260,7 @@ export default {
     },
     backgroundColor: {
       get() {
-        return this.style.backgroundColor
+        return this.styles.backgroundColor
       },
       set(value) {
         this.record({
@@ -262,7 +271,7 @@ export default {
     },
     textAlign: {
       get() {
-        return this.style.textAlign
+        return this.styles.textAlign
       },
       set(value) {
         this.record({
@@ -273,7 +282,7 @@ export default {
     },
     textDecoration: {
       get() {
-        return this.style.textDecoration
+        return this.styles.textDecoration
       },
       set(value) {
         this.record({
@@ -284,7 +293,7 @@ export default {
     },
     fontWeight: {
       get() {
-        return this.style.fontWeight
+        return this.styles.fontWeight
       },
       set(value) {
         this.record({
@@ -295,7 +304,7 @@ export default {
     },
     fontStyle: {
       get() {
-        return this.style.fontStyle
+        return this.styles.fontStyle
       },
       set(value) {
         this.record({
@@ -303,9 +312,6 @@ export default {
           value
         })
       }
-    },
-    props() {
-      return this.node.props || {}
     },
     tag: {
       get() {
@@ -330,8 +336,14 @@ export default {
       }
     }
   },
+  watch: {
+    value: {
+      handler(value) {
+        this.$refs.content.innerText = value
+      }
+    }
+  },
   created() {
-    this.text = this.value
     const families = this.findFontNames(this.value)
 
     if (families.length) {
@@ -350,7 +362,7 @@ export default {
       if (this.isExample) {
         return
       }
-      this.record(object)
+      this.RECORD(object)
     },
     findFontNames(string) {
       if (typeof string === 'object') {
@@ -371,14 +383,6 @@ export default {
     },
     removeLink() {
       this.link = undefined
-    },
-    onInput(event) {
-      const value = event.target.innerText
-
-      this.record({
-        path: `${this.id}.value`,
-        value
-      })
     }
   }
 }
