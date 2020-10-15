@@ -43,6 +43,7 @@ import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
 import ComponentSet from '../Templates/ComponentSet'
 
+let timeId
 export default {
   name: 'PanelDraft',
   components: {
@@ -53,7 +54,7 @@ export default {
     SidebarRight: () => import('@/components/Layout/SidebarRight'),
     SidebarLeft: () => import('@/components/Layout/SidebarLeft'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
-    PanelDraft: () => import('@/components/Layout/PanelDraft'),
+    PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
   computed: {
     ...mapState('node', ['editingProjectId', 'editingComponentSetId'])
@@ -81,9 +82,13 @@ export default {
         if (!this.isDraftMode) {
           return
         }
+        clearTimeout(timeId)
 
         this.LAYOUT_SET({ gridResizing: true })
-        this.resizeNodeQuickFn()
+        timeId = setTimeout(() => {
+          this.resizeNodeQuickFn()
+          timeId = null
+        }, 50)
       },
       true
     )

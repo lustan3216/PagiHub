@@ -301,7 +301,7 @@ export default {
     deleteSlider() {
       vmGet(this.node.id, this.isExample).removeCurrentSlider()
     },
-    resize() {
+    resize: debounce(function() {
       const self = this
       this.$nextTick(() => {
         if (!this.node) {
@@ -383,7 +383,7 @@ export default {
 
         this.visible = true
       })
-    },
+    }, 100),
     mouseenter() {
       timeId = setTimeout(() => {
         this.hovering = true

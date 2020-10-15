@@ -55,7 +55,7 @@ export default {
             control: [
               {
                 handle: x => x[0],
-                rule: [number('interval', { info: '', step: 100 })]
+                rule: [number('interval', { info: '', step: 3000 })]
               }
             ]
           }),

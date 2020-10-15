@@ -168,7 +168,7 @@ export default {
 
             if (!autoHeight) {
               if (currentGrid.unitH === 'vh') {
-                h = (this.vh / 100) * parseInt(h)
+                h = this.vh * parseInt(h)
               }
               else {
                 h = parseInt(h)
@@ -255,7 +255,7 @@ export default {
         let h = child.h
 
         if (child.unitH === 'vh') {
-          h = h / (this.vh / 100)
+          h = h / this.vh
         }
 
         if (process.env.NODE_ENV !== 'production' && child.w === 1) {
@@ -266,7 +266,8 @@ export default {
           x: child.x,
           y: child.y,
           h: toPrecision(h, 0),
-          w: child.w
+          w: child.w,
+          unitH: child.unitH
         }
         if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
           records.push({

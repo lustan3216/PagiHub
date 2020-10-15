@@ -62,7 +62,7 @@
 
     <el-carousel
       ref="carousel"
-      :key="gridGenerators.length"
+      :key="sliders.length"
       v-bind="innerProps"
       :indicator-position="hasIndicator"
       :class="{ indicatorTop, indicatorLeft }"
@@ -72,7 +72,7 @@
       @change="checkSelectedComponent"
     >
       <el-carousel-item
-        v-for="(child, index) in gridGenerators"
+        v-for="(child, index) in sliders"
         :key="child.id"
         :class="`carousel-item-${id}`"
       >
@@ -87,7 +87,7 @@
 
 <script>
 import interactjs from 'interactjs'
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -99,6 +99,7 @@ import { isSlider, traversalSelfAndChildren } from '@/utils/node'
 import { vmRemoveNode } from '@/utils/vmMap'
 import ComponentGiver from '@/components/TemplateUtils/ComponentGiver'
 import { getValueByPath } from '@/utils/tool'
+import { findIndexBy } from '@/utils/array'
 
 export default {
   defaultSetting,
@@ -128,7 +129,7 @@ export default {
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('layout', ['currentBreakpoint']),
-    gridGenerators() {
+    sliders() {
       return this.innerChildren.filter(node => {
         const hidden = getValueByPath(node, [
           STYLES,
@@ -236,18 +237,28 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_ID']),
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    ...mapActions('layout', ['resizeNodeQuickFn']),
     checkSelectedComponent(index, oldIndex) {
-      const { id } = this.gridGenerators[oldIndex]
+      const { id } = this.sliders[oldIndex]
       const node = this.nodesMap[id]
       const ids = []
       this.currentIndex = index
       traversalSelfAndChildren(node, ({ id }) => ids.push(id))
 
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
+      this.LAYOUT_SET({ gridResizing: true })
+      setTimeout(() => {
+        this.resizeNodeQuickFn()
+      }, 700)
     },
     removeCurrentSlider() {
       const node = this.children[this.currentIndex]
       vmRemoveNode(node)
+    },
+    setActiveIndex(childId) {
+      this.currentIndex = findIndexBy(this.sliders, 'id', childId)
+      this.carousel.setActiveItem(this.currentIndex)
     }
   }
 }

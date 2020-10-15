@@ -91,8 +91,7 @@ export default {
 
 .grid-item-border {
   border: 1px dashed #bcbcbc;
-  box-sizing: border-box;
-  margin-left: -1px;
+  margin: -1px;
 }
 
 .stack {

@@ -65,11 +65,11 @@ input[type='number'] {
   font-size: 16px;
 }
 
-::-webkit-scrollbar {
+::-webkit-scrollbar:not(.art-board) {
   display: none !important;
 }
 
-* {
+*:not(.art-board) {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }

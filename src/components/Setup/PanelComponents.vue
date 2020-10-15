@@ -101,14 +101,21 @@
 <script>
 import Tree from '@/vendor/element-ui/tree'
 import { SOFT_DELETE } from '@/const'
-import { mapState, mapMutations } from 'vuex'
-import { cloneJson } from '@/utils/tool'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { asyncGetValue, cloneJson } from '@/utils/tool'
 import ComponentController from '../TemplateUtils/ComponentController'
 import ComponentName from '../TemplateUtils/ComponentName'
 import Touchable from '../TemplateUtils/Lock'
 import Visible from '../TemplateUtils/Visible'
 import Hidden from '../TemplateUtils/Hidden'
-import { traversalSelfAndChildren, isGrid, isSlider } from '@/utils/node'
+import {
+  traversalSelfAndChildren,
+  isGrid,
+  isSlider,
+  traversalAncestor,
+  isComponentSet,
+  traversalAncestorAndSelf
+} from '@/utils/node'
 import {
   BIconFonts,
   BIconImage,
@@ -119,6 +126,7 @@ import {
   BIconLayoutSidebarInsetReverse,
   BIconLink
 } from 'bootstrap-vue'
+import { vmGet } from '@/utils/vmMap'
 
 require('smoothscroll-polyfill').polyfill()
 
@@ -182,6 +190,8 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
     ...mapMutations('node', ['RECORD']),
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    ...mapActions('layout', ['resizeNodeQuickFn']),
     renderTree() {
       const tree = this.componentSetNode
 
@@ -228,10 +238,34 @@ export default {
       this.$bus.$emit(`hover-${id}`, false)
     },
     scrollIntoView(id) {
-      if (this.vmMap[id]) {
-        // 可能被device hidden 所以map找不到
-        this.vmMap[id].$el.scrollIntoView(false)
-      }
+      this.LAYOUT_SET({ gridResizing: true })
+      this.loadSliders(id)
+      this.$nextTick(() => {
+        if (this.vmMap[id]) {
+          // 可能被device hidden 所以map找不到
+          this.vmMap[id].$el.scrollIntoView(false)
+
+          setTimeout(() => {
+            this.resizeNodeQuickFn()
+          }, 700)
+        }
+      })
+    },
+    loadSliders(id) {
+      const node = this.nodesMap[id]
+      const queue = []
+      traversalAncestorAndSelf(node, node => {
+        if (isSlider(node)) {
+          queue.unshift(node)
+        }
+
+        if (isComponentSet(node)) return false
+      })
+
+      queue.forEach(async node => {
+        const carousel = await asyncGetValue(() => vmGet(node.parentId))
+        carousel.setActiveIndex(node.id)
+      })
     }
   }
 }
