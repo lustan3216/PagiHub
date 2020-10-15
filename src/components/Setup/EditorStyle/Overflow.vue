@@ -9,11 +9,12 @@
 
     <el-col :span="16">
       <el-select
-        v-model="overflow"
+        :value="overflow || undefined"
+        @input="overflow = $event"
       >
         <el-option
+          :value="undefined"
           label="Visible"
-          value="visible"
         />
         <el-option
           label="Hidden"

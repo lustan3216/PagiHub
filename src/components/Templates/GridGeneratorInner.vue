@@ -99,7 +99,7 @@ export default {
       return !this.rootLayout && !['scroll', 'hidden'].includes(this.overflow)
     },
     overflow() {
-      return getValueByPath(this, 'innerStyles.html.overflow')
+      return getValueByPath(this.node.parentNode, 'styles.html.overflow')
     },
     rootLayout() {
       return isComponentSet(this.node.parentNode)
