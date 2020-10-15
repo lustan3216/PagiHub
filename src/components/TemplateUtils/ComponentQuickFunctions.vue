@@ -353,7 +353,7 @@ export default {
         }
 
         const styles = {
-          x: Math.round(left),
+          x: Math.round(left) + 1,
           y: Math.round(top),
           width: Math.round(width - 2),
           height: Math.round(height - 2)
