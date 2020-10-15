@@ -65,14 +65,14 @@ input[type='number'] {
   font-size: 16px;
 }
 
-::-webkit-scrollbar:not(.art-board) {
-  display: none !important;
-}
-
-*:not(.art-board) {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
+//::-webkit-scrollbar {
+//  display: none !important;
+//}
+//
+//* {
+//  scrollbar-width: none;
+//  -ms-overflow-style: none;
+//}
 
 .router-link-exact-active {
   color: #409eff !important;

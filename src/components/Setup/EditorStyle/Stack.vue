@@ -1,5 +1,6 @@
 <template>
   <el-tooltip
+    :open-delay="300"
     effect="light"
     content="Stack Mode. It will push other stack container when colliding."
     placement="top"
@@ -41,7 +42,11 @@ export default {
       const lastNode = arrayLast(this.selectedComponentNodes)
       const grid = closestGridItem(lastNode)
       if (grid) {
-        return getValueByPath(vmGet(grid.id), ['innerStyles', 'layout', 'stack'])
+        return getValueByPath(vmGet(grid.id), [
+          'innerStyles',
+          'layout',
+          'stack'
+        ])
       }
     }
   },

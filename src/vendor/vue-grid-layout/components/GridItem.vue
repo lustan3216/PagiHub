@@ -416,8 +416,7 @@
               this.offResizeListener()
             }
           })
-        },
-        immediate: true
+        }
       },
       isDragging(value) {
         if (this.parentGridItem) {

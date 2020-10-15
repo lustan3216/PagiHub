@@ -85,7 +85,7 @@
         />
 
         <stack
-          v-if="!isInstance"
+          v-if="!isComponentSet"
           :id="id"
         />
 
@@ -103,6 +103,7 @@
 
         <el-tooltip
           v-if="!isInstance"
+          :open-delay="300"
           effect="light"
           placement="top"
         >
@@ -296,7 +297,12 @@ export default {
       this.setBeingAddedComponentId(this.id)
     },
     vmCreateEmptyItem() {
-      vmCreateEmptyItem(this.node)
+      if (this.isComponentSet) {
+        vmCreateEmptyItem(this.node.children[0])
+      }
+      else {
+        vmCreateEmptyItem(this.node)
+      }
     },
     deleteSlider() {
       vmGet(this.node.id, this.isExample).removeCurrentSlider()

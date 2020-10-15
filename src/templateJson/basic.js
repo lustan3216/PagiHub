@@ -37,10 +37,6 @@ export const gridGeneratorItem = function(options) {
 
 export const gridGeneratorItems = function() {
   return [
-    gridGeneratorItem(),
-    gridGeneratorItem({
-      [GRID]: mapPoints({ x: 15, y: 0, w: 44, h: 130 })
-    }),
     gridGeneratorItem({
       [STYLES]: { layout: { stack: true }},
       [GRID]: mapPoints({ x: 70, y: 0, w: 22, h: 65 })
@@ -48,6 +44,10 @@ export const gridGeneratorItems = function() {
     gridGeneratorItem({
       [STYLES]: { layout: { stack: true }},
       [GRID]: mapPoints({ x: 70, y: 44, w: 22, h: 65 })
+    }),
+    gridGeneratorItem(),
+    gridGeneratorItem({
+      [GRID]: mapPoints({ x: 15, y: 0, w: 44, h: 130 })
     })
   ]
 }
