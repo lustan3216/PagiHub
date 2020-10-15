@@ -70,5 +70,6 @@ export default {
   overflow: scroll;
   background-color: #fff;
   height: 100%;
+  padding-left: 1px;
 }
 </style>

@@ -204,7 +204,6 @@ export default {
     },
     style: {
       handler(style) {
-        const { LAYOUT_SET } = this
         gsap.to(this.targetEl, {
           height: style.h,
           width: style.w,
@@ -215,10 +214,11 @@ export default {
           top: '50%',
           left: '50%',
           onStart: () => {
-            LAYOUT_SET({ gridResizing: true })
+            this.LAYOUT_SET({ gridResizing: true })
           },
           onComplete: () => {
-            LAYOUT_SET({ gridResizing: false })
+            this.LAYOUT_SET({ gridResizing: false })
+            this.resizeNodeQuickFn()
           }
         })
 
@@ -264,9 +264,8 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('layout', {
-      LAYOUT_SET: 'SET'
-    }),
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    ...mapActions('layout', ['resizeNodeQuickFn']),
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.$el)
 

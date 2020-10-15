@@ -44,9 +44,9 @@
             <select-unit
               v-if="options[option.name]"
               :value="option.value || options[option.name].default"
-              :clearable="false"
               :key="option.name"
               v-bind="options[option.name]"
+              clearable
               @input="onChange(index, $event)"
             />
           </el-col>

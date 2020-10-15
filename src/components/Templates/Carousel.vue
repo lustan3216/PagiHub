@@ -61,7 +61,8 @@
     </template>
 
     <el-carousel
-      :ref="id"
+      ref="carousel"
+      :key="gridGenerators.length"
       v-bind="innerProps"
       :indicator-position="hasIndicator"
       :class="{ indicatorTop, indicatorLeft }"
@@ -86,17 +87,18 @@
 
 <script>
 import interactjs from 'interactjs'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import Grid from './GridGenerator'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
-import { CHILDREN, POLYMORPHISM } from '@/const'
+import { CHILDREN, POLYMORPHISM, STYLES } from '@/const'
 import { CarouselItem, Carousel } from 'element-ui'
-import { traversalSelfAndChildren } from '@/utils/node'
+import { isSlider, traversalSelfAndChildren } from '@/utils/node'
 import { vmRemoveNode } from '@/utils/vmMap'
 import ComponentGiver from '@/components/TemplateUtils/ComponentGiver'
+import { getValueByPath } from '@/utils/tool'
 
 export default {
   defaultSetting,
@@ -125,8 +127,16 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
+    ...mapGetters('layout', ['currentBreakpoint']),
     gridGenerators() {
-      return this.innerChildren.filter(x => x[POLYMORPHISM] === 'slider')
+      return this.innerChildren.filter(node => {
+        const hidden = getValueByPath(node, [
+          STYLES,
+          this.currentBreakpoint,
+          'hidden'
+        ])
+        return isSlider(node) && !hidden
+      })
     },
     customerIndicator() {
       return this.innerChildren.find(x => x[POLYMORPHISM] === 'indicators')
@@ -176,7 +186,7 @@ export default {
       return this.innerChildren.length - 2 === this.carousel.activeIndex
     },
     carousel() {
-      return this.$refs[this.id]
+      return this.$refs.carousel
     }
   },
   mounted() {

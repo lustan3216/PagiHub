@@ -41,7 +41,7 @@
 
     <padding v-if="isAllGridItem" />
 
-    <radius v-if="!hasTextEditor" />
+    <radius v-if="canRadius" />
 
     <opacity />
 
@@ -56,7 +56,7 @@
 
     <border-all />
 
-    <box-shadow />
+    <box-shadow v-if="canShadow" />
 
     <effect />
 
@@ -89,7 +89,8 @@ import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
 import TextEditorSimpleStyle from './EditorStyle/TextEditorSimpleStyle'
 import Position from '@/components/Setup/EditorStyle/Position'
-import { isGridItem, isTextEditor } from '@/utils/node'
+import { isGridItem, isSlider, isTextEditor } from '@/utils/node'
+import { arrayLast } from '@/utils/array'
 
 export default {
   name: 'PanelStyles',
@@ -124,11 +125,13 @@ export default {
       const allGridItem = nodes.length === this.selectedComponentNodes.length
       return this.selectedComponentNodes.length && allGridItem
     },
-    hasTextEditor() {
-      const nodes = this.selectedComponentNodes.filter(node =>
-        isTextEditor(node)
-      )
-      return nodes.length
+    canRadius() {
+      const node = arrayLast(this.selectedComponentNodes)
+      return !isTextEditor(node) && !isSlider(node)
+    },
+    canShadow() {
+      const node = arrayLast(this.selectedComponentNodes)
+      return !isSlider(node)
     },
     isAllTextEditor() {
       const nodes = this.selectedComponentNodes.filter(node =>

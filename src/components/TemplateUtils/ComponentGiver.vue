@@ -5,7 +5,8 @@ import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import { getNode, isComponentSet, isGrid, isGridItem } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
+import { STYLES } from '@/const'
 
 export default {
   name: 'ComponentGiver',
@@ -61,11 +62,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('layout', ['breakpoint']),
+    ...mapGetters('layout', ['currentBreakpoint']),
     visible() {
-      const hidden =
-        this.node && this.node.hidden && this.node.hidden[this.breakpoint]
-      return this.node && !hidden
+      return this.node && !this.hidden
     },
     node() {
       return getNode(this.id)
@@ -77,8 +76,12 @@ export default {
     isGridItem() {
       return isGridItem(this.node)
     },
-    isGrid() {
-      return isGrid(this.node)
+    hidden() {
+      return getValueByPath(this.node, [
+        STYLES,
+        this.currentBreakpoint,
+        'hidden'
+      ])
     }
   },
   render(h) {

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 
@@ -34,12 +34,16 @@ export default {
     }
   },
   computed: {
-    ...mapState('layout', ['breakpoint']),
+    ...mapGetters('layout', ['currentBreakpoint']),
     node() {
       return this.nodesMap[this.id]
     },
     hidden() {
-      return getValueByPath(this.node, [STYLES, this.breakpoint, 'hidden'])
+      return getValueByPath(this.node, [
+        STYLES,
+        this.currentBreakpoint,
+        'hidden'
+      ])
     }
   },
   methods: {
@@ -47,7 +51,7 @@ export default {
     record() {
       if (this.hidden) {
         this.RECORD({
-          path: `${this.id}.${STYLES}.${this.breakpoint}.hidden`,
+          path: `${this.id}.${STYLES}.${this.currentBreakpoint}.hidden`,
           value: undefined
         })
       }
@@ -56,6 +60,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

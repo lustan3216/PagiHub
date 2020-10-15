@@ -1,10 +1,10 @@
 const path = require('path')
+const webpack = require('webpack')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 const isDev = process.env.NODE_ENV === 'development'
 const isTest = process.env.NODE_ENV === 'test'
 const isStaging = process.env.NODE_ENV === 'staging'
 const isProd = process.env.NODE_ENV === 'production'
-const fs = require('fs')
 
 module.exports = {
   transpileDependencies: [
@@ -29,7 +29,13 @@ module.exports = {
       }
     }
   },
-
+  configureWebpack: config => {
+    return {
+      plugins: [
+        new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, 'element-ui/lib/locale/lang/en')
+      ]
+    }
+  },
   chainWebpack: config => {
     config.resolve.alias
       .set('icons', path.resolve(__dirname, 'src/assets/icons'))
@@ -43,17 +49,16 @@ module.exports = {
     config.plugins.delete('prefetch') // TODO: need test
     config.plugin('cache').use(HardSourceWebpackPlugin)
 
-    config
-      .when((isProd || isStaging),
-        config => {
-          config.devtool(isProd ? 'hidden-source-map' : 'source-map')
-          config.plugins.delete('hmr')
-          config.output.filename('[name].[contenthash:8].js')
-          config.output.chunkFilename('js/[name].[contenthash:8].js')
-        }
-      )
+    config.when(isProd || isStaging, config => {
+      config.devtool(isProd ? 'hidden-source-map' : 'source-map')
+      config.plugins.delete('hmr')
+      config.output.filename('[name].[contenthash:8].js')
+      config.output.chunkFilename('js/[name].[contenthash:8].js')
+    })
 
-    config.when((isTest), config => config.devtool('cheap-module-eval-source-map'))
+    config.when(isTest, config =>
+      config.devtool('cheap-module-eval-source-map')
+    )
 
     config.module
       .rule('vue')

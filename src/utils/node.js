@@ -25,7 +25,7 @@ export function wrapByGrid(nodesMap, ids) {
   ids.forEach(id => {
     const node = nodesMap[id]
 
-    traversalAncestorAndSelf(node, (node) => {
+    traversalAncestorAndSelf(node, node => {
       const pureNode = cleanInherit(cloneJsonWithoutChildren(node))
 
       if (isGridItem(node)) {
@@ -117,7 +117,7 @@ export function traversalAncestor(node, fn) {
   }
 
   const go = fn(node.parentNode)
-  if ((go || isUndefined(go))) {
+  if (go || isUndefined(go)) {
     traversalAncestorAndSelf(node.parentNode, fn)
   }
 }
@@ -212,7 +212,7 @@ export function isCarousel(node) {
 
 export function isGrid(node) {
   if (node) {
-    return node.tag === GRID_GENERATOR
+    return node.tag === GRID_GENERATOR && !isSlider(node)
   }
 }
 

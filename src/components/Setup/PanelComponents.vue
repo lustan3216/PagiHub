@@ -19,7 +19,10 @@
           @mouseenter.stop="hoverNode(data.id)"
           @mouseleave.stop="hoverLeaveNode(data.id)"
         >
-          <hidden :id="data.id" />
+          <hidden
+            :id="data.id"
+            class="hidden-button"
+          />
 
           <component-name
             :id="data.id"
@@ -201,9 +204,9 @@ export default {
       const sameLayer = drag.parent === drop.parent
       return sameLayer && ['prev', 'next'].includes(action)
     },
-    filterTagBySearching(serachText, { label, tag, value }) {
-      serachText = serachText.toLowerCase().toString()
-      return `${label}${tag}${value}`.toLowerCase().indexOf(serachText) !== -1
+    filterTagBySearching(searchText, { label, tag, value }) {
+      searchText = searchText.toLowerCase().toString()
+      return `${label}${tag}${value}`.toLowerCase().indexOf(searchText) !== -1
     },
     nodeClick(event, id) {
       if (event.metaKey || event.ctrlKey) {
@@ -257,6 +260,10 @@ export default {
   margin: 5px 10px;
 }
 ::v-deep {
+  .el-button {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
   .el-tree-node__content {
     height: 30px;
   }
@@ -267,5 +274,10 @@ export default {
 
 .icon {
   font-size: 14px;
+}
+.hidden-button {
+  font-size: 16px;
+  margin-left: 8px;
+  margin-right: -8px;
 }
 </style>
