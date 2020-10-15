@@ -15,7 +15,7 @@
               class="link"
               @click="openGoogleFont"
             >Google font</span>. For
-            example, You found a name "Open Sans", then just type it in.
+            example, You found a name "Open Sans", then just type "Open Sans".
           </tip>
         </span>
       </el-col>

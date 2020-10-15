@@ -284,14 +284,10 @@ export default {
   },
   created() {
     this.resize()
+    this.$bus.$on('quick-function-resize', this.resize)
   },
-  mounted() {
-    // Don't put in created to prevent some component fail before mount
-    // 給 store component 裡面呼叫的
-    quickFnMap[this.id] = this
-    if (process.env.NODE_ENV === 'production') {
-      window.quickFnMap = quickFnMap
-    }
+  beforeDestroy() {
+    this.$bus.$off('quick-function-resize', this.resize)
   },
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
@@ -387,7 +383,7 @@ export default {
 
         this.visible = true
       })
-    }, 300),
+    }, 150),
     mouseenter() {
       timeId = setTimeout(() => {
         this.hovering = true

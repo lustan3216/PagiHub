@@ -1,5 +1,4 @@
 import { SET } from '../index'
-import { quickFnMap } from '@/components/TemplateUtils/ComponentQuickFunctions'
 import { findBreakpoint, sortDescBreakpoint } from '@/utils/layout'
 
 const state = {
@@ -14,14 +13,9 @@ const mutations = {
 }
 
 const actions = {
-  resizeNodeQuickFn({ rootState, commit }) {
+  resizeNodeQuickFn({ commit }) {
     this._vm.$nextTick(() => {
-      rootState.app.selectedComponentIds.forEach(id => {
-        if (quickFnMap[id]) {
-          quickFnMap[id].resize()
-        }
-      })
-
+      this._vm.$bus.$emit('quick-function-resize')
       commit('SET', { gridResizing: false })
     })
   }

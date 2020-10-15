@@ -16,6 +16,13 @@
       multiple
     />
 
+    <dialog-component-tabs
+      v-if="isDraftMode && (beingAddedComponentId || uploading)"
+      :visible="Boolean(beingAddedComponentId)"
+      @uploading="uploading = true"
+      @uploaded="uploading = false"
+    />
+
     <div id="fb-root" />
   </div>
 </template>
@@ -27,11 +34,19 @@ import TopNav from '@/pages/TopNav'
 export default {
   name: 'App',
   components: {
-    TopNav
+    TopNav,
+    DialogComponentTabs: () =>
+      import('@/components/ExampleAddPanel/DialogComponentTabs')
+  },
+  data() {
+    return {
+      uploading: false
+    }
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('user', ['isLogin']),
+    ...mapState('app', ['beingAddedComponentId']),
     inDashboard() {
       return this.$route.path.indexOf('/dashboard') === 0
     },

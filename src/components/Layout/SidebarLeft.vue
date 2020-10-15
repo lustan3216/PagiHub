@@ -3,26 +3,25 @@
     :style="{ width: width + 'px' }"
     class="sidebar-left"
   >
-    <el-button-group class="flex">
-      <el-button
-        class="flex1 small-title"
-        @click="activePanel = 'PanelComponentSets'"
-      >
-        Layers
-      </el-button>
+    <!--    <el-button-group class="flex">-->
+    <!--      <el-button-->
+    <!--        class="flex1 small-title"-->
+    <!--        @click="activePanel = 'PanelComponentSets'"-->
+    <!--      >-->
+    <!--        Layers-->
+    <!--      </el-button>-->
 
-      <el-button
-        class="flex1"
-        @click="activePanel = 'PanelAsset'"
-      >
-        Asset
-      </el-button>
-    </el-button-group>
+    <!--      <el-button-->
+    <!--        class="flex1"-->
+    <!--        @click="activePanel = 'PanelAsset'"-->
+    <!--      >-->
+    <!--        Asset-->
+    <!--      </el-button>-->
+    <!--    </el-button-group>-->
 
-    <panel-asset v-if="editingAsset" />
+    <!--    <panel-asset v-if="editingAsset" />-->
 
     <split-pane
-      v-else
       :default-percent="40"
       split="horizontal"
     >
@@ -118,7 +117,7 @@ export default {
 
 ::v-deep {
   .vue-splitter-container {
-    @include calc-vh('height', '100% - 20px');
+    height: 100%;
   }
   .splitter-pane {
     background-color: #ffffff;

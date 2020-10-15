@@ -111,7 +111,6 @@ export default {
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     ...mapState('layout', ['gridResizing']),
-    ...mapState('example', ['exampleNodesMap']),
     lock() {
       return this.node.lock
     },

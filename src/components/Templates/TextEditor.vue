@@ -1,9 +1,12 @@
 <template>
   <div class="editor ProseMirror">
     <el-popover
+      :disabled="isExample"
+      :key="id"
+      :value="editing"
       popper-class="p-0"
       placement="right"
-      trigger="hover"
+      trigger="manual"
     >
       <div
         id="menu-bubble"
@@ -192,6 +195,10 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    editing: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

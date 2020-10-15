@@ -27,11 +27,11 @@ export const actions = {
     return data
   },
 
-  async getComponentSetChildren({ commit, state }, id) {
+  async getComponentSetChildren({ commit, state }, { id, force = false }) {
     const nodes = Object.values(state.nodesMap)
     const imported = nodes.find(node => node.parentId === id)
 
-    if (imported) {
+    if (imported && !force) {
       return
     }
 

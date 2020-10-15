@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loadingKey">
     <div class="justify-between">
       <h4 style="margin: 10px 0 15px;">
         Breakpoints
@@ -81,7 +81,6 @@
         class="justify-end"
       >
         <el-button
-          v-loading="key === loadingKey"
           v-if="key !== 'xs'"
           :type="isEnable(key) ? '' : 'primary'"
           plain

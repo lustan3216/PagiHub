@@ -53,11 +53,11 @@
 </template>
 
 <script>
-import { shortTagName, getNode, isComponentSet } from '@/utils/node'
+import { shortTagName, getNode } from '@/utils/node'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import TipCopy from '../Tip/TipCopy'
 import { Tag } from 'element-ui'
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import ExampleViewPort from './ExampleViewPort'
 import ArtBoard from '@/components/Layout/ArtBoard'
 

@@ -91,7 +91,7 @@ import { isGrid, isGridItem } from '@/utils/node'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
-import { array } from "@/validator"
+import { array } from '@/validator'
 
 export default {
   name: 'Dimension',
@@ -138,7 +138,10 @@ export default {
     },
     w: {
       get() {
-        const prop = this.lastVm.innerGrid[this.currentBreakpoint]
+        const prop = getValueByPath(this.lastVm, [
+          'innerGrid',
+          this.currentBreakpoint
+        ])
         if (prop) {
           return (prop.w || '0').toString() + (prop.unitW || '%')
         }
@@ -164,7 +167,10 @@ export default {
     },
     h: {
       get() {
-        const prop = this.lastVm.innerGrid[this.currentBreakpoint]
+        const prop = getValueByPath(this.lastVm, [
+          'innerGrid',
+          this.currentBreakpoint
+        ])
         if (prop) {
           return (prop.h || '0').toString() + (prop.unitH || 'px')
         }

@@ -19,10 +19,8 @@ https://github.com/antonreshetov/vue-eva-icons
 <ol>
 
 grid item 用繼承的方式，不要每個 breakpoint 都不一樣
-字體要可以搜尋
 每個用戶都有一個 playground 進去可以馬上玩
 切換 componentset 時 patchchildren 有 bug
-trnasofrm 要修改個別的 component，不然像是 rotate 跟 backgrpund 會重疊
 width px, grid layout 底城如果用每單位 用 px 計算搞不好有機會
 
 <li>road map</li>
@@ -30,6 +28,7 @@ width px, grid layout 底城如果用每單位 用 px 計算搞不好有機會
 
 ### Last
 
+inherit 放最後
 font 還是需要 fit container, 行為都要一致，做成 checkbox
 等 stylecomponent 好了，把 master style 放左邊一蘭
 可以 shift 拉出來複製,拉出來的應該可以改成 stack false

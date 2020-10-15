@@ -34,13 +34,6 @@
     <sidebar-right v-if="isDraftMode" />
 
     <preview-controller v-if="isPreviewMode" />
-
-    <dialog-component-tabs
-      v-if="beingAddedComponentId || uploading"
-      :visible="Boolean(beingAddedComponentId)"
-      @uploading="uploading = true"
-      @uploaded="uploading = false"
-    />
   </div>
 </template>
 
@@ -61,16 +54,8 @@ export default {
     SidebarLeft: () => import('@/components/Layout/SidebarLeft'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
     PanelDraft: () => import('@/components/Layout/PanelDraft'),
-    DialogComponentTabs: () =>
-      import('@/components/ExampleAddPanel/DialogComponentTabs')
-  },
-  data() {
-    return {
-      uploading: false
-    }
   },
   computed: {
-    ...mapState('app', ['beingAddedComponentId']),
     ...mapState('node', ['editingProjectId', 'editingComponentSetId'])
   },
   async created() {

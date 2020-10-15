@@ -5,7 +5,7 @@
     v-bind="innerProps"
     class="wh-100 m-0 button"
   >
-    <editor-text-inner
+    <text-editor
       :id="id"
       :value="innerValue || 'Submit'"
     />
@@ -44,13 +44,13 @@ import { MessageBox } from 'element-ui'
 import { isUndefined } from '@/utils/tool'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSubmit'
 import nodeMixin from '@/components/Templates/mixins/node'
-import TextEditorSimpleInner from '@/components/Templates/TextEditorSimpleInner'
+import TextEditor from '@/components/Templates/TextEditor'
 
 export default {
   defaultSetting,
   name: 'FormSubmit',
   components: {
-    TextEditorSimpleInner
+    TextEditor
   },
   mixins: [nodeMixin],
   props: {

@@ -30,7 +30,10 @@ export default {
     }
   },
   created() {
-    this.getComponentSetChildren(this[ID])
+    this.getComponentSetChildren({
+      id: this[ID],
+      force: this.isExample
+    })
   },
   mounted() {
     // Don't put in created to prevent some component fail before mount

@@ -19,6 +19,7 @@
 import { mapGetters } from 'vuex'
 import { bigCamelCase } from '@/utils/string'
 import { arrayLast, arrayUniq } from '@/utils/array'
+import { vmGet } from '@/utils/vmMap'
 
 const self = {
   name: 'PanelSettings',
@@ -68,7 +69,10 @@ const self = {
       return arrayUniq(tags).length === 1
     },
     canSetUp() {
-      return this.areSameTag && this.hasVueSettingComponent
+      return this.areSameTag && this.hasVueSettingComponent && this.vm
+    },
+    vm() {
+      return vmGet(this.lastNode.id) // when selecting component in example
     }
   }
 }
