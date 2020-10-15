@@ -25,7 +25,7 @@ module.exports = {
     extract: false,
     loaderOptions: {
       sass: {
-        data: `@import "~@/styles/mixins.scss";@import "~@/styles/variable.scss";`
+        data: `@import "src/styles/mixins.scss";@import "src/styles/variable.scss";`
       }
     }
   },
