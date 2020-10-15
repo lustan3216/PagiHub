@@ -10,14 +10,14 @@
         :prefix-icon="icon"
         :value="innerValue[0]"
         :min="0"
-        @input="emit({ unit: $event })"
+        @input="emit($event, innerValue[1], innerValue[2])"
       />
     </el-col>
 
     <el-col :span="10">
       <style-select
         :value="innerValue[1]"
-        @input="emit({ style: $event })"
+        @input="emit(innerValue[0], $event, innerValue[2])"
       />
     </el-col>
 
@@ -25,7 +25,7 @@
       <color-picker
         :value="innerValue[2]"
         style="margin-top: 1px;"
-        @input="emit({ color: $event })"
+        @input="emit(innerValue[0], innerValue[1], $event)"
       />
     </el-col>
   </el-row>
@@ -97,13 +97,12 @@ export default {
     }
   },
   methods: {
-    emit({ unit, style = 'solid', color = '#000' }) {
-      if (unit && parseInt(unit)) {
-        this.$emit('input', [unit, style, color].join(' '))
+    emit(unit, style = 'solid', color) {
+      if (unit === null) {
+        return this.$emit('input', '')
       }
-      else {
-        this.$emit('input', '')
-      }
+
+      this.$emit('input', [unit || '1px', style, color].join(' '))
     }
   }
 }
