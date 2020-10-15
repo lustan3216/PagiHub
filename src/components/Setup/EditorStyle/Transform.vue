@@ -182,6 +182,9 @@ export default {
         this.departTransformToArray()
       },
       immediate: true
+    },
+    transform() {
+      this.departTransformToArray()
     }
   },
   methods: {

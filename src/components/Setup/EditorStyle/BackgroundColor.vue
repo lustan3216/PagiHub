@@ -47,7 +47,7 @@ import forNode from '@/components/Setup/EditorStyle/mixins/forNode'
 
 export default {
   name: 'BackgroundColor',
-  mixins: [forNode(['backgroundColor', 'backgroundImage'])],
+  mixins: [forNode('backgroundColor'), forNode('backgroundImage')],
   components: {
     ColorPicker
   },

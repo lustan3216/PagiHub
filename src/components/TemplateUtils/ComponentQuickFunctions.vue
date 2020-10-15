@@ -359,10 +359,10 @@ export default {
         }
 
         const styles = {
-          x: Math.round(left) + 1,
-          y: Math.round(top),
-          width: Math.round(width - 2),
-          height: Math.round(height - 2)
+          x: left,
+          y: top,
+          width: width - 2,
+          height: height - 2
         }
 
         Object.assign(this.$data, styles)

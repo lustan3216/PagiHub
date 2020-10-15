@@ -165,6 +165,9 @@ export default {
         this.departShadowToArray()
       },
       immediate: true
+    },
+    boxShadow() {
+      this.departShadowToArray()
     }
   },
   methods: {
@@ -183,9 +186,8 @@ export default {
         boxShadowArray = parse(this.boxShadow)
       }
 
-      const id = +new Date()
       boxShadowArray.forEach((boxShadow, index) => {
-        boxShadow.id = id + index
+        boxShadow.id = index
         boxShadow.visible = true
       })
 

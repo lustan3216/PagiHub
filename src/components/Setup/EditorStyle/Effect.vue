@@ -161,6 +161,9 @@ export default {
         this.departFilterToArray()
       },
       immediate: true
+    },
+    filter() {
+      this.departFilterToArray()
     }
   },
   methods: {
