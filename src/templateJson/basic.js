@@ -110,6 +110,7 @@ export const textEditor = function(options) {
   return {
     [TAG]: TEXT_EDITOR,
     [CAN_BE_EDITED]: true,
+    [VALUE]: 'text',
     ...options
   }
 }

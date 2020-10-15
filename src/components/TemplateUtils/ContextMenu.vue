@@ -147,16 +147,17 @@ export default {
           shortKey: [this.metaKey, 'X'],
           disabled: this.selectedComponentIds.length !== 1
         },
-        { name: 'Duplicate' },
+        { name: 'Duplicate', disabled: !this.selectedComponentNodes.length },
         {
           name: 'Delete',
           shortKey: ['&#9003;'],
-          disabled: isInstanceChild(this.node)
-        },
-        {
-          name: 'Make Master Component',
-          divided: true
+          disabled:
+            isInstanceChild(this.node) || !this.selectedComponentNodes.length
         }
+        // {
+        //   name: 'Make Master Component',
+        //   divided: true
+        // }
       ]
     }
   },

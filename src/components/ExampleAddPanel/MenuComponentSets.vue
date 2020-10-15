@@ -19,7 +19,7 @@
           @mouseenter.native="hoverId = item.id"
           @mouseleave.native="hoverId = null"
         >
-          <b class="title">{{ shortTagName(item) }}</b>
+          <b class="title">{{ item.label }}</b>
 
           <div
             :max-lines="3"
@@ -58,7 +58,6 @@
 <script>
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import VClamp from 'vue-clamp'
-import { shortTagName } from '@/utils/node'
 import { mapMutations } from 'vuex'
 import { searchComponentSets } from '@/api/node'
 import { debounce } from '@/utils/tool'
@@ -142,9 +141,11 @@ export default {
       }
     }
   },
+  activated() {
+    this.initSearch()
+  },
   methods: {
     ...mapMutations('node', ['SET_NODES_TO_MAP']),
-    shortTagName,
     // description(component) {
     //   const div = document.createElement('div')
     //   div.innerHTML = component.description

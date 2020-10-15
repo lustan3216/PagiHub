@@ -4,12 +4,6 @@
 
     <router-view :style="{ paddingTop: needNavBar ? '50px' : '0' }" />
 
-    <dialog-component-tabs
-      :visible="Boolean(beingAddedComponentId)"
-      @uploading="uploading = true"
-      @uploaded="uploading = false"
-    />
-
     <portal-target
       v-for="id in selectedComponentIds"
       :name="`App-${id}`"
@@ -33,18 +27,10 @@ import TopNav from '@/pages/TopNav'
 export default {
   name: 'App',
   components: {
-    TopNav,
-    DialogComponentTabs: () =>
-      import('@/components/ExampleAddPanel/DialogComponentTabs')
-  },
-  data() {
-    return {
-      uploading: false
-    }
+    TopNav
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapState('app', ['beingAddedComponentId']),
     ...mapGetters('user', ['isLogin']),
     inDashboard() {
       return this.$route.path.indexOf('/dashboard') === 0

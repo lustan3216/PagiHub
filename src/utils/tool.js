@@ -24,8 +24,10 @@ export {
 }
 
 export function resizeListener(element, fn) {
-  addResizeListener(element, fn)
-  return () => removeResizeListener(element, fn)
+  if (element) {
+    addResizeListener(element, fn)
+  }
+  return () => element && removeResizeListener(element, fn)
 }
 
 export function isBoolean(value) {

@@ -3,18 +3,10 @@
     id="art-board"
     class="art-board"
   >
-    <transition
-      name="slide"
-      mode="out-in"
-    >
-      <keep-alive>
-        <component-giver
-          v-if="id"
-          :id="id"
-          :key="id"
-        />
-      </keep-alive>
-    </transition>
+    <component-giver
+      :id="id"
+      :key="id"
+    />
   </div>
 </template>
 
@@ -32,8 +24,12 @@ export default {
   },
   props: {
     id: {
-      type: String,
-      required: true
+      type: String
+    }
+  },
+  data() {
+    return {
+      scrollTop: 0
     }
   },
   computed: {
@@ -41,17 +37,26 @@ export default {
       return this.nodesMap[this.id]
     }
   },
-  watch: {
-    node() {
-      if (!this.isExample) {
-        const { clientWidth, clientHeight } = this.$el
+  mounted() {
+    const page = this.$el
+    page.addEventListener('scroll', () => {
+      this.scrollTop = page.scrollTop
+    })
 
-        this.LAYOUT_SET({
-          gridResizing: false,
-          artBoardWidth: parseInt(clientWidth),
-          artBoardHeight: parseInt(clientHeight)
-        })
-      }
+    if (!this.isExample) {
+      const { clientWidth, clientHeight } = this.$el
+
+      this.LAYOUT_SET({
+        gridResizing: false,
+        artBoardWidth: parseInt(clientWidth),
+        artBoardHeight: parseInt(clientHeight)
+      })
+    }
+  },
+  activated() {
+    if (this.scrollTop) {
+      const page = this.$el
+      page.scrollTop = this.scrollTop
     }
   },
   methods: {

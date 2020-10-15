@@ -5,7 +5,7 @@
     :class="classObj"
     :style="{
           ...this.style,
-          zIndex,
+          zIndex: isDragging || isResizing ? 10000 : zIndex,
           position: this.fixItem ? 'fixed' : 'absolute'
         }"
   >

@@ -4,9 +4,10 @@
     type="text"
     @click.stop="visible = !visible"
   >
-    <b-icon-cloud-arrow-up/>
+    <b-icon-cloud-arrow-up />
 
     <dialog-confirmable
+      v-if="node"
       :loading="loading"
       :visible.sync="visible"
       title="Publish"
@@ -32,8 +33,15 @@
             class="description"
           />
 
-          <p class="small-title">
+          <p class="font-12 gray-font-2">
             It is private for note.
+          </p>
+
+          <p
+            v-if="node.publishAt"
+            class="small-title"
+          >
+            Publish at {{ publishAt }}
           </p>
         </el-form-item>
       </el-form>
@@ -47,6 +55,9 @@ import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import TextEditorRich from '@/components/Components/TextEditorRich'
 import { BIconCloudArrowUp } from 'bootstrap-vue'
 import { Message } from 'element-ui'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 
 export default {
   name: 'DialogPublish',
@@ -70,7 +81,10 @@ export default {
       return this.nodesMap[this.editingComponentSetId]
     },
     version() {
-      return (this.node && this.node.version) || 1
+      return (this.node && this.node.version) || 0
+    },
+    publishAt() {
+      return dayjs().to(dayjs(this.node.publishAt))
     }
   },
   watch: {

@@ -25,8 +25,8 @@
       :data-cy="`grid-item-${index}`"
       drag-ignore-from=".grid-item-fix"
       drag-allow-from="div"
-      @resizeStart="itemUpdating"
-      @moveStart="itemUpdating"
+      @resize="itemUpdating"
+      @move="itemUpdating"
     >
       <component-giver :id="layout.id" />
     </vue-grid-item>

@@ -82,37 +82,36 @@ import FontSelector from '@/components/Components/FontSelector'
 import Tip from '@/components/Tip/TipPopper'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES, HTML } from '@/const'
-import { mapMutations } from 'vuex'
-import { getNode } from '@/utils/node'
+import { mapGetters, mapMutations } from 'vuex'
+import { arrayLast } from '@/utils/array'
+import { vmGet } from '@/utils/vmMap'
 
 export default {
-  name: 'TextEditorRichStyle',
+  name: 'TextEditorSimpleStyle',
   components: {
     SelectUnit,
     FontSelector,
     Tip
   },
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
   computed: {
+    ...mapGetters('app', ['selectedComponentNodes']),
     node() {
-      return getNode(this.id, this.isExample)
+      return arrayLast(this.selectedComponentNodes)
     },
     style() {
-      return getValueByPath(this.node, [STYLES, HTML]) || {}
+      const vm = vmGet(this.node.id)
+      return getValueByPath(vm, ['innerStyles', HTML], {})
     },
     fontFamily: {
       get() {
         return this.style.fontFamily
       },
       set(value) {
-        this.RECORD({
-          path: `${this.id}.${STYLES}.${HTML}.fontFamily`,
-          value
+        this.selectedComponentNodes.forEach(node => {
+          this.RECORD({
+            path: `${node.id}.${STYLES}.${HTML}.fontFamily`,
+            value: value || undefined
+          })
         })
       }
     },
@@ -121,9 +120,11 @@ export default {
         return this.style.fontSize
       },
       set(value) {
-        this.RECORD({
-          path: `${this.id}.${STYLES}.${HTML}.fontSize`,
-          value
+        this.selectedComponentNodes.forEach(node => {
+          this.RECORD({
+            path: `${node.id}.${STYLES}.${HTML}.fontSize`,
+            value: value || undefined
+          })
         })
       }
     },
@@ -132,9 +133,11 @@ export default {
         return this.style.letterSpacing
       },
       set(value) {
-        this.RECORD({
-          path: `${this.id}.${STYLES}.${HTML}.letterSpacing`,
-          value
+        this.selectedComponentNodes.forEach(node => {
+          this.RECORD({
+            path: `${node.id}.${STYLES}.${HTML}.letterSpacing`,
+            value: value || undefined
+          })
         })
       }
     },
@@ -143,9 +146,11 @@ export default {
         return this.style.lineHeight
       },
       set(value) {
-        this.RECORD({
-          path: `${this.id}.${STYLES}.${HTML}.lineHeight`,
-          value
+        this.selectedComponentNodes.forEach(node => {
+          this.RECORD({
+            path: `${node.id}.${STYLES}.${HTML}.lineHeight`,
+            value: value || undefined
+          })
         })
       }
     }

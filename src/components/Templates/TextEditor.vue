@@ -1,14 +1,5 @@
 <template>
   <div class="editor ProseMirror">
-    <template v-if="isDraftMode">
-      <portal
-        v-if="canEditStyle"
-        to="PanelStyles"
-      >
-        <text-editor-simple-style :id="id" />
-      </portal>
-    </template>
-
     <el-popover
       popper-class="p-0"
       placement="right"
@@ -166,7 +157,7 @@
       <content-editable
         ref="content"
         slot="reference"
-        :style="innerStyles.html"
+        :style="htmlStyles"
         :tag="tag || 'div'"
         v-model="text"
         :content-editable="isDraftMode && !isExample"
@@ -181,7 +172,7 @@ import { Popover } from 'element-ui'
 import WebFont from 'webfontloader'
 import ColorPicker from '@/components/Components/ColorPicker'
 import { HTML, STYLES, TEXT_EDITOR } from '@/const'
-import { getNode, isGridItem } from '@/utils/node'
+import { isGridItem } from '@/utils/node'
 import { asyncGetValue } from '@/utils/tool'
 import ContentEditable from '@/components/Components/ContentEditable'
 import nodeMixin from './mixins/node'
@@ -191,9 +182,7 @@ export default {
   components: {
     ColorPicker,
     ElPopover: Popover,
-    ContentEditable,
-    TextEditorSimpleStyle: () =>
-      import('@/components/Setup/EditorStyle/TextEditorSimpleStyle')
+    ContentEditable
   },
   inject: {
     isExample: { default: false }
@@ -203,10 +192,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-    editing: {
-      type: Boolean,
-      required: false
     }
   },
   data() {
@@ -230,6 +215,9 @@ export default {
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },
+    htmlStyles() {
+      return this.innerStyles.html || {}
+    },
     text: {
       get() {
         return this.innerValue
@@ -243,7 +231,7 @@ export default {
     },
     color: {
       get() {
-        return this.innerStyles.html.color
+        return this.htmlStyles.color
       },
       set(value) {
         this.record({
@@ -254,7 +242,7 @@ export default {
     },
     backgroundColor: {
       get() {
-        return this.innerStyles.html.backgroundColor
+        return this.htmlStyles.backgroundColor
       },
       set(value) {
         this.record({
@@ -265,7 +253,7 @@ export default {
     },
     textAlign: {
       get() {
-        return this.innerStyles.html.textAlign
+        return this.htmlStyles.textAlign
       },
       set(value) {
         this.record({
@@ -276,7 +264,7 @@ export default {
     },
     textDecoration: {
       get() {
-        return this.innerStyles.html.textDecoration
+        return this.htmlStyles.textDecoration
       },
       set(value) {
         this.record({
@@ -287,7 +275,7 @@ export default {
     },
     fontWeight: {
       get() {
-        return this.innerStyles.html.fontWeight
+        return this.htmlStyles.fontWeight
       },
       set(value) {
         this.record({
@@ -298,7 +286,7 @@ export default {
     },
     fontStyle: {
       get() {
-        return this.innerStyles.html.fontStyle
+        return this.htmlStyles.fontStyle
       },
       set(value) {
         this.record({
@@ -338,7 +326,7 @@ export default {
     }
   },
   created() {
-    const families = this.findFontNames(this.innerValue)
+    const families = this.findFontNames(this.innerValue || '')
 
     if (families.length) {
       WebFont.load({

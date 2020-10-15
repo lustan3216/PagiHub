@@ -51,7 +51,12 @@
 <script>
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import { shortTagName, getNode, isTextEditor } from '@/utils/node'
+import {
+  shortTagName,
+  getNode,
+  isTextEditor,
+  isComponentSet
+} from '@/utils/node'
 import { LABEL } from '@/const'
 import { BIconXDiamond, BIconXDiamondFill } from 'bootstrap-vue'
 import {
@@ -119,7 +124,9 @@ export default {
       return isTextEditor(this.node)
     },
     nodeShortName() {
-      return shortTagName(this.node)
+      return isComponentSet(this.node)
+        ? this.node.label
+        : shortTagName(this.node)
     },
     shortId() {
       if (process.env.NODE_ENV !== 'production') {

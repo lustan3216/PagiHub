@@ -17,15 +17,30 @@
       :class="{ draft: isDraftMode }"
       style="flex: 1"
     >
-      <art-board
-        v-if="editingComponentSetId"
-        :id="editingComponentSetId"
-      />
+      <transition
+        name="slide"
+        mode="out-in"
+      >
+        <keep-alive>
+          <art-board
+            v-if="editingComponentSetId"
+            :id="editingComponentSetId"
+            :key="editingComponentSetId"
+          />
+        </keep-alive>
+      </transition>
     </view-port>
 
     <sidebar-right v-if="isDraftMode" />
 
     <preview-controller v-if="isPreviewMode" />
+
+    <dialog-component-tabs
+      v-if="beingAddedComponentId || uploading"
+      :visible="Boolean(beingAddedComponentId)"
+      @uploading="uploading = true"
+      @uploaded="uploading = false"
+    />
   </div>
 </template>
 
@@ -45,12 +60,21 @@ export default {
     SidebarRight: () => import('@/components/Layout/SidebarRight'),
     SidebarLeft: () => import('@/components/Layout/SidebarLeft'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
-    PanelDraft: () => import('@/components/Layout/PanelDraft')
+    PanelDraft: () => import('@/components/Layout/PanelDraft'),
+    DialogComponentTabs: () =>
+      import('@/components/ExampleAddPanel/DialogComponentTabs')
+  },
+  data() {
+    return {
+      uploading: false
+    }
   },
   computed: {
+    ...mapState('app', ['beingAddedComponentId']),
     ...mapState('node', ['editingProjectId', 'editingComponentSetId'])
   },
   async created() {
+    this.getAssets()
     this.SET_DRAFT_MODE()
     const { projectId } = this.$route.params
 
@@ -84,7 +108,8 @@ export default {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapMutations('mode', ['SET_DRAFT_MODE']),
     ...mapActions('example', ['initExamples']),
-    ...mapActions('layout', ['resizeNodeQuickFn'])
+    ...mapActions('layout', ['resizeNodeQuickFn']),
+    ...mapActions('asset', ['getAssets'])
   }
 }
 </script>

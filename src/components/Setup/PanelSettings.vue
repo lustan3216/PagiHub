@@ -4,12 +4,14 @@
       SETTINGS
     </el-divider>
 
-    <component
-      v-if="visible"
-      :is="vueComponentTag"
-      :id="lastNode.id"
-      class="m-t-10 settings"
-    />
+    <keep-alive>
+      <component
+        :is="vueComponentTag"
+        :key="vueComponentTag"
+        :id="lastNode.id"
+        class="m-t-10 settings"
+      />
+    </keep-alive>
   </div>
 </template>
 
@@ -47,11 +49,6 @@ const self = {
     SettingFormTextarea: () => import('./EditorSetting/SettingFormTextarea'),
     SettingFormTimePicker: () => import('./EditorSetting/SettingFormTimePicker')
   },
-  data() {
-    return {
-      visible: true
-    }
-  },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
     lastNode() {
@@ -72,18 +69,6 @@ const self = {
     },
     canSetUp() {
       return this.areSameTag && this.hasVueSettingComponent
-    }
-  },
-  watch: {
-    vueComponentTag(tag) {
-      this.visible = false
-      if (tag) {
-        this.$nextTick(() => {
-          setTimeout(() => {
-            this.visible = true
-          }, 50)
-        })
-      }
     }
   }
 }

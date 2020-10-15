@@ -104,7 +104,7 @@ const getters = {
   selectedComponentNodes(state, getters, rootState) {
     return state.selectedComponentIds
       .map(id => rootState.node.nodesMap[id])
-      .filter(node => node)
+      .filter(node => isComponent(node))
   }
 }
 

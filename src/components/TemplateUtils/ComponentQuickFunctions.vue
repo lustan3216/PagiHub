@@ -331,6 +331,11 @@ export default {
 
         const bounderNode = element.closest('.art-board')
 
+        if (!bounderNode) {
+          this.visible = false
+          return
+        }
+
         const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()
 
         // this.visible = top < top1 + height1
@@ -359,6 +364,11 @@ export default {
         }
 
         Object.assign(this.$data, styles)
+
+        if (!this.framer) {
+          this.visible = false
+          return
+        }
 
         gsap.to(this.framer, {
           ...styles,

@@ -82,7 +82,7 @@ export default {
   .divider-with-button {
     display: flex;
     & > .el-dropdown {
-      margin-top: 15px;
+      margin-top: 6px;
       margin-left: 10px;
     }
 
@@ -93,7 +93,7 @@ export default {
   }
 
   .el-divider--horizontal {
-    margin: 25px 0 15px;
+    margin: 15px 0 15px;
   }
 
   .el-divider__text {

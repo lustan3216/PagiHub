@@ -53,14 +53,14 @@ export default {
       immediate: true
     }
   },
-  async created() {
+  created() {
     Object.assign(this.inheritance, {
       inheritParentId: this.id,
       masterComponentSetId: this.masterComponentSetId
     })
-
+    console.log(this.masterComponentSetId)
     if (this.masterComponentSetId) {
-      await this.getComponentSetChildren(this.masterComponentSetId)
+      this.getComponentSetChildren(this.masterComponentSetId)
     }
   },
   methods: {

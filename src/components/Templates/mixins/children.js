@@ -1,5 +1,5 @@
 import { mapMutations, mapState } from 'vuex'
-import { CHILDREN, STYLES, PROPS, GRID, SOFT_DELETE } from '@/const'
+import { CHILDREN, STYLES, PROPS, GRID, SOFT_DELETE, VALUE } from '@/const'
 import { arrayLast, isArray } from '@/utils/array'
 import { vmRemoveNode } from '@/utils/vmMap'
 import { cloneJson, deepMerge, getValueByPath, isUndefined } from '@/utils/tool'
@@ -75,6 +75,9 @@ export default {
   activated() {
     this.updateChildrenWithMaster()
   },
+  created() {
+    this.updateChildrenWithMaster()
+  },
   methods: {
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
@@ -89,6 +92,7 @@ export default {
     updateChildrenWithMaster() {
       const realChildren = this.node.children || []
       const diff = this.masterChildren.length - realChildren.length
+
       if (
         this.isExample ||
         !this.inheritance.loaded ||
@@ -99,7 +103,7 @@ export default {
       ) {
         return
       }
-
+      // console.log(diff)
       const records = []
       if (diff > 0) {
         arraySubtract(this.masterChildren, realChildren).forEach(newItem => {
@@ -149,6 +153,7 @@ export default {
               delete node[PROPS]
               delete node[STYLES]
               delete node[GRID]
+              delete node[VALUE]
             }
           }
         }

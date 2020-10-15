@@ -163,8 +163,6 @@ export default {
     }
   },
   mounted() {
-    this.getAssets()
-
     setOptions({
       server: {
         process: postAsset
@@ -181,7 +179,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions('asset', ['getAssets', 'deleteAsset', 'postAsset']),
+    ...mapActions('asset', ['deleteAsset', 'postAsset']),
     addImageToComponent(data) {
       const image = flexImage({ props: { src: this.assetHost + data.url }})
       this.$emit('add', image)

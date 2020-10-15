@@ -41,7 +41,7 @@ export default {
       return this.node[PROPS] || {}
     },
     innerValue() {
-      return this.masterNode.value || this.node[VALUE]
+      return this.node[VALUE] || this.masterNode.value
     },
     masterId() {
       return getMasterId(this.node)

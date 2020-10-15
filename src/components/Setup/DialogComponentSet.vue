@@ -12,6 +12,7 @@
       :visible.sync="visible"
       :loading="loading"
       :disable-submit="!dirty"
+      :key="id"
       title="A powerful page can reuse and share..."
       width="80vw"
       class="dialog"
@@ -48,7 +49,9 @@
               :class="[node && node.version ? 'link' : 'gray-font']"
               class="font-13"
             >
-              {{ origin }}/{{ username || 'username' }}/{{ project && project.label }}/{{ form.label || 'page-name' }}
+              {{ origin }}/{{ username || 'username' }}/{{
+                project && project.label
+              }}/{{ form.label || 'page-name' }}
             </component>
 
             <el-form-item
@@ -96,7 +99,7 @@
         </el-row>
       </el-form>
 
-      <tip-page v-if="!node || !node.version"/>
+      <tip-page v-if="!node || !node.version" />
     </dialog-confirmable>
   </el-button>
 </template>
@@ -177,6 +180,14 @@ export default {
     }
   },
   watch: {
+    visible(value) {
+      if (value) {
+        this.$emit('open')
+      }
+      else {
+        this.$emit('close')
+      }
+    },
     form: {
       handler() {
         this.dirty = true

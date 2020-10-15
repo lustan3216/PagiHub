@@ -29,6 +29,8 @@
 
     <portal-target name="PanelStyles" />
 
+    <text-editor-simple-style v-if="isAllTextEditor" />
+
     <item-hidden-controller />
 
     <dimension v-if="isAllGridItem" />
@@ -39,7 +41,7 @@
 
     <padding v-if="isAllGridItem" />
 
-    <radius v-if="!isTextEditor" />
+    <radius v-if="!hasTextEditor" />
 
     <opacity />
 
@@ -70,7 +72,7 @@
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { RadioGroup, RadioButton } from 'element-ui'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
@@ -85,6 +87,7 @@ import TransformOrigin from './EditorStyle/TransformOrigin'
 import Opacity from './EditorStyle/Opacity'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
+import TextEditorSimpleStyle from './EditorStyle/TextEditorSimpleStyle'
 import Position from '@/components/Setup/EditorStyle/Position'
 import { isGridItem, isTextEditor } from '@/utils/node'
 
@@ -105,6 +108,7 @@ export default {
     TransformOrigin,
     Transform,
     ItemHiddenController,
+    TextEditorSimpleStyle,
     ElRadioGroup: RadioGroup,
     ElRadioButton: RadioButton
   },
@@ -120,11 +124,18 @@ export default {
       const allGridItem = nodes.length === this.selectedComponentNodes.length
       return this.selectedComponentNodes.length && allGridItem
     },
-    isTextEditor() {
+    hasTextEditor() {
       const nodes = this.selectedComponentNodes.filter(node =>
         isTextEditor(node)
       )
       return nodes.length
+    },
+    isAllTextEditor() {
+      const nodes = this.selectedComponentNodes.filter(node =>
+        isTextEditor(node)
+      )
+      const allGridItem = nodes.length === this.selectedComponentNodes.length
+      return this.selectedComponentNodes.length && allGridItem
     }
   }
 }

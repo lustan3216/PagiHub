@@ -10,6 +10,7 @@
       :visible.sync="visible"
       :loading="loading"
       :disable-submit="!dirty"
+      :key="id"
       title="Now, about your project..."
       width="80vw"
       class="dialog"

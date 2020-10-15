@@ -21,13 +21,20 @@
         class="relative w-100 over-hidden border-box flex-center"
         style="transition: all 0.3s;"
         @click="nodeClick($event, componentSet)"
-        @mouseenter="hoverId = componentSet.id"
+        @mouseenter="mouseenter(componentSet.id)"
+        @mouseleave="mouseleave"
       >
         <div class="upload-icon">
-          <b-icon-cloud-arrow-up
-            v-if="componentSet.version"
-            class="gray-font-2 font-13"
-          />
+          <template v-if="componentSet.version">
+            <b-icon-cloud-slash
+              v-if="componentSet.isPrivate"
+              class="gray-font-2 font-13"
+            />
+            <b-icon-cloud-arrow-up
+              v-else
+              class="gray-font-2 font-13"
+            />
+          </template>
         </div>
 
         <component-name
@@ -40,12 +47,18 @@
             v-if="componentSet.id === hoverId"
             class="controller"
           >
-            <dialog-delete :id="componentSet.id" />
+            <dialog-delete
+              :id="componentSet.id"
+              @open="visible = true"
+              @close="visible = false"
+            />
 
             <dialog-component-set
               :key="componentSet.updatedAt"
               :id="componentSet.id"
               type="text"
+              @open="visible = true"
+              @close="visible = false"
             />
           </div>
         </transition>
@@ -62,9 +75,9 @@ import PanelComponentSets from './PanelComponentSets'
 import DialogDelete from './DialogDelete'
 import ComponentName from '../TemplateUtils/ComponentName'
 import DialogComponentSet from '@/components/Setup/DialogComponentSet'
-import { cloneJsonWithoutChildren, getNode } from '@/utils/node'
+import { getNode } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
-import { BIconCloudArrowUp } from 'bootstrap-vue'
+import { BIconCloudArrowUp, BIconCloudSlash } from 'bootstrap-vue'
 
 export default {
   name: 'PanelComponentSets',
@@ -75,25 +88,31 @@ export default {
     PanelComponentSets,
     DialogDelete,
     ComponentName,
-    BIconCloudArrowUp
+    BIconCloudArrowUp,
+    BIconCloudSlash
   },
   data() {
     return {
-      hoverId: null
+      hoverId: null,
+      visible: false
     }
   },
   computed: {
-    ...mapState('node', ['projectIds', 'editingProjectId', 'editingComponentSetId']),
+    ...mapState('node', [
+      'projectIds',
+      'editingProjectId',
+      'editingComponentSetId'
+    ]),
     ...mapGetters('node', ['projectNodes']),
-    componentSets() {
+    componentSetIds() {
       const project = getNode(this.editingProjectId)
-      if (project) {
-
-        return cloneJsonWithoutChildren(project.children).sort(
-          (a, b) => b.label - a.label
-        )
-        // components可能會因為Example裡面的跟當下project的混在一起
-      }
+      return project ? project.children.map(node => node.id) : []
+    },
+    componentSets() {
+      // components可能會因為Example裡面的跟當下project的混在一起
+      return this.componentSetIds
+        .map(id => getNode(id))
+        .sort((a, b) => b.label - a.label)
     }
   },
   async created() {
@@ -120,6 +139,14 @@ export default {
     nodeClick(event, node) {
       this.APP_SET({ selectedComponentIds: [] })
       this.SET_EDITING_COMPONENT_SET_ID(node.id)
+    },
+    mouseenter(id) {
+      this.hoverId = id
+      this.visible = false
+    },
+    mouseleave() {
+      if (this.visible) return
+      this.hoverId = null
     }
   }
 }
@@ -158,7 +185,8 @@ export default {
   height: 26px;
 }
 .upload-icon {
-  width: 23px;
+  width: 20px;
   text-align: center;
+  margin-left: 5px;
 }
 </style>

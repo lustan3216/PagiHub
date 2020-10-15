@@ -5,7 +5,6 @@
     :id="id"
     :inner-props="innerProps"
     :inner-styles="innerStyles"
-    class="over-hidden"
   />
   <!--  <div-->
   <!--    v-else-->

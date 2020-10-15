@@ -79,7 +79,17 @@ export default {
   },
   computed: {
     type() {
-      return capitalize(this.node.tag)
+      return this.node.label
+    }
+  },
+  watch: {
+    visible(value) {
+      if (value) {
+        this.$emit('open')
+      }
+      else {
+        this.$emit('close')
+      }
     }
   },
   methods: {

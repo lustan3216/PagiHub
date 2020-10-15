@@ -13,7 +13,6 @@
       </b>
 
       <el-button
-        :disabled="canNotAdd"
         type="primary"
         @click="$emit('add', component)"
       >
@@ -84,9 +83,6 @@ export default {
     },
     node() {
       return getNode(this.beingAddedComponentId)
-    },
-    canNotAdd() {
-      return isComponentSet(this.node)
     }
   },
   methods: {
