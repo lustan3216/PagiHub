@@ -29,13 +29,16 @@ module.exports = {
       }
     }
   },
-  configureWebpack: config => {
-    return {
-      plugins: [
-        new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, 'element-ui/lib/locale/lang/en')
-      ]
-    }
-  },
+  // configureWebpack: config => {
+  //   return {
+  //     plugins: [
+  //       new webpack.NormalModuleReplacementPlugin(
+  //         /element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/,
+  //         'element-ui/lib/locale/lang/en'
+  //       )
+  //     ]
+  //   }
+  // },
   chainWebpack: config => {
     config.resolve.alias
       .set('icons', path.resolve(__dirname, 'src/assets/icons'))
