@@ -1,8 +1,8 @@
 import { mapMutations, mapState } from 'vuex'
-import { CHILDREN, STYLES, PROPS, GRID, SOFT_DELETE, VALUE } from '@/const'
-import { arrayLast, isArray } from '@/utils/array'
+import { CHILDREN, SOFT_DELETE } from '@/const'
+import { arrayLast } from '@/utils/array'
 import { vmRemoveNode } from '@/utils/vmMap'
-import { cloneJson, deepMerge, getValueByPath, isUndefined } from '@/utils/tool'
+import { cloneJson } from '@/utils/tool'
 import { appendIds } from '@/utils/nodeId'
 import {
   getNode,
@@ -46,13 +46,9 @@ export default {
       'SET_SELECTED_COMPONENT_ID',
       'CLEAN_SELECTED_COMPONENT_ID'
     ]),
-    ...mapMutations('node', [
-      'RECORD',
-      'IRREVERSIBLE_RECORD',
-      'SET_EDITING_COMPONENT_SET_ID'
-    ]),
+    ...mapMutations('node', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
 
-    addNodeToParentRecords(nodeTree = {}, isUnderInstanceParent) {
+    addNodeToParentRecords(nodeTree = {}) {
       // nodeTree should be single node instead of an array
       // could be triggered by copy, delete
 

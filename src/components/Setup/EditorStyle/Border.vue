@@ -16,7 +16,7 @@
 
     <el-col :span="10">
       <style-select
-        :value="innerValue[1]"
+        :value="innerValue[1] || 'solid'"
         @input="emit(innerValue[0], $event, innerValue[2])"
       />
     </el-col>
@@ -43,12 +43,12 @@ const StyleSelect = {
   render(h, context) {
     const { data, props } = context
     const options = [
+      'solid',
+      'double',
       'inset',
       'outset',
       'dashed',
       'dotted',
-      'solid',
-      'double',
       'groove',
       'ridge'
     ].map((option, index) =>
