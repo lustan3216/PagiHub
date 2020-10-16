@@ -1,5 +1,4 @@
 <script>
-import InheritanceController from '@/components/TemplateUtils/InheritanceController'
 import ControllerLayer from '@/components/TemplateUtils/ControllerLayer'
 import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
 import { ObserveVisibility } from 'vue-observe-visibility'
@@ -69,10 +68,6 @@ export default {
     node() {
       return getNode(this.id)
     },
-    isPossibleInherit() {
-      // no matter the master is softDelete or not
-      return getValueByPath(this.node, 'inheritance.isInstanceParent')
-    },
     isGridItem() {
       return isGridItem(this.node)
     },
@@ -123,17 +118,6 @@ export default {
       })
     }
 
-    if (this.isPossibleInherit) {
-      vnode = h(
-        InheritanceController,
-        {
-          props: {
-            id: this.id
-          }
-        },
-        [vnode]
-      )
-    }
     return vnode
   }
 }

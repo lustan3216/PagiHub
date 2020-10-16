@@ -15,22 +15,12 @@
   <el-button
     v-else-if="node"
     v-bind="{ ...$props, ...$attrs }"
-    :class="{ instance: isInstance }"
     type="text"
     @click="click"
     @dblclick.native="dblclick"
   >
     <span class="icon">
-      <b-icon-x-diamond-fill
-        v-if="isMasterParent"
-        class="master-icon"
-      />
-      <b-icon-x-diamond
-        v-else-if="isInstanceParent"
-        class="master-icon"
-      />
       <slot
-        v-else
         name="icon"
       />
     </span>
@@ -59,11 +49,6 @@ import {
 } from '@/utils/node'
 import { LABEL } from '@/const'
 import { BIconXDiamond, BIconXDiamondFill } from 'bootstrap-vue'
-import {
-  isMasterParent,
-  isInstanceParent,
-  isInstance
-} from '@/utils/inheritance'
 const observable = Vue.observable({ editingId: null })
 
 export default {
@@ -76,14 +61,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-    inheritParentId: {
-      type: String,
-      default: ''
-    },
-    inheritRootComponentSetId: {
-      type: String,
-      default: ''
     },
     editable: {
       type: Boolean,
@@ -110,15 +87,6 @@ export default {
   computed: {
     node() {
       return getNode(this.id, this.isExample)
-    },
-    isMasterParent() {
-      return isMasterParent(this.node)
-    },
-    isInstanceParent() {
-      return isInstanceParent(this.node)
-    },
-    isInstance() {
-      return isInstance(this.node)
     },
     isTextEditor() {
       return isTextEditor(this.node)
@@ -198,10 +166,5 @@ $connectColor: rgba(135, 199, 124, 0.68);
 ::v-deep.input > input {
   height: 26px;
   padding-left: 6px;
-}
-
-.master-icon {
-  margin-top: -5px;
-  transform: translateY(3px);
 }
 </style>

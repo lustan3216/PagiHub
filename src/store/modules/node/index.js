@@ -5,7 +5,6 @@ import { deleteBy, findBy, toArray } from '@/utils/array'
 import { defineProperties } from '@/utils/nodeProperties'
 import { isComponentSet, isProject } from '@/utils/node'
 import { cloneJson, setValueByPath } from '@/utils/tool'
-import inheritMapUploader from '@/utils/inheritMapUploader'
 import jsonHistory from '@/store/jsonHistory'
 
 let childrenOf = {}
@@ -22,22 +21,14 @@ const state = {
 
 const callbacks = {
   componentAddNew(node) {
-    inheritMapUploader.add(node)
     this._vm.$bus.$emit('component-add-new', node)
     store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   },
   componentDelete(node) {
-    inheritMapUploader.remove(node)
     this._vm.$bus.$emit('component-delete', node)
     store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   },
-  componentUpdate(tree, key, value) {
-    if (key === 'inheritance' && value) {
-      inheritMapUploader.setComponentSet(tree)
-    }
-    else if (key === 'inheritance' && !value) {
-      inheritMapUploader.unsetComponentSet(tree)
-    }
+  componentUpdate() {
     store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   }
 }

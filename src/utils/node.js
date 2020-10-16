@@ -2,8 +2,6 @@ import store from '../store'
 import { toArray } from './array'
 import { getValueByPath, isUndefined } from './tool'
 import { humanize } from './string'
-import { cloneJson } from './tool'
-import { cleanInherit } from './inheritance'
 import listToTree from './listToTree'
 import { gridGenerator } from '../templateJson/basic'
 import {
@@ -26,7 +24,7 @@ export function wrapByGrid(nodesMap, ids) {
     const node = nodesMap[id]
 
     traversalAncestorAndSelf(node, node => {
-      const pureNode = cleanInherit(cloneJsonWithoutChildren(node))
+      const pureNode = cloneJsonWithoutChildren(node)
 
       if (isGridItem(node)) {
         delete pureNode.parentId
@@ -35,7 +33,7 @@ export function wrapByGrid(nodesMap, ids) {
       }
       else if (node.id === id) {
         traversalSelfAndChildren(node, node => {
-          const pureNode = cleanInherit(cloneJsonWithoutChildren(node))
+          const pureNode = cloneJsonWithoutChildren(node)
           childrenArray.push(pureNode)
         })
       }

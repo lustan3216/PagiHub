@@ -43,7 +43,6 @@ import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
 import { getBreakpoint, sortAscBreakpoint } from '@/utils/layout'
 import { getValueByPath, cloneJson } from '@/utils/tool'
-import { isInstanceChild } from '@/utils/inheritance'
 import { COLUMNS } from '@/const'
 import { isComponentSet } from '@/utils/node'
 
@@ -113,9 +112,6 @@ export default {
     },
     currentBreakPoint() {
       return this.isExample ? this.exampleBoundary : this.currentBreakpoint
-    },
-    isInstanceChild() {
-      return isInstanceChild(this.node)
     },
     layouts() {
       return this.responsiveLayouts[this.currentBreakPoint]
@@ -200,9 +196,8 @@ export default {
             verticalCompact: styleLayout.position === 'verticalCompact',
             isDraggable:
               this.isDraftMode &&
-              styleLayout.position !== 'fixOnParentBottom' &&
-              !this.isInstanceChild,
-            isResizable: this.isDraftMode && !this.isInstanceChild,
+              styleLayout.position !== 'fixOnParentBottom',
+            isResizable: this.isDraftMode,
             stack: styleLayout.stack,
             isPixel: currentGrid.unitW === 'px'
           })

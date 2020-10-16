@@ -3,14 +3,6 @@ import { CHILDREN, STYLES, PROPS, GRID, SOFT_DELETE, VALUE } from '@/const'
 import { arrayLast, isArray } from '@/utils/array'
 import { vmRemoveNode } from '@/utils/vmMap'
 import { cloneJson, deepMerge, getValueByPath, isUndefined } from '@/utils/tool'
-import {
-  isMasterHasAnyInstance,
-  getMasterId,
-  isInstanceParent,
-  isMasterParent,
-  isInstance,
-  isInstanceChild
-} from '@/utils/inheritance'
 import { appendIds } from '@/utils/nodeId'
 import {
   getNode,
@@ -22,8 +14,6 @@ import {
 } from '@/utils/node'
 import * as basicTemplates from '@/templateJson/basic'
 import { camelCase } from '@/utils/string'
-import { arraySubtract } from '@/utils/array'
-import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
 
 export default {
   props: {
@@ -33,18 +23,12 @@ export default {
     }
   },
   inject: {
-    isExample: { default: false },
-    inheritance: {
-      default: inheritanceObject()
-    }
+    isExample: { default: false }
   },
   computed: {
     ...mapState('node', ['rootComponentSetIds', 'editingComponentSetId']),
     node() {
       return getNode(this.id)
-    },
-    masterId() {
-      return getMasterId(this.node)
     },
     children() {
       const children = (this.node && this.node.children) || []
@@ -55,28 +39,7 @@ export default {
       // appendNestedIds(innerChildren)
       // children 因為每次更新 draft nodesMap，如果innerChildren用computed會所有的component都被更新
       return this.children.map(({ [CHILDREN]: _, ...node }) => node)
-    },
-    masterChildren() {
-      return getValueByPath(getNode(this.masterId), 'children', [])
-    },
-    sameComponentSet() {
-      return this.node.rootComponentSetId === this.editingComponentSetId
     }
-  },
-  watch: {
-    // 不要watch masterChildren的方式更新節點，不然redo undo會有bug
-    'masterChildren.length'() {
-      this.updateChildrenWithMaster()
-    },
-    masterId() {
-      this.updateChildrenWithMaster()
-    }
-  },
-  activated() {
-    this.updateChildrenWithMaster()
-  },
-  created() {
-    this.updateChildrenWithMaster()
   },
   methods: {
     ...mapMutations('app', [
@@ -88,45 +51,6 @@ export default {
       'IRREVERSIBLE_RECORD',
       'SET_EDITING_COMPONENT_SET_ID'
     ]),
-
-    updateChildrenWithMaster() {
-      const realChildren = this.node.children || []
-      const diff = this.masterChildren.length - realChildren.length
-
-      if (
-        this.isExample ||
-        !this.inheritance.loaded ||
-        !this.isDraftMode ||
-        !this.masterId ||
-        !this.sameComponentSet ||
-        !diff
-      ) {
-        return
-      }
-      // console.log(diff)
-      const records = []
-      if (diff > 0) {
-        arraySubtract(this.masterChildren, realChildren).forEach(newItem => {
-          const { records: newRecords } = this.addNodeToParentRecords(
-            newItem,
-            true
-          )
-          records.push(...newRecords)
-        })
-      }
-      else if (diff < 0) {
-        arraySubtract(realChildren, this.masterChildren).forEach(deleteItem => {
-          records.push(...this.removeNodeRecords(deleteItem))
-        })
-      }
-
-      if (this.sameComponentSet) {
-        this.RECORD(records)
-      }
-      else {
-        this.IRREVERSIBLE_RECORD(records)
-      }
-    },
 
     addNodeToParentRecords(nodeTree = {}, isUnderInstanceParent) {
       // nodeTree should be single node instead of an array
@@ -142,22 +66,7 @@ export default {
         vmRemoveNode(this.node)
       }
 
-      appendIds(
-        nodeTree,
-        parentId,
-        isInstanceParent(nodeTree) || isUnderInstanceParent,
-        {
-          instanceBeforeAppend: node => {
-            const firstTimeInit = !getMasterId(node)
-            if (firstTimeInit) {
-              delete node[PROPS]
-              delete node[STYLES]
-              delete node[GRID]
-              delete node[VALUE]
-            }
-          }
-        }
-      )
+      appendIds(nodeTree, parentId)
 
       traversalSelfAndChildren(nodeTree, node => {
         records.push({
@@ -204,63 +113,18 @@ export default {
       // should use vmMap method to call to keep consistency
       const records = []
 
-      function traversal(node) {
-        traversalSelfAndChildren(node, child => {
-          if (isMasterParent(child) && isMasterHasAnyInstance(child)) {
-            traversalSelfAndChildren(child, child => {
-              if (isInstanceParent(child)) {
-                traversal(child)
-                return false
-              }
-              else {
-                records.unshift({
-                  path: `${child.id}.${SOFT_DELETE}`,
-                  value: true
-                })
-              }
-            })
-
-            return false
-          }
-
-          records.unshift({
-            path: child.id,
-            value: undefined
-          })
+      traversalSelfAndChildren(theNodeGonnaRemove, child => {
+        records.unshift({
+          path: child.id,
+          value: undefined
         })
-      }
-
-      traversal(theNodeGonnaRemove)
-      // traversalAncestorAndSelf(
-      //   this.node,
-      //   ({ id, tag, children, parentNode }) => {
-      //     stopNodeId = id
-      //
-      //     if (
-      //       parentNode &&
-      //       parentNode.parentNode &&
-      //       isComponentSet(parentNode.parentNode) &&
-      //       parentNode.children.length === 1
-      //     ) {
-      //       return 'stop'
-      //     }
-      //     else if (tag === GRID_GENERATOR_ITEM || children.length > 1) {
-      //       return 'stop'
-      //     }
-      //     else if (children.length === 1) {
-      //       records.unshift({
-      //         path: id,
-      //         value: undefined
-      //       })
-      //     }
-      //   }
-      // )
+      })
 
       return records
     },
 
     removeNodeFromParent(theNodeGonnaRemove) {
-      if (this.isExample || isInstanceChild(theNodeGonnaRemove)) {
+      if (this.isExample) {
         return
       }
 

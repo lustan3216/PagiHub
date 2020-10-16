@@ -5,7 +5,6 @@
     :style="{
       zIndex: isExample ? 2005 : 800
     }"
-    :class="{ instance: isInstance }"
     class="quick-functions flex-center"
   >
     <el-button
@@ -72,12 +71,6 @@
         v-if="isDraftMode && !isExample && isLastOne"
         class="flex backface-hidden"
       >
-        <inheritance-jumper
-          :id="id"
-          :inherit-parent-id="inheritParentId"
-          :master-component-set-id="masterComponentSetId"
-        />
-
         <portal-target
           v-if="isDraftMode"
           :name="`QuickFunctions${id}`"
@@ -102,7 +95,6 @@
         <!--        />-->
 
         <el-tooltip
-          v-if="!isInstance"
           :open-delay="300"
           effect="light"
           placement="top"
@@ -123,7 +115,7 @@
         </el-tooltip>
 
         <el-button
-          v-if="isCarousel && !isInstance"
+          v-if="isCarousel"
           class="icon"
           @click="deleteSlider"
         >
@@ -139,7 +131,6 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import ComponentName from './ComponentName'
 import ZIndex from '@/components/Setup/EditorStyle/ZIndex'
 import Stack from '@/components/Setup/EditorStyle/Stack'
-import InheritanceJumper from './InheritanceJumper'
 import Lock from './Lock'
 import { Popover } from 'element-ui'
 import {
@@ -155,7 +146,6 @@ import { arrayLast } from '@/utils/array'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR } from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
-import { isInstance } from '@/utils/inheritance'
 import gsap from 'gsap'
 import { debounce } from '@/utils/tool'
 
@@ -175,7 +165,6 @@ let timeId
 export default {
   name: 'ComponentQuickFunctions',
   components: {
-    InheritanceJumper,
     ComponentName,
     ZIndex,
     Lock,
@@ -186,14 +175,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-    inheritParentId: {
-      type: String,
-      default: ''
-    },
-    masterComponentSetId: {
-      type: String,
-      default: ''
     },
     itemEditing: {
       type: Boolean,
@@ -254,9 +235,6 @@ export default {
     },
     isGridItem() {
       return isGridItem(this.node)
-    },
-    isInstance() {
-      return isInstance(this.node)
     },
     isLastOne() {
       return arrayLast(this.selectedComponentIds) === this.id
@@ -404,23 +382,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-::v-deep.instance,
-::v-deep .el-button {
-  &.quick-functions,
-  .wrapper > *,
-  .button-group > * {
-    border-color: $color-inherit !important;
-    color: $color-inherit !important;
-  }
-
-  .button-group i {
-    color: $color-inherit;
-  }
-  .can-action {
-    color: $color-inherit;
-  }
-}
-
 .quick-functions {
   position: absolute;
   pointer-events: none;

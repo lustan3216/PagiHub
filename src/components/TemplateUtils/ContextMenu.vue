@@ -87,9 +87,6 @@ import {
   vmBecomeMaster
 } from '@/utils/vmMap'
 import ComponentMove from './ComponentMove'
-import { getValueByPath } from '@/utils/tool'
-import { COMPONENT_SET } from '@/const'
-import { isInstanceChild } from '@/utils/inheritance'
 import ClickOutside from '@/directive/clickOutside'
 import { arrayLast } from '@/utils/array'
 
@@ -151,8 +148,7 @@ export default {
         {
           name: 'Delete',
           shortKey: ['&#9003;'],
-          disabled:
-            isInstanceChild(this.node) || !this.selectedComponentNodes.length
+          disabled: !this.selectedComponentNodes.length
         }
         // {
         //   name: 'Make Master Component',

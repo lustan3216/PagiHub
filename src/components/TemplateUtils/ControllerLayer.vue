@@ -23,21 +23,6 @@
         v-if="selected && !gridResizing"
         :id="id"
         :is-example="isExample"
-        :item-editing="itemEditing"
-        :inherit-parent-id="inheritance.inheritParentId"
-        :master-component-set-id="inheritance.masterComponentSetId"
-      />
-    </portal>
-
-    <portal
-      v-if="selected && onlyOneSelected && isInstance"
-      to="PanelStyles"
-    >
-      <setting-inheritance
-        :id="id"
-        :item-editing="itemEditing"
-        :inherit-parent-id="inheritance.inheritParentId"
-        :master-component-set-id="inheritance.masterComponentSetId"
       />
     </portal>
 
@@ -76,8 +61,6 @@ import {
   traversalAncestorAndSelf
 } from '@/utils/node'
 import { getValueByPath, isUndefined } from '@/utils/tool'
-import { isInstance } from '@/utils/inheritance'
-import { inheritanceObject } from '@/components/TemplateUtils/InheritanceController'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { findIndexBy } from '@/utils/array'
 import { vmGet } from '@/utils/vmMap'
@@ -91,16 +74,11 @@ const store = vue.observable({
 export default {
   name: 'ControllerLayer',
   inject: {
-    isExample: { default: false },
-    inheritance: {
-      default: inheritanceObject()
-    }
+    isExample: { default: false }
   },
   components: {
     ContextMenu,
-    ComponentQuickFunctions: () => import('./ComponentQuickFunctions'),
-    SettingInheritance: () =>
-      import('@/components/Setup/EditorSetting/SettingInheritance')
+    ComponentQuickFunctions: () => import('./ComponentQuickFunctions')
   },
   props: {
     id: {
@@ -125,9 +103,6 @@ export default {
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)
-    },
-    isInstance() {
-      return isInstance(this.node)
     },
     canBeEdited() {
       return this.node && this.node[CAN_BE_EDITED]
