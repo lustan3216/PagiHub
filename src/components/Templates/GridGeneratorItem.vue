@@ -1,7 +1,7 @@
 <template>
   <vue-grid-item
     v-if="!hidden"
-    v-bind="{ ...extraProps, ...layout }"
+    v-bind="layout"
     :class="{
       'no-action': lock,
       'grid-item-border': isDraftMode,
@@ -96,28 +96,8 @@ export default {
     hidden() {
       return getValueByPath(this.node, [STYLES, this.validBreakpoint, 'hidden'])
     },
-    extraProps() {
-      const { ratioH, ratioW, zIndex, position } = this.styleLayout
-
-      return {
-        static: !this.isDraftMode || this.lock,
-        lock: this.lock,
-        stack: this.stack,
-        hidden: this.hidden,
-
-        ratioH: ratioH,
-        ratioW: ratioW,
-
-        zIndex: zIndex,
-
-        isResizable: this.isDraftMode,
-        isDraggable: this.isDraftMode && position !== 'fixOnParentBottom',
-        fixed: position === 'fixed',
-        fixOnParentBottom: position === 'fixOnParentBottom',
-        verticalCompact: position === 'verticalCompact'
-      }
-    },
     layout() {
+      const { ratioH, ratioW, zIndex, position } = this.styleLayout
       let h = parseInt(this.currentGrid.h)
 
       if (this.currentGrid.unitH === 'vh') {
@@ -132,6 +112,22 @@ export default {
 
         unitH: this.currentGrid.unitH,
         unitW: this.currentGrid.unitW,
+
+        static: !this.isDraftMode || this.lock,
+        lock: this.lock,
+        stack: this.stack,
+        hidden: this.hidden,
+
+        ratioH: ratioH,
+        ratioW: ratioW,
+
+        zIndex: zIndex,
+
+        isResizable: this.isDraftMode,
+        isDraggable: this.isDraftMode && position !== 'fixOnParentBottom',
+        fixed: position === 'fixed',
+        fixOnParentBottom: position === 'fixOnParentBottom',
+        verticalCompact: position === 'verticalCompact',
 
         id: this.id,
         i: this.id // should not happen, but just prevent crash in case

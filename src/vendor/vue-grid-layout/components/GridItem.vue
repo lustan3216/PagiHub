@@ -668,10 +668,10 @@
             }
 
             if (this.fixItem && clientRect.top + clientRect.height > parentRect.top + parentRect.height) {
-              newSize.height = parentRect.height - (clientRect.top - parentRect.top)
+              newSize.height = (parentRect.height / this.scaleRatio) - (clientRect.top - parentRect.top)
             }
-            else if (this.lockItemInLayout && pos.height + pos.top > parentRect.height) {
-              newSize.height = parentRect.height - pos.top
+            else if (this.lockItemInLayout && (pos.height + pos.top) * this.scaleRatio > parentRect.height) {
+              newSize.height = (parentRect.height / this.scaleRatio) - pos.top
             }
             else {
               newSize.height = pos.height
@@ -815,7 +815,7 @@
           this.$emit('move', this.i, pos.x, pos.y)
         }
         if (event.type === 'dragend' && (this.previousX !== this.innerX || this.previousY !== this.innerY)) {
-          if ((this.lockItemInLayout || this.fixItem) && pos.y > parentRect.height - clientRect.height) {
+          if ((this.lockItemInLayout || this.fixItem) && pos.y * this.scaleRatio > parentRect.height - clientRect.height) {
             pos.y = (parentRect.height - clientRect.height) / this.scaleRatio
           }
           this.$emit('moved', this.i, pos.x, pos.y)
