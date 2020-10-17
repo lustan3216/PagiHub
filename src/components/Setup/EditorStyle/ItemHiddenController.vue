@@ -6,7 +6,7 @@
 
     <el-button-group class="group">
       <el-tooltip
-        v-for="(point, index) in breakpoints"
+        v-for="(point, index) in descBreakpoints"
         :content="content(point, index)"
         :key="point"
         effect="light"
@@ -41,14 +41,14 @@ export default {
   },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
-    ...mapGetters('layout', ['breakpoints'])
+    ...mapGetters('layout', ['descBreakpoints'])
   },
   methods: {
     ...mapMutations('node', ['RECORD']),
     content(key, index) {
       return index
         ? `Hidden when screen ${BREAK_POINTS_MAP[key]}px - ${
-          BREAK_POINTS_MAP[this.breakpoints[index - 1]]
+          BREAK_POINTS_MAP[this.descBreakpoints[index - 1]]
         }px`
         : `Hidden when screen ${BREAK_POINTS_MAP[key]}px - ∞`
     },

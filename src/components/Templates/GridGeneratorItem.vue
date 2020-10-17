@@ -1,84 +1,219 @@
 <template>
-  <div
+  <vue-grid-item
+    v-if="!hidden"
+    v-bind="{ ...extraProps, ...layout }"
     :class="{
+      'no-action': lock,
       'grid-item-border': isDraftMode,
-      'border-pulse': parentGridItem.pulsing,
-      'h-100': !isTextEditor,
-      stack: parentGridItem.pulsing && stack
+      'border-pulse': pulsing,
+      stack: pulsing && stack
     }"
+    :auto-height="isTextEditor"
+    drag-ignore-from=".grid-item-fix"
+    drag-allow-from="div"
+    @moveStart="assignStore"
+    @move="itemUpdating"
+    @moved="cleanStore"
+    @resizeStart="assignStore"
+    @resize="itemUpdating"
+    @resized="cleanStore"
   >
     <div
       :style="innerStyles.html"
-      class="h-100 border-box"
+      :class="{
+        'h-100': !noHeight
+      }"
+      class="border-box"
     >
       <component-giver
         v-if="child"
         :id="child.id"
       />
     </div>
-  </div>
+  </vue-grid-item>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import Vue from 'vue'
 import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
+import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import { getValueByPath } from '@/utils/tool'
-import { AUTO_HEIGHT, GRID, STYLES } from '@/const'
-import { isTextEditor } from '@/utils/node'
+import { STYLES } from '@/const'
+import { closestGridItem, isGridItem, isTextEditor } from '@/utils/node'
+import { findBreakpoint } from '@/utils/layout'
+import { findIndexBy } from '@/utils/array'
+
+const store = Vue.observable({ updatingItemParentId: null })
 
 export default {
   name: 'GridGeneratorItem',
   components: {
     ControllerLayer,
     ComponentController,
+    VueGridItem: GridItem,
     ComponentGiver: () => import('../TemplateUtils/ComponentGiver')
   },
   mixins: [childrenMixin, nodeMixin],
   inject: {
     // connect with GridGeneratorInner
-    gridItemsData: { required: true }
-  },
-  provide() {
-    return {
-      parentGridItem: this.parentGridItem
-    }
+    layouts: { required: true }
   },
   data() {
     return {
-      parentGridItem: {
-        pulsing: false
-      }
+      exampleBoundary: 'xs',
+      validBreakpoint: 'md'
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
+    ...mapGetters('layout', [
+      'currentBreakpoint',
+      'breakpointsMap',
+      'descBreakpoints',
+      'vh'
+    ]),
+    innerGrid() {
+      return this.node.grid
+    },
+    pulsing() {
+      return this.id === store.updatingItemParentId
+    },
+    noHeight() {
+      return this.isTextEditor && isGridItem(this.node)
+    },
+    currentGrid() {
+      return this.innerGrid[this.validBreakpoint]
+    },
+    lock() {
+      return this.node.lock
+    },
+    styleLayout() {
+      return getValueByPath(this.node, [STYLES, 'layout'], {})
+    },
+    hidden() {
+      return getValueByPath(this.node, [STYLES, this.validBreakpoint, 'hidden'])
+    },
+    extraProps() {
+      const { ratioH, ratioW, zIndex, position } = this.styleLayout
+
+      return {
+        static: !this.isDraftMode || this.lock,
+        lock: this.lock,
+        stack: this.stack,
+        hidden: this.hidden,
+
+        ratioH: ratioH,
+        ratioW: ratioW,
+
+        zIndex: zIndex,
+
+        isResizable: this.isDraftMode,
+        isDraggable: this.isDraftMode && position !== 'fixOnParentBottom',
+        fixed: position === 'fixed',
+        fixOnParentBottom: position === 'fixOnParentBottom',
+        verticalCompact: position === 'verticalCompact'
+      }
+    },
+    layout() {
+      let h = parseInt(this.currentGrid.h)
+
+      if (this.currentGrid.unitH === 'vh') {
+        h = this.vh * h
+      }
+
+      return {
+        x: this.currentGrid.x || 0,
+        y: this.currentGrid.y || 0,
+        w: this.currentGrid.w || 0,
+        h: h || 0,
+
+        unitH: this.currentGrid.unitH,
+        unitW: this.currentGrid.unitW,
+
+        id: this.id,
+        i: this.id // should not happen, but just prevent crash in case
+      }
+    },
     child() {
       return this.innerChildren[0]
     },
     stack() {
-      return getValueByPath(this.innerStyles, ['layout', 'stack'])
+      return this.styleLayout.stack
     },
     isTextEditor() {
       return isTextEditor(this.child)
-    },
-    data() {
-      return {
-        [STYLES]: this.innerStyles,
-        [GRID]: this.innerGrid,
-        [AUTO_HEIGHT]: this.isTextEditor
-      }
     }
   },
   watch: {
-    data: {
+    layout: {
       handler(value) {
-        this.$set(this.gridItemsData, this.id, value)
+        if (this.hidden) {
+          this.$delete(this.layouts[this.id])
+        }
+        else {
+          this.$set(this.layouts, this.id, value)
+        }
       },
-      immediate: true,
-      deep: true
+      immediate: true
+    },
+    hidden(value) {
+      if (value) {
+        this.$delete(this.layouts[this.id])
+      }
+      else {
+        this.$set(this.layouts, this.id, this.layout)
+      }
+    },
+    currentBreakpoint: {
+      handler(value) {
+        if (this.isExample) {
+          const el = this.$el.closest('.art-board')
+          this.validBreakpoint = findBreakpoint(
+            this.breakpointsMap,
+            el.clientWidth
+          )
+        }
+        else {
+          this.validBreakpoint = this.closestValidGrid(value)
+        }
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    closestValidGrid(currentPoint) {
+      // [1,2,3,4,5]
+      // currentPoint = 4
+      // => [4,3,2,1,5]
+      const asc = this.descBreakpoints.reverse()
+      const index = asc.indexOf(currentPoint)
+      const newArray = asc
+        .slice(0, index + 1)
+        .reverse()
+        .concat(asc.slice(index + 1))
+
+      for (let i = 0; i <= newArray.length; i++) {
+        const point = newArray[i]
+        if (this.innerGrid[point]) {
+          return point
+        }
+      }
+    },
+    itemUpdating() {
+      this.LAYOUT_SET({ gridResizing: true })
+    },
+    assignStore() {
+      const item = closestGridItem(this.node.parentNode)
+      if (item) {
+        store.updatingItemParentId = item.id
+      }
+    },
+    cleanStore() {
+      store.updatingItemParentId = null
     }
   }
 }
@@ -91,7 +226,6 @@ export default {
 
 .grid-item-border {
   border: 1px dashed #bcbcbc;
-  margin: -1px;
 }
 
 .stack {

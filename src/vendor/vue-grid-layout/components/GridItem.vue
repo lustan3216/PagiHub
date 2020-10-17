@@ -22,7 +22,7 @@
   }
 
   .transition {
-    /*transition: all 200ms ease;*/
+    transition: all 150ms ease;
   }
 
   .vue-grid-item.no-touch {
@@ -105,7 +105,7 @@
   import { mapState } from 'vuex'
   import { setTopLeft, setTopRight, setTransformRtl, setTransform, getBoundaryEl } from '../helpers/utils'
   import { getDocumentDir } from '../helpers/DOM'
-  import { debounce } from '@/utils/tool'
+  import { debounce, getValueByPath } from '@/utils/tool'
   //    var eventBus = require('./eventBus');
   import {
     resizeListener
@@ -165,10 +165,6 @@
        required: true
        },
        */
-      lockInParent: {
-        type: Boolean,
-        default: true
-      },
       static: {
         type: Boolean,
         required: false,
@@ -253,9 +249,6 @@
       eventBus: {
         required: true
       },
-      parentGridItem: {
-        default: null
-      },
       parent: {
         required: true
       }
@@ -294,7 +287,8 @@
         innerW: this.w,
         innerH: this.h,
 
-        offResizeListener: null
+        offResizeListener: null,
+        lockItemInLayout: false
       }
     },
     created() {
@@ -376,6 +370,7 @@
         this.cols = this.parent.colNum
       }
 
+      this.lockItemInLayout = this.parent.lockItemInLayout
       this.rowHeight = this.parent.rowHeight
       this.containerWidth = this.parent.width !== null ? this.parent.width : 100
       this.margin = this.parent.margin !== undefined ? this.parent.margin : [10, 10]
@@ -407,8 +402,10 @@
       autoHeight: {
         handler(value) {
           this.$nextTick(() => {
-            if (value && this.slotElement) {
-              this.offResizeListener = resizeListener(this.slotElement, debounce(() => {
+            const elm = getValueByPath(this.$slots, ['default', 0, 'elm'])
+            if (value && elm) {
+              this.autoSize()
+              this.offResizeListener = resizeListener(elm, debounce(() => {
                 this.autoSize()
               }, 80))
             }
@@ -416,24 +413,16 @@
               this.offResizeListener()
             }
           })
-        }
+        },
+        immediate: true
       },
       isDragging(value) {
-        if (this.parentGridItem) {
-          this.parentGridItem.pulsing = value
-        }
-
         if (value) {
           store.hideHandler = true
         } else {
           setTimeout(() => {
             store.hideHandler = false
           },510)
-        }
-      },
-      isResizing(value) {
-        if (this.parentGridItem) {
-          this.parentGridItem.pulsing = value
         }
       },
       isDraggable: function() {
@@ -483,7 +472,7 @@
         this.innerY = newVal
         this.createStyle()
       },
-      h: function(newVal) {
+      h: function(newVal, old) {
         this.innerH = newVal
         this.createStyle()
         // this.emitContainerResized();
@@ -494,7 +483,6 @@
         // this.emitContainerResized();
       },
       renderRtl: function() {
-        // console.log("### renderRtl");
         this.tryMakeResizable()
         this.createStyle()
       },
@@ -526,10 +514,6 @@
       },
       boundaryElement() {
         return getBoundaryEl(this.$el.parentNode)
-      },
-      slotElement() {
-        const slot = this.$slots.default && this.$slots.default[0]
-        return slot && slot.elm
       },
       hideHandler() {
         return store.hideHandler
@@ -679,14 +663,14 @@
               parentRect = this.boundaryElement.getBoundingClientRect()
               clientRect = event.target.getBoundingClientRect()
             }
-            else if (this.lockInParent) {
+            else if (this.lockItemInLayout) {
               parentRect = this.getParent(event.target).getBoundingClientRect()
             }
 
             if (this.fixItem && clientRect.top + clientRect.height > parentRect.top + parentRect.height) {
               newSize.height = parentRect.height - (clientRect.top - parentRect.top)
             }
-            else if (this.lockInParent && pos.height + pos.top > parentRect.height) {
+            else if (this.lockItemInLayout && pos.height + pos.top > parentRect.height) {
               newSize.height = parentRect.height - pos.top
             }
             else {
@@ -831,7 +815,7 @@
           this.$emit('move', this.i, pos.x, pos.y)
         }
         if (event.type === 'dragend' && (this.previousX !== this.innerX || this.previousY !== this.innerY)) {
-          if ((this.lockInParent || this.fixItem) && pos.y > parentRect.height - clientRect.height) {
+          if ((this.lockItemInLayout || this.fixItem) && pos.y > parentRect.height - clientRect.height) {
             pos.y = (parentRect.height - clientRect.height) / this.scaleRatio
           }
           this.$emit('moved', this.i, pos.x, pos.y)
@@ -902,14 +886,9 @@
       },
       // Helper for generating column width
       calcColWidth() {
-        if (this.isPixel) {
-          // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
-          return 1
-        } else {
-          const colWidth = (this.containerWidth - (this.margin[0] * (this.cols + 1))) / this.cols
-          // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
-          return colWidth
-        }
+        const colWidth = (this.containerWidth - (this.margin[0] * (this.cols + 1))) / this.cols
+        // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+        return colWidth
       },
 
       /**
@@ -1039,9 +1018,10 @@
           this.previousW = this.innerW
           this.previousH = this.innerH
 
-          let { elm } = this.$slots.default[0]
-          const { clientHeight, clientWidth } = elm
-          let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
+          const { clientHeight, clientWidth } = this.$slots.default[0].elm
+
+          let pos = this.calcWH(clientHeight, clientWidth)
+          // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
           if (pos.w < this.minW) {
             pos.w = this.minW
           }
@@ -1070,7 +1050,7 @@
           }
           if (this.previousW !== pos.w || this.previousH !== pos.h) {
             this.$emit('resized', this.i, pos.h, pos.w, clientHeight, clientWidth)
-            this.eventBus.$emit('resizeEvent', 'autoSize', this.i, this.innerX, this.innerY, pos.h, pos.w)
+            this.eventBus.$emit('resizeEvent', 'autoSize', this.i, this.innerX, this.innerY, pos.h, this.innerW)
           }
         })
       }

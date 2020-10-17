@@ -367,7 +367,7 @@ export default {
 
         this.visible = true
       })
-    }, 100),
+    }, 180),
     mouseenter() {
       timeId = setTimeout(() => {
         this.hovering = true

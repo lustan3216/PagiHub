@@ -1,12 +1,5 @@
 import { BREAK_POINTS_MAP } from '@/const'
 
-export function getBreakpoint(width) {
-  const { clientWidth } = width
-
-  const points = Object.keys(BREAK_POINTS_MAP)
-  return points.find(key => clientWidth >= BREAK_POINTS_MAP[key]) || 'xxs'
-}
-
 export function sortDescBreakpoint(breakpoints) {
   const points = Object.keys(BREAK_POINTS_MAP)
   const array = []

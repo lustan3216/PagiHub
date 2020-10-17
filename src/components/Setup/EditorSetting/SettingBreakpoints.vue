@@ -17,7 +17,7 @@
 
     <el-row
       v-for="(key, index) in originalBreakpoints"
-      v-if="adding || breakpoints.includes(key)"
+      v-if="adding || descBreakpoints.includes(key)"
       :key="key"
       :gutter="5"
       style="height: 40px;"
@@ -58,7 +58,7 @@
           class="text-center font-12"
         >
           <template v-if="isEnable(key)">
-            <template v-if="key === breakpoints[0]">
+            <template v-if="key === descBreakpoints[0]">
               ∞
             </template>
             <template v-else>
@@ -114,7 +114,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('layout', ['breakpoints', 'breakpointsMap']),
+    ...mapGetters('layout', ['descBreakpoints', 'breakpointsMap']),
     originalBreakpoints() {
       return Object.keys(BREAK_POINTS_MAP)
     },
@@ -125,11 +125,11 @@ export default {
   methods: {
     ...mapActions('node', ['patchComponentSet']),
     isEnable(key) {
-      return this.breakpoints.includes(key)
+      return this.descBreakpoints.includes(key)
     },
     nextPixel(key) {
-      const index = findIndexBy(this.breakpoints, key)
-      return this.breakpointsMap[this.breakpoints[index - 1]] - 1
+      const index = findIndexBy(this.descBreakpoints, key)
+      return this.breakpointsMap[this.descBreakpoints[index - 1]] - 1
     },
     async onclick(key, enable) {
       const breakpointsMap = cloneJson(this.breakpointsMap)

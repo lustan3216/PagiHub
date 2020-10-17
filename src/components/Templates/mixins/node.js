@@ -27,13 +27,8 @@ export default {
       return this.node[STYLES] || {}
     },
     innerProps() {
-      const setting = cloneJson(this.$options.defaultSetting)
+      const setting = cloneJson(this.$options.defaultSetting || {})
       return deepMerge(setting, this.node[PROPS])
-    },
-    innerGrid() {
-      if (isGridItem(this.node)) {
-        return this.node.grid
-      }
     }
   },
   mounted() {

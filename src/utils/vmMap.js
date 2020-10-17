@@ -32,7 +32,7 @@ export function vmCreateEmptyItem(node) {
     traversalAncestorAndSelf(node, node => {
       if (isGridItem(node)) {
         store.commit('app/SET', { copyComponentIds: [node.id] })
-        const { children, inheritance, ...emptyGridItem } = node
+        const { children, inheritance, styles, ...emptyGridItem } = node
         vmGet(node.parentId).addNodeToParent(emptyGridItem)
         return false
       }
@@ -112,9 +112,7 @@ export function vmAddNode(node) {
     vmAddNodeToParent(parentId, node)
   }
   else {
-    // if parentNode can not new item, it means the node is a child of layer-item, grid-item, carousel-item, form-item
-    const grandParentId = parentNode.parentId
-    vmAddNodeToParent(grandParentId, node.parentNode)
+    vmAddNode(parentNode)
   }
 }
 

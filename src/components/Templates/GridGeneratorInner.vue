@@ -2,62 +2,43 @@
   <vue-grid-generator
     ref="gridGenerator"
     v-bind="innerProps"
-    :layout="layouts"
-    :responsive-layouts="responsiveLayouts"
+    :layout="layout"
     :margin="[0, 0]"
     :row-height="1"
-    :cols="cols"
-    :breakpoints="breakpointsMap"
+    :col-num="100"
     :vertical-compact="false"
-    :height-as-parent="autoUpdateHeight"
+    :lock-item-in-layout="autoUpdateHeight"
     prevent-collision
-    responsive
     @layout-updated="layoutUpdated($event)"
   >
-    <slot />
-
-    <vue-grid-item
-      v-for="(layout, index) in layouts"
-      v-bind="layout"
-      :class="{ 'no-action': layout.lock }"
-      :ref="layout.id"
-      :key="layout.id"
-      :data-cy="`grid-item-${index}`"
-      drag-ignore-from=".grid-item-fix"
-      drag-allow-from="div"
-      @resize="itemUpdating"
-      @move="itemUpdating"
-    >
-      <component-giver :id="layout.id" />
-    </vue-grid-item>
+    <component-giver
+      v-for="child in children"
+      :key="child.id"
+      :id="child.id"
+    />
   </vue-grid-generator>
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { GRID } from '@/const'
-import { findBy } from '@/utils/array'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
-import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
-import { getBreakpoint, sortAscBreakpoint } from '@/utils/layout'
-import { getValueByPath, cloneJson } from '@/utils/tool'
-import { COLUMNS } from '@/const'
+import { getValueByPath } from '@/utils/tool'
 import { isComponentSet } from '@/utils/node'
 
 export default {
   name: 'GridGeneratorInner',
   components: {
     VueGridGenerator: GridLayout,
-    VueGridItem: GridItem,
     // 因為loop call AsyncComponent, 這裏不用 async import 會噴bug
     ComponentGiver: () => import('../TemplateUtils/ComponentGiver')
   },
   mixins: [childrenMixin],
   provide() {
     return {
-      gridItemsData: this.gridItemsData
+      layouts: this.layouts
     }
   },
   inject: {
@@ -79,21 +60,11 @@ export default {
   },
   data() {
     return {
-      responsiveLayouts: [],
-      gridItemsData: {},
-      exampleBoundary: 'xs'
+      layouts: {}
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
-    ...mapState('layout', ['artBoardWidth', 'artBoardHeight']),
-    ...mapState('node', ['nodesMap']),
-    ...mapGetters('layout', [
-      'currentBreakpoint',
-      'breakpoints',
-      'breakpointsMap',
-      'vh'
-    ]),
+    ...mapGetters('layout', ['currentBreakpoint']),
     autoUpdateHeight() {
       return !this.rootLayout && !['scroll', 'hidden'].includes(this.overflow)
     },
@@ -103,130 +74,11 @@ export default {
     rootLayout() {
       return isComponentSet(this.node.parentNode)
     },
-    cols() {
-      const object = {}
-      this.breakpoints.forEach(point => {
-        object[point] = COLUMNS
-      })
-      return object
-    },
-    currentBreakPoint() {
-      return this.isExample ? this.exampleBoundary : this.currentBreakpoint
-    },
-    layouts() {
-      return this.responsiveLayouts[this.currentBreakPoint]
-    },
-    computedLayouts() {
-      const layouts = {}
-      let prevLayout
-
-      sortAscBreakpoint(this.breakpoints).forEach(breakpoint => {
-        const layout = []
-        this.children.forEach(({ id, lock }, index) => {
-          const data = {
-            static: false,
-            id: id,
-            i: id || index, // should not happen, but just prevent crash in case
-            x: 0,
-            y: 0,
-            w: 0,
-            h: 0,
-            verticalCompact: false,
-            autoHeight: false
-          }
-
-          if (!this.gridItemsData[id]) {
-            return layout.push(data)
-          }
-
-          const { styles = {}, grid, autoHeight } = this.gridItemsData[id]
-
-          if (!grid) {
-            return layout.push(data)
-          }
-
-          const currentGrid = grid[breakpoint]
-
-          if (!currentGrid) {
-            return layout.push(findBy(prevLayout, 'id', id))
-          }
-
-          if (getValueByPath(styles, [breakpoint, 'hidden'])) {
-            return
-          }
-
-          let w = 0
-          let h = 0
-
-          if (grid && currentGrid) {
-            w = currentGrid.w
-            h = currentGrid.h
-
-            if (!autoHeight) {
-              if (currentGrid.unitH === 'vh') {
-                h = this.vh * parseInt(h)
-              }
-              else {
-                h = parseInt(h)
-              }
-            }
-          }
-
-          const styleLayout = getValueByPath(styles, ['layout'], {})
-
-          layout.push({
-            static: lock,
-            lock,
-            id: id,
-            i: id || index, // should not happen, but just prevent crash in case
-            x: currentGrid.x || 0,
-            y: currentGrid.y || 0,
-            w,
-            h,
-            unitH: currentGrid.unitH,
-            unitW: currentGrid.unitW,
-            ratioH: styleLayout.ratioH,
-            ratioW: styleLayout.ratioW,
-            lockInParent: this.autoUpdateHeight,
-            autoHeight,
-            zIndex: styleLayout.zIndex,
-            canScroll: this.overflow === 'scroll',
-            fixed: styleLayout.position === 'fixed',
-            fixOnParentBottom: styleLayout.position === 'fixOnParentBottom',
-            verticalCompact: styleLayout.position === 'verticalCompact',
-            isDraggable:
-              this.isDraftMode &&
-              styleLayout.position !== 'fixOnParentBottom',
-            isResizable: this.isDraftMode,
-            stack: styleLayout.stack,
-            isPixel: currentGrid.unitW === 'px'
-          })
-        })
-
-        layouts[breakpoint] = prevLayout = layout
-      })
-
-      return layouts
-    }
-  },
-  watch: {
-    computedLayouts: {
-      handler(value) {
-        cloneJson(value)
-        this.responsiveLayouts = value
-      },
-      deep: true,
-      immediate: true
-    }
-  },
-  mounted() {
-    if (this.isExample) {
-      const el = this.$el.closest('.art-board')
-      this.exampleBoundary = getBreakpoint(el)
+    layout() {
+      return Object.values(this.layouts)
     }
   },
   methods: {
-    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     layoutUpdated(newChildren) {
       if (this.isExample) {
         return
@@ -235,16 +87,18 @@ export default {
       const records = []
 
       newChildren.forEach((child, index) => {
-        const oldGrid = getValueByPath(this.innerChildren, [
-          index,
-          GRID,
-          this.breakpoint
-        ])
+        const oldGrid = getValueByPath(
+          this.innerChildren,
+          [index, GRID, this.currentBreakpoint],
+          {}
+        )
+
         const oldValue = {
-          x: oldGrid && oldGrid.x,
-          y: oldGrid && oldGrid.y,
-          h: oldGrid && oldGrid.h,
-          w: oldGrid && oldGrid.w
+          x: oldGrid.x,
+          y: oldGrid.y,
+          h: oldGrid.h,
+          w: oldGrid.w,
+          unitH: oldGrid.unitH
         }
 
         let h = child.h
@@ -264,9 +118,10 @@ export default {
           w: child.w,
           unitH: child.unitH
         }
+
         if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
           records.push({
-            path: `${child.id}.${GRID}.${this.currentBreakPoint}`,
+            path: `${child.id}.${GRID}.${this.currentBreakpoint}`,
             value: { ...oldValue, ...newValue }
           })
         }
@@ -275,9 +130,6 @@ export default {
       if (records.length) {
         this.RECORD(records)
       }
-    },
-    itemUpdating() {
-      this.LAYOUT_SET({ gridResizing: true })
     }
   }
 }

@@ -98,9 +98,6 @@ export default {
     node() {
       return getNode(this.id)
     },
-    onlyOneSelected() {
-      return this.selectedComponentIds.length === 1
-    },
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },
@@ -113,7 +110,8 @@ export default {
     noHeight() {
       return (
         (isTextEditor(this.child) && isGridItem(this.node)) ||
-        isTextEditor(this.node)
+        isTextEditor(this.node) ||
+        isGridItem(this.node)
       )
     },
     contextMenu() {

@@ -1,12 +1,11 @@
 <template>
   <div class="editor ProseMirror">
     <el-popover
-      :disabled="isExample"
+      :disabled="isExample || !isDraftMode"
       :key="id"
-      :value="editing"
       popper-class="p-0"
       placement="right"
-      trigger="manual"
+      trigger="hover"
     >
       <div
         id="menu-bubble"

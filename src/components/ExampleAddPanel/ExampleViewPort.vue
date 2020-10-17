@@ -21,7 +21,7 @@
       class="flex-center"
     >
       <button-device
-        v-for="point in breakpoints"
+        v-for="point in descBreakpoints"
         v-if="point !== 'xs'"
         :key="point"
         :point-key="point"
@@ -65,12 +65,11 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import ButtonDevice from '../Components/ButtonDevice'
 import { getRectWithoutPadding } from '@/utils/style'
 import gsap from 'gsap'
 import { getNode } from '@/utils/node'
-import { sortDescBreakpoint } from '@/utils/layout'
 import { DEVICE_OPTIONS } from '@/components/Layout/ViewPort'
 import elementResizeDetectorMaker from 'element-resize-detector'
 
@@ -106,6 +105,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('layout', ['descBreakpoints']),
     scalePercent() {
       return Math.ceil(+this.style.scale * 100)
     },
@@ -118,11 +118,6 @@ export default {
     breakpointsMap() {
       if (this.componentSet) {
         return this.componentSet.breakpointsMap
-      }
-    },
-    breakpoints() {
-      if (this.breakpointsMap) {
-        return sortDescBreakpoint(Object.keys(this.breakpointsMap))
       }
     },
     deviceOptions() {

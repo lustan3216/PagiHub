@@ -20,10 +20,9 @@ import {
 } from '../const'
 
 const mapPoints = object => {
-  return Object.keys(DEFAULT_BREAK_POINTS_MAP).reduce((all, point) => {
-    all[point] = object
-    return all
-  }, {})
+  return {
+    md: object
+  }
 }
 
 export const gridGeneratorItem = function(options) {

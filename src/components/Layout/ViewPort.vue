@@ -43,7 +43,7 @@
         </el-tooltip>
 
         <button-device
-          v-for="point in breakpoints"
+          v-for="point in descBreakpoints"
           :key="point"
           :point-key="point"
           @click="setSize({ w: $event })"
@@ -54,7 +54,7 @@
           width="280"
           trigger="click"
         >
-          <setting-breakpoints v-if="breakpoints && breakpoints.length" />
+          <setting-breakpoints v-if="descBreakpoints.length" />
 
           <el-button
             slot="reference"
@@ -169,7 +169,7 @@ export default {
   },
   computed: {
     ...mapState('layout', ['artBoardWidth', 'artBoardHeight']),
-    ...mapGetters('layout', ['breakpoints']),
+    ...mapGetters('layout', ['descBreakpoints']),
     scalePercent() {
       return Math.ceil(+this.style.scale * 100)
     },

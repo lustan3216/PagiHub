@@ -27,7 +27,7 @@ const getters = {
     const node = nodesMap[editingComponentSetId]
     return (node && node.breakpointsMap) || {}
   },
-  breakpoints(state, getters) {
+  descBreakpoints(state, getters) {
     return sortDescBreakpoint(Object.keys(getters.breakpointsMap))
   },
   currentBreakpoint({ artBoardWidth: width }, { breakpointsMap }) {

@@ -59,11 +59,11 @@
     },
     props: {
       // If true, the container height swells and contracts to fit contents
-      heightAsParent: {
+      autoSize: {
         type: Boolean,
         default: true
       },
-      autoSize: {
+      lockItemInLayout: {
         type: Boolean,
         default: true
       },
@@ -219,18 +219,18 @@
 
             self.onWindowResize()
 
-            const off1 = resizeListener(self.$refs.item, debounce(() => {
+            const off1 = resizeListener(self.$refs.item, () => {
               self.onWindowResize()
               self.resizeNodeQuickFn()
-            }, 80))
+            })
 
             this.offListeners.push(off1)
 
             self.boundaryElement = getBoundaryEl(self.$refs.item)
-            const off2 = resizeListener(self.boundaryElement, debounce(() => {
+            const off2 = resizeListener(self.boundaryElement, () => {
               self.correctFixItemsBound()
               self.resizeNodeQuickFn()
-            }, 80))
+            })
 
             this.offListeners.push(off2)
           })
@@ -343,7 +343,7 @@
         }
       },
       updateHeight: function() {
-        const height = this.heightAsParent ? '100%' : this.containerHeight()
+        const height = this.lockItemInLayout ? '100%' : this.containerHeight()
         this.mergedStyle = { height }
       },
       // autoSize() {},
@@ -462,7 +462,9 @@
         // lots-design
         this.updateHeight()
 
-        if (eventName === 'resizeend') this.$emit('layout-updated', this.layout)
+        if (eventName === 'resizeend') {
+          this.$emit('layout-updated', this.layout)
+        }
 
       },
 
