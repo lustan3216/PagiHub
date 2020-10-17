@@ -17,10 +17,7 @@ https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
 
 <ol>
-
-grid item 用繼承的方式，不要每個 breakpoint 都不一樣
 每個用戶都有一個 playground 進去可以馬上玩
-切換 componentset 時 patchchildren 有 bug
 width px, grid layout 底城如果用每單位 用 px 計算搞不好有機會
 
 <li>road map</li>
