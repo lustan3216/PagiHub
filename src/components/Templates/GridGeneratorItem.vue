@@ -8,6 +8,7 @@
       'border-pulse': pulsing,
       stack: pulsing && stack
     }"
+    :style-props="innerStyles.html"
     :auto-height="isTextEditor"
     drag-ignore-from=".grid-item-fix"
     drag-allow-from="div"
@@ -18,18 +19,13 @@
     @resize="itemUpdating"
     @resized="cleanStore"
   >
-    <div
-      :style="innerStyles.html"
-      :class="{
-        'h-100': !noHeight
+    <component-giver
+      v-if="child"
+      :style="{
+        marginTop
       }"
-      class="border-box"
-    >
-      <component-giver
-        v-if="child"
-        :id="child.id"
-      />
-    </div>
+      :id="child.id"
+    />
   </vue-grid-item>
 </template>
 
@@ -75,6 +71,12 @@ export default {
       'descBreakpoints',
       'vh'
     ]),
+    marginTop() {
+      const style = this.innerStyles.html || {}
+      const borderTop = parseInt(style.border || style.borderTop || '')
+      const px = this.isDraftMode && !borderTop ? 1 : borderTop
+      return -px + 'px'
+    },
     innerGrid() {
       return this.node.grid
     },

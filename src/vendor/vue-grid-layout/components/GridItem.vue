@@ -4,9 +4,10 @@
     class="vue-grid-item"
     :class="classObj"
     :style="{
-          ...this.style,
+          ...style,
+          ...styleProps,
           zIndex: isDragging || isResizing ? 10000 : zIndex,
-          position: this.fixItem ? 'fixed' : 'absolute'
+          position: fixItem ? 'fixed' : 'absolute'
         }"
   >
     <slot/>
@@ -138,6 +139,10 @@
        type: Number,
        required: true
        },*/
+      styleProps: {
+        type: Object,
+        default: () => ({})
+      },
       fixed: {
         type: Boolean,
         default: false
@@ -1019,7 +1024,7 @@
           this.previousH = this.innerH
 
           const { clientHeight, clientWidth } = this.$slots.default[0].elm
-          console.log(clientHeight, clientWidth)
+
           let pos = this.calcWH(clientHeight, clientWidth)
           // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
           if (pos.w < this.minW) {
