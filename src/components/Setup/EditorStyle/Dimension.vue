@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Tip from '@/components/Tip/TipPopper'
 import SelectUnit from '@/components/Components/SelectUnit'
 import { COLUMNS, GRID } from '@/const'
@@ -105,7 +105,7 @@ export default {
           })
         })
 
-        this.RECORD(records)
+        this.record(records)
       }
     },
     h: {
@@ -131,7 +131,7 @@ export default {
           })
         })
 
-        this.RECORD(records)
+        this.record(records)
       }
     },
     ratioW() {
@@ -142,7 +142,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD'])
+    ...mapActions('node', ['record'])
   }
 }
 </script>

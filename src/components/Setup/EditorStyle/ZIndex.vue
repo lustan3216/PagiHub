@@ -15,7 +15,7 @@
 
 <script>
 import { Tooltip } from 'element-ui'
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { arrayLast } from '@/utils/array'
 import { getNode } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
@@ -42,9 +42,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     click() {
-      this.RECORD({
+      this.record({
         path: [this.lastId, STYLES, 'layout', 'zIndex'],
         value: this.hasIndex ? undefined : 1
       })

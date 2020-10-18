@@ -158,7 +158,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
     ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapActions('app', ['setCopySelectedNodeId']),
     close(fn) {

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 import { getNode, traversalSelfAndChildren, shortTagName } from '@/utils/node'
 import { getMasterId } from '@/utils/inheritance'
 import InheritanceJumper from '@/components/TemplateUtils/InheritanceJumper'
@@ -85,7 +85,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     ...mapMutations('node', {
       NODE_SET: 'SET'
     }),
@@ -101,7 +101,7 @@ export default {
         })
       })
 
-      this.RECORD(records)
+      this.record(records)
     },
     reset() {
       const records = [
@@ -119,7 +119,7 @@ export default {
         }
       ]
 
-      this.RECORD(records)
+      this.record(records)
     }
   }
 }

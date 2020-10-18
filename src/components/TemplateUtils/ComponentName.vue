@@ -34,7 +34,7 @@
 
 <script>
 import Vue from 'vue'
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 import {
   shortTagName,
   getNode,
@@ -105,7 +105,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
     click(event) {
       observable.editingId = null
       this.$emit('click', event)

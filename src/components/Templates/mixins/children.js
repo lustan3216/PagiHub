@@ -1,4 +1,4 @@
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState, mapActions } from 'vuex'
 import { CHILDREN, SOFT_DELETE } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { vmRemoveNode } from '@/utils/vmMap'
@@ -46,7 +46,8 @@ export default {
       'SET_SELECTED_COMPONENT_ID',
       'CLEAN_SELECTED_COMPONENT_ID'
     ]),
-    ...mapMutations('node', ['RECORD', 'SET_EDITING_COMPONENT_SET_ID']),
+    ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
+    ...mapActions('node', ['record']),
 
     addNodeToParentRecords(nodeTree = {}) {
       // nodeTree should be single node instead of an array
@@ -80,7 +81,7 @@ export default {
       }
 
       const { records, newNodeId } = this.addNodeToParentRecords(nodeTree)
-      this.RECORD(records)
+      this.record(records)
 
       this.$nextTick(() => {
         this.SET_SELECTED_COMPONENT_ID(newNodeId)
@@ -128,12 +129,12 @@ export default {
 
       const ids = records.map(x => x.path)
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
-      this.RECORD(records)
+      this.record(records)
 
       this.$nextTick(() => {
         if (isCarousel(this.node) || isGrid(this.node)) {
           if (this.node.children.length === 0) {
-            this.RECORD({
+            this.record({
               path: this.node.id,
               value: undefined
             })

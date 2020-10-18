@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { assignDefaultValue, boolean, select, number } from './utils/ruleTool'
 import { SOFT_DELETE, CHILDREN, POLYMORPHISM } from '@/const'
@@ -111,7 +111,7 @@ export default {
       const IndicatorGrid = this.nodesMap[this.id][CHILDREN].find(
         x => x[POLYMORPHISM] === 'indicators'
       )
-      this.RECORD([
+      this.record([
         {
           path: `${IndicatorGrid.id}.${SOFT_DELETE}`,
           value: value !== 'custom'
@@ -120,7 +120,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD'])
+    ...mapActions('node', ['record'])
   }
 }
 </script>

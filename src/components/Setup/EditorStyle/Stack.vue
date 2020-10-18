@@ -18,7 +18,7 @@
 
 <script>
 import { Tooltip } from 'element-ui'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { vmGet } from '@/utils/vmMap'
@@ -51,11 +51,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     click() {
       this.selectedComponentNodes.forEach(node => {
         const grid = closestGridItem(node)
-        this.RECORD({
+        this.record({
           path: [grid.id, STYLES, 'layout', 'stack'],
           value: this.isStack ? undefined : true
         })

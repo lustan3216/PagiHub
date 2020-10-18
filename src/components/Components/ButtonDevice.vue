@@ -13,7 +13,6 @@
     effect="light"
     placement="bottom"
   >
-
     <el-button
       :type="type || (pointKey === currentBreakpoint ? 'primary' : 'text')"
       :class="buttonConfig.class"
@@ -69,23 +68,23 @@ export default {
     },
     buttonConfig() {
       return {
-        xxl: {
+        xl: {
           icon: 'el-icon-data-line'
         },
-        xl: {
+        lg: {
           icon: 'el-icon-monitor'
         },
-        lg: {
+        md: {
           icon: 'laptop'
         },
-        md: {
+        sm: {
           icon: 'el-icon-mobile'
         },
-        sm: {
+        xs: {
           icon: 'el-icon-mobile-phone',
           class: 'rotate90'
         },
-        xs: {
+        xxs: {
           icon: 'el-icon-mobile-phone'
         }
       }[this.pointKey]

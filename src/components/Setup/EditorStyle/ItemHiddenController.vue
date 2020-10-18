@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { STYLES, BREAK_POINTS_MAP } from '@/const'
 import ButtonDevice from '@/components/Components/ButtonDevice'
 import { getValueByPath } from '@/utils/tool'
@@ -44,7 +44,7 @@ export default {
     ...mapGetters('layout', ['descBreakpoints'])
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     content(key, index) {
       return index
         ? `Hidden when screen ${BREAK_POINTS_MAP[key]}px - ${
@@ -75,7 +75,7 @@ export default {
         })
       })
 
-      this.RECORD(records)
+      this.record(records)
     }
   }
 }

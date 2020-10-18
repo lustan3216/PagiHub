@@ -106,9 +106,9 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import { asyncGetValue, cloneJson } from '@/utils/tool'
 import ComponentController from '../TemplateUtils/ComponentController'
 import ComponentName from '../TemplateUtils/ComponentName'
-import Touchable from '../TemplateUtils/Lock'
-import Visible from '../TemplateUtils/Visible'
-import Hidden from '../TemplateUtils/Hidden'
+import Touchable from './EditorStyle/Lock'
+import Visible from './EditorStyle/Visible'
+import Hidden from './EditorStyle/Hidden'
 import {
   traversalSelfAndChildren,
   isGrid,
@@ -190,7 +190,6 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
       'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
-    ...mapMutations('node', ['RECORD']),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('layout', ['resizeNodeQuickFn']),
     renderTree() {

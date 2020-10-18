@@ -131,7 +131,7 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 import ComponentName from './ComponentName'
 import ZIndex from '@/components/Setup/EditorStyle/ZIndex'
 import Stack from '@/components/Setup/EditorStyle/Stack'
-import Lock from './Lock'
+import Lock from '../Setup/EditorStyle/Lock'
 import { Popover } from 'element-ui'
 import {
   isGridItem,

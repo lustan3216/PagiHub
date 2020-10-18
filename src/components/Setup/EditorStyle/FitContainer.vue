@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { vmGet } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
@@ -40,7 +40,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     recordStyles(object) {
       const records = []
 
@@ -55,7 +55,7 @@ export default {
         })
       }
 
-      this.RECORD(records)
+      this.record(records)
     }
   }
 }

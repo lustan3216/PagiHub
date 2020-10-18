@@ -26,7 +26,9 @@ export default {
 
     const { userLabel, projectLabel, componentSetLabel } = this.$route.params
     const { privateLinkToken } = this.$route.query
-    const { componentSet, data: nodes } = await getComponentSetPublicChildren({
+    const {
+      data: { componentSet, data: nodes }
+    } = await getComponentSetPublicChildren({
       userLabel: userLabel || this.firstPath,
       projectLabel: projectLabel || this.secondPath,
       componentSetLabel: componentSetLabel || this.thirdPath,

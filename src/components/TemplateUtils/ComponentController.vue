@@ -33,8 +33,8 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import Lock from './Lock'
-import Visible from './Visible'
+import Lock from '../Setup/EditorStyle/Lock'
+import Visible from '../Setup/EditorStyle/Visible'
 import { isMac } from '@/utils/device'
 import { getValueByPath } from '@/utils/tool'
 import { isGridItem } from '@/utils/node'
@@ -85,7 +85,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
     isMac,
     vmCreateEmptyItem,
     vmAddNode,

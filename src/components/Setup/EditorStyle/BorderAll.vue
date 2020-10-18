@@ -55,7 +55,7 @@
 import Border from './Border'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { HTML, STYLES } from '@/const'
 import { vmGet } from '@/utils/vmMap'
 
@@ -114,7 +114,7 @@ export default {
     this.isUniq = this.checkIsUniq()
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     changeUniq(uniq) {
       this.isUniq = uniq
       if (uniq) {
@@ -191,7 +191,7 @@ export default {
         })
       }
 
-      this.RECORD(records)
+      this.record(records)
     }
   }
 }

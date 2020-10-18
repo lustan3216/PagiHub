@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 import nodeMixin from '@/components/Templates/mixins/node'
 import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSlider'
@@ -22,7 +22,7 @@ export default {
   watch: {
     'innerProps.isRange'(value) {
       if (value && !this.isExample) {
-        this.RECORD([
+        this.record([
           {
             path: `${this.id}.${PROPS}.showInput`,
             value: undefined
@@ -32,7 +32,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD'])
+    ...mapActions('node', ['record'])
   }
 }
 </script>

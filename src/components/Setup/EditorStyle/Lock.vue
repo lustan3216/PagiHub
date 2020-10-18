@@ -9,7 +9,7 @@
 
 <script>
 import { getNode } from '@/utils/node'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Lock',
@@ -37,18 +37,18 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     click() {
       if (this.allowMulti) {
         this.selectedComponentIds.forEach(id => {
-          this.RECORD({
+          this.record({
             path: [id, 'lock'],
             value: this.lock ? undefined : true
           })
         })
       }
       else {
-        this.RECORD({
+        this.record({
           path: [this.id, 'lock'],
           value: this.lock ? undefined : true
         })

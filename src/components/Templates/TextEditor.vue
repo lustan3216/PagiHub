@@ -169,7 +169,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { arrayUniq } from '@/utils/array'
 import { Popover } from 'element-ui'
 import WebFont from 'webfontloader'
@@ -230,7 +230,7 @@ export default {
         return this.innerValue
       },
       set(value) {
-        this.record({
+        this.recordValue({
           path: `${this.id}.value`,
           value
         })
@@ -241,7 +241,7 @@ export default {
         return this.htmlStyles.color
       },
       set(value) {
-        this.record({
+        this.recordValue({
           path: `${this.id}.${STYLES}.${HTML}.color`,
           value
         })
@@ -252,7 +252,7 @@ export default {
         return this.htmlStyles.backgroundColor
       },
       set(value) {
-        this.record({
+        this.recordValue({
           path: `${this.id}.${STYLES}.${HTML}.backgroundColor`,
           value
         })
@@ -263,7 +263,7 @@ export default {
         return this.htmlStyles.textAlign
       },
       set(value) {
-        this.record({
+        this.recordValue({
           path: `${this.id}.${STYLES}.${HTML}.textAlign`,
           value
         })
@@ -274,7 +274,7 @@ export default {
         return this.htmlStyles.textDecoration
       },
       set(value) {
-        this.record({
+        this.recordValue({
           path: `${this.id}.${STYLES}.${HTML}.textDecoration`,
           value
         })
@@ -285,7 +285,7 @@ export default {
         return this.htmlStyles.fontWeight
       },
       set(value) {
-        this.record({
+        this.recordValue({
           path: `${this.id}.${STYLES}.${HTML}.fontWeight`,
           value
         })
@@ -296,7 +296,7 @@ export default {
         return this.htmlStyles.fontStyle
       },
       set(value) {
-        this.record({
+        this.recordValue({
           path: `${this.id}.${STYLES}.${HTML}.fontStyle`,
           value
         })
@@ -307,7 +307,7 @@ export default {
         return this.innerProps.tag
       },
       set(value) {
-        this.record({
+        this.recordValue({
           path: `${this.id}.props.tag`,
           value
         })
@@ -318,7 +318,7 @@ export default {
         return this.innerProps.link
       },
       set(value) {
-        this.record({
+        this.recordValue({
           path: `${this.id}.props.link`,
           value
         })
@@ -346,12 +346,12 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
-    record(object) {
+    ...mapActions('node', ['record']),
+    recordValue(object) {
       if (this.isExample) {
         return
       }
-      this.RECORD(object)
+      this.record(object)
     },
     findFontNames(string) {
       if (typeof string === 'object') {

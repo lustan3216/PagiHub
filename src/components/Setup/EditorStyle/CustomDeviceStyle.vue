@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'ItemHiddenController',
@@ -90,7 +90,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     click(name, hidden) {
       const records = []
 
@@ -101,7 +101,7 @@ export default {
         })
       })
 
-      this.RECORD(records)
+      this.record(records)
     }
   }
 }

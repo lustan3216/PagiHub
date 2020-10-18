@@ -167,7 +167,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     ...mapActions('app', ['removeBeingAddedComponentId']),
     ...mapActions('layout', ['resizeNodeQuickFn']),
     addTemplate(template) {
@@ -177,7 +177,7 @@ export default {
         // 為了不拿到componentSet
         template = template.children[0]
 
-        this.RECORD({
+        this.record({
           path: `${node.id}.${STYLES}.${HTML}.overflow`,
           value: 'scroll'
         })

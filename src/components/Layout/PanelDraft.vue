@@ -57,11 +57,16 @@ export default {
     PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
   computed: {
-    ...mapState('node', ['editingProjectId', 'editingComponentSetId', 'rootComponentSetIds'])
+    ...mapState('node', [
+      'editingProjectId',
+      'editingComponentSetId',
+      'rootComponentSetIds'
+    ])
   },
   async created() {
     this.getAssets()
     this.SET_DRAFT_MODE()
+    this.NODE_SET({ editingComponentSetId: null })
     const { projectId } = this.$route.params
 
     if (projectId) {

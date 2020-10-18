@@ -2,14 +2,11 @@
 import {
   closestGridItem,
   isGridItem,
-  isOverlapComponent,
-  sortByZIndex,
-  traversalAncestorAndSelf
 } from '@/utils/node'
 import { arrayAscSort, arrayDescSort, arrayUniq, deleteBy, findIndexBy } from '@/utils/array'
 import { appendIds } from '@/utils/nodeId'
 import { CHILDREN, SORT_INDEX, STYLES } from '@/const'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { gridGenerator } from '@/templateJson/basic'
 import { vmGet } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
@@ -73,7 +70,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     getZIndex(node) {
       const vm = vmGet(node.id)
       return getValueByPath(vm, ['innerStyles', 'layout', 'zIndex'], 0)
@@ -83,7 +80,7 @@ export default {
       positive.forEach((zI, i) => {
         const ids = this.zIndexMap[zI]
         ids.forEach(id => {
-          this.RECORD({
+          this.record({
             path: [id, STYLES, 'layout', 'zIndex'],
             value: i || undefined
           })
@@ -94,17 +91,17 @@ export default {
       negative.forEach((zI, i) => {
         const ids = this.zIndexMap[zI]
         ids.forEach(id => {
-          this.RECORD({
+          this.record({
             path: [id, STYLES, 'layout', 'zIndex'],
             value: -i || undefined
           })
         })
       })
     },
-    record(value) {
+    recordValue(value) {
       const griItem = closestGridItem(this.node)
 
-      this.RECORD({
+      this.record({
         path: [griItem.id, STYLES, 'layout', 'zIndex'],
         value
       })
@@ -112,25 +109,25 @@ export default {
     moveForward() {
       if (this.canMoveForward) {
         this.cleanGap()
-        this.record(this.currentIndex + 1)
+        this.recordValue(this.currentIndex + 1)
       }
     },
     moveToFront() {
       if (this.canMoveForward) {
         this.cleanGap()
-        this.record(this.maxIndex + 1)
+        this.recordValue(this.maxIndex + 1)
       }
     },
     moveToBackward() {
       if (this.canMoveBackward) {
         this.cleanGap()
-        this.record(this.currentIndex - 1)
+        this.recordValue(this.currentIndex - 1)
       }
     },
     moveToEnd() {
       if (this.canMoveBackward) {
         this.cleanGap()
-        this.record(this.minIndex - 1)
+        this.recordValue(this.minIndex - 1)
       }
     }
   },

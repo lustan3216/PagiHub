@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 
@@ -47,10 +47,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     record() {
       if (this.hidden) {
-        this.RECORD({
+        this.record({
           path: `${this.id}.${STYLES}.${this.currentBreakpoint}.hidden`,
           value: undefined
         })

@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { INITIATE, PROPS } from '@/const'
 import { vmGet } from '@/utils/vmMap'
 import { MessageBox } from 'element-ui'
@@ -112,12 +112,12 @@ export default {
             value: this.id
           })
         })
-        this.RECORD(records)
+        this.record(records)
       })
       .catch(() => {})
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     submit() {
       const data = []
       const invalidFields = []

@@ -1,4 +1,4 @@
-import { mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { arrayLast, toArray } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
@@ -21,7 +21,7 @@ export default function(attr) {
       }
     },
     methods: {
-      ...mapMutations('node', ['RECORD']),
+      ...mapActions('node', ['record']),
       recordStyles(object) {
         const records = []
 
@@ -36,7 +36,7 @@ export default function(attr) {
           })
         }
 
-        this.RECORD(records)
+        this.record(records)
       }
     }
   }

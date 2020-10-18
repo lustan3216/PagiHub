@@ -15,7 +15,7 @@ import { getValueByPath, isBoolean } from '@/utils/tool'
 import { isArray } from '@/utils/array'
 import { cloneObject } from '@/utils/object'
 import { vmGet } from '@/utils/vmMap'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { PROPS } from '@/const'
 import SelectUnit from '@/components/Components/SelectUnit'
 import SliderPoints from '@/components/Components/SliderPoints'
@@ -65,7 +65,7 @@ export default {
     ...mapGetters('app', ['selectedComponentNodes'])
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     transformRule(rule) {
       const vmProps = vmGet(this.id).innerProps
       const path = rule.path ? `${rule.path}.${rule.field}` : `${rule.field}`
@@ -105,7 +105,7 @@ export default {
         records.push({ path, value })
       })
 
-      this.RECORD(records)
+      this.record(records)
     }
   }
 }

@@ -1,4 +1,4 @@
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 import validator from '@/validator'
 import { toArray } from '@/utils/array'
 import { cloneJson } from '@/utils/tool'
@@ -85,10 +85,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     updateRecord(value) {
       if (this.isExample) return
-      this.RECORD([{ path: `${this.id}.${VALUE}`, value }])
+      this.record([{ path: `${this.id}.${VALUE}`, value }])
     }
   }
 }

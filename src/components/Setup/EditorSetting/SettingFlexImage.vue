@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { select, string, assignDefaultValue } from './utils/ruleTool'
 import { arrayLast } from '@/utils/array'
@@ -104,7 +104,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     recordStyles(value) {
       const records = []
 
@@ -115,7 +115,7 @@ export default {
         })
       })
 
-      this.RECORD(records)
+      this.record(records)
     }
   }
 }

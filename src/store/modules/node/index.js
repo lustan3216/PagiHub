@@ -6,6 +6,7 @@ import { defineProperties } from '@/utils/nodeProperties'
 import { isComponentSet, isProject } from '@/utils/node'
 import { cloneJson, setValueByPath } from '@/utils/tool'
 import jsonHistory from '@/store/jsonHistory'
+import { getComponentSets } from '@/api/node'
 
 let childrenOf = {}
 let tmpChildrenOf = {}
@@ -176,12 +177,6 @@ const mutations = {
     const set = ({ path, value }) => setValueByPath(state.nodesMap, path, value)
     Array.isArray(payLoad) ? payLoad.forEach(set) : set(payLoad)
   },
-  RECORD(state, payLoad) {
-    jsonHistory.debounceRecord(payLoad, 300)
-  },
-  IRREVERSIBLE_RECORD(state, payLoad) {
-    jsonHistory.irreversibleRecord(payLoad)
-  },
   REDO() {
     jsonHistory.redo()
   },
@@ -204,6 +199,19 @@ const mutations = {
   }
 }
 
+const actions = {
+  record({ rooState }, payLoad) {
+    if (rooState.mode.isDraftMode) {
+      jsonHistory.debounceRecord(payLoad, 300)
+    }
+  },
+  // irreversibleRecord({ rooState }, payLoad) {
+  //   if (rooState.mode.isDraftMode) {
+  //     jsonHistory.irreversibleRecord(payLoad)
+  //   }
+  // }
+}
+
 const getters = {
   projectNodes(state) {
     return state.projectIds.map(id => state.nodesMap[id]).filter(node => node)
@@ -216,6 +224,7 @@ export default {
   mutations,
   getters,
   actions: {
+    ...actions,
     ...require('./componentSet').actions,
     ...require('./project').actions
   }

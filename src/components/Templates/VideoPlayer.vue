@@ -57,7 +57,6 @@ export default {
     removeResizeListener(this.$el, this.updateRatio)
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
     updateRatio() {
       this.height = this.$el.clientHeight
       this.width = this.$el.clientWidth

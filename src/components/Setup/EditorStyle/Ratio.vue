@@ -36,10 +36,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Tip from '@/components/Tip/TipPopper'
 import SelectUnit from '@/components/Components/SelectUnit'
-import { COLUMNS, GRID, STYLES } from '@/const'
+import { STYLES } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 
@@ -72,7 +72,7 @@ export default {
           })
         })
 
-        this.RECORD(records)
+        this.record(records)
       }
     },
     ratioH: {
@@ -89,12 +89,12 @@ export default {
           })
         })
 
-        this.RECORD(records)
+        this.record(records)
       }
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD'])
+    ...mapActions('node', ['record'])
   }
 }
 </script>

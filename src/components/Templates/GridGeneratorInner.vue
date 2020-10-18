@@ -7,6 +7,8 @@
     :row-height="1"
     :col-num="100"
     :vertical-compact="false"
+    :is-draggable="isDraftMode"
+    :is-resizable="isDraftMode"
     :lock-item-in-layout="autoUpdateHeight"
     prevent-collision
     @layout-updated="layoutUpdated($event)"

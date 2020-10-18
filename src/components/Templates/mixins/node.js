@@ -2,7 +2,6 @@ import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { cloneJson, deepMerge } from '@/utils/tool'
 import { PROPS, VALUE, STYLES } from '@/const'
 import { getNode, isGrid, isGridItem } from '@/utils/node'
-import { mapMutations } from 'vuex'
 
 let hoverNode = []
 
@@ -51,7 +50,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD', 'IRREVERSIBLE_RECORD']),
     hoverCover(hover) {
       if (!this.node) {
         return

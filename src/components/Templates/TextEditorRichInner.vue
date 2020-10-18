@@ -306,7 +306,7 @@ import {
   LineHeight,
   TextAlign
 } from '../../vendor/tiptap'
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { arrayUniq } from '../../utils/array'
 import { Popover } from 'element-ui'
 import WebFont from 'webfontloader'
@@ -401,7 +401,7 @@ export default {
               })
             }
 
-            this.RECORD(records)
+            this.record(records)
           }
         })
       }
@@ -430,7 +430,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     findFontNames(string) {
       if (typeof string === 'object') {
         string = JSON.stringify(string)

@@ -82,7 +82,7 @@ import FontSelector from '@/components/Components/FontSelector'
 import Tip from '@/components/Tip/TipPopper'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES, HTML } from '@/const'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { arrayLast } from '@/utils/array'
 import { vmGet } from '@/utils/vmMap'
 
@@ -108,7 +108,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.RECORD({
+          this.record({
             path: `${node.id}.${STYLES}.${HTML}.fontFamily`,
             value: value || undefined
           })
@@ -121,7 +121,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.RECORD({
+          this.record({
             path: `${node.id}.${STYLES}.${HTML}.fontSize`,
             value: value || undefined
           })
@@ -134,7 +134,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.RECORD({
+          this.record({
             path: `${node.id}.${STYLES}.${HTML}.letterSpacing`,
             value: value || undefined
           })
@@ -147,7 +147,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.RECORD({
+          this.record({
             path: `${node.id}.${STYLES}.${HTML}.lineHeight`,
             value: value || undefined
           })
@@ -156,7 +156,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['RECORD']),
+    ...mapActions('node', ['record']),
     openGoogleFont() {
       const win = window.open('https://fonts.google.com/', '_blank')
       win.focus()
