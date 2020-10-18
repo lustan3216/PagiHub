@@ -46,6 +46,7 @@
               :value="option.value || options[option.name].default"
               :key="option.name"
               v-bind="options[option.name]"
+              prefix-icon="el-icon-refresh-right"
               clearable
               @input="onChange(index, $event)"
             />

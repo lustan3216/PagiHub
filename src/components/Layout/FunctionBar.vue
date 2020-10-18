@@ -61,7 +61,13 @@
         />
       </el-tooltip>
 
-      <dialog-publish />
+      <el-tooltip
+        effect="light"
+        content="Publish"
+        placement="bottom"
+      >
+        <dialog-publish />
+      </el-tooltip>
 
       <portal-target name="ViewPortController" />
     </el-form>
@@ -86,7 +92,10 @@ export default {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
     ...mapState('node', ['editingComponentSetId']),
     ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
-    ...mapGetters('app', ['selectedComponentNodes', 'theOnlySelectedComponentId']),
+    ...mapGetters('app', [
+      'selectedComponentNodes',
+      'theOnlySelectedComponentId'
+    ]),
     selected() {
       return this.selectedComponentIds.includes(this.id)
     }

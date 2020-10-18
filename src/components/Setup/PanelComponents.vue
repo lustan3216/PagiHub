@@ -6,6 +6,7 @@
       :data="tree"
       :indent="20"
       :allow-drop="allowDrop"
+      empty-text="No components"
       class="tree"
       node-key="id"
     >

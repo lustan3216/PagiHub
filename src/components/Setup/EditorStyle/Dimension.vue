@@ -9,7 +9,7 @@
       type="flex"
       align="middle"
     >
-      <el-col :span="4">
+      <el-col :span="3">
         <span
           class="title flex"
           style="align-items: baseline"
@@ -28,7 +28,7 @@
         />
       </el-col>
 
-      <el-col :span="4">
+      <el-col :span="3">
         <span
           class="title flex"
           style="align-items: baseline"
@@ -48,50 +48,17 @@
         />
       </el-col>
     </el-row>
-
-    <el-row
-      :gutter="10"
-      type="flex"
-      align="middle"
-    >
-      <el-col :span="5">
-        <span class="title flex">
-          Ratio
-          <tip class="m-l-5">
-            Ratio will be disabled if height unit is
-            <span class="crucial">vw</span> or Overflow is
-            <span class="crucial">fit container</span>.
-          </tip>
-        </span>
-      </el-col>
-
-      <el-col :span="12">
-        <select-unit
-          v-model.number="ratioW"
-          :units="['W']"
-        />
-      </el-col>
-
-      <el-col :span="12">
-        <select-unit
-          v-model.number="ratioH"
-          :units="['H']"
-        />
-      </el-col>
-    </el-row>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import Tip from '@/components/Tip/TipPopper'
 import SelectUnit from '@/components/Components/SelectUnit'
-import { COLUMNS, GRID, STYLES } from '@/const'
-import { isGrid, isGridItem } from '@/utils/node'
-import { arrayLast, arrayUniq } from '@/utils/array'
+import { COLUMNS, GRID } from '@/const'
+import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
-import { array } from '@/validator'
 
 export default {
   name: 'Dimension',
@@ -101,47 +68,23 @@ export default {
   },
 
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
     ...mapGetters('layout', ['currentBreakpoint']),
-    vms() {
-      return this.selectedComponentNodes.map(node => vmGet(node.id))
+    lastNode() {
+      return arrayLast(this.selectedComponentNodes)
+    },
+    lastNodeVm() {
+      return vmGet(this.lastNode.id)
     },
     cols() {
       return COLUMNS
     },
-    lastVm() {
-      return arrayLast(this.vms)
-    },
-    lastInnerStyles() {
-      return getValueByPath(this.lastVm, 'innerStyles')
-    },
     heightDisabled() {
       return Boolean(this.ratioH && this.ratioW)
     },
-    verticalCompact: {
-      get() {
-        return getValueByPath(this.lastInnerStyles, 'layout.verticalCompact')
-      },
-      set(value) {
-        const records = []
-
-        this.selectedComponentNodes.forEach(node => {
-          records.push({
-            path: [node.id, STYLES, 'layout', 'verticalCompact'],
-            value: value || undefined
-          })
-        })
-
-        this.RECORD(records)
-      }
-    },
     w: {
       get() {
-        const prop = getValueByPath(this.lastVm, [
-          'innerGrid',
-          this.currentBreakpoint
-        ])
+        const prop = this.lastNodeVm.currentGrid
         if (prop) {
           return (prop.w || '0').toString() + (prop.unitW || '%')
         }
@@ -153,11 +96,11 @@ export default {
         value = parseInt(value)
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${GRID}.${this.currentBreakpoint}.unitW`,
+            path: [node.id, GRID, this.currentBreakpoint, 'unitW'],
             value: unitW === 'px' ? 'px' : undefined
           })
           records.push({
-            path: `${node.id}.${GRID}.${this.currentBreakpoint}.w`,
+            path: [node.id, GRID, this.currentBreakpoint, 'w'],
             value: value || 0
           })
         })
@@ -167,10 +110,7 @@ export default {
     },
     h: {
       get() {
-        const prop = getValueByPath(this.lastVm, [
-          'innerGrid',
-          this.currentBreakpoint
-        ])
+        const prop = this.lastNodeVm.currentGrid
         if (prop) {
           return (prop.h || '0').toString() + (prop.unitH || 'px')
         }
@@ -182,11 +122,11 @@ export default {
         value = parseInt(value)
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: `${node.id}.${GRID}.${this.currentBreakpoint}.unitH`,
+            path: [node.id, GRID, this.currentBreakpoint, 'unitH'],
             value: unitH === 'vh' ? 'vh' : undefined
           })
           records.push({
-            path: `${node.id}.${GRID}.${this.currentBreakpoint}.h`,
+            path: [node.id, GRID, this.currentBreakpoint, 'h'],
             value: value || 0
           })
         })
@@ -194,39 +134,11 @@ export default {
         this.RECORD(records)
       }
     },
-    ratioW: {
-      get() {
-        return getValueByPath(this.lastInnerStyles, 'layout.ratioW')
-      },
-      set(value) {
-        const records = []
-
-        this.selectedComponentNodes.forEach(node => {
-          records.push({
-            path: [node.id, STYLES, 'layout', 'ratioW'],
-            value: value || undefined
-          })
-        })
-
-        this.RECORD(records)
-      }
+    ratioW() {
+      return getValueByPath(this.lastNodeStyles, 'layout.ratioW')
     },
-    ratioH: {
-      get() {
-        return getValueByPath(this.lastInnerStyles, 'layout.ratioH')
-      },
-      set(value) {
-        const records = []
-
-        this.selectedComponentNodes.forEach(node => {
-          records.push({
-            path: [node.id, STYLES, 'layout', 'ratioH'],
-            value: value || undefined
-          })
-        })
-
-        this.RECORD(records)
-      }
+    ratioH() {
+      return getValueByPath(this.lastNodeStyles, 'layout.ratioH')
     }
   },
   methods: {

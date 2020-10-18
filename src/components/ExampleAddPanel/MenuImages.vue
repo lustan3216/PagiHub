@@ -10,6 +10,7 @@
         :data="nodeTree"
         :indent="16"
         :draggable="false"
+        empty-text="No images"
         class="tree h-100"
         node-key="id"
         default-expand-all

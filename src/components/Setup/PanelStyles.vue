@@ -29,23 +29,23 @@
 
     <portal-target name="PanelStyles" />
 
-    <text-editor-simple-style v-if="isAllTextEditor" />
-
     <item-hidden-controller />
 
     <dimension v-if="isAllGridItem" />
 
+    <ratio v-if="isAllGridItem" />
+
     <el-divider content-position="left">STACK</el-divider>
 
     <position v-if="isAllGridItem" />
+
+    <overflow v-if="isAllGridItem" />
 
     <padding v-if="isAllGridItem" />
 
     <radius v-if="canRadius" />
 
     <opacity />
-
-    <overflow v-if="isAllGridItem" />
 
     <portal-target
       name="Rotate"
@@ -61,6 +61,8 @@
     <effect />
 
     <transform />
+
+    <text-editor-simple-style v-if="isAllTextEditor" />
 
     <!--      <transitions-->
     <!--        :disabled="!isDefaultState"-->
@@ -88,6 +90,7 @@ import Opacity from './EditorStyle/Opacity'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
 import TextEditorSimpleStyle from './EditorStyle/TextEditorSimpleStyle'
+import Ratio from './EditorStyle/Ratio'
 import Position from '@/components/Setup/EditorStyle/Position'
 import { isGridItem, isSlider, isTextEditor } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
@@ -102,6 +105,7 @@ export default {
     Opacity,
     BorderAll,
     Dimension,
+    Ratio,
     Effect,
     Overflow,
     BoxShadow,

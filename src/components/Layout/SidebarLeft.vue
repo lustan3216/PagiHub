@@ -47,7 +47,6 @@ import SplitPane from 'vue-splitpane'
 import { getValueByPath } from '@/utils/tool'
 import PanelComponents from '@/components/Setup/PanelComponents'
 import PanelComponentSets from '@/components/Setup/PanelComponentSets'
-import PanelAsset from '@/components/Setup/PanelAsset'
 import interactjs from 'interactjs'
 
 export default {
@@ -55,7 +54,6 @@ export default {
   components: {
     PanelComponents,
     PanelComponentSets,
-    PanelAsset,
     SplitPane
   },
   data() {
