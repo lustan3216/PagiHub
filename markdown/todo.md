@@ -15,11 +15,14 @@ https://github.com/anseki/leader-line
 https://uppy.io/docs/companion/
 https://github.com/antonreshetov/vue-unicons
 https://github.com/antonreshetov/vue-eva-icons
+https://www.npmjs.com/package/xss
+https://www.npmjs.com/package/dompurify
+https://www.npmjs.com/package/sanitize-html
 
 <ol>
 每個用戶都有一個 playground 進去可以馬上玩
 width px, grid layout 底城如果用每單位 用 px 計算搞不好有機會
-
+sanitize-html
 <li>road map</li>
 </ol>
 

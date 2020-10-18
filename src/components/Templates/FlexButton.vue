@@ -1,13 +1,12 @@
 <template>
   <div
-    v-if="isDraftMode"
     :style="innerStyles.html"
     :class="{ pointer: !isDraftMode }"
     class="flex-center h-100"
-    @click.prevent="onClick"
+    @click="onRealClick"
   >
     <portal
-      v-if="link"
+      v-if="link && isDraftMode"
       :to="`QuickFunctions${id}`"
     >
       <el-tooltip
@@ -17,7 +16,7 @@
       >
         <el-button
           icon="el-icon-thumb"
-          @click.stop="onClick"
+          @click.stop="onDraftClick"
         />
       </el-tooltip>
     </portal>
@@ -78,9 +77,7 @@ export default {
     // }
   },
   methods: {
-    onClick() {
-      if (this.isDraftMode) return
-
+    click() {
       if (this.link) {
         if (this.innerProps.newTab) {
           window.open(this.link, '_blank')
@@ -91,6 +88,16 @@ export default {
         else {
           window.location.href = this.link
         }
+      }
+    },
+    onDraftClick() {
+      if (this.isDraftMode) {
+        this.click()
+      }
+    },
+    onRealClick() {
+      if (!this.isDraftMode) {
+        this.click()
       }
     },
     redirect() {

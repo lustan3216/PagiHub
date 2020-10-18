@@ -1,6 +1,7 @@
 <template>
   <div class="editor ProseMirror">
     <el-popover
+      ref="popover"
       :disabled="isExample || !isDraftMode"
       :key="id"
       popper-class="p-0"
@@ -155,16 +156,16 @@
           </div>
         </div>
       </div>
-
-      <content-editable
-        ref="content"
-        slot="reference"
-        :style="htmlStyles"
-        :tag="tag || 'div'"
-        v-model="text"
-        :content-editable="isDraftMode && !isExample"
-      />
     </el-popover>
+
+    <content-editable
+      v-popover:popover
+      ref="content"
+      :style="htmlStyles"
+      :tag="tag || 'div'"
+      v-model="text"
+      :content-editable="isDraftMode && !isExample"
+    />
   </div>
 </template>
 <script>
@@ -457,6 +458,7 @@ $color-grey: #b2b2b2;
 }
 
 .editor {
+  word-break: break-word;
   position: relative;
   overflow: hidden;
   padding: 0;

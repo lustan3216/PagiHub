@@ -1,29 +1,22 @@
 <template>
-  <!--  <rules-generator-->
-  <!--    :id="id"-->
-  <!--    :rules="spec"-->
-  <!--  />-->
+  <rules-generator
+    :id="id"
+    :rules="spec"
+  />
 </template>
 
 <script>
 import RulesGenerator from './Common/RulesGenerator'
-import { select, boolean, assignDefaultValue } from './utils/ruleTool'
+import { boolean, assignDefaultValue } from './utils/ruleTool'
 
 export const defaultSetting = {
-  // isDraggable: true,
-  // isResizable: true,
+  userCanDrag: false,
+  userCanResize: false
   // static: false,
-  autoHeight: false
 }
 
-const options = [
-  { label: 'Follow Parent', value: null },
-  { label: 'YES', value: true },
-  { label: 'NO', value: false }
-]
-
 export default {
-  name: 'SettingGridItem',
+  name: 'SettingGridGeneratorItem',
   components: { RulesGenerator },
   props: {
     id: {
@@ -38,7 +31,12 @@ export default {
           // select('isDraggable', { options }),
           // select('isResizable', { options }),
           // select('static', { options }),
-          boolean('autoHeight')
+          boolean('userCanDrag', {
+            info: 'Allow client user play with dragging when published.'
+          }),
+          boolean('userCanResize', {
+            info: 'Allow client user play with resizing when published.'
+          })
         ],
         defaultSetting
       )

@@ -98,6 +98,8 @@ export default {
     },
     computedLayout() {
       const { ratioH, ratioW, zIndex, position } = this.styleLayout
+      const { userCanResize, userCanDrag } = this.innerProps
+
       let h = parseInt(this.currentGrid.h)
 
       if (this.currentGrid.unitH === 'vh') {
@@ -113,8 +115,7 @@ export default {
         unitH: this.currentGrid.unitH,
         unitW: this.currentGrid.unitW,
 
-        static: !this.isDraftMode || this.lock,
-        lock: this.lock,
+        static: this.lock,
         stack: this.stack,
         hidden: this.hidden,
 
@@ -123,8 +124,9 @@ export default {
 
         zIndex: zIndex,
 
-        isResizable: this.isDraftMode,
-        isDraggable: this.isDraftMode && position !== 'fixOnParentBottom',
+        isResizable: this.isDraftMode || userCanResize,
+        isDraggable:
+          (this.isDraftMode && position !== 'fixOnParentBottom') || userCanDrag,
         fixed: position === 'fixed',
         fixOnParentBottom: position === 'fixOnParentBottom',
         verticalCompact: position === 'verticalCompact',

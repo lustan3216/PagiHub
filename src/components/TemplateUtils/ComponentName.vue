@@ -20,19 +20,13 @@
     @dblclick.native="dblclick"
   >
     <span class="icon">
-      <slot
-        name="icon"
-      />
+      <slot name="icon" />
     </span>
 
-    <template v-if="textShowContent && isTextEditor">
-      <span>
-        {{ node.value ? node.value.slice(0, 15) : 'TextEditor' }}{{ shortId }}
-      </span>
-    </template>
-    <template v-else>
-      <span> {{ nodeShortName }}{{ shortId }} </span>
-    </template>
+    <span v-if="textShowContent && isTextEditor">
+      {{ textName }}{{ shortId }}
+    </span>
+    <span v-else> {{ nodeShortName }}{{ shortId }} </span>
 
     <slot />
   </el-button>
@@ -90,6 +84,11 @@ export default {
     },
     isTextEditor() {
       return isTextEditor(this.node)
+    },
+    textName() {
+      return this.node.value
+        ? this.node.value.replace(/<\/?[^>]+(>|$)/g, '').slice(0, 15)
+        : 'TextEditor'
     },
     nodeShortName() {
       return isComponentSet(this.node)

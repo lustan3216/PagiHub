@@ -25,27 +25,48 @@
       <el-divider />
 
       <div class="flex-column">
-        <router-link
+        <app-link
           :to="{ name: 'Projects' }"
           class="link-li"
         >
           <i class="el-icon-picture-outline-round" /> Projects
-        </router-link>
+        </app-link>
 
-        <router-link
+        <app-link
           :to="{ name: 'Help' }"
           class="link-li"
         >
           <i class="el-icon-help" /> Help
-        </router-link>
+        </app-link>
 
-        <router-link
+        <app-link
+          to="https://github.com/LotsDesign/issues/issues/new?assignees=&labels=&template=bug_report.md&title="
+          class="link-li"
+        >
+          <i class="el-icon-warning-outline" /> Bug report
+        </app-link>
+
+        <app-link
+          to="https://github.com/LotsDesign/issues/issues/new?assignees=&labels=&template=feature_request.md&title="
+          class="link-li"
+        >
+          <i class="el-icon-coffee-cup" /> Feature request
+        </app-link>
+
+        <app-link
+          to="https://github.com/LotsDesign/issues/issues/new"
+          class="link-li"
+        >
+          <i class="el-icon-phone-outline" /> Contact
+        </app-link>
+
+        <app-link
           to="/"
           class="link-li"
           @click.native="logout"
         >
           <i class="el-icon-switch-button" /> Logout
-        </router-link>
+        </app-link>
       </div>
     </div>
     <div class="view">

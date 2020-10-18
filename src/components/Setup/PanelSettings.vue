@@ -7,7 +7,7 @@
     <keep-alive>
       <component
         :is="vueComponentTag"
-        :key="vueComponentTag"
+        :key="lastNode.id"
         :id="lastNode.id"
         class="m-t-10 settings"
       />
@@ -29,7 +29,8 @@ const self = {
     SettingFlexButton: () => import('./EditorSetting/SettingFlexButton'),
     SettingFlexImage: () => import('./EditorSetting/SettingFlexImage'),
     // SettingGridGenerator: () => import('./EditorSetting/SettingGridGenerator'),
-    // SettingGridItem: () => import('./EditorSetting/SettingGridItem'),
+    SettingGridGeneratorItem: () =>
+      import('./EditorSetting/SettingGridGeneratorItem'),
     SettingVideoPlayer: () => import('./EditorSetting/SettingVideoPlayer'),
     SettingCarousel: () => import('./EditorSetting/SettingCarousel'),
     SettingIframer: () => import('./EditorSetting/SettingIframer'),

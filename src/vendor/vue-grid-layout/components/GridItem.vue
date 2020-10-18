@@ -1019,7 +1019,7 @@
           this.previousH = this.innerH
 
           const { clientHeight, clientWidth } = this.$slots.default[0].elm
-
+          console.log(clientHeight, clientWidth)
           let pos = this.calcWH(clientHeight, clientWidth)
           // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
           if (pos.w < this.minW) {

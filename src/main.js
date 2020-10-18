@@ -1,7 +1,3 @@
-if (process.env.NODE_ENV === 'test') {
-  require('./apiMock')
-}
-
 import 'normalize.css'
 import '@/styles/index.scss'
 import 'intersection-observer'
@@ -15,6 +11,7 @@ import router from './router'
 import VueShortKey from 'vue-shortkey'
 import VueRouter from 'vue-router'
 import PortalVue from 'portal-vue'
+import AppLink from '@/pages/components/AppLink'
 import formCreate from '@form-create/element-ui'
 import vmMap from '@/utils/vmMap'
 import jsonHistory from '@/store/jsonHistory'
@@ -38,6 +35,7 @@ jsonHistory.tree = store.state.node.nodesMap
 import vhCheck from 'vh-check'
 vhCheck()
 
+Vue.component('app-link', AppLink)
 Vue.use(VueRouter)
 Vue.use(formCreate)
 Vue.use(PortalVue)
