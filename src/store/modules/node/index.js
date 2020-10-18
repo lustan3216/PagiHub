@@ -200,11 +200,11 @@ const mutations = {
 }
 
 const actions = {
-  record({ rooState }, payLoad) {
-    if (rooState.mode.isDraftMode) {
+  record({ rootState }, payLoad) {
+    if (rootState.mode.isDraftMode) {
       jsonHistory.debounceRecord(payLoad, 300)
     }
-  },
+  }
   // irreversibleRecord({ rooState }, payLoad) {
   //   if (rooState.mode.isDraftMode) {
   //     jsonHistory.irreversibleRecord(payLoad)
