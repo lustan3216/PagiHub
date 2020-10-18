@@ -79,11 +79,12 @@ export default {
   methods: {
     click() {
       if (this.link) {
+        const link = this.link.replace(location.origin, '')
         if (this.innerProps.newTab) {
           window.open(this.link, '_blank')
         }
-        else if (this.link.indexOf('/') === 0) {
-          this.$router.push(this.link)
+        else if (link.indexOf('/') === 0) {
+          this.$router.push(link)
         }
         else {
           window.location.href = this.link

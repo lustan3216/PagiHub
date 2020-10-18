@@ -58,24 +58,12 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
-import { Auth, Hub } from 'aws-amplify'
+import { Auth } from 'aws-amplify'
 
 export default {
   name: 'Login',
   computed: {
     ...mapGetters('user', ['isLogin'])
-  },
-  mounted() {
-    Hub.listen('auth', ({ payload: { event, data }}) => {
-      switch (event) {
-        case 'signIn':
-          this.getCurrentUser()
-          break
-        case 'signOut':
-          this.userInit()
-          break
-      }
-    })
   },
   methods: {
     ...mapActions('user', ['getCurrentUser']),

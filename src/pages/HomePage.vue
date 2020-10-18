@@ -1,15 +1,14 @@
 <template>
-  <div class="flex-center">
-    <h1>
-      Yet to do homepage. Please login or go dashboard first then create
-      <span @dblclick="$dialog.open('login')">a</span> project.
-    </h1>
-  </div>
+  <panel-production first-path="homepage" />
 </template>
 
 <script>
+import PanelProduction from '@/components/Layout/PanelProduction'
 export default {
-  name: 'Home'
+  name: 'HomePage',
+  components: {
+    PanelProduction
+  }
 }
 </script>
 

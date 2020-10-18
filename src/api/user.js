@@ -1,4 +1,4 @@
-import { API } from './request'
+import API from './request'
 import { queryString } from '@/utils/url'
 
 export function patchCurrentUser(data) {

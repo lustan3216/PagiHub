@@ -21,7 +21,7 @@
         name="slide"
         mode="out-in"
       >
-        <keep-alive>
+        <keep-alive :include="rootComponentSetIds">
           <art-board
             v-if="editingComponentSetId"
             :id="editingComponentSetId"
@@ -57,7 +57,7 @@ export default {
     PanelDraft: () => import('@/components/Layout/PanelDraft')
   },
   computed: {
-    ...mapState('node', ['editingProjectId', 'editingComponentSetId'])
+    ...mapState('node', ['editingProjectId', 'editingComponentSetId', 'rootComponentSetIds'])
   },
   async created() {
     this.getAssets()

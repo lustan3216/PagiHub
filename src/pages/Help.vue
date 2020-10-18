@@ -1,15 +1,15 @@
 <template>
-  <div>
-    help
-  </div>
+  <panel-production first-path="help"/>
 </template>
 
 <script>
-export default {
-  name: 'Help'
-}
+  import PanelProduction from '@/components/Layout/PanelProduction'
+  export default {
+    name: 'Help',
+    components: {
+      PanelProduction
+    }
+  }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped lang="scss"></style>

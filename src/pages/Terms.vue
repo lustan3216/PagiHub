@@ -1,13 +1,20 @@
 <template>
-  <div>Terms</div>
+  <panel-production
+    first-path="terms"
+  />
 </template>
 
 <script>
+import PanelProduction from '@/components/Layout/PanelProduction'
 export default {
-  name: 'Terms'
+  name: 'Terms',
+  components: {
+    PanelProduction
+  },
+  created() {
+    console.log(123)
+  }
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

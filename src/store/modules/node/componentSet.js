@@ -111,19 +111,19 @@ export const actions = {
     await deleteComponentSet({ id })
     const node = state.nodesMap[id]
 
-    traversalSelfAndChildren(node, child => {
-      commit('VUE_DELETE', {
-        tree: state.nodesMap,
-        key: child.id
-      })
+    commit('CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', id)
 
-      if (isComponentSet(child)) {
-        commit('CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS', child.id)
-      }
+    this._vm.$nextTick(() => {
+      traversalSelfAndChildren(node, child => {
+        commit('VUE_DELETE', {
+          tree: state.nodesMap,
+          key: child.id
+        })
 
-      jsonHistory.cleanDeltas(delta => {
-        const key = objectFirstKey(delta)
-        return child.id === key
+        jsonHistory.cleanDeltas(delta => {
+          const key = objectFirstKey(delta)
+          return child.id === key
+        })
       })
     })
   }

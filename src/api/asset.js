@@ -1,5 +1,5 @@
 import { Auth } from 'aws-amplify'
-import { API } from './request'
+import API from './request'
 import axios from 'axios'
 import store from '@/store'
 import Compressor from 'compressorjs'

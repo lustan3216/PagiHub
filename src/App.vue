@@ -47,11 +47,8 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('user', ['isLogin']),
     ...mapState('app', ['beingAddedComponentId']),
-    inDashboard() {
-      return this.$route.path.indexOf('/dashboard') === 0
-    },
     needNavBar() {
-      return !this.inDashboard && !this.isPreviewMode && !this.isProductionMode
+      return !this.$route.meta.noNavbar
     }
   },
   created() {

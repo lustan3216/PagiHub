@@ -15,24 +15,21 @@ export default {
   components: {
     ArtBoard
   },
+  props: ['firstPath', 'secondPath', 'thirdPath'],
   data() {
     return {
-      loadedList: {},
       rootComponentSetId: null
     }
   },
   async created() {
     this.SET_PRODUCTION_MODE()
-    if (this.loadedList[this.$route.path]) {
-      return
-    }
-    this.loadedList[this.$route.path] = true
 
     const { userLabel, projectLabel, componentSetLabel } = this.$route.params
+
     const { componentSet, data: nodes } = await getComponentSetPublicChildren({
-      userLabel,
-      projectLabel,
-      componentSetLabel
+      userLabel: userLabel || this.firstPath,
+      projectLabel: projectLabel || this.secondPath,
+      componentSetLabel: componentSetLabel || this.thirdPath
     })
 
     if (nodes.length) {
@@ -48,7 +45,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('node', ['SET_NODES_TO_MAP', 'SET_EDITING_COMPONENT_SET_ID']),
+    ...mapMutations('node', [
+      'SET_NODES_TO_MAP',
+      'SET_EDITING_COMPONENT_SET_ID'
+    ]),
     ...mapMutations('mode', ['SET_PRODUCTION_MODE'])
   }
 }

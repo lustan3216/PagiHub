@@ -1,8 +1,8 @@
+import { isUndefined } from '@/utils/tool'
 export function queryString(obj, prefix) {
   const str = []
-  let p
-  for (p in obj) {
-    if (obj.hasOwnProperty(p)) {
+  for (const p in obj) {
+    if (obj.hasOwnProperty(p) && !isUndefined(obj[p])) {
       const k = prefix ? prefix + '[]' : p
       const v = obj[p]
       str.push(

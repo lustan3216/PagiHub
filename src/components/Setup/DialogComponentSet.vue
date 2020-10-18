@@ -35,7 +35,7 @@
               <el-input
                 v-model="form.label"
                 data-cy="component-set-name-input"
-                placeholder="At least 6 letters"
+                placeholder="At least 3 letters"
               />
             </el-form-item>
 
@@ -113,6 +113,7 @@ import { Message } from 'element-ui'
 import TextEditorRich from '@/components/Components/TextEditorRich'
 import TipPage from '@/components/Tip/TipPage'
 import { getNode } from '@/utils/node'
+
 export default {
   name: 'DialogComponentSet',
   components: {

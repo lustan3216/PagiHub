@@ -41,10 +41,7 @@ const mutations = {
     const node = tree[key]
     // 有id 代表component 沒有代表attr
     if (node && node[ID]) {
-      if (isProject(node)) {
-        deleteBy(state.projectIds, node.id)
-      }
-      else if (isComponentSet(node)) {
+      if (isComponentSet(node)) {
         deleteBy(state.rootComponentSetIds, node.id)
       }
 
@@ -169,6 +166,7 @@ const mutations = {
   CLEAN_EDITING_COMPONENT_SET_ID_BY_IDS(state, ids) {
     toArray(ids).forEach(id => {
       if (id === state.editingComponentSetId) {
+        deleteBy(state.rootComponentSetIds, id)
         state.editingComponentSetId = null
       }
     })

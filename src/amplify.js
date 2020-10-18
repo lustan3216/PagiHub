@@ -17,6 +17,10 @@ Amplify.configure({
             Authorization: `${session.getAccessToken().getJwtToken()}`
           }
         }
+      },
+      {
+        name: 'noToken',
+        endpoint: process.env.VUE_APP_API_ENDPOINT
       }
     ]
   }

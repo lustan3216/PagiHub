@@ -117,6 +117,7 @@ export default {
 .view {
   padding: 15px;
   flex: 6;
+  box-sizing: border-box;
   @include calc-vh('height', '100vh');
   overflow: scroll;
 }

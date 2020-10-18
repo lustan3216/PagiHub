@@ -34,6 +34,7 @@ export default new VueRouter({
         {
           path: 'projects',
           name: 'Projects',
+          meta: { noNavbar: true },
           component: () => import('@/pages/Projects')
         }
       ]
@@ -44,20 +45,14 @@ export default new VueRouter({
       component: () => import('@/pages/Help')
     },
     {
-      path: '/about',
-      name: 'About',
-      children: [
-        {
-          path: 'terms',
-          name: 'Terms',
-          component: () => import('@/pages/Terms')
-        },
-        {
-          path: 'privacy',
-          name: 'Privacy',
-          component: () => import('@/pages/Privacy')
-        }
-      ]
+      path: '/terms',
+      name: 'Terms',
+      component: () => import('@/pages/Terms')
+    },
+    {
+      path: '/privacy',
+      name: 'Privacy',
+      component: () => import('@/pages/Privacy')
     },
     {
       path: '/workboard/:projectId',
@@ -67,6 +62,7 @@ export default new VueRouter({
     {
       path: '/:userLabel/:projectLabel/:componentSetLabel',
       name: 'PanelProduction',
+      meta: { noNavbar: true },
       component: () => import('@/components/Layout/PanelProduction')
     },
     {

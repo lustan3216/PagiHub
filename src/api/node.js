@@ -1,7 +1,7 @@
 import localforage from 'localforage'
 import { toArray } from '@/utils/array'
 import { queryString } from '@/utils/url'
-import { API } from './request'
+import API from './request'
 
 export function getProjects() {
   return API.get('jwt', '/projects', {})
@@ -55,9 +55,17 @@ export function getComponentSetChildren({ id }) {
   return API.get('jwt', `/component-sets/${id}/children`, {})
 }
 
-export function getComponentSetPublicChildren({ userLabel, projectLabel, componentSetLabel }) {
-  const _queryString = queryString({ userLabel, projectLabel, componentSetLabel })
-  return API.get('jwt', `/public?${_queryString}`, {})
+export function getComponentSetPublicChildren({
+  userLabel,
+  projectLabel,
+  componentSetLabel
+}) {
+  const _queryString = queryString({
+    userLabel,
+    projectLabel,
+    componentSetLabel
+  })
+  return API.get('axios', `/public?${_queryString}`)
 }
 
 export function publishComponentSet({ id, tree, description }) {
@@ -103,7 +111,8 @@ export function createComponentSet({
   children,
   parentId,
   projectLabel,
-  breakpointsMap, isPrivate
+  breakpointsMap,
+  isPrivate
 }) {
   return API.post('jwt', `/component-sets`, {
     body: {

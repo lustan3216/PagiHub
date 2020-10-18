@@ -1,4 +1,4 @@
-import { API } from './request'
+import API from './request'
 import { isUndefined } from '@/utils/tool'
 
 export function getTags({ query, size }) {
