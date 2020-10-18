@@ -45,7 +45,6 @@ import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestGridItem, isGridItem, isTextEditor } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
-import { findIndexBy } from '@/utils/array'
 
 const store = Vue.observable({ updatingItemParentId: null })
 
@@ -65,7 +64,8 @@ export default {
   data() {
     return {
       exampleBoundary: 'xs',
-      validBreakpoint: 'md'
+      validBreakpoint: 'md',
+      layout: {}
     }
   },
   computed: {
@@ -96,7 +96,7 @@ export default {
     hidden() {
       return getValueByPath(this.node, [STYLES, this.validBreakpoint, 'hidden'])
     },
-    layout() {
+    computedLayout() {
       const { ratioH, ratioW, zIndex, position } = this.styleLayout
       let h = parseInt(this.currentGrid.h)
 
@@ -144,13 +144,15 @@ export default {
     }
   },
   watch: {
-    layout: {
+    computedLayout: {
       handler(value) {
+        // 一定要轉成data，不然第一次computed 會因為不能assign值出bug
+        this.layout = value
         if (this.hidden) {
           this.$delete(this.layouts[this.id])
         }
         else {
-          this.$set(this.layouts, this.id, value)
+          this.$set(this.layouts, this.id, this.layout)
         }
       },
       immediate: true
