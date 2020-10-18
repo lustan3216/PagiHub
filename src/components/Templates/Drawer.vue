@@ -20,7 +20,6 @@
       :show-close="false"
     >
       <controller-layer
-
         :id="id"
         class="h-100"
       >
@@ -28,7 +27,6 @@
           :id="id"
           :inner-props="innerProps"
         />
-
       </controller-layer>
     </el-drawer>
   </portal>
