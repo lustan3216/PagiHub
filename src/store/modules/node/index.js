@@ -200,8 +200,8 @@ const mutations = {
 }
 
 const actions = {
-  record({ rootState }, payLoad) {
-    if (rootState.mode.isDraftMode) {
+  record({ rootGetters }, payLoad) {
+    if (rootGetters['mode/isDraftMode']) {
       jsonHistory.debounceRecord(payLoad, 300)
     }
   }
