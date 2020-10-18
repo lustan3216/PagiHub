@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -81,6 +81,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('node', ['record']),
     layoutUpdated(newChildren) {
       if (this.isExample) {
         return
@@ -130,7 +131,7 @@ export default {
       })
 
       if (records.length) {
-        this.RECORD(records)
+        this.record(records)
       }
     }
   }

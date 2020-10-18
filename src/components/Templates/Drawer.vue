@@ -43,6 +43,7 @@ import { defaultSetting } from '../Setup/EditorSetting/SettingDrawer'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import { asyncGetValue } from '@/utils/tool'
 import { PROPS } from '@/const'
+import { mapActions } from 'vuex'
 
 export default {
   defaultSetting,
@@ -75,7 +76,7 @@ export default {
       // the node is deleted
       this.interactWithButton(node)
       if (!node && !this.isExample) {
-        this.RECORD([
+        this.record([
           {
             path: `${this.id}.${PROPS}.buttonCanCloseId`,
             value: undefined
@@ -88,6 +89,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('node', ['record']),
     interactWithButton(visible) {
       // the child vm not mount yet even Drawer mounted.
       if (visible) {
