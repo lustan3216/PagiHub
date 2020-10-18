@@ -1,7 +1,5 @@
 <template>
-  <tip>Once published, it will become public page that people can reuse your any
-  component.
-  </tip>
+  <tip>Once published, it will become public page that people can reuse it.</tip>
 </template>
 
 <script>

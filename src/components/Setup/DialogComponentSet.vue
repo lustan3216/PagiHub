@@ -51,7 +51,7 @@
             >
               {{ origin }}/{{ username || 'username' }}/{{
                 project && project.label
-              }}/{{ form.label || 'page-name' }}
+              }}/{{ form.label || 'page-name' }}{{ privateLinkToken }}
             </component>
 
             <el-form-item
@@ -178,6 +178,16 @@ export default {
     },
     isExist() {
       return Boolean(this.id)
+    },
+    privateLinkToken() {
+      if (this.form.isPrivate) {
+        if (this.node && this.node.privateLinkToken) {
+          return `?privateLinkToken=${this.node.privateLinkToken}`
+        }
+        else {
+          return `?privateLinkToken=secret`
+        }
+      }
     }
   },
   watch: {

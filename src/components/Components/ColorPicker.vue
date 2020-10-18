@@ -58,7 +58,6 @@ export default {
 
   data() {
     return {
-      innerValue: '',
       pickr: null,
       visible: false,
       key: 0
