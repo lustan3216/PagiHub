@@ -75,7 +75,7 @@ export default {
       const style = this.innerStyles.html || {}
       const borderTop = parseInt(style.border || style.borderTop || '')
       const px = this.isDraftMode && !borderTop ? 1 : borderTop
-      return -px + 'px'
+      return -(px - 1) + 'px'
     },
     innerGrid() {
       return this.node.grid

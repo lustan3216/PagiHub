@@ -19,6 +19,10 @@ https://www.npmjs.com/package/xss
 https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
 
+refactor 
+style 試試看能不能全部放在 當個component裡面，style用props傳遞
+form-create 整個拔掉
+
 <ol>
 每個用戶都有一個 playground 進去可以馬上玩
 width px, grid layout 底城如果用每單位 用 px 計算搞不好有機會
@@ -27,8 +31,7 @@ sanitize-html
 </ol>
 
 ### Last
-
-inherit 放最後
+svg
 font 還是需要 fit container, 行為都要一致，做成 checkbox
 等 stylecomponent 好了，把 master style 放左邊一蘭
 可以 shift 拉出來複製,拉出來的應該可以改成 stack false
@@ -60,6 +63,7 @@ style 支援 每個 device 可客製化, hover click
 <li>like</li>
 <li>fork</li>
 <li>form item 會卡到lazy load 要處理 / 可計算哪些有formitem的就取消lazload</li>
+inherit 放最後
 
 https://bhch.github.io/posts/2019/03/adding-rotation-handles-in-interact-js/
 https://codepen.io/taye/pen/wrrxKb

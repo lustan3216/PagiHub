@@ -48,12 +48,12 @@ export const COLUMNS = 100
 // }
 
 export const BREAK_POINTS_MAP = {
-  xxl: 1440,
-  xl: 1200,
-  lg: 992,
-  md: 768,
-  sm: 576,
-  xs: 0
+  xl: 1440,
+  lg: 1200,
+  md: 992,
+  sm: 768,
+  xs: 576,
+  xxs: 0
 }
 
 export const DEFAULT_BREAK_POINTS_MAP = {

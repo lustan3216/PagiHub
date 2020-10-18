@@ -58,6 +58,7 @@ export default {
 
   data() {
     return {
+      innerValue: '',
       pickr: null,
       visible: false,
       key: 0
@@ -73,9 +74,30 @@ export default {
       }
     }
   },
+  watch: {
+    value(value) {
+      if (this.gradient) {
+        this.pickr.setGradient(value)
+      }
+      else {
+        this.pickr.setColor(value)
+      }
+    }
+  },
+  beforeDestroy() {
+    if (this.pickr) {
+      this.pickr.destroyAndRemove()
+    }
+  },
   methods: {
     create() {
       if (this.pickr) {
+        if (this.gradient) {
+          this.pickr.setGradient(this.value)
+        }
+        else {
+          this.pickr.setColor(this.value)
+        }
         return
       }
 
@@ -118,11 +140,13 @@ export default {
               clear: true
             }
           }
-        }).on('change', pickr => {
-          this.$emit('input', pickr.toHEXA().toString())
-        }).on('clear', pickr => {
-          this.$emit('input', '')
         })
+          .on('change', pickr => {
+            this.$emit('input', pickr.toHEXA().toString())
+          })
+          .on('clear', pickr => {
+            this.$emit('input', '')
+          })
 
         this.pickr.setColor(this.value)
       }
@@ -132,36 +156,35 @@ export default {
 </script>
 
 <style scoped>
- .button {
-   background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
-   position: relative;
-   display: block;
-   box-sizing: border-box;
-   border: 1px solid #999;
-   border-radius: 2px;
-   width: 100%;
-   height: 100%;
-   text-align: center;
-   cursor: pointer;
- }
- .wrapper {
-   height: 28px;
-   width: 28px;
-   display: inline-block;
-   box-sizing: border-box;
-   padding: 4px;
-   border: 1px solid #e6e6e6;
-   border-radius: 4px;
-   font-size: 0;
-   position: relative;
-   cursor: pointer;
- }
- .inner {
-   position: absolute;
-   left: 0;
-   top: 0;
-   right: 0;
-   bottom: 0;
- }
+.button {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  border: 1px solid #999;
+  border-radius: 2px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+.wrapper {
+  height: 28px;
+  width: 28px;
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 4px;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  font-size: 0;
+  position: relative;
+  cursor: pointer;
+}
+.inner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
 </style>
-

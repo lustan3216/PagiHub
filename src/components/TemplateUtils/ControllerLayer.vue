@@ -23,6 +23,7 @@
         v-if="selected && !gridResizing"
         :id="id"
         :is-example="isExample"
+        :item-editing="itemEditing"
       />
     </portal>
 

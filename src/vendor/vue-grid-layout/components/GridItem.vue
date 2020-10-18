@@ -819,7 +819,7 @@
         if (this.innerX !== pos.x || this.innerY !== pos.y) {
           this.$emit('move', this.i, pos.x, pos.y)
         }
-        if (event.type === 'dragend' && (this.previousX !== this.innerX || this.previousY !== this.innerY)) {
+        if (event.type === 'dragend') {
           if ((this.lockItemInLayout || this.fixItem) && pos.y * this.scaleRatio > parentRect.height - clientRect.height) {
             pos.y = (parentRect.height - clientRect.height) / this.scaleRatio
           }

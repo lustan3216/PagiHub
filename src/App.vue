@@ -48,7 +48,7 @@ export default {
     ...mapGetters('user', ['isLogin']),
     ...mapState('app', ['beingAddedComponentId']),
     needNavBar() {
-      return !this.$route.meta.noNavbar
+      return !this.$route.meta.noNavbar && !this.isPreviewMode
     }
   },
   created() {
