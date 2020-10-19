@@ -326,7 +326,7 @@ export default {
               ? rect.top + height - top1
               : height
 
-        if (height < 5) {
+        if (height < 5 || left < 10 || top < 10) {
           this.visible = false
           return
         }

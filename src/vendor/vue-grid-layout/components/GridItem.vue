@@ -19,13 +19,12 @@
 </template>
 <style>
   .grid-item {
-    transition-property: left, top, right, width, height;
     box-sizing: border-box;
     /* add right for rtl */
   }
 
   .transition {
-    transition: all 150ms ease;
+    transition: transform 100ms ease;
   }
 
   .grid-item.no-touch {
