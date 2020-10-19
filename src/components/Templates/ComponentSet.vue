@@ -1,8 +1,5 @@
 <template>
-  <div
-    :style="innerStyles.html"
-    class="wh-100"
-  >
+  <div :style="innerStyles.html">
     <component-giver
       v-if="firstChild && firstChild.id"
       :id="firstChild.id"

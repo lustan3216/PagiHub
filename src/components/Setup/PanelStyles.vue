@@ -35,6 +35,8 @@
 
     <ratio v-if="isAllGridItem" />
 
+    <background-color v-if="canBackgroundColor" />
+
     <el-divider content-position="left">STACK</el-divider>
 
     <position v-if="isAllGridItem" />
@@ -51,8 +53,6 @@
       name="Rotate"
       slim
     />
-
-    <background-color v-if="isAllGridItem" />
 
     <border-all />
 
@@ -143,6 +143,13 @@ export default {
       )
       const allGridItem = nodes.length === this.selectedComponentNodes.length
       return this.selectedComponentNodes.length && allGridItem
+    },
+    canBackgroundColor() {
+      const nodes = this.selectedComponentNodes.filter(
+        node => isGridItem(node) || isSlider(node)
+      )
+      const valid = nodes.length === this.selectedComponentNodes.length
+      return this.selectedComponentNodes.length && valid
     }
   }
 }

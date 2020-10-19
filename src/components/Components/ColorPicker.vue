@@ -75,6 +75,7 @@ export default {
   },
   watch: {
     value(value) {
+      if (!this.pickr) return
       if (this.gradient) {
         this.pickr.setGradient(value)
       }
