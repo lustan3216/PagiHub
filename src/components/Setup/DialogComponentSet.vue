@@ -116,7 +116,6 @@ import SelectTag from '@/components/Components/SelectTag'
 import { Message } from 'element-ui'
 import TextEditorRich from '@/components/Components/TextEditorRich'
 import TipPage from '@/components/Tip/TipPage'
-import { getNode } from '@/utils/node'
 
 export default {
   name: 'DialogComponentSet',
@@ -182,7 +181,7 @@ export default {
       return this.nodesMap[this.id]
     },
     project() {
-      return getNode(this.editingProjectId)
+      return this.nodesMap[this.editingProjectId]
     },
     isExist() {
       return Boolean(this.id)

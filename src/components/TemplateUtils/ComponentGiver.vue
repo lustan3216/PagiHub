@@ -2,7 +2,7 @@
 import ControllerLayer from '@/components/TemplateUtils/ControllerLayer'
 import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
 import { ObserveVisibility } from 'vue-observe-visibility'
-import { getNode, isComponentSet, isGrid, isGridItem } from '@/utils/node'
+import { isComponentSet, isGrid, isGridItem } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
 import { mapGetters, mapState } from 'vuex'
 import { STYLES } from '@/const'
@@ -30,34 +30,40 @@ export default {
     }
   },
   data() {
-    // draftMode因為css & setting需要拿vm，不打開拿不到
-    const node = getNode(this.id)
-
-    const options = {
-      once: this.onceObserve || this.isExample,
-      callback: isVisible => {
-        this.vIf = isVisible
-      },
-      intersection: {
-        root: this.isExample
-          ? document.getElementById(`example-${node.rootComponentSetId}`)
-          : document.getElementById('art-board'),
-        rootMargin: '300px 0px 0px 300px'
-      }
-    }
-
-    const thirdLayer = getValueByPath(node, 'parentNode.parentNode.parentNode')
-    const isThirdLayer = isComponentSet(thirdLayer)
-
     return {
-      vIf: !isThirdLayer,
-      options: isThirdLayer ? options : false
+      vIf: false,
+      options: null
     }
   },
   created() {
     if (!this.isExample && this.isDraftMode) {
       this.vIf = true
       this.options = false
+    }
+    else {
+      const node = this.nodesMap[this.id]
+
+      const options = {
+        once: this.onceObserve || this.isExample,
+        callback: isVisible => {
+          this.vIf = isVisible
+        },
+        intersection: {
+          root: this.isExample
+            ? document.getElementById(`example-${node.rootComponentSetId}`)
+            : document.getElementById('art-board'),
+          rootMargin: '300px 0px 0px 300px'
+        }
+      }
+
+      const thirdLayer = getValueByPath(
+        node,
+        'parentNode.parentNode.parentNode'
+      )
+      const isThirdLayer = isComponentSet(thirdLayer)
+
+      this.vIf = !isThirdLayer
+      this.options = isThirdLayer ? options : false
     }
   },
   computed: {
@@ -66,7 +72,7 @@ export default {
       return this.node && !this.hidden
     },
     node() {
-      return getNode(this.id)
+      return this.nodesMap[this.id]
     },
     isGridItem() {
       return isGridItem(this.node)

@@ -11,6 +11,7 @@
       :style="{ left: width + 10 + 'px' }"
       name="QuickFunctionsTextEditor"
       slim
+      class="can-action"
     />
 
     <el-button
@@ -23,6 +24,20 @@
       data-cy="add-panel-button"
       @click="tryToAddComponent"
     />
+
+    <el-tooltip
+      effect="light"
+      content="Append an empty container"
+      placement="bottom"
+    >
+      <el-button
+        class="append-container"
+        type="text"
+        size="mini"
+        icon="el-icon-plus"
+        @click="vmCreateEmptyItem"
+      />
+    </el-tooltip>
 
     <div
       :class="[
@@ -83,56 +98,39 @@
           slim
         />
 
-        <stack
-          v-if="!isComponentSet"
-          :id="id"
-        />
-
         <lock
           :id="id"
           visible
           allow-multi
         />
 
-        <!--        <el-button-->
-        <!--          v-popover:popover-->
-        <!--          icon="el-icon-more"-->
-        <!--          class="icon"-->
-        <!--        />-->
+        <stack
+          v-if="!isComponentSet"
+          :id="id"
+        />
 
-        <el-tooltip
-          :open-delay="300"
-          effect="light"
-          placement="top"
-        >
-          <div slot="content">
-            {{ newItemToolTip }} <span
-              class="m-l-10"
-              v-html="metaKey"
-            /> + B
-          </div>
-
+        <template v-if="isCarousel">
           <el-button
             class="icon"
             @click="vmCreateEmptyItem"
           >
             {{ newItemToolTip }}
           </el-button>
-        </el-tooltip>
 
-        <el-button
-          v-if="isCarousel"
-          class="icon"
-          @click="deleteSlider"
-        >
-          Delete Slider
-        </el-button>
+          <el-button
+            class="icon"
+            @click="deleteSlider"
+          >
+            Delete Slider
+          </el-button>
+        </template>
       </el-button-group>
     </div>
   </div>
 </template>
 
 <script>
+import gsap from 'gsap'
 import { mapState, mapActions, mapMutations } from 'vuex'
 import ComponentName from './ComponentName'
 import ZIndex from '@/components/Setup/EditorStyle/ZIndex'
@@ -141,7 +139,6 @@ import Lock from '../Setup/EditorStyle/Lock'
 import { Popover } from 'element-ui'
 import {
   isGridItem,
-  getNode,
   getClosetGrimItem,
   isComponentSet,
   traversalAncestorAndSelf,
@@ -152,8 +149,9 @@ import { arrayLast } from '@/utils/array'
 import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR } from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
-import gsap from 'gsap'
 import { debounce } from '@/utils/tool'
+import { BIconPlusSquareFill } from 'bootstrap-vue'
+import BasicComponentAdd from './BasicComponentAdd'
 
 let topShared = window.innerHeight / 2
 let leftShared = window.innerWidth / 2
@@ -175,7 +173,9 @@ export default {
     ZIndex,
     Lock,
     Stack,
-    ElPopover: Popover
+    ElPopover: Popover,
+    BIconPlusSquareFill,
+    BasicComponentAdd
   },
   props: {
     id: {
@@ -234,7 +234,7 @@ export default {
       return isMac() ? '&#8984;' : '&#8963;'
     },
     node() {
-      return getNode(this.id)
+      return this.nodesMap[this.id]
     },
     isCarousel() {
       return isCarousel(this.node)
@@ -416,8 +416,23 @@ export default {
   bottom: 0;
 }
 
-.el-icon-more-outline {
-  transform: rotate(90deg);
+.basic-component-add {
+  background-color: transparent;
+  width: 100%;
+}
+
+.append-container {
+  position: absolute;
+  bottom: -10px;
+  padding: 0;
+  pointer-events: all;
+  font-size: 12px;
+  height: 18px;
+  width: 18px;
+  background: #409eff !important;
+  color: white !important;
+  transform: translateX(-100%);
+  left: 50%;
 }
 
 .component-name {
@@ -435,10 +450,10 @@ export default {
 }
 
 ::v-deep > .el-button {
-  color: $color-active !important;
+  color: $color-active;
 }
 
-::v-deep .el-button-group {
+::v-deep.wrapper .el-button-group {
   border-radius: 5px;
   background-color: white;
   margin-left: 10px;

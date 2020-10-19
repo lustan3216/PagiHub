@@ -64,20 +64,16 @@ export default {
     ])
   },
   async created() {
-    this.getAssets()
     this.SET_DRAFT_MODE()
     this.NODE_SET({ editingComponentSetId: null })
     const { projectId } = this.$route.params
 
     if (projectId) {
       this.NODE_SET({ editingProjectId: projectId })
+      this.getAssets()
     }
     else {
       this.$router.push({ name: 'Dashboard' })
-    }
-
-    if (this.isDraftMode) {
-      this.initExamples()
     }
   },
   mounted() {
@@ -102,7 +98,6 @@ export default {
     ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapMutations('mode', ['SET_DRAFT_MODE']),
-    ...mapActions('example', ['initExamples']),
     ...mapActions('layout', ['resizeNodeQuickFn']),
     ...mapActions('asset', ['getAssets'])
   }

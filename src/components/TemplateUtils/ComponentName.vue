@@ -37,7 +37,6 @@ import Vue from 'vue'
 import { mapActions } from 'vuex'
 import {
   shortTagName,
-  getNode,
   isTextEditor,
   isComponentSet
 } from '@/utils/node'
@@ -80,7 +79,7 @@ export default {
   },
   computed: {
     node() {
-      return getNode(this.id, this.isExample)
+      return this.nodesMap[this.id]
     },
     isTextEditor() {
       return isTextEditor(this.node)

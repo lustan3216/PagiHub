@@ -9,7 +9,7 @@
         class="el-form-item__label"
         style="width: 90px;"
       >
-        <span>Src</span>
+        <span>Url</span>
       </label>
       <div
         class="el-form-item__content"
@@ -25,8 +25,8 @@
         >
           <el-option
             v-for="option in imageOptions"
-            :key="option.url"
-            :label="option.url"
+            :key="option.label"
+            :label="option.label"
             :value="option.value"
           />
         </el-select>
@@ -96,6 +96,7 @@ export default {
     },
     imageOptions() {
       return this.images.map(image => {
+        console.log(image.path, image.label)
         return {
           label: [image.path, image.label].join('/'),
           value: this.assetHost + image.url

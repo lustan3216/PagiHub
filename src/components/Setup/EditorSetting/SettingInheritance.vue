@@ -46,7 +46,7 @@
 
 <script>
 import { mapMutations, mapActions } from 'vuex'
-import { getNode, traversalSelfAndChildren, shortTagName } from '@/utils/node'
+import { traversalSelfAndChildren, shortTagName } from '@/utils/node'
 import { getMasterId } from '@/utils/inheritance'
 import InheritanceJumper from '@/components/TemplateUtils/InheritanceJumper'
 import { GRID, PROPS, STYLES } from '@/const'
@@ -78,10 +78,10 @@ export default {
       return getMasterId(this.node)
     },
     masterNode() {
-      return getNode(this.masterId)
+      return this.nodesMap[this.masterId]
     },
     masterComponentSet() {
-      return getNode(this.masterComponentSetId)
+      return this.nodesMap[this.masterComponentSetId]
     }
   },
   methods: {

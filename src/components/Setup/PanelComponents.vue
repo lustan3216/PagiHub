@@ -113,7 +113,6 @@ import {
   traversalSelfAndChildren,
   isGrid,
   isSlider,
-  traversalAncestor,
   isComponentSet,
   traversalAncestorAndSelf
 } from '@/utils/node'

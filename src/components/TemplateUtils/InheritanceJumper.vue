@@ -28,7 +28,7 @@
 import Vue from 'vue'
 import { asyncGetValue } from '@/utils/tool'
 import { mapState, mapMutations } from 'vuex'
-import { getNode, shortTagName } from '@/utils/node'
+import { shortTagName } from '@/utils/node'
 import { getMasterId } from '@/utils/inheritance'
 
 const originalEditing = Vue.observable({
@@ -59,7 +59,7 @@ export default {
   computed: {
     ...mapState('node', ['editingComponentSetId']),
     node() {
-      return getNode(this.id)
+      return this.nodesMap[this.id]
     },
     canBackToInstance() {
       return originalEditing.componentSetId

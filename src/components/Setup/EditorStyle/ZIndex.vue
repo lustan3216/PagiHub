@@ -17,7 +17,6 @@
 import { Tooltip } from 'element-ui'
 import { mapActions, mapState } from 'vuex'
 import { arrayLast } from '@/utils/array'
-import { getNode } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 
@@ -35,7 +34,7 @@ export default {
       return this.lastId === this.id
     },
     node() {
-      return getNode(this.lastId)
+      return this.nodesMap[this.lastId]
     },
     hasIndex() {
       return getValueByPath(this.node, [STYLES, 'layout', 'zIndex'])

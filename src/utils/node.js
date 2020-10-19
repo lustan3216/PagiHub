@@ -77,9 +77,7 @@ export function sortByZIndex(children, asc = true) {
 
 export function getNode(id) {
   if (id) {
-    const node = store.state.node.nodesMap[id]
-
-    return node || store.state.example.exampleNodesMap[id]
+    return store.state.node.nodesMap[id]
   }
 }
 

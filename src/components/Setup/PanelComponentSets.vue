@@ -77,7 +77,6 @@ import PanelComponentSets from './PanelComponentSets'
 import DialogDelete from './DialogDelete'
 import ComponentName from '../TemplateUtils/ComponentName'
 import DialogComponentSet from '@/components/Setup/DialogComponentSet'
-import { getNode } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
 import { BIconCloudArrowUp, BIconCloudSlash } from 'bootstrap-vue'
 
@@ -107,13 +106,13 @@ export default {
     ]),
     ...mapGetters('node', ['projectNodes']),
     componentSetIds() {
-      const project = getNode(this.editingProjectId)
+      const project = this.nodesMap[this.editingProjectId]
       return project ? project.children.map(node => node.id) : []
     },
     componentSets() {
       // components可能會因為Example裡面的跟當下project的混在一起
       return this.componentSetIds
-        .map(id => getNode(id))
+        .map(id => this.nodesMap[id])
         .sort((a, b) => b.label - a.label)
     }
   },

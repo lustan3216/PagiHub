@@ -41,7 +41,7 @@ export const gridGenerator = function(options) {
   return {
     [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
-    [LABEL]: 'containers',
+    [LABEL]: 'container',
     [CHILDREN]: gridGeneratorItems(),
     ...options
   }
@@ -51,6 +51,7 @@ export const iframer = function(options) {
   return {
     [TAG]: 'iframer',
     [CAN_BE_EDITED]: true,
+    [LABEL]: 'iframe',
     ...options
   }
 }
@@ -96,6 +97,7 @@ export const textEditor = function(options) {
     [TAG]: TEXT_EDITOR,
     [CAN_BE_EDITED]: true,
     [VALUE]: 'text',
+    [LABEL]: 'text',
     ...options
   }
 }

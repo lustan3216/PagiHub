@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { getNode } from '@/utils/node'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -30,7 +29,7 @@ export default {
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     node() {
-      return getNode(this.id)
+      return this.nodesMap[this.id]
     },
     lock() {
       return this.node && this.node.lock

@@ -54,7 +54,6 @@ import { mapState, mapMutations } from 'vuex'
 import { CAN_BE_EDITED } from '@/const'
 import { isMac } from '@/utils/device'
 import {
-  getNode,
   isGridItem,
   isTextEditor,
   traversalAncestorAndSelf
@@ -62,6 +61,7 @@ import {
 import { getValueByPath, isUndefined } from '@/utils/tool'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { findIndexBy } from '@/utils/array'
+
 
 const store = vue.observable({
   editingPath: [],
@@ -94,7 +94,7 @@ export default {
       return store.editingPath.includes(this.id)
     },
     node() {
-      return getNode(this.id)
+      return this.nodesMap[this.id]
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)

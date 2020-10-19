@@ -1,7 +1,7 @@
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { cloneJson, deepMerge } from '@/utils/tool'
 import { PROPS, VALUE, STYLES } from '@/const'
-import { getNode, isGrid, isGridItem } from '@/utils/node'
+import { isGrid } from '@/utils/node'
 
 let hoverNode = []
 
@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     node() {
-      return getNode(this.id, this.isExample)
+      return this.nodesMap[this.id]
     },
     innerValue() {
       return this.node[VALUE]

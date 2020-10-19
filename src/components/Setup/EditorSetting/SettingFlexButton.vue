@@ -14,7 +14,6 @@
 import { mapState } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { select, assignDefaultValue, boolean } from './utils/ruleTool'
-import { getNode } from '@/utils/node'
 
 const LINK = 'link'
 const NEW_TAB = 'newTab'
@@ -41,7 +40,8 @@ export default {
       return this.nodesMap[this.editingProjectId].children
     },
     options() {
-      const { label } = getNode(this.editingProjectId)
+      const node = this.nodesMap[this.editingProjectId]
+      const { label } = node
       const options = []
       this.linkableComponentSet.forEach(node => {
         if (node.version) {

@@ -1,7 +1,7 @@
 <template>
   <div
     ref="item"
-    class="vue-grid-item"
+    class="grid-item"
     :class="classObj"
     :style="{
           ...style,
@@ -14,11 +14,11 @@
     <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass" :style="{
       cursor: autoHeight ? 'ew-resize' : 'se-resize'
     }"/>
-    <!--<span v-if="draggable" ref="dragHandle" class="vue-draggable-handle"></span>-->
+    <!--<span v-if="draggable" ref="dragHandle" class="draggable-handle"></span>-->
   </div>
 </template>
 <style>
-  .vue-grid-item {
+  .grid-item {
     transition-property: left, top, right, width, height;
     box-sizing: border-box;
     /* add right for rtl */
@@ -28,33 +28,33 @@
     transition: all 150ms ease;
   }
 
-  .vue-grid-item.no-touch {
+  .grid-item.no-touch {
     -ms-touch-action: none;
     touch-action: none;
   }
 
-  .vue-grid-item.cssTransforms {
+  .grid-item.cssTransforms {
     transition-property: transform;
     left: 0;
     right: auto;
   }
 
-  .vue-grid-item.cssTransforms.render-rtl {
+  .grid-item.cssTransforms.render-rtl {
     left: auto;
     right: 0;
   }
 
-  .vue-grid-item.resizing {
+  .grid-item.resizing {
     opacity: 0.6;
     z-index: 3;
   }
 
-  .vue-grid-item.vue-draggable-dragging {
+  .grid-item.draggable-dragging {
     transition: none;
     z-index: 3;
   }
 
-  .vue-grid-item.vue-grid-placeholder {
+  .grid-item.grid-placeholder {
     background: #E8FFFD;
     transition-duration: 100ms;
     z-index: 2;
@@ -62,7 +62,7 @@
     transition-timing-function: ease;
   }
 
-  .vue-grid-item > .vue-resizable-handle {
+  .grid-item > .resizable-handle {
     position: absolute;
     width: 20px;
     height: 20px;
@@ -79,14 +79,14 @@
     transition: background-color 0.3s, border-radius 0.3s;
   }
 
-  .vue-grid-item:hover > .vue-resizable-handle {
+  .grid-item:hover > .resizable-handle {
     border-radius: 10px 10px 0;
     opacity: 0.8;
     visibility: visible;
     background-color: white;
   }
 
-  .vue-grid-item.disable-userselect {
+  .grid-item.disable-userselect {
     user-select: none;
   }
 </style>
@@ -485,10 +485,10 @@
       },
       classObj() {
         return {
-          'vue-resizable': this.resizableAndNotStatic,
+          'resizable': this.resizableAndNotStatic,
           'static': this.static,
           'resizing': this.isResizing,
-          'vue-draggable-dragging': this.isDragging,
+          'draggable-dragging': this.isDragging,
           'cssTransforms': this.useCssTransforms,
           'render-rtl': this.renderRtl,
           'disable-userselect': this.isDragging,
@@ -510,9 +510,9 @@
       },
       resizableHandleClass() {
         if (this.renderRtl) {
-          return 'vue-resizable-handle vue-rtl-resizable-handle'
+          return 'resizable-handle rtl-resizable-handle'
         } else {
-          return 'vue-resizable-handle'
+          return 'resizable-handle'
         }
       }
     },
@@ -896,7 +896,7 @@
             allowFrom: this.dragAllowFrom
           }
           this.interactObj.draggable(opts)
-          /*this.interactObj.draggable({allowFrom: '.vue-draggable-handle'});*/
+          /*this.interactObj.draggable({allowFrom: '.draggable-handle'});*/
           if (!this.dragEventSet) {
             this.dragEventSet = true
             this.interactObj.on('dragstart dragmove dragend', function(event) {

@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { getNode } from '@/utils/node'
 
 export default {
   name: 'AsyncComponent',
@@ -56,7 +55,7 @@ export default {
   },
   computed: {
     node() {
-      return getNode(this.id, this.isExample)
+      return this.nodesMap[this.id]
     }
   }
 }

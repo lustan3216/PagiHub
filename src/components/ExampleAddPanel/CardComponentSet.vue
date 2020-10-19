@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { shortTagName, getNode } from '@/utils/node'
+import { shortTagName } from '@/utils/node'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import TipCopy from '../Tip/TipCopy'
 import { Tag } from 'element-ui'
@@ -79,10 +79,10 @@ export default {
   computed: {
     ...mapState('app', ['beingAddedComponentId']),
     component() {
-      return getNode(this.id)
+      return this.nodesMap[this.id]
     },
     node() {
-      return getNode(this.beingAddedComponentId)
+      return this.nodesMap[this.beingAddedComponentId]
     }
   },
   methods: {

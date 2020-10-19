@@ -69,7 +69,6 @@ import { mapGetters, mapMutations } from 'vuex'
 import ButtonDevice from '../Components/ButtonDevice'
 import { getRectWithoutPadding } from '@/utils/style'
 import gsap from 'gsap'
-import { getNode } from '@/utils/node'
 import { DEVICE_OPTIONS } from '@/components/Layout/ViewPort'
 import elementResizeDetectorMaker from 'element-resize-detector'
 
@@ -113,7 +112,7 @@ export default {
       return this.$refs.target
     },
     componentSet() {
-      return getNode(this.id)
+      return this.nodesMap[this.id]
     },
     breakpointsMap() {
       if (this.componentSet) {

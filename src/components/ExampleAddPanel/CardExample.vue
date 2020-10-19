@@ -1,28 +1,52 @@
 <template>
-  <div
-    v-if="show"
+  <el-button
+    :disabled="canNotAdd"
     :id="`example-${component.id}`"
+    style="border-color: #f1f1f1"
+    @click="$emit('add')"
   >
-    <div class="p-10 justify-between">
-      <span style="visibility: hidden">ADD</span>
-      <b style="line-height: 28px;">
-        {{ shortTagName(component) }}
-      </b>
-
-      <el-button
-        :disabled="canNotAdd"
-        type="primary"
-        data-cy="add-component-button"
-        @click="$emit('add')"
-      >
-        ADD
-      </el-button>
+    <div
+      class="text-center"
+      style="padding: 10px 0;"
+    >
+      {{ shortTagName(component) }}
     </div>
 
-    <div class="relative z-index1 p-1">
-      <art-board
-        :id="id"
-        class="outer"
+    <div
+      class="relative z-index1 p-1"
+      style="font-size: 20px;"
+    >
+      <b-icon-fonts
+        v-if="component.tag === 'text-editor'"
+        class="gray-font-2"
+      />
+      <b-icon-image
+        v-if="component.tag === 'flex-image'"
+        class="gray-font-2"
+      />
+      <b-icon-aspect-ratio
+        v-if="component.tag === 'grid-generator-item'"
+        class="gray-font-2"
+      />
+      <b-icon-columns
+        v-if="component.tag === 'grid-generator'"
+        class="gray-font-2"
+      />
+      <b-icon-camera-video
+        v-if="component.tag === 'video-player'"
+        class="gray-font-2"
+      />
+      <b-icon-calendar3-event
+        v-if="component.tag === 'iframer'"
+        class="gray-font-2"
+      />
+      <b-icon-layout-sidebar-inset-reverse
+        v-if="component.tag === 'carousel'"
+        class="gray-font-2"
+      />
+      <b-icon-link
+        v-if="component.tag === 'flex-button'"
+        class="gray-font-2"
       />
     </div>
 
@@ -50,29 +74,42 @@
 
       <p v-html="component.description" />
     </div>
-  </div>
+  </el-button>
 </template>
 
 <script>
-import { shortTagName, getNode, isComponentSet, isGrid } from '@/utils/node'
+import { shortTagName, isComponentSet, isGrid } from '@/utils/node'
 import ArtBoard from '../Layout/ArtBoard'
 import { Tag } from 'element-ui'
-import gsap from 'gsap'
 import { mapState } from 'vuex'
 
+import {
+  BIconFonts,
+  BIconImage,
+  BIconAspectRatio,
+  BIconColumns,
+  BIconCameraVideo,
+  BIconCalendar3Event,
+  BIconLayoutSidebarInsetReverse,
+  BIconLink
+} from 'bootstrap-vue'
 export default {
   name: 'CardExample',
   components: {
     ArtBoard,
-    ElTag: Tag
+    ElTag: Tag,
+    BIconFonts,
+    BIconImage,
+    BIconAspectRatio,
+    BIconColumns,
+    BIconCameraVideo,
+    BIconCalendar3Event,
+    BIconLayoutSidebarInsetReverse,
+    BIconLink
   },
   props: {
     id: {
       type: String,
-      required: true
-    },
-    delay: {
-      type: Number,
       required: true
     }
   },
@@ -84,32 +121,14 @@ export default {
   computed: {
     ...mapState('app', ['beingAddedComponentId']),
     component() {
-      return getNode(this.id)
+      return this.nodesMap[this.id]
     },
     node() {
-      return getNode(this.beingAddedComponentId)
+      return this.nodesMap[this.beingAddedComponentId]
     },
     canNotAdd() {
       return isComponentSet(this.node) && !isGrid(this.component)
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.show = true
-      this.$nextTick(() => {
-        gsap.fromTo(
-          this.$el,
-          {
-            opacity: 0
-          },
-          {
-            opacity: 1,
-            duration: 3,
-            ease: 'elastic'
-          }
-        )
-      })
-    }, this.delay)
   },
   methods: {
     shortTagName

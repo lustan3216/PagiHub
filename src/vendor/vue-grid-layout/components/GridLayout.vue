@@ -1,7 +1,7 @@
 <template>
-  <div ref="item" class="vue-grid-layout" :style="mergedStyle" style="z-index: 0;">
+  <div ref="item" class="grid-layout" :style="mergedStyle" style="z-index: 0;">
     <slot></slot>
-    <grid-item class="vue-grid-placeholder"
+    <grid-item class="grid-placeholder"
                v-if="showPlaceHolder && isDragging"
                :x="placeholder.x"
                :y="placeholder.y"
@@ -11,7 +11,7 @@
   </div>
 </template>
 <style>
-  .vue-grid-layout {
+  .grid-layout {
     position: relative;
     /*transition: height 200ms ease;*/
   }

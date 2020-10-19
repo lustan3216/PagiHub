@@ -2,17 +2,17 @@
   <el-tooltip
     :open-delay="300"
     effect="light"
-    content="Stack Mode. It will push other stack container when colliding."
+    content="Enable it will bounce away when two containers colliding."
     placement="top"
   >
     <el-button
-      :type="isStack ? 'primary' : 'text'"
       :class="{ isStack }"
       data-cy="stack"
       plain
-      icon="el-icon-s-grid"
       @click="click"
-    />
+    >
+      Stack Mode
+    </el-button>
   </el-tooltip>
 </template>
 
@@ -66,10 +66,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-::v-deep.isStack:hover,
-::v-deep.isStack:focus {
-  .el-icon-s-grid {
-    color: #fff !important;
-  }
+.isStack {
+  background: aliceblue;
+}
+.isStack:hover {
+  background: aliceblue;
 }
 </style>

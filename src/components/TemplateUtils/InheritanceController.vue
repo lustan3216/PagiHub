@@ -1,5 +1,4 @@
 <script>
-import { getNode } from '@/utils/node'
 import { mapActions } from 'vuex'
 import { getMasterComponentSetIdFromInheritMap } from '@/utils/inheritMapUploader'
 
@@ -34,7 +33,7 @@ export default {
   },
   computed: {
     node() {
-      return getNode(this.id)
+      return this.nodesMap[this.id]
     },
     masterComponentSetId() {
       return getMasterComponentSetIdFromInheritMap(this.node)

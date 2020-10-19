@@ -1,20 +1,23 @@
 <template>
   <div>
     <el-row
-      :gutter="25"
+      :gutter="10"
       type="flex"
       style="flex-wrap: wrap"
+      align="middle"
     >
       <el-col
-        v-for="(component, index) in basicExamples"
-        v-show="searchedExamples.includes(component.id)"
+        v-for="component in basicExamples"
+        v-show="searchedExamples.includes(component.tag)"
         :key="component.id"
-        :span="8"
+        :lg="4"
+        :md="6"
+        :sm="8"
         style="margin-bottom: 35px;"
       >
         <card-example
-          :delay="index * 100"
           :id="component.id"
+          style="width: 100%;height: 100px;"
           @add="$emit('add', component)"
         />
       </el-col>
@@ -23,9 +26,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { shortTagName } from '@/utils/node'
 import CardExample from './CardExample'
+import basic from '@/templateJson/basic'
 
 export default {
   name: 'MenuExamples',
@@ -38,22 +41,19 @@ export default {
       default: null
     }
   },
-  data() {
-    return {
-      hoverId: null
-    }
-  },
   computed: {
-    ...mapState('example', ['basicExamples']),
+    basicExamples() {
+      return basic
+    },
     searchedExamples() {
-      return this.basicExamples
+      return basic
         .filter(
           x =>
             shortTagName(x)
               .toLowerCase()
               .search(this.search) >= 0
         )
-        .map(x => x.id)
+        .map(x => x.tag)
     }
   }
 }

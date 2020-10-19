@@ -5,7 +5,6 @@ import { vmRemoveNode } from '@/utils/vmMap'
 import { cloneJson } from '@/utils/tool'
 import { appendIds } from '@/utils/nodeId'
 import {
-  getNode,
   traversalSelfAndChildren,
   isCarousel,
   isGridItem,
@@ -28,7 +27,7 @@ export default {
   computed: {
     ...mapState('node', ['rootComponentSetIds', 'editingComponentSetId']),
     node() {
-      return getNode(this.id)
+      return this.nodesMap[this.id]
     },
     children() {
       const children = (this.node && this.node.children) || []

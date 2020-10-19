@@ -59,7 +59,6 @@ export default {
   data() {
     return {
       exampleBoundary: 'xs',
-      validBreakpoint: 'md',
       layout: {},
       offResizeListener: null
     }
@@ -80,6 +79,9 @@ export default {
     innerGrid() {
       return this.node.grid
     },
+    validBreakpoint() {
+      return this.isExample ? this.exampleBoundary : this.currentBreakpoint
+    },
     pulsing() {
       return this.id === store.updatingItemParentId
     },
@@ -87,7 +89,28 @@ export default {
       return this.isChildTextEditor && isGridItem(this.node)
     },
     currentGrid() {
-      return this.innerGrid[this.validBreakpoint]
+      return this[this.validBreakpoint]
+    },
+    xl() {
+      return (this.breakpointsMap.xl && this.innerGrid.xl) || this.lg
+    },
+    lg() {
+      return (this.breakpointsMap.lg && this.innerGrid.lg) || this.md
+    },
+    md() {
+      return (this.breakpointsMap.md && this.innerGrid.md) || this.xs
+    },
+    xs() {
+      return (this.breakpointsMap.xs && this.innerGrid.xs) || this.xxs
+    },
+    xxs() {
+      return (
+        (this.breakpointsMap.xxs && this.innerGrid.xxs) ||
+        this.innerGrid.xs ||
+        this.innerGrid.md ||
+        this.innerGrid.lg ||
+        this.xl
+      )
     },
     lock() {
       return this.node.lock
@@ -186,24 +209,15 @@ export default {
       else {
         this.$set(this.layouts, this.id, this.layout)
       }
-    },
-    currentBreakpoint: {
-      handler(value) {
-        if (this.isExample) {
-          this.$nextTick(() => {
-            const el = this.$el.closest('.art-board')
-            const currentPoint = findBreakpoint(
-              this.breakpointsMap,
-              el.clientWidth
-            )
-            this.validBreakpoint = this.closestValidGrid(currentPoint)
-          })
-        }
-        else {
-          this.validBreakpoint = this.closestValidGrid(value)
-        }
-      },
-      immediate: true
+    }
+  },
+  created() {
+    if (this.isExample) {
+      this.$nextTick(() => {
+        const el = this.$el.closest('.art-board')
+        const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
+        this.exampleBoundary = this.closestValidGrid(currentPoint)
+      })
     }
   },
   beforeDestroy() {

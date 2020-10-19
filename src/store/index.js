@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import node from './modules/node/index'
-import example from './modules/example'
 import app from './modules/app'
 import asset from './modules/asset'
 import mode from './modules/mode'
@@ -51,7 +50,6 @@ const store = new Vuex.Store({
     mode,
     node,
     user,
-    example,
     asset,
     layout
   }

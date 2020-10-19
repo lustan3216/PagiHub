@@ -2,6 +2,7 @@ import store from '../store'
 import { CAN_NEW_ITEM } from '../const'
 import { isGridItem, traversalAncestorAndSelf, wrapByGrid } from '@/utils/node'
 import { arrayEquals } from '@/utils/array'
+import { getValueByPath, setValueByPath } from '@/utils/tool'
 
 const vmMap = {}
 
@@ -33,6 +34,10 @@ export function vmCreateEmptyItem(node) {
       if (isGridItem(node)) {
         store.commit('app/SET', { copyComponentIds: [node.id] })
         const { children, inheritance, styles, ...emptyGridItem } = node
+        const stack = getValueByPath(styles, 'layout.stack')
+        if (stack) {
+          setValueByPath(emptyGridItem, 'styles.layout.stack', true)
+        }
         vmGet(node.parentId).addNodeToParent(emptyGridItem)
         return false
       }

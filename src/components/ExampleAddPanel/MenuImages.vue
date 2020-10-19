@@ -40,7 +40,7 @@
 
             <div
               v-if="hoverImage && hoverImage.id === data.id"
-              class="p-r-10"
+              class="controller"
             >
               <el-button
                 v-if="data.url"
@@ -255,6 +255,16 @@ export default {
 
 .filepond-container {
   height: calc(100% - 70px);
+}
+
+.controller {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 1px;
+  text-align: right;
+  padding: 0 10px;
+  background: #f5f7fa;
 }
 
 .preview-image {
