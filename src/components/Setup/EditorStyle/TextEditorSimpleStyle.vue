@@ -38,8 +38,7 @@
       <el-col :span="16">
         <select-unit
           ref="fontSize"
-          :value="fontSize"
-          @change="fontSize = $event"
+          v-model="fontSize"
         />
       </el-col>
     </el-row>
@@ -53,8 +52,7 @@
       <el-col :span="16">
         <select-unit
           ref="letterSpacing"
-          :value="letterSpacing"
-          @change="letterSpacing = $event"
+          v-model="letterSpacing"
         />
       </el-col>
     </el-row>
@@ -68,8 +66,7 @@
       <el-col :span="16">
         <select-unit
           ref="lineHeight"
-          :value="lineHeight"
-          @change="lineHeight = $event"
+          v-model="lineHeight"
         />
       </el-col>
     </el-row>
@@ -121,6 +118,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
+          console.log(value)
           this.record({
             path: `${node.id}.${STYLES}.${HTML}.fontSize`,
             value: value || undefined

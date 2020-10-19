@@ -172,11 +172,14 @@ export default {
     currentBreakpoint: {
       handler(value) {
         if (this.isExample) {
-          const el = this.$el.closest('.art-board')
-          this.validBreakpoint = findBreakpoint(
-            this.breakpointsMap,
-            el.clientWidth
-          )
+          this.$nextTick(() => {
+            const el = this.$el.closest('.art-board')
+            const currentPoint = findBreakpoint(
+              this.breakpointsMap,
+              el.clientWidth
+            )
+            this.validBreakpoint = this.closestValidGrid(currentPoint)
+          })
         }
         else {
           this.validBreakpoint = this.closestValidGrid(value)

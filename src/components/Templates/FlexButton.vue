@@ -33,7 +33,6 @@
 import { Message } from 'element-ui'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
-import TextEditorRichInner from './TextEditorRichInner'
 import GridGeneratorInner from './GridGeneratorInner'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
@@ -44,7 +43,6 @@ export default {
   name: 'FlexButton',
   components: {
     GridGeneratorInner,
-    TextEditorRichInner,
     ComponentGiver
   },
   mixins: [nodeMixin, childrenMixin],

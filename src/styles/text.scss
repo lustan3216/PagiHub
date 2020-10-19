@@ -63,6 +63,10 @@ div.ProseMirror {
     line-height: 14px;
   }
 
+  p:empty::after {
+    content: "\00A0";
+  }
+
   &__content {
     word-wrap: break-word;
   }
