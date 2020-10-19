@@ -13,9 +13,8 @@ const mutations = {
 }
 
 const actions = {
-  async getAssets({ rootState, commit }) {
-    const { editingProjectId } = rootState.node
-    const data = await getAssets({ projectId: editingProjectId })
+  async getAssets({ rootState, commit }, projectId) {
+    const data = await getAssets({ projectId })
     commit('SET', { images: data.data })
   },
   // postAsset is a special case, hard to do here. the code in PanelAsset

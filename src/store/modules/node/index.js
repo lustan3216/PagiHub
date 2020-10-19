@@ -6,7 +6,6 @@ import { defineProperties } from '@/utils/nodeProperties'
 import { isComponentSet, isProject } from '@/utils/node'
 import { cloneJson, setValueByPath } from '@/utils/tool'
 import jsonHistory from '@/store/jsonHistory'
-import { getComponentSets } from '@/api/node'
 
 let childrenOf = {}
 let tmpChildrenOf = {}

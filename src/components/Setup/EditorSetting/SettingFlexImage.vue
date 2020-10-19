@@ -96,7 +96,6 @@ export default {
     },
     imageOptions() {
       return this.images.map(image => {
-        console.log(image.path, image.label)
         return {
           label: [image.path, image.label].join('/'),
           value: this.assetHost + image.url

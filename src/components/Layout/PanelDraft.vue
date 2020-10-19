@@ -66,11 +66,11 @@ export default {
   async created() {
     this.SET_DRAFT_MODE()
     this.NODE_SET({ editingComponentSetId: null })
-    const { projectId } = this.$route.params
 
+    const { projectId } = this.$route.params
     if (projectId) {
       this.NODE_SET({ editingProjectId: projectId })
-      this.getAssets()
+      this.getAssets(projectId)
     }
     else {
       this.$router.push({ name: 'Dashboard' })
@@ -94,6 +94,7 @@ export default {
       true
     )
   },
+
   methods: {
     ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),

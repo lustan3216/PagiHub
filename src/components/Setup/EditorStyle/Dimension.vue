@@ -73,7 +73,7 @@ export default {
     lastNode() {
       return arrayLast(this.selectedComponentNodes)
     },
-    lastNodeVm() {
+    lastVm() {
       return vmGet(this.lastNode.id)
     },
     cols() {
@@ -84,7 +84,7 @@ export default {
     },
     w: {
       get() {
-        const prop = this.lastNodeVm.currentGrid
+        const prop = this.lastVm && this.lastVm.currentGrid
         if (prop) {
           return (prop.w || '0').toString() + (prop.unitW || '%')
         }
@@ -110,7 +110,7 @@ export default {
     },
     h: {
       get() {
-        const prop = this.lastNodeVm.currentGrid
+        const prop = this.lastVm && this.lastVm.currentGrid
         if (prop) {
           return (prop.h || '0').toString() + (prop.unitH || 'px')
         }

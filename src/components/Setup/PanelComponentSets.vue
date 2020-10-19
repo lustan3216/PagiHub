@@ -79,6 +79,7 @@ import ComponentName from '../TemplateUtils/ComponentName'
 import DialogComponentSet from '@/components/Setup/DialogComponentSet'
 import { getValueByPath } from '@/utils/tool'
 import { BIconCloudArrowUp, BIconCloudSlash } from 'bootstrap-vue'
+import { isGridItem, traversalChildren } from '@/utils/node'
 
 export default {
   name: 'PanelComponentSets',
@@ -114,6 +115,20 @@ export default {
       return this.componentSetIds
         .map(id => this.nodesMap[id])
         .sort((a, b) => b.label - a.label)
+    },
+    editingComponentSet() {
+      return this.nodesMap[this.editingComponentSetId]
+    }
+  },
+  watch: {
+    editingComponentSet(node) {
+      traversalChildren(node, child => {
+        if (isGridItem(child)) {
+          this.SET_SELECTED_COMPONENT_ID(child.id)
+          return false
+          // for better UX, let people know where is the add component button
+        }
+      })
     }
   },
   async created() {
@@ -136,12 +151,10 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('app', { APP_SET: 'SET' }),
-    ...mapMutations('node', { NODE_SET: 'SET' }),
+    ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
     ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
     ...mapActions('node', ['getProject']),
     nodeClick(event, node) {
-      this.APP_SET({ selectedComponentIds: [] })
       this.SET_EDITING_COMPONENT_SET_ID(node.id)
     },
     mouseenter(id) {

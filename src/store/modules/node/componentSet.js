@@ -10,7 +10,7 @@ import {
 import jsonHistory from '@/store/jsonHistory'
 import { gridGenerator } from '@/templateJson/basic'
 import { getCopyComponentIds, getTmpComponentsArray } from '@/store'
-import { traversalSelfAndChildren } from '@/utils/node'
+import { isGridItem, traversalSelfAndChildren } from '@/utils/node'
 import { objectFirstKey } from '@/utils/object'
 import { cloneJson } from '@/utils/tool'
 import { appendIds } from '@/utils/nodeId'

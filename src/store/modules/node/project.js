@@ -5,7 +5,10 @@ import {
   patchProject,
   getProject
 } from '@/api/node'
-import { isComponentSet, isProject } from '@/utils/node'
+import {
+  isComponentSet,
+  isProject
+} from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
 import inheritMapUploader from '@/utils/inheritMapUploader'
 
