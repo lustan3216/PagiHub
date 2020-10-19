@@ -16,7 +16,7 @@
         style="margin-bottom: 35px;"
       >
         <card-example
-          :id="component.id"
+          :component="component"
           style="width: 100%;height: 100px;"
           @add="$emit('add', component)"
         />

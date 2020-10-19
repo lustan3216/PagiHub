@@ -108,8 +108,8 @@ export default {
     BIconLink
   },
   props: {
-    id: {
-      type: String,
+    component: {
+      type: Object,
       required: true
     }
   },
@@ -120,9 +120,6 @@ export default {
   },
   computed: {
     ...mapState('app', ['beingAddedComponentId']),
-    component() {
-      return this.nodesMap[this.id]
-    },
     node() {
       return this.nodesMap[this.beingAddedComponentId]
     },
