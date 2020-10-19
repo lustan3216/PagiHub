@@ -7,6 +7,12 @@
     }"
     class="quick-functions flex-center"
   >
+    <portal-target
+      :style="{ left: width + 10 + 'px' }"
+      name="QuickFunctionsTextEditor"
+      slim
+    />
+
     <el-button
       v-if="canAddComponent"
       icon="el-icon-circle-plus"

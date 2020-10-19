@@ -30,7 +30,6 @@
     <div
       v-if="canBeEdited"
       :class="{
-        'grid-item-fix': itemEditing,
         'no-action': !itemEditing && !isExample,
         'h-100': !noHeight
       }"
@@ -52,11 +51,10 @@
 <script>
 import vue from 'vue'
 import { mapState, mapMutations } from 'vuex'
-import { CAN_BE_EDITED, STYLES } from '@/const'
+import { CAN_BE_EDITED } from '@/const'
 import { isMac } from '@/utils/device'
 import {
   getNode,
-  isGrid,
   isGridItem,
   isTextEditor,
   traversalAncestorAndSelf
@@ -64,7 +62,6 @@ import {
 import { getValueByPath, isUndefined } from '@/utils/tool'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { findIndexBy } from '@/utils/array'
-import { vmGet } from '@/utils/vmMap'
 
 const store = vue.observable({
   editingPath: [],

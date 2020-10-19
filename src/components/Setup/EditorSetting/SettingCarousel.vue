@@ -26,7 +26,7 @@ export const defaultSetting = {
   type: '',
   direction: 'horizontal',
   loop: true,
-  allowDrag: true,
+  allowDrag: false,
   keyboard: true
 }
 

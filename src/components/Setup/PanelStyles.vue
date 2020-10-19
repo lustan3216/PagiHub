@@ -35,8 +35,6 @@
 
     <ratio v-if="isAllGridItem" />
 
-    <background-color v-if="canBackgroundColor" />
-
     <el-divider content-position="left">STACK</el-divider>
 
     <position v-if="isAllGridItem" />
@@ -53,6 +51,8 @@
       name="Rotate"
       slim
     />
+
+    <background-color v-if="canBackgroundColor" />
 
     <border-all />
 

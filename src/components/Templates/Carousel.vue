@@ -79,6 +79,7 @@
         <component-giver
           v-if="index === currentIndex"
           :id="child.id"
+          :style="cursor"
         />
       </el-carousel-item>
     </el-carousel>
@@ -129,6 +130,11 @@ export default {
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('layout', ['currentBreakpoint']),
+    cursor() {
+      return {
+        cursor: this.innerProps.allowDrag ? 'ew-resize' : 'default'
+      }
+    },
     sliders() {
       return this.innerChildren.filter(node => {
         const hidden = getValueByPath(node, [

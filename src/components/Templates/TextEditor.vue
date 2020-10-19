@@ -1,12 +1,8 @@
 <template>
   <div class="editor ProseMirror">
-    <el-popover
-      ref="popover"
-      :disabled="isExample || !isDraftMode"
-      :key="id"
-      popper-class="p-0"
-      placement="right"
-      trigger="hover"
+    <portal
+      v-if="selected"
+      to="QuickFunctionsTextEditor"
     >
       <div
         id="menu-bubble"
@@ -66,7 +62,7 @@
               <color-picker v-model="color">
                 <span
                   :style="{ color }"
-                  style="margin-left: 2px;margin-top: -2px;font-size: 16px;"
+                  style="margin-left: 2px;margin-top: -2px;font-size: 12px;"
                 >A</span>
               </color-picker>
             </button>
@@ -88,10 +84,7 @@
               class="menububble__button"
               @click="showLinkMenu"
             >
-              <img
-                svg-inline
-                src="icons/link.svg"
-              >
+              <b-icon-link class="font-14" />
             </button>
 
             <button
@@ -99,7 +92,7 @@
               class="menububble__button"
               @click="fontWeight = fontWeight === 'bold' ? undefined : 'bold'"
             >
-              <span style="font-weight: bold;">B</span>
+              <span>B</span>
             </button>
 
             <button
@@ -137,26 +130,26 @@
               class="menububble__button"
               @click="textAlign = textAlign === 'left' ? undefined : 'left'"
             >
-              <i class="el-icon-s-fold" />
+              <b-icon-text-left class="font-14" />
             </button>
             <button
               :class="{ 'is-active': textAlign === 'center' }"
               class="menububble__button"
               @click="textAlign = textAlign === 'center' ? undefined : 'center'"
             >
-              <i class="el-icon-s-unfold" />
+              <b-icon-text-center class="font-14" />
             </button>
             <button
               :class="{ 'is-active': textAlign === 'right' }"
               class="menububble__button"
               @click="textAlign = textAlign === 'right' ? undefined : 'right'"
             >
-              <i class="el-icon-s-unfold" />
+              <b-icon-text-right class="font-14" />
             </button>
           </div>
         </div>
       </div>
-    </el-popover>
+    </portal>
 
     <content-editable
       v-popover:popover
@@ -165,6 +158,7 @@
       :tag="tag || 'div'"
       v-model="text"
       :content-editable="isDraftMode && !isExample"
+      tabindex="0"
     />
   </div>
 </template>
@@ -179,13 +173,23 @@ import { isGridItem } from '@/utils/node'
 import { asyncGetValue } from '@/utils/tool'
 import ContentEditable from '@/components/Components/ContentEditable'
 import nodeMixin from './mixins/node'
+import {
+  BIconTextLeft,
+  BIconTextCenter,
+  BIconTextRight,
+  BIconLink
+} from 'bootstrap-vue'
 
 export default {
   name: 'TextEditor',
   components: {
     ColorPicker,
     ElPopover: Popover,
-    ContentEditable
+    ContentEditable,
+    BIconTextLeft,
+    BIconTextCenter,
+    BIconTextRight,
+    BIconLink
   },
   inject: {
     isExample: { default: false }
@@ -198,7 +202,7 @@ export default {
     },
     editing: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
@@ -323,12 +327,18 @@ export default {
           value
         })
       }
+    },
+    content() {
+      return this.$refs.content
     }
   },
   watch: {
-    value: {
-      handler(value) {
-        this.$refs.content.innerText = value
+    value(value) {
+      this.content.innerText = value
+    },
+    editing(value) {
+      if (value) {
+        this.content.$el.focus()
       }
     }
   },
@@ -371,6 +381,7 @@ export default {
       linkInput.focus()
     },
     removeLink() {
+      this.linkMenuIsActive = false
       this.link = undefined
     }
   }
@@ -392,7 +403,12 @@ $color-grey: #b2b2b2;
 }
 
 .menububble {
+  background-color: #fff;
+  border-radius: 5px;
   padding: 0.3rem;
+  position: absolute;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  pointer-events: all;
 }
 
 .el-color-picker {
@@ -406,18 +422,12 @@ $color-grey: #b2b2b2;
   font-size: 12px;
   display: flex;
   z-index: 900;
-  transition: all 0.3s;
-
-  &.is-active {
-    opacity: 1;
-    visibility: visible;
-  }
 
   &__button {
     background: transparent;
     border: 0;
     color: $color-black;
-    font-weight: bold;
+    font-weight: normal;
     padding: 0.2rem 0.5rem;
     margin-right: 0.2rem;
     border-radius: 3px;
@@ -425,7 +435,7 @@ $color-grey: #b2b2b2;
     width: 35px;
     height: 20px;
     overflow: hidden;
-    font-size: 13px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -460,7 +470,7 @@ $color-grey: #b2b2b2;
 .editor {
   word-break: break-word;
   position: relative;
-  overflow: hidden;
   padding: 0;
+  overflow: hidden;
 }
 </style>

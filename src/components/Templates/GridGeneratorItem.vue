@@ -1,6 +1,7 @@
 <template>
   <vue-grid-item
     v-if="!hidden"
+    ref="gridItem"
     v-bind="layout"
     :class="{
       'no-action': lock,
@@ -9,8 +10,7 @@
       stack: pulsing && stack
     }"
     :style-props="innerStyles.html"
-    :auto-height="isTextEditor"
-    drag-ignore-from=".grid-item-fix"
+    :auto-height="isChildTextEditor"
     drag-allow-from="div"
     @moveStart="assignStore"
     @move="itemUpdating"
@@ -21,9 +21,8 @@
   >
     <component-giver
       v-if="child"
-      :style="{
-        marginTop
-      }"
+      ref="child"
+      :style="{ marginTop }"
       :id="child.id"
     />
   </vue-grid-item>
@@ -37,7 +36,7 @@ import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import { getValueByPath } from '@/utils/tool'
+import { asyncGetValue, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestGridItem, isGridItem, isTextEditor } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
@@ -61,7 +60,8 @@ export default {
     return {
       exampleBoundary: 'xs',
       validBreakpoint: 'md',
-      layout: {}
+      layout: {},
+      offResizeListener: null
     }
   },
   computed: {
@@ -84,7 +84,7 @@ export default {
       return this.id === store.updatingItemParentId
     },
     noHeight() {
-      return this.isTextEditor && isGridItem(this.node)
+      return this.isChildTextEditor && isGridItem(this.node)
     },
     currentGrid() {
       return this.innerGrid[this.validBreakpoint]
@@ -143,11 +143,29 @@ export default {
     stack() {
       return this.styleLayout.stack
     },
-    isTextEditor() {
+    isChildTextEditor() {
       return isTextEditor(this.child)
     }
   },
   watch: {
+    isChildTextEditor: {
+      handler(value) {
+        this.$nextTick(() => {
+          if (value) {
+            asyncGetValue([this.$refs, 'child', '$el']).then(ele => {
+              const { gridItem } = this.$refs
+              gridItem.autoSize()
+              this.offResizeListener = resizeListener(ele, gridItem.autoSize)
+            })
+          }
+          else if (this.offResizeListener) {
+            this.offResizeListener()
+            this.offResizeListener = null
+          }
+        })
+      },
+      immediate: true
+    },
     computedLayout: {
       handler(value) {
         // 一定要轉成data，不然第一次computed 會因為不能assign值出bug
@@ -186,6 +204,12 @@ export default {
         }
       },
       immediate: true
+    }
+  },
+  beforeDestroy() {
+    if (this.offResizeListener) {
+      this.offResizeListener()
+      this.offResizeListener = null
     }
   },
   methods: {

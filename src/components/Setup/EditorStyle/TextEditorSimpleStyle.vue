@@ -8,7 +8,7 @@
     >
       <el-col :span="8">
         <span class="title">
-          Family
+          Font
           <tip>
             You can enter the font name you like. Check more from
             <span
@@ -96,8 +96,13 @@ export default {
       return arrayLast(this.selectedComponentNodes)
     },
     style() {
-      const vm = vmGet(this.node.id)
-      return getValueByPath(vm, ['innerStyles', HTML], {})
+      return getValueByPath(this.node, [STYLES, HTML], {})
+    },
+    element() {
+      return vmGet(this.node.id).content.$el
+    },
+    computedStyle() {
+      return window.getComputedStyle(this.element)
     },
     fontFamily: {
       get() {
@@ -114,11 +119,10 @@ export default {
     },
     fontSize: {
       get() {
-        return this.style.fontSize
+        return this.style.fontSize || this.computedStyle.fontSize
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          console.log(value)
           this.record({
             path: `${node.id}.${STYLES}.${HTML}.fontSize`,
             value: value || undefined
@@ -128,7 +132,11 @@ export default {
     },
     letterSpacing: {
       get() {
-        return this.style.letterSpacing
+        return (
+          this.style.letterSpacing ||
+          parseInt(this.computedStyle.letterSpacing) ||
+          0
+        )
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
@@ -141,7 +149,7 @@ export default {
     },
     lineHeight: {
       get() {
-        return this.style.lineHeight
+        return this.style.lineHeight || this.computedStyle.lineHeight
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {

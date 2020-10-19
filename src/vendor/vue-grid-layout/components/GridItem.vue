@@ -11,7 +11,9 @@
         }"
   >
     <slot/>
-    <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass"/>
+    <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass" :style="{
+      cursor: autoHeight ? 'ew-resize' : 'se-resize'
+    }"/>
     <!--<span v-if="draggable" ref="dragHandle" class="vue-draggable-handle"></span>-->
   </div>
 </template>
@@ -72,7 +74,6 @@
     background-repeat: no-repeat;
     background-origin: content-box;
     box-sizing: border-box;
-    cursor: se-resize;
     z-index: 100;
     visibility: hidden;
     transition: background-color 0.3s, border-radius 0.3s;
@@ -85,18 +86,6 @@
     background-color: white;
   }
 
-  .vue-grid-item > .vue-rtl-resizable-handle {
-    bottom: 0;
-    left: 0;
-    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAuMDAwMDAwMDAwMDAwMDAyIiBoZWlnaHQ9IjEwLjAwMDAwMDAwMDAwMDAwMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KIDwhLS0gQ3JlYXRlZCB3aXRoIE1ldGhvZCBEcmF3IC0gaHR0cDovL2dpdGh1Yi5jb20vZHVvcGl4ZWwvTWV0aG9kLURyYXcvIC0tPgogPGc+CiAgPHRpdGxlPmJhY2tncm91bmQ8L3RpdGxlPgogIDxyZWN0IGZpbGw9Im5vbmUiIGlkPSJjYW52YXNfYmFja2dyb3VuZCIgaGVpZ2h0PSIxMiIgd2lkdGg9IjEyIiB5PSItMSIgeD0iLTEiLz4KICA8ZyBkaXNwbGF5PSJub25lIiBvdmVyZmxvdz0idmlzaWJsZSIgeT0iMCIgeD0iMCIgaGVpZ2h0PSIxMDAlIiB3aWR0aD0iMTAwJSIgaWQ9ImNhbnZhc0dyaWQiPgogICA8cmVjdCBmaWxsPSJ1cmwoI2dyaWRwYXR0ZXJuKSIgc3Ryb2tlLXdpZHRoPSIwIiB5PSIwIiB4PSIwIiBoZWlnaHQ9IjEwMCUiIHdpZHRoPSIxMDAlIi8+CiAgPC9nPgogPC9nPgogPGc+CiAgPHRpdGxlPkxheWVyIDE8L3RpdGxlPgogIDxsaW5lIGNhbnZhcz0iI2ZmZmZmZiIgY2FudmFzLW9wYWNpdHk9IjEiIHN0cm9rZS1saW5lY2FwPSJ1bmRlZmluZWQiIHN0cm9rZS1saW5lam9pbj0idW5kZWZpbmVkIiBpZD0ic3ZnXzEiIHkyPSItNzAuMTc4NDA3IiB4Mj0iMTI0LjQ2NDE3NSIgeTE9Ii0zOC4zOTI3MzciIHgxPSIxNDQuODIxMjg5IiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlPSIjMDAwIiBmaWxsPSJub25lIi8+CiAgPGxpbmUgc3Ryb2tlPSIjNjY2NjY2IiBzdHJva2UtbGluZWNhcD0idW5kZWZpbmVkIiBzdHJva2UtbGluZWpvaW49InVuZGVmaW5lZCIgaWQ9InN2Z181IiB5Mj0iOS4xMDY5NTciIHgyPSIwLjk0NzI0NyIgeTE9Ii0wLjAxODEyOCIgeDE9IjAuOTQ3MjQ3IiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz4KICA8bGluZSBzdHJva2UtbGluZWNhcD0idW5kZWZpbmVkIiBzdHJva2UtbGluZWpvaW49InVuZGVmaW5lZCIgaWQ9InN2Z183IiB5Mj0iOSIgeDI9IjEwLjA3MzUyOSIgeTE9IjkiIHgxPSItMC42NTU2NCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2U9IiM2NjY2NjYiIGZpbGw9Im5vbmUiLz4KIDwvZz4KPC9zdmc+);
-    background-position: bottom left;
-    padding-left: 3px;
-    background-repeat: no-repeat;
-    background-origin: content-box;
-    cursor: sw-resize;
-    right: auto;
-  }
-
   .vue-grid-item.disable-userselect {
     user-select: none;
   }
@@ -106,11 +95,7 @@
   import { mapState } from 'vuex'
   import { setTopLeft, setTopRight, setTransformRtl, setTransform, getBoundaryEl } from '../helpers/utils'
   import { getDocumentDir } from '../helpers/DOM'
-  import { debounce, getValueByPath } from '@/utils/tool'
   //    var eventBus = require('./eventBus');
-  import {
-    resizeListener
-  } from '@/utils/tool'
   let interact = require('interactjs')
 
   const store = Vue.observable({ hideHandler: false })
@@ -291,8 +276,6 @@
         innerY: this.y,
         innerW: this.w,
         innerH: this.h,
-
-        offResizeListener: null,
         lockItemInLayout: false
       }
     },
@@ -362,10 +345,6 @@
       if (this.interactObj) {
         this.interactObj.unset() // destroy interact intance
       }
-
-      if (this.offResizeListener) {
-        this.offResizeListener()
-      }
     },
     mounted: function() {
       // lots-design fix bug
@@ -394,32 +373,13 @@
       this.createStyle()
       this.$nextTick(() => {
         this.transition = true
-
       })
-
     },
     watch: {
       fixOnParentBottom(value) {
         if (value) {
           this.parent.correctFixItemsBound()
         }
-      },
-      autoHeight: {
-        handler(value) {
-          this.$nextTick(() => {
-            const elm = getValueByPath(this.$slots, ['default', 0, 'elm'])
-            if (value && elm) {
-              this.autoSize()
-              this.offResizeListener = resizeListener(elm, debounce(() => {
-                this.autoSize()
-              }, 80))
-            }
-            else if (this.offResizeListener) {
-              this.offResizeListener()
-            }
-          })
-        },
-        immediate: true
       },
       isDragging(value) {
         if (value) {

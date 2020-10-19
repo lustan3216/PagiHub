@@ -74,7 +74,7 @@
                 :style="{
                   color: getMarkAttrs('color').color
                 }"
-                style="margin-left: 2px;margin-top: -2px;font-size: 16px;"
+                style="margin-left: 2px;margin-top: -2px;font-size: 12px;"
               >A</span>
               <color-picker
                 :value="getMarkAttrs('color').color"
@@ -104,10 +104,7 @@
               class="menububble__button"
               @click.prevent="showLinkMenu(getMarkAttrs('link'))"
             >
-              <img
-                svg-inline
-                src="icons/link.svg"
-              >
+              <b-icon-link class="font-14" />
             </button>
 
             <button
@@ -115,7 +112,7 @@
               class="menububble__button"
               @click.prevent="commands.bold"
             >
-              <span style="font-weight: bold;">B</span>
+              <span>B</span>
             </button>
 
             <button
@@ -149,7 +146,7 @@
               class="menububble__button"
               @click.prevent="setAttribute('textAlign', 'left')"
             >
-              <i class="el-icon-s-fold" />
+              <b-icon-text-left class="font-14" />
             </button>
             <button
               :class="{
@@ -158,7 +155,7 @@
               class="menububble__button"
               @click.prevent="setAttribute('textAlign', 'center')"
             >
-              <i class="el-icon-s-unfold" />
+              <b-icon-text-center class="font-14" />
             </button>
             <button
               :class="{
@@ -167,7 +164,7 @@
               class="menububble__button"
               @click.prevent="setAttribute('textAlign', 'right')"
             >
-              <i class="el-icon-s-unfold" />
+              <b-icon-text-right class="font-14" />
             </button>
           </div>
         </div>
@@ -294,6 +291,12 @@ import {
   TextAlign
 } from '../../vendor/tiptap'
 import ColorPicker from '@/vendor/element-ui/color-picker'
+import {
+  BIconTextLeft,
+  BIconTextCenter,
+  BIconTextRight,
+  BIconLink
+} from 'bootstrap-vue'
 
 export default {
   name: 'TextEditorRich',
@@ -301,7 +304,11 @@ export default {
     ColorPicker,
     EditorContent,
     EditorMenuBubble,
-    EditorFloatingMenu
+    EditorFloatingMenu,
+    BIconTextLeft,
+    BIconTextCenter,
+    BIconTextRight,
+    BIconLink
   },
   inject: {
     isExample: { default: false }
@@ -462,7 +469,7 @@ $color-grey: #b2b2b2;
     background: transparent;
     border: 0;
     color: $color-black;
-    font-weight: bold;
+    font-weight: normal;
     padding: 0.2rem 0.5rem;
     margin-right: 0.2rem;
     border-radius: 3px;
@@ -470,7 +477,7 @@ $color-grey: #b2b2b2;
     width: 35px;
     height: 20px;
     overflow: hidden;
-    font-size: 13px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
