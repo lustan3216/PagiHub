@@ -12,7 +12,7 @@
         TIP
       </div>
     </div>
-    <div class="content">
+    <div class="content align-center">
       <span class="gray-font">
         <slot />
       </span>
