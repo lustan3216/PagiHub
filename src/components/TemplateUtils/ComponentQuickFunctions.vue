@@ -114,14 +114,16 @@
             class="icon"
             @click="vmCreateEmptyItem"
           >
-            {{ newItemToolTip }}
+            <i class="el-icon-plus" />
+            Slider
           </el-button>
 
           <el-button
             class="icon"
             @click="deleteSlider"
           >
-            Delete Slider
+            <i class="el-icon-delete" />
+            Slider
           </el-button>
         </template>
       </el-button-group>
@@ -216,19 +218,6 @@ export default {
         return !isComponentSet(node)
       })
       return nodes.slice(0, 4)
-    },
-    newItemToolTip() {
-      if (this.node[CAN_NEW_ITEM]) {
-        switch (this.node.tag) {
-          case GRID_GENERATOR:
-            return 'Add Container'
-          case CAROUSEL:
-            return 'Add Slider'
-        }
-      }
-      else {
-        return 'Append Container'
-      }
     },
     metaKey() {
       return isMac() ? '&#8984;' : '&#8963;'
