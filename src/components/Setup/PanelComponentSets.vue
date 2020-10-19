@@ -4,6 +4,8 @@
       <b class="small-title m-l-10">Pages</b>
       <dialog-component-set
         v-if="editingProjectId"
+        ref="dialogComponentSet"
+        :first-time="!componentSetIds.length"
         style="font-size: 18px; color: #409EFF;"
         size="mini"
       />
@@ -128,6 +130,9 @@ export default {
       const id = getValueByPath(this.componentSets, [0, 'id'])
       if (id) {
         this.SET_EDITING_COMPONENT_SET_ID(id)
+      }
+      else {
+        this.$refs.dialogComponentSet.open()
       }
     })
   },

@@ -40,8 +40,23 @@ export default {
     linkableComponentSet() {
       return this.nodesMap[this.editingProjectId].children
     },
+    options() {
+      const { label } = getNode(this.editingProjectId)
+      const options = []
+      this.linkableComponentSet.forEach(node => {
+        if (node.version) {
+          options.push({
+            label: node.label,
+            value: `/${this.username || this.userId}/${label}/${
+              node.label
+            }`
+          })
+        }
+      })
+
+      return options
+    },
     spec() {
-      const project = getNode(this.editingProjectId)
       const specArray = [
         select(LINK, {
           props: {
@@ -49,12 +64,7 @@ export default {
             filterable: true,
             placeholder: 'Can Create by typing'
           },
-          options: this.linkableComponentSet.map(node => ({
-            label: node.label,
-            value: `/${this.username || this.userId}/${project.label}/${
-              node.label
-            }`
-          }))
+          options: this.options
         }),
         boolean(NEW_TAB)
       ]

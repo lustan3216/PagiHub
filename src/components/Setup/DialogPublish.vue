@@ -2,9 +2,15 @@
   <el-button
     :disabled="!editingComponentSetId"
     type="text"
-    @click.stop="visible = !visible"
+    @click.stop="open"
   >
-    <b-icon-cloud-arrow-up />
+    <b-icon-cloud-arrow-up style="padding-top: 1px;" />
+
+    <dialog-username
+      ref="dialogUsername"
+      class="hidden"
+      title="Sorry, we need a username to publish :)"
+    />
 
     <dialog-confirmable
       v-if="node"
@@ -55,6 +61,7 @@ import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import TextEditorRich from '@/components/Components/TextEditorRich'
 import { BIconCloudArrowUp } from 'bootstrap-vue'
 import { Message } from 'element-ui'
+import DialogUsername from './DialogUsername'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
@@ -63,6 +70,7 @@ export default {
   name: 'DialogPublish',
   components: {
     DialogConfirmable,
+    DialogUsername,
     TextEditorRich,
     BIconCloudArrowUp
   },
@@ -77,6 +85,10 @@ export default {
   },
   computed: {
     ...mapState('node', ['editingComponentSetId']),
+    ...mapState('user', ['username']),
+    canPublish() {
+      return this.username
+    },
     node() {
       return this.nodesMap[this.editingComponentSetId]
     },
@@ -104,6 +116,14 @@ export default {
     ...mapActions('node', ['publishComponentSet']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
+    },
+    open() {
+      if (!this.canPublish) {
+        this.$refs.dialogUsername.open()
+      }
+      else {
+        this.visible = !this.visible
+      }
     },
     onSubmit() {
       this.$refs.form.validate(async valid => {

@@ -9,7 +9,7 @@
       :visible.sync="visible"
       :loading="loading"
       :disable-submit="invalidName"
-      title="Choose one to remember easily..."
+      :title="title"
       width="30vw"
       @confirm="onSubmit"
     >
@@ -63,16 +63,18 @@ export default {
     text: {
       type: String,
       default: ''
+    },
+    title: {
+      type: String,
+      default: 'Choose one to remember easily...'
     }
   },
   data() {
-    const { nodesMap } = this.$store.state.node
-    const node = nodesMap[this.id]
     return {
       visible: false,
       valid: false,
       form: {
-        username: node ? node.label : ''
+        username: ''
       },
       rules: {
         username
@@ -87,8 +89,16 @@ export default {
       return this.form.username.length < 8 || !this.valid
     }
   },
+  created() {
+    const { nodesMap } = this.$store.state.node
+    const node = nodesMap[this.id]
+    this.form.username = (node && node.label) || ''
+  },
   methods: {
     ...mapActions('user', ['patchUser']),
+    open() {
+      this.visible = true
+    },
     nameCheck: debounce(async function() {
       if (!this.invalidName) {
         return

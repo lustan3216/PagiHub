@@ -31,6 +31,8 @@
           to confirm delete.
         </p>
       </el-form>
+
+      <tip-delete :name="label"/>
     </dialog-confirmable>
   </el-button>
 </template>
@@ -38,15 +40,15 @@
 <script>
 import { mapActions } from 'vuex'
 import { required } from '@/validator'
-import { capitalize } from '@/utils/string'
-import { KIND } from '@/const'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import { isComponentSet } from '@/utils/node'
+import TipDelete from '@/components/Tip/TipDelete'
 
 export default {
   name: 'DialogDelete',
   components: {
-    DialogConfirmable
+    DialogConfirmable,
+    TipDelete
   },
   props: {
     id: {

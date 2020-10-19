@@ -4,11 +4,13 @@
     class="tip"
     type="warning"
   >
-    <div
-      class="m-r-15 el-button el-button--primary el-button--mini"
-      style="padding: 5px 10px;"
-    >
-      TIP
+    <div class="align-center">
+      <div
+        class="m-r-15 el-button el-button--primary el-button--mini"
+        style="padding: 5px 10px;"
+      >
+        TIP
+      </div>
     </div>
     <div class="content">
       <span class="gray-font">
@@ -41,10 +43,10 @@ export default {
   border-radius: 10px;
 }
 .content {
-  display: inline-flex;
   font-size: 13px;
 }
 ::v-deep.el-alert .el-alert__description {
   margin: 0;
+  display: flex;
 }
 </style>

@@ -13,7 +13,11 @@
       :loading="loading"
       :disable-submit="!dirty"
       :key="id"
-      title="A powerful page can reuse and share..."
+      :title="
+        firstTime
+          ? 'Let we build the first page'
+          : 'A powerful page can reuse and share...'
+      "
       width="80vw"
       class="dialog"
       @close="initData"
@@ -138,6 +142,10 @@ export default {
     text: {
       type: String,
       default: ''
+    },
+    firstTime: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -210,6 +218,9 @@ export default {
     ...mapActions('node', ['createComponentSet', 'patchComponentSet']),
     initData() {
       Object.assign(this.$data, this.$options.data.call(this))
+    },
+    open() {
+      this.visible = true
     },
     onSubmit() {
       this.$refs.form.validate(async valid => {
