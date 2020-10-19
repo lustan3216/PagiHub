@@ -1,5 +1,5 @@
 import store from '../store'
-import { CAN_NEW_ITEM } from '../const'
+import { CAN_NEW_ITEM, BREAK_POINTS_MAP } from '../const'
 import { isGridItem, traversalAncestorAndSelf, wrapByGrid } from '@/utils/node'
 import { arrayEquals } from '@/utils/array'
 import { getValueByPath, setValueByPath } from '@/utils/tool'
@@ -38,6 +38,16 @@ export function vmCreateEmptyItem(node) {
         if (stack) {
           setValueByPath(emptyGridItem, 'styles.layout.stack', true)
         }
+        // else {
+        //   // 區別與原本的位子，不然會以為沒有增加，for UX
+        //   Object.keys(BREAK_POINTS_MAP).forEach(point => {
+        //     const grid = emptyGridItem.grid[point]
+        //     if (grid) {
+        //       grid.x = grid.x + 1
+        //       grid.y = grid.y + 10
+        //     }
+        //   })
+        // }
         vmGet(node.parentId).addNodeToParent(emptyGridItem)
         return false
       }

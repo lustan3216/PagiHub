@@ -24,9 +24,9 @@
     </span>
 
     <span v-if="textShowContent && isTextEditor">
-      {{ textName }}{{ shortId }}
+      {{ textName }} {{ shortId }}
     </span>
-    <span v-else> {{ nodeShortName }}{{ shortId }} </span>
+    <span v-else> {{ nodeShortName }} {{ shortId }} </span>
 
     <slot />
   </el-button>
@@ -38,7 +38,9 @@ import { mapActions } from 'vuex'
 import {
   shortTagName,
   isTextEditor,
-  isComponentSet
+  isComponentSet,
+  shortId,
+  isComponent
 } from '@/utils/node'
 import { LABEL } from '@/const'
 import { BIconXDiamond, BIconXDiamondFill } from 'bootstrap-vue'
@@ -98,8 +100,11 @@ export default {
         : shortTagName(this.node)
     },
     shortId() {
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.NODE_ENV === 'development') {
         return `- ${this.id.substring(23, 26)}`
+      }
+      else if (isComponent(this.node)) {
+        return `- ${shortId(this.node.id)}`
       }
     },
     editing() {

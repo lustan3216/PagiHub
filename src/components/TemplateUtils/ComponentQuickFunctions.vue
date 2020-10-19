@@ -3,7 +3,7 @@
     v-if="node && visible"
     :id="`quick-fn-${id}`"
     :style="{
-      zIndex: isExample ? 2005 : 800
+      zIndex: isExample ? 2005 : 2000
     }"
     class="quick-functions flex-center"
   >
