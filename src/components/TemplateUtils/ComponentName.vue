@@ -87,7 +87,10 @@ export default {
     },
     textName() {
       return this.node.value
-        ? this.node.value.replace(/<\/?[^>]+(>|$)/g, '').slice(0, 15)
+        ? this.node.value
+          .replace(/<\/?[^>]+(>|$)/g, '')
+          .replace(/&nbsp;/g, '')
+          .slice(0, 15)
         : 'TextEditor'
     },
     nodeShortName() {
