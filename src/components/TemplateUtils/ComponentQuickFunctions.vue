@@ -253,7 +253,8 @@ export default {
     },
     framer() {
       // 如果有refs=framer, 在拉動window時不知為什麼會找不到element
-      return document.getElementById(`quick-fn-${this.id}`)
+      return this.$el
+      // return document.getElementById(`quick-fn-${this.id}`)
     }
   },
   created() {
@@ -280,11 +281,12 @@ export default {
     deleteSlider() {
       vmGet(this.node.id, this.isExample).removeCurrentSlider()
     },
-    resize: debounce(function() {
+    resize: function() {
       const self = this
       this.$nextTick(() => {
+        this.visible = false
+
         if (!this.node) {
-          this.visible = false
           return
         }
 
@@ -296,7 +298,6 @@ export default {
         const element = vm && vm.$el
 
         if (!element) {
-          this.visible = false
           return
         }
 
@@ -307,7 +308,6 @@ export default {
         const bounderNode = element.closest('.art-board')
 
         if (!bounderNode) {
-          this.visible = false
           return
         }
 
@@ -327,7 +327,6 @@ export default {
               : height
 
         if (height < 5 || left < 10 || top < 10) {
-          this.visible = false
           return
         }
 
@@ -341,13 +340,11 @@ export default {
         Object.assign(this.$data, styles)
 
         if (!this.framer) {
-          this.visible = false
           return
         }
 
         gsap.to(this.framer, {
           ...styles,
-          ease: 'ease',
           duration: 0,
           onUpdate() {
             const { width, height, x, y } = this.vars
@@ -357,12 +354,11 @@ export default {
             heightShared = height
             self.top = y
             self.left = x
+            self.visible = true
           }
         })
-
-        this.visible = true
       })
-    }, 180),
+    },
     mouseenter() {
       timeId = setTimeout(() => {
         this.hovering = true

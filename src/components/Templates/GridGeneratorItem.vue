@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import Vue from 'vue'
 import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
@@ -228,6 +228,7 @@ export default {
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    ...mapActions('layout', ['resizeNodeQuickFn']),
     closestValidGrid(currentPoint) {
       // [1,2,3,4,5]
       // currentPoint = 4
@@ -256,6 +257,10 @@ export default {
       }
     },
     cleanStore() {
+      setTimeout(() => {
+        // griditem 的動畫時候是100
+        this.resizeNodeQuickFn()
+      }, 200)
       store.updatingItemParentId = null
     }
   }
