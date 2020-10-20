@@ -4,6 +4,7 @@
     class="art-board"
   >
     <component-giver
+      v-if="node"
       :id="id"
       :key="id"
     />
@@ -38,11 +39,11 @@ export default {
     }
   },
   mounted() {
-    const page = this.$el
-    page.addEventListener('scroll', () => {
-      this.scrollTop = page.scrollTop
-    })
+    this.$el.addEventListener('scroll', this.updateScrollTop)
     this.$bus.$emit('art-board-mounted')
+  },
+  beforeDestroy() {
+    this.$el.removeEventListener('scroll', this.updateScrollTop)
   },
   activated() {
     if (this.scrollTop) {
@@ -51,7 +52,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('layout', { LAYOUT_SET: 'SET' })
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    updateScrollTop() {
+      this.scrollTop = this.$el.scrollTop
+    }
   }
 }
 </script>

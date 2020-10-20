@@ -13,11 +13,7 @@
       :loading="loading"
       :disable-submit="!dirty"
       :key="id"
-      :title="
-        firstTime
-          ? 'Let we build the first page'
-          : 'A powerful page can reuse and share...'
-      "
+      :title="title"
       width="80vw"
       class="dialog"
       @close="initData"
@@ -174,6 +170,11 @@ export default {
   computed: {
     ...mapState('node', ['editingProjectId']),
     ...mapState('user', ['userId', 'username']),
+    title() {
+      return this.firstTime
+        ? "Let's build the first page"
+        : 'A powerful page can reuse and share...'
+    },
     origin() {
       return location.origin
     },

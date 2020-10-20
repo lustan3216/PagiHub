@@ -4,7 +4,7 @@ import {
   isGridItem,
 } from '@/utils/node'
 import { arrayAscSort, arrayDescSort } from '@/utils/array'
-import { CHILDREN, STYLES } from '@/const'
+import { STYLES } from '@/const'
 import { mapActions, mapGetters } from 'vuex'
 import { vmGet } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'

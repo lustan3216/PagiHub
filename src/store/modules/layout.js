@@ -1,5 +1,6 @@
 import { SET } from '../index'
 import { findBreakpoint, sortDescBreakpoint } from '@/utils/layout'
+import { BREAK_POINTS_MAP } from '@/const'
 
 const state = {
   gridResizing: false,
@@ -25,7 +26,7 @@ const getters = {
   breakpointsMap(state, getters, rootState) {
     const { nodesMap, editingComponentSetId } = rootState.node
     const node = nodesMap[editingComponentSetId]
-    return (node && node.breakpointsMap) || {}
+    return (node && node.breakpointsMap) || BREAK_POINTS_MAP
   },
   descBreakpoints(state, getters) {
     return sortDescBreakpoint(Object.keys(getters.breakpointsMap))

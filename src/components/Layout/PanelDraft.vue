@@ -23,7 +23,6 @@
       >
         <keep-alive :include="rootComponentSetIds">
           <art-board
-            v-if="editingComponentSetId"
             :id="editingComponentSetId"
             :key="editingComponentSetId"
           />
@@ -41,6 +40,8 @@
 import { mapActions, mapState, mapMutations } from 'vuex'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
+import SidebarLeft from '@/components/Layout/SidebarLeft'
+import SidebarRight from '@/components/Layout/SidebarRight'
 
 let timeId
 export default {
@@ -48,9 +49,9 @@ export default {
   components: {
     ArtBoard,
     ViewPort,
+    SidebarRight,
+    SidebarLeft,
     PreviewController: () => import('@/components/Layout/PreviewController'),
-    SidebarRight: () => import('@/components/Layout/SidebarRight'),
-    SidebarLeft: () => import('@/components/Layout/SidebarLeft'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
     PanelDraft: () => import('@/components/Layout/PanelDraft')
   },

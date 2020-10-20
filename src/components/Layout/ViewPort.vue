@@ -2,12 +2,15 @@
   <div
     v-free-view="freeViewOptions"
     id="view-port"
-    :class="{ resizeBar, draft: isDraftMode }"
+    :class="{ resizeBar }"
     class="fake-transform view-port"
   >
     <!--   這層雖然多餘，但為了要限制 interact 的 size grab bar 被拉出去  -->
     <!--  interactjs.modifiers.restrictEdges({ outer: 'parent' })  -->
-    <div class="h-100">
+    <div
+      ref="asd"
+      class="h-100"
+    >
       <div
         ref="target"
         class="target free-view-target"
@@ -244,8 +247,8 @@ export default {
         })
 
         this.LAYOUT_SET({
-          artBoardWidth: toPrecision(style.w, 0),
-          artBoardHeight: toPrecision(style.h, 0)
+          artBoardWidth: parseInt(style.w),
+          artBoardHeight: parseInt(style.h)
         })
       },
       deep: true
@@ -309,15 +312,17 @@ export default {
       inertia: false
     })
 
-    this.reset()
     this.$bus.$on('art-board-mounted', this.setBoundaryRect)
+
+    this.$nextTick(() => {
+      this.reset()
+    })
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('layout', ['resizeNodeQuickFn']),
     reset() {
-      this.style.w = this.artBoardWidth
-      this.style.h = this.artBoardHeight
+      this.setBoundaryRect()
       this.style.scale = 1
     },
     setBoundaryRect() {
@@ -325,12 +330,6 @@ export default {
 
       this.style.w = width
       this.style.h = height
-
-      this.LAYOUT_SET({
-        gridResizing: false,
-        artBoardWidth: parseInt(width),
-        artBoardHeight: parseInt(height)
-      })
     },
     scaleCallback(event, { scaleRatio }) {
       this.style.scale = scaleRatio
