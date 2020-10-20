@@ -44,7 +44,7 @@ export function getTmpComponentsArray() {
 }
 
 const store = new Vuex.Store({
-  strict: process.env.NODE_ENV !== 'production',
+  strict: process.env.NODE_ENV === 'development',
   modules: {
     app,
     mode,
