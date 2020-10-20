@@ -14,10 +14,22 @@
         style="height: 100%;"
       >
         <template v-if="resizeBar">
-          <div class="handler top" />
-          <div class="handler right" />
-          <div class="handler bottom" />
-          <div class="handler left" />
+          <div
+            class="handler top"
+            @mousedown="handlerStart('moveTop')"
+          />
+          <div
+            class="handler right"
+            @mousedown="handlerStart('moveRight')"
+          />
+          <div
+            class="handler bottom"
+            @mousedown="handlerStart('moveBottom')"
+          />
+          <div
+            class="handler left"
+            @mousedown="handlerStart('moveLeft')"
+          />
         </template>
         <slot />
       </div>
@@ -160,6 +172,10 @@ export default {
         scaleCallback: this.scaleCallback,
         targetSelector: '.free-view-target'
       },
+      moveTop: false,
+      moveLeft: false,
+      moveRight: false,
+      moveBottom: false,
       style: {
         h: 0,
         w: 0,
@@ -239,16 +255,37 @@ export default {
     }
   },
   mounted() {
+    let lastPositionX
+    let lastPositionY
     this.interact.resizable({
-      edges: { left: true, right: true, bottom: true, top: true },
-      allowFrom: '.handler.top, .handler.bottom, .handler.right, .handler.left',
+      edges: {
+        left: '.handler.left',
+        right: '.handler.right',
+        bottom: '.handler.bottom',
+        top: '.handler.top'
+      },
       listeners: {
+        start: event => {
+          lastPositionX = event.client.x
+          lastPositionY = event.client.y
+        },
         move: event => {
           const { scale } = this.style
 
-          const h = (event.rect.height + event.deltaRect.top) / scale
-          const w = (event.rect.width + event.deltaRect.left) / scale
+          const deltaX =
+            this.moveLeft || this.moveRight
+              ? (event.client.x - lastPositionX) * 2
+              : 0
+          const deltaY =
+            this.moveTop || this.moveBottom
+              ? (event.client.y - lastPositionY) * 2
+              : 0
 
+          const h = this.style.h + (this.moveTop ? -deltaY : deltaY) / scale
+          const w = this.style.w + (this.moveLeft ? -deltaX : deltaX) / scale
+
+          lastPositionX = event.client.x
+          lastPositionY = event.client.y
           Object.assign(this.style, {
             h,
             w,
@@ -256,6 +293,10 @@ export default {
           })
 
           this.$emit('resize', event)
+        },
+        end: event => {
+          lastPositionX = null
+          lastPositionY = null
         }
       },
       modifiers: [
@@ -265,9 +306,10 @@ export default {
         })
       ],
 
-      inertia: true
+      inertia: false
     })
 
+    this.reset()
     this.$bus.$on('art-board-mounted', this.setBoundaryRect)
   },
   methods: {
@@ -307,6 +349,13 @@ export default {
       }
       this.style.w = w
       this.style.h = h
+    },
+    handlerStart(position) {
+      this.moveTop = false
+      this.moveLeft = false
+      this.moveRight = false
+      this.moveBottom = false
+      this[position] = true
     }
   }
 }
