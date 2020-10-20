@@ -194,11 +194,11 @@ export default {
         vmGet(node.id).addNodeToParent(cloneJson(template))
         this.removeBeingAddedComponentId()
       }
-      else if (isGridItem(template)) {
+      else if (isGridItem(node)) {
         vmGet(node.id).addNodeToParent(cloneJson(template))
         this.removeBeingAddedComponentId()
       }
-      else if (isComponent(template)) {
+      else if (isComponent(node)) {
         vmRemoveNode(node)
         vmGet(node.parentId).addNodeToParent(cloneJson(template))
         this.removeBeingAddedComponentId()
