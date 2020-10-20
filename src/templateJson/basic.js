@@ -85,8 +85,14 @@ export const carousel = function(options, breakpoint) {
           }
         ]
       }),
-      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }, breakpoint),
-      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }, breakpoint),
+      gridGenerator(
+        { [LABEL]: 'slider', [POLYMORPHISM]: 'slider' },
+        breakpoint
+      ),
+      gridGenerator(
+        { [LABEL]: 'slider', [POLYMORPHISM]: 'slider' },
+        breakpoint
+      ),
       gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }, breakpoint)
     ]
   }
@@ -137,11 +143,10 @@ export const videoPlayer = function(options) {
 }
 
 export const exampleMap = {
-  [GRID_GENERATOR_ITEM]: gridGeneratorItem,
   [GRID_GENERATOR]: gridGenerator,
   [CAROUSEL]: carousel,
   [TEXT_EDITOR]: textEditor,
-  'iframer': iframer,
+  iframer: iframer,
   'flex-button': flexButton,
   'flex-image': flexImage,
   'video-player': videoPlayer
