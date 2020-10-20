@@ -2,9 +2,7 @@
   <div
     v-if="node && visible"
     :id="`quick-fn-${id}`"
-    :style="{
-      zIndex: isExample ? 2005 : 2000
-    }"
+    :style="styles"
     class="quick-functions flex-center"
   >
     <portal-target
@@ -25,19 +23,11 @@
       @click="tryToAddComponent"
     />
 
-    <el-tooltip
-      effect="light"
-      content="Append an empty container"
-      placement="bottom"
-    >
-      <el-button
-        class="append-container"
-        type="text"
-        size="mini"
-        icon="el-icon-plus"
-        @click="vmCreateEmptyItem"
-      />
-    </el-tooltip>
+    <component-quick-add
+      v-if="isComponent"
+      :id="id"
+      class="append-container"
+    />
 
     <div
       :class="[
@@ -132,7 +122,6 @@
 </template>
 
 <script>
-import gsap from 'gsap'
 import { mapState, mapActions, mapMutations } from 'vuex'
 import ComponentName from './ComponentName'
 import ZIndex from '@/components/Setup/EditorStyle/ZIndex'
@@ -145,20 +134,20 @@ import {
   isComponentSet,
   traversalAncestorAndSelf,
   isCarousel,
-  isGrid
+  isGrid,
+  isComponent
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
-import { CAN_NEW_ITEM, CAROUSEL, GRID_GENERATOR } from '@/const'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import { debounce } from '@/utils/tool'
 import { BIconPlusSquareFill } from 'bootstrap-vue'
-import BasicComponentAdd from './BasicComponentAdd'
+import ComponentQuickAdd from './ComponentQuickAdd'
 
-let topShared = window.innerHeight / 2
-let leftShared = window.innerWidth / 2
-let widthShared = 0
-let heightShared = 0
+const topShared = window.innerHeight / 2
+const leftShared = window.innerWidth / 2
+const widthShared = 0
+const heightShared = 0
 
 export const quickFnMap = {}
 
@@ -177,7 +166,7 @@ export default {
     Stack,
     ElPopover: Popover,
     BIconPlusSquareFill,
-    BasicComponentAdd
+    ComponentQuickAdd
   },
   props: {
     id: {
@@ -199,15 +188,25 @@ export default {
       left: leftShared,
       width: widthShared,
       height: heightShared,
+      zIndex: this.isExample ? 2005 : 2000,
       animationId: null,
       canGoBack: null,
       hovering: false,
-      visible: true
+      visible: false
     }
   },
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
     ...mapState('layout', ['gridResizing', 'artBoardHeight']),
+    styles() {
+      return {
+        top: this.top + 'px',
+        left: this.left + 'px',
+        width: this.width + 'px',
+        height: this.height + 'px',
+        zIndex: this.zIndex
+      }
+    },
     textEditorStyle() {
       const shouldOnLeftSide = this.width + this.left + 400 > window.innerWidth
       if (shouldOnLeftSide) {
@@ -246,6 +245,9 @@ export default {
     isComponentSet() {
       return isComponentSet(this.node)
     },
+    isComponent() {
+      return isComponent(this.node)
+    },
     isButton() {
       return this.node.tag === 'flex-button'
     },
@@ -280,21 +282,14 @@ export default {
       this.setBeingAddedComponentId(this.id)
     },
     vmCreateEmptyItem() {
-      if (this.isComponentSet) {
-        vmCreateEmptyItem(this.node.children[0])
-      }
-      else {
-        vmCreateEmptyItem(this.node)
-      }
+      vmCreateEmptyItem(this.node)
     },
     deleteSlider() {
       vmGet(this.node.id, this.isExample).removeCurrentSlider()
     },
     resize: debounce(function() {
-      const self = this
       this.$nextTick(() => {
         this.visible = false
-
         if (!this.node) {
           return
         }
@@ -339,32 +334,12 @@ export default {
           return
         }
 
-        const styles = {
-          x: left,
-          y: top,
+        Object.assign(this.$data, {
+          left,
+          top,
           width: width - 2,
-          height: height - 2
-        }
-
-        Object.assign(this.$data, styles)
-
-        if (!this.framer) {
-          return
-        }
-
-        gsap.to(this.framer, {
-          ...styles,
-          duration: 0,
-          onUpdate() {
-            const { width, height, x, y } = this.vars
-            leftShared = x
-            topShared = y
-            widthShared = width
-            heightShared = height
-            self.top = y
-            self.left = x
-            self.visible = true
-          }
+          height: height - 2,
+          visible: true
         })
       })
       // 180 不要再動了，因為 griitem 動畫是100 且store/node 裡面也有callback呼叫
@@ -397,13 +372,13 @@ export default {
 }
 
 .top {
-  left: 5px;
-  top: -40px;
+  left: 0;
+  top: -35px;
 }
 
 .bottom {
-  left: -1px;
-  bottom: -40px;
+  left: 0;
+  bottom: -35px;
 }
 
 .right {
@@ -418,16 +393,14 @@ export default {
 
 .append-container {
   position: absolute;
-  bottom: -10px;
+  bottom: -31px;
   padding: 0;
   pointer-events: all;
   font-size: 12px;
-  height: 18px;
-  width: 18px;
-  background: #409eff !important;
-  color: white !important;
-  transform: translateX(-100%);
-  left: 50%;
+  height: 25px;
+  right: 0;
+  border-radius: 5px;
+  background: white;
 }
 
 .component-name {

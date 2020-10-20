@@ -154,8 +154,8 @@ export default [
   gridGenerator(),
   textEditor(),
   flexImage(),
+  flexButton(),
   carousel(),
   videoPlayer(),
-  flexButton(),
   iframer()
 ]

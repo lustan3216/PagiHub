@@ -21,7 +21,7 @@
           filterable
           class="m-b-10 w-100"
           size="small"
-          @inout="recordStyles($event)"
+          @change="recordStyles($event)"
         >
           <el-option
             v-for="option in imageOptions"
