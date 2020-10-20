@@ -5,12 +5,10 @@ import {
   patchProject,
   getProject
 } from '@/api/node'
-import {
-  isComponentSet,
-  isProject
-} from '@/utils/node'
+import { isComponentSet, isProject } from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
 import inheritMapUploader from '@/utils/inheritMapUploader'
+import { arraySubtract } from '@/utils/array'
 
 export const actions = {
   async getProjects({ state, commit }) {
@@ -67,6 +65,16 @@ export const actions = {
 
   async deleteProjectNode({ state, commit, getters, dispatch }, id) {
     await deleteProject({ id })
-    commit('INIT')
+    if (state.editingProjectId === id) {
+      commit('SET', {
+        editingProjectId: null,
+        editingComponentSetId: null,
+        projectIds: arraySubtract(state.projectIds, id),
+        rootComponentSetIds: []
+      })
+
+      jsonHistory.deltas = []
+      jsonHistory.currentIndex = 0
+    }
   }
 }

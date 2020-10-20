@@ -56,6 +56,15 @@ const store = new Vuex.Store({
 })
 
 store.watch(
+  state => state.node.editingProjectId,
+  newValue => {
+    if (newValue) {
+      store.commit('node/PROJECT_INIT', newValue, { root: true })
+    }
+  }
+)
+
+store.watch(
   state => state.node.editingComponentSetId,
   (newValue, oldValue) => {
     draftStateUploader.requestImmediately(oldValue)

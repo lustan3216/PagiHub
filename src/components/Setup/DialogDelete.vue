@@ -32,7 +32,7 @@
         </p>
       </el-form>
 
-      <tip-delete :name="label"/>
+      <tip-delete :name="label" />
     </dialog-confirmable>
   </el-button>
 </template>
@@ -109,8 +109,8 @@ export default {
           else {
             await this.deleteProjectNode(this.id)
           }
-          // this.loading = false
-          // this.visible = false
+          this.loading = false
+          this.visible = false
         }
       })
     }

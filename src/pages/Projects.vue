@@ -76,7 +76,6 @@ import { Tag } from 'element-ui'
 import DialogDelete from '@/components/Setup/DialogDelete'
 import DialogProject from '@/components/Setup/DialogProject'
 import TipUsername from '@/components/Tip/TipUsername'
-import { isProject } from '@/utils/node'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
@@ -91,8 +90,9 @@ export default {
   },
   computed: {
     ...mapState('user', ['username']),
+    ...mapState('node', ['projectIds']),
     projects() {
-      return Object.values(this.nodesMap).filter(node => isProject(node))
+      return this.projectIds.map(id => this.nodesMap[id])
     }
   },
   created() {
