@@ -23,12 +23,6 @@
       @click="tryToAddComponent"
     />
 
-    <component-quick-add
-      v-if="isComponent"
-      :id="id"
-      class="append-container"
-    />
-
     <div
       :class="[
         top > 100 || top + height >= artBoardHeight - 100 ? 'top' : 'bottom'
@@ -78,55 +72,46 @@
         </div>
       </div>
 
-      <el-button-group
+      <component-quick-add
         v-if="isDraftMode && !isExample && isLastOne"
+        :id="id"
         class="flex backface-hidden"
-      >
-        <portal-target
-          v-if="isDraftMode"
-          :name="`QuickFunctions${id}`"
-          slim
-        />
-
-        <lock
-          :id="id"
-          visible
-          allow-multi
-        />
-
-        <stack
-          v-if="!isComponentSet"
-          :id="id"
-        />
-
-        <template v-if="isCarousel">
-          <el-button
-            class="icon"
-            @click="vmCreateEmptyItem"
-          >
-            <i class="el-icon-plus" />
-            Slider
-          </el-button>
-
-          <el-button
-            class="icon"
-            @click="deleteSlider"
-          >
-            <i class="el-icon-delete" />
-            Slider
-          </el-button>
-        </template>
-      </el-button-group>
+      />
     </div>
+
+    <el-button-group class="uniq-function can-action">
+      <el-button
+        v-if="isImage"
+        class="icon"
+        @click="openImageAsset"
+      >
+        Replace
+      </el-button>
+
+      <template v-if="isCarousel">
+        <el-button
+          class="icon"
+          @click="vmCreateEmptyItem"
+        >
+          <i class="el-icon-plus" />
+          Slider
+        </el-button>
+
+        <el-button
+          class="icon"
+          @click="deleteSlider"
+        >
+          <i class="el-icon-delete" />
+          Slider
+        </el-button>
+      </template>
+    </el-button-group>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import ComponentName from './ComponentName'
-import ZIndex from '@/components/Setup/EditorStyle/ZIndex'
-import Stack from '@/components/Setup/EditorStyle/Stack'
-import Lock from '../Setup/EditorStyle/Lock'
 import { Popover } from 'element-ui'
 import {
   isGridItem,
@@ -134,8 +119,7 @@ import {
   isComponentSet,
   traversalAncestorAndSelf,
   isCarousel,
-  isGrid,
-  isComponent
+  isGrid
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
@@ -143,6 +127,7 @@ import { isMac } from '@/utils/device'
 import { debounce } from '@/utils/tool'
 import { BIconPlusSquareFill } from 'bootstrap-vue'
 import ComponentQuickAdd from './ComponentQuickAdd'
+import { IMAGE_ASSET } from '@/components/ExampleAddPanel/MenuCategories'
 
 const topShared = window.innerHeight / 2
 const leftShared = window.innerWidth / 2
@@ -161,9 +146,6 @@ export default {
   name: 'ComponentQuickFunctions',
   components: {
     ComponentName,
-    ZIndex,
-    Lock,
-    Stack,
     ElPopover: Popover,
     BIconPlusSquareFill,
     ComponentQuickAdd
@@ -233,6 +215,9 @@ export default {
     node() {
       return this.nodesMap[this.id]
     },
+    isImage() {
+      return this.node.tag === 'flex-image'
+    },
     isCarousel() {
       return isCarousel(this.node)
     },
@@ -244,9 +229,6 @@ export default {
     },
     isComponentSet() {
       return isComponentSet(this.node)
-    },
-    isComponent() {
-      return isComponent(this.node)
     },
     isButton() {
       return this.node.tag === 'flex-button'
@@ -352,6 +334,12 @@ export default {
     mouseleave() {
       clearTimeout(timeId)
       this.hovering = false
+    },
+    openImageAsset() {
+      this.setBeingAddedComponentId(this.id)
+      this.$nextTick(() => {
+        this.$bus.$emit('dialog-component-tabs-jump', IMAGE_ASSET)
+      })
     }
   }
 }
@@ -386,23 +374,6 @@ export default {
   bottom: 0;
 }
 
-.basic-component-add {
-  background-color: transparent;
-  width: 100%;
-}
-
-.append-container {
-  position: absolute;
-  bottom: -31px;
-  padding: 0;
-  pointer-events: all;
-  font-size: 12px;
-  height: 25px;
-  right: 0;
-  border-radius: 5px;
-  background: white;
-}
-
 .component-name {
   background-color: white;
   white-space: pre;
@@ -421,18 +392,10 @@ export default {
   color: $color-active;
 }
 
-::v-deep.wrapper .el-button-group {
-  border-radius: 5px;
-  background-color: white;
-  margin-left: 10px;
-
-  button {
-    padding: 5px 8px;
-    border: 1px solid $color-active;
-  }
-
-  i {
-    color: $color-active;
-  }
+.uniq-function {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  opacity: 0.9;
 }
 </style>

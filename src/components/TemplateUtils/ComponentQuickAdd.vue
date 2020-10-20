@@ -1,60 +1,85 @@
 <template>
   <el-button-group>
-    <el-tooltip
-      effect="light"
-      content="Append an empty container"
-      placement="bottom"
-    >
-      <el-button
-        type="text"
-        @click="vmCreateEmptyItem(null)"
-      >
-        <b-icon-aspect-ratio />
-        <i class="el-icon-plus" />
-      </el-button>
-    </el-tooltip>
+    <portal-target
+      v-if="isDraftMode"
+      :name="`QuickFunctions${id}`"
+      slim
+    />
 
     <el-tooltip
       effect="light"
-      content="Append a text"
-      placement="bottom"
+      content="Lock"
+      placement="top"
     >
-      <el-button
-        type="text"
-        @click="vmCreateEmptyItem('text-editor')"
-      >
-        <b-icon-fonts />
-        <i class="el-icon-plus" />
-      </el-button>
+      <lock
+        :id="id"
+        visible
+        allow-multi
+      />
     </el-tooltip>
 
-    <el-tooltip
-      effect="light"
-      content="Append an image"
-      placement="bottom"
-    >
-      <el-button
-        type="text"
-        @click="vmCreateEmptyItem('flex-image')"
+    <template v-if="isComponent">
+      <el-tooltip
+        effect="light"
+        content="Append an empty container"
+        placement="top"
       >
-        <b-icon-image />
-        <i class="el-icon-plus" />
-      </el-button>
-    </el-tooltip>
+        <el-button
+          type="text"
+          @click="vmCreateEmptyItem(null)"
+        >
+          <b-icon-aspect-ratio />
+          <i class="el-icon-plus" />
+        </el-button>
+      </el-tooltip>
 
-    <el-tooltip
-      effect="light"
-      content="Append a button"
-      placement="bottom"
-    >
-      <el-button
-        type="text"
-        @click="vmCreateEmptyItem('flex-button')"
+      <el-tooltip
+        effect="light"
+        content="Append a text"
+        placement="top"
       >
-        <b-icon-link />
-        <i class="el-icon-plus" />
-      </el-button>
-    </el-tooltip>
+        <el-button
+          type="text"
+          @click="vmCreateEmptyItem('text-editor')"
+        >
+          <b-icon-fonts />
+          <i class="el-icon-plus" />
+        </el-button>
+      </el-tooltip>
+
+      <el-tooltip
+        effect="light"
+        content="Append an image"
+        placement="top"
+      >
+        <el-button
+          type="text"
+          @click="vmCreateEmptyItem('flex-image')"
+        >
+          <b-icon-image />
+          <i class="el-icon-plus" />
+        </el-button>
+      </el-tooltip>
+
+      <!--      <el-tooltip-->
+      <!--        effect="light"-->
+      <!--        content="Append a button"-->
+      <!--        placement="top"-->
+      <!--      >-->
+      <!--        <el-button-->
+      <!--          type="text"-->
+      <!--          @click="vmCreateEmptyItem('flex-button')"-->
+      <!--        >-->
+      <!--          <b-icon-link />-->
+      <!--          <i class="el-icon-plus" />-->
+      <!--        </el-button>-->
+      <!--      </el-tooltip>-->
+    </template>
+
+    <stack
+      v-if="!isComponentSet"
+      :id="id"
+    />
   </el-button-group>
 </template>
 
@@ -68,15 +93,18 @@ import {
   BIconAspectRatio,
   BIconLink
 } from 'bootstrap-vue'
-import { closestGridItem } from '@/utils/node'
-
+import { closestGridItem, isComponent, isComponentSet } from '@/utils/node'
+import Stack from '@/components/Setup/EditorStyle/Stack'
+import Lock from '../Setup/EditorStyle/Lock'
 export default {
   name: 'ComponentQuickAdd',
   components: {
     BIconFonts,
     BIconImage,
     BIconAspectRatio,
-    BIconLink
+    BIconLink,
+    Stack,
+    Lock
   },
   props: {
     id: {
@@ -87,6 +115,12 @@ export default {
   computed: {
     node() {
       return this.nodesMap[this.id]
+    },
+    isComponentSet() {
+      return isComponentSet(this.node)
+    },
+    isComponent() {
+      return isComponent(this.node)
     }
   },
   methods: {
@@ -108,9 +142,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.el-button-group {
-  border: 1px solid $color-active;
+::v-deep.el-button-group {
+  border-radius: 5px;
+  background-color: white;
+  margin-left: 10px;
+
+  button {
+    padding: 5px 8px;
+    border: 1px solid $color-active;
+  }
+
+  i {
+    color: $color-active;
+  }
 }
+
 .el-button {
   padding: 4px 5px 2px;
   &:hover {

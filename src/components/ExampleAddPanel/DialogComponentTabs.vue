@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import { isComponentSet } from '@/utils/node'
 import { Tag } from 'element-ui'
@@ -166,10 +166,19 @@ export default {
       this.resizeNodeQuickFn()
     }
   },
+  mounted() {
+    this.$bus.$on('dialog-component-tabs-jump', this.chooseCategory)
+  },
+  beforeDestroy() {
+    this.$bus.$off('dialog-component-tabs-jump', this.chooseCategory)
+  },
   methods: {
     ...mapActions('node', ['record']),
     ...mapActions('app', ['removeBeingAddedComponentId']),
     ...mapActions('layout', ['resizeNodeQuickFn']),
+    chooseCategory(category) {
+      this.currentCategory = { name: category }
+    },
     addTemplate(template) {
       const node = this.nodesMap[this.beingAddedComponentId]
 
