@@ -66,7 +66,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapGetters('layout', ['currentBreakpoint', 'vh']),
     autoUpdateHeight() {
       return !this.rootLayout && !['scroll', 'hidden'].includes(this.overflow)
     },

@@ -8,7 +8,7 @@
     class="quick-functions flex-center"
   >
     <portal-target
-      :style="{ left: width + 10 + 'px' }"
+      :style="textEditorStyle"
       name="QuickFunctionsTextEditor"
       slim
       class="can-action"
@@ -208,6 +208,15 @@ export default {
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
     ...mapState('layout', ['gridResizing', 'artBoardHeight']),
+    textEditorStyle() {
+      const shouldOnLeftSide = this.width + this.left + 400 > window.innerWidth
+      if (shouldOnLeftSide) {
+        return { right: this.width + 10 + 'px' }
+      }
+      else {
+        return { left: this.width + 10 + 'px' }
+      }
+    },
     nodesPath() {
       const nodes = []
       traversalAncestorAndSelf(this.node, node => {

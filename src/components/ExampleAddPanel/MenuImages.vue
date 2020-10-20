@@ -76,8 +76,8 @@
             :allow-revert="false"
             :files="files"
             :label-idle="labelIdle"
+            :max-file-size="maxFileSize"
             accepted-file-types="image/gif, image/jpeg, image/jpg, image/png"
-            max-file-size="1MB"
           />
         </transition-group>
       </div>
@@ -93,7 +93,7 @@
         2. It can <span class="crucial">NOT</span> be deleted in public
         component or page once it publish.
         <br >
-        <div>3. Each image size limit is 1MB.</div>
+        <div>3. Each image size limit is {{ maxFileSize }}.</div>
       </tip>
     </template>
   </split-pane>
@@ -154,6 +154,9 @@ export default {
   },
   computed: {
     ...mapState('asset', ['images']),
+    maxFileSize() {
+      return '2MB'
+    },
     folderParser() {
       const parser = new FolderParser(this.images)
       parser.parse()

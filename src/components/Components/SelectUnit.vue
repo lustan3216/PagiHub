@@ -13,7 +13,7 @@
     class="number"
     @keydown.shift.native="shiftPress = true"
     @keyup.shift.native="shiftPress = false"
-    @mousedown.native="clicking = true"
+    @mousedown.native="mousedown"
     @focus="resizeCursor = false"
     @blur="resizeCursor = true"
     @change="$emit('change', innerValue || deleteValue)"
@@ -197,37 +197,29 @@ export default {
       this.innerValue = value
     }
   },
-  created() {
-    document.addEventListener('mousemove', this.handleMousemove)
-    document.addEventListener('mouseup', this.releaseClick)
-  },
-  beforeDestroy() {
-    document.removeEventListener('mousemove', this.handleMousemove)
-    document.removeEventListener('mouseup', this.releaseClick)
-  },
   methods: {
     releaseClick() {
       this.clicking = false
+      this.lastPosition = 0
+      document.removeEventListener('mousemove', this.handleMousemove)
+      document.removeEventListener('mouseup', this.releaseClick)
+    },
+    mousedown(e) {
+      this.clicking = true
+      this.lastPosition = e.clientY
+      document.addEventListener('mousemove', this.handleMousemove)
+      document.addEventListener('mouseup', this.releaseClick)
     },
     handleMousemove(e) {
-      if (!this.clicking) {
-        return
-      }
-      const viewportOffset = this.$el.getBoundingClientRect()
-      let value
-      if (!this.lastPosition) {
-        value = e.clientY <= viewportOffset.top ? this.step : -1 * this.step
-      }
-      else {
-        value = this.lastPosition >= e.clientY ? this.step : -1 * this.step
-      }
+      if (!this.clicking) return
+
+      const value = this.lastPosition > e.clientY ? this.step : -1 * this.step
 
       if (this.number + value < this.min || this.number + value > this.max) {
         return
       }
 
       this.number += value
-      this.lastPosition = e.clientY
     },
     isInvalid(value) {
       return (

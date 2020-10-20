@@ -58,7 +58,12 @@
               H{{ level }}
             </button>
 
-            <button class="menububble__button">
+            <button
+              :class="{
+                'is-active': color
+              }"
+              class="menububble__button"
+            >
               <color-picker v-model="color">
                 <span
                   :style="{ color }"
@@ -67,7 +72,12 @@
               </color-picker>
             </button>
 
-            <button class="menububble__button">
+            <button
+              :class="{
+                'is-active': backgroundColor
+              }"
+              class="menububble__button"
+            >
               <color-picker v-model="backgroundColor">
                 <i
                   :style="{ color: backgroundColor }"
@@ -78,7 +88,10 @@
             </button>
           </div>
 
-          <div class="flex">
+          <div
+            class="flex"
+            style="margin-top: 3px;"
+          >
             <button
               v-if="canLink"
               class="menububble__button"

@@ -6,6 +6,7 @@
 
     <keep-alive>
       <component
+        v-if="lastNode"
         :is="vueComponentTag"
         :key="lastNode.id"
         :id="lastNode.id"
