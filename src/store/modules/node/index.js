@@ -7,7 +7,7 @@ import { isComponentSet, isProject } from '@/utils/node'
 import { cloneJson, setValueByPath } from '@/utils/tool'
 import jsonHistory from '@/store/jsonHistory'
 
-let childrenOf = {}
+const childrenOf = {}
 let tmpChildrenOf = {}
 
 const state = {

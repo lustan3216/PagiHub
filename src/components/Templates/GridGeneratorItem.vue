@@ -257,10 +257,7 @@ export default {
       }
     },
     cleanStore() {
-      setTimeout(() => {
-        // griditem 的動畫時候是100
-        this.resizeNodeQuickFn()
-      }, 200)
+      this.resizeNodeQuickFn()
       store.updatingItemParentId = null
     }
   }

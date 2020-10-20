@@ -234,7 +234,9 @@ class GPickr {
     destroyAndRemove() {
         this._pickr.destroyAndRemove()
         this._stops.forEach(() => {
-          off(...stop.listener)
+          if (stop.listener && stop.listener.length) {
+            off(...stop.listener)
+          }
         })
     }
 

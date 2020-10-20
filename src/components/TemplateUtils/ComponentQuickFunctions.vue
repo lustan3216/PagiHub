@@ -281,7 +281,7 @@ export default {
     deleteSlider() {
       vmGet(this.node.id, this.isExample).removeCurrentSlider()
     },
-    resize: function() {
+    resize: debounce(function() {
       const self = this
       this.$nextTick(() => {
         this.visible = false
@@ -358,7 +358,8 @@ export default {
           }
         })
       })
-    },
+      // 180 不要再動了，因為 griitem 動畫是100 且store/node 裡面也有callback呼叫
+    }, 180),
     mouseenter() {
       timeId = setTimeout(() => {
         this.hovering = true

@@ -41,7 +41,6 @@
 import { mapActions, mapState, mapMutations } from 'vuex'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
-import ComponentSet from '../Templates/ComponentSet'
 
 let timeId
 export default {
@@ -49,7 +48,6 @@ export default {
   components: {
     ArtBoard,
     ViewPort,
-    ComponentSet,
     PreviewController: () => import('@/components/Layout/PreviewController'),
     SidebarRight: () => import('@/components/Layout/SidebarRight'),
     SidebarLeft: () => import('@/components/Layout/SidebarLeft'),

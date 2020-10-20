@@ -140,6 +140,11 @@ export default {
 
     await this.getProject(projectId)
 
+    if (this.editingComponentSetId) {
+      // preview mode 回來時
+      return
+    }
+
     this.$nextTick(() => {
       const id = getValueByPath(this.componentSets, [0, 'id'])
       if (id) {

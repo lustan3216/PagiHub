@@ -42,16 +42,7 @@ export default {
     page.addEventListener('scroll', () => {
       this.scrollTop = page.scrollTop
     })
-
-    if (!this.isExample) {
-      const { clientWidth, clientHeight } = this.$el
-
-      this.LAYOUT_SET({
-        gridResizing: false,
-        artBoardWidth: parseInt(clientWidth),
-        artBoardHeight: parseInt(clientHeight)
-      })
-    }
+    this.$bus.$emit('art-board-mounted')
   },
   activated() {
     if (this.scrollTop) {

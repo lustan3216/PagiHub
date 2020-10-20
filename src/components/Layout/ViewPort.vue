@@ -170,6 +170,7 @@ export default {
   computed: {
     ...mapState('layout', ['artBoardWidth', 'artBoardHeight']),
     ...mapGetters('layout', ['descBreakpoints']),
+    ...mapState('mode', ['mode']),
     scalePercent() {
       return Math.ceil(+this.style.scale * 100)
     },
@@ -184,6 +185,10 @@ export default {
     }
   },
   watch: {
+    mode() {
+      this.setBoundaryRect()
+      this.reset()
+    },
     resizeBar(value) {
       if (value && this.style.w === this.artBoardWidth) {
         this.$nextTick(() => {
@@ -262,15 +267,28 @@ export default {
 
       inertia: true
     })
+
+    this.$bus.$on('art-board-mounted', this.setBoundaryRect)
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('layout', ['resizeNodeQuickFn']),
+    reset() {
+      this.style.w = this.artBoardWidth
+      this.style.h = this.artBoardHeight
+      this.style.scale = 1
+    },
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.$el)
 
       this.style.w = width
       this.style.h = height
+
+      this.LAYOUT_SET({
+        gridResizing: false,
+        artBoardWidth: parseInt(width),
+        artBoardHeight: parseInt(height)
+      })
     },
     scaleCallback(event, { scaleRatio }) {
       this.style.scale = scaleRatio
