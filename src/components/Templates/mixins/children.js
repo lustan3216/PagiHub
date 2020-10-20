@@ -1,4 +1,4 @@
-import { mapMutations, mapState, mapActions } from 'vuex'
+import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 import { CHILDREN, SOFT_DELETE } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { vmRemoveNode } from '@/utils/vmMap'
@@ -11,8 +11,7 @@ import {
   cloneJsonWithoutChildren,
   isGrid
 } from '@/utils/node'
-import * as basicTemplates from '@/templateJson/basic'
-import { camelCase } from '@/utils/string'
+import { getExample } from '@/templateJson/basic'
 
 export default {
   props: {
@@ -26,6 +25,7 @@ export default {
   },
   computed: {
     ...mapState('node', ['rootComponentSetIds', 'editingComponentSetId']),
+    ...mapGetters('layout', ['currentBreakpoint']),
     node() {
       return this.nodesMap[this.id]
     },
@@ -99,7 +99,7 @@ export default {
       // can new layer-item, grid-item, carousel-item, form-item
       const { tag } = this.node
       // eslint-disable-next-line
-      const template = basicTemplates[camelCase(tag)]()
+      const template = getExample(tag, {}, this.currentBreakpoint)
       const emptyItem = arrayLast(template[CHILDREN])
 
       this.addNodeToParent(emptyItem)

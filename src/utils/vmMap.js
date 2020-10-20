@@ -1,5 +1,5 @@
 import store from '../store'
-import { CAN_NEW_ITEM, BREAK_POINTS_MAP } from '../const'
+import { CAN_NEW_ITEM } from '../const'
 import { isGridItem, traversalAncestorAndSelf, wrapByGrid } from '@/utils/node'
 import { arrayEquals } from '@/utils/array'
 import { getValueByPath, setValueByPath } from '@/utils/tool'

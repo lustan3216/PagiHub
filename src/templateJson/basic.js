@@ -18,31 +18,31 @@ import {
   HTML
 } from '../const'
 
-const mapPoints = object => {
+const mapPoints = (object, breakpoint) => {
   return {
-    md: object
+    [breakpoint]: object
   }
 }
 
-export const gridGeneratorItem = function(options) {
+export const gridGeneratorItem = function(options, breakpoint) {
   return {
     [TAG]: GRID_GENERATOR_ITEM,
     [LABEL]: 'container',
-    [GRID]: mapPoints({ x: 0, y: 0, w: 22, h: 100 }),
+    [GRID]: mapPoints({ x: 0, y: 0, w: 22, h: 100 }, breakpoint),
     ...options
   }
 }
 
-export const gridGeneratorItems = function() {
-  return [gridGeneratorItem()]
+export const gridGeneratorItems = function(options, breakpoint) {
+  return [gridGeneratorItem(options, breakpoint)]
 }
 
-export const gridGenerator = function(options) {
+export const gridGenerator = function(options, breakpoint) {
   return {
     [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
     [LABEL]: 'container',
-    [CHILDREN]: gridGeneratorItems(),
+    [CHILDREN]: gridGeneratorItems(null, breakpoint),
     ...options
   }
 }
@@ -56,7 +56,7 @@ export const iframer = function(options) {
   }
 }
 
-export const carousel = function() {
+export const carousel = function(options, breakpoint) {
   return {
     [TAG]: CAROUSEL,
     [CAN_NEW_ITEM]: true,
@@ -70,14 +70,14 @@ export const carousel = function() {
         [CAN_NEW_ITEM]: false,
         [CHILDREN]: [
           {
-            [GRID]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }),
+            [GRID]: mapPoints({ x: 0, y: 0, w: 22, h: 71 }, breakpoint),
             [TAG]: GRID_GENERATOR_ITEM,
             [POLYMORPHISM]: 'prev',
             [CAN_NOT_COPY]: true,
             [CAN_NOT_DELETE]: true
           },
           {
-            [GRID]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }),
+            [GRID]: mapPoints({ x: 23, y: 0, w: 22, h: 71 }, breakpoint),
             [TAG]: GRID_GENERATOR_ITEM,
             [POLYMORPHISM]: 'next',
             [CAN_NOT_COPY]: true,
@@ -85,9 +85,9 @@ export const carousel = function() {
           }
         ]
       }),
-      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
-      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
-      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' })
+      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }, breakpoint),
+      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }, breakpoint),
+      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }, breakpoint)
     ]
   }
 }
@@ -102,7 +102,7 @@ export const textEditor = function(options) {
   }
 }
 
-export const flexButton = function() {
+export const flexButton = function(options) {
   return {
     [TAG]: 'flex-button',
     [LABEL]: 'button',
@@ -120,15 +120,15 @@ export const flexButton = function() {
   }
 }
 
-export const flexImage = function(props) {
+export const flexImage = function(options) {
   return {
     [TAG]: 'flex-image',
     [LABEL]: 'image',
-    ...props
+    ...options
   }
 }
 
-export const videoPlayer = function() {
+export const videoPlayer = function(options) {
   return {
     [TAG]: 'video-player',
     [CAN_BE_EDITED]: true,
@@ -136,26 +136,17 @@ export const videoPlayer = function() {
   }
 }
 
-export const drawer = function() {
-  const button = flexButton()
-  button[LABEL] = 'drawer'
-  button[CHILDREN] = [
-    {
-      [TAG]: 'drawer',
-      [STYLES]: { background: '#fff' },
-      [CHILDREN]: gridGeneratorItems()
-    }
-  ]
-
-  return button
+export const exampleMap = {
+  [GRID_GENERATOR_ITEM]: gridGeneratorItem,
+  [GRID_GENERATOR]: gridGenerator,
+  [CAROUSEL]: carousel,
+  [TEXT_EDITOR]: textEditor,
+  'iframer': iframer,
+  'flex-button': flexButton,
+  'flex-image': flexImage,
+  'video-player': videoPlayer
 }
 
-export default [
-  gridGenerator(),
-  textEditor(),
-  flexImage(),
-  flexButton(),
-  carousel(),
-  videoPlayer(),
-  iframer()
-]
+export function getExample(tag, options = {}, breakpoint) {
+  return exampleMap[tag](options, breakpoint)
+}

@@ -103,9 +103,9 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { cloneJson } from '@/utils/tool'
-import { isComponentSet } from '@/utils/node'
+import { isComponent, isComponentSet, isGridItem } from '@/utils/node'
 import { Tag } from 'element-ui'
-import { vmGet } from '@/utils/vmMap'
+import { vmGet, vmRemoveNode } from '@/utils/vmMap'
 import { HTML, STYLES } from '@/const'
 import Tip from '@/components/Tip/TipPopper'
 import SelectTag from '@/components/Components/SelectTag'
@@ -190,10 +190,19 @@ export default {
           path: `${node.id}.${STYLES}.${HTML}.overflow`,
           value: 'scroll'
         })
-      }
 
-      vmGet(node.id).addNodeToParent(cloneJson(template))
-      this.removeBeingAddedComponentId()
+        vmGet(node.id).addNodeToParent(cloneJson(template))
+        this.removeBeingAddedComponentId()
+      }
+      else if (isGridItem(template)) {
+        vmGet(node.id).addNodeToParent(cloneJson(template))
+        this.removeBeingAddedComponentId()
+      }
+      else if (isComponent(template)) {
+        vmRemoveNode(node)
+        vmGet(node.parentId).addNodeToParent(cloneJson(template))
+        this.removeBeingAddedComponentId()
+      }
     }
   }
 }

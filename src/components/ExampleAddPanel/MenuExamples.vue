@@ -7,18 +7,18 @@
       align="middle"
     >
       <el-col
-        v-for="component in basicExamples"
-        v-show="searchedExamples.includes(component.tag)"
-        :key="component.id"
+        v-for="tag in basicTags"
+        v-show="searchedExamples.includes(tag)"
+        :key="tag"
         :lg="4"
         :md="6"
         :sm="8"
         style="margin-bottom: 35px;"
       >
         <card-example
-          :component="component"
+          :tag="tag"
           style="width: 100%;height: 100px;"
-          @add="$emit('add', component)"
+          @add="add(tag)"
         />
       </el-col>
     </el-row>
@@ -26,9 +26,9 @@
 </template>
 
 <script>
-import { shortTagName } from '@/utils/node'
+import { mapGetters } from 'vuex'
 import CardExample from './CardExample'
-import basic from '@/templateJson/basic'
+import { exampleMap, getExample } from '@/templateJson/basic'
 
 export default {
   name: 'MenuExamples',
@@ -42,18 +42,18 @@ export default {
     }
   },
   computed: {
-    basicExamples() {
-      return basic
+    ...mapGetters('layout', ['currentBreakpoint']),
+    basicTags() {
+      return Object.keys(exampleMap)
     },
     searchedExamples() {
-      return basic
-        .filter(
-          x =>
-            shortTagName(x)
-              .toLowerCase()
-              .search(this.search) >= 0
-        )
-        .map(x => x.tag)
+      return this.basicTags
+        .filter(tag => tag.toLowerCase().search(this.search) >= 0)
+    }
+  },
+  methods: {
+    add(tag) {
+      this.$emit('add', getExample(tag, this.currentBreakpoint))
     }
   }
 }

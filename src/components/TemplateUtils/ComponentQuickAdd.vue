@@ -84,8 +84,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { vmAddNodeToParent } from '@/utils/vmMap'
-import basicTemplate from '@/templateJson/basic'
+import { getExample } from '@/templateJson/basic'
 import { cloneJson } from '@/utils/tool'
 import {
   BIconFonts,
@@ -113,6 +114,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('layout', ['currentBreakpoint']),
     node() {
       return this.nodesMap[this.id]
     },
@@ -125,14 +127,9 @@ export default {
   },
   methods: {
     vmCreateEmptyItem(tag) {
-      const child = basicTemplate.find(node => node.tag === tag)
-      let gridItem = closestGridItem(this.node)
-
-      if (child) {
-        gridItem = {
-          ...gridItem,
-          children: [child]
-        }
+      const gridItem = {
+        ...closestGridItem(this.node),
+        children: tag ? [getExample(tag, {}, this.currentBreakpoint)] : []
       }
 
       vmAddNodeToParent(gridItem.parentId, cloneJson(gridItem))

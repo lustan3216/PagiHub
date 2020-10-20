@@ -3,18 +3,11 @@ import {
   closestGridItem,
   isGridItem,
 } from '@/utils/node'
-import { arrayAscSort, arrayDescSort, arrayUniq, deleteBy, findIndexBy } from '@/utils/array'
-import { appendIds } from '@/utils/nodeId'
-import { CHILDREN, SORT_INDEX, STYLES } from '@/const'
+import { arrayAscSort, arrayDescSort } from '@/utils/array'
+import { CHILDREN, STYLES } from '@/const'
 import { mapActions, mapGetters } from 'vuex'
-import { gridGenerator } from '@/templateJson/basic'
 import { vmGet } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
-
-const emptyGird = () =>
-  gridGenerator({
-    [CHILDREN]: []
-  })
 
 export default {
   name: 'ComponentMove',

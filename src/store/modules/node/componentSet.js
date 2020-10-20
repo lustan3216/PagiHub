@@ -47,10 +47,10 @@ export const actions = {
   },
 
   async createComponentSet(
-    { commit, state, dispatch },
+    { commit, state, dispatch, rootGetters },
     { label, description, tags }
   ) {
-    const tree = gridGenerator()
+    const tree = gridGenerator({}, rootGetters['layout/currentBreakpoint'])
     appendIds(tree)
     const {
       data: { children, ...componentSet }

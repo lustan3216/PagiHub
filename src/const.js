@@ -57,9 +57,9 @@ export const BREAK_POINTS_MAP = {
 }
 
 export const DEFAULT_BREAK_POINTS_MAP = {
-  lg: 992,
-  md: 768,
-  xs: 0
+  md: 992,
+  sm: 768,
+  xxs: 0
 }
 
 export const SORT_INDEX = 'sortIndex'

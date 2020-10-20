@@ -109,7 +109,7 @@ export default {
         this.innerGrid.xs ||
         this.innerGrid.md ||
         this.innerGrid.lg ||
-        this.xl
+        this.innerGrid.xl
       )
     },
     lock() {
