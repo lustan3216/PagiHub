@@ -392,10 +392,13 @@ export default {
   color: $color-active;
 }
 
-.uniq-function {
+::v-deep.uniq-function {
   position: absolute;
-  right: 3px;
+  left: 3px;
   top: 3px;
   opacity: 0.9;
+  .el-button {
+    padding: 4px;
+  }
 }
 </style>

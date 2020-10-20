@@ -89,7 +89,7 @@
                   color: getMarkAttrs('backgroundColor').backgroundColor
                 }"
                 style="font-size: 14px;"
-                class="el-icon-s-opportunity"
+                class="el-icon-s-open"
               />
               <color-picker
                 :value="getMarkAttrs('backgroundColor').backgroundColor"

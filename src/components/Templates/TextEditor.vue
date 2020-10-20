@@ -82,7 +82,7 @@
                 <i
                   :style="{ color: backgroundColor }"
                   style="font-size: 14px;"
-                  class="el-icon-s-opportunity"
+                  class="el-icon-s-open"
                 />
               </color-picker>
             </button>

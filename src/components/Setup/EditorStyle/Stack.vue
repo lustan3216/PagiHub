@@ -66,10 +66,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.isStack {
-  background: aliceblue;
-}
-.isStack:hover {
-  background: aliceblue;
+.isStack,
+.isStack:hover,
+.isStack:focus {
+  background: $color-active;
+  color: white !important;
 }
 </style>
