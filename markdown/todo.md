@@ -20,6 +20,7 @@ https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
 
 image 做個換照片按鈕，還有個放到最大
+首頁 load 完，再去同個編輯夜，原本 draft 的會被覆蓋掉，vuex 應該切開
 
 refactor
 style 試試看能不能全部放在 當個 component 裡面，style 用 props 傳遞

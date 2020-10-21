@@ -63,6 +63,7 @@ export default {
     ])
   },
   async created() {
+    this.INIT_NODE_STORE()
     this.SET_DRAFT_MODE()
     this.NODE_SET({ editingComponentSetId: null })
 
@@ -95,6 +96,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations('node', ['INIT_NODE_STORE']),
     ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapMutations('mode', ['SET_DRAFT_MODE']),

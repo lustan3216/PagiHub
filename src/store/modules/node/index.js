@@ -7,7 +7,7 @@ import { isComponentSet, isProject } from '@/utils/node'
 import { cloneJson, setValueByPath } from '@/utils/tool'
 import jsonHistory from '@/store/jsonHistory'
 
-const childrenOf = {}
+let childrenOf = {}
 let tmpChildrenOf = {}
 
 const state = {
@@ -185,6 +185,17 @@ const mutations = {
   SET_EDITING_COMPONENT_SET_ID(state, id) {
     state.editingComponentSetId = id
   },
+  INIT_NODE_STORE(state) {
+    state.editingProjectId = null
+    state.editingComponentSetId = null
+    state.nodesMap = {}
+    state.projectIds = []
+    state.rootComponentSetIds = []
+
+    childrenOf = {}
+    jsonHistory.deltas = []
+    jsonHistory.currentIndex = 0
+  },
   PROJECT_INIT(state, projectId) {
     state.editingProjectId = projectId
     state.editingComponentSetId = null
@@ -201,11 +212,6 @@ const actions = {
       jsonHistory.debounceRecord(payLoad, 300)
     }
   }
-  // irreversibleRecord({ rooState }, payLoad) {
-  //   if (rooState.mode.isDraftMode) {
-  //     jsonHistory.irreversibleRecord(payLoad)
-  //   }
-  // }
 }
 
 const getters = {

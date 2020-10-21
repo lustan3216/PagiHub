@@ -38,9 +38,7 @@ export default {
     if (nodes.length) {
       this.SET_EDITING_COMPONENT_SET_ID(componentSet.id)
       this.rootComponentSetId = componentSet.id
-      this.SET_NODES_TO_MAP({
-        nodes: [componentSet]
-      })
+      this.SET_NODES_TO_MAP({ nodes: [componentSet] })
       this.SET_NODES_TO_MAP({
         nodes,
         rootComponentSetId: componentSet.id
