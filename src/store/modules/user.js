@@ -26,33 +26,34 @@ const mutations = {
 }
 
 const actions = {
-  async getCurrentUser({ commit }) {
+  async getCurrentLocalUser({ commit, dispatch }) {
     try {
       const user = await Auth.currentAuthenticatedUser()
-      const { attributes } = user
-      const { userId } = JSON.parse(attributes.identities)[0]
+      commit('SET', parseCognitoUser(user))
 
-      commit('SET', {
-        userId,
-        user,
-        email: attributes.email,
-        coverPhoto: attributes['custom:coverPhoto'],
-        username: attributes.preferred_username,
-        description: attributes['custom:description'],
-        facebookId: attributes['custom:facebookId'],
-        instagramId: attributes['custom:instagramId']
-      })
+      // 為了UX體驗，一開始先用 local 的就好，增加速度，之後在底層用async 方式更新，如果失敗就登出
+      dispatch('getCurrentRemoteUser')
     }
     catch {
       router.push('/')
       commit('INIT')
     }
   },
-  async patchUser({ state, commit }, { username }) {
+  async getCurrentRemoteUser({ commit }) {
+    const user = await Auth.currentUserInfo()
+
+    if (user.id) {
+      commit('SET', parseCognitoUser(user))
+    }
+    else {
+      router.push('/')
+      commit('INIT')
+    }
+  },
+  async patchUser({ state, commit, dispatch }, { username }) {
     const { data } = await patchCurrentUser({ username })
-    commit('SET', {
-      username: data.username
-    })
+    dispatch('getCurrentRemoteUser')
+    commit('SET', { username: data.username })
   },
   async logout({ commit }) {
     try {
@@ -68,6 +69,21 @@ const actions = {
 const getters = {
   isLogin(state) {
     return state.userId
+  }
+}
+
+function parseCognitoUser(user) {
+  const { attributes } = user
+  const { userId } = JSON.parse(attributes.identities)[0]
+  return {
+    userId,
+    user,
+    email: attributes.email,
+    coverPhoto: attributes['custom:coverPhoto'],
+    username: attributes.preferred_username,
+    description: attributes['custom:description'],
+    facebookId: attributes['custom:facebookId'],
+    instagramId: attributes['custom:instagramId']
   }
 }
 

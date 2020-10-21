@@ -52,10 +52,10 @@ export default {
     }
   },
   created() {
-    this.getCurrentUser()
+    this.getCurrentLocalUser()
   },
   methods: {
-    ...mapActions('user', ['getCurrentUser'])
+    ...mapActions('user', ['getCurrentLocalUser'])
   }
 }
 </script>

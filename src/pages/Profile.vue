@@ -119,27 +119,6 @@ export default {
       return `Please ${lack.join(' and ')} to unlock first.`
     }
   },
-  created() {
-    // this.getCurrentUser().then(user => {
-    //   this.coverPhoto = user.coverPhoto
-    //   this.email = user.email
-    //   this.verified = user.verified
-    //   this.username = user.username
-    //   this.data.username = user.username
-    //   this.data.description = user.description
-    //   this.data.facebookId = user.facebookId
-    //   this.data.instagramId = user.instagramId
-    //   this.$watch(
-    //     'data',
-    //     () => {
-    //       this.dirty = true
-    //     },
-    //     {
-    //       deep: true
-    //     }
-    //   )
-    // })
-  },
   methods: {
     submitForm() {
       this.$refs.form.validate(valid => {

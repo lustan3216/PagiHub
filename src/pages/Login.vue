@@ -66,7 +66,6 @@ export default {
     ...mapGetters('user', ['isLogin'])
   },
   methods: {
-    ...mapActions('user', ['getCurrentUser']),
     ...mapMutations('user', {
       userSet: 'SET',
       userInit: 'INIT'
