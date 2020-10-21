@@ -55,12 +55,10 @@ export default {
         return
       }
 
-      const $el = isGrid(this.node) ? this.$el : this.$el.parentNode
-
       if (hover) {
         const node = document.createElement('DIV')
         node.className = 'hover-cover'
-        $el.appendChild(node)
+        this.$el.appendChild(node)
         hoverNode.push(node)
       }
       else {
