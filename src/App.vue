@@ -23,7 +23,7 @@
       @uploaded="uploading = false"
     />
 
-    <facebook-chat v-if="!$route.meta.noFbChat"/>
+    <facebook-chat />
   </div>
 </template>
 
