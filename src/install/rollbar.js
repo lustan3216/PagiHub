@@ -14,10 +14,5 @@ export default function(Vue) {
   })
 
   Vue.prototype.$rollbar = rollbar
-
-  Vue.config.errorHandler = (err, vm, info) => {
-    vm.$rollbar.error(err)
-    throw err
-  }
 }
 

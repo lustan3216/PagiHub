@@ -54,6 +54,18 @@ Vue.mixin({
   }
 })
 
+Vue.config.errorHandler = (err, vm, info) => {
+  if (vm.$rollbar) {
+    vm.$rollbar.error(err)
+  }
+  if (process.env.NODE_ENV === 'development') {
+    const { Message } = require('element-ui')
+    Message(JSON.stringify(err))
+  }
+
+  throw err
+}
+
 Vue.prototype.$t = key => i18n[key]
 Vue.prototype.$Log = console.log
 Vue.prototype.$log = console.log
