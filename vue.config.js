@@ -1,20 +1,21 @@
 const path = require('path')
-const webpack = require('webpack')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 const isDev = process.env.NODE_ENV === 'development'
 const isTest = process.env.NODE_ENV === 'test'
 const isStaging = process.env.NODE_ENV === 'staging'
 const isProd = process.env.NODE_ENV === 'production'
 
+const transpileDependencies = isProd
+  ? [
+    'vue-grid-layout',
+    'vue-clamp',
+    'resize-detector',
+    'vue-observe-visibility',
+    'vue'
+  ]
+  : []
 module.exports = {
-  transpileDependencies: [
-    // 'element-ui',
-    // 'vue-grid-layout',
-    // 'vue-clamp',
-    // 'resize-detector',
-    // 'vue-observe-visibility',
-    // 'vue'
-  ],
+  transpileDependencies,
   productionSourceMap: false,
   devServer: {
     https: true

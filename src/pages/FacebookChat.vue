@@ -48,7 +48,7 @@ export default {
   methods: {
     try(noFbChat) {
       if (noFbChat) {
-        this.hide()
+        this.close()
       }
       else {
         this.open()
