@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="element">
     <el-divider content-position="left">FONT</el-divider>
 
     <el-row
@@ -99,7 +99,8 @@ export default {
       return getValueByPath(this.node, [STYLES, HTML], {})
     },
     element() {
-      return vmGet(this.node.id).content.$el
+      const vm = vmGet(this.node.id)
+      return getValueByPath(vm, 'content.$el')
     },
     computedStyle() {
       return window.getComputedStyle(this.element)

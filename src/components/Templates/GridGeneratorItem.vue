@@ -3,7 +3,9 @@
     v-if="!hidden"
     ref="gridItem"
     v-bind="layout"
-    :class="{ 'no-action': lock }"
+    :class="{
+      'no-action': lock
+    }"
     :auto-height="isChildTextEditor"
     drag-allow-from="div"
     @moveStart="assignStore"
@@ -17,15 +19,14 @@
       :class="{
         'grid-item-border': isDraftMode,
         'border-pulse': pulsing,
-        stack: pulsing && stack,
-        'h-100': !isChildTextEditor
+        'h-100': !isChildTextEditor,
+        stack: pulsing && stack
       }"
       :style="innerStyles.html"
     >
       <component-giver
         v-if="child"
         ref="child"
-        :style="{ marginTop }"
         :id="child.id"
       />
     </div>
@@ -63,8 +64,7 @@ export default {
   data() {
     return {
       exampleBoundary: 'xs',
-      layout: {},
-      offResizeListener: null
+      layout: {}
     }
   },
   computed: {
@@ -175,24 +175,6 @@ export default {
     }
   },
   watch: {
-    isChildTextEditor: {
-      handler(value) {
-        this.$nextTick(() => {
-          if (value) {
-            asyncGetValue([this.$refs, 'child', '$el']).then(ele => {
-              const { gridItem } = this.$refs
-              gridItem.autoSize()
-              this.offResizeListener = resizeListener(ele, gridItem.autoSize)
-            })
-          }
-          else if (this.offResizeListener) {
-            this.offResizeListener()
-            this.offResizeListener = null
-          }
-        })
-      },
-      immediate: true
-    },
     computedLayout: {
       handler(value) {
         // 一定要轉成data，不然第一次computed 會因為不能assign值出bug
@@ -222,12 +204,6 @@ export default {
         const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
         this.exampleBoundary = this.closestValidGrid(currentPoint)
       })
-    }
-  },
-  beforeDestroy() {
-    if (this.offResizeListener) {
-      this.offResizeListener()
-      this.offResizeListener = null
     }
   },
   methods: {

@@ -97,7 +97,7 @@
   import { getDocumentDir } from '../helpers/DOM'
   //    var eventBus = require('./eventBus');
   let interact = require('interactjs')
-
+  import { getValueByPath, resizeListener, debounce } from '@/utils/tool'
   const store = Vue.observable({ hideHandler: false })
 
   export default {
@@ -276,7 +276,8 @@
         innerY: this.y,
         innerW: this.w,
         innerH: this.h,
-        lockItemInLayout: false
+        lockItemInLayout: false,
+        offResizeListener: null
       }
     },
     created() {
@@ -345,6 +346,11 @@
       if (this.interactObj) {
         this.interactObj.unset() // destroy interact intance
       }
+
+      if (this.offResizeListener) {
+        this.offResizeListener()
+        this.offResizeListener = null
+      }
     },
     mounted: function() {
       // lots-design fix bug
@@ -376,6 +382,24 @@
       })
     },
     watch: {
+      autoHeight: {
+        handler(value) {
+          this.$nextTick(() => {
+            const elm = getValueByPath(this.$slots, ['default', 0, 'elm'])
+            if (value && elm) {
+              this.autoSize()
+              this.offResizeListener = resizeListener(elm, debounce(() => {
+                this.autoSize()
+              }, 10))
+            }
+            else if (this.offResizeListener) {
+              this.offResizeListener()
+              this.offResizeListener = null
+            }
+          })
+        },
+        immediate: true
+      },
       fixOnParentBottom(value) {
         if (value) {
           this.parent.correctFixItemsBound()
@@ -968,7 +992,16 @@
           })
         }
       },
+      getAbsoluteHeight(el) {
+    // Get the DOM Node if you pass in a string
+    el = (typeof el === 'string') ? document.querySelector(el) : el;
 
+    const styles = window.getComputedStyle(el);
+        const margin = parseFloat(styles['marginTop']) +
+                 parseFloat(styles['marginBottom']);
+
+    return Math.ceil(el.offsetHeight + margin);
+  },
       autoSize() {
         // ok here we want to calculate if a resize is needed
         this.$nextTick(() => {
@@ -983,9 +1016,12 @@
           this.previousW = this.innerW
           this.previousH = this.innerH
 
-          const { clientHeight, clientWidth } = this.$slots.default[0].elm
 
-          let pos = this.calcWH(clientHeight, clientWidth)
+          const { elm } = this.$slots.default[0]
+
+          const hegiht = this.getAbsoluteHeight(elm)
+          const width = elm.clientWidth
+          let pos = this.calcWH(hegiht, width)
           // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
           if (pos.w < this.minW) {
             pos.w = this.minW
@@ -1011,10 +1047,10 @@
           // this.lastH = y;
 
           if (this.innerW !== pos.w || this.innerH !== pos.h) {
-            this.$emit('resize', this.i, pos.h, pos.w, clientHeight, clientWidth)
+            this.$emit('resize', this.i, pos.h, pos.w, hegiht, width)
           }
           if (this.previousW !== pos.w || this.previousH !== pos.h) {
-            this.$emit('resized', this.i, pos.h, pos.w, clientHeight, clientWidth)
+            this.$emit('resized', this.i, pos.h, pos.w, hegiht, width)
             this.eventBus.$emit('resizeEvent', 'autoSize', this.i, this.innerX, this.innerY, pos.h, this.innerW)
           }
         })
