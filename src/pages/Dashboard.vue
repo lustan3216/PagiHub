@@ -40,27 +40,6 @@
         </app-link>
 
         <app-link
-          to="https://github.com/LotsDesign/issues/issues/new?assignees=&labels=&template=bug_report.md&title="
-          class="link-li"
-        >
-          <i class="el-icon-warning-outline" /> Bug report
-        </app-link>
-
-        <app-link
-          to="https://github.com/LotsDesign/issues/issues/new?assignees=&labels=&template=feature_request.md&title="
-          class="link-li"
-        >
-          <i class="el-icon-coffee-cup" /> Feature request
-        </app-link>
-
-        <app-link
-          to="https://github.com/LotsDesign/issues/issues/new"
-          class="link-li"
-        >
-          <i class="el-icon-phone-outline" /> Contact
-        </app-link>
-
-        <app-link
           to="/"
           class="link-li"
           @click.native="logout"

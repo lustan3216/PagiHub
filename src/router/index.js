@@ -24,6 +24,7 @@ export default new VueRouter({
     {
       path: '/login',
       name: 'Login',
+      meta: { noFbChat: true },
       component: () => import('@/pages/Login')
     },
     {
@@ -57,12 +58,13 @@ export default new VueRouter({
     {
       path: '/workboard/:projectId',
       name: 'Workboard',
+      meta: { noFbChat: true },
       component: () => import('@/components/Layout/PanelDraft')
     },
     {
       path: '/:userLabel/:projectLabel/:componentSetLabel',
       name: 'PanelProduction',
-      meta: { noNavbar: true },
+      meta: { noNavbar: true, noFbChat: true },
       component: () => import('@/components/Layout/PanelProduction')
     },
     {

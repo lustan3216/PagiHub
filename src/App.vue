@@ -23,7 +23,7 @@
       @uploaded="uploading = false"
     />
 
-    <div id="fb-root" />
+    <facebook-chat v-if="!$route.meta.noFbChat"/>
   </div>
 </template>
 
@@ -35,6 +35,7 @@ export default {
   name: 'App',
   components: {
     TopNav,
+    FacebookChat: () => import('@/pages/FacebookChat'),
     DialogComponentTabs: () =>
       import('@/components/ExampleAddPanel/DialogComponentTabs')
   },
