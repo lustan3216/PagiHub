@@ -49,6 +49,7 @@ class GPickr {
       ['#42445a', 0],
       ['#20b6dd', 1]
     ]
+  _string = ''
 
     constructor(opt) {
         opt = Object.assign({
@@ -204,8 +205,9 @@ class GPickr {
 
         // Apply gradient and update result
         preview.style.background = `linear-gradient(to right, ${this.getStops().toString('linear')})`;
-        result.style.background = this.getGradient().toString();
-
+        const string = this.getGradient().toString();
+        result.style.background = string
+        this._string = string
         // Show / hide angle control. Update switch button
         pos.style.opacity = _mode === 'radial' ? '' : '0';
         pos.style.visibility = _mode === 'radial' ? '' : 'hidden';
@@ -337,6 +339,7 @@ class GPickr {
      * @param str gradient string
      */
     setGradient(str) {
+        if (this._string === str) return
         const parsed = parseGradient(str);
 
         if (!parsed || parsed.stops.length < 2) {
