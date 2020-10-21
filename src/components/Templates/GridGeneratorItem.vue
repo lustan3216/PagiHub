@@ -251,6 +251,7 @@ export default {
 
 .grid-item-border {
   border: 1px dashed #bcbcbc;
+  box-sizing: border-box;
 }
 
 .stack {

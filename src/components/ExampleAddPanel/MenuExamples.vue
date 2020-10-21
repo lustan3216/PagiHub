@@ -29,7 +29,7 @@
 import { mapGetters } from 'vuex'
 import CardExample from './CardExample'
 import { exampleMap } from '@/templateJson/basic'
-import { shortTagName } from '@/utils/node'
+import { isGridItem, shortTagName } from '@/utils/node'
 
 export default {
   name: 'MenuExamples',
@@ -45,7 +45,9 @@ export default {
   computed: {
     ...mapGetters('layout', ['currentBreakpoint']),
     basicComponents() {
-      return Object.values(exampleMap).map(fn => fn({}, this.currentBreakpoint))
+      return Object.values(exampleMap)
+        .map(fn => fn({}, this.currentBreakpoint))
+        .filter(node => !isGridItem(node))
     },
     searchedExamples() {
       return this.basicComponents

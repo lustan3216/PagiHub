@@ -144,9 +144,10 @@ export const videoPlayer = function(options) {
 
 export const exampleMap = {
   [GRID_GENERATOR]: gridGenerator,
+  [GRID_GENERATOR_ITEM]: gridGeneratorItem,
   [CAROUSEL]: carousel,
   [TEXT_EDITOR]: textEditor,
-  iframer: iframer,
+  iframer,
   'flex-button': flexButton,
   'flex-image': flexImage,
   'video-player': videoPlayer

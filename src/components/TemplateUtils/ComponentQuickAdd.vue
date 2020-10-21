@@ -7,7 +7,7 @@
     >
       <el-button
         type="text"
-        @click="vmCreateEmptyItem(null)"
+        @click="vmCreateEmptyItem('grid-item')"
       >
         <b-icon-aspect-ratio />
         <i class="el-icon-plus" />
@@ -60,9 +60,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { vmAddNodeToParent } from '@/utils/vmMap'
+import { vmAddNodeToParent, vmCreateEmptyItem } from '@/utils/vmMap'
 import { getExample } from '@/templateJson/basic'
-import { cloneJson } from '@/utils/tool'
+import { cloneJson, getValueByPath } from '@/utils/tool'
 import {
   BIconFonts,
   BIconImage,
@@ -72,6 +72,8 @@ import {
 import { closestGridItem, isComponent } from '@/utils/node'
 import Stack from '@/components/Setup/EditorStyle/Stack'
 import Lock from '../Setup/EditorStyle/Lock'
+import { STYLES } from '@/const'
+
 export default {
   name: 'ComponentQuickAdd',
   components: {
@@ -99,12 +101,20 @@ export default {
   },
   methods: {
     vmCreateEmptyItem(tag) {
-      const gridItem = {
-        ...closestGridItem(this.node),
-        children: tag ? [getExample(tag, {}, this.currentBreakpoint)] : []
+      if (tag === 'grid-item') {
+        return vmCreateEmptyItem(this.node)
       }
 
-      vmAddNodeToParent(gridItem.parentId, cloneJson(gridItem))
+      let gridItem = {
+        ...closestGridItem(this.node),
+        children: [getExample(tag, {}, this.currentBreakpoint)]
+      }
+
+      gridItem = cloneJson(gridItem)
+      gridItem[STYLES] = {
+        layout: getValueByPath(gridItem, [STYLES, 'layout'])
+      }
+      vmAddNodeToParent(gridItem.parentId, gridItem)
     }
   }
 }

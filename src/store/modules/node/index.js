@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import store, { SET } from '@/store'
 import { CHILDREN, ID, PARENT_ID, SOFT_DELETE } from '@/const'
-import { arraySubtract, deleteBy, findBy, toArray } from '@/utils/array'
+import { deleteBy, findBy, toArray } from '@/utils/array'
 import { defineProperties } from '@/utils/nodeProperties'
 import { isComponentSet, isProject } from '@/utils/node'
 import { cloneJson, setValueByPath } from '@/utils/tool'
@@ -188,9 +188,12 @@ const mutations = {
   INIT_NODE_STORE(state) {
     state.editingProjectId = null
     state.editingComponentSetId = null
-    state.nodesMap = {}
     state.projectIds = []
     state.rootComponentSetIds = []
+
+    for (const key in state.nodesMap) delete state.nodesMap[key]
+    // state.nodesMap = {}, do not use it to clean nodesMap
+    // otherwise whole app will lost reactive of nodesMpa, it's a disaster
 
     childrenOf = {}
     jsonHistory.deltas = []
