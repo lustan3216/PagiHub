@@ -1,7 +1,7 @@
 export const englishAndNumber = {
   trigger: 'blur',
-  pattern: /^[\w|_|\-]*$/,
-  message: 'Only accept English letter or number or _ -.'
+  pattern: /^[\w]*$/,
+  message: 'Only accept English letter or number.'
 }
 
 export const email = {

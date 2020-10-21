@@ -19,7 +19,7 @@
     </portal>
 
     <portal :to="`App-${id}`">
-      <component-quick-functions
+      <component-operator
         v-if="selected && !gridResizing"
         :id="id"
         :is-example="isExample"
@@ -58,10 +58,9 @@ import {
   isTextEditor,
   traversalAncestorAndSelf
 } from '@/utils/node'
-import { getValueByPath, isUndefined } from '@/utils/tool'
+import { getValueByPath } from '@/utils/tool'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { findIndexBy } from '@/utils/array'
-
 
 const store = vue.observable({
   editingPath: [],
@@ -76,7 +75,7 @@ export default {
   },
   components: {
     ContextMenu,
-    ComponentQuickFunctions: () => import('./ComponentQuickFunctions')
+    ComponentOperator: () => import('./ComponentOperator')
   },
   props: {
     id: {

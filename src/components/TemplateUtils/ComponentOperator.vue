@@ -108,7 +108,7 @@ if (process.env.NODE_ENV !== 'production') {
 let timeId
 
 export default {
-  name: 'ComponentQuickFunctions',
+  name: 'ComponentOperator',
   components: {
     ComponentName,
     ElPopover: Popover,
@@ -349,5 +349,6 @@ export default {
   bottom: -33px;
   opacity: 0.9;
   pointer-events: all;
+  width: 125px;
 }
 </style>

@@ -3,7 +3,7 @@
     <el-tooltip
       effect="light"
       content="Append an empty container"
-      placement="top"
+      placement="bottom"
     >
       <el-button
         type="text"
@@ -17,7 +17,7 @@
     <el-tooltip
       effect="light"
       content="Append a text"
-      placement="top"
+      placement="bottom"
     >
       <el-button
         type="text"
@@ -31,7 +31,7 @@
     <el-tooltip
       effect="light"
       content="Append an image"
-      placement="top"
+      placement="bottom"
     >
       <el-button
         type="text"
@@ -45,7 +45,7 @@
     <el-tooltip
       effect="light"
       content="Append a button"
-      placement="top"
+      placement="bottom"
     >
       <el-button
         type="text"

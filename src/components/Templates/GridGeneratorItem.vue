@@ -3,13 +3,7 @@
     v-if="!hidden"
     ref="gridItem"
     v-bind="layout"
-    :class="{
-      'no-action': lock,
-      'grid-item-border': isDraftMode,
-      'border-pulse': pulsing,
-      stack: pulsing && stack
-    }"
-    :style-props="innerStyles.html"
+    :class="{ 'no-action': lock }"
     :auto-height="isChildTextEditor"
     drag-allow-from="div"
     @moveStart="assignStore"
@@ -19,12 +13,22 @@
     @resize="itemUpdating"
     @resized="cleanStore"
   >
-    <component-giver
-      v-if="child"
-      ref="child"
-      :style="{ marginTop }"
-      :id="child.id"
-    />
+    <div
+      :class="{
+        'grid-item-border': isDraftMode,
+        'border-pulse': pulsing,
+        stack: pulsing && stack,
+        'h-100': !isChildTextEditor
+      }"
+      :style="innerStyles.html"
+    >
+      <component-giver
+        v-if="child"
+        ref="child"
+        :style="{ marginTop }"
+        :id="child.id"
+      />
+    </div>
   </vue-grid-item>
 </template>
 

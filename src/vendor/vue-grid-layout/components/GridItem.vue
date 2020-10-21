@@ -11,6 +11,7 @@
         }"
   >
     <slot/>
+
     <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass" :style="{
       cursor: autoHeight ? 'ew-resize' : 'se-resize'
     }"/>
