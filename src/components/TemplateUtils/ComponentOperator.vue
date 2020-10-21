@@ -277,7 +277,7 @@ export default {
           left,
           top,
           width: width - 2,
-          height: height,
+          height: height - 2,
           visible: true
         })
       })
