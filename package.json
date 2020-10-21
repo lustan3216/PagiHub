@@ -6,8 +6,8 @@
     "build": "vue-cli-service build --report",
     "test": "vue-cli-service serve --mode test --port 8085  --open --https true",
     "lint": "vue-cli-service lint --fix",
-    "deploy:staging": "yarn purge && vue-cli-service build --mode staging --modern && vue-cli-service s3-deploy --mode staging",
-    "deploy:prod": "yarn purge && vue-cli-service build --mode production --modern && vue-cli-service s3-deploy --mode production",
+    "deploy:staging": "vue-cli-service build --mode staging --modern && vue-cli-service s3-deploy --mode staging",
+    "deploy:prod": "vue-cli-service build --mode production --modern && vue-cli-service s3-deploy --mode production",
     "dev": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js serve --open --https true",
     "purge": "rm -rf ./node_modules/.cache/hard-source"
   },
