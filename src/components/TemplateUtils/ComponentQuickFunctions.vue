@@ -23,18 +23,7 @@
       @click="tryToAddComponent"
     />
 
-    <div
-      :class="[
-        top > 100 || top + height >= artBoardHeight - 100 ? 'top' : 'bottom'
-      ]"
-      :style="{
-        top:
-          top + height >= artBoardHeight - 100 && artBoardHeight - height < 100
-            ? '5px'
-            : ''
-      }"
-      class="wrapper flex"
-    >
+    <div class="wrapper flex top">
       <div
         class="flex"
         @mouseenter="mouseenter"
@@ -72,40 +61,17 @@
         </div>
       </div>
 
-      <component-quick-add
+      <often-use-menu
         v-if="isDraftMode && !isExample && isLastOne"
         :id="id"
         class="flex backface-hidden"
       />
     </div>
 
-    <el-button-group class="uniq-function can-action">
-      <el-button
-        v-if="isImage"
-        class="icon"
-        @click="openImageAsset"
-      >
-        Replace
-      </el-button>
-
-      <template v-if="isCarousel">
-        <el-button
-          class="icon"
-          @click="vmCreateEmptyItem"
-        >
-          <i class="el-icon-plus" />
-          Slider
-        </el-button>
-
-        <el-button
-          class="icon"
-          @click="deleteSlider"
-        >
-          <i class="el-icon-delete" />
-          Slider
-        </el-button>
-      </template>
-    </el-button-group>
+    <component-quick-add
+      :id="id"
+      class="uniq-function"
+    />
   </div>
 </template>
 
@@ -118,7 +84,6 @@ import {
   getClosetGrimItem,
   isComponentSet,
   traversalAncestorAndSelf,
-  isCarousel,
   isGrid
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
@@ -126,8 +91,8 @@ import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import { debounce } from '@/utils/tool'
 import { BIconPlusSquareFill } from 'bootstrap-vue'
+import OftenUseMenu from './OftenUseMenu'
 import ComponentQuickAdd from './ComponentQuickAdd'
-import { IMAGE_ASSET } from '@/components/ExampleAddPanel/MenuCategories'
 
 const topShared = window.innerHeight / 2
 const leftShared = window.innerWidth / 2
@@ -148,6 +113,7 @@ export default {
     ComponentName,
     ElPopover: Popover,
     BIconPlusSquareFill,
+    OftenUseMenu,
     ComponentQuickAdd
   },
   props: {
@@ -215,12 +181,6 @@ export default {
     node() {
       return this.nodesMap[this.id]
     },
-    isImage() {
-      return this.node.tag === 'flex-image'
-    },
-    isCarousel() {
-      return isCarousel(this.node)
-    },
     isGridItem() {
       return isGridItem(this.node)
     },
@@ -265,9 +225,6 @@ export default {
     },
     vmCreateEmptyItem() {
       vmCreateEmptyItem(this.node)
-    },
-    deleteSlider() {
-      vmGet(this.node.id, this.isExample).removeCurrentSlider()
     },
     resize: debounce(function() {
       this.$nextTick(() => {
@@ -334,12 +291,6 @@ export default {
     mouseleave() {
       clearTimeout(timeId)
       this.hovering = false
-    },
-    openImageAsset() {
-      this.setBeingAddedComponentId(this.id)
-      this.$nextTick(() => {
-        this.$bus.$emit('dialog-component-tabs-jump', IMAGE_ASSET)
-      })
     }
   }
 }
@@ -392,13 +343,11 @@ export default {
   color: $color-active;
 }
 
-::v-deep.uniq-function {
+.uniq-function {
   position: absolute;
-  left: 3px;
-  top: 3px;
+  right: 0;
+  bottom: -33px;
   opacity: 0.9;
-  .el-button {
-    padding: 4px;
-  }
+  pointer-events: all;
 }
 </style>

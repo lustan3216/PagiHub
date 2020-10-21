@@ -1,85 +1,60 @@
 <template>
-  <el-button-group>
-    <portal-target
-      v-if="isDraftMode"
-      :name="`QuickFunctions${id}`"
-      slim
-    />
+  <el-button-group v-if="isComponent">
+    <el-tooltip
+      effect="light"
+      content="Append an empty container"
+      placement="top"
+    >
+      <el-button
+        type="text"
+        @click="vmCreateEmptyItem(null)"
+      >
+        <b-icon-aspect-ratio />
+        <i class="el-icon-plus" />
+      </el-button>
+    </el-tooltip>
 
     <el-tooltip
       effect="light"
-      content="Lock"
+      content="Append a text"
       placement="top"
     >
-      <lock
-        :id="id"
-        visible
-        allow-multi
-      />
+      <el-button
+        type="text"
+        @click="vmCreateEmptyItem('text-editor')"
+      >
+        <b-icon-fonts />
+        <i class="el-icon-plus" />
+      </el-button>
     </el-tooltip>
 
-    <template v-if="isComponent">
-      <el-tooltip
-        effect="light"
-        content="Append an empty container"
-        placement="top"
+    <el-tooltip
+      effect="light"
+      content="Append an image"
+      placement="top"
+    >
+      <el-button
+        type="text"
+        @click="vmCreateEmptyItem('flex-image')"
       >
-        <el-button
-          type="text"
-          @click="vmCreateEmptyItem(null)"
-        >
-          <b-icon-aspect-ratio />
-          <i class="el-icon-plus" />
-        </el-button>
-      </el-tooltip>
+        <b-icon-image />
+        <i class="el-icon-plus" />
+      </el-button>
+    </el-tooltip>
 
-      <el-tooltip
-        effect="light"
-        content="Append a text"
-        placement="top"
+    <el-tooltip
+      effect="light"
+      content="Append a button"
+      placement="top"
+    >
+      <el-button
+        type="text"
+        @click="vmCreateEmptyItem('flex-button')"
       >
-        <el-button
-          type="text"
-          @click="vmCreateEmptyItem('text-editor')"
-        >
-          <b-icon-fonts />
-          <i class="el-icon-plus" />
-        </el-button>
-      </el-tooltip>
-
-      <el-tooltip
-        effect="light"
-        content="Append an image"
-        placement="top"
-      >
-        <el-button
-          type="text"
-          @click="vmCreateEmptyItem('flex-image')"
-        >
-          <b-icon-image />
-          <i class="el-icon-plus" />
-        </el-button>
-      </el-tooltip>
-
-      <!--      <el-tooltip-->
-      <!--        effect="light"-->
-      <!--        content="Append a button"-->
-      <!--        placement="top"-->
-      <!--      >-->
-      <!--        <el-button-->
-      <!--          type="text"-->
-      <!--          @click="vmCreateEmptyItem('flex-button')"-->
-      <!--        >-->
-      <!--          <b-icon-link />-->
-      <!--          <i class="el-icon-plus" />-->
-      <!--        </el-button>-->
-      <!--      </el-tooltip>-->
-    </template>
-
-    <stack
-      v-if="!isComponentSet"
-      :id="id"
-    />
+        <b-icon-link />
+        <i class="el-icon-plus" />
+      </el-button>
+    </el-tooltip>
   </el-button-group>
 </template>
 
@@ -94,7 +69,7 @@ import {
   BIconAspectRatio,
   BIconLink
 } from 'bootstrap-vue'
-import { closestGridItem, isComponent, isComponentSet } from '@/utils/node'
+import { closestGridItem, isComponent } from '@/utils/node'
 import Stack from '@/components/Setup/EditorStyle/Stack'
 import Lock from '../Setup/EditorStyle/Lock'
 export default {
@@ -117,9 +92,6 @@ export default {
     ...mapGetters('layout', ['currentBreakpoint']),
     node() {
       return this.nodesMap[this.id]
-    },
-    isComponentSet() {
-      return isComponentSet(this.node)
     },
     isComponent() {
       return isComponent(this.node)
@@ -145,7 +117,7 @@ export default {
   margin-left: 10px;
 
   button {
-    padding: 5px 8px;
+    padding: 4px 7px;
     border: 1px solid $color-active;
   }
 
