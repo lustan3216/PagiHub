@@ -184,7 +184,7 @@ export default {
         // 一定要轉成data，不然第一次computed 會因為不能assign值出bug
         this.layout = value
         if (this.hidden) {
-          this.$delete(this.layouts[this.id])
+          this.$delete(this.layouts, this.id)
         }
         else {
           this.$set(this.layouts, this.id, this.layout)
@@ -194,7 +194,7 @@ export default {
     },
     hidden(value) {
       if (value) {
-        this.$delete(this.layouts[this.id])
+        this.$delete(this.layouts, this.id)
       }
       else {
         this.$set(this.layouts, this.id, this.layout)
@@ -209,6 +209,9 @@ export default {
         this.exampleBoundary = this.closestValidGrid(currentPoint)
       })
     }
+  },
+  beforeDestroy() {
+    this.$delete(this.layouts, this.id)
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
