@@ -390,7 +390,7 @@
               this.autoSize()
               this.offResizeListener = resizeListener(elm, debounce(() => {
                 this.autoSize()
-              }, 10))
+              }, 50))
             }
             else if (this.offResizeListener) {
               this.offResizeListener()

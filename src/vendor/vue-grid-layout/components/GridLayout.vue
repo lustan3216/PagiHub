@@ -219,18 +219,18 @@
 
             self.onWindowResize()
 
-            const off1 = resizeListener(self.$refs.item, () => {
+            const off1 = resizeListener(self.$refs.item, debounce(() => {
               self.onWindowResize()
               self.resizeNodeQuickFn()
-            })
+            }, 50))
 
             this.offListeners.push(off1)
 
             self.boundaryElement = getBoundaryEl(self.$refs.item)
-            const off2 = resizeListener(self.boundaryElement, () => {
+            const off2 = resizeListener(self.boundaryElement, debounce(() => {
               self.correctFixItemsBound()
               self.resizeNodeQuickFn()
-            })
+            }, 50))
 
             this.offListeners.push(off2)
           })

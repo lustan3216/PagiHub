@@ -41,7 +41,7 @@ import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import { asyncGetValue, getValueByPath, resizeListener } from '@/utils/tool'
+import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestGridItem, isGridItem, isTextEditor } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
@@ -102,7 +102,10 @@ export default {
       return (this.breakpointsMap.lg && this.innerGrid.lg) || this.md
     },
     md() {
-      return (this.breakpointsMap.md && this.innerGrid.md) || this.xs
+      return (this.breakpointsMap.md && this.innerGrid.md) || this.sm
+    },
+    sm() {
+      return (this.breakpointsMap.md && this.innerGrid.sm) || this.xs
     },
     xs() {
       return (this.breakpointsMap.xs && this.innerGrid.xs) || this.xxs
@@ -111,6 +114,7 @@ export default {
       return (
         (this.breakpointsMap.xxs && this.innerGrid.xxs) ||
         this.innerGrid.xs ||
+        this.innerGrid.sm ||
         this.innerGrid.md ||
         this.innerGrid.lg ||
         this.innerGrid.xl
