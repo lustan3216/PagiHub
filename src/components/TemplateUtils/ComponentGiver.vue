@@ -93,6 +93,7 @@ export default {
 
     if (!this.controller || isGrid(this.node)) {
       vnode = h(AsyncComponent, {
+        key: this.id,
         props: {
           id: this.id
         }
@@ -104,6 +105,7 @@ export default {
       if (this.vIf) {
         scopedSlots.default = ref => {
           return h(AsyncComponent, {
+            key: this.id,
             props: {
               id: this.id,
               editing: ref.itemEditing

@@ -48,9 +48,12 @@ export default {
     ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
     ...mapActions('node', ['record']),
 
-    addNodeToParentRecords(nodeTree = {}) {
+    addNodeToParent(nodeTree = {}) {
       // nodeTree should be single node instead of an array
       // could be triggered by copy, delete
+      if (this.isExample) {
+        return
+      }
 
       const records = []
       let parentId = this.id
@@ -71,19 +74,10 @@ export default {
         })
       })
 
-      return { records, newNodeId: nodeTree.id }
-    },
-
-    addNodeToParent(nodeTree = {}) {
-      if (this.isExample) {
-        return
-      }
-
-      const { records, newNodeId } = this.addNodeToParentRecords(nodeTree)
       this.record(records)
 
       this.$nextTick(() => {
-        this.SET_SELECTED_COMPONENT_ID(newNodeId)
+        this.SET_SELECTED_COMPONENT_ID(nodeTree.id)
       })
     },
 
@@ -105,8 +99,12 @@ export default {
       this.addNodeToParent(emptyItem)
     },
 
-    removeNodeRecords(theNodeGonnaRemove) {
+    removeNodeFromParent(theNodeGonnaRemove) {
       // should use vmMap method to call to keep consistency
+      if (this.isExample) {
+        return
+      }
+
       const records = []
 
       traversalSelfAndChildren(theNodeGonnaRemove, child => {
@@ -115,16 +113,6 @@ export default {
           value: undefined
         })
       })
-
-      return records
-    },
-
-    removeNodeFromParent(theNodeGonnaRemove) {
-      if (this.isExample) {
-        return
-      }
-
-      const records = this.removeNodeRecords(theNodeGonnaRemove)
 
       const ids = records.map(x => x.path)
       this.CLEAN_SELECTED_COMPONENT_ID(ids)

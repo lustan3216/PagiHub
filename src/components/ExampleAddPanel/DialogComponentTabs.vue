@@ -182,27 +182,25 @@ export default {
     addTemplate(template) {
       const node = this.nodesMap[this.beingAddedComponentId]
 
-      if (isComponentSet(template)) {
-        // 為了不拿到componentSet
-        template = template.children[0]
-
-        this.record({
-          path: `${node.id}.${STYLES}.${HTML}.overflow`,
-          value: 'scroll'
-        })
-
-        vmGet(node.id).addNodeToParent(cloneJson(template))
-        this.removeBeingAddedComponentId()
-      }
-      else if (isGridItem(node)) {
-        vmGet(node.id).addNodeToParent(cloneJson(template))
-        this.removeBeingAddedComponentId()
-      }
-      else if (isComponent(node)) {
+      if (node.tag === template.tag) {
+        // when replacing flex-image, no add
         vmRemoveNode(node)
         vmGet(node.parentId).addNodeToParent(cloneJson(template))
-        this.removeBeingAddedComponentId()
       }
+      else {
+        if (isComponentSet(template)) {
+          // 為了不拿到componentSet
+          template = template.children[0]
+
+          this.record({
+            path: `${node.id}.${STYLES}.${HTML}.overflow`,
+            value: 'scroll'
+          })
+        }
+
+        vmGet(node.id).addNodeToParent(cloneJson(template))
+      }
+      this.removeBeingAddedComponentId()
     }
   }
 }

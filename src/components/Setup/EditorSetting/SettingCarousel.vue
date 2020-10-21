@@ -1,5 +1,6 @@
 <template>
   <rules-generator
+    v-if="node"
     ref="generator"
     :id="id"
     :rules="spec"
@@ -82,8 +83,11 @@ export default {
         defaultSetting
       )
     },
+    node() {
+      return this.nodesMap[this.id]
+    },
     currentProps() {
-      return this.nodesMap[this.id].props || {}
+      return this.node.props || {}
     },
     isHorizontal() {
       // undefined situation comes from after the second updating

@@ -17,10 +17,9 @@
     />
 
     <dialog-component-tabs
-      v-if="isDraftMode && (beingAddedComponentId || uploading)"
+      v-if="isDraftMode"
+      v-show="beingAddedComponentId"
       :visible="Boolean(beingAddedComponentId)"
-      @uploading="uploading = true"
-      @uploaded="uploading = false"
     />
 
     <facebook-chat />
