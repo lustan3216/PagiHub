@@ -113,7 +113,6 @@ module.exports = {
       awsProfile: 'northeast-2',
       overrideEndpoint: false,
       region: 'ap-northeast-2',
-      bucket: isProd ? 'lots.design' : 'staging.lots.design',
       createBucket: true,
       staticHosting: true,
       staticIndexPage: 'index.html',
@@ -124,7 +123,8 @@ module.exports = {
       acl: 'private',
       pwa: false,
       enableCloudfront: true,
-      cloudfrontId: isProd ? 'ESPDCBGELU41H' : 'EVKEO76ZHMB01',
+      bucket: process.env.VUE_APP_BUCKET,
+      cloudfrontId: process.env.VUE_APP_CLOUDFRONT_ID,
       pluginVersion: '4.0.0-rc3',
       uploadConcurrency: 80,
       gzip: true
