@@ -1,5 +1,5 @@
 <template>
-  <div class="editor ProseMirror">
+  <div class="editor ProseMirror over-hidden">
     <portal
       v-if="selected"
       to="QuickFunctionsTextEditor"
@@ -483,6 +483,5 @@ $color-grey: #b2b2b2;
   word-break: break-word;
   position: relative;
   padding: 0;
-  overflow: hidden;
 }
 </style>
