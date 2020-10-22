@@ -104,7 +104,7 @@ module.exports = {
     s3Deploy: {
       registry: undefined,
       awsProfile: 'northeast-2',
-      overrideEndpoint: true,
+      overrideEndpoint: false,
       region: 'ap-northeast-2',
       createBucket: true,
       staticHosting: true,
