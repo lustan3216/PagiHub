@@ -60,7 +60,7 @@
 
     <effect />
 
-<!--    <transform />-->
+    <transform v-if="canTransform" />
 
     <text-editor-simple-style v-if="isAllTextEditor" />
 
@@ -128,6 +128,13 @@ export default {
       const nodes = this.selectedComponentNodes.filter(node => isGridItem(node))
       const allGridItem = nodes.length === this.selectedComponentNodes.length
       return this.selectedComponentNodes.length && allGridItem
+    },
+    canTransform() {
+      const nodes = this.selectedComponentNodes.filter(
+        node => !isGridItem(node)
+      )
+      const allNotGridItem = nodes.length === this.selectedComponentNodes.length
+      return this.selectedComponentNodes.length && allNotGridItem
     },
     canRadius() {
       const node = arrayLast(this.selectedComponentNodes)
