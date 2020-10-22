@@ -390,12 +390,12 @@
             const elm = getValueByPath(this.$slots, ['default', 0, 'elm'])
             if (value && elm) {
               if (this.offResizeListener) return
-              // this.autoSize()
+
               setTimeout(() => {
                 // TODO
                 // 這裏如果不設定時間，會太早執行造成bug，節省時間懶得debug 這樣比較快
                 // 再過不久 layout底層要大改在修
-                this.offResizeListener = resizeListener(elm, this.autoSize)
+                this.offResizeListener = resizeListener(elm, debounce(() => this.autoSize), 50)
               }, 500)
             }
             else if (this.offResizeListener) {
