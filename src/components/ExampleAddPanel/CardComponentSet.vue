@@ -9,7 +9,7 @@
     <div class="p-10 justify-between">
       <span style="visibility: hidden">ADD</span>
       <b style="line-height: 28px; font-size: 24px;">
-        {{ shortTagName(component) }}
+        {{ component.label }}
       </b>
 
       <el-button

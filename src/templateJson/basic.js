@@ -161,7 +161,7 @@ export const descriptionMap = {
   [TEXT_EDITOR]: 'Support 900+ Google font',
   iframer: 'For embedding service you like, such as your website or youtube',
   'flex-button': 'A functioning block you can redirect page',
-  'flex-image': '= = Just image',
+  'flex-image': 'Just image = = ',
   'video-player': 'Support Youtube and Viemo'
 }
 

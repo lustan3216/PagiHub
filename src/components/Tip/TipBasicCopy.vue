@@ -1,7 +1,7 @@
 <template>
   <tip>
-    <b>Copy</b> and <b>paste</b> are the most powerful function in the world.
-    Try to use it to any element in the arboard .
+    <b>Copy</b> and <b>paste</b> are the most powerful functions in the world.
+    Try to use it on any element in the arboard .
   </tip>
 </template>
 

@@ -65,13 +65,17 @@
         icon="el-icon-warning"
         class="tip crucial"
       >
-        1. Import the <b>private images</b> in private pages instead of public
-        page or component.
-        <br >
-        2. It can <span class="crucial">NOT</span> be deleted in public
-        component or page once it publish.
-        <br >
-        <div>
+        <div style="margin: 5px 0;">
+          1. Import the <b>private images</b> in private pages instead of public
+          page or component.
+        </div>
+
+        <div style="margin: 5px 0;">
+          2. It can <span class="crucial">NOT</span> be deleted in public
+          component or page once it publish.
+        </div>
+
+        <div style="margin: 5px 0;">
           3. Each image size limit is <b>{{ maxFileSize }}</b>.
         </div>
       </tip>
@@ -259,7 +263,7 @@ export default {
 }
 
 .filepond-container {
-  height: calc(100% - 70px);
+  height: calc(100% - 90px);
 }
 
 .controller {
