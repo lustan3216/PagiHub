@@ -5,7 +5,15 @@ const isTest = process.env.NODE_ENV === 'test'
 const isStaging = process.env.NODE_ENV === 'staging'
 const isProd = process.env.NODE_ENV === 'production'
 
-const transpileDependencies = isProd ? [/vue/] : []
+const transpileDependencies = isProd
+  ? [
+    'vue-grid-layout',
+    'vue-clamp',
+    'resize-detector',
+    'vue-observe-visibility',
+    'vue'
+  ]
+  : []
 module.exports = {
   transpileDependencies,
   productionSourceMap: false,
