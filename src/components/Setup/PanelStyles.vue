@@ -60,7 +60,7 @@
 
     <effect />
 
-    <transform />
+<!--    <transform />-->
 
     <text-editor-simple-style v-if="isAllTextEditor" />
 

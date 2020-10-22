@@ -166,24 +166,16 @@
       const self = this
 
       // Accessible refernces of functions for removing in beforeDestroy
-      self.resizeEventHandler = function(eventType, i, x, y, h, w) {
-        self.resizeEvent(eventType, i, x, y, h, w)
-      }
-
-      self.dragEventHandler = function(eventType, i, x, y, h, w) {
-        self.dragEvent(eventType, i, x, y, h, w)
-      }
-
       self._provided.eventBus = new Vue()
       self.eventBus = self._provided.eventBus
-      self.eventBus.$on('resizeEvent', self.resizeEventHandler)
-      self.eventBus.$on('dragEvent', self.dragEventHandler)
+      self.eventBus.$on('resizeEvent', self.resizeEvent)
+      self.eventBus.$on('dragEvent', self.dragEvent)
       self.$emit('layout-created', self.layout)
     },
     beforeDestroy: function() {
       //Remove listeners
-      this.eventBus.$off('resizeEvent', this.resizeEventHandler)
-      this.eventBus.$off('dragEvent', this.dragEventHandler)
+      this.eventBus.$off('resizeEvent', this.resizeEvent)
+      this.eventBus.$off('dragEvent', this.dragEvent)
       this.eventBus.$destroy()
       removeWindowEventListener('resize', this.onWindowResize)
       this.offListeners.forEach(off => off())
@@ -202,12 +194,10 @@
         this.originalLayout = this.layout
         const self = this
         this.$nextTick(function() {
-          self.onWindowResize()
-
-          self.initResponsiveFeatures()
+          // self.initResponsiveFeatures()
 
           //self.width = self.$el.offsetWidth;
-          addWindowEventListener('resize', self.onWindowResize)
+          // addWindowEventListener('resize', self.onWindowResize)
 
           compact(self.layout, self.verticalCompact)
 
@@ -215,25 +205,10 @@
           // self.$emit('layout-updated', self.layout)
           // lots-design
           self.updateHeight()
-          self.$nextTick(function() {
+          self.onWindowResize()
+          const off1 = resizeListener(self.$refs.item, self.onWindowResize)
 
-            self.onWindowResize()
-
-            const off1 = resizeListener(self.$refs.item, debounce(() => {
-              self.onWindowResize()
-              self.resizeNodeQuickFn()
-            }, 50))
-
-            this.offListeners.push(off1)
-
-            self.boundaryElement = getBoundaryEl(self.$refs.item)
-            const off2 = resizeListener(self.boundaryElement, debounce(() => {
-              self.correctFixItemsBound()
-              self.resizeNodeQuickFn()
-            }, 50))
-
-            this.offListeners.push(off2)
-          })
+          this.offListeners.push(off1)
         })
       })
     },
@@ -288,19 +263,8 @@
       isResizable: function() {
         this.eventBus.$emit('setResizable', this.isResizable)
       },
-      responsive() {
-        if (!this.responsive) {
-          this.$emit('update:layout', this.originalLayout)
-          this.eventBus.$emit('setColNum', this.colNum)
-        }
-        this.onWindowResize()
-      },
       maxRows: function() {
         this.eventBus.$emit('setMaxRows', this.maxRows)
-      },
-      margin() {
-        // lots-design
-        this.updateHeight()
       }
     },
     methods: {
@@ -330,7 +294,7 @@
             }
 
             this.lastLayoutLength = this.layout.length
-            this.initResponsiveFeatures()
+            // this.initResponsiveFeatures()
           }
 
           compact(this.layout, this.verticalCompact)
@@ -455,8 +419,6 @@
           })
         }
 
-        if (this.responsive) this.responsiveGridLayout()
-
         compact(this.layout, this.verticalCompact)
         this.eventBus.$emit('compact')
         // lots-design
@@ -468,48 +430,6 @@
 
       },
 
-      // finds or generates new layouts for set breakpoints
-      responsiveGridLayout() {
-        let newBreakpoint = getBreakpointFromWidth(this.breakpoints, this.width)
-        let newCols = getColsFromBreakpoint(newBreakpoint, this.cols)
-
-        // save actual layout in layouts
-        if (this.lastBreakpoint != null && !this.layouts[this.lastBreakpoint]) {
-          this.layouts[this.lastBreakpoint] = cloneLayout(this.layout)
-        }
-
-        // Find or generate a new layout.
-        let layout = findOrGenerateResponsiveLayout(
-          this.originalLayout,
-          this.layouts,
-          this.breakpoints,
-          newBreakpoint,
-          this.lastBreakpoint,
-          newCols,
-          this.verticalCompact
-        )
-
-        // Store the new layout.
-        this.layouts[newBreakpoint] = layout
-
-        if (this.lastBreakpoint !== newBreakpoint) {
-          this.$emit('breakpoint-changed', newBreakpoint, layout)
-        }
-
-        // new prop sync
-        this.$emit('update:layout', layout)
-
-        this.lastBreakpoint = newBreakpoint
-        this.eventBus.$emit('setColNum', getColsFromBreakpoint(newBreakpoint, this.cols))
-      },
-
-      // clear all responsive layouts
-      initResponsiveFeatures() {
-        // clear layouts
-        this.layouts = Object.assign({}, this.responsiveLayouts)
-      },
-
-      // find difference in layouts
       findDifference(layout, originalLayout) {
 
         //Find values that are in result1 but not in result2

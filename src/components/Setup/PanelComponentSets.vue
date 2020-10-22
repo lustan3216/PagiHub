@@ -35,6 +35,7 @@
             <b-icon-cloud-arrow-up
               v-else
               class="gray-font-2 font-13"
+              style="margin-top: 3px;"
             />
           </template>
         </div>
