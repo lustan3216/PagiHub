@@ -6,12 +6,12 @@
     placement="top"
   >
     <el-button
-      :class="{ isStack }"
+      :class="{ isStack: !isStack }"
       data-cy="stack"
       plain
       @click="click"
     >
-      Stack Mode
+      Free drag
     </el-button>
   </el-tooltip>
 </template>

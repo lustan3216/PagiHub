@@ -29,6 +29,7 @@ export const gridGeneratorItem = function(options, breakpoint) {
     [TAG]: GRID_GENERATOR_ITEM,
     [LABEL]: 'container',
     [GRID]: mapPoints({ x: 0, y: 0, w: 22, h: 100 }, breakpoint),
+    [STYLES]: { layout: { stack: true } },
     ...options
   }
 }
