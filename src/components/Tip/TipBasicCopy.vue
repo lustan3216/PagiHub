@@ -1,6 +1,8 @@
 <template>
-  <tip><b>Copy</b> is also powerful here, you can copy any single design from page
-  to paste in the artboard.</tip>
+  <tip>
+    <b>Copy</b> and <b>paste</b> are the most powerful function in the world.
+    Try to use it to any element in the arboard .
+  </tip>
 </template>
 
 <script>

@@ -1,5 +1,7 @@
 <template>
   <div>
+    <tip-basic-copy class="m-b-20" />
+
     <el-row
       :gutter="10"
       type="flex"
@@ -29,11 +31,13 @@ import { mapGetters } from 'vuex'
 import CardExample from './CardExample'
 import { exampleMap } from '@/templateJson/basic'
 import { isGridItem, shortTagName } from '@/utils/node'
+import TipBasicCopy from '@/components/Tip/TipBasicCopy'
 
 export default {
   name: 'MenuExamples',
   components: {
-    CardExample
+    CardExample,
+    TipBasicCopy
   },
   props: {
     search: {

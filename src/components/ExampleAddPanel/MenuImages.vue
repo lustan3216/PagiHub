@@ -60,6 +60,22 @@
     </template>
 
     <template slot="paneR">
+      <tip
+        :closeable="false"
+        icon="el-icon-warning"
+        class="tip crucial"
+      >
+        1. Import the <b>private images</b> in private pages instead of public
+        page or component.
+        <br >
+        2. It can <span class="crucial">NOT</span> be deleted in public
+        component or page once it publish.
+        <br >
+        <div>
+          3. Each image size limit is <b>{{ maxFileSize }}</b>.
+        </div>
+      </tip>
+
       <div class="filepond-container">
         <transition-group name="fade">
           <img
@@ -81,20 +97,6 @@
           />
         </transition-group>
       </div>
-
-      <tip
-        :closeable="false"
-        icon="el-icon-warning"
-        class="tip crucial"
-      >
-        1. Import the private images in private pages instead of public page or
-        component.
-        <br >
-        2. It can <span class="crucial">NOT</span> be deleted in public
-        component or page once it publish.
-        <br >
-        <div>3. Each image size limit is {{ maxFileSize }}.</div>
-      </tip>
     </template>
   </split-pane>
 </template>
@@ -288,6 +290,6 @@ export default {
   background-repeat: no-repeat;
 }
 .tip {
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
 </style>
