@@ -120,14 +120,14 @@ export default {
 
       this.$nextTick(() => {
         if (isCarousel(this.node) || isGrid(this.node)) {
+          this.SET_SELECTED_COMPONENT_ID(this.node.parentId)
+
           if (this.node.children.length === 0) {
             this.record({
               path: this.node.id,
               value: undefined
             })
           }
-
-          this.SET_SELECTED_COMPONENT_ID(this.node.parentId)
         }
         else {
           this.SET_SELECTED_COMPONENT_ID(this.node.id)
