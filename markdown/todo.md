@@ -7,6 +7,7 @@ Style component
 
 ### Functionality
 
+https://github.com/probil/vue-moveable
 https://github.com/girliemac/Filterous
 http://camanjs.com/examples/
 https://github.com/niklasramo/mezr
@@ -65,7 +66,6 @@ https://tympanus.net/Development/ColorExtraction/
 https://tympanus.net/Development/HeaderEffects/
 
 </ol>
-https://github.com/probil/vue-moveable
 
 協作 / 觀察 /註釋 Comment
 https://medium.com/as-a-product-designer/figma-design-tool-1c6542ae8dc1

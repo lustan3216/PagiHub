@@ -66,7 +66,7 @@ export default {
     },
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.$el)
-      console.log(123)
+
       this.LAYOUT_SET({
         windowWidth: width,
         windowHeight: height
