@@ -25,3 +25,14 @@ export function getRectWithoutPadding(element) {
   elementWidth -= parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight)
   return { height: elementHeight, width: elementWidth }
 }
+
+export function getAbsoluteHeight(el) {
+  // Get the DOM Node if you pass in a string
+  el = (typeof el === 'string') ? document.querySelector(el) : el
+
+  const styles = window.getComputedStyle(el)
+  const margin = parseFloat(styles['marginTop']) +
+                 parseFloat(styles['marginBottom'])
+
+  return Math.ceil(el.offsetHeight + margin)
+}

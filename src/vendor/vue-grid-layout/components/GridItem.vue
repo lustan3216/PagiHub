@@ -20,12 +20,13 @@
 </template>
 <style>
   .grid-item {
+    transition-property: left, top, right, width, height;
     box-sizing: border-box;
     /* add right for rtl */
   }
 
   .transition {
-    transition: transform 100ms ease;
+    transition: transform 200ms ease;
   }
 
   .grid-item.no-touch {
@@ -98,6 +99,7 @@
   //    var eventBus = require('./eventBus');
   let interact = require('interactjs')
   import { getValueByPath, resizeListener, debounce } from '@/utils/tool'
+  import { getAbsoluteHeight } from '@/utils/style'
   const store = Vue.observable({ hideHandler: false })
 
   export default {
@@ -992,16 +994,6 @@
           })
         }
       },
-      getAbsoluteHeight(el) {
-    // Get the DOM Node if you pass in a string
-    el = (typeof el === 'string') ? document.querySelector(el) : el;
-
-    const styles = window.getComputedStyle(el);
-        const margin = parseFloat(styles['marginTop']) +
-                 parseFloat(styles['marginBottom']);
-
-    return Math.ceil(el.offsetHeight + margin);
-  },
       autoSize() {
         // ok here we want to calculate if a resize is needed
         this.$nextTick(() => {
@@ -1019,9 +1011,9 @@
 
           const { elm } = this.$slots.default[0]
 
-          const hegiht = this.getAbsoluteHeight(elm)
+          const height = getAbsoluteHeight(elm)
           const width = elm.clientWidth
-          let pos = this.calcWH(hegiht, width)
+          let pos = this.calcWH(height, width)
           // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
           if (pos.w < this.minW) {
             pos.w = this.minW
@@ -1047,10 +1039,10 @@
           // this.lastH = y;
 
           if (this.innerW !== pos.w || this.innerH !== pos.h) {
-            this.$emit('resize', this.i, pos.h, pos.w, hegiht, width)
+            this.$emit('resize', this.i, pos.h, pos.w, height, width)
           }
           if (this.previousW !== pos.w || this.previousH !== pos.h) {
-            this.$emit('resized', this.i, pos.h, pos.w, hegiht, width)
+            this.$emit('resized', this.i, pos.h, pos.w, height, width)
             this.eventBus.$emit('resizeEvent', 'autoSize', this.i, this.innerX, this.innerY, pos.h, this.innerW)
           }
         })

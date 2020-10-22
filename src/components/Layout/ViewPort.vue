@@ -92,7 +92,7 @@
             class="gray-font font-12"
             style="width: 75px; display: inline-block;"
           >
-            {{ artBoardWidth }} x {{ artBoardHeight }}
+            {{ style.w }} x {{ style.h }}
           </span>
 
           <el-dropdown-menu slot="dropdown">
@@ -132,7 +132,6 @@ import SettingBreakpoints from '../Setup/EditorSetting/SettingBreakpoints'
 import ButtonDevice from '../Components/ButtonDevice'
 import { directive } from '@/directive/freeView'
 import { getRectWithoutPadding } from '@/utils/style'
-import { toPrecision } from '@/utils/number'
 import gsap from 'gsap'
 
 export const DEVICE_OPTIONS = [
@@ -187,7 +186,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('layout', ['artBoardWidth', 'artBoardHeight']),
+    ...mapState('layout', ['windowWidth', 'windowHeight']),
     ...mapGetters('layout', ['descBreakpoints']),
     ...mapState('mode', ['mode']),
     scalePercent() {
@@ -209,17 +208,11 @@ export default {
       this.reset()
     },
     resizeBar(value) {
-      if (value && this.style.w === this.artBoardWidth) {
+      if (value && this.style.w === this.windowWidth) {
         this.$nextTick(() => {
           this.setBoundaryRect()
         })
       }
-    },
-    artBoardHeight(value) {
-      this.style.h = value
-    },
-    artBoardWidth(value) {
-      this.style.w = value
     },
     isDraftMode(value) {
       if (value) {
@@ -237,6 +230,8 @@ export default {
           scale: style.scale,
           top: '50%',
           left: '50%',
+          duration: 0,
+          ease: 'liner',
           onStart: () => {
             this.LAYOUT_SET({ gridResizing: true })
           },
@@ -244,11 +239,6 @@ export default {
             this.LAYOUT_SET({ gridResizing: false })
             this.resizeNodeQuickFn()
           }
-        })
-
-        this.LAYOUT_SET({
-          artBoardWidth: parseInt(style.w),
-          artBoardHeight: parseInt(style.h)
         })
       },
       deep: true
@@ -290,8 +280,8 @@ export default {
           lastPositionX = event.client.x
           lastPositionY = event.client.y
           Object.assign(this.style, {
-            h,
-            w,
+            h: parseInt(h),
+            w: parseInt(w),
             scale
           })
 
@@ -311,8 +301,6 @@ export default {
 
       inertia: false
     })
-
-    this.$bus.$on('art-board-mounted', this.setBoundaryRect)
 
     this.$nextTick(() => {
       this.reset()

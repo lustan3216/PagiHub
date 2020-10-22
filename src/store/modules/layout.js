@@ -4,8 +4,8 @@ import { BREAK_POINTS_MAP } from '@/const'
 
 const state = {
   gridResizing: false,
-  artBoardWidth: 0,
-  artBoardHeight: 0,
+  windowWidth: 0,
+  windowHeight: 0,
   scaleRatio: 1
 }
 
@@ -31,11 +31,11 @@ const getters = {
   descBreakpoints(state, getters) {
     return sortDescBreakpoint(Object.keys(getters.breakpointsMap))
   },
-  currentBreakpoint({ artBoardWidth: width }, { breakpointsMap }) {
+  currentBreakpoint({ windowWidth: width }, { breakpointsMap }) {
     return findBreakpoint(breakpointsMap, width)
   },
   vh(state) {
-    return state.artBoardHeight / 100
+    return state.windowHeight / 100
   }
 }
 

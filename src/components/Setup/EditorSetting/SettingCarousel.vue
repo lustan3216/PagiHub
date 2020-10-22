@@ -11,6 +11,7 @@
 import { mapActions } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { assignDefaultValue, boolean, select, number } from './utils/ruleTool'
+import { getValueByPath } from '@/utils/tool'
 import { SOFT_DELETE, CHILDREN, POLYMORPHISM } from '@/const'
 
 // https://gs-shop.github.io/vue-slick-carousel/#/api
@@ -87,7 +88,7 @@ export default {
       return this.nodesMap[this.id]
     },
     currentProps() {
-      return this.node.props || {}
+      return getValueByPath(this.node, ['props'], {})
     },
     isHorizontal() {
       // undefined situation comes from after the second updating

@@ -145,7 +145,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
-    ...mapState('layout', ['gridResizing', 'artBoardHeight']),
+    ...mapState('layout', ['gridResizing', 'windowHeight']),
     styles() {
       return {
         top: this.top + 'px',
@@ -233,12 +233,9 @@ export default {
           return
         }
 
-        const gridItem = getClosetGrimItem(this.node.id)
-        const vm = vmGet(
-          (gridItem && gridItem.id) || this.node.id,
-          this.isExample
+        const element = document.querySelector(
+          `[data-node][id='${this.node.id}']`
         )
-        const element = vm && vm.$el
 
         if (!element) {
           return

@@ -30,9 +30,24 @@ export default {
       return deepMerge(setting, this.node[PROPS])
     }
   },
+  activated() {
+    if (this.isDraftMode) {
+      vmAppend(this, this.isExample)
+    }
+  },
+  update() {
+    if (this.isDraftMode) {
+      vmAppend(this, this.isExample)
+    }
+  },
   mounted() {
     // Don't put in created to prevent some component fail before mount
     if (this.isDraftMode) {
+
+      // for componentOperator using
+      this.$el.id = this.id
+      this.$el.dataset.node = ''
+
       vmAppend(this, this.isExample)
 
       if (!this.isExample) {

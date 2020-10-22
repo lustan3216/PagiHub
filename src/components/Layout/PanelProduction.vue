@@ -1,8 +1,13 @@
 <template>
-  <art-board
-    v-if="rootComponentSetId"
-    :id="rootComponentSetId"
-  />
+  <div
+    :style="{ height }"
+    class="fake-transform"
+  >
+    <art-board
+      v-if="rootComponentSetId"
+      :id="rootComponentSetId"
+    />
+  </div>
 </template>
 
 <script>
@@ -21,7 +26,19 @@ export default {
       rootComponentSetId: null
     }
   },
+  computed: {
+    height() {
+      // must need to limit height here, otherwise artBoard will cause vh loop increase
+      if (this.$route.meta.noNavbar) {
+        return 'calc(100vh - var(--vh-offset, 0px))'
+      }
+      else {
+        return 'calc(100vh - 50px - var(--vh-offset, 0px))'
+      }
+    }
+  },
   async created() {
+    this.INIT_NODE_STORE()
     this.SET_PRODUCTION_MODE()
 
     const { userLabel, projectLabel, componentSetLabel } = this.$route.params
@@ -47,6 +64,7 @@ export default {
   },
   methods: {
     ...mapMutations('node', [
+      'INIT_NODE_STORE',
       'SET_NODES_TO_MAP',
       'SET_EDITING_COMPONENT_SET_ID'
     ]),

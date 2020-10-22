@@ -14,6 +14,8 @@
 <script>
 import { mapMutations } from 'vuex'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
+import { resizeListener } from '@/utils/tool'
+import { getRectWithoutPadding } from '@/utils/style'
 
 export default {
   name: 'ArtBoard',
@@ -30,7 +32,8 @@ export default {
   },
   data() {
     return {
-      scrollTop: 0
+      scrollTop: 0,
+      offResizeListener: null
     }
   },
   computed: {
@@ -40,10 +43,15 @@ export default {
   },
   mounted() {
     this.$el.addEventListener('scroll', this.updateScrollTop)
-    this.$bus.$emit('art-board-mounted')
+    if (!this.isExample) {
+      this.offResizeListener = resizeListener(this.$el, this.setBoundaryRect)
+    }
   },
   beforeDestroy() {
     this.$el.removeEventListener('scroll', this.updateScrollTop)
+    if (this.offResizeListener) {
+      this.offResizeListener()
+    }
   },
   activated() {
     if (this.scrollTop) {
@@ -55,6 +63,14 @@ export default {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     updateScrollTop() {
       this.scrollTop = this.$el.scrollTop
+    },
+    setBoundaryRect() {
+      const { height, width } = getRectWithoutPadding(this.$el)
+      console.log(123)
+      this.LAYOUT_SET({
+        windowWidth: width,
+        windowHeight: height
+      })
     }
   }
 }

@@ -14,7 +14,7 @@
 
   <el-button
     v-else-if="node"
-    v-bind="{ ...$props, ...$attrs }"
+    v-bind="$attrs"
     type="text"
     @click="click"
     @dblclick.native="dblclick"

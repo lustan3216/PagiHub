@@ -2,7 +2,7 @@ import jsonHistory from '@/store/jsonHistory'
 import { findLastIndex } from '@/utils/array'
 import { patchComponentSetChildren } from '@/api/node'
 
-const DEBOUNCE_TIME = 1500
+const DEBOUNCE_TIME = 1000
 const INIT_TIME = +new Date()
 
 class DraftStateUploader {
