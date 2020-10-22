@@ -135,31 +135,5 @@ export default {
 
 .el-button {
   padding: 4px 5px 2px;
-  &:hover {
-    svg {
-      opacity: 0.2;
-    }
-    i {
-      opacity: 1;
-    }
-  }
-
-  & svg {
-    font-size: 16px;
-    /*color: white;*/
-    transition: opacity 0.2s;
-  }
-
-  & i {
-    font-size: 14px;
-    /*color: white;*/
-    font-weight: bold;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
 }
 </style>

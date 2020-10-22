@@ -69,7 +69,7 @@ import {
   BIconAspectRatio,
   BIconLink
 } from 'bootstrap-vue'
-import { closestGridItem, isComponent } from '@/utils/node'
+import { closestGridItem, isCarousel, isComponent } from '@/utils/node'
 import Stack from '@/components/Setup/EditorStyle/Stack'
 import Lock from '../Setup/EditorStyle/Lock'
 import { STYLES } from '@/const'
@@ -102,7 +102,12 @@ export default {
   methods: {
     vmCreateEmptyItem(tag) {
       if (tag === 'grid-item') {
-        return vmCreateEmptyItem(this.node)
+        if (isCarousel(this.node)) {
+          return vmCreateEmptyItem(this.node.parentNode)
+        }
+        else {
+          return vmCreateEmptyItem(this.node)
+        }
       }
 
       let gridItem = {
