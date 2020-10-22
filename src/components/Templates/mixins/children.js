@@ -126,6 +126,11 @@ export default {
               value: undefined
             })
           }
+
+          this.SET_SELECTED_COMPONENT_ID(this.node.parentId)
+        }
+        else {
+          this.SET_SELECTED_COMPONENT_ID(this.node.id)
         }
       })
     }
