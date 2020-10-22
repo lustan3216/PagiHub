@@ -11,7 +11,7 @@
       plain
       @click="click"
     >
-      Free drag
+      Free dragging
     </el-button>
   </el-tooltip>
 </template>
