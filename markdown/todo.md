@@ -22,7 +22,23 @@ https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
 
 左下角 container 可以有個+
-panelcomponent 可以拖拉
+panel component 可以拖拉
+width 要支援 px
+支援 icon
+自動對齊
+距離輔助線
+hover click
+anitmation
+style component
+container can transform
+form input
+can setting put under style or new tab
+style 支援 每個 device 可客製化
+button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction 在弄就好
+image can put more effect
+when adding element, does it needs to with container along with, should we bind it together
+
+<li>active / click / hover / showing 的狀態註冊到改成全局，當該個component作用時，可引響全局的組建，參考XD，然後要做成array，之後可以做成timeline</li>
 
 refactor
 style 試試看能不能全部放在 當個 component 裡面，style 用 props 傳遞
@@ -35,7 +51,6 @@ sanitize-html
 <li>road map</li>
 </ol>
 
-grid 可以刪除，坐在 breakpoint settingL 裡面
 svg/icon
 stylecomponent
 container 對其功能 , 距離輔助
@@ -44,13 +59,12 @@ seo
 5<li>seo sitemap page 要可以挑選</li>
 
 <li>radius 可加增神奇第二元素</li>
-<li>style 支援 每個 device 可客製化</li>
+
 update children 要做 queue
+
 <li>embed iframe,iframe 要可以自動 resize</li>
 5<li>避風港跟三振條款</li>
 <li>time line/ steps/ transfer / cascader / map / text-shadow</li>
-button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction在弄就好
-<li>active / click / hover / showing 的狀態註冊到改成全局，當該個component作用時，可引響全局的組建，參考XD，然後要做成array，之後可以做成timeline</li>
 
 <li>aws 要做安全機制</li>
 <li>only one device can login</li>

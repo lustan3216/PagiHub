@@ -22,7 +22,7 @@
     <!--    <panel-asset v-if="editingAsset" />-->
 
     <split-pane
-      :default-percent="40"
+      :default-percent="25"
       split="horizontal"
     >
       <template slot="paneL">

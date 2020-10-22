@@ -61,9 +61,7 @@
             <template v-if="key === descBreakpoints[0]">
               ∞
             </template>
-            <template v-else>
-              {{ nextPixel(key) }}
-            </template>
+            <template v-else> {{ nextPixel(key) }}px </template>
           </template>
           <template v-else>
             <template v-if="index">
