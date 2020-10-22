@@ -177,7 +177,9 @@
       this.eventBus.$off('resizeEvent', this.resizeEvent)
       this.eventBus.$off('dragEvent', this.dragEvent)
       this.eventBus.$destroy()
-      removeWindowEventListener('resize', this.onWindowResize)
+      removeWindowEventListener('resize', debounce(() => {
+        this.onWindowResize()
+      }, 50))
       this.offListeners.forEach(off => off())
     },
     beforeMount: function() {

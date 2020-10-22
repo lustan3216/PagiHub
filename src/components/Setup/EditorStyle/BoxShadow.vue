@@ -72,7 +72,6 @@
             <el-col :span="3">
               <el-input
                 :value="boxShadow.spreadRadius"
-                :min="0"
                 type="number"
                 @input="onChange(index, 'spreadRadius', parseInt($event))"
               />

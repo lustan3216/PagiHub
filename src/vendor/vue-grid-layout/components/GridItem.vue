@@ -60,6 +60,8 @@
     transition-duration: 100ms;
     z-index: 2;
     user-select: none;
+    opacity: 0.9;
+    border-radius: 3px;
     transition-timing-function: ease;
   }
 
@@ -389,13 +391,15 @@
           this.$nextTick(() => {
             const elm = getValueByPath(this.$slots, ['default', 0, 'elm'])
             if (value && elm) {
-              if (this.offResizeListener) return
 
               setTimeout(() => {
                 // TODO
                 // 這裏如果不設定時間，會太早執行造成bug，節省時間懶得debug 這樣比較快
                 // 再過不久 layout底層要大改在修
-                this.offResizeListener = resizeListener(elm, debounce(() => this.autoSize), 50)
+                this.autoSize()
+                this.offResizeListener = resizeListener(elm, debounce(() => {
+                  this.autoSize()
+                }, 50))
               }, 500)
             }
             else if (this.offResizeListener) {

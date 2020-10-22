@@ -483,5 +483,6 @@ $color-grey: #b2b2b2;
   word-break: break-word;
   position: relative;
   padding: 0;
+  overflow: hidden;
 }
 </style>
