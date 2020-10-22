@@ -246,7 +246,7 @@ export default {
     cleanStore() {
       setTimeout(() => {
         this.resizeNodeQuickFn()
-      }, 120)
+      }, 180)
       store.updatingItemParentId = null
     }
   }

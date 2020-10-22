@@ -69,6 +69,7 @@
     </div>
 
     <component-quick-add
+      v-if="isDraftMode && !isExample && isLastOne"
       :id="id"
       class="uniq-function"
     />
@@ -342,7 +343,7 @@ export default {
 
 .uniq-function {
   position: absolute;
-  right: 0;
+  left: 0;
   bottom: -33px;
   opacity: 0.9;
   pointer-events: all;
