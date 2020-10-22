@@ -28,7 +28,7 @@ width 要支援 px
 自動對齊
 距離輔助線
 hover click
-anitmation
+animation
 style component
 container can transform
 form input
@@ -37,6 +37,7 @@ style 支援 每個 device 可客製化
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction 在弄就好
 image can put more effect
 when adding element, does it needs to with container along with, should we bind it together
+動畫
 
 <li>active / click / hover / showing 的狀態註冊到改成全局，當該個component作用時，可引響全局的組建，參考XD，然後要做成array，之後可以做成timeline</li>
 
