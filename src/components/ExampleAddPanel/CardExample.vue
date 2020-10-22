@@ -5,10 +5,10 @@
     @click="$emit('add')"
   >
     <div
-      class="text-center"
+      class="text-center m-b-10"
       style="padding: 10px 0;"
     >
-      {{ shortTagName(component) }}
+      <b>{{ shortTagName(component) }}</b>
     </div>
 
     <div
@@ -44,6 +44,13 @@
         class="gray-font-2"
       />
     </div>
+
+    <p
+      class="small-title"
+      style="white-space: initial"
+    >
+      {{ description }}
+    </p>
   </el-button>
 </template>
 
@@ -52,6 +59,7 @@ import { shortTagName, isComponentSet, isGrid } from '@/utils/node'
 import ArtBoard from '../Layout/ArtBoard'
 import { Tag } from 'element-ui'
 import { mapState } from 'vuex'
+import { descriptionMap } from '@/templateJson/basic'
 
 import {
   BIconFonts,
@@ -63,6 +71,7 @@ import {
   BIconLayoutSidebarInsetReverse,
   BIconLink
 } from 'bootstrap-vue'
+
 export default {
   name: 'CardExample',
   components: {
@@ -95,6 +104,9 @@ export default {
     },
     canNotAdd() {
       return isComponentSet(this.node) && !isGrid(this.component)
+    },
+    description() {
+      return descriptionMap[this.component.tag]
     }
   },
   methods: {

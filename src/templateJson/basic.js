@@ -152,6 +152,18 @@ export const exampleMap = {
   'flex-image': flexImage,
   'video-player': videoPlayer
 }
+export const descriptionMap = {
+  [GRID_GENERATOR]:
+    'Each container can only include an element to control element size',
+  [GRID_GENERATOR_ITEM]: 'not yet',
+  [CAROUSEL]:
+    'Carousel could nested with multi carousels to have more creation',
+  [TEXT_EDITOR]: 'Support 900+ Google font',
+  iframer: 'For embedding service you like, such as your website or youtube',
+  'flex-button': 'A functioning block you can redirect page',
+  'flex-image': '= = Just image',
+  'video-player': 'Support Youtube and Viemo'
+}
 
 export function getExample(tag, options = {}, breakpoint) {
   return exampleMap[tag](options, breakpoint)

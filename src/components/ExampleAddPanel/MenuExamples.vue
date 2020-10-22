@@ -10,14 +10,13 @@
         v-for="component in basicComponents"
         v-show="searchedExamples.includes(component.tag)"
         :key="component.tag"
-        :lg="4"
-        :md="6"
-        :sm="8"
+        :lg="6"
+        :md="8"
         style="margin-bottom: 35px;"
       >
         <card-example
           :component="component"
-          style="width: 100%;height: 100px;"
+          style="width: 100%; height: 140px;"
           @add="$emit('add', component)"
         />
       </el-col>
