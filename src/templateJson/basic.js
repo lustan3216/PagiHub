@@ -29,13 +29,28 @@ export const gridGeneratorItem = function(options, breakpoint) {
     [TAG]: GRID_GENERATOR_ITEM,
     [LABEL]: 'container',
     [GRID]: mapPoints({ x: 0, y: 0, w: 22, h: 100 }, breakpoint),
-    [STYLES]: { layout: { stack: true } },
+    [STYLES]: { layout: { stack: true }},
     ...options
   }
 }
 
 export const gridGeneratorItems = function(options, breakpoint) {
-  return [gridGeneratorItem(options, breakpoint)]
+  return [
+    {
+      [TAG]: GRID_GENERATOR_ITEM,
+      [LABEL]: 'container',
+      [GRID]: mapPoints({ x: 0, y: 0, w: 22, h: 100 }, breakpoint),
+      [STYLES]: { layout: { stack: true }},
+      ...options
+    },
+    {
+      [TAG]: GRID_GENERATOR_ITEM,
+      [LABEL]: 'container',
+      [GRID]: mapPoints({ x: 22, y: 0, w: 22, h: 100 }, breakpoint),
+      [STYLES]: { layout: { stack: true }},
+      ...options
+    }
+  ]
 }
 
 export const gridGenerator = function(options, breakpoint) {
@@ -43,6 +58,16 @@ export const gridGenerator = function(options, breakpoint) {
     [TAG]: GRID_GENERATOR,
     [CAN_NEW_ITEM]: true,
     [LABEL]: 'container',
+    [CHILDREN]: gridGeneratorItems(null, breakpoint),
+    ...options
+  }
+}
+
+export const background = function(options, breakpoint) {
+  return {
+    [TAG]: GRID_GENERATOR,
+    [CAN_NEW_ITEM]: true,
+    [POLYMORPHISM]: 'background',
     [CHILDREN]: gridGeneratorItems(null, breakpoint),
     ...options
   }

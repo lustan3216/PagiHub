@@ -69,7 +69,7 @@
     </div>
 
     <component-quick-add
-      v-if="isDraftMode && !isExample && isLastOne"
+      v-if="isDraftMode && !isExample && isLastOne && !isBackground"
       :id="id"
       class="uniq-function"
     />
@@ -82,13 +82,12 @@ import ComponentName from './ComponentName'
 import { Popover } from 'element-ui'
 import {
   isGridItem,
-  getClosetGrimItem,
-  isComponentSet,
   traversalAncestorAndSelf,
-  isGrid
+  isGrid,
+  isBackground
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
-import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
+import { vmCreateEmptyItem } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
 import { debounce } from '@/utils/tool'
 import { BIconPlusSquareFill } from 'bootstrap-vue'
@@ -172,7 +171,7 @@ export default {
           nodes.push(node)
         }
 
-        return !isComponentSet(node)
+        return !isBackground(node)
       })
       return nodes.slice(0, 4)
     },
@@ -188,8 +187,8 @@ export default {
     isLastOne() {
       return arrayLast(this.selectedComponentIds) === this.id
     },
-    isComponentSet() {
-      return isComponentSet(this.node)
+    isBackground() {
+      return isBackground(this.node)
     },
     isButton() {
       return this.node.tag === 'flex-button'
@@ -199,16 +198,11 @@ export default {
         (!this.isExample &&
           (this.isGridItem || this.isButton) &&
           this.isLastOne) ||
-        this.isComponentSet
+        this.isBackground
       ) {
         const { children = [] } = this.node
         return !children.length
       }
-    },
-    framer() {
-      // 如果有refs=framer, 在拉動window時不知為什麼會找不到element
-      return this.$el
-      // return document.getElementById(`quick-fn-${this.id}`)
     }
   },
   created() {
@@ -227,60 +221,67 @@ export default {
     vmCreateEmptyItem() {
       vmCreateEmptyItem(this.node)
     },
+    animate() {
+      const element = document.querySelector(
+        `[data-node][id='${this.node.id}']`
+      )
+
+      if (!element) {
+        return
+      }
+
+      const rect = element.getBoundingClientRect()
+
+      let { x: left, y: top, width, height } = rect
+
+      const bounderNode = element.closest('.art-board')
+
+      if (!bounderNode) {
+        return
+      }
+
+      const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()
+
+      top = top < top1 ? top1 : top
+      height =
+        rect.top + height >= top1 + height1
+          ? top1 + height1 - top
+          : rect.top < top1
+            ? rect.top + height - top1
+            : height
+
+      if (height < 5 || left < 10 || top < 10) {
+        return
+      }
+
+      Object.assign(this.$data, {
+        left,
+        top,
+        width: width - 2,
+        height: height - 2,
+        visible: true
+      })
+
+      const progress = +new Date() - this.startTime
+      if (progress < 250) {
+        this.animateId = window.requestAnimationFrame(this.animate)
+      }
+    },
     resize: debounce(function() {
+      if (this.animateId) {
+        cancelAnimationFrame(this.animateId)
+      }
+
       this.$nextTick(() => {
         this.visible = false
         if (!this.node) {
           return
         }
 
-        const element = document.querySelector(
-          `[data-node][id='${this.node.id}']`
-        )
-
-        if (!element) {
-          return
-        }
-
-        const rect = element.getBoundingClientRect()
-
-        let { x: left, y: top, width, height } = rect
-
-        const bounderNode = element.closest('.art-board')
-
-        if (!bounderNode) {
-          return
-        }
-
-        const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()
-
-        // this.visible = top < top1 + height1
-        // if (!this.visible) {
-        //   return
-        // }
-
-        top = top < top1 ? top1 : top
-        height =
-          rect.top + height >= top1 + height1
-            ? top1 + height1 - top
-            : rect.top < top1
-              ? rect.top + height - top1
-              : height
-
-        if (height < 5 || left < 10 || top < 10) {
-          return
-        }
-
-        Object.assign(this.$data, {
-          left,
-          top,
-          width: width - 2,
-          height: height - 2,
-          visible: true
-        })
+        this.startTime = +new Date()
+        this.animateId = requestAnimationFrame(this.animate)
       })
-      // 180 不要再動了，因為 griitem 動畫是100 且store/node 裡面也有callback呼叫
-    }, 180),
+    }, 80),
     mouseenter() {
       timeId = setTimeout(() => {
         this.hovering = true

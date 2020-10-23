@@ -1,7 +1,7 @@
 <template>
   <div
-    :style="innerStyles.html"
     style="min-height: 100%;"
+    class="h-100"
   >
     <component-giver
       v-if="firstChild && firstChild.id"

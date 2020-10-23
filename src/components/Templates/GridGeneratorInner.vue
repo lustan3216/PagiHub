@@ -9,7 +9,8 @@
     :vertical-compact="false"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
-    :lock-item-in-layout="autoUpdateHeight"
+    :auto-calc-height="autoCalcHeight"
+    :extra-style="extraStyle"
     prevent-collision
     @layout-updated="layoutUpdated($event)"
   >
@@ -28,7 +29,7 @@ import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { toPrecision } from '@/utils/number'
 import { getValueByPath } from '@/utils/tool'
-import { isComponentSet } from '@/utils/node'
+import { isBackground } from '@/utils/node'
 
 export default {
   name: 'GridGeneratorInner',
@@ -67,17 +68,25 @@ export default {
   },
   computed: {
     ...mapGetters('layout', ['currentBreakpoint', 'vh']),
-    autoUpdateHeight() {
-      return !this.rootLayout && !['scroll', 'hidden'].includes(this.overflow)
+    autoCalcHeight() {
+      return ['scroll', 'hidden'].includes(this.overflow) || this.isBackground
     },
     overflow() {
       return getValueByPath(this.node.parentNode, 'styles.html.overflow')
     },
-    rootLayout() {
-      return isComponentSet(this.node.parentNode)
-    },
     layout() {
       return Object.values(this.layouts)
+    },
+    isBackground() {
+      return isBackground(this.node)
+    },
+    extraStyle() {
+      const style = {}
+      if (this.isBackground) {
+        style.minHeight = '100%'
+      }
+
+      return style
     }
   },
   methods: {

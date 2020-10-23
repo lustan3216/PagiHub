@@ -63,9 +63,9 @@
         type: Boolean,
         default: true
       },
-      lockItemInLayout: {
+      autoCalcHeight: {
         type: Boolean,
-        default: true
+        default: false
       },
       scale: {
         type: Number,
@@ -117,22 +117,10 @@
         type: Boolean,
         default: false
       },
-      responsiveLayouts: {
+      extraStyle: {
         type: Object,
         default: function() {
           return {}
-        }
-      },
-      breakpoints: {
-        type: Object,
-        default: function() {
-          return { xl: 1440, lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }
-        }
-      },
-      cols: {
-        type: Object,
-        default: function() {
-          return { xl: 16, lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }
         }
       },
       preventCollision: {
@@ -309,8 +297,8 @@
         }
       },
       updateHeight: function() {
-        const height = this.lockItemInLayout ? '100%' : this.containerHeight()
-        this.mergedStyle = { height }
+        const height = this.autoCalcHeight ? this.containerHeight() : '100%'
+        this.mergedStyle = { height, ...this.extraStyle }
       },
       // autoSize() {},
       onWindowResize: function() {

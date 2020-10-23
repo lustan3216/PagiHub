@@ -8,9 +8,9 @@ import {
 } from '@/api/node'
 
 import jsonHistory from '@/store/jsonHistory'
-import { gridGenerator } from '@/templateJson/basic'
+import { background } from '@/templateJson/basic'
 import { getCopyComponentIds, getTmpComponentsArray } from '@/store'
-import { isGridItem, traversalSelfAndChildren } from '@/utils/node'
+import { traversalSelfAndChildren } from '@/utils/node'
 import { objectFirstKey } from '@/utils/object'
 import { cloneJson } from '@/utils/tool'
 import { appendIds } from '@/utils/nodeId'
@@ -50,7 +50,7 @@ export const actions = {
     { commit, state, dispatch, rootGetters },
     { label, description, tags }
   ) {
-    const tree = gridGenerator({}, rootGetters['layout/currentBreakpoint'])
+    const tree = background({}, rootGetters['layout/currentBreakpoint'])
     appendIds(tree)
     const {
       data: { children, ...componentSet }

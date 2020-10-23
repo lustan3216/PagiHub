@@ -43,7 +43,6 @@ export default {
   mounted() {
     // Don't put in created to prevent some component fail before mount
     if (this.isDraftMode) {
-
       // for componentOperator using
       this.$el.id = this.id
       this.$el.dataset.node = ''

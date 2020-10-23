@@ -364,7 +364,7 @@
         this.cols = this.parent.colNum
       }
 
-      this.lockItemInLayout = this.parent.lockItemInLayout
+      this.lockItemInLayout = !this.parent.autoCalcHeight
       this.rowHeight = this.parent.rowHeight
       this.containerWidth = this.parent.width !== null ? this.parent.width : 100
       this.margin = this.parent.margin !== undefined ? this.parent.margin : [10, 10]

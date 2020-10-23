@@ -27,43 +27,46 @@
     <!--      </el-radio-group>-->
     <!--    </div>-->
 
-    <portal-target name="PanelStyles" />
+    <template v-if="!hasBackground">
+      <portal-target name="PanelStyles" />
 
-    <item-hidden-controller v-if="!selectedComponentSet" />
+      <item-hidden-controller />
 
-    <dimension v-if="isAllGridItem" />
+      <dimension v-if="isAllGridItem" />
 
-    <ratio v-if="isAllGridItem" />
+      <ratio v-if="isAllGridItem" />
 
-    <el-divider content-position="left">STACK</el-divider>
+      <el-divider content-position="left">STACK</el-divider>
 
-    <position v-if="isAllGridItem" />
+      <position v-if="isAllGridItem" />
 
-    <overflow v-if="isAllGridItem" />
+      <overflow v-if="isAllGridItem" />
 
-    <padding v-if="isAllGridItem" />
+      <padding v-if="isAllGridItem" />
 
-    <radius v-if="canRadius" />
+      <radius v-if="canRadius" />
 
-    <opacity />
+      <opacity />
 
-    <portal-target
-      name="Rotate"
-      slim
-    />
+      <portal-target
+        name="Rotate"
+        slim
+      />
 
-    <background-color v-if="canBackgroundColor" />
+      <background-color v-if="canBackgroundColor" />
 
-    <border-all />
+      <border-all />
 
-    <box-shadow v-if="canShadow" />
+      <box-shadow v-if="canShadow" />
 
-    <effect />
+      <effect />
 
-    <transform v-if="canTransform" />
+      <transform v-if="canTransform" />
 
-    <text-editor-simple-style v-if="isAllTextEditor" />
+      <text-editor-simple-style v-if="isAllTextEditor" />
+    </template>
 
+    <background-color v-else />
     <!--      <transitions-->
     <!--        :disabled="!isDefaultState"-->
     <!--        :value="styles.transition"-->
@@ -74,7 +77,7 @@
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { RadioGroup, RadioButton } from 'element-ui'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
@@ -93,7 +96,7 @@ import TextEditorSimpleStyle from './EditorStyle/TextEditorSimpleStyle'
 import Ratio from './EditorStyle/Ratio'
 import Position from '@/components/Setup/EditorStyle/Position'
 import {
-  isComponentSet,
+  isBackground,
   isGridItem,
   isSlider,
   isTextEditor
@@ -130,8 +133,10 @@ export default {
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
-    selectedComponentSet() {
-      return this.selectedComponentNodes.find(node => isComponentSet(node))
+    hasBackground() {
+      return this.selectedComponentIds.find(id =>
+        isBackground(this.nodesMap[id])
+      )
     },
     isAllGridItem() {
       const nodes = this.selectedComponentNodes.filter(node => isGridItem(node))
@@ -147,13 +152,11 @@ export default {
     },
     canRadius() {
       const node = arrayLast(this.selectedComponentNodes)
-      return (
-        !isTextEditor(node) && !isSlider(node) && !this.selectedComponentSet
-      )
+      return !isTextEditor(node) && !isSlider(node)
     },
     canShadow() {
       const node = arrayLast(this.selectedComponentNodes)
-      return !isSlider(node) && !this.selectedComponentSet
+      return !isSlider(node)
     },
     isAllTextEditor() {
       const nodes = this.selectedComponentNodes.filter(node =>
@@ -166,12 +169,8 @@ export default {
       const nodes = this.selectedComponentNodes.filter(
         node => isGridItem(node) || isSlider(node)
       )
-
       const valid = nodes.length === this.selectedComponentNodes.length
-      return (
-        (this.selectedComponentNodes.length && valid) ||
-        this.selectedComponentSet
-      )
+      return this.selectedComponentNodes.length && valid
     }
   }
 }

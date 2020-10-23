@@ -207,7 +207,7 @@ export function isCarousel(node) {
 
 export function isGrid(node) {
   if (node) {
-    return node.tag === GRID_GENERATOR && !isSlider(node)
+    return node.tag === GRID_GENERATOR && !node[POLYMORPHISM]
   }
 }
 
@@ -223,9 +223,9 @@ export function isTextEditor(node) {
   }
 }
 
-export function isParagraph(node) {
+export function isBackground(node) {
   if (node) {
-    return node[POLYMORPHISM] === 'paragraph'
+    return node[POLYMORPHISM] === 'background'
   }
 }
 

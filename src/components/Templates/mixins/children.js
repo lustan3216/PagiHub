@@ -129,7 +129,7 @@ export default {
             })
           }
         }
-        else {
+        else if (this.node) {
           this.SET_SELECTED_COMPONENT_ID(this.node.id)
         }
       })

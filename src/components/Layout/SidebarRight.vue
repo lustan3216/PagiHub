@@ -66,7 +66,7 @@ export default {
   }
 
   &.sidebar-right-content {
-    padding: 0 10px 10px;
+    padding: 5px 10px 10px;
     @include calc-vh('max-height', '100vh - 60px');
     overflow: scroll;
     height: 100%;

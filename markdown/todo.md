@@ -1,10 +1,3 @@
-Road map
-
-SEO
-Interaction / animation
-Form
-Style component
-
 ### Functionality
 
 https://lottiefiles.com/
@@ -20,6 +13,9 @@ https://github.com/antonreshetov/vue-eva-icons
 https://www.npmjs.com/package/xss
 https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
+
+提示 breakpoint 拉完就定型
+grid 輔助工具勁量做的跟大型工具一樣
 
 左下角 container 可以有個+
 panel component 可以拖拉
@@ -37,12 +33,12 @@ style 支援 每個 device 可客製化
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction 在弄就好
 image can put more effect
 when adding element, does it needs to with container along with, should we bind it together
-動畫
 SEO / 跟後端在一起大改吧
 
-監聽事件可以選，先選動作，在選要執行的 style component
-
-<li>active / click / hover / showing 的狀態註冊到改成全局，當該個component作用時，可引響全局的組建，參考XD，然後要做成array，之後可以做成timeline</li>
+監聽事件 click/hover visible or / scroll
+event can trigger style component or animation component change
+event can animation component, animation component can trigger style component change
+animation control timing and transition, rest of stuff will be control by style component
 
 refactor
 style 試試看能不能全部放在 當個 component 裡面，style 用 props 傳遞

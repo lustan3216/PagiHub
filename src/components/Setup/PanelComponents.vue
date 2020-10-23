@@ -114,7 +114,8 @@ import {
   isGrid,
   isSlider,
   isComponentSet,
-  traversalAncestorAndSelf
+  traversalAncestorAndSelf,
+  isBackground
 } from '@/utils/node'
 import {
   BIconFonts,
@@ -199,7 +200,12 @@ export default {
       }
 
       const cloneTree = cloneJson(tree)
+
       traversalSelfAndChildren(cloneTree, (node, parentNode) => {
+        if (isBackground(node)) {
+          parentNode.children = node.children
+        }
+
         node.children = node.children.filter(node => node && !node[SOFT_DELETE])
 
         if (isGrid(node) && !isSlider(node)) {

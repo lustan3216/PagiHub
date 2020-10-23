@@ -4,7 +4,7 @@ import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import { isComponentSet, isGrid, isGridItem } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { STYLES } from '@/const'
 
 export default {
@@ -91,7 +91,7 @@ export default {
     }
     let vnode = null
 
-    if (!this.controller || isGrid(this.node)) {
+    if (!this.controller || isGrid(this.node) || isComponentSet(this.node)) {
       vnode = h(AsyncComponent, {
         key: this.id,
         props: {
