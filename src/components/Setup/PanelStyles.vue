@@ -74,7 +74,7 @@
 
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { RadioGroup, RadioButton } from 'element-ui'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
@@ -92,7 +92,12 @@ import ItemHiddenController from './EditorStyle/ItemHiddenController'
 import TextEditorSimpleStyle from './EditorStyle/TextEditorSimpleStyle'
 import Ratio from './EditorStyle/Ratio'
 import Position from '@/components/Setup/EditorStyle/Position'
-import { isGridItem, isSlider, isTextEditor } from '@/utils/node'
+import {
+  isComponentSet,
+  isGridItem,
+  isSlider,
+  isTextEditor
+} from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 
 export default {
@@ -123,7 +128,13 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
+    selectedComponentSet() {
+      return this.selectedComponentIds.find(id =>
+        isComponentSet(this.nodesMap[id])
+      )
+    },
     isAllGridItem() {
       const nodes = this.selectedComponentNodes.filter(node => isGridItem(node))
       const allGridItem = nodes.length === this.selectedComponentNodes.length
@@ -138,11 +149,13 @@ export default {
     },
     canRadius() {
       const node = arrayLast(this.selectedComponentNodes)
-      return !isTextEditor(node) && !isSlider(node)
+      return (
+        !isTextEditor(node) && !isSlider(node) && !this.selectedComponentSet
+      )
     },
     canShadow() {
       const node = arrayLast(this.selectedComponentNodes)
-      return !isSlider(node)
+      return !isSlider(node) && !this.selectedComponentSet
     },
     isAllTextEditor() {
       const nodes = this.selectedComponentNodes.filter(node =>
@@ -155,8 +168,12 @@ export default {
       const nodes = this.selectedComponentNodes.filter(
         node => isGridItem(node) || isSlider(node)
       )
+
       const valid = nodes.length === this.selectedComponentNodes.length
-      return this.selectedComponentNodes.length && valid
+      return (
+        (this.selectedComponentNodes.length && valid) ||
+        this.selectedComponentSet
+      )
     }
   }
 }
