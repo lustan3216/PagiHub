@@ -44,10 +44,11 @@
               publish.
             </p>
             <component
-              :is="node && node.version ? 'router-link' : 'span'"
-              :to="`/${username}/${project && project.label}/${form.label}`"
+              :is="node && node.version ? 'a' : 'span'"
+              :href="href"
               :class="[node && node.version ? 'link' : 'gray-font']"
               class="font-13"
+              target="_blank"
             >
               {{ origin }}/{{ username || 'username' }}/{{
                 project && project.label
@@ -187,10 +188,21 @@ export default {
     isExist() {
       return Boolean(this.id)
     },
+    href() {
+      let url = `/${this.username}/${this.project && this.project.label}/${
+        this.form.label
+      }`
+
+      if (this.node && this.node.privateLinkToken) {
+        url += `?token=${this.node.privateLinkToken}`
+      }
+
+      return url
+    },
     privateLinkToken() {
       if (this.form.isPrivate) {
         if (this.node && this.node.privateLinkToken) {
-          return `?privateLinkToken=${this.node.privateLinkToken}`
+          return `?token=${this.node.privateLinkToken}`
         }
         else {
           return `?privateLinkToken=secret`

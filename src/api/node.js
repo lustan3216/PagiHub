@@ -58,12 +58,14 @@ export function getComponentSetChildren({ id }) {
 export function getComponentSetPublicChildren({
   userLabel,
   projectLabel,
-  componentSetLabel
+  componentSetLabel,
+  token
 }) {
   const _queryString = queryString({
     userLabel,
     projectLabel,
-    componentSetLabel
+    componentSetLabel,
+    token
   })
   return API.get('axios', `/public?${_queryString}`)
 }

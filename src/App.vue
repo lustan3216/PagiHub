@@ -52,7 +52,9 @@ export default {
     }
   },
   created() {
-    this.getCurrentLocalUser()
+    if (!this.$route.meta.noNeedLogin) {
+      this.getCurrentLocalUser()
+    }
   },
   methods: {
     ...mapActions('user', ['getCurrentLocalUser'])

@@ -64,7 +64,7 @@ export default new VueRouter({
     {
       path: '/:userLabel/:projectLabel/:componentSetLabel',
       name: 'PanelProduction',
-      meta: { noNavbar: true, noFbChat: true },
+      meta: { noNavbar: true, noFbChat: true, noNeedLogin: true },
       component: () => import('@/components/Layout/PanelProduction')
     },
     {

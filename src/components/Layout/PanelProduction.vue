@@ -42,14 +42,15 @@ export default {
     this.SET_PRODUCTION_MODE()
 
     const { userLabel, projectLabel, componentSetLabel } = this.$route.params
-    const { privateLinkToken } = this.$route.query
+    const { token } = this.$route.query
+
     const {
       data: { componentSet, data: nodes }
     } = await getComponentSetPublicChildren({
       userLabel: userLabel || this.firstPath,
       projectLabel: projectLabel || this.secondPath,
       componentSetLabel: componentSetLabel || this.thirdPath,
-      privateLinkToken
+      token
     })
 
     if (nodes.length) {
