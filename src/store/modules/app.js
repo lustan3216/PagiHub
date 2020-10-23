@@ -62,11 +62,11 @@ const actions = {
   },
   setCopySelectedNodeId({ commit, state, rootState }, ids) {
     const { rootComponentSetIds, nodesMap } = rootState.node
-    const copyComponentIds = ids
-      ? toArray(ids)
-      : state.selectedComponentIds.filter(
-        id => !rootComponentSetIds.includes(id)
-      )
+    let copyComponentIds = ids ? toArray(ids) : state.selectedComponentIds
+
+    copyComponentIds = copyComponentIds.filter(
+      id => !rootComponentSetIds.includes(id)
+    )
 
     // the top component under rootComponentSet should not be copied
     const copyNodeArray = []
@@ -102,9 +102,7 @@ const getters = {
     }
   },
   selectedComponentNodes(state, getters, rootState) {
-    return state.selectedComponentIds
-      .map(id => rootState.node.nodesMap[id])
-      .filter(node => isComponent(node))
+    return state.selectedComponentIds.map(id => rootState.node.nodesMap[id])
   }
 }
 

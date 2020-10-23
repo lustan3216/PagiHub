@@ -1,7 +1,6 @@
 import { mapActions, mapGetters } from 'vuex'
-import { arrayLast, toArray } from '@/utils/array'
+import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
-import { vmGet } from '@/utils/vmMap'
 import { HTML, STYLES } from '@/const'
 
 export default function(attr) {

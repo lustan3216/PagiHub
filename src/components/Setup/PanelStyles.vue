@@ -29,7 +29,7 @@
 
     <portal-target name="PanelStyles" />
 
-    <item-hidden-controller />
+    <item-hidden-controller v-if="!selectedComponentSet" />
 
     <dimension v-if="isAllGridItem" />
 
@@ -131,9 +131,7 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
     selectedComponentSet() {
-      return this.selectedComponentIds.find(id =>
-        isComponentSet(this.nodesMap[id])
-      )
+      return this.selectedComponentNodes.find(node => isComponentSet(node))
     },
     isAllGridItem() {
       const nodes = this.selectedComponentNodes.filter(node => isGridItem(node))
