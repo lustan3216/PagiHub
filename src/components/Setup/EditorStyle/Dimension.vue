@@ -23,7 +23,7 @@
           :disabled="!selectedComponentNodes.length"
           v-model="w"
           :max="cols"
-          :units="['%', 'px']"
+          :units="['%']"
           delete-value=""
         />
       </el-col>
