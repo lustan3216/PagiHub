@@ -10,7 +10,7 @@
       type="text"
       @mouseenter.native="hovering = true"
       @mouseleave.native="hovering = false"
-      @click="record"
+      @click="storeRecord"
     />
   </el-tooltip>
 </template>
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     ...mapActions('node', ['record']),
-    record() {
+    storeRecord() {
       if (this.hidden) {
         this.record({
           path: `${this.id}.${STYLES}.${this.currentBreakpoint}.hidden`,
