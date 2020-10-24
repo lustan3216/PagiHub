@@ -96,23 +96,38 @@ export default {
       return this[this.validBreakpoint]
     },
     xl() {
-      return (this.breakpointsMap.xl && this.innerGrid.xl) || this.lg
+      return (
+        (Number.isInteger(this.breakpointsMap.xl) && this.innerGrid.xl) ||
+        this.lg
+      )
     },
     lg() {
-      return (this.breakpointsMap.lg && this.innerGrid.lg) || this.md
+      return (
+        (Number.isInteger(this.breakpointsMap.lg) && this.innerGrid.lg) ||
+        this.md
+      )
     },
     md() {
-      return (this.breakpointsMap.md && this.innerGrid.md) || this.sm
+      return (
+        (Number.isInteger(this.breakpointsMap.md) && this.innerGrid.md) ||
+        this.sm
+      )
     },
     sm() {
-      return (this.breakpointsMap.md && this.innerGrid.sm) || this.xs
+      return (
+        (Number.isInteger(this.breakpointsMap.md) && this.innerGrid.sm) ||
+        this.xs
+      )
     },
     xs() {
-      return (this.breakpointsMap.xs && this.innerGrid.xs) || this.xxs
+      return (
+        (Number.isInteger(this.breakpointsMap.xs) && this.innerGrid.xs) ||
+        this.xxs
+      )
     },
     xxs() {
       return (
-        (this.breakpointsMap.xxs && this.innerGrid.xxs) ||
+        (Number.isInteger(this.breakpointsMap.xxs) && this.innerGrid.xxs) ||
         this.innerGrid.xs ||
         this.innerGrid.sm ||
         this.innerGrid.md ||

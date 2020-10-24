@@ -20,16 +20,19 @@ grid 輔助工具勁量做的跟大型工具一樣
 左下角 container 可以有個+
 panel component 可以拖拉
 width 要支援 px
-支援 icon
 自動對齊
 距離輔助線
+style 支援 每個 device 可客製化
+
+支援 icon
+
 hover click
 animation
 style component
 container can transform
 form input
 can setting put under style or new tab
-style 支援 每個 device 可客製化
+
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction 在弄就好
 image can put more effect
 when adding element, does it needs to with container along with, should we bind it together
