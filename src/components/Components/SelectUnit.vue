@@ -181,18 +181,17 @@ export default {
           result = this.min
         }
 
-        if (this.unit) {
-          result += this.unit
-        }
-
         if (this.separate) {
-          this.$emit('update:value', result)
+          this.$emit('update:number', result)
+          this.innerValue = result
         }
         else {
+          if (this.unit) {
+            result += this.unit
+          }
           this.$emit('input', result)
+          this.innerValue = result
         }
-
-        this.innerValue = result
       }
     },
     innerUnit: {

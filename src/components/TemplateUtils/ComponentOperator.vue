@@ -222,6 +222,13 @@ export default {
       vmCreateEmptyItem(this.node)
     },
     animate() {
+      if (!this.node) {
+        if (process.env.NODE_ENV === 'production') {
+          console.warn('component operator has no node')
+        }
+        return
+      }
+
       const element = document.querySelector(
         `[data-node][id='${this.node.id}']`
       )
@@ -274,10 +281,6 @@ export default {
 
       this.$nextTick(() => {
         this.visible = false
-        if (!this.node) {
-          return
-        }
-
         this.startTime = +new Date()
         this.animateId = requestAnimationFrame(this.animate)
       })

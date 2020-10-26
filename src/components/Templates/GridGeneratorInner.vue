@@ -114,12 +114,6 @@ export default {
           unitW: oldGrid.unitW
         }
 
-        let h = child.h
-
-        if (child.unitH === 'vh') {
-          h = h / this.vh
-        }
-
         if (process.env.NODE_ENV !== 'production' && child.w === 1) {
           console.warn(`${this.id}.width === 1`)
         }
@@ -127,7 +121,7 @@ export default {
         const newValue = {
           x: child.x,
           y: child.y,
-          h: toPrecision(h, 0),
+          h: child.h,
           w: child.w,
           unitH: child.unitH,
           unitW: child.unitW

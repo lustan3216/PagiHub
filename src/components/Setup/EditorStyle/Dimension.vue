@@ -26,7 +26,6 @@
           :disabled="!selectedComponentNodes.length"
           :number.sync="w"
           :unit.sync="unitW"
-          :max="unitWMax"
           :min="0"
           :units="['%', 'px', 'vw', 'vh']"
           separate
@@ -45,7 +44,6 @@
       <el-col :span="12">
         <select-unit
           :disabled="heightDisabled"
-          :max="unitHMax"
           :number.sync="h"
           :min="0"
           :unit.sync="unitH"
@@ -142,12 +140,12 @@ export default {
             value
           })
 
-          if (value !== 'px' && this.h > 100) {
-            records.push({
-              path: [node.id, GRID, this.currentBreakpoint, 'h'],
-              value: 100
-            })
-          }
+          // if (value !== 'px' && this.h > 100) {
+          //   records.push({
+          //     path: [node.id, GRID, this.currentBreakpoint, 'h'],
+          //     value: 100
+          //   })
+          // }
         })
 
         this.record(records)
@@ -166,12 +164,12 @@ export default {
             value
           })
 
-          if (value !== 'px' && this.w > 100) {
-            records.push({
-              path: [node.id, GRID, this.currentBreakpoint, 'w'],
-              value: 100
-            })
-          }
+          // if (value !== 'px' && this.w > 100) {
+          //   records.push({
+          //     path: [node.id, GRID, this.currentBreakpoint, 'w'],
+          //     value: 100
+          //   })
+          // }
         })
 
         this.record(records)

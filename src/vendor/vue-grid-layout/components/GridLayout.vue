@@ -63,10 +63,6 @@
         type: Number,
         default: 12
       },
-      maxRows: {
-        type: Number,
-        default: Infinity
-      },
       isDraggable: {
         type: Boolean,
         default: true
@@ -216,9 +212,6 @@
       },
       isResizable: function() {
         this.eventBus.$emit('setResizable', this.isResizable)
-      },
-      maxRows: function() {
-        this.eventBus.$emit('setMaxRows', this.maxRows)
       }
     },
     methods: {

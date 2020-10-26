@@ -148,17 +148,11 @@ export default {
       const { ratioH, ratioW, zIndex, position } = this.styleLayout
       const { userCanResize, userCanDrag } = this.innerProps
 
-      let h = parseInt(this.currentGrid.h)
-
-      if (this.currentGrid.unitH === 'vh') {
-        h = this.vh * h
-      }
-
       return {
         x: this.currentGrid.x || 0,
         y: this.currentGrid.y || 0,
         w: this.currentGrid.w || 0,
-        h: h || 0,
+        h: this.currentGrid.h || 0,
 
         unitH: this.currentGrid.unitH,
         unitW: this.currentGrid.unitW,

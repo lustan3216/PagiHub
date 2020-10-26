@@ -232,7 +232,6 @@
       return {
         cols: 1,
         containerWidth: 100,
-        maxRows: Infinity,
         draggable: null,
         resizable: null,
 
@@ -245,7 +244,6 @@
         lastW: NaN,
         lastH: NaN,
         style: {},
-        rtl: false,
 
         dragEventSet: false,
         resizeEventSet: false,
@@ -286,15 +284,6 @@
         }
       }
 
-      self.setMaxRowsHandler = function(maxRows) {
-        self.maxRows = maxRows
-      }
-
-      self.directionchangeHandler = () => {
-        this.rtl = getDocumentDir() === 'rtl'
-        this.compact()
-      }
-
       self.setColNum = (colNum) => {
         self.cols = parseInt(colNum)
       }
@@ -303,11 +292,7 @@
       this.eventBus.$on('compact', self.compactHandler)
       this.eventBus.$on('setDraggable', self.setDraggableHandler)
       this.eventBus.$on('setResizable', self.setResizableHandler)
-      this.eventBus.$on('setMaxRows', self.setMaxRowsHandler)
-      this.eventBus.$on('directionchange', self.directionchangeHandler)
       this.eventBus.$on('setColNum', self.setColNum)
-
-      this.rtl = getDocumentDir() === 'rtl'
     },
     beforeDestroy: function() {
       let self = this
@@ -316,8 +301,6 @@
       this.eventBus.$off('compact', self.compactHandler)
       this.eventBus.$off('setDraggable', self.setDraggableHandler)
       this.eventBus.$off('setResizable', self.setResizableHandler)
-      this.eventBus.$off('setMaxRows', self.setMaxRowsHandler)
-      this.eventBus.$off('directionchange', self.directionchangeHandler)
       this.eventBus.$off('setColNum', self.setColNum)
       if (this.interactObj) {
         this.interactObj.unset() // destroy interact intance
@@ -334,7 +317,6 @@
       this.lockItemInLayout = !this.parent.autoCalcHeight
       this.containerWidth = this.parent.width !== null ? this.parent.width : 100
 
-      this.maxRows = this.parent.maxRows
       if (this.isDraggable === null) {
         this.draggable = this.parent.isDraggable
       } else {
@@ -409,6 +391,12 @@
           this.createStyle()
         })
       },
+      unitH() {
+        this.$nextTick(() => {
+          this.autoSize()
+          this.createStyle()
+        })
+      },
       ratioW() {
         this.tryMakeResizable()
       },
@@ -469,12 +457,12 @@
       pxH() {
         return Math.round(this.colHeight * this.h)
       },
-      calcColHeight() {
+      colHeight() {
         switch (this.unitH) {
-          case '%':
-            const colHeight = this.containerHeight / 100
-            // console.log("### COLS=" + this.cols + " COL WIDTH=" + colHeight + " MARGIN " + this.margin[0]);
-            return colHeight
+          // case '%':
+          //   const colHeight = this.containerHeight / 100
+          //   // console.log("### COLS=" + this.cols + " COL WIDTH=" + colHeight + " MARGIN " + this.margin[0]);
+          //   return colHeight
 
           case 'vw':
             return this.vw
@@ -777,16 +765,14 @@
       },
 
       calcPosition: function(x, y, w, h) {
-        const colWidth = this.colWidth
-
         return {
           left: Math.round(x),
           top: Math.round(y),
           // 0 * Infinity === NaN, which causes problems with resize constriants;
           // Fix this if it occurs.
           // Note we do it here rather than later because Math.round(Infinity) causes deopt
-          width: w === Infinity ? w : Math.round(colWidth * w),
-          height: h === Infinity ? h : Math.round(h)
+          width: w === Infinity ? w : Math.round(this.colWidth * w),
+          height: h === Infinity ? h : Math.round(this.colHeight * h)
         }
       },
       /**
@@ -809,7 +795,7 @@
 
         // Capping
         x = Math.max(Math.min(x, this.cols - this.innerW), 0)
-        y = Math.max(Math.min(y, this.maxRows - this.innerH), 0)
+        y = Math.max(y, 0)
 
         return { x, y }
       },
@@ -821,17 +807,15 @@
        * @return {Object} w, h as grid units.
        */
       calcWH(height, width) {
-        const colWidth = this.colWidth
-
         // width = colWidth * w - (margin * (w - 1))
         // ...
         // w = (width + margin) / (colWidth + margin)
-        let w = Math.round(width / colWidth)
-        let h = Math.round(height)
+        let w = Math.round(width / this.colWidth)
+        let h = Math.round(height / this.colHeight)
 
         // Capping
         w = Math.max(Math.min(w, this.cols - this.innerX), 0)
-        h = Math.max(Math.min(h, this.maxRows - this.innerY), 0)
+        h = Math.max(h, 0)
         return { w, h }
       },
       updateWidth: function(width, colNum) {
