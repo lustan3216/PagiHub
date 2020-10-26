@@ -103,7 +103,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { cloneJson } from '@/utils/tool'
-import { isComponent, isComponentSet, isGridItem } from '@/utils/node'
+import { isComponentSet } from '@/utils/node'
 import { Tag } from 'element-ui'
 import { vmGet, vmRemoveNode } from '@/utils/vmMap'
 import { HTML, STYLES } from '@/const'

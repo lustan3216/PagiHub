@@ -1,5 +1,5 @@
 <template>
-  <div ref="item" class="grid-layout" :style="mergedStyle" style="z-index: 0;">
+  <div ref="item" class="grid-layout" :style="{...mergedStyle, ...extraStyle}" style="z-index: 0;">
     <slot></slot>
     <grid-item class="grid-placeholder"
                v-if="showPlaceHolder && isDragging"
@@ -17,7 +17,7 @@
   }
 </style>
 <script>
-  import { mapActions } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
   import Vue from 'vue'
 
   import {
@@ -30,16 +30,8 @@
     getLayoutItem,
     moveElement,
     validateLayout,
-    cloneLayout,
-    getAllCollisions,
     correctFixItemsBound,
-    getBoundaryEl
   } from '../helpers/utils'
-  import {
-    getBreakpointFromWidth,
-    getColsFromBreakpoint,
-    findOrGenerateResponsiveLayout
-  } from '../helpers/responsiveUtils'
   //var eventBus = require('./eventBus');
 
   import GridItem from './GridItem.vue'
@@ -67,17 +59,9 @@
         type: Boolean,
         default: false
       },
-      scale: {
-        type: Number,
-        default: 1
-      },
       colNum: {
         type: Number,
         default: 12
-      },
-      rowHeight: {
-        type: Number,
-        default: 150
       },
       maxRows: {
         type: Number,
@@ -97,14 +81,6 @@
         type: Boolean,
         default: true
       },
-      isMirrored: {
-        type: Boolean,
-        default: false
-      },
-      useCssTransforms: {
-        type: Boolean,
-        default: true
-      },
       verticalCompact: {
         type: Boolean,
         default: true
@@ -112,10 +88,6 @@
       layout: {
         type: Array,
         required: true
-      },
-      responsive: {
-        type: Boolean,
-        default: false
       },
       extraStyle: {
         type: Object,
@@ -150,6 +122,9 @@
         offListeners: []
       }
     },
+    computed: {
+      ...mapGetters('layout', ['vw', 'vh'])
+    },
     created() {
       const self = this
 
@@ -165,9 +140,7 @@
       this.eventBus.$off('resizeEvent', this.resizeEvent)
       this.eventBus.$off('dragEvent', this.dragEvent)
       this.eventBus.$destroy()
-      removeWindowEventListener('resize', debounce(() => {
-        this.onWindowResize()
-      }, 50))
+
       this.offListeners.forEach(off => off())
     },
     beforeMount: function() {
@@ -188,7 +161,7 @@
 
           //self.width = self.$el.offsetWidth;
           // addWindowEventListener('resize', self.onWindowResize)
-
+          this.calcPxWH()
           compact(self.layout, self.verticalCompact)
 
           // lots-design
@@ -244,9 +217,6 @@
       colNum: function(val) {
         this.eventBus.$emit('setColNum', val)
       },
-      rowHeight: function() {
-        this.eventBus.$emit('setRowHeight', this.rowHeight)
-      },
       isDraggable: function() {
         this.eventBus.$emit('setDraggable', this.isDraggable)
       },
@@ -259,6 +229,41 @@
     },
     methods: {
       ...mapActions('layout', ['resizeNodeQuickFn']),
+
+      colWidth(item) {
+        switch (item.unitW) {
+          case '%':
+            const colWidth = (this.width || 0) / 100
+            // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+            return colWidth
+
+          case 'vw':
+            return this.vw
+
+          case 'vh':
+            return this.vh
+
+          default:
+            return 1
+        }
+      },
+      colHeight(item) {
+        switch (item.unitH) {
+          // case '%':
+          //   const colHeight = (this.width || 0) / 100
+          //   // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+          //   return colHeight
+
+          case 'vw':
+            return this.vw
+
+          case 'vh':
+            return this.vh
+
+          default:
+            return 1
+        }
+      },
       correctFixItemsBound() {
         if (this.boundaryElement) {
           correctFixItemsBound(this.layout, this.boundaryElement.clientHeight)
@@ -287,6 +292,8 @@
             // this.initResponsiveFeatures()
           }
 
+          this.calcPxWH()
+
           compact(this.layout, this.verticalCompact)
           this.eventBus.$emit('updateWidth', this.width)
           // lots-design
@@ -297,10 +304,10 @@
         }
       },
       updateHeight: function() {
-        const height = this.autoCalcHeight ? this.containerHeight() : '100%'
-        this.mergedStyle = { height, ...this.extraStyle }
+        const height = this.containerHeight()
+        this.mergedStyle = { height }
       },
-      // autoSize() {},
+
       onWindowResize: function() {
         if (this.$refs !== null && this.$refs.item !== null && this.$refs.item !== undefined) {
           this.width = this.$refs.item.offsetWidth
@@ -308,15 +315,32 @@
 
         this.eventBus.$emit('resizeEvent')
       },
+      calcPxWH() {
+        this.layout.forEach(item => {
+          item.pxW = Math.round(this.colWidth(item) * item.w)
+          item.pxH = Math.round(this.colHeight(item) * item.h)
+
+          if (item.x + item.pxW > this.colNum) {
+            item.x = this.colNum - item.pxW < 0 ? 0 : this.colNum - item.pxW
+            item.pxW = (item.pxW > this.colNum) ? this.colNum : item.w
+          }
+
+        })
+      },
        containerHeight: function() {
-        if (!this.autoSize) return
+        if (this.autoSize) {
+          const containerHeight = bottom(this.layout) + 'px'
+          return containerHeight
+        }
+        else {
+          return '100%'
+        }
         // console.log("bottom: " + bottom(this.layout))
         // console.log("rowHeight + margins: " + (this.rowHeight + this.margin[1]) + this.margin[1])
-        const containerHeight = bottom(this.layout) * (this.rowHeight + this.margin[1]) + this.margin[1] + 'px'
-        return containerHeight
       },
       dragEvent: function(eventName, id, x, y, h, w) {
         //console.log(eventName + " id=" + id + ", x=" + x + ", y=" + y);
+        this.calcPxWH()
         let l = getLayoutItem(this.layout, id)
         //GetLayoutItem sometimes returns null object
         if (l === undefined || l === null) {
@@ -355,6 +379,7 @@
         if (eventName === 'dragend') this.$emit('layout-updated', this.layout)
       },
       resizeEvent: function(eventName, id, x, y, h, w) {
+        this.calcPxWH()
         let l = getLayoutItem(this.layout, id)
         //GetLayoutItem sometimes return null object
         if (l === undefined || l === null) {

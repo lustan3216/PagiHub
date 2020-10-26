@@ -1,7 +1,7 @@
 <template>
   <el-input
     ref="input"
-    v-model="number"
+    v-model="innerNumber"
     :class="{ 'ns-resize': resizeCursor }"
     :prefix-icon="prefixIcon"
     :step="shiftPress ? step * 10 : step"
@@ -16,7 +16,7 @@
     @mousedown.native="mousedown"
     @focus="resizeCursor = false"
     @blur="resizeCursor = true"
-    @change="$emit('change', innerValue || deleteValue)"
+    @change="$emit('change', innerValue)"
   >
     <el-dropdown
       v-if="optionUnits.length > 1"
@@ -24,11 +24,12 @@
       :disabled="disabled"
       size="small"
       class="pointer"
-      @command="unit = $event"
+      @command="innerUnit = $event"
     >
       <span class="title">
-        {{ unit }}
+        {{ innerUnit }}
       </span>
+
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item
           v-for="unit in optionUnits"
@@ -53,6 +54,7 @@
 
 <script>
 import { toPrecision } from '@/utils/number'
+
 export default {
   name: 'SelectUnit',
   props: {
@@ -63,10 +65,6 @@ export default {
     prefixIcon: {
       type: String,
       default: ''
-    },
-    deleteValue: {
-      type: String,
-      default: null
     },
     clearable: {
       type: Boolean,
@@ -98,9 +96,19 @@ export default {
       },
       default: null
     },
+    number: {
+      type: [String, Number]
+    },
+    unit: {
+      type: String
+    },
     units: {
       type: [Array, String],
       default: () => ['px', '%']
+    },
+    separate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -146,9 +154,14 @@ export default {
         return [parseFloat(this.innerValue), unit]
       }
     },
-    number: {
+    innerNumber: {
       get() {
-        return toPrecision(this.match[0], this.precision)
+        if (this.separate) {
+          return this.number
+        }
+        else {
+          return toPrecision(this.match[0], this.precision)
+        }
       },
       set(number) {
         let result
@@ -157,39 +170,73 @@ export default {
           result = null
         }
         else {
-          result = toPrecision(number, this.precision) + this.unit
+          result = toPrecision(number, this.precision)
+        }
+
+        if (result > this.max) {
+          result = this.max
+        }
+
+        if (result < this.min) {
+          result = this.min
+        }
+
+        if (this.unit) {
+          result += this.unit
+        }
+
+        if (this.separate) {
+          this.$emit('update:value', result)
+        }
+        else {
+          this.$emit('input', result)
         }
 
         this.innerValue = result
-        this.$emit('input', result || this.deleteValue)
       }
     },
-    unit: {
+    innerUnit: {
       get() {
-        if (this.isStringUnit) {
-          return this.units
-        }
-
-        const { length } = this.units
-        if (length === 1) {
-          return this.units[0]
-        }
-        else if (length === 0) {
-          return ''
+        if (this.separate) {
+          return this.unit
         }
         else {
-          return this.match[1] || this.units[0]
+          if (this.isStringUnit) {
+            return this.units
+          }
+
+          const { length } = this.units
+          if (length === 1) {
+            return this.units[0]
+          }
+          else if (length === 0) {
+            return ''
+          }
+          else {
+            return this.match[1] || this.units[0]
+          }
         }
       },
       set(unit) {
-        const number = unit === 'auto' ? '' : this.number || '0'
+        const isAuto = unit === 'auto'
+        const number = isAuto ? '' : this.innerNumber || '0'
+
+        if (isAuto) {
+          this.$emit('update:value', '0')
+        }
+
+        if (this.separate) {
+          this.$emit('update:unit', unit)
+        }
+        else {
+          this.$emit('input', this.innerValue)
+        }
 
         this.innerValue = number + unit
-        this.$emit('input', this.innerValue, this.deleteValue)
       }
     },
     isAuto() {
-      return this.unit === 'auto'
+      return this.innerUnit === 'auto'
     }
   },
   watch: {
@@ -207,6 +254,7 @@ export default {
     mousedown(e) {
       this.clicking = true
       this.lastPosition = e.clientY
+
       document.addEventListener('mousemove', this.handleMousemove)
       document.addEventListener('mouseup', this.releaseClick)
     },
@@ -219,7 +267,7 @@ export default {
         return
       }
 
-      this.number += value
+      this.innerNumber += value
     },
     isInvalid(value) {
       return (

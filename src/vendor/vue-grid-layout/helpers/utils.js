@@ -28,7 +28,7 @@ export type Size = {width: number, height: number};
 export function bottom(layout: Layout): number {
   let max = 0, bottomY;
   for (let i = 0, len = layout.length; i < len; i++) {
-    bottomY = layout[i]. y + layout[i].h;
+    bottomY = layout[i].y + layout[i].pxH;
     if (bottomY > max) max = bottomY;
   }
   return max;
@@ -45,7 +45,7 @@ export function cloneLayout(layout: Layout): Layout {
 // Fast path to cloning, since this is monomorphic
 export function cloneLayoutItem(layoutItem: LayoutItem): LayoutItem {
   /*return {
-    w: layoutItem.w, h: layoutItem.h, x: layoutItem.x, y: layoutItem.y, i: layoutItem.i,
+    w: layoutItem.pxW, h: layoutItem.pxH, x: layoutItem.x, y: layoutItem.y, i: layoutItem.i,
     minW: layoutItem.minW, maxW: layoutItem.maxW, minH: layoutItem.minH, maxH: layoutItem.maxH,
     moved: Boolean(layoutItem.moved), static: Boolean(layoutItem.static),
     // These can be null
@@ -66,10 +66,10 @@ export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
 
     if ((fix1 && fix2) || (!fix1 && !fix2)) {
       if (l1 === l2) return false; // same element
-      if (l1.x + l1.w <= l2.x) return false; // l1 is left of l2
-      if (l1.x >= l2.x + l2.w) return false; // l1 is right of l2
-      if (l1.y + l1.h <= l2.y) return false; // l1 is above l2
-      if (l1.y >= l2.y + l2.h) return false; // l1 is below l2
+      if (l1.x + l1.pxW <= l2.x) return false; // l1 is left of l2
+      if (l1.x >= l2.x + l2.pxW) return false; // l1 is right of l2
+      if (l1.y + l1.pxH <= l2.y) return false; // l1 is above l2
+      if (l1.y >= l2.y + l2.pxH) return false; // l1 is below l2
       return true; // boxes overlap
     }
   }
@@ -84,7 +84,7 @@ export function correctFixItemsBound(layout: Layout, height) {
     let l = layout[i]
 
     if (l.fixOnParentBottom) {
-      l.y = height - l.h
+      l.y = height - l.pxH
 
       l.moved = false;
     }
@@ -148,7 +148,7 @@ export function compactItem(compareWith: Layout, l: LayoutItem, verticalCompact:
   // Move it down, and keep moving it down if it's colliding.
   let collides;
   while((collides = getFirstCollision(compareWith, l))) {
-    l.y = collides.y + collides.h;
+    l.y = collides.y + collides.pxH;
   }
   return l;
 }
@@ -164,11 +164,11 @@ export function correctBounds(layout: Layout, bounds: {cols: number}): Layout {
   for (let i = 0, len = layout.length; i < len; i++) {
     const l = layout[i];
     // Overflows right
-    if (l.x + l.w > bounds.cols) l.x = bounds.cols - l.w;
+    if (l.x + l.pxW > bounds.cols) l.x = bounds.cols - l.pxW;
     // Overflows left
     if (l.x < 0) {
       l.x = 0;
-      l.w = bounds.cols;
+      l.pxW = bounds.cols;
     }
     if (!l.static) collidesWith.push(l);
     else {
@@ -266,13 +266,13 @@ export function moveElement(layout: Layout, l: LayoutItem, x: Number, y: Number,
   // Move each item that collides away from this element.
   for (let i = 0, len = collisions.length; i < len; i++) {
     const collision = collisions[i];
-    // console.log('resolving collision between', l.i, 'at', l.y, 'and', collision.i, 'at', collision.y);
+    //
 
     // Short circuit so we can't infinite loop
     if (collision.moved) continue;
 
     // This makes it feel a bit more precise by waiting to swap for just a bit when moving up.
-    if (l.y > collision.y && l.y - collision.y > collision.h / 4) continue;
+    if (l.y > collision.y && l.y - collision.y > collision.pxH / 4) continue;
 
     // Don't move static items - we have to move *this* element away
     if (collision.static) {
@@ -307,11 +307,11 @@ export function moveElementAwayFromCollision(layout: Layout, collidesWith: Layou
     const fakeItem: LayoutItem = {
       x: itemToMove.x,
       y: itemToMove.y,
-      w: itemToMove.w,
-      h: itemToMove.h,
+      w: itemToMove.pxW,
+      h: itemToMove.pxH,
       i: '-1'
     };
-    fakeItem.y = Math.max(collidesWith.y - itemToMove.h, 0);
+    fakeItem.y = Math.max(collidesWith.y - itemToMove.pxH, 0);
     if (!getFirstCollision(layout, fakeItem)) {
       return moveElement(layout, itemToMove, undefined, fakeItem.y, preventCollision);
     }

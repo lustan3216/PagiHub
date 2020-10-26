@@ -2,6 +2,9 @@
   <div>
     <el-divider content-position="left">
       DIMENSION
+      <tip class="m-l-5">
+        Height will be disabled if Overflow is fit container.
+      </tip>
     </el-divider>
 
     <el-row
@@ -21,10 +24,12 @@
       <el-col :span="12">
         <select-unit
           :disabled="!selectedComponentNodes.length"
-          v-model="w"
-          :max="cols"
-          :units="['%']"
-          delete-value=""
+          :number.sync="w"
+          :unit.sync="unitW"
+          :max="unitWMax"
+          :min="0"
+          :units="['%', 'px', 'vw', 'vh']"
+          separate
         />
       </el-col>
 
@@ -34,17 +39,18 @@
           style="align-items: baseline"
         >
           H
-          <tip class="m-l-5">
-            Height will be disabled if Overflow is fit container.
-          </tip>
         </span>
       </el-col>
 
       <el-col :span="12">
         <select-unit
           :disabled="heightDisabled"
-          v-model="h"
-          :units="['px', 'vh']"
+          :max="unitHMax"
+          :number.sync="h"
+          :min="0"
+          :unit.sync="unitH"
+          :units="['px', 'vw', 'vh']"
+          separate
         />
       </el-col>
     </el-row>
@@ -70,11 +76,18 @@ export default {
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
     ...mapGetters('layout', ['currentBreakpoint']),
+    unitWMax() {
+      return this.unitW === 'px' ? Infinity : 100
+    },
+    unitHMax() {
+      return this.unitH === 'px' ? Infinity : 100
+    },
     lastNode() {
       return arrayLast(this.selectedComponentNodes)
     },
-    lastVm() {
-      return vmGet(this.lastNode.id)
+    currentGrid() {
+      const vm = vmGet(this.lastNode.id)
+      return getValueByPath(vm, ['currentGrid'], {})
     },
     cols() {
       return COLUMNS
@@ -84,24 +97,15 @@ export default {
     },
     w: {
       get() {
-        const prop = this.lastVm && this.lastVm.currentGrid
-        if (prop) {
-          return (prop.w || '0').toString() + (prop.unitW || '%')
-        }
+        return this.currentGrid.w
       },
       set(value) {
         const records = []
 
-        const unitW = value.toString().replace(/\d/g, '')
-        value = parseInt(value)
         this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: [node.id, GRID, this.currentBreakpoint, 'unitW'],
-            value: unitW === 'px' ? 'px' : undefined
-          })
-          records.push({
             path: [node.id, GRID, this.currentBreakpoint, 'w'],
-            value: value || 0
+            value
           })
         })
 
@@ -110,25 +114,64 @@ export default {
     },
     h: {
       get() {
-        const prop = this.lastVm && this.lastVm.currentGrid
-        if (prop) {
-          return (prop.h || '0').toString() + (prop.unitH || 'px')
-        }
+        return this.currentGrid.h
       },
       set(value) {
         const records = []
 
-        const unitH = value.toString().replace(/\d/g, '')
-        value = parseInt(value)
+        this.selectedComponentNodes.forEach(node => {
+          records.push({
+            path: [node.id, GRID, this.currentBreakpoint, 'h'],
+            value
+          })
+        })
+
+        this.record(records)
+      }
+    },
+    unitH: {
+      get() {
+        return this.currentGrid.unitH
+      },
+      set(value) {
+        const records = []
+
         this.selectedComponentNodes.forEach(node => {
           records.push({
             path: [node.id, GRID, this.currentBreakpoint, 'unitH'],
-            value: unitH === 'vh' ? 'vh' : undefined
+            value
           })
+
+          if (value !== 'px' && this.h > 100) {
+            records.push({
+              path: [node.id, GRID, this.currentBreakpoint, 'h'],
+              value: 100
+            })
+          }
+        })
+
+        this.record(records)
+      }
+    },
+    unitW: {
+      get() {
+        return this.currentGrid.unitW
+      },
+      set(value) {
+        const records = []
+
+        this.selectedComponentNodes.forEach(node => {
           records.push({
-            path: [node.id, GRID, this.currentBreakpoint, 'h'],
-            value: value || 0
+            path: [node.id, GRID, this.currentBreakpoint, 'unitW'],
+            value
           })
+
+          if (value !== 'px' && this.w > 100) {
+            records.push({
+              path: [node.id, GRID, this.currentBreakpoint, 'w'],
+              value: 100
+            })
+          }
         })
 
         this.record(records)

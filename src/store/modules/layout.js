@@ -36,6 +36,9 @@ const getters = {
   },
   vh(state) {
     return state.windowHeight / 100
+  },
+  vw(state) {
+    return state.windowWidth / 100
   }
 }
 

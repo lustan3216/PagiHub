@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import CardExample from './CardExample'
-import { exampleMap } from '@/templateJson/basic'
-import { isGridItem, shortTagName } from '@/utils/node'
+import { exampleMap, background } from '@/templateJson/basic'
+import { isComponentSet, isGrid, isGridItem, shortTagName } from '@/utils/node'
 import TipBasicCopy from '@/components/Tip/TipBasicCopy'
 
 export default {
@@ -47,10 +47,25 @@ export default {
   },
   computed: {
     ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('app', ['beingAddedComponentId']),
+    node() {
+      return this.nodesMap[this.beingAddedComponentId]
+    },
+    isComponentSet() {
+      return isComponentSet(this.node)
+    },
     basicComponents() {
-      return Object.values(exampleMap)
-        .map(fn => fn({}, this.currentBreakpoint))
-        .filter(node => !isGridItem(node))
+      if (isComponentSet) {
+        const fns = Object.values(exampleMap)
+        return [background, ...fns]
+          .map(fn => fn({}, this.currentBreakpoint))
+          .filter(node => !isGridItem(node) && !isGrid(node))
+      }
+      else {
+        return Object.values(exampleMap)
+          .map(fn => fn({}, this.currentBreakpoint))
+          .filter(node => !isGridItem(node))
+      }
     },
     searchedExamples() {
       return this.basicComponents

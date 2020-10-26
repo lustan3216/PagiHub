@@ -31,28 +31,13 @@ export default {
     }
   },
   activated() {
-    if (this.isDraftMode) {
-      vmAppend(this, this.isExample)
-    }
+    this.init()
   },
   update() {
-    if (this.isDraftMode) {
-      vmAppend(this, this.isExample)
-    }
+    this.init()
   },
   mounted() {
-    // Don't put in created to prevent some component fail before mount
-    if (this.isDraftMode) {
-      // for componentOperator using
-      this.$el.id = this.id
-      this.$el.dataset.node = ''
-
-      vmAppend(this, this.isExample)
-
-      if (!this.isExample) {
-        this.$bus.$on(`hover-${this.id}`, this.hoverCover)
-      }
-    }
+    this.init()
   },
   beforeDestroy() {
     if (this.isDraftMode) {
@@ -64,6 +49,20 @@ export default {
     }
   },
   methods: {
+    init() {
+      // Don't put in created to prevent some component fail before mount
+      if (this.isDraftMode) {
+        // for componentOperator using
+        this.$el.id = this.id
+        this.$el.dataset.node = ''
+
+        vmAppend(this, this.isExample)
+
+        if (!this.isExample) {
+          this.$bus.$on(`hover-${this.id}`, this.hoverCover)
+        }
+      }
+    },
     hoverCover(hover) {
       if (!this.node) {
         return

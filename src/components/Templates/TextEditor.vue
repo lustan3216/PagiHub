@@ -58,29 +58,9 @@
               H{{ level }}
             </button>
 
-            <button
-              :class="{
-                'is-active': color
-              }"
-              class="menububble__button"
-            >
+            <button class="menububble__button">
               <color-picker v-model="color">
-                <span
-                  :style="{ color }"
-                  style="margin-left: 2px;margin-top: -2px;font-size: 12px;"
-                >A</span>
-              </color-picker>
-            </button>
-
-            <button
-              :class="{
-                'is-active': backgroundColor
-              }"
-              class="menububble__button"
-            >
-              <color-picker v-model="backgroundColor">
                 <i
-                  :style="{ color: backgroundColor }"
                   style="font-size: 14px;"
                   class="el-icon-s-open"
                 />
@@ -260,17 +240,6 @@ export default {
       set(value) {
         this.recordValue({
           path: `${this.id}.${STYLES}.${HTML}.color`,
-          value
-        })
-      }
-    },
-    backgroundColor: {
-      get() {
-        return this.htmlStyles.backgroundColor
-      },
-      set(value) {
-        this.recordValue({
-          path: `${this.id}.${STYLES}.${HTML}.backgroundColor`,
           value
         })
       }

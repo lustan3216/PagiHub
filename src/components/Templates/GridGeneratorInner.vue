@@ -4,12 +4,11 @@
     v-bind="innerProps"
     :layout="layout"
     :margin="[0, 0]"
-    :row-height="1"
-    :col-num="100"
+    :col-num="windowWidth"
     :vertical-compact="false"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
-    :auto-calc-height="autoCalcHeight"
+    :auto-size="autoCalcHeight"
     :extra-style="extraStyle"
     prevent-collision
     @layout-updated="layoutUpdated($event)"
@@ -23,7 +22,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -67,6 +66,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('layout', ['windowWidth']),
     ...mapGetters('layout', ['currentBreakpoint', 'vh']),
     autoCalcHeight() {
       return ['scroll', 'hidden'].includes(this.overflow) || this.isBackground
@@ -110,7 +110,8 @@ export default {
           y: oldGrid.y,
           h: oldGrid.h,
           w: oldGrid.w,
-          unitH: oldGrid.unitH
+          unitH: oldGrid.unitH,
+          unitW: oldGrid.unitW
         }
 
         let h = child.h
@@ -128,7 +129,8 @@ export default {
           y: child.y,
           h: toPrecision(h, 0),
           w: child.w,
-          unitH: child.unitH
+          unitH: child.unitH,
+          unitW: child.unitW
         }
 
         if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {

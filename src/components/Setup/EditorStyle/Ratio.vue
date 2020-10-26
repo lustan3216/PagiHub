@@ -2,6 +2,10 @@
   <div>
     <el-divider content-position="left">
       RATIO
+      <tip class="m-l-5">
+        Ratio will be disabled if height unit is
+        <span class="crucial">vw</span>.
+      </tip>
     </el-divider>
 
     <el-row
@@ -10,25 +14,34 @@
       align="middle"
     >
       <el-col :span="3">
-        <span class="title flex">
-          <tip class="m-l-5">
-            Ratio will be disabled if height unit is
-            <span class="crucial">vw</span>.
-          </tip>
+        <span
+          class="title flex"
+          style="align-items: baseline"
+        >
+          W
         </span>
       </el-col>
 
       <el-col :span="12">
         <select-unit
           v-model.number="ratioW"
-          :units="['W']"
+          :units="[]"
         />
+      </el-col>
+
+      <el-col :span="3">
+        <span
+          class="title flex"
+          style="align-items: baseline"
+        >
+          H
+        </span>
       </el-col>
 
       <el-col :span="12">
         <select-unit
           v-model.number="ratioH"
-          :units="['H']"
+          :units="[]"
         />
       </el-col>
     </el-row>
