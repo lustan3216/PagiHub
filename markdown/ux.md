@@ -17,12 +17,13 @@
 13. 提及 後端改完，會有即時資料更新,同 figma 的效果, 要放按鈕及 ux
 14. 文字，如果英文不放心可以用中文
 15. 怎麼複製 component 進去 carousel or group 裡面
-16. svg icon, should same as image
+16. font selector
+17. svg icon, should same as image
     首頁文案，怎麼對設計師才有吸引力
     對其
     距離輔助線
     16 image replacement,and the ux of adding
-17. 不同 device 有不同可以有不同 style
+18. 不同 device 有不同可以有不同 style
 
 以後穩定才做
 
