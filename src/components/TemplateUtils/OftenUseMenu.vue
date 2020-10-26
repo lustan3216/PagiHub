@@ -63,7 +63,7 @@ import {
 import { isCarousel, isComponentSet } from '@/utils/node'
 import Stack from '@/components/Setup/EditorStyle/Stack'
 import Lock from '../Setup/EditorStyle/Lock'
-import { IMAGE_ASSET } from '@/components/ExampleAddPanel/MenuCategories'
+import { IMAGE_ASSET } from '@/components/ComponentAdd/MenuCategories'
 
 export default {
   name: 'OftenUseMenu',

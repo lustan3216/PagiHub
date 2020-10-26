@@ -36,7 +36,7 @@ export default {
     TopNav,
     FacebookChat: () => import('@/pages/FacebookChat'),
     DialogComponentTabs: () =>
-      import('@/components/ExampleAddPanel/DialogComponentTabs')
+      import('@/components/ComponentAdd/DialogComponentTabs')
   },
   data() {
     return {

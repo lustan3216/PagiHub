@@ -14,6 +14,7 @@
   "dependencies": {
     "@form-create/element-ui": "^1.0.10",
     "@simonwep/pickr": "^1.7.4",
+    "@simonwep/selection-js": "^1.7.1",
     "aws-amplify": "^3.0.17",
     "aws-sdk": "^2.693.0",
     "axios": "^0.19.2",

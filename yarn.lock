@@ -2882,6 +2882,11 @@
     core-js "^3.6.5"
     nanopop "^2.1.0"
 
+"@simonwep/selection-js@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@simonwep/selection-js/-/selection-js-1.7.1.tgz#bbee77c3914bd8b226294275c0ff96821230e3c6"
+  integrity sha512-3UI3SBUuhce53RV9oRExh9hEaaXn0y3vOmgxS294uRMknWfMO1D//ZJ9UqdXmwbMf6s/UMl227jHBuJK4iHMjQ==
+
 "@sinonjs/commons@^1", "@sinonjs/commons@^1.3.0", "@sinonjs/commons@^1.4.0", "@sinonjs/commons@^1.7.0":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.1.tgz#e7df00f98a203324f6dc7cc606cad9d4a8ab2217"
