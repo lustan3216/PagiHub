@@ -74,12 +74,6 @@ export default {
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
     ...mapGetters('layout', ['currentBreakpoint']),
-    unitWMax() {
-      return this.unitW === 'px' ? Infinity : 100
-    },
-    unitHMax() {
-      return this.unitH === 'px' ? Infinity : 100
-    },
     lastNode() {
       return arrayLast(this.selectedComponentNodes)
     },

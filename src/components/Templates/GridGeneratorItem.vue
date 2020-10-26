@@ -3,9 +3,7 @@
     v-if="!hidden"
     ref="gridItem"
     v-bind="layout"
-    :class="{
-      'no-action': lock
-    }"
+    :class="{ 'no-action': lock }"
     :auto-height="isChildTextEditor"
     drag-allow-from="div"
     @moveStart="assignStore"
@@ -16,6 +14,7 @@
     @resized="cleanStore"
   >
     <div
+      ref="content"
       :class="{
         'grid-item-border': isDraftMode,
         'border-pulse': pulsing,
@@ -41,7 +40,7 @@ import nodeMixin from './mixins/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import { getValueByPath } from '@/utils/tool'
+import { debounce, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestGridItem, isGridItem, isTextEditor } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
@@ -64,6 +63,7 @@ export default {
   data() {
     return {
       exampleBoundary: 'xs',
+      offResizeListener: null,
       layout: {}
     }
   },
@@ -74,12 +74,6 @@ export default {
       'descBreakpoints',
       'vh'
     ]),
-    marginTop() {
-      const style = this.innerStyles.html || {}
-      const borderTop = parseInt(style.border || style.borderTop || '')
-      const px = this.isDraftMode && !borderTop ? 1 : borderTop
-      return -(px - 1) + 'px'
-    },
     innerGrid() {
       return this.node.grid
     },
@@ -188,6 +182,26 @@ export default {
     }
   },
   watch: {
+    isChildTextEditor: {
+      handler(value) {
+        this.$nextTick(() => {
+          if (value) {
+            this.$refs.gridItem.autoSize()
+            this.offResizeListener = resizeListener(
+              this.$refs.content,
+              debounce(() => {
+                this.$refs.gridItem.autoSize()
+              }, 50)
+            )
+          }
+          else if (this.offResizeListener) {
+            this.offResizeListener()
+            this.offResizeListener = null
+          }
+        })
+      },
+      immediate: true
+    },
     computedLayout: {
       handler(value) {
         // 一定要轉成data，不然第一次computed 會因為不能assign值出bug
@@ -221,6 +235,11 @@ export default {
   },
   beforeDestroy() {
     this.$delete(this.layouts, this.id)
+
+    if (this.offResizeListener) {
+      this.offResizeListener()
+      this.offResizeListener = null
+    }
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),

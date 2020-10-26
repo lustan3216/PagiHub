@@ -51,7 +51,7 @@
     },
     props: {
       // If true, the container height swells and contracts to fit contents
-      autoSize: {
+      autoHeight: {
         type: Boolean,
         default: true
       },
@@ -315,7 +315,7 @@
         })
       },
        containerHeight: function() {
-        if (this.autoSize) {
+        if (this.autoHeight) {
           const containerHeight = bottom(this.layout) + 'px'
           return containerHeight
         }
@@ -366,8 +366,12 @@
         if (eventName === 'dragend') this.$emit('layout-updated', this.layout)
       },
       resizeEvent: function(eventName, id, x, y, h, w) {
-        this.calcPxWH()
         let l = getLayoutItem(this.layout, id)
+        if (l && eventName === 'autoSize') {
+          l.h = h
+        }
+        this.calcPxWH()
+
         //GetLayoutItem sometimes return null object
         if (l === undefined || l === null) {
           l = { h: 0, w: 0 }

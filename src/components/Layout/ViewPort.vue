@@ -231,15 +231,11 @@ export default {
           top: '50%',
           left: '50%',
           duration: 0,
-          ease: 'liner',
-          onStart: () => {
-            this.LAYOUT_SET({ gridResizing: true })
-          },
-          onComplete: () => {
-            this.LAYOUT_SET({ gridResizing: false })
-            this.resizeNodeQuickFn()
-          }
+          ease: 'liner'
         })
+
+        this.LAYOUT_SET({ gridResizing: false })
+        this.resizeNodeQuickFn()
       },
       deep: true
     },
@@ -261,6 +257,7 @@ export default {
         start: event => {
           lastPositionX = event.client.x
           lastPositionY = event.client.y
+          this.LAYOUT_SET({ gridResizing: true })
         },
         move: event => {
           const { scale } = this.style

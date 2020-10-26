@@ -87,8 +87,7 @@
   import Vue from 'vue'
   import { mapState, mapGetters } from 'vuex'
   import { setTopLeft, setTopRight, setTransformRtl, setTransform, getBoundaryEl } from '../helpers/utils'
-  import { getDocumentDir } from '../helpers/DOM'
-  //    var eventBus = require('./eventBus');
+
   let interact = require('interactjs')
   import { getValueByPath, resizeListener, debounce } from '@/utils/tool'
   import { getAbsoluteHeight } from '@/utils/style'
@@ -256,8 +255,7 @@
         innerY: this.y,
         innerW: this.w,
         innerH: this.h,
-        lockItemInLayout: false,
-        offResizeListener: null
+        lockItemInLayout: false
       }
     },
     created() {
@@ -305,11 +303,6 @@
       if (this.interactObj) {
         this.interactObj.unset() // destroy interact intance
       }
-
-      if (this.offResizeListener) {
-        this.offResizeListener()
-        this.offResizeListener = null
-      }
     },
     mounted: function() {
       this.cols = this.parent.colNum
@@ -334,30 +327,6 @@
       })
     },
     watch: {
-      autoHeight: {
-        handler(value) {
-          this.$nextTick(() => {
-            const elm = getValueByPath(this.$slots, ['default', 0, 'elm'])
-            if (value && elm) {
-
-              setTimeout(() => {
-                // TODO
-                // 這裏如果不設定時間，會太早執行造成bug，節省時間懶得debug 這樣比較快
-                // 再過不久 layout底層要大改在修
-                this.autoSize()
-                this.offResizeListener = resizeListener(elm, debounce(() => {
-                  this.autoSize()
-                }, 50))
-              }, 500)
-            }
-            else if (this.offResizeListener) {
-              this.offResizeListener()
-              this.offResizeListener = null
-            }
-          })
-        },
-        immediate: true
-      },
       fixOnParentBottom(value) {
         if (value) {
           this.parent.correctFixItemsBound()
@@ -912,55 +881,53 @@
       },
       autoSize() {
         // ok here we want to calculate if a resize is needed
-        this.$nextTick(() => {
-          if (process.env.NODE_ENV !== 'production') {
-            console.warn('autoSize')
-          }
-          if (!this.autoHeight) {
-            return
-          }
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn('autoSize')
+        }
+        if (!this.autoHeight) {
+          return
+        }
 
-          this.previousW = this.innerW
-          this.previousH = this.innerH
+        this.previousW = this.innerW
+        this.previousH = this.innerH
 
 
-          const { elm } = this.$slots.default[0]
+        const { elm } = this.$slots.default[0]
 
-          const height = getAbsoluteHeight(elm)
-          const width = elm.clientWidth
-          let pos = this.calcWH(height, width)
-          // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
-          if (pos.w < this.minW) {
-            pos.w = this.minW
-          }
-          if (pos.w > this.maxW) {
-            pos.w = this.maxW
-          }
-          if (pos.h < this.minH) {
-            pos.h = this.minH
-          }
-          if (pos.h > this.maxH) {
-            pos.h = this.maxH
-          }
+        const height = getAbsoluteHeight(elm)
+        const width = elm.clientWidth
+        let pos = this.calcWH(height, width)
+        // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
+        if (pos.w < this.minW) {
+          pos.w = this.minW
+        }
+        if (pos.w > this.maxW) {
+          pos.w = this.maxW
+        }
+        if (pos.h < this.minH) {
+          pos.h = this.minH
+        }
+        if (pos.h > this.maxH) {
+          pos.h = this.maxH
+        }
 
-          if (pos.h < 1) {
-            pos.h = 1
-          }
-          if (pos.w < 1) {
-            pos.w = 1
-          }
+        if (pos.h < 1) {
+          pos.h = 1
+        }
+        if (pos.w < 1) {
+          pos.w = 1
+        }
 
-          // this.lastW = x; // basically, this is copied from resizehandler, but shouldn't be needed
-          // this.lastH = y;
+        // this.lastW = x; // basically, this is copied from resizehandler, but shouldn't be needed
+        // this.lastH = y;
 
-          if (this.innerW !== pos.w || this.innerH !== pos.h) {
-            this.$emit('resize', this.i, pos.h, pos.w, height, width)
-          }
-          if (this.previousW !== pos.w || this.previousH !== pos.h) {
-            this.$emit('resized', this.i, pos.h, pos.w, height, width)
-            this.eventBus.$emit('resizeEvent', 'autoSize', this.i, this.innerX, this.innerY, pos.h, this.innerW)
-          }
-        })
+        if (this.innerW !== pos.w || this.innerH !== pos.h) {
+          this.$emit('resize', this.i, pos.h, pos.w, height, width)
+        }
+        if (this.previousW !== pos.w || this.previousH !== pos.h) {
+          this.$emit('resized', this.i, pos.h, pos.w, height, width)
+          this.eventBus.$emit('resizeEvent', 'autoSize', this.i, this.innerX, this.innerY, pos.h, this.innerW)
+        }
       }
     }
   }

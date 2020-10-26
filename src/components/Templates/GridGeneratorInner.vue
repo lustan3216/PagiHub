@@ -8,7 +8,7 @@
     :vertical-compact="false"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
-    :auto-size="autoCalcHeight"
+    :auto-height="autoCalcHeight"
     :extra-style="extraStyle"
     prevent-collision
     @layout-updated="layoutUpdated($event)"
