@@ -67,12 +67,6 @@
         type: Number,
         default: Infinity
       },
-      margin: {
-        type: Array,
-        default: function() {
-          return [10, 10]
-        }
-      },
       isDraggable: {
         type: Boolean,
         default: true

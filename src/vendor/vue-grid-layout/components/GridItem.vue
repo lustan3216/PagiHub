@@ -232,7 +232,6 @@
       return {
         cols: 1,
         containerWidth: 100,
-        margin: [10, 10],
         maxRows: Infinity,
         draggable: null,
         resizable: null,
@@ -334,7 +333,7 @@
 
       this.lockItemInLayout = !this.parent.autoCalcHeight
       this.containerWidth = this.parent.width !== null ? this.parent.width : 100
-      this.margin = this.parent.margin !== undefined ? this.parent.margin : [10, 10]
+
       this.maxRows = this.parent.maxRows
       if (this.isDraggable === null) {
         this.draggable = this.parent.isDraggable
@@ -458,14 +457,6 @@
       },
       maxW: function() {
         this.tryMakeResizable()
-      },
-      'parent.margin': function(margin) {
-        if (!margin || (margin[0] == this.margin[0] && margin[1] == this.margin[1])) {
-          return
-        }
-        this.margin = margin.map(m => Number(m))
-        this.createStyle()
-        this.emitContainerResized()
       }
     },
     computed: {
@@ -481,7 +472,7 @@
       calcColHeight() {
         switch (this.unitH) {
           case '%':
-            const colHeight = (this.containerHeight - (this.margin[0] * (this.cols + 1))) / 100
+            const colHeight = this.containerHeight / 100
             // console.log("### COLS=" + this.cols + " COL WIDTH=" + colHeight + " MARGIN " + this.margin[0]);
             return colHeight
 
@@ -499,7 +490,7 @@
       colWidth() {
         switch (this.unitW) {
           case '%':
-            const colWidth = (this.containerWidth - (this.margin[0] * (this.cols + 1))) / 100
+            const colWidth = this.containerWidth / 100
             // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
             return colWidth
 
@@ -789,13 +780,13 @@
         const colWidth = this.colWidth
 
         return {
-          left: Math.round(x + (x + 1) * this.margin[0]),
-          top: Math.round(y + (y + 1) * this.margin[1]),
+          left: Math.round(x),
+          top: Math.round(y),
           // 0 * Infinity === NaN, which causes problems with resize constriants;
           // Fix this if it occurs.
           // Note we do it here rather than later because Math.round(Infinity) causes deopt
-          width: w === Infinity ? w : Math.round(colWidth * w + Math.max(0, w - 1) * this.margin[0]),
-          height: h === Infinity ? h : Math.round(h + Math.max(0, h - 1) * this.margin[1])
+          width: w === Infinity ? w : Math.round(colWidth * w),
+          height: h === Infinity ? h : Math.round(h)
         }
       },
       /**
@@ -806,8 +797,6 @@
        */
       // TODO check if this function needs change in order to support rtl.
       calcXY(top, left) {
-        const colWidth = this.colWidth
-
         // left = colWidth * x + margin * (x + 1)
         // l = cx + m(x+1)
         // l = cx + mx + m
@@ -837,8 +826,8 @@
         // width = colWidth * w - (margin * (w - 1))
         // ...
         // w = (width + margin) / (colWidth + margin)
-        let w = Math.round((width + this.margin[0]) / (colWidth + this.margin[0]))
-        let h = Math.round((height + this.margin[1]))
+        let w = Math.round(width / colWidth)
+        let h = Math.round(height)
 
         // Capping
         w = Math.max(Math.min(w, this.cols - this.innerX), 0)
