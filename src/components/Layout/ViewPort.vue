@@ -234,8 +234,10 @@ export default {
           ease: 'liner'
         })
 
-        this.LAYOUT_SET({ gridResizing: false })
-        this.resizeNodeQuickFn()
+        this.$nextTick(() => {
+          this.LAYOUT_SET({ gridResizing: false })
+          this.resizeNodeQuickFn()
+        })
       },
       deep: true
     },
@@ -317,6 +319,7 @@ export default {
       this.style.h = height
     },
     scaleCallback(event, { scaleRatio }) {
+      this.LAYOUT_SET({ gridResizing: true })
       this.style.scale = scaleRatio
     },
     setSize({ w, h }) {

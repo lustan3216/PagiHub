@@ -3,21 +3,32 @@
     ref="gridGenerator"
     v-bind="innerProps"
     :layout="layout"
-    :margin="[0, 0]"
     :col-num="windowWidth"
     :vertical-compact="false"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
     :auto-height="autoCalcHeight"
     :extra-style="extraStyle"
+    :data-addable-id="id"
+    data-node
     prevent-collision
     @layout-updated="layoutUpdated($event)"
   >
-    <component-giver
-      v-for="child in children"
-      :key="child.id"
-      :id="child.id"
-    />
+    <controller-layer v-if="controller" :id="id">
+      <component-giver
+        v-for="child in children"
+        :key="child.id"
+        :id="child.id"
+      />
+    </controller-layer>
+
+    <template v-else>
+      <component-giver
+        v-for="child in children"
+        :key="child.id"
+        :id="child.id"
+      />
+    </template>
   </vue-grid-generator>
 </template>
 
@@ -26,16 +37,17 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
-import { toPrecision } from '@/utils/number'
 import { getValueByPath } from '@/utils/tool'
 import { isBackground } from '@/utils/node'
+import ControllerLayer from '../TemplateUtils/ControllerLayer'
 
 export default {
   name: 'GridGeneratorInner',
   components: {
     VueGridGenerator: GridLayout,
     // 因為loop call AsyncComponent, 這裏不用 async import 會噴bug
-    ComponentGiver: () => import('../TemplateUtils/ComponentGiver')
+    ComponentGiver: () => import('../TemplateUtils/ComponentGiver'),
+    ControllerLayer
   },
   mixins: [childrenMixin],
   provide() {
@@ -58,6 +70,10 @@ export default {
     innerStyles: {
       type: Object,
       default: () => ({})
+    },
+    controller: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

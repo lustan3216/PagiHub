@@ -50,8 +50,9 @@ export const actions = {
     { commit, state, dispatch, rootGetters },
     { label, description, tags }
   ) {
-    const tree = background({}, rootGetters['layout/currentBreakpoint'])
+    const tree = background()
     appendIds(tree)
+
     const {
       data: { children, ...componentSet }
     } = await createComponentSet({

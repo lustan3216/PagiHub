@@ -1,10 +1,16 @@
 <template>
   <el-button
-    v-if="visible || lock"
+    v-if="isButton && (visible || lock)"
     :icon="lock ? 'el-icon-lock' : 'el-icon-unlock'"
     type="text"
     @click.stop="click"
   />
+  <div
+    v-else
+    @click.stop="click"
+  >
+    <slot :lock="lock" />
+  </div>
 </template>
 
 <script>
@@ -24,10 +30,17 @@ export default {
     allowMulti: {
       type: Boolean,
       default: false
+    },
+    type: {
+      validator: value => ['button', 'text'].includes(value),
+      default: 'button'
     }
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
+    isButton() {
+      return this.type === 'button'
+    },
     node() {
       return this.nodesMap[this.id]
     },

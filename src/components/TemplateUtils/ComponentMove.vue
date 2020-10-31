@@ -1,8 +1,5 @@
 <script>
-import {
-  closestGridItem,
-  isGridItem,
-} from '@/utils/node'
+import { closestGridItem, isGridItem } from '@/utils/node'
 import { arrayAscSort, arrayDescSort } from '@/utils/array'
 import { STYLES } from '@/const'
 import { mapActions, mapGetters } from 'vuex'
@@ -14,14 +11,7 @@ export default {
   computed: {
     ...mapGetters('app', ['theOnlySelectedComponentId']),
     node() {
-      const node = this.nodesMap[this.theOnlySelectedComponentId]
-
-      if (isGridItem(node)) {
-        return node
-      }
-      else {
-        return closestGridItem(node)
-      }
+      return this.nodesMap[this.theOnlySelectedComponentId]
     },
     gridParent() {
       return this.node.parentNode
@@ -92,10 +82,8 @@ export default {
       })
     },
     recordValue(value) {
-      const griItem = closestGridItem(this.node)
-
       this.record({
-        path: [griItem.id, STYLES, 'layout', 'zIndex'],
+        path: [this.node.id, STYLES, 'layout', 'zIndex'],
         value
       })
     },

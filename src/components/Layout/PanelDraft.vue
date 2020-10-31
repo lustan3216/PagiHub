@@ -25,6 +25,7 @@
           <art-board
             :id="editingComponentSetId"
             :key="editingComponentSetId"
+            class="draft-artboard"
           />
         </keep-alive>
       </transition>

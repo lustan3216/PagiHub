@@ -5,21 +5,13 @@
     <router-view :style="{ paddingTop: needNavBar ? '50px' : '0' }" />
 
     <portal-target
-      v-for="id in selectedComponentIds"
-      :name="`App-${id}`"
-      :key="id"
-      slim
-    />
-
-    <portal-target
       name="App"
       multiple
     />
 
-    <dialog-component-tabs
+    <dialog-image-tabs
       v-if="isDraftMode"
-      v-show="beingAddedComponentId"
-      :visible="Boolean(beingAddedComponentId)"
+      :visible="isImageDialogOpen"
     />
 
     <facebook-chat />
@@ -35,8 +27,7 @@ export default {
   components: {
     TopNav,
     FacebookChat: () => import('@/pages/FacebookChat'),
-    DialogComponentTabs: () =>
-      import('@/components/ComponentAdd/DialogComponentTabs')
+    DialogImageTabs: () => import('@/components/ComponentAdd/DialogImageTabs')
   },
   data() {
     return {
@@ -45,8 +36,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds']),
-    ...mapGetters('user', ['isLogin']),
-    ...mapState('app', ['beingAddedComponentId']),
+    ...mapState('asset', ['isImageDialogOpen']),
     needNavBar() {
       return !this.$route.meta.noNavbar && !this.isPreviewMode
     }

@@ -1,19 +1,16 @@
 <template>
-  <el-tooltip
-    :open-delay="300"
-    effect="light"
-    content="Enable it will bounce away when two containers colliding."
-    placement="top"
-  >
-    <el-button
-      :class="{ isStack: !isStack }"
-      data-cy="stack"
-      plain
-      @click="click"
+  <div>
+    <el-divider content-position="left">STACK MODE</el-divider>
+
+    <el-checkbox
+      v-model="isStack"
+      :key="isStack"
     >
-      Free dragging
-    </el-button>
-  </el-tooltip>
+      <span
+        class="font-12"
+      >Bounce away when two blocks colliding if both enable.</span>
+    </el-checkbox>
+  </div>
 </template>
 
 <script>
@@ -30,37 +27,31 @@ export default {
   components: {
     ElTooltip: Tooltip
   },
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
-    isStack() {
-      const lastNode = arrayLast(this.selectedComponentNodes)
-      const grid = closestGridItem(lastNode)
-      if (grid) {
-        return getValueByPath(vmGet(grid.id), [
-          'innerStyles',
-          'layout',
-          'stack'
-        ])
+    isStack: {
+      get() {
+        const lastNode = arrayLast(this.selectedComponentNodes)
+        if (lastNode) {
+          return getValueByPath(vmGet(lastNode.id), [
+            'innerStyles',
+            'layout',
+            'stack'
+          ])
+        }
+      },
+      set() {
+        this.selectedComponentNodes.forEach(node => {
+          this.record({
+            path: [node.id, STYLES, 'layout', 'stack'],
+            value: this.isStack ? undefined : true
+          })
+        })
       }
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
-    click() {
-      this.selectedComponentNodes.forEach(node => {
-        const grid = closestGridItem(node)
-        this.record({
-          path: [grid.id, STYLES, 'layout', 'stack'],
-          value: this.isStack ? undefined : true
-        })
-      })
-    }
+    ...mapActions('node', ['record'])
   }
 }
 </script>
@@ -71,5 +62,15 @@ export default {
 .isStack:focus {
   background: $color-active;
   color: white !important;
+}
+
+::v-deep.el-checkbox {
+  display: flex;
+  .el-checkbox__input {
+    margin-top: 4px;
+  }
+  .el-checkbox__label {
+    white-space: normal;
+  }
 }
 </style>

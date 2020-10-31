@@ -1,5 +1,5 @@
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
-import { CHILDREN, SOFT_DELETE } from '@/const'
+import { CAN_NOT_DELETE, CHILDREN, SOFT_DELETE } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { vmRemoveNode } from '@/utils/vmMap'
 import { cloneJson } from '@/utils/tool'
@@ -108,31 +108,33 @@ export default {
       const records = []
 
       traversalSelfAndChildren(theNodeGonnaRemove, child => {
-        records.unshift({
-          path: child.id,
-          value: undefined
-        })
+        if (!child[CAN_NOT_DELETE]) {
+          records.unshift({
+            path: child.id,
+            value: undefined
+          })
+        }
       })
 
       const ids = records.map(x => x.path)
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
       this.record(records)
 
-      this.$nextTick(() => {
-        if (isCarousel(this.node) || isGrid(this.node)) {
-          this.SET_SELECTED_COMPONENT_ID(this.node.parentId)
-
-          if (this.node.children.length === 0) {
-            this.record({
-              path: this.node.id,
-              value: undefined
-            })
-          }
-        }
-        else if (this.node) {
-          this.SET_SELECTED_COMPONENT_ID(this.node.id)
-        }
-      })
+      // this.$nextTick(() => {
+      //   if (isCarousel(this.node) || isGrid(this.node)) {
+      //     this.SET_SELECTED_COMPONENT_ID(this.node.parentId)
+      //
+      //     if (this.node.children.length === 0) {
+      //       this.record({
+      //         path: this.node.id,
+      //         value: undefined
+      //       })
+      //     }
+      //   }
+      //   else if (this.node) {
+      //     this.SET_SELECTED_COMPONENT_ID(this.node.id)
+      //   }
+      // })
     }
   }
 }

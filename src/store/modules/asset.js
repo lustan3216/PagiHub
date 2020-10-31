@@ -2,13 +2,20 @@ import { SET } from '../index'
 import { getAssets, deleteAsset } from '@/api/asset'
 
 const state = {
-  images: []
+  images: [],
+  isImageDialogOpen: false
 }
 
 const mutations = {
   SET,
   ADD_IMAGE(state, image) {
     state.images.push(image)
+  },
+  OPEN_ASSET(state) {
+    state.isImageDialogOpen = true
+  },
+  CLOSE_ASSET() {
+    state.isImageDialogOpen = false
   }
 }
 

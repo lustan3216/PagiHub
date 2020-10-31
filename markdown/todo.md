@@ -14,18 +14,28 @@ https://www.npmjs.com/package/xss
 https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
 
-提示 breakpoint 拉完就定型
-grid 輔助工具勁量做的跟大型工具一樣
+- group 右側鎖不住 grid-item
+- can move items together by keyboard or mouse
+- video ratio
+- xy axis, multi block moving
+- ratio might has bug when using vh, vw, %, is that possible to use px only
+- 對其, will have a problem when stack mode container around
+- ratio 要跟 wh 合併
+- w h unit 換的時候要找最近點
+- unitW 不是 px 時拉出邊界會有 bug
+- overflow
+- 提示 breakpoint 拉完就定型
+- panel component 可以拖拉
+- 自動對齊
+- style, setting refactor
+- copy public page
+- panel 做個按鍵可以跑到右邊去
+- flexbutton
+- nested add component
 
-左下角 container 可以有個+
-panel component 可以拖拉
-width 要支援 px
-自動對齊
-距離輔助線
 style 支援 每個 device 可客製化
-
 支援 icon
-
+距離輔助線
 hover click
 animation
 style component
@@ -82,8 +92,6 @@ Better Asset Management https://wishlist.webflow.com/ideas/WEBFLOW-I-1057
 Webflow Desktop / Offline Application https://wishlist.webflow.com/ideas/DESIGNER-I-13
 https://tympanus.net/Development/ColorExtraction/
 https://tympanus.net/Development/HeaderEffects/
-
-</ol>
 
 協作 / 觀察 /註釋 Comment
 https://medium.com/as-a-product-designer/figma-design-tool-1c6542ae8dc1

@@ -1,15 +1,13 @@
 import { vmAppend, vmRemove } from '@/utils/vmMap'
 import { cloneJson, deepMerge } from '@/utils/tool'
 import { PROPS, VALUE, STYLES } from '@/const'
-import { isGrid } from '@/utils/node'
 
 let hoverNode = []
 
 export default {
   props: {
     id: {
-      type: String,
-      required: true
+      type: String
     }
   },
   inject: {
@@ -54,7 +52,6 @@ export default {
       if (this.isDraftMode) {
         // for componentOperator using
         this.$el.id = this.id
-        this.$el.dataset.node = ''
 
         vmAppend(this, this.isExample)
 

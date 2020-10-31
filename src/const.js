@@ -56,6 +56,8 @@ export const BREAK_POINTS_MAP = {
   xxs: 0
 }
 
+export const BREAK_POINTS_ARRAY = Object.keys(BREAK_POINTS_MAP)
+
 export const DEFAULT_BREAK_POINTS_MAP = {
   md: 992,
   sm: 768,

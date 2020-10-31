@@ -73,6 +73,63 @@
         </div>
       </div>
     </template>
+
+    <div class="el-dropdown-menu__item--divided" />
+
+    <component-group>
+      <template
+        v-slot="{
+          canGroup,
+          canUngroup,
+          group,
+          ungroup
+        }"
+      >
+        <div>
+          <div
+            :class="{ 'is-disabled': !canGroup }"
+            class="el-dropdown-menu__item"
+            type="text"
+            @click="group"
+          >
+            <div class="justify-between">
+              <span>Group</span>
+              <span v-html="`${metaKey} + G`" />
+            </div>
+          </div>
+
+          <div
+            :class="{ 'is-disabled': !canUngroup }"
+            class="el-dropdown-menu__item"
+            type="text"
+            @click="ungroup"
+          >
+            <div class="justify-between">
+              <span>Ungroup</span>
+            </div>
+          </div>
+        </div>
+      </template>
+    </component-group>
+
+    <div class="el-dropdown-menu__item--divided" />
+
+    <lock
+      :id="node.id"
+      type="text"
+      visible
+      class="el-dropdown-menu__item"
+    >
+      <template v-slot="{ lock }">
+        <div class="justify-between">
+          <span>{{ lock ? 'Unlock' : 'Lock' }}</span>
+          <span
+            class="m-l-15"
+            v-html="`${metaKey} + L`"
+          />
+        </div>
+      </template>
+    </lock>
   </div>
 </template>
 
@@ -87,13 +144,17 @@ import {
   vmBecomeMaster
 } from '@/utils/vmMap'
 import ComponentMove from './ComponentMove'
+import ComponentGroup from './ComponentGroup'
+import Lock from '../Setup/EditorStyle/Lock'
 import ClickOutside from '@/directive/clickOutside'
 import { arrayLast } from '@/utils/array'
 
 export default {
   name: 'ContextMenu',
   components: {
-    ComponentMove
+    Lock,
+    ComponentMove,
+    ComponentGroup
   },
   directives: {
     ClickOutside
@@ -207,7 +268,7 @@ export default {
   padding: 0 20px;
 }
 .el-dropdown-menu {
-  z-index: 1000;
+  z-index: 3000;
 }
 .el-dropdown-menu__item {
   line-height: 27px;

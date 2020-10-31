@@ -5,23 +5,14 @@
     :id="id"
     :inner-props="innerProps"
     :inner-styles="innerStyles"
-    data-node
+    :class="{ 'cross-hair': isAdding }"
+    controller
+    class="background"
   />
-  <!--  <div-->
-  <!--    v-else-->
-  <!--    :style="innerStyles.default"-->
-  <!--    class="h-100 no-action"-->
-  <!--    @scroll.passive="onScroll"-->
-  <!--  >-->
-  <!--    <grid-generator-inner-->
-  <!--      :id="id"-->
-  <!--      :inner-props="innerProps"-->
-  <!--      class="can-action"-->
-  <!--    />-->
-  <!--  </div>-->
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import nodeMixin from '@/components/Templates/mixins/node'
 // childrenMixin 要拿來新增刪除小孩的
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -31,11 +22,23 @@ import { defaultSetting } from '../Setup/EditorSetting/SettingGridGenerator'
 
 export default {
   defaultSetting,
-  name: 'GridGenerator',
+  name: 'Background',
   components: {
     GridGeneratorInner,
     ControllerLayer
   },
-  mixins: [nodeMixin, childrenMixin]
+  mixins: [nodeMixin, childrenMixin],
+  computed: {
+    ...mapState('app', ['isAdding'])
+  }
 }
 </script>
+
+<style scoped lang="scss">
+.background {
+  min-height: 100%;
+}
+.cross-hair {
+  cursor: crosshair !important;
+}
+</style>

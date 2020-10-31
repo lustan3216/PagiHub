@@ -1,5 +1,5 @@
 <template>
-  <div v-if="element">
+  <div v-if="node && element">
     <el-divider content-position="left">FONT</el-divider>
 
     <el-row

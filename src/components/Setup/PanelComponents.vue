@@ -33,36 +33,8 @@
             @click="nodeClick($event, data.id)"
           >
             <template slot="icon">
-              <b-icon-fonts
-                v-if="data.tag === 'text-editor'"
-                class="gray-font-2"
-              />
-              <b-icon-image
-                v-if="data.tag === 'flex-image'"
-                class="gray-font-2"
-              />
-              <b-icon-aspect-ratio
-                v-if="data.tag === 'grid-generator-item'"
-                class="gray-font-2"
-              />
-              <b-icon-columns
-                v-if="data.tag === 'grid-generator'"
-                class="gray-font-2"
-              />
-              <b-icon-camera-video
-                v-if="data.tag === 'video-player'"
-                class="gray-font-2"
-              />
-              <b-icon-calendar3-event
-                v-if="data.tag === 'iframer'"
-                class="gray-font-2"
-              />
-              <b-icon-layout-sidebar-inset-reverse
-                v-if="data.tag === 'carousel'"
-                class="gray-font-2"
-              />
-              <b-icon-link
-                v-if="data.tag === 'flex-button'"
+              <element-icon
+                :icon="data.tag"
                 class="gray-font-2"
               />
             </template>
@@ -104,6 +76,7 @@ import Tree from '@/vendor/element-ui/tree'
 import { SOFT_DELETE } from '@/const'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { asyncGetValue, cloneJson } from '@/utils/tool'
+import ElementIcon from '@/components/Components/ElementIcon'
 import ComponentController from '../TemplateUtils/ComponentController'
 import ComponentName from '../TemplateUtils/ComponentName'
 import Touchable from './EditorStyle/Lock'
@@ -115,18 +88,9 @@ import {
   isSlider,
   isComponentSet,
   traversalAncestorAndSelf,
-  isBackground
+  isBackground,
+  sortByZIndex
 } from '@/utils/node'
-import {
-  BIconFonts,
-  BIconImage,
-  BIconAspectRatio,
-  BIconColumns,
-  BIconCameraVideo,
-  BIconCalendar3Event,
-  BIconLayoutSidebarInsetReverse,
-  BIconLink
-} from 'bootstrap-vue'
 import { vmGet } from '@/utils/vmMap'
 
 require('smoothscroll-polyfill').polyfill()
@@ -140,14 +104,7 @@ export default {
     Touchable,
     Visible,
     Hidden,
-    BIconFonts,
-    BIconImage,
-    BIconAspectRatio,
-    BIconColumns,
-    BIconCameraVideo,
-    BIconCalendar3Event,
-    BIconLayoutSidebarInsetReverse,
-    BIconLink
+    ElementIcon
   },
   data() {
     return {
@@ -207,6 +164,7 @@ export default {
         }
 
         node.children = node.children.filter(node => node && !node[SOFT_DELETE])
+        node.children = sortByZIndex(node.children, 'desc')
 
         if (isGrid(node) && !isSlider(node)) {
           parentNode.children = node.children

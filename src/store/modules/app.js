@@ -8,9 +8,11 @@ import {
 } from '@/utils/node'
 
 const state = {
+  isAdding: null,
   beingAddedComponentId: null,
   selectedComponentIds: [],
   copyComponentIds: [],
+  editingPath: [],
   dialog: null
 }
 

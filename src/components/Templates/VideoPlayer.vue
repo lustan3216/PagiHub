@@ -1,28 +1,30 @@
 <template>
-  <div
-    :style="innerStyles.html"
-    class="h-100 over-hidden"
-  >
-    <vue-plyr
-      ref="plyr"
-      :options="{ ...innerProps, ratio }"
-      :key="JSON.stringify({ ...innerProps, ratio })"
-      class="h-100"
-      @mouseleave="mouseleave"
+  <grid-generator-item :id="id">
+    <div
+      :style="innerStyles.html"
+      class="h-100 over-hidden"
     >
-      <div
-        :data-plyr-provider="innerProps.provider"
-        :data-plyr-embed-id="innerProps.embedId"
-      />
-    </vue-plyr>
-  </div>
+      <vue-plyr
+        ref="plyr"
+        :options="{ ...innerProps, ratio }"
+        :key="JSON.stringify({ ...innerProps, ratio })"
+        class="h-100"
+        @mouseleave="mouseleave"
+      >
+        <div
+          :data-plyr-provider="innerProps.provider"
+          :data-plyr-embed-id="innerProps.embedId"
+        />
+      </vue-plyr>
+    </div>
+  </grid-generator-item>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import nodeMixin from '@/components/Templates/mixins/node'
 import { defaultSetting } from '../Setup/EditorSetting/SettingVideoPlayer'
 import VuePlyr from 'vue-plyr'
+import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
 import {
   addResizeListener,
   removeResizeListener
@@ -32,7 +34,8 @@ export default {
   defaultSetting,
   name: 'VideoPlayer',
   components: {
-    VuePlyr
+    VuePlyr,
+    GridGeneratorItem
   },
   mixins: [nodeMixin],
   data() {

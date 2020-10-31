@@ -63,6 +63,7 @@ export default {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     updateScrollTop() {
       this.scrollTop = this.$el.scrollTop
+      this.$bus.$emit('art-board-scroll-top', this.scrollTop)
     },
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.$el)

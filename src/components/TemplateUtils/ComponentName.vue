@@ -157,8 +157,8 @@ $connectColor: rgba(135, 199, 124, 0.68);
   }
 
   svg {
-    font-size: 15px;
-    margin-right: 5px;
+    font-size: 14px;
+    margin-right: 8px;
   }
 
   & > span {

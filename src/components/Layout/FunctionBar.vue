@@ -46,6 +46,10 @@
       :disabled="!editingComponentSetId"
       class="align-center"
     >
+      <element-add-bar />
+
+      <el-divider direction="vertical" />
+
       <el-tooltip
         effect="light"
         content="Preview"
@@ -81,12 +85,14 @@ import DialogComponentSet from '../Setup/DialogComponentSet'
 import { vmPasteNodes, vmRemoveNode, vmCreateEmptyItem } from '@/utils/vmMap'
 import { arrayLast } from '@/utils/array'
 import DialogPublish from '@/components/Setup/DialogPublish'
+import ElementAddBar from '@/components/ComponentAdd/ElementAddBar'
 
 export default {
   name: 'FunctionBar',
   components: {
     DialogComponentSet,
-    DialogPublish
+    DialogPublish,
+    ElementAddBar
   },
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),

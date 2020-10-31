@@ -2,10 +2,29 @@
   <vue-grid-item
     v-if="!hidden"
     ref="gridItem"
-    v-bind="layout"
+    :id="id"
+    :i="computedLayout.i"
+    :x="computedLayout.x"
+    :y="computedLayout.y"
+    :w="computedLayout.w"
+    :h="computedLayout.h"
+    :unit-h="computedLayout.unitH"
+    :unit-w="computedLayout.unitW"
+    :static="lock"
+    :stack="stack"
+    :hidden="computedLayout.hidden"
+    :ratio-h="styleLayout.ratioH"
+    :ratio-w="styleLayout.ratioW"
+    :z-index="styleLayout.zIndex"
+    :is-resizable="computedLayout.isResizable"
+    :is-draggable="isDraggable"
+    :fixed="computedLayout.fixed"
+    :fix-on-parent-bottom="computedLayout.fixOnParentBottom"
+    :vertical-compact="computedLayout.verticalCompact"
     :class="{ 'no-action': lock }"
-    :auto-height="isChildTextEditor"
+    :auto-height="isTextEditor"
     drag-allow-from="div"
+    data-node
     @moveStart="assignStore"
     @move="itemUpdating"
     @moved="cleanStore"
@@ -15,34 +34,36 @@
   >
     <div
       ref="content"
-      :class="{
-        'grid-item-border': isDraftMode,
-        'border-pulse': pulsing,
-        'h-100': !isChildTextEditor,
-        stack: pulsing && stack
+      :style="{
+        ...divStyle,
+        ...innerStyles.html
       }"
-      :style="innerStyles.html"
+      :class="{
+        'h-100': !isTextEditor
+      }"
     >
-      <component-giver
-        v-if="child"
-        ref="child"
-        :id="child.id"
-      />
+      <controller-layer :id="id">
+        <slot />
+      </controller-layer>
     </div>
   </vue-grid-item>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
 import Vue from 'vue'
-import childrenMixin from './mixins/children'
 import nodeMixin from './mixins/node'
+import childrenMixin from './mixins/children'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import { debounce, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
-import { closestGridItem, isGridItem, isTextEditor } from '@/utils/node'
+import {
+  closestGridItem,
+  closestValidBreakpoint,
+  isTextEditor
+} from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
 
 const store = Vue.observable({ updatingItemParentId: null })
@@ -52,13 +73,18 @@ export default {
   components: {
     ControllerLayer,
     ComponentController,
-    VueGridItem: GridItem,
-    ComponentGiver: () => import('../TemplateUtils/ComponentGiver')
+    VueGridItem: GridItem
   },
-  mixins: [childrenMixin, nodeMixin],
+  mixins: [nodeMixin, childrenMixin],
   inject: {
     // connect with GridGeneratorInner
     layouts: { required: true }
+  },
+  props: {
+    divStyle: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {
@@ -68,6 +94,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', ['beingAddedComponentId', 'isAdding']),
     ...mapGetters('layout', [
       'currentBreakpoint',
       'breakpointsMap',
@@ -82,9 +109,6 @@ export default {
     },
     pulsing() {
       return this.id === store.updatingItemParentId
-    },
-    noHeight() {
-      return this.isChildTextEditor && isGridItem(this.node)
     },
     currentGrid() {
       return this[this.validBreakpoint]
@@ -139,30 +163,25 @@ export default {
       return getValueByPath(this.node, [STYLES, this.validBreakpoint, 'hidden'])
     },
     computedLayout() {
-      const { ratioH, ratioW, zIndex, position } = this.styleLayout
-      const { userCanResize, userCanDrag } = this.innerProps
+      const { position } = this.styleLayout
+      const { userCanResize } = this.innerProps
 
       return {
-        x: this.currentGrid.x || 0,
-        y: this.currentGrid.y || 0,
-        w: this.currentGrid.w || 0,
-        h: this.currentGrid.h || 0,
+        // might be string from selectUnit, so parse it
+        x: parseInt(this.currentGrid.x) || 0,
+        y: parseInt(this.currentGrid.y) || 0,
+        w: parseInt(this.currentGrid.w) || 0,
+        h: parseInt(this.currentGrid.h) || 0,
 
         unitH: this.currentGrid.unitH,
         unitW: this.currentGrid.unitW,
 
-        static: this.lock,
         stack: this.stack,
         hidden: this.hidden,
 
-        ratioH: ratioH,
-        ratioW: ratioW,
-
-        zIndex: zIndex,
-
         isResizable: this.isDraftMode || userCanResize,
-        isDraggable:
-          (this.isDraftMode && position !== 'fixOnParentBottom') || userCanDrag,
+        isDraggable: this.isDraggable,
+
         fixed: position === 'fixed',
         fixOnParentBottom: position === 'fixOnParentBottom',
         verticalCompact: position === 'verticalCompact',
@@ -171,18 +190,25 @@ export default {
         i: this.id // should not happen, but just prevent crash in case
       }
     },
-    child() {
-      return this.innerChildren[0]
+    isDraggable() {
+      const { position } = this.styleLayout
+      const { userCanDrag } = this.innerProps
+      return (
+        (!this.isAdding &&
+          this.isDraftMode &&
+          position !== 'fixOnParentBottom') ||
+        (this.isProductionMode && userCanDrag)
+      )
     },
     stack() {
       return this.styleLayout.stack
     },
-    isChildTextEditor() {
-      return isTextEditor(this.child)
+    isTextEditor() {
+      return isTextEditor(this.node)
     }
   },
   watch: {
-    isChildTextEditor: {
+    isTextEditor: {
       handler(value) {
         this.$nextTick(() => {
           if (value) {
@@ -229,7 +255,7 @@ export default {
       this.$nextTick(() => {
         const el = this.$el.closest('.art-board')
         const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
-        this.exampleBoundary = this.closestValidGrid(currentPoint)
+        this.exampleBoundary = closestValidBreakpoint(this.node, currentPoint)
       })
     }
   },
@@ -244,24 +270,6 @@ export default {
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('layout', ['resizeNodeQuickFn']),
-    closestValidGrid(currentPoint) {
-      // [1,2,3,4,5]
-      // currentPoint = 4
-      // => [4,3,2,1,5]
-      const asc = this.descBreakpoints.reverse()
-      const index = asc.indexOf(currentPoint)
-      const newArray = asc
-        .slice(0, index + 1)
-        .reverse()
-        .concat(asc.slice(index + 1))
-
-      for (let i = 0; i <= newArray.length; i++) {
-        const point = newArray[i]
-        if (this.innerGrid[point]) {
-          return point
-        }
-      }
-    },
     itemUpdating() {
       this.LAYOUT_SET({ gridResizing: true })
     },
@@ -281,11 +289,6 @@ export default {
 <style scoped lang="scss">
 ::v-deep[data-invisible] + .vue-resizable-handle {
   display: none;
-}
-
-.grid-item-border {
-  border: 1px dashed #bcbcbc;
-  box-sizing: border-box;
 }
 
 .stack {

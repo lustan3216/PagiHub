@@ -1,8 +1,21 @@
 <template>
   <div id="sidebar-right">
+    <el-button-group class="flex">
+      <el-button
+        icon="el-icon-brush"
+        class="flex1"
+        @click="activePanel = 'PanelStyles'"
+      />
+
+      <el-button
+        icon="el-icon-setting"
+        class="flex1"
+        @click="activePanel = 'PanelSettings'"
+      />
+    </el-button-group>
+
     <div class="sidebar-right-content">
-      <panel-styles />
-      <panel-settings />
+      <component :is="activePanel" />
     </div>
   </div>
 </template>

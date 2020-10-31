@@ -50,6 +50,7 @@ export default {
     position: {
       get() {
         const node = arrayLast(this.selectedComponentNodes)
+        if (!node) return ''
         const vm = vmGet(node.id, this.isExample)
         return getValueByPath(vm, ['innerStyles', 'layout', 'position'], '')
       },

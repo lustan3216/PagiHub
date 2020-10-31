@@ -1,17 +1,19 @@
 <template>
-  <el-image
-    :style="innerStyles.html"
-    v-bind="innerProps"
-    :lazy="lazy"
-    class="wh-100 over-hidden"
-  >
-    <div
-      slot="error"
-      class="el-image__error"
+  <grid-generator-item :id="id">
+    <el-image
+      :style="innerStyles.html"
+      v-bind="innerProps"
+      class="wh-100 over-hidden"
+      @dblclick.native="dblclick"
     >
-      {{ innerProps.error }}
-    </div>
-  </el-image>
+      <div
+        slot="error"
+        class="el-image__error"
+      >
+        {{ innerProps.error }}
+      </div>
+    </el-image>
+  </grid-generator-item>
 </template>
 
 <script>
@@ -19,12 +21,15 @@ import nodeMixin from '@/components/Templates/mixins/node'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexImage'
 import { Image } from 'element-ui'
 import { isComponentSet, isSlider, traversalAncestor } from '@/utils/node'
+import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
+import { mapMutations } from 'vuex'
 
 export default {
   defaultSetting,
   name: 'FlexImage',
   components: {
-    ElImage: Image
+    ElImage: Image,
+    GridGeneratorItem
   },
   mixins: [nodeMixin],
   data() {
@@ -42,6 +47,14 @@ export default {
         return false
       }
     })
+  },
+  methods: {
+    ...mapMutations('asset', ['OPEN_ASSET']),
+    ...mapMutations('app', { APP_SET: 'SET' }),
+    dblclick() {
+      this.APP_SET({ beingAddedComponentId: this.id })
+      this.OPEN_ASSET()
+    }
   }
 }
 </script>

@@ -1,103 +1,93 @@
 <template>
-  <el-dialog
-    id="examples-dialog"
-    ref="dialog"
-    :class="currentCategory"
-    :visible="visible"
-    class="dialog"
-    top="5vh"
-    width="80vw"
-    @close="removeBeingAddedComponentId"
+  <el-tooltip
+    effect="light"
+    content="Top Center 提示文字"
+    placement="top"
   >
-    <el-row
-      :gutter="10"
-      type="flex"
-      class="search"
-    >
-      <el-col :span="6">
-        <el-input
-          v-model="search"
-          placeholder="Search name or description"
-          size="small"
-          clearable
-        />
-      </el-col>
-
-      <el-col :span="9">
-        <select-tag
-          :disabled="isBasic || isAsset"
-          v-model="tags"
-          :allow-create="false"
-          placeholder="Select tags to search"
-          size="small"
-          class="w-100"
-        />
-      </el-col>
-    </el-row>
-
-    <div
-      class="flex"
-      style="height: 83vh;"
-    >
-      <menu-categories
-        v-model="currentCategory"
-        class="flex-column over-scroll"
-        style="width: 225px;"
-      />
-
-      <keep-alive>
-        <menu-examples
-          v-if="isBasic"
-          :search="search"
-          style="flex: 7.5"
-          class="over-scroll p-15"
-          @add="addTemplate"
-        />
-
-        <menu-images
-          v-else-if="isAsset"
-          :search="search"
-          style="flex: 7.5"
-          @uploading="$emit('uploading')"
-          @uploaded="$emit('uploaded')"
-          @add="addTemplate"
-        />
-
-        <menu-component-sets
-          v-else
-          v-model="currentComponentId"
-          :except-ids="[editingComponentSetId]"
-          :category="currentCategory.name"
-          :key="currentCategory.name"
-          :text="search"
-          :tags="tags"
-          :default-tags="defaultTags"
-          class="flex-column over-scroll"
-          style="flex: 1.5;"
-          @add="addTemplate"
-        />
-      </keep-alive>
-
-      <div
-        v-if="!isBasic && !isAsset"
-        style="flex: 6"
-        class="content"
+    <el-button type="text">
+      <el-dialog
+        id="examples-dialog"
+        ref="dialog"
+        :class="currentCategory"
+        :visible="visible"
+        class="dialog"
+        top="5vh"
+        width="80vw"
+        @close="removeBeingAddedComponentId"
       >
-        <card-component-set
-          v-if="currentComponentId"
-          :id="currentComponentId"
-          @add="addTemplate"
-        />
+        <el-row
+          :gutter="10"
+          type="flex"
+          class="search"
+        >
+          <el-col :span="6">
+            <el-input
+              v-model="search"
+              placeholder="Search name or description"
+              size="small"
+              clearable
+            />
+          </el-col>
+
+          <el-col :span="9">
+            <select-tag
+              :disabled="isBasic || isAsset"
+              v-model="tags"
+              :allow-create="false"
+              placeholder="Select tags to search"
+              size="small"
+              class="w-100"
+            />
+          </el-col>
+        </el-row>
 
         <div
-          v-else
-          class="flex-center h-100"
+          class="flex"
+          style="height: 83vh;"
         >
-          <p>Please select a page to review</p>
+          <menu-categories
+            v-model="currentCategory"
+            class="flex-column over-scroll"
+            style="width: 225px;"
+          />
+
+          <keep-alive>
+            <menu-component-sets
+              v-model="currentComponentId"
+              :except-ids="[editingComponentSetId]"
+              :category="currentCategory.name"
+              :key="currentCategory.name"
+              :text="search"
+              :tags="tags"
+              :default-tags="defaultTags"
+              class="flex-column over-scroll"
+              style="flex: 1.5;"
+              @add="addTemplate"
+            />
+          </keep-alive>
+
+          <div
+            v-if="!isBasic && !isAsset"
+            style="flex: 6"
+            class="content"
+          >
+            <card-component-set
+              v-if="currentComponentId"
+              :id="currentComponentId"
+              @add="addTemplate"
+            />
+
+            <div
+              v-else
+              class="flex-center h-100"
+            >
+              <p>Please select a page to review</p>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </el-dialog>
+      </el-dialog>
+    </el-button>
+  </el-tooltip>
 </template>
 
 <script>

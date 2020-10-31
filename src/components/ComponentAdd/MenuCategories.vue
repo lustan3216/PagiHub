@@ -60,14 +60,6 @@ export default {
     categories() {
       return [
         {
-          name: BASIC_COMPONENTS,
-          subtitle: 'The basic UI kit'
-        },
-        {
-          name: IMAGE_ASSET,
-          subtitle: 'Image or svg management'
-        },
-        {
           name: LOCAL_PAGES,
           subtitle: "Components you've created"
         },

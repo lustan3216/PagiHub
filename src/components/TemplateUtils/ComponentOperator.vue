@@ -6,25 +6,16 @@
     class="quick-functions flex-center"
   >
     <portal-target
+      v-if="isTextEditor && itemEditing"
       :style="textEditorStyle"
       name="QuickFunctionsTextEditor"
       slim
       class="can-action"
     />
 
-    <el-button
-      v-if="canAddComponent"
-      icon="el-icon-circle-plus"
-      style="font-size: 18px;"
-      class="can-action"
-      type="text"
-      size="mini"
-      data-cy="add-panel-button"
-      @click="tryToAddComponent"
-    />
-
     <div class="wrapper flex top">
       <div
+        v-if="isLastOne"
         class="flex"
         @mouseenter="mouseenter"
         @mouseleave="mouseleave"
@@ -67,24 +58,18 @@
         class="flex backface-hidden"
       />
     </div>
-
-    <component-quick-add
-      v-if="isDraftMode && !isExample && isLastOne && !isBackground"
-      :id="id"
-      class="uniq-function"
-    />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import ComponentName from './ComponentName'
 import { Popover } from 'element-ui'
 import {
-  isGridItem,
-  traversalAncestorAndSelf,
   isGrid,
-  isBackground
+  isBackground,
+  isTextEditor,
+  traversalAncestorAndSelf
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { vmCreateEmptyItem } from '@/utils/vmMap'
@@ -92,7 +77,6 @@ import { isMac } from '@/utils/device'
 import { debounce } from '@/utils/tool'
 import { BIconPlusSquareFill } from 'bootstrap-vue'
 import OftenUseMenu from './OftenUseMenu'
-import ComponentQuickAdd from './ComponentQuickAdd'
 
 const topShared = window.innerHeight / 2
 const leftShared = window.innerWidth / 2
@@ -113,17 +97,12 @@ export default {
     ComponentName,
     ElPopover: Popover,
     BIconPlusSquareFill,
-    OftenUseMenu,
-    ComponentQuickAdd
+    OftenUseMenu
   },
   props: {
     id: {
       type: String,
       required: true
-    },
-    itemEditing: {
-      type: Boolean,
-      default: false
     },
     isExample: {
       type: Boolean,
@@ -144,8 +123,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
+    ...mapState('app', [
+      'copyComponentIds',
+      'selectedComponentIds',
+      'editingPath'
+    ]),
     ...mapState('layout', ['gridResizing', 'windowHeight']),
+    ...mapGetters('app', ['selectedComponentNodes']),
     styles() {
       return {
         top: this.top + 'px',
@@ -154,6 +138,9 @@ export default {
         height: this.height + 'px',
         zIndex: this.zIndex
       }
+    },
+    itemEditing() {
+      return this.editingPath.includes(this.id)
     },
     textEditorStyle() {
       const shouldOnLeftSide = this.width + this.left + 400 > window.innerWidth
@@ -181,9 +168,6 @@ export default {
     node() {
       return this.nodesMap[this.id]
     },
-    isGridItem() {
-      return isGridItem(this.node)
-    },
     isLastOne() {
       return arrayLast(this.selectedComponentIds) === this.id
     },
@@ -193,19 +177,11 @@ export default {
     isButton() {
       return this.node.tag === 'flex-button'
     },
-    canAddComponent() {
-      if (
-        (!this.isExample &&
-          (this.isGridItem || this.isButton) &&
-          this.isLastOne) ||
-        this.isBackground
-      ) {
-        const { children = [] } = this.node
-        return !children.length
-      }
+    isTextEditor() {
+      return isTextEditor(this.node)
     }
   },
-  created() {
+  mounted() {
     this.resize()
     this.$bus.$on('quick-function-resize', this.resize)
   },

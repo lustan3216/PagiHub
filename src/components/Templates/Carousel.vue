@@ -1,89 +1,91 @@
 <template>
-  <div
-    v-observe-visibility="options"
-    :style="innerStyles.html"
-    class="h-100 over-hidden"
-  >
-    <template v-if="inViewPort && innerProps.keyboard">
-      <i
-        v-shortkey="['arrowup']"
-        v-if="canUp"
-        @shortkey="carousel.prev()"
-      />
-      <i
-        v-shortkey="['arrowdown']"
-        v-if="canDown"
-        @shortkey="carousel.next()"
-      />
-      <i
-        v-shortkey="['arrowleft']"
-        v-if="canLeft"
-        @shortkey="carousel.prev()"
-      />
-      <i
-        v-shortkey="['arrowright']"
-        v-if="canRight"
-        @shortkey="carousel.next()"
-      />
-    </template>
-
-    <template v-if="innerProps.arrow === 'custom'">
-      <grid
-        :id="customerIndicator.id"
-        class="customer-indicator"
-      />
-
-      <portal :to="`QuickFunctions${prevGridItemId}`">
-        <el-tooltip
-          effect="light"
-          content="Replace Prev action in this button for nicer editing UX. It only shows in Draft mode."
-          placement="top"
-        >
-          <el-button
-            icon="el-icon-thumb"
-            @click="carousel.prev()"
-          />
-        </el-tooltip>
-      </portal>
-
-      <portal :to="`QuickFunctions${nextGridItemId}`">
-        <el-tooltip
-          effect="light"
-          content="Replace Next action in this button for nicer editing UX. It only shows in Draft mode."
-          placement="top"
-        >
-          <el-button
-            icon="el-icon-thumb"
-            @click="carousel.next()"
-          />
-        </el-tooltip>
-      </portal>
-    </template>
-
-    <el-carousel
-      ref="carousel"
-      :key="sliders.length"
-      v-bind="innerProps"
-      :indicator-position="hasIndicator"
-      :class="{ indicatorTop, indicatorLeft }"
-      :arrow="arrow"
-      draggable="false"
-      class="wh-100"
-      @change="checkSelectedComponent"
+  <grid-generator-item :id="id">
+    <div
+      v-observe-visibility="options"
+      class="h-100 over-hidden"
     >
-      <el-carousel-item
-        v-for="(child, index) in sliders"
-        :key="child.id"
-        :class="`carousel-item-${id}`"
-      >
-        <component-giver
-          v-if="index === currentIndex"
-          :id="child.id"
-          :style="cursor"
+      <template v-if="inViewPort && innerProps.keyboard">
+        <i
+          v-shortkey="['arrowup']"
+          v-if="canUp"
+          @shortkey="carousel.prev()"
         />
-      </el-carousel-item>
-    </el-carousel>
-  </div>
+        <i
+          v-shortkey="['arrowdown']"
+          v-if="canDown"
+          @shortkey="carousel.next()"
+        />
+        <i
+          v-shortkey="['arrowleft']"
+          v-if="canLeft"
+          @shortkey="carousel.prev()"
+        />
+        <i
+          v-shortkey="['arrowright']"
+          v-if="canRight"
+          @shortkey="carousel.next()"
+        />
+      </template>
+
+      <template v-if="innerProps.arrow === 'custom'">
+        <grid-generator
+          :id="customerIndicator.id"
+          class="customer-indicator"
+        />
+
+        <portal :to="`QuickFunctions${prevGridItemId}`">
+          <el-tooltip
+            effect="light"
+            content="Replace Prev action in this button for nicer editing UX. It only shows in Draft mode."
+            placement="top"
+          >
+            <el-button
+              icon="el-icon-thumb"
+              @click="carousel.prev()"
+            />
+          </el-tooltip>
+        </portal>
+
+        <portal :to="`QuickFunctions${nextGridItemId}`">
+          <el-tooltip
+            effect="light"
+            content="Replace Next action in this button for nicer editing UX. It only shows in Draft mode."
+            placement="top"
+          >
+            <el-button
+              icon="el-icon-thumb"
+              @click="carousel.next()"
+            />
+          </el-tooltip>
+        </portal>
+      </template>
+
+      <el-carousel
+        ref="carousel"
+        :key="sliders.length"
+        v-bind="innerProps"
+        :indicator-position="hasIndicator"
+        :class="{ indicatorTop, indicatorLeft }"
+        :arrow="arrow"
+        draggable="false"
+        class="wh-100"
+        @change="checkSelectedComponent"
+      >
+        <el-carousel-item
+          v-for="(child, index) in sliders"
+          :key="child.id"
+          :class="`carousel-item-${id}`"
+        >
+          <grid-generator
+            v-if="index === currentIndex"
+            :id="child.id"
+            :style="{ cursor }"
+            controller
+          />
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+  </grid-generator-item>
 </template>
 
 <script>
@@ -92,13 +94,12 @@ import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
-import Grid from './GridGenerator'
+import GridGenerator from './GridGenerator'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, POLYMORPHISM, STYLES } from '@/const'
 import { CarouselItem, Carousel } from 'element-ui'
 import { isSlider, traversalSelfAndChildren } from '@/utils/node'
 import { vmRemoveNode } from '@/utils/vmMap'
-import ComponentGiver from '@/components/TemplateUtils/ComponentGiver'
 import { getValueByPath } from '@/utils/tool'
 import { findIndexBy } from '@/utils/array'
 
@@ -106,8 +107,7 @@ export default {
   defaultSetting,
   name: 'Carousel',
   components: {
-    ComponentGiver,
-    Grid,
+    GridGenerator,
     ElCarouselItem: CarouselItem,
     ElCarousel: Carousel
   },
@@ -128,11 +128,19 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
+    ...mapState('app', ['selectedComponentIds', 'isAdding']),
     ...mapGetters('layout', ['currentBreakpoint']),
     cursor() {
-      return {
-        cursor: this.innerProps.allowDrag ? 'ew-resize' : 'default'
+      if (this.isAdding) {
+        return 'crosshair'
+      }
+      if (this.innerProps.allowDrag) {
+        return this.innerProps.direction === 'vertical'
+          ? 'ns-resize'
+          : 'ew-resize'
+      }
+      else {
+        return 'default'
       }
     },
     sliders() {

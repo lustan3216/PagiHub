@@ -15,32 +15,8 @@
       class="relative z-index1 p-1"
       style="font-size: 20px;"
     >
-      <b-icon-fonts
-        v-if="component.tag === 'text-editor'"
-        class="gray-font-2"
-      />
-      <b-icon-image
-        v-if="component.tag === 'flex-image'"
-        class="gray-font-2"
-      />
-      <b-icon-aspect-ratio
-        v-if="component.tag === 'grid-generator'"
-        class="gray-font-2"
-      />
-      <b-icon-camera-video
-        v-if="component.tag === 'video-player'"
-        class="gray-font-2"
-      />
-      <b-icon-calendar3-event
-        v-if="component.tag === 'iframer'"
-        class="gray-font-2"
-      />
-      <b-icon-layout-sidebar-inset-reverse
-        v-if="component.tag === 'carousel'"
-        class="gray-font-2"
-      />
-      <b-icon-link
-        v-if="component.tag === 'flex-button'"
+      <element-icon
+        :icon="component.tag"
         class="gray-font-2"
       />
     </div>
@@ -60,31 +36,14 @@ import ArtBoard from '../Layout/ArtBoard'
 import { Tag } from 'element-ui'
 import { mapState } from 'vuex'
 import { descriptionMap } from '@/templateJson/basic'
-
-import {
-  BIconFonts,
-  BIconImage,
-  BIconAspectRatio,
-  BIconColumns,
-  BIconCameraVideo,
-  BIconCalendar3Event,
-  BIconLayoutSidebarInsetReverse,
-  BIconLink
-} from 'bootstrap-vue'
+import ElementIcon from '@/components/Components/ElementIcon'
 
 export default {
   name: 'CardExample',
   components: {
     ArtBoard,
     ElTag: Tag,
-    BIconFonts,
-    BIconImage,
-    BIconAspectRatio,
-    BIconColumns,
-    BIconCameraVideo,
-    BIconCalendar3Event,
-    BIconLayoutSidebarInsetReverse,
-    BIconLink
+    ElementIcon
   },
   props: {
     component: {

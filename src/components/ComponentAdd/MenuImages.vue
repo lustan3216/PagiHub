@@ -42,12 +42,21 @@
               v-if="hoverImage && hoverImage.id === data.id"
               class="controller"
             >
-              <el-button
-                v-if="data.url"
-                type="text"
-                icon="el-icon-plus"
-                @click="addImageToComponent(data)"
-              />
+              <template v-if="data.url">
+                <el-button
+                  v-if="isImageBeingAdded || selectedImageNodes.length"
+                  type="text"
+                  icon="el-icon-refresh"
+                  @click="replace(data)"
+                />
+                <el-button
+                  v-else
+                  type="text"
+                  icon="el-icon-plus"
+                  @click="addImage(data)"
+                />
+              </template>
+
               <el-button
                 type="text"
                 icon="el-icon-delete"
@@ -106,7 +115,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex'
 import { Tree, Avatar } from 'element-ui'
 import Tip from '@/components/Tip/Tip'
 import SplitPane from 'vue-splitpane'
@@ -117,9 +126,10 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size'
 import { postAsset } from '@/api/asset'
-import { flexImage } from '@/templateJson/basic'
 import FolderParser from '@/utils/folderParser'
 import { humanize } from '@/utils/string'
+import { PROPS } from '@/const'
+import { isImage } from '@/utils/node'
 
 const FilePond = vueFilePond(
   FilePondPluginFileValidateType,
@@ -160,6 +170,15 @@ export default {
   },
   computed: {
     ...mapState('asset', ['images']),
+    ...mapState('app', ['beingAddedComponentId']),
+    ...mapGetters('app', ['selectedComponentNodes']),
+    selectedImageNodes() {
+      return this.selectedComponentNodes.filter(node => isImage(node))
+    },
+    isImageBeingAdded() {
+      const node = this.nodesMap[this.beingAddedComponentId]
+      return isImage(node)
+    },
     maxFileSize() {
       return '2MB'
     },
@@ -190,9 +209,27 @@ export default {
   },
   methods: {
     ...mapActions('asset', ['deleteAsset', 'postAsset']),
-    addImageToComponent(data) {
-      const image = flexImage({ props: { src: this.assetHost + data.url }})
-      this.$emit('add', image)
+    ...mapMutations('asset', ['CLOSE_ASSET']),
+    ...mapMutations('app', { APP_SET: 'SET' }),
+    ...mapActions('node', ['record']),
+    replace(data) {
+      const ids = this.beingAddedComponentId
+        ? [this.beingAddedComponentId]
+        : this.selectedImageNodes.map(node => node.id)
+
+      ids.forEach(id => {
+        this.record({
+          path: [id, PROPS, 'src'],
+          value: this.assetHost + data.url
+        })
+      })
+
+      this.CLOSE_ASSET()
+      this.APP_SET({ beingAddedComponentId: null })
+    },
+    addImage(data) {
+      this.$bus.$emit('image-add', this.assetHost + data.url)
+      this.CLOSE_ASSET()
     },
     filterTagBySearching(value, { label, tag }) {
       value = value.toLowerCase().toString()

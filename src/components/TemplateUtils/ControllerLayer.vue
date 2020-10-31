@@ -1,14 +1,20 @@
 <template>
   <div
     v-if="isDraftMode && node"
-    :class="{ 'h-100': !noHeight, 'no-action': lock }"
-    @mousedown.stop="singleClick"
+    :class="{
+      'h-100': !isTextEditor,
+      'no-action': lock
+    }"
+    @mousedown="singleClick"
     @dblclick.stop="dblclick"
     @contextmenu.stop.prevent="contextmenu($event)"
   >
-    <portal to="App">
+    <portal
+      v-if="selected && !gridResizing"
+      to="App"
+    >
       <context-menu
-        v-if="contextMenu && selected && !gridResizing"
+        v-if="contextMenu"
         :style="{
           top: contextMenu.y,
           left: contextMenu.x
@@ -16,14 +22,11 @@
         class="absolute"
         @close="closeContextmenu"
       />
-    </portal>
 
-    <portal :to="`App-${id}`">
       <component-operator
-        v-if="selected && !gridResizing"
         :id="id"
+        :key="id"
         :is-example="isExample"
-        :item-editing="itemEditing"
       />
     </portal>
 
@@ -31,10 +34,10 @@
       v-if="canBeEdited"
       :class="{
         'no-action': !itemEditing && !isExample,
-        'h-100': !noHeight
+        'h-100': !isTextEditor
       }"
     >
-      <slot :item-editing="itemEditing" />
+      <slot />
     </div>
 
     <slot v-else />
@@ -42,7 +45,7 @@
 
   <div
     v-else-if="node"
-    :class="{ 'h-100': !noHeight }"
+    :class="{ 'h-100': !isTextEditor }"
   >
     <slot />
   </div>
@@ -54,16 +57,15 @@ import { mapState, mapMutations } from 'vuex'
 import { CAN_BE_EDITED } from '@/const'
 import { isMac } from '@/utils/device'
 import {
+  isBackground,
   isGridItem,
   isTextEditor,
   traversalAncestorAndSelf
 } from '@/utils/node'
-import { getValueByPath } from '@/utils/tool'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { findIndexBy } from '@/utils/array'
 
 const store = vue.observable({
-  editingPath: [],
   lastEditId: null,
   contextMenu: null
 })
@@ -83,14 +85,19 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      hovering: false
+    }
+  },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
+    ...mapState('app', ['selectedComponentIds', 'editingPath', 'isAdding']),
     ...mapState('layout', ['gridResizing']),
     lock() {
       return this.node.lock
     },
     itemEditing() {
-      return store.editingPath.includes(this.id)
+      return this.editingPath.includes(this.id)
     },
     node() {
       return this.nodesMap[this.id]
@@ -101,15 +108,8 @@ export default {
     canBeEdited() {
       return this.node && this.node[CAN_BE_EDITED]
     },
-    child() {
-      return getValueByPath(this.node, ['children', 0])
-    },
-    noHeight() {
-      return (
-        (isTextEditor(this.child) && isGridItem(this.node)) ||
-        isTextEditor(this.node) ||
-        isGridItem(this.node)
-      )
+    isTextEditor() {
+      return isTextEditor(this.node)
     },
     contextMenu() {
       return store.contextMenu
@@ -120,6 +120,9 @@ export default {
     ...mapMutations('layout', {
       LAYOUT_SET: 'SET'
     }),
+    ...mapMutations('app', {
+      APP_SET: 'SET'
+    }),
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_ID',
@@ -127,12 +130,12 @@ export default {
     ]),
 
     finEditingPath() {
-      const path = []
+      const editingPath = []
       traversalAncestorAndSelf(this.node, node => {
-        path.push(node.id)
+        editingPath.push(node.id)
       })
 
-      store.editingPath = path
+      this.APP_SET({ editingPath })
       store.lastEditId = this.node.id
     },
 
@@ -147,6 +150,13 @@ export default {
     },
 
     singleClick(event) {
+      if (this.isAdding) {
+        return
+      }
+      if (!isBackground(this.node)) {
+        event.stopPropagation()
+      }
+
       if (this.isRightCheck(event)) {
         return
       }
@@ -156,21 +166,22 @@ export default {
 
       if (!this.isExample) {
         if (this.itemEditing) {
-          const index = findIndexBy(store.editingPath, this.id)
-          store.editingPath.splice(0, index)
+          const index = findIndexBy(this.editingPath, this.id)
+          const editingPath = Array.from(this.editingPath).splice(index)
+          this.APP_SET({ editingPath })
         }
         else {
-          let editingWithinChildren = false
+          let editingInChildren = false
 
           traversalAncestorAndSelf(this.node, parent => {
-            editingWithinChildren = parent.id === store.lastEditId
-            if (editingWithinChildren) {
+            editingInChildren = parent.id === store.lastEditId
+            if (editingInChildren) {
               return false
             }
           })
 
-          if (!editingWithinChildren) {
-            store.editingPath = []
+          if (!editingInChildren) {
+            this.APP_SET({ editingPath: [] })
           }
         }
       }

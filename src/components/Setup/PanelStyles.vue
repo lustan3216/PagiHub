@@ -28,23 +28,25 @@
     <!--    </div>-->
 
     <template v-if="!hasBackground">
+      <text-editor-simple-style />
+
+      <stack />
+
       <portal-target name="PanelStyles" />
 
       <item-hidden-controller />
 
-      <dimension v-if="isAllGridItem" />
-
-      <ratio v-if="isAllGridItem" />
+      <dimension />
 
       <el-divider content-position="left">STACK</el-divider>
 
-      <position v-if="isAllGridItem" />
+      <position />
 
-      <overflow v-if="isAllGridItem" />
+<!--      <overflow />-->
 
-      <padding v-if="isAllGridItem" />
+      <padding />
 
-      <radius v-if="canRadius" />
+      <radius />
 
       <opacity />
 
@@ -53,17 +55,15 @@
         slim
       />
 
-      <background-color v-if="canBackgroundColor" />
+      <background-color />
 
       <border-all />
 
-      <box-shadow v-if="canShadow" />
+      <box-shadow />
 
       <effect />
 
-      <transform v-if="canTransform" />
-
-      <text-editor-simple-style v-if="isAllTextEditor" />
+      <transform />
     </template>
 
     <background-color v-else />
@@ -90,17 +90,13 @@ import BorderAll from './EditorStyle/BorderAll'
 import Transform from './EditorStyle/Transform'
 import TransformOrigin from './EditorStyle/TransformOrigin'
 import Opacity from './EditorStyle/Opacity'
+import Stack from './EditorStyle/Stack'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
 import TextEditorSimpleStyle from './EditorStyle/TextEditorSimpleStyle'
 import Ratio from './EditorStyle/Ratio'
 import Position from '@/components/Setup/EditorStyle/Position'
-import {
-  isBackground,
-  isGridItem,
-  isSlider,
-  isTextEditor
-} from '@/utils/node'
+import { isBackground, isGridItem, isSlider, isTextEditor } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 
 export default {
@@ -120,6 +116,7 @@ export default {
     Transitions,
     TransformOrigin,
     Transform,
+    Stack,
     ItemHiddenController,
     TextEditorSimpleStyle,
     ElRadioGroup: RadioGroup,

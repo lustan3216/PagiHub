@@ -47,7 +47,7 @@
       slot="append"
       class="no-action"
     >
-      {{ optionUnits.length ? unit : ' - ' }}
+      {{ optionUnits.length ? optionUnits[0] : ' - ' }}
     </span>
   </el-input>
 </template>
@@ -182,8 +182,8 @@ export default {
         }
 
         if (this.separate) {
-          this.$emit('update:number', result)
-          this.innerValue = result
+          this.$emit('update:number', result.toString())
+          this.innerValue = result.toString()
         }
         else {
           if (this.unit) {

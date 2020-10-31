@@ -91,42 +91,42 @@ export default {
     }
     let vnode = null
 
-    if (!this.controller || isGrid(this.node) || isComponentSet(this.node)) {
-      vnode = h(AsyncComponent, {
-        key: this.id,
-        props: {
-          id: this.id
-        }
-      })
-    }
-    else {
-      const scopedSlots = {}
+    // if (!this.controller || isGrid(this.node) || isComponentSet(this.node)) {
+    //   vnode =
+    // }
+    // else {
+    //   const scopedSlots = {}
+    //
+    //   if (this.vIf) {
+    //     scopedSlots.default = ref => {
+    //       return h(AsyncComponent, {
+    //         key: this.id,
+    //         props: {
+    //           id: this.id,
+    //           editing: ref.itemEditing
+    //         }
+    //       })
+    //     }
+    //   }
+    //
+    //   vnode = h(ControllerLayer, {
+    //     attrs: { id: this.id },
+    //     directives: [
+    //       {
+    //         name: 'observe-visibility',
+    //         value: this.options
+    //       }
+    //     ],
+    //     scopedSlots
+    //   })
+    // }
 
-      if (this.vIf) {
-        scopedSlots.default = ref => {
-          return h(AsyncComponent, {
-            key: this.id,
-            props: {
-              id: this.id,
-              editing: ref.itemEditing
-            }
-          })
-        }
+    return h(AsyncComponent, {
+      key: this.id,
+      props: {
+        id: this.id
       }
-
-      vnode = h(ControllerLayer, {
-        attrs: { id: this.id },
-        directives: [
-          {
-            name: 'observe-visibility',
-            value: this.options
-          }
-        ],
-        scopedSlots
-      })
-    }
-
-    return vnode
+    })
   }
 }
 </script>

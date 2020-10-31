@@ -7,179 +7,189 @@ import {
   TAG,
   CHILDREN,
   CAN_BE_EDITED,
-  CAN_NOT_DELETE,
-  CAN_NOT_COPY,
   STYLES,
   LABEL,
   GRID,
-  SOFT_DELETE,
   TEXT_EDITOR,
   VALUE,
-  HTML
+  HTML,
+  CAN_NOT_DELETE
 } from '../const'
 
-const mapPoints = (object, breakpoint) => {
+const mapPoints = (object, grid) => {
   return {
-    [breakpoint]: object
+    [grid]: object
   }
 }
 
-export const gridGeneratorItem = function(options, breakpoint) {
+export const gridGeneratorItem = function(options, grid) {
   return {
     [TAG]: GRID_GENERATOR_ITEM,
     [LABEL]: 'container',
-    [GRID]: mapPoints(
-      { x: 0, y: 0, w: 22, h: 100, unitW: '%', unitH: 'px' },
-      breakpoint
-    ),
-    [STYLES]: { layout: { stack: true }},
+    grid,
     ...options
   }
 }
 
-export const gridGeneratorItems = function(options, breakpoint) {
-  return [
-    {
-      [TAG]: GRID_GENERATOR_ITEM,
-      [LABEL]: 'container',
-      [GRID]: mapPoints(
-        { x: 0, y: 0, w: 22, h: 100, unitW: '%', unitH: 'px' },
-        breakpoint
-      ),
-      [STYLES]: { layout: { stack: true }},
-      ...options
-    },
-    {
-      [TAG]: GRID_GENERATOR_ITEM,
-      [LABEL]: 'container',
-      [GRID]: mapPoints(
-        { x: 22, y: 0, w: 22, h: 100, unitW: '%', unitH: 'px' },
-        breakpoint
-      ),
-      [STYLES]: { layout: { stack: true }},
-      ...options
-    }
-  ]
+export const rectangle = function(options, grid) {
+  return {
+    [TAG]: 'rectangle',
+    grid,
+    ...options
+  }
 }
 
-export const gridGenerator = function(options, breakpoint) {
+// export const gridGeneratorItems = function(options, grid) {
+//   return [
+//     {
+//       [TAG]: GRID_GENERATOR_ITEM,
+//       [LABEL]: 'container',
+//       [GRID]: mapPoints(
+//         { x: 0, y: 0, w: 22, h: 100, unitW: '%', unitH: 'px' },
+//         grid
+//       ),
+//       [STYLES]: { layout: { stack: true }},
+//       ...options
+//     },
+//     {
+//       [TAG]: GRID_GENERATOR_ITEM,
+//       [LABEL]: 'container',
+//       [GRID]: mapPoints(
+//         { x: 22, y: 0, w: 22, h: 100, unitW: '%', unitH: 'px' },
+//         grid
+//       ),
+//       [STYLES]: { layout: { stack: true }},
+//       ...options
+//     }
+//   ]
+// }
+
+export const gridGenerator = function(options, grid) {
   return {
     [TAG]: GRID_GENERATOR,
-    [CAN_NEW_ITEM]: true,
     [LABEL]: 'container',
-    [CHILDREN]: gridGeneratorItems({}, breakpoint),
+    grid,
     ...options
   }
 }
 
-export const background = function(options, breakpoint) {
+export const group = function(options, grid) {
   return {
-    [TAG]: GRID_GENERATOR,
+    [TAG]: 'group',
     [CAN_NEW_ITEM]: true,
-    [POLYMORPHISM]: 'background',
-    [CHILDREN]: gridGeneratorItems({}, breakpoint),
+    [CAN_BE_EDITED]: true,
+    grid,
     ...options
   }
 }
 
-export const iframer = function(options) {
+export const background = function(options) {
+  return {
+    [TAG]: 'background',
+    [CAN_NEW_ITEM]: true,
+    [CAN_NOT_DELETE]: true,
+    ...options
+  }
+}
+
+export const iframer = function(options, grid) {
   return {
     [TAG]: 'iframer',
-    [CAN_BE_EDITED]: true,
     [LABEL]: 'iframe',
+    [CAN_BE_EDITED]: true,
+    grid,
     ...options
   }
 }
 
-export const carousel = function(options, breakpoint) {
+export const carousel = function(options, grid) {
   return {
     [TAG]: CAROUSEL,
     [CAN_NEW_ITEM]: true,
     [CAN_BE_EDITED]: true,
+    grid,
     [CHILDREN]: [
-      gridGenerator({
-        [POLYMORPHISM]: 'indicators',
-        [CAN_NOT_COPY]: true,
-        [CAN_NOT_DELETE]: true,
-        [SOFT_DELETE]: true,
-        [CAN_NEW_ITEM]: false,
-        [CHILDREN]: [
-          {
-            [GRID]: mapPoints(
-              { x: 0, y: 0, w: 22, h: 71, unitW: '%', unitH: 'px' },
-              breakpoint
-            ),
-            [TAG]: GRID_GENERATOR_ITEM,
-            [POLYMORPHISM]: 'prev',
-            [CAN_NOT_COPY]: true,
-            [CAN_NOT_DELETE]: true
-          },
-          {
-            [GRID]: mapPoints(
-              { x: 23, y: 0, w: 22, h: 71, unitW: '%', unitH: 'px' },
-              breakpoint
-            ),
-            [TAG]: GRID_GENERATOR_ITEM,
-            [POLYMORPHISM]: 'next',
-            [CAN_NOT_COPY]: true,
-            [CAN_NOT_DELETE]: true
-          }
-        ]
-      }),
-      gridGenerator(
-        { [LABEL]: 'slider', [POLYMORPHISM]: 'slider' },
-        breakpoint
-      ),
-      gridGenerator(
-        { [LABEL]: 'slider', [POLYMORPHISM]: 'slider' },
-        breakpoint
-      ),
-      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }, breakpoint)
+      // gridGenerator({
+      //   [POLYMORPHISM]: 'indicators',
+      //   [CAN_NOT_COPY]: true,
+      //   [CAN_NOT_DELETE]: true,
+      //   [SOFT_DELETE]: true,
+      //   [CAN_NEW_ITEM]: false,
+      //   [CHILDREN]: [
+      //     {
+      //       [GRID]: mapPoints(
+      //         { x: 0, y: 0, w: 22, h: 71, unitW: '%', unitH: 'px' },
+      //         grid
+      //       ),
+      //       [TAG]: GRID_GENERATOR_ITEM,
+      //       [POLYMORPHISM]: 'prev',
+      //       [CAN_NOT_COPY]: true,
+      //       [CAN_NOT_DELETE]: true
+      //     },
+      //     {
+      //       [GRID]: mapPoints(
+      //         { x: 23, y: 0, w: 22, h: 71, unitW: '%', unitH: 'px' },
+      //         grid
+      //       ),
+      //       [TAG]: GRID_GENERATOR_ITEM,
+      //       [POLYMORPHISM]: 'next',
+      //       [CAN_NOT_COPY]: true,
+      //       [CAN_NOT_DELETE]: true
+      //     }
+      //   ]
+      // }),
+      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
+      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
+      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' })
     ]
   }
 }
 
-export const textEditor = function(options) {
+export const textEditor = function(options, grid) {
   return {
     [TAG]: TEXT_EDITOR,
     [CAN_BE_EDITED]: true,
     [VALUE]: 'text',
     [LABEL]: 'text',
+    grid,
     ...options
   }
 }
 
-export const flexButton = function(options) {
+export const flexButton = function(options, grid) {
   return {
     [TAG]: 'flex-button',
     [LABEL]: 'button',
     [STYLES]: {
       [HTML]: { border: '1px solid #dcdfe6' }
     },
-    children: [
-      textEditor({
-        [VALUE]: 'I can be changed to anything',
-        [STYLES]: {
-          [HTML]: { textAlign: 'center' }
-        }
-      })
-    ]
+    grid
+    // children: [
+    //   textEditor({
+    //     [VALUE]: 'I can be changed to anything',
+    //     [STYLES]: {
+    //       [HTML]: { textAlign: 'center' }
+    //     }
+    //   })
+    // ]
   }
 }
 
-export const flexImage = function(options) {
+export const flexImage = function(options, grid) {
   return {
     [TAG]: 'flex-image',
     [LABEL]: 'image',
+    grid,
     ...options
   }
 }
 
-export const videoPlayer = function(options) {
+export const videoPlayer = function(options, grid) {
   return {
     [TAG]: 'video-player',
     [CAN_BE_EDITED]: true,
-    [STYLES]: { ratioW: 16, ratioH: 9 }
+    [STYLES]: { ratioW: 16, ratioH: 9 },
+    grid
   }
 }
 
@@ -191,8 +201,11 @@ export const exampleMap = {
   iframer,
   'flex-button': flexButton,
   'flex-image': flexImage,
-  'video-player': videoPlayer
+  'video-player': videoPlayer,
+  rectangle,
+  group
 }
+
 export const descriptionMap = {
   [GRID_GENERATOR]:
     'Each container can only include an element to control element size',
@@ -206,6 +219,6 @@ export const descriptionMap = {
   'video-player': 'Support Youtube and Viemo'
 }
 
-export function getExample(tag, options = {}, breakpoint) {
-  return exampleMap[tag](options, breakpoint)
+export function getExample(tag, options = {}, grid) {
+  return exampleMap[tag](options, grid)
 }

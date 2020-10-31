@@ -12,7 +12,7 @@ import {
   POLYMORPHISM,
   GRID_GENERATOR,
   CAROUSEL,
-  SOFT_DELETE
+  SOFT_DELETE, BREAK_POINTS_MAP
 } from '@/const'
 import { vmGet } from '@/utils/vmMap'
 
@@ -47,6 +47,26 @@ export function wrapByGrid(nodesMap, ids) {
   })
 }
 
+export function closestValidBreakpoint(node, currentPoint) {
+  // [1,2,3,4,5]
+  // currentPoint = 4
+  // => [4,3,2,1,5]
+  const descBreakpoints = store.getters['layout/descBreakpoints']
+  const asc = descBreakpoints.reverse()
+  const index = asc.indexOf(currentPoint)
+  const newArray = asc
+    .slice(0, index + 1)
+    .reverse()
+    .concat(asc.slice(index + 1))
+
+  for (let i = 0; i <= newArray.length; i++) {
+    const point = newArray[i]
+    if (node.grid[point]) {
+      return point
+    }
+  }
+}
+
 export function cloneJsonWithoutChildren(tree) {
   const string = JSON.stringify(tree, function(key, value) {
     if (value && value['children']) {
@@ -77,16 +97,6 @@ export function sortByZIndex(children, asc = true) {
 export function getNode(id) {
   if (id) {
     return store.state.node.nodesMap[id]
-  }
-}
-
-export function getClosetGrimItem(id) {
-  const node = getNode(id)
-  if (isGridItem(node)) {
-    return node
-  }
-  else if (node) {
-    return getClosetGrimItem(node.parentId)
   }
 }
 
@@ -225,7 +235,19 @@ export function isTextEditor(node) {
 
 export function isBackground(node) {
   if (node) {
-    return node[POLYMORPHISM] === 'background'
+    return node.tag === 'background'
+  }
+}
+
+export function isImage(node) {
+  if (node) {
+    return node.tag === 'flex-image'
+  }
+}
+
+export function isGroup(node) {
+  if (node) {
+    return node.tag === 'group'
   }
 }
 

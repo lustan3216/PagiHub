@@ -1,49 +1,50 @@
 <template>
-  <div
-    :style="innerStyles.html"
-    :class="{ pointer: !isDraftMode }"
-    class="flex-center h-100"
-    @click="onRealClick"
-  >
-    <portal
-      v-if="link && isDraftMode"
-      :to="`QuickFunctions${id}`"
+  <grid-generator-item :id="id">
+    <div
+      :class="{ pointer: !isDraftMode }"
+      class="flex-center h-100"
+      @click="onRealClick"
     >
-      <el-tooltip
-        effect="light"
-        content="Replace all actions in this button for nicer editing UX. It only shows in Draft mode."
-        placement="top"
+      <portal
+        v-if="link && isDraftMode"
+        :to="`QuickFunctions${id}`"
       >
-        <el-button
-          icon="el-icon-thumb"
-          @click.stop="onDraftClick"
-        />
-      </el-tooltip>
-    </portal>
+        <el-tooltip
+          effect="light"
+          content="Replace all actions in this button for nicer editing UX. It only shows in Draft mode."
+          placement="top"
+        >
+          <el-button
+            icon="el-icon-thumb"
+            @click.stop="onDraftClick"
+          />
+        </el-tooltip>
+      </portal>
 
-    <component-giver
-      v-if="firstChild"
-      :id="firstChild.id"
-      class="w-100"
-    />
-  </div>
+      <text-editor-inner
+        :id="id"
+        :can-link="false"
+        class="w-100"
+      />
+    </div>
+  </grid-generator-item>
 </template>
 
 <script>
 import { Message } from 'element-ui'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
-import GridGeneratorInner from './GridGeneratorInner'
-import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { deleteBy } from '@/utils/array'
+import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
+import TextEditorInner from './TextEditorInner'
 
 export default {
   defaultSetting,
   name: 'FlexButton',
   components: {
-    GridGeneratorInner,
-    ComponentGiver
+    TextEditorInner,
+    GridGeneratorItem
   },
   mixins: [nodeMixin, childrenMixin],
   props: {

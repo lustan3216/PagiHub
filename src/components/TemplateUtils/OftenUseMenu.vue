@@ -6,25 +6,25 @@
       slim
     />
 
-    <el-tooltip
-      effect="light"
-      content="Lock"
-      placement="top"
-    >
-      <lock
-        :id="id"
-        visible
-        allow-multi
-      />
-    </el-tooltip>
+    <!--    <el-tooltip-->
+    <!--      effect="light"-->
+    <!--      content="Lock"-->
+    <!--      placement="top"-->
+    <!--    >-->
+    <!--      <lock-->
+    <!--        :id="id"-->
+    <!--        visible-->
+    <!--        allow-multi-->
+    <!--      />-->
+    <!--    </el-tooltip>-->
 
-    <el-button
-      v-if="isImage"
-      class="icon"
-      @click="openImageAsset"
-    >
-      Replace
-    </el-button>
+    <!--    <el-button-->
+    <!--      v-if="isImage"-->
+    <!--      class="icon"-->
+    <!--      @click="openImageAsset"-->
+    <!--    >-->
+    <!--      Replace-->
+    <!--    </el-button>-->
 
     <template v-if="isCarousel">
       <el-button
@@ -43,11 +43,6 @@
         Slider
       </el-button>
     </template>
-
-    <stack
-      v-if="!isComponentSet"
-      :id="id"
-    />
   </el-button-group>
 </template>
 
@@ -61,7 +56,6 @@ import {
   BIconLink
 } from 'bootstrap-vue'
 import { isCarousel, isComponentSet } from '@/utils/node'
-import Stack from '@/components/Setup/EditorStyle/Stack'
 import Lock from '../Setup/EditorStyle/Lock'
 import { IMAGE_ASSET } from '@/components/ComponentAdd/MenuCategories'
 
@@ -72,7 +66,6 @@ export default {
     BIconImage,
     BIconAspectRatio,
     BIconLink,
-    Stack,
     Lock
   },
   props: {
@@ -89,9 +82,6 @@ export default {
     isComponentSet() {
       return isComponentSet(this.node)
     },
-    isImage() {
-      return this.node.tag === 'flex-image'
-    },
     isCarousel() {
       return isCarousel(this.node)
     }
@@ -100,12 +90,6 @@ export default {
     ...mapActions('app', ['setBeingAddedComponentId']),
     vmCreateEmptyItem(tag) {
       vmCreateEmptyItem(this.node)
-    },
-    openImageAsset() {
-      this.setBeingAddedComponentId(this.id)
-      this.$nextTick(() => {
-        this.$bus.$emit('dialog-component-tabs-jump', IMAGE_ASSET)
-      })
     },
     deleteSlider() {
       vmGet(this.node.id, this.isExample).removeCurrentSlider()

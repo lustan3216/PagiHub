@@ -113,15 +113,15 @@ export default {
       api.trigger('indicatorPosition', 'change', value ? 'bottom' : 'right')
     },
     arrow(value) {
-      const IndicatorGrid = this.nodesMap[this.id][CHILDREN].find(
-        x => x[POLYMORPHISM] === 'indicators'
-      )
-      this.record([
-        {
-          path: `${IndicatorGrid.id}.${SOFT_DELETE}`,
-          value: value !== 'custom'
-        }
-      ])
+      // const IndicatorGrid = this.nodesMap[this.id][CHILDREN].find(
+      //   x => x[POLYMORPHISM] === 'indicators'
+      // )
+      // this.record([
+      //   {
+      //     path: `${IndicatorGrid.id}.${SOFT_DELETE}`,
+      //     value: value !== 'custom'
+      //   }
+      // ])
     }
   },
   methods: {
