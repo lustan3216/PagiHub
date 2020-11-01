@@ -12,7 +12,9 @@ import {
   POLYMORPHISM,
   GRID_GENERATOR,
   CAROUSEL,
-  SOFT_DELETE, BREAK_POINTS_MAP
+  SOFT_DELETE,
+  BREAK_POINTS_MAP,
+  STYLES
 } from '@/const'
 import { vmGet } from '@/utils/vmMap'
 
@@ -47,6 +49,41 @@ export function wrapByGrid(nodesMap, ids) {
   })
 }
 
+export function getGroupRect(nodes) {
+  const rect = {
+    minX: Infinity,
+    minY: Infinity,
+    maxX: 0,
+    maxY: 0
+  }
+
+  const currentBreakpoint = store.getters['layout/currentBreakpoint']
+
+  nodes.forEach(node => {
+    const point = closestValidBreakpoint(node, currentBreakpoint)
+    const { x, y, w, h } = node.grid[point]
+    if (x <= rect.minX) rect.minX = x
+    if (y <= rect.minY) rect.minY = y
+    if (x + w >= rect.maxX) rect.maxX = x + w
+    if (y + h >= rect.maxY) rect.maxY = y + h
+  })
+
+  return {
+    x: rect.minX,
+    y: rect.minY,
+    w: rect.maxX - rect.minX,
+    h: rect.maxY - rect.minY
+  }
+}
+
+export function closestValidGrid(node, currentPoint) {
+  // [1,2,3,4,5]
+  // currentPoint = 4
+  // => [4,3,2,1,5]
+  const point = closestValidBreakpoint(node, currentPoint)
+  return node.grid[point]
+}
+
 export function closestValidBreakpoint(node, currentPoint) {
   // [1,2,3,4,5]
   // currentPoint = 4
@@ -79,19 +116,19 @@ export function cloneJsonWithoutChildren(tree) {
   return JSON.parse(string)
 }
 
-export function sortByZIndex(children, asc = true) {
+export function sortDescByZIndex(children) {
   children = Array.from(children)
 
-  const getZIndex = node => {
-    const vm = vmGet(node.id)
-    return getValueByPath(vm, ['innerStyles', 'layout', 'zIndex'])
-  }
-  if (asc) {
-    return children.sort((a, b) => getZIndex(a) - getZIndex(b))
-  }
-  else {
-    return children.sort((a, b) => getZIndex(b) - getZIndex(a))
-  }
+  const getZIndex = node => getValueByPath(node, [STYLES, 'layout', 'zIndex'], 0)
+  return children.sort((a, b) => getZIndex(b) - getZIndex(a))
+}
+
+export function sortAscByZIndex(children) {
+  children = Array.from(children)
+
+  const getZIndex = node =>
+    getValueByPath(node, [STYLES, 'layout', 'zIndex'], 0)
+  return children.sort((a, b) => getZIndex(a) - getZIndex(b))
 }
 
 export function getNode(id) {

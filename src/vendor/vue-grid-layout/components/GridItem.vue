@@ -22,10 +22,19 @@
   .grid-item {
     left: 0;
     right: auto;
-    box-sizing: content-box;
+    box-sizing: border-box;
     /* add right for rtl */
-    &:hover {
-      border: 1px dashed #bcbcbc;
+  }
+  .grid-item:hover {
+    &:before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      content: ' ';
+      border: 1px solid #bcbcbc;
       margin-top: -1px;
       margin-left: -1px;
     }
@@ -287,15 +296,10 @@
         }
       }
 
-      self.setColNum = (colNum) => {
-        self.cols = parseInt(colNum)
-      }
-
       this.eventBus.$on('updateWidth', self.updateWidthHandler)
       this.eventBus.$on('compact', self.compactHandler)
       this.eventBus.$on('setDraggable', self.setDraggableHandler)
       this.eventBus.$on('setResizable', self.setResizableHandler)
-      this.eventBus.$on('setColNum', self.setColNum)
     },
     beforeDestroy: function() {
       let self = this
@@ -304,13 +308,12 @@
       this.eventBus.$off('compact', self.compactHandler)
       this.eventBus.$off('setDraggable', self.setDraggableHandler)
       this.eventBus.$off('setResizable', self.setResizableHandler)
-      this.eventBus.$off('setColNum', self.setColNum)
       if (this.interactObj) {
         this.interactObj.unset() // destroy interact intance
       }
     },
     mounted: function() {
-      this.cols = this.parent.colNum
+      this.cols = this.width
 
       this.lockItemInLayout = !this.parent.autoCalcHeight
       this.containerWidth = this.parent.width !== null ? this.parent.width : 100
@@ -794,6 +797,7 @@
       },
       updateWidth: function(width, colNum) {
         this.containerWidth = width
+        this.cols = width
         if (colNum !== undefined && colNum !== null) {
           this.cols = colNum
         }
@@ -886,9 +890,9 @@
       },
       autoSize() {
         // ok here we want to calculate if a resize is needed
-        if (process.env.NODE_ENV !== 'production') {
-          console.warn('autoSize')
-        }
+        // if (process.env.NODE_ENV !== 'production') {
+        //   console.warn('autoSize')
+        // }
         if (!this.autoHeight) {
           return
         }

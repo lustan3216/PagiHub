@@ -3,31 +3,10 @@
     :disabled="!selectedComponentNodes.length"
     label-position="top"
   >
-    <!--    <div class="m-b-10">-->
-    <!--      <span class="title p-r-10">State</span>-->
-    <!--      <el-radio-group-->
-    <!--        v-model="state"-->
-    <!--        size="mini"-->
-    <!--      >-->
-    <!--        <el-radio-button label="default">-->
-    <!--          Default-->
-    <!--        </el-radio-button>-->
-
-    <!--        <el-radio-button label=":hover">-->
-    <!--          Hover-->
-    <!--        </el-radio-button>-->
-
-    <!--        <el-radio-button label=":active">-->
-    <!--          Click-->
-    <!--        </el-radio-button>-->
-
-    <!--        &lt;!&ndash;        <el-radio-button label="show">&ndash;&gt;-->
-    <!--        &lt;!&ndash;          Show&ndash;&gt;-->
-    <!--        &lt;!&ndash;        </el-radio-button>&ndash;&gt;-->
-    <!--      </el-radio-group>-->
-    <!--    </div>-->
 
     <template v-if="!hasBackground">
+      <align :grid="grid"/>
+
       <text-editor-simple-style />
 
       <stack />
@@ -38,11 +17,11 @@
 
       <dimension />
 
-      <el-divider content-position="left">STACK</el-divider>
+      <el-divider content-position="left">APPEARANCE</el-divider>
 
       <position />
 
-<!--      <overflow />-->
+      <!--      <overflow />-->
 
       <padding />
 
@@ -67,11 +46,7 @@
     </template>
 
     <background-color v-else />
-    <!--      <transitions-->
-    <!--        :disabled="!isDefaultState"-->
-    <!--        :value="styles.transition"-->
-    <!--        @change="recordStyles($event)"-->
-    <!--      />-->
+
   </el-form>
 </template>
 
@@ -96,12 +71,13 @@ import ItemHiddenController from './EditorStyle/ItemHiddenController'
 import TextEditorSimpleStyle from './EditorStyle/TextEditorSimpleStyle'
 import Ratio from './EditorStyle/Ratio'
 import Position from '@/components/Setup/EditorStyle/Position'
-import { isBackground, isGridItem, isSlider, isTextEditor } from '@/utils/node'
-import { arrayLast } from '@/utils/array'
+import Align from '@/components/Setup/EditorStyle/Align'
+import { isBackground } from '@/utils/node'
 
 export default {
   name: 'PanelStyles',
   components: {
+    Align,
     Position,
     BackgroundColor,
     Padding,
@@ -122,6 +98,20 @@ export default {
     ElRadioGroup: RadioGroup,
     ElRadioButton: RadioButton
   },
+  props: {
+    styles: {
+      type: Object,
+      default: () => ({})
+    },
+    props: {
+      type: Object,
+      default: () => ({})
+    },
+    grid: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       state: 'default'
@@ -131,43 +121,7 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
     hasBackground() {
-      return this.selectedComponentIds.find(id =>
-        isBackground(this.nodesMap[id])
-      )
-    },
-    isAllGridItem() {
-      const nodes = this.selectedComponentNodes.filter(node => isGridItem(node))
-      const allGridItem = nodes.length === this.selectedComponentNodes.length
-      return this.selectedComponentNodes.length && allGridItem
-    },
-    canTransform() {
-      const nodes = this.selectedComponentNodes.filter(
-        node => !isGridItem(node)
-      )
-      const allNotGridItem = nodes.length === this.selectedComponentNodes.length
-      return this.selectedComponentNodes.length && allNotGridItem
-    },
-    canRadius() {
-      const node = arrayLast(this.selectedComponentNodes)
-      return !isTextEditor(node) && !isSlider(node)
-    },
-    canShadow() {
-      const node = arrayLast(this.selectedComponentNodes)
-      return !isSlider(node)
-    },
-    isAllTextEditor() {
-      const nodes = this.selectedComponentNodes.filter(node =>
-        isTextEditor(node)
-      )
-      const allGridItem = nodes.length === this.selectedComponentNodes.length
-      return this.selectedComponentNodes.length && allGridItem
-    },
-    canBackgroundColor() {
-      const nodes = this.selectedComponentNodes.filter(
-        node => isGridItem(node) || isSlider(node)
-      )
-      const valid = nodes.length === this.selectedComponentNodes.length
-      return this.selectedComponentNodes.length && valid
+      return this.selectedComponentIds.find(id => isBackground(this.nodesMap[id]))
     }
   }
 }

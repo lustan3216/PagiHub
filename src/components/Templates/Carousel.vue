@@ -74,7 +74,10 @@
         <el-carousel-item
           v-for="(child, index) in sliders"
           :key="child.id"
-          :class="`carousel-item-${id}`"
+          :animation="animation"
+          :class="{
+            [`carousel-item-${id}`]: true
+          }"
         >
           <grid-generator
             v-if="index === currentIndex"
@@ -95,9 +98,11 @@ import { ObserveVisibility } from 'vue-observe-visibility'
 import nodeMixin from '@/components/Templates/mixins/node'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridGenerator from './GridGenerator'
+import GridGeneratorItem from './GridGeneratorItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { CHILDREN, POLYMORPHISM, STYLES } from '@/const'
-import { CarouselItem, Carousel } from 'element-ui'
+import { Carousel } from 'element-ui'
+import CarouselItem from '@/vendor/element-ui/CarouselItem'
 import { isSlider, traversalSelfAndChildren } from '@/utils/node'
 import { vmRemoveNode } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
@@ -108,6 +113,7 @@ export default {
   name: 'Carousel',
   components: {
     GridGenerator,
+    GridGeneratorItem,
     ElCarouselItem: CarouselItem,
     ElCarousel: Carousel
   },
@@ -120,6 +126,7 @@ export default {
       canNotDrag: false,
       currentIndex: 0,
       inViewPort: false,
+      animation: false,
       options: {
         callback: isVisible => {
           this.inViewPort = isVisible
@@ -270,6 +277,9 @@ export default {
       const node = this.children[this.currentIndex]
       vmRemoveNode(node)
     },
+    setAnimation(value) {
+      this.animation = value
+    },
     setActiveIndex(childId) {
       this.currentIndex = findIndexBy(this.sliders, 'id', childId)
       this.carousel.setActiveItem(this.currentIndex)
@@ -306,6 +316,10 @@ export default {
     right: initial;
     left: 0;
   }
+}
+
+.noTransition {
+  transition-duration: 0s !important;
 }
 
 .customer-indicator {

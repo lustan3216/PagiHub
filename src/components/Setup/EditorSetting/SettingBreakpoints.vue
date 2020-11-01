@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loadingKey">
     <div class="justify-between">
-      <h4 style="margin: 10px 0 15px;">
+      <h4 style="margin: 10px 0;">
         Breakpoints
       </h4>
 

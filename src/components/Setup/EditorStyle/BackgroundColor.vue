@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-divider content-position="left">
-      BACKGROUND
+      FILL
     </el-divider>
 
     <el-row

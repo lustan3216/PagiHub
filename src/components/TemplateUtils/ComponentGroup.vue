@@ -1,7 +1,7 @@
 <script>
 import { cloneJson } from '@/utils/tool'
 import { arrayUniq } from '@/utils/array'
-import { isGroup, closestValidBreakpoint } from '@/utils/node'
+import { isGroup, closestValidBreakpoint, getGroupRect } from '@/utils/node'
 import { mapActions, mapGetters } from 'vuex'
 import { BREAK_POINTS_ARRAY, GRID } from '@/const'
 import { group } from '@/templateJson/basic'
@@ -27,29 +27,15 @@ export default {
   methods: {
     ...mapActions('node', ['record']),
     group() {
-      const rect = {
-        minX: Infinity,
-        minY: Infinity,
-        maxX: 0,
-        maxY: 0
-      }
-
-      this.selectedComponentNodes.forEach(node => {
-        const point = closestValidBreakpoint(node, this.currentBreakpoint)
-        const { x, y, w, h } = node.grid[point]
-        if (x <= rect.minX) rect.minX = x
-        if (y <= rect.minY) rect.minY = y
-        if (x + w >= rect.maxX) rect.maxX = x + w
-        if (y + h >= rect.maxY) rect.maxY = y + h
-      })
+      const { x, y, w, h } = getGroupRect(this.selectedComponentNodes)
 
       const children = this.selectedComponentNodes.map(node => {
         node = cloneJson(node)
         const currentGrid = node.grid[this.currentBreakpoint]
         node.grid = {
           [this.currentBreakpoint]: {
-            x: currentGrid.x - rect.minX,
-            y: currentGrid.y - rect.minY,
+            x: currentGrid.x - x,
+            y: currentGrid.y - y,
             w: currentGrid.w,
             h: currentGrid.h
           }
@@ -60,12 +46,7 @@ export default {
 
       const tree = group({
         grid: {
-          [this.currentBreakpoint]: {
-            x: rect.minX,
-            y: rect.minY,
-            w: rect.maxX - rect.minX,
-            h: rect.maxY - rect.minY
-          }
+          [this.currentBreakpoint]: { x, y, w, h }
         },
         children
       })

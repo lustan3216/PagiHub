@@ -22,15 +22,16 @@
     :fix-on-parent-bottom="computedLayout.fixOnParentBottom"
     :vertical-compact="computedLayout.verticalCompact"
     :class="{ 'no-action': lock }"
-    :auto-height="isTextEditor"
+    :auto-height="shouldAutoHeight"
+    drag-ignore-from=".item-editing"
     drag-allow-from="div"
     data-node
     @moveStart="assignStore"
-    @move="itemUpdating"
-    @moved="cleanStore"
+    @move="itemChanging"
+    @moved="itemChanged"
     @resizeStart="assignStore"
-    @resize="itemUpdating"
-    @resized="cleanStore"
+    @resize="itemChanging"
+    @resized="itemChanged"
   >
     <div
       ref="content"
@@ -39,12 +40,16 @@
         ...innerStyles.html
       }"
       :class="{
-        'h-100': !isTextEditor
+        'h-100': !shouldAutoHeight
       }"
     >
-      <controller-layer :id="id">
+      <controller-layer
+        v-if="isDraftMode"
+        :id="id"
+      >
         <slot />
       </controller-layer>
+      <slot v-else />
     </div>
   </vue-grid-item>
 </template>
@@ -62,6 +67,7 @@ import { STYLES } from '@/const'
 import {
   closestGridItem,
   closestValidBreakpoint,
+  isGroup,
   isTextEditor
 } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
@@ -94,7 +100,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['beingAddedComponentId', 'isAdding']),
+    ...mapState('app', [
+      'beingAddedComponentId',
+      'isAdding',
+      'selectedComponentIds'
+    ]),
     ...mapGetters('layout', [
       'currentBreakpoint',
       'breakpointsMap',
@@ -106,9 +116,6 @@ export default {
     },
     validBreakpoint() {
       return this.isExample ? this.exampleBoundary : this.currentBreakpoint
-    },
-    pulsing() {
-      return this.id === store.updatingItemParentId
     },
     currentGrid() {
       return this[this.validBreakpoint]
@@ -205,10 +212,16 @@ export default {
     },
     isTextEditor() {
       return isTextEditor(this.node)
+    },
+    isGroup() {
+      return isGroup(this.node)
+    },
+    shouldAutoHeight() {
+      return this.isTextEditor || this.isGroup
     }
   },
   watch: {
-    isTextEditor: {
+    shouldAutoHeight: {
       handler(value) {
         this.$nextTick(() => {
           if (value) {
@@ -217,7 +230,7 @@ export default {
               this.$refs.content,
               debounce(() => {
                 this.$refs.gridItem.autoSize()
-              }, 50)
+              }, 10)
             )
           }
           else if (this.offResizeListener) {
@@ -270,7 +283,7 @@ export default {
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('layout', ['resizeNodeQuickFn']),
-    itemUpdating() {
+    itemChanging() {
       this.LAYOUT_SET({ gridResizing: true })
     },
     assignStore() {
@@ -279,7 +292,7 @@ export default {
         store.updatingItemParentId = item.id
       }
     },
-    cleanStore() {
+    itemChanged() {
       store.updatingItemParentId = null
     }
   }

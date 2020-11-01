@@ -40,7 +40,7 @@ export default {
       }, {})
     },
     zIndexs() {
-      return Object.keys(this.zIndexMap)
+      return Object.keys(this.zIndexMap).map(x => parseInt(x))
     },
     maxIndex() {
       return Math.max(...this.zIndexs)
@@ -56,7 +56,8 @@ export default {
     ...mapActions('node', ['record']),
     getZIndex(node) {
       const vm = vmGet(node.id)
-      return getValueByPath(vm, ['innerStyles', 'layout', 'zIndex'], 0)
+      const value = getValueByPath(vm, ['innerStyles', 'layout', 'zIndex'], 0)
+      return parseInt(value)
     },
     cleanGap() {
       const positive = arrayAscSort(this.zIndexs.filter(x => x >= 0))

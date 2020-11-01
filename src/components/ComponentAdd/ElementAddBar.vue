@@ -6,44 +6,62 @@
       @shortkey="finish"
     />
 
-    <el-button
-      :type="isAdding === 'text-editor' ? 'primary' : 'text'"
-      size="small"
-      plain
-      class="button"
-      @click="onClick('text-editor')"
+    <el-tooltip
+      effect="light"
+      content="Image Asset"
+      placement="bottom"
     >
-      <element-icon icon="text-editor" />
-    </el-button>
+      <el-button
+        type="text"
+        size="small"
+        class="button"
+        style="margin-right: 10px;"
+        @click="OPEN_ASSET"
+      >
+        <b-icon-images
+          style="font-size: 18px;"
+          class="gray-font-2"
+        />
+      </el-button>
+    </el-tooltip>
 
-    <el-button
-      type="text"
-      size="small"
-      plain
-      class="button"
-      style="margin-right: 15px;"
-      @click="OPEN_ASSET"
+    <el-tooltip
+      effect="light"
+      content="Text"
+      placement="bottom"
     >
-      <b-icon-images
-        style="font-size: 18px;"
-        class="gray-font-2"
-      />
-    </el-button>
+      <el-button
+        type="text"
+        size="small"
+        class="button"
+        @click="onClick('text-editor')"
+      >
+        <element-icon
+          icon="text-editor"
+          style="font-size: 18px;"
+        />
+      </el-button>
+    </el-tooltip>
 
-    <el-button
-      type="text"
-      size="small"
-      plain
-      class="button"
-      style="margin-right: 0;"
-      @click="onClick('rectangle')"
+    <el-tooltip
+      effect="light"
+      content="Rectangle"
+      placement="bottom"
     >
-      <element-icon
-        icon="rectangle"
-        style="font-size: 18px;"
-        class="gray-font-2"
-      />
-    </el-button>
+      <el-button
+        type="text"
+        size="small"
+        class="button"
+        style="margin-right: 0;"
+        @click="onClick('rectangle')"
+      >
+        <element-icon
+          icon="rectangle"
+          style="font-size: 18px;"
+          class="gray-font-2"
+        />
+      </el-button>
+    </el-tooltip>
 
     <el-dropdown
       size="small"

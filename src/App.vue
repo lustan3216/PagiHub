@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import TopNav from '@/pages/TopNav'
 
 export default {

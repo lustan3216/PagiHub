@@ -5,6 +5,7 @@
     :id="id"
     :inner-props="innerProps"
     :inner-styles="innerStyles"
+    :controller="controller"
     data-node
   />
   <!--  <div-->
@@ -36,6 +37,12 @@ export default {
     GridGeneratorInner,
     ControllerLayer
   },
-  mixins: [nodeMixin, childrenMixin]
+  mixins: [nodeMixin, childrenMixin],
+  props: {
+    controller: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>

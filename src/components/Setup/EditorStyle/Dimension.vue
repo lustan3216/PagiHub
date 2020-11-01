@@ -12,7 +12,49 @@
       type="flex"
       align="middle"
     >
-      <el-col :span="3">
+      <el-col :span="2">
+        <span
+          class="title flex"
+          style="align-items: baseline"
+        >
+          X
+        </span>
+      </el-col>
+
+      <el-col :span="12">
+        <select-unit
+          v-model="x"
+          :min="0"
+          :units="['px']"
+          separate
+        />
+      </el-col>
+
+      <el-col :span="2">
+        <span
+          class="title flex"
+          style="align-items: baseline"
+        >
+          Y
+        </span>
+      </el-col>
+
+      <el-col :span="12">
+        <select-unit
+          v-model="y"
+          :min="0"
+          :units="['px']"
+          separate
+        />
+      </el-col>
+    </el-row>
+
+    <el-row
+      :gutter="10"
+      type="flex"
+      align="middle"
+    >
+      <el-col :span="2">
         <span
           class="title flex"
           style="align-items: baseline"
@@ -31,14 +73,8 @@
           separate
         />
       </el-col>
-    </el-row>
 
-    <el-row
-      :gutter="10"
-      type="flex"
-      align="middle"
-    >
-      <el-col :span="3">
+      <el-col :span="2">
         <span
           class="title flex"
           style="align-items: baseline"
@@ -54,48 +90,6 @@
           :min="0"
           :unit.sync="unitH"
           :units="['px', 'vw', 'vh']"
-          separate
-        />
-      </el-col>
-    </el-row>
-
-    <el-row
-      :gutter="10"
-      type="flex"
-      align="middle"
-    >
-      <el-col :span="3">
-        <span
-          class="title flex"
-          style="align-items: baseline"
-        >
-          X
-        </span>
-      </el-col>
-
-      <el-col :span="12">
-        <select-unit
-          v-model="x"
-          :min="0"
-          :units="['px']"
-          separate
-        />
-      </el-col>
-
-      <el-col :span="3">
-        <span
-          class="title flex"
-          style="align-items: baseline"
-        >
-          Y
-        </span>
-      </el-col>
-
-      <el-col :span="12">
-        <select-unit
-          v-model="y"
-          :min="0"
-          :units="['px']"
           separate
         />
       </el-col>

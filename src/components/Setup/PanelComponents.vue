@@ -17,6 +17,7 @@
           :class="{ active: selectedComponentIds.includes(data.id) }"
           class="relative w-100 over-hidden align-center"
           style="margin-left: -6px;"
+          @click="nodeClick($event, data.id)"
           @mouseenter.stop="hoverNode(data.id)"
           @mouseleave.stop="hoverLeaveNode(data.id)"
         >
@@ -30,7 +31,6 @@
             class="text-left"
             editable
             text-show-content
-            @click="nodeClick($event, data.id)"
           >
             <template slot="icon">
               <element-icon
@@ -89,7 +89,7 @@ import {
   isComponentSet,
   traversalAncestorAndSelf,
   isBackground,
-  sortByZIndex
+  sortDescByZIndex
 } from '@/utils/node'
 import { vmGet } from '@/utils/vmMap'
 
@@ -137,10 +137,12 @@ export default {
     this.renderTree()
     this.$bus.$on('component-add-new', this.renderTree)
     this.$bus.$on('component-delete', this.renderTree)
+    this.$bus.$on('component-update-zindex', this.renderTree)
   },
   beforeDestroy() {
     this.$bus.$off('component-add-new', this.renderTree)
     this.$bus.$off('component-delete', this.renderTree)
+    this.$bus.$off('component-update-zindex', this.renderTree)
   },
   methods: {
     ...mapMutations('app', [
@@ -160,15 +162,11 @@ export default {
 
       traversalSelfAndChildren(cloneTree, (node, parentNode) => {
         if (isBackground(node)) {
-          parentNode.children = node.children
+          parentNode.children = sortDescByZIndex(node.children)
         }
 
         node.children = node.children.filter(node => node && !node[SOFT_DELETE])
-        node.children = sortByZIndex(node.children, 'desc')
-
-        if (isGrid(node) && !isSlider(node)) {
-          parentNode.children = node.children
-        }
+        node.children = sortDescByZIndex(node.children)
       })
 
       this.tree = cloneTree.children
@@ -196,38 +194,53 @@ export default {
       this.hoverId = id
       this.$bus.$emit(`hover-${id}`, true)
     },
+
     hoverLeaveNode(id) {
       this.hoverId = null
       this.$bus.$emit(`hover-${id}`, false)
     },
-    scrollIntoView(id) {
-      this.LAYOUT_SET({ gridResizing: true })
-      this.loadSliders(id)
-      this.$nextTick(() => {
-        if (this.vmMap[id]) {
-          // 可能被device hidden 所以map找不到
-          this.vmMap[id].$el.scrollIntoView(false)
 
-          setTimeout(() => {
+    async scrollIntoView(id) {
+      const sliders = await this.jumpToCorrectSliders(id)
+
+      if (this.vmMap[id]) {
+        // 可能被device hidden 所以map找不到
+        setTimeout(
+          () => {
+            this.vmMap[id].$el.scrollIntoView(false)
             this.resizeNodeQuickFn()
-          }, 700)
-        }
-      })
+          },
+          sliders.length ? 100 : 0
+        )
+      }
     },
-    loadSliders(id) {
-      const node = this.nodesMap[id]
-      const queue = []
-      traversalAncestorAndSelf(node, node => {
-        if (isSlider(node)) {
-          queue.unshift(node)
-        }
 
-        if (isComponentSet(node)) return false
-      })
+    jumpToCorrectSliders(id) {
+      return new Promise(resolve => {
+        const node = this.nodesMap[id]
+        const queue = []
 
-      queue.forEach(async node => {
-        const carousel = await asyncGetValue(() => vmGet(node.parentId))
-        carousel.setActiveIndex(node.id)
+        traversalAncestorAndSelf(node, node => {
+          if (isSlider(node)) {
+            queue.unshift(node)
+          }
+
+          if (isComponentSet(node)) return false
+        })
+
+        queue.forEach(async(node, index) => {
+          const carousel = await asyncGetValue(() => vmGet(node.parentId))
+          carousel.setAnimation(false)
+          carousel.setActiveIndex(node.id)
+
+          this.$nextTick(() => {
+            carousel.setAnimation(true)
+          })
+
+          if (index === queue.length - 1) {
+            resolve(queue)
+          }
+        })
       })
     }
   }

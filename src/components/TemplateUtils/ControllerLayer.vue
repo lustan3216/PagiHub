@@ -2,19 +2,18 @@
   <div
     v-if="isDraftMode && node"
     :class="{
-      'h-100': !isTextEditor,
-      'no-action': lock
+      'h-100': sameHeightAsParent,
+      'no-action': lock,
+      'item-editing': itemEditing
     }"
+    class="relative z-index1"
     @mousedown="singleClick"
     @dblclick.stop="dblclick"
     @contextmenu.stop.prevent="contextmenu($event)"
   >
-    <portal
-      v-if="selected && !gridResizing"
-      to="App"
-    >
+    <portal to="App">
       <context-menu
-        v-if="contextMenu"
+        v-if="contextMenu.id === id && !gridResizing"
         :style="{
           top: contextMenu.y,
           left: contextMenu.x
@@ -24,6 +23,7 @@
       />
 
       <component-operator
+        v-if="!gridResizing && selected"
         :id="id"
         :key="id"
         :is-example="isExample"
@@ -34,7 +34,7 @@
       v-if="canBeEdited"
       :class="{
         'no-action': !itemEditing && !isExample,
-        'h-100': !isTextEditor
+        'h-100': sameHeightAsParent
       }"
     >
       <slot />
@@ -45,7 +45,8 @@
 
   <div
     v-else-if="node"
-    :class="{ 'h-100': !isTextEditor }"
+    :class="{ 'h-100': sameHeightAsParent }"
+    class="relative z-index1"
   >
     <slot />
   </div>
@@ -58,16 +59,16 @@ import { CAN_BE_EDITED } from '@/const'
 import { isMac } from '@/utils/device'
 import {
   isBackground,
-  isGridItem,
+  isGroup,
   isTextEditor,
   traversalAncestorAndSelf
 } from '@/utils/node'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
-import { findIndexBy } from '@/utils/array'
+import { arrayLast, findIndexBy } from '@/utils/array'
 
 const store = vue.observable({
   lastEditId: null,
-  contextMenu: null
+  contextMenu: {}
 })
 
 export default {
@@ -105,6 +106,9 @@ export default {
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },
+    isLastOne() {
+      return arrayLast(this.selectedComponentIds) === this.id
+    },
     canBeEdited() {
       return this.node && this.node[CAN_BE_EDITED]
     },
@@ -113,6 +117,12 @@ export default {
     },
     contextMenu() {
       return store.contextMenu
+    },
+    isGroup() {
+      return isGroup(this.node)
+    },
+    sameHeightAsParent() {
+      return !this.isTextEditor && !this.isGroup
     }
   },
   methods: {
@@ -190,7 +200,7 @@ export default {
         return
       }
 
-      if (event.metaKey || event.ctrlKey) {
+      if (event.shiftKey) {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)
       }
       else {
@@ -203,9 +213,11 @@ export default {
           }
         }, 100)
       }
+
+      document.getSelection().removeAllRanges()
     },
     closeContextmenu() {
-      store.contextMenu = null
+      store.contextMenu = {}
     },
     contextmenu(event) {
       const y =
@@ -213,6 +225,7 @@ export default {
           ? event.clientY
           : window.innerHeight - 400
       store.contextMenu = {
+        id: this.id,
         x: `${event.clientX + 10}px`,
         y: `${y}px`
       }

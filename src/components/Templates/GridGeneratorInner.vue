@@ -7,14 +7,17 @@
     :vertical-compact="false"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
-    :auto-height="autoCalcHeight"
+    :auto-height="shouldAutoHeight"
     :extra-style="extraStyle"
     :data-addable-id="id"
     data-node
     prevent-collision
     @layout-updated="layoutUpdated($event)"
   >
-    <controller-layer v-if="controller" :id="id">
+    <controller-layer
+      v-if="controller && isDraftMode"
+      :id="id"
+    >
       <component-giver
         v-for="child in children"
         :key="child.id"
@@ -38,7 +41,7 @@ import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { getValueByPath } from '@/utils/tool'
-import { isBackground } from '@/utils/node'
+import { isBackground, isSlider } from '@/utils/node'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 
 export default {
@@ -84,8 +87,8 @@ export default {
   computed: {
     ...mapState('layout', ['windowWidth']),
     ...mapGetters('layout', ['currentBreakpoint', 'vh']),
-    autoCalcHeight() {
-      return ['scroll', 'hidden'].includes(this.overflow) || this.isBackground
+    shouldAutoHeight() {
+      return !isSlider(this.node)
     },
     overflow() {
       return getValueByPath(this.node.parentNode, 'styles.html.overflow')

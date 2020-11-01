@@ -28,7 +28,11 @@ const callbacks = {
     this._vm.$bus.$emit('component-delete', node)
     store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   },
-  componentUpdate() {
+  componentUpdate(tree, key, value) {
+    if (key === 'zIndex') {
+      this._vm.$bus.$emit('component-update-zindex')
+    }
+
     store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   }
 }

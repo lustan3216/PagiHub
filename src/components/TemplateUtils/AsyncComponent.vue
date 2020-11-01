@@ -25,7 +25,7 @@ export default {
 
     Background: () => import('../Templates/Background'),
     GridGenerator: () => import('../Templates/GridGenerator'),
-    // GridGeneratorItem: () => import('../Templates/GridGeneratorItem'),
+    GridGeneratorItem: () => import('../Templates/GridGeneratorItem'),
 
     VideoPlayer: () => import('../Templates/VideoPlayer'),
     Drawer: () => import('../Templates/Drawer'),

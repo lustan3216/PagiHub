@@ -1,10 +1,15 @@
 <template>
   <el-tooltip
     effect="light"
-    content="Top Center 提示文字"
-    placement="top"
+    content="Shared pages"
+    placement="bottom"
   >
-    <el-button type="text">
+    <el-button
+      type="text"
+      @click="visible = !visible"
+    >
+      <b-icon-files />
+
       <el-dialog
         id="examples-dialog"
         ref="dialog"
@@ -12,8 +17,9 @@
         :visible="visible"
         class="dialog"
         top="5vh"
+        append-to-body
         width="80vw"
-        @close="removeBeingAddedComponentId"
+        @close="visible = false"
       >
         <el-row
           :gutter="10"
@@ -31,7 +37,6 @@
 
           <el-col :span="9">
             <select-tag
-              :disabled="isBasic || isAsset"
               v-model="tags"
               :allow-create="false"
               placeholder="Select tags to search"
@@ -67,7 +72,6 @@
           </keep-alive>
 
           <div
-            v-if="!isBasic && !isAsset"
             style="flex: 6"
             class="content"
           >
@@ -100,7 +104,8 @@ import { HTML, STYLES } from '@/const'
 import Tip from '@/components/Tip/TipPopper'
 import SelectTag from '@/components/Components/SelectTag'
 import CardComponentSet from './CardComponentSet'
-import MenuCategories, { BASIC_COMPONENTS, IMAGE_ASSET } from './MenuCategories'
+import { BIconFiles } from 'bootstrap-vue'
+import MenuCategories, { LOCAL_PAGES } from './MenuCategories'
 import MenuComponentSets from './MenuComponentSets'
 import MenuExamples from './MenuExamples'
 import MenuImages from './MenuImages'
@@ -118,34 +123,24 @@ export default {
     MenuComponentSets,
     MenuImages,
     CardComponentSet,
+    BIconFiles,
     Tip,
     SelectTag,
     ElTag: Tag
   },
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
-    }
-  },
   data() {
     return {
-      currentCategory: { name: BASIC_COMPONENTS },
+      currentCategory: { name: LOCAL_PAGES },
       currentComponentId: null,
       search: '',
       tags: [],
-      defaultTags: []
+      defaultTags: [],
+      visible: false
     }
   },
   computed: {
     ...mapState('node', ['editingComponentSetId', 'rootComponentSetIds']),
-    ...mapState('app', ['beingAddedComponentId']),
-    isBasic() {
-      return this.currentCategory.name === BASIC_COMPONENTS
-    },
-    isAsset() {
-      return this.currentCategory.name === IMAGE_ASSET
-    }
+    ...mapState('app', ['beingAddedComponentId'])
   },
   watch: {
     currentCategory(value) {

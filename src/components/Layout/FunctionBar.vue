@@ -46,6 +46,8 @@
       :disabled="!editingComponentSetId"
       class="align-center"
     >
+      <dialog-component-tabs />
+
       <element-add-bar />
 
       <el-divider direction="vertical" />
@@ -73,6 +75,8 @@
         <dialog-publish />
       </el-tooltip>
 
+      <el-divider direction="vertical" />
+
       <portal-target name="ViewPortController" />
     </el-form>
   </nav>
@@ -86,13 +90,15 @@ import { vmPasteNodes, vmRemoveNode, vmCreateEmptyItem } from '@/utils/vmMap'
 import { arrayLast } from '@/utils/array'
 import DialogPublish from '@/components/Setup/DialogPublish'
 import ElementAddBar from '@/components/ComponentAdd/ElementAddBar'
+import DialogComponentTabs from '@/components/ComponentAdd/DialogComponentTabs'
 
 export default {
   name: 'FunctionBar',
   components: {
     DialogComponentSet,
     DialogPublish,
-    ElementAddBar
+    ElementAddBar,
+    DialogComponentTabs
   },
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),

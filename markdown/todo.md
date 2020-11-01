@@ -14,7 +14,7 @@ https://www.npmjs.com/package/xss
 https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
 
-- group 右側鎖不住 grid-item
+- 修復 shared page copy and ux
 - can move items together by keyboard or mouse
 - video ratio
 - xy axis, multi block moving
@@ -23,12 +23,10 @@ https://www.npmjs.com/package/sanitize-html
 - ratio 要跟 wh 合併
 - w h unit 換的時候要找最近點
 - unitW 不是 px 時拉出邊界會有 bug
-- overflow
 - 提示 breakpoint 拉完就定型
 - panel component 可以拖拉
 - 自動對齊
 - style, setting refactor
-- copy public page
 - panel 做個按鍵可以跑到右邊去
 - flexbutton
 - nested add component

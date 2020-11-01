@@ -75,11 +75,11 @@ export default {
           select('arrow', {
             info: '',
             options: ['always', 'hover', 'never']
-          })
+          }),
           // select('type', {
           //   info: '',
-          //   options: [{ label: 'General', value: '' }, 'card']
-          // }),
+          //   options: [{ label: 'Default', value: '' }, 'card']
+          // })
         ],
         defaultSetting
       )

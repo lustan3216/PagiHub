@@ -40,8 +40,6 @@
 
     <portal to="ViewPortController">
       <div class="align-center">
-        <el-divider direction="vertical" />
-
         <el-tooltip
           v-if="isPreviewMode"
           content="Hide Resize bar"

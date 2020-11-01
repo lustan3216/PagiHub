@@ -15,7 +15,7 @@
 
     <div class="wrapper flex top">
       <div
-        v-if="isLastOne"
+        v-if="selectedComponentIds.length === 1"
         class="flex"
         @mouseenter="mouseenter"
         @mouseleave="mouseleave"
@@ -238,7 +238,7 @@ export default {
       }
 
       Object.assign(this.$data, {
-        left,
+        left: left + 1,
         top,
         width: width - 2,
         height: height - 2,
@@ -278,7 +278,7 @@ export default {
 .quick-functions {
   position: absolute;
   pointer-events: none;
-  border: 1px dashed $color-active;
+  border: 1px solid $color-active;
   top: 0;
   left: 0;
 }
@@ -314,7 +314,10 @@ export default {
   font-size: 12px;
   font-weight: 500;
   height: 28px;
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
+  & * {
+    transition: all 0.3s ease;
+  }
 }
 
 ::v-deep > .el-button {
