@@ -23,12 +23,27 @@
         @close="closeContextmenu"
       />
 
+<<<<<<< Updated upstream
       <component-operator
         v-if="!gridResizing && selected"
         :id="id"
         :key="id"
         :is-example="isExample"
       />
+=======
+      <!--      <component-operator-->
+      <!--        v-if="!gridResizing && selected"-->
+      <!--        :id="id"-->
+      <!--        :key="id"-->
+      <!--        :is-example="isExample"-->
+      <!--      />-->
+      <!--      <component-operator-->
+      <!--        v-if="!gridResizing && selected"-->
+      <!--        :id="id"-->
+      <!--        :key="id"-->
+      <!--        :is-example="isExample"-->
+      <!--      />-->
+>>>>>>> Stashed changes
     </portal>
 
     <div
