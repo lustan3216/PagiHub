@@ -190,6 +190,11 @@ export default {
 
       if (!this.isExample) {
         if (this.itemEditing) {
+          if (store.lastEditId === this.id) {
+            // when clicking text-editor in the editing condition
+            // should return to prevent component rerender to lose focus
+            return
+          }
           const index = findIndexBy(this.editingPath, this.id)
           const editingPath = Array.from(this.editingPath).splice(index)
           this.APP_SET({ editingPath })
