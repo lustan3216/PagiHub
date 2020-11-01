@@ -278,7 +278,7 @@ export default {
 .quick-functions {
   position: absolute;
   pointer-events: none;
-  border: 1px solid $color-active;
+  // border: 1px solid $color-active;
   top: 0;
   left: 0;
 }

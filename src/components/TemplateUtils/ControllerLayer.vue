@@ -23,12 +23,12 @@
         @close="closeContextmenu"
       />
 
-      <!--      <component-operator-->
-      <!--        v-if="!gridResizing && selected"-->
-      <!--        :id="id"-->
-      <!--        :key="id"-->
-      <!--        :is-example="isExample"-->
-      <!--      />-->
+      <component-operator
+        v-if="!gridResizing && selected"
+        :id="id"
+        :key="id"
+        :is-example="isExample"
+      />
     </portal>
 
     <div
