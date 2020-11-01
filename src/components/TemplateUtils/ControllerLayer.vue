@@ -7,7 +7,8 @@
       'item-editing': itemEditing
     }"
     class="relative z-index1"
-    @mousedown="singleClick"
+    @mousedown="mousedown"
+    @mouseup="mouseup"
     @dblclick.stop="dblclick"
     @contextmenu.stop.prevent="contextmenu($event)"
   >
@@ -22,12 +23,12 @@
         @close="closeContextmenu"
       />
 
-      <component-operator
-        v-if="!gridResizing && selected"
-        :id="id"
-        :key="id"
-        :is-example="isExample"
-      />
+      <!--      <component-operator-->
+      <!--        v-if="!gridResizing && selected"-->
+      <!--        :id="id"-->
+      <!--        :key="id"-->
+      <!--        :is-example="isExample"-->
+      <!--      />-->
     </portal>
 
     <div
@@ -88,7 +89,9 @@ export default {
   },
   data() {
     return {
-      hovering: false
+      hovering: false,
+      previousX: null,
+      previousY: null
     }
   },
   computed: {
@@ -158,8 +161,19 @@ export default {
         this.SET_SELECTED_COMPONENT_ID(this.id)
       }
     },
+    mousedown(event) {
+      this.previousX = event.clientX
+      this.previousY = event.clientY
+    },
+    mouseup(event) {
+      if (
+        this.previousX !== event.clientX &&
+        this.previousY !== event.clientY
+      ) {
+        // moving
+        return
+      }
 
-    singleClick(event) {
       if (this.isAdding) {
         return
       }

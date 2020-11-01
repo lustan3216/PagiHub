@@ -12,9 +12,12 @@
   >
     <slot/>
 
-    <span v-show="!hideHandler" v-if="resizableAndNotStatic" ref="handle" :class="resizableHandleClass" :style="{
-      cursor: autoHeight ? 'ew-resize' : 'se-resize'
-    }"/>
+    <template v-if="!autoHeight">
+      <span v-show="!hideHandler" v-if="resizableAndNotStatic" :class="resizableHandleClass"/>
+      <span v-show="!hideHandler" v-if="resizableAndNotStatic" :class="resizableHandleClass" class="bottom"/>
+    </template>
+
+    <span v-show="!hideHandler" v-if="resizableAndNotStatic" :class="resizableHandleClass" class="right"/>
     <!--<span v-if="draggable" ref="dragHandle" class="draggable-handle"></span>-->
   </div>
 </template>
@@ -31,12 +34,37 @@
       left: 0;
       top: 0;
       pointer-events: none;
-      width: 100%;
-      height: 100%;
+      width: calc(100% - 2px);
+      height: calc(100% - 2px);
       content: ' ';
       border: 1px solid #bcbcbc;
-      margin-top: -1px;
-      margin-left: -1px;
+    }
+    > .resizable-handle {
+      display: block;
+    }
+  }
+
+  .selected:hover {
+    &:before {
+      border-color: $color-active;
+    }
+  }
+
+  .selected {
+    &:before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      pointer-events: none;
+      width: calc(100% - 2px);
+      height: calc(100% - 2px);
+      content: ' ';
+      border: 2px solid $color-active;
+    }
+
+    > .resizable-handle {
+      border-color: $color-active !important;
+      display: block !important;
     }
   }
 
@@ -71,26 +99,29 @@
 
   .grid-item > .resizable-handle {
     position: absolute;
-    width: 15px;
-    height: 15px;
-    bottom: 2px;
-    right: 2px;
-    background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg08IS0tIEdlbmVyYXRvcjogQWRvYmUgRmlyZXdvcmtzIENTNiwgRXhwb3J0IFNWRyBFeHRlbnNpb24gYnkgQWFyb24gQmVhbGwgKGh0dHA6Ly9maXJld29ya3MuYWJlYWxsLmNvbSkgLiBWZXJzaW9uOiAwLjYuMSAgLS0+DTwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DTxzdmcgaWQ9IlVudGl0bGVkLVBhZ2UlMjAxIiB2aWV3Qm94PSIwIDAgNiA2IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojZmZmZmZmMDAiIHZlcnNpb249IjEuMSINCXhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbDpzcGFjZT0icHJlc2VydmUiDQl4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjZweCIgaGVpZ2h0PSI2cHgiDT4NCTxnIG9wYWNpdHk9IjAuMzAyIj4NCQk8cGF0aCBkPSJNIDYgNiBMIDAgNiBMIDAgNC4yIEwgNCA0LjIgTCA0LjIgNC4yIEwgNC4yIDAgTCA2IDAgTCA2IDYgTCA2IDYgWiIgZmlsbD0iIzAwMDAwMCIvPg0JPC9nPg08L3N2Zz4=');
+    width: 9px;
+    height: 9px;
+    bottom: -4px;
+    right: -4px;
+    border: 1px solid #bcbcbc;
     background-position: bottom right;
     padding: 0 3px 3px 0;
     background-repeat: no-repeat;
     background-origin: content-box;
     box-sizing: border-box;
     z-index: 100;
-    visibility: hidden;
-    transition: background-color 0.3s, border-radius 0.3s;
+    display: none;
+    background-color: #fff;
   }
 
-  .grid-item:hover > .resizable-handle {
-    border-radius: 10px 10px 0;
-    opacity: 0.8;
-    visibility: visible;
-    background-color: white;
+  .grid-item > .bottom {
+    left: 50%;
+    margin-left: -5px;
+  }
+
+  .grid-item > .right {
+    top: 50%;
+    margin-top: -5px;
   }
 
   .grid-item.disable-userselect {
@@ -152,6 +183,10 @@
         type: Boolean,
         required: false,
         default: null
+      },
+      selected: {
+        type: Boolean,
+        default: false
       },
       static: {
         type: Boolean,
@@ -296,18 +331,24 @@
         }
       }
 
+      self.moveTogether = function(event) {
+        if (self.i !== event.id) {
+          self.handleDrag(event)
+        }
+      }
+
       this.eventBus.$on('updateWidth', self.updateWidthHandler)
       this.eventBus.$on('compact', self.compactHandler)
       this.eventBus.$on('setDraggable', self.setDraggableHandler)
       this.eventBus.$on('setResizable', self.setResizableHandler)
     },
     beforeDestroy: function() {
-      let self = this
       //Remove listeners
-      this.eventBus.$off('updateWidth', self.updateWidthHandler)
-      this.eventBus.$off('compact', self.compactHandler)
-      this.eventBus.$off('setDraggable', self.setDraggableHandler)
-      this.eventBus.$off('setResizable', self.setResizableHandler)
+      this.$bus.$off('moveTogether', this.moveTogether)
+      this.eventBus.$off('updateWidth', this.updateWidthHandler)
+      this.eventBus.$off('compact', this.compactHandler)
+      this.eventBus.$off('setDraggable', this.setDraggableHandler)
+      this.eventBus.$off('setResizable', this.setResizableHandler)
       if (this.interactObj) {
         this.interactObj.unset() // destroy interact intance
       }
@@ -335,6 +376,16 @@
       })
     },
     watch: {
+      selected: {
+        handler(value) {
+          if (value) {
+            this.$bus.$on('moveTogether', this.moveTogether)
+          }
+          else {
+            this.$bus.$off('moveTogether', this.moveTogether)
+          }
+        }
+      },
       fixOnParentBottom(value) {
         if (value) {
           this.parent.correctFixItemsBound()
@@ -346,7 +397,7 @@
         } else {
           setTimeout(() => {
             store.hideHandler = false
-          }, 510)
+          }, 300)
         }
       },
       isDraggable: function() {
@@ -425,6 +476,7 @@
       }
     },
     computed: {
+      ...mapState('app', ['selectedComponentIds']),
       ...mapState('layout', ['scaleRatio']),
       ...mapGetters('layout', ['vw', 'vh']),
       // Helper for generating column width
@@ -486,7 +538,8 @@
           'draggable-dragging': this.isDragging,
           'disable-userselect': this.isDragging,
           'no-touch': this.isAndroid && this.draggableOrResizableAndNotStatic,
-          transition: process.env.NODE_ENV !== 'test'
+          transition: process.env.NODE_ENV !== 'test',
+          selected: this.selected
         }
       },
       resizableAndNotStatic() {
@@ -569,12 +622,12 @@
             // const coreEvent = createCoreData(this.lastW, this.lastH, x, y)
             // console.log(event)
             // console.log(coreEvent.deltaX)
-            newSize.width = this.resizing.width + event.delta.x
+            newSize.width = this.resizing.width + event.deltaRect.right
             if (this.autoHeight) {
               pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH)
               newSize.height = pos.height
             } else {
-              newSize.height = this.resizing.height + event.delta.y
+              newSize.height = this.resizing.height + event.deltaRect.bottom
             }
 
             ///console.log("### resize => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
@@ -651,6 +704,17 @@
         if (this.static) return
         if (this.isResizing) return
 
+        if (event.id && !this.selectedComponentIds.includes(event.id)) {
+          return
+        }
+
+        if (!event.isFakeEvent) {
+          // to prevent other item call self and be called by self again
+          event.isFakeEvent = true
+          event.id = this.i
+          this.$bus.$emit('moveTogether', event)
+        }
+
         // const position = getControlPosition(event)
 
         // Get the current drag point from the event. This is used as the offset.
@@ -671,9 +735,9 @@
               parentRect = this.boundaryElement.getBoundingClientRect()
             }
             else {
-              parentRect = this.getParent(event.target).getBoundingClientRect()
+              parentRect = this.getParent(this.$el).getBoundingClientRect()
             }
-            clientRect = event.target.getBoundingClientRect()
+            clientRect = this.$el.getBoundingClientRect()
 
             newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
 
@@ -689,9 +753,9 @@
               parentRect = this.boundaryElement.getBoundingClientRect()
             }
             else {
-              parentRect = this.getParent(event.target).getBoundingClientRect()
+              parentRect = this.getParent(this.$el).getBoundingClientRect()
             }
-            clientRect = event.target.getBoundingClientRect()
+            clientRect = this.$el.getBoundingClientRect()
             //                        Add rtl support
             newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
 
@@ -846,8 +910,8 @@
             // allowFrom: "." + this.resizableHandleClass,
             edges: {
               left: false,
-              right: '.' + this.resizableHandleClass,
-              bottom: this.autoHeight ? false : '.' + this.resizableHandleClass,
+              right: true,
+              bottom: !this.autoHeight,
               top: false
             },
             ignoreFrom: this.resizeIgnoreFrom,

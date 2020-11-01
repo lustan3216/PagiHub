@@ -23,15 +23,12 @@
     :vertical-compact="computedLayout.verticalCompact"
     :class="{ 'no-action': lock }"
     :auto-height="shouldAutoHeight"
+    :selected="selected"
     drag-ignore-from=".item-editing"
     drag-allow-from="div"
     data-node
-    @moveStart="assignStore"
     @move="itemChanging"
-    @moved="itemChanged"
-    @resizeStart="assignStore"
     @resize="itemChanging"
-    @resized="itemChanged"
   >
     <div
       ref="content"
@@ -56,7 +53,6 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
-import Vue from 'vue'
 import nodeMixin from './mixins/node'
 import childrenMixin from './mixins/children'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
@@ -65,14 +61,11 @@ import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import { debounce, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
 import {
-  closestGridItem,
   closestValidBreakpoint,
   isGroup,
   isTextEditor
 } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
-
-const store = Vue.observable({ updatingItemParentId: null })
 
 export default {
   name: 'GridGeneratorItem',
@@ -111,6 +104,9 @@ export default {
       'descBreakpoints',
       'vh'
     ]),
+    selected() {
+      return this.selectedComponentIds.includes(this.id)
+    },
     innerGrid() {
       return this.node.grid
     },
@@ -274,7 +270,6 @@ export default {
   },
   beforeDestroy() {
     this.$delete(this.layouts, this.id)
-
     if (this.offResizeListener) {
       this.offResizeListener()
       this.offResizeListener = null
@@ -285,15 +280,6 @@ export default {
     ...mapActions('layout', ['resizeNodeQuickFn']),
     itemChanging() {
       this.LAYOUT_SET({ gridResizing: true })
-    },
-    assignStore() {
-      const item = closestGridItem(this.node.parentNode)
-      if (item) {
-        store.updatingItemParentId = item.id
-      }
-    },
-    itemChanged() {
-      store.updatingItemParentId = null
     }
   }
 }
@@ -320,6 +306,25 @@ export default {
   }
   100% {
     border-color: #0065ae;
+  }
+}
+
+.selected:hover {
+  &:before {
+    border: 1px solid $color-active;
+  }
+}
+
+.selected {
+  &:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
+    content: ' ';
+    border: 1px solid $color-active;
   }
 }
 </style>

@@ -134,7 +134,7 @@ import gsap from 'gsap'
 
 export const DEVICE_OPTIONS = [
   { name: 'iMac', w: 2560, h: 1440 },
-  { name: 'MaxBook Pro', w: 1440, h: 900 },
+  { name: 'MacBook Pro', w: 1440, h: 900 },
   { name: 'Surface Pro 4', w: 1368, h: 912 },
   { name: 'Surface Pro 3', w: 1440, h: 960 },
   { name: 'iPhone 11 Pro Max', w: 414, h: 896 },

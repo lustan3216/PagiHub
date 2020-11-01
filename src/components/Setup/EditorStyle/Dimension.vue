@@ -105,6 +105,7 @@ import { COLUMNS, GRID } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
+import { isGroup, isTextEditor } from '@/utils/node'
 
 export default {
   name: 'Dimension',
@@ -132,7 +133,8 @@ export default {
       return COLUMNS
     },
     heightDisabled() {
-      return Boolean(this.ratioH && this.ratioW)
+      const nodes = this.selectedComponentNodes.filter(node => isGroup(node) || isTextEditor(node))
+      return Boolean(nodes.length)
     },
     x: {
       get() {

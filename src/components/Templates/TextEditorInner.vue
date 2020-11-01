@@ -459,6 +459,6 @@ $color-grey: #b2b2b2;
 .editor {
   word-break: break-word;
   position: relative;
-  padding: 0;
+  padding: 0 3px !important;
 }
 </style>
