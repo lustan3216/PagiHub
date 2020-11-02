@@ -60,11 +60,7 @@ import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import { debounce, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
-import {
-  closestValidBreakpoint,
-  isGroup,
-  isTextEditor
-} from '@/utils/node'
+import { closestValidBreakpoint, isGroup, isTextEditor } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
 
 export default {
@@ -222,11 +218,8 @@ export default {
         this.$nextTick(() => {
           if (value) {
             this.$refs.gridItem.autoSize()
-            this.offResizeListener = resizeListener(
-              this.$refs.content,
-              debounce(() => {
-                this.$refs.gridItem.autoSize()
-              }, 10)
+            this.offResizeListener = resizeListener(this.$refs.content, () =>
+              requestAnimationFrame(this.$refs.gridItem.autoSize)
             )
           }
           else if (this.offResizeListener) {
@@ -240,13 +233,7 @@ export default {
     computedLayout: {
       handler(value) {
         // 一定要轉成data，不然第一次computed 會因為不能assign值出bug
-        this.layout = value
-        if (this.hidden) {
-          this.$delete(this.layouts, this.id)
-        }
-        else {
-          this.$set(this.layouts, this.id, this.layout)
-        }
+        this.updateLayout(value)
       },
       immediate: true
     },
@@ -258,6 +245,9 @@ export default {
         this.$set(this.layouts, this.id, this.layout)
       }
     }
+  },
+  updated() {
+    this.updateLayout()
   },
   created() {
     if (this.isExample) {
@@ -280,6 +270,15 @@ export default {
     ...mapActions('layout', ['resizeNodeQuickFn']),
     itemChanging() {
       this.LAYOUT_SET({ gridResizing: true })
+    },
+    updateLayout(layout = this.computedLayout) {
+      this.layout = layout
+      if (this.hidden) {
+        this.$delete(this.layouts, this.id)
+      }
+      else {
+        this.$set(this.layouts, this.id, this.layout)
+      }
     }
   }
 }

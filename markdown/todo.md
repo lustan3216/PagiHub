@@ -15,12 +15,11 @@ https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
 
 bug
-
+- griditem 如果都用Math.round，在縮小width位置的時候會有bug, 可以採用無條件捨去，且 % vw vh 可小數點一位
 - 修復 shared page copy and ux
-- video ratio
+- video ratio, ratio 要跟 wh 合併
 - ratio might has bug when using vh, vw, %, is that possible to use px only
 - 對其, will have a problem when stack mode container around
-- ratio 要跟 wh 合併
 - w h unit 換的時候要找最近點
 - unitW 不是 px 時拉出邊界會有 bug
 - 提示 breakpoint 拉完就定型

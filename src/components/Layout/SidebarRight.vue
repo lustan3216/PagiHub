@@ -80,7 +80,7 @@ export default {
 
   &.sidebar-right-content {
     padding: 5px 10px 10px;
-    @include calc-vh('max-height', '100vh - 60px');
+    @include calc-vh('max-height', '100vh - 95px');
     overflow: scroll;
     height: 100%;
 
@@ -106,7 +106,7 @@ export default {
   }
 
   .el-divider--horizontal {
-    margin: 15px 0 15px;
+    margin: 20px 0 15px;
   }
 
   .el-divider__text {

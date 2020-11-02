@@ -3,9 +3,8 @@
     :disabled="!selectedComponentNodes.length"
     label-position="top"
   >
-
     <template v-if="!hasBackground">
-      <align :grid="grid"/>
+      <align />
 
       <text-editor-simple-style />
 
@@ -46,7 +45,6 @@
     </template>
 
     <background-color v-else />
-
   </el-form>
 </template>
 
@@ -99,18 +97,18 @@ export default {
     ElRadioButton: RadioButton
   },
   props: {
-    styles: {
-      type: Object,
-      default: () => ({})
-    },
-    props: {
-      type: Object,
-      default: () => ({})
-    },
-    grid: {
-      type: Object,
-      default: () => ({})
-    }
+    // styles: {
+    //   type: Object,
+    //   default: () => ({})
+    // },
+    // props: {
+    //   type: Object,
+    //   default: () => ({})
+    // },
+    // grid: {
+    //   type: Object,
+    //   default: () => ({})
+    // }
   },
   data() {
     return {
@@ -121,7 +119,9 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
     hasBackground() {
-      return this.selectedComponentIds.find(id => isBackground(this.nodesMap[id]))
+      return this.selectedComponentIds.find(id =>
+        isBackground(this.nodesMap[id])
+      )
     }
   }
 }
