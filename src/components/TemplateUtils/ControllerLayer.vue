@@ -190,7 +190,7 @@ export default {
 
       if (!this.isExample) {
         if (this.itemEditing) {
-          if (store.lastEditId === this.id) {
+          if (store.lastEditId === this.id && !event.shiftKey) {
             // when clicking text-editor in the editing condition
             // should return to prevent component rerender to lose focus
             return
