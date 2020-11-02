@@ -65,7 +65,7 @@
 
       <el-col :span="10">
         <select-unit
-          :disabled="!selectedComponentNodes.length"
+          :disabled="!selectedComponentNodes.length || hasSlider"
           :number.sync="w"
           :unit.sync="unitW"
           :min="0"
@@ -85,7 +85,7 @@
 
       <el-col :span="10">
         <select-unit
-          :disabled="heightDisabled"
+          :disabled="heightDisabled || hasSlider"
           :number.sync="h"
           :min="0"
           :unit.sync="unitH"

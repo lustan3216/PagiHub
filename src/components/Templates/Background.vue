@@ -13,6 +13,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import toolMixin from '@/components/Templates/mixins/tool'
 import propsMixin from '@/components/Templates/mixins/props'
 // childrenMixin 要拿來新增刪除小孩的
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -27,7 +28,7 @@ export default {
     GridGeneratorInner,
     ControllerLayer
   },
-  mixins: [propsMixin, childrenMixin],
+  mixins: [toolMixin, propsMixin, childrenMixin],
   computed: {
     ...mapState('app', ['isAdding'])
   }
