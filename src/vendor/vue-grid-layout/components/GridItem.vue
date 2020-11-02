@@ -226,13 +226,9 @@
         type: String,
         default: ''
       },
-      ratioW: {
-        type: Number,
-        default: 0
-      },
-      ratioH: {
-        type: Number,
-        default: 0
+      ratio: {
+        type: Boolean,
+        default: false
       },
       x: {
         type: Number,
@@ -426,10 +422,7 @@
           this.createStyle()
         })
       },
-      ratioW() {
-        this.tryMakeResizable()
-      },
-      ratioH() {
+      ratio() {
         this.tryMakeResizable()
       },
       resizable: function() {
@@ -860,7 +853,7 @@
         }
 
         let h
-        if (this.unitW === 'px') {
+        if (this.unitH === 'px') {
           h = Math.round(height / this.colHeight)
         }else {
           h = toPrecision(height / this.colWidth, 1)
@@ -939,11 +932,11 @@
             }
           }
 
-          if (this.ratioW && this.ratioH) {
+          if (this.ratio) {
             opts.modifiers = [
               interact.modifiers.aspectRatio({
                 // make sure the width is always double the height
-                ratio: parseInt(this.ratioW) / parseInt(this.ratioH)
+                ratio: this.pxW / this.pxH
               })
             ]
           } else {

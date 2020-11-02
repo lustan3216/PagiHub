@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="relative">
     <el-divider content-position="left">
       DIMENSION
       <tip class="m-l-5">
@@ -7,6 +7,15 @@
       </tip>
     </el-divider>
 
+    <div class="flex-column lock-outer">
+      <el-button
+        :icon="`el-icon-${ratio ? 'lock' : 'unlock'}`"
+        type="text"
+        class="lock"
+        @click="ratio = !ratio"
+      />
+    </div>
+
     <el-row
       :gutter="10"
       type="flex"
@@ -16,44 +25,9 @@
         <span
           class="title flex"
           style="align-items: baseline"
-        >
-          X
-        </span>
-      </el-col>
-
-      <el-col :span="12">
-        <select-unit
-          v-model="x"
-          :disabled="hasSlider"
-          :min="0"
-          :units="['px']"
         />
       </el-col>
 
-      <el-col :span="2">
-        <span
-          class="title flex"
-          style="align-items: baseline"
-        >
-          Y
-        </span>
-      </el-col>
-
-      <el-col :span="12">
-        <select-unit
-          v-model="y"
-          :disabled="hasSlider"
-          :min="0"
-          :units="['px']"
-        />
-      </el-col>
-    </el-row>
-
-    <el-row
-      :gutter="10"
-      type="flex"
-      align="middle"
-    >
       <el-col :span="2">
         <span
           class="title flex"
@@ -65,6 +39,7 @@
 
       <el-col :span="10">
         <select-unit
+          :clearable="false"
           :disabled="!selectedComponentNodes.length || hasSlider"
           :number.sync="w"
           :unit.sync="unitW"
@@ -80,12 +55,45 @@
           class="title flex"
           style="align-items: baseline"
         >
+          X
+        </span>
+      </el-col>
+
+      <el-col :span="10">
+        <select-unit
+          :clearable="false"
+          v-model="x"
+          :disabled="hasSlider"
+          :min="0"
+          :units="['px']"
+        />
+      </el-col>
+    </el-row>
+
+    <el-row
+      :gutter="10"
+      type="flex"
+      align="middle"
+    >
+      <el-col :span="2">
+        <span
+          class="title flex"
+          style="align-items: baseline"
+        />
+      </el-col>
+
+      <el-col :span="2">
+        <span
+          class="title flex"
+          style="align-items: baseline"
+        >
           H
         </span>
       </el-col>
 
       <el-col :span="10">
         <select-unit
+          :clearable="false"
           :disabled="heightDisabled || hasSlider"
           :number.sync="h"
           :min="0"
@@ -93,6 +101,25 @@
           :unit.sync="unitH"
           :units="['px', 'vw', 'vh']"
           separate
+        />
+      </el-col>
+
+      <el-col :span="2">
+        <span
+          class="title flex"
+          style="align-items: baseline"
+        >
+          Y
+        </span>
+      </el-col>
+
+      <el-col :span="10">
+        <select-unit
+          :clearable="false"
+          v-model="y"
+          :disabled="hasSlider"
+          :min="0"
+          :units="['px']"
         />
       </el-col>
     </el-row>
@@ -103,7 +130,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import Tip from '@/components/Tip/TipPopper'
 import SelectUnit from '@/components/Components/SelectUnit'
-import { GRID } from '@/const'
+import { GRID, STYLES } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
@@ -142,6 +169,23 @@ export default {
         node => isGroup(node) || isTextEditor(node)
       )
       return Boolean(nodes.length)
+    },
+    ratio: {
+      get() {
+        return getValueByPath(this.lastNode, [STYLES, 'layout', 'ratio'])
+      },
+      set(value) {
+        const records = []
+
+        this.selectedComponentNodes.forEach(node => {
+          records.push({
+            path: [node.id, STYLES, 'layout', 'ratio'],
+            value: value || undefined
+          })
+        })
+
+        this.record(records)
+      }
     },
     x: {
       get() {
@@ -226,5 +270,23 @@ export default {
   .el-input__inner {
     padding: 0 10px !important;
   }
+}
+.lock-outer {
+  position: absolute;
+  height: 40px;
+  border: 1px solid #d6dae2;
+  border-radius: 9px 0 0 9px;
+  border-right: none;
+  top: 28px;
+  left: 4px;
+  width: 10px;
+  z-index: 10;
+}
+.lock {
+  position: absolute;
+  top: 9px;
+  left: -12px;
+  background: white;
+  padding: 5px !important;
 }
 </style>
