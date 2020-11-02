@@ -9,7 +9,7 @@
 
 <script>
 import { cloneJson } from '@/utils/tool'
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSwitch'
 
@@ -17,7 +17,7 @@ export default {
   defaultSetting,
   type: 'switch',
   name: 'FormSwitch',
-  mixins: [nodeMixin, formItemMixin],
+  mixins: [propsMixin, formItemMixin],
   data() {
     // to solve a element-ui bug comes from the object reference different
     return {

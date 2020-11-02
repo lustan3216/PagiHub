@@ -9,7 +9,7 @@
 
 <script>
 import { cloneJson } from '@/utils/tool'
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormRate'
 
@@ -17,7 +17,7 @@ export default {
   defaultSetting,
   type: 'rate',
   name: 'FormRate',
-  mixins: [nodeMixin, formItemMixin],
+  mixins: [propsMixin, formItemMixin],
   computed: {
     innerRule2() {
       const rule = cloneJson(this.innerRule[0])

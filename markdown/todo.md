@@ -16,6 +16,7 @@ https://www.npmjs.com/package/sanitize-html
 
 bug
 
+- height %
 - button 的 text 無法 focus
 - griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 可以採用無條件捨去，且 % vw vh 可小數點一位
 - 修復 shared page copy and ux

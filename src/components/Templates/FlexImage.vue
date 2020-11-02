@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexImage'
 import { Image } from 'element-ui'
 import { isComponentSet, isSlider, traversalAncestor } from '@/utils/node'
@@ -30,7 +30,7 @@ export default {
     ElImage: Image,
     GridGeneratorItem
   },
-  mixins: [nodeMixin],
+  mixins: [propsMixin],
   data() {
     return {
       lazy: true

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormTextarea'
 
@@ -17,7 +17,7 @@ export default {
   defaultSetting,
   type: 'input',
   name: 'FormTextarea',
-  mixins: [nodeMixin, formItemMixin]
+  mixins: [propsMixin, formItemMixin]
 }
 </script>
 

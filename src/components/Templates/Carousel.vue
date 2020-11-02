@@ -95,7 +95,7 @@
 import interactjs from 'interactjs'
 import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridGenerator from './GridGenerator'
 import GridGeneratorItem from './GridGeneratorItem'
@@ -120,7 +120,7 @@ export default {
   directives: {
     ObserveVisibility
   },
-  mixins: [childrenMixin, nodeMixin],
+  mixins: [childrenMixin, propsMixin],
   data() {
     return {
       canNotDrag: false,

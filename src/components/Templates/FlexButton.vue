@@ -33,7 +33,7 @@
 
 <script>
 import { Message } from 'element-ui'
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { deleteBy } from '@/utils/array'
@@ -47,7 +47,7 @@ export default {
     TextEditorInner,
     GridGeneratorItem
   },
-  mixins: [nodeMixin, childrenMixin],
+  mixins: [propsMixin, childrenMixin],
   props: {
     editing: {
       type: Boolean,

@@ -34,7 +34,7 @@
 
 <script>
 import { Drawer } from 'element-ui'
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import GridInner from './GridGeneratorInner'
 import mousewheel from 'element-ui/lib/directives/mousewheel'
 import { defaultSetting } from '../Setup/EditorSetting/SettingDrawer'
@@ -54,7 +54,7 @@ export default {
   directives: {
     mousewheel
   },
-  mixins: [nodeMixin],
+  mixins: [propsMixin],
   data() {
     return {
       visible: false,

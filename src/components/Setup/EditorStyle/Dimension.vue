@@ -24,6 +24,7 @@
       <el-col :span="12">
         <select-unit
           v-model="x"
+          :disabled="hasSlider"
           :min="0"
           :units="['px']"
         />
@@ -41,6 +42,7 @@
       <el-col :span="12">
         <select-unit
           v-model="y"
+          :disabled="hasSlider"
           :min="0"
           :units="['px']"
         />
@@ -103,7 +105,7 @@ import { COLUMNS, GRID } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
-import { isGroup, isTextEditor } from '@/utils/node'
+import { isGroup, isSlider, isTextEditor } from '@/utils/node'
 
 export default {
   name: 'Dimension',
@@ -127,8 +129,10 @@ export default {
         return {}
       }
     },
-    cols() {
-      return COLUMNS
+    hasSlider() {
+      return Boolean(
+        this.selectedComponentNodes.filter(node => isSlider(node)).length
+      )
     },
     heightDisabled() {
       const nodes = this.selectedComponentNodes.filter(

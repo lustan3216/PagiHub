@@ -164,7 +164,7 @@ import ColorPicker from '@/components/Components/ColorPicker'
 import { HTML, STYLES, TEXT_EDITOR } from '@/const'
 import { asyncGetValue } from '@/utils/tool'
 import ContentEditable from '@/components/Components/ContentEditable'
-import nodeMixin from './mixins/node'
+import propsMixin from './mixins/props'
 import {
   BIconTextLeft,
   BIconTextCenter,
@@ -188,7 +188,7 @@ export default {
   inject: {
     isExample: { default: false }
   },
-  mixins: [nodeMixin],
+  mixins: [propsMixin],
   props: {
     id: {
       type: String,

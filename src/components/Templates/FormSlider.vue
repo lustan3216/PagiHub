@@ -9,7 +9,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import formItemMixin from '@/components/Templates/mixins/formItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSlider'
 import { PROPS } from '@/const'
@@ -18,7 +18,7 @@ export default {
   defaultSetting,
   type: 'slider',
   name: 'FormSlider',
-  mixins: [nodeMixin, formItemMixin],
+  mixins: [propsMixin, formItemMixin],
   watch: {
     'innerProps.isRange'(value) {
       if (value && !this.isExample) {

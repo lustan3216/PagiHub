@@ -14,7 +14,7 @@
 import { mapActions } from 'vuex'
 import { ID } from '@/const'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { vmAppend } from '@/utils/vmMap'
 
@@ -23,7 +23,7 @@ export default {
   components: {
     ComponentGiver
   },
-  mixins: [nodeMixin, childrenMixin],
+  mixins: [propsMixin, childrenMixin],
   computed: {
     firstChild() {
       return this.innerChildren[0]

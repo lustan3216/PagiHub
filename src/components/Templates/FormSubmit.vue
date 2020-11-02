@@ -43,7 +43,7 @@ import { vmGet } from '@/utils/vmMap'
 import { MessageBox } from 'element-ui'
 import { isUndefined } from '@/utils/tool'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFormSubmit'
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import TextEditor from '@/components/Templates/TextEditor'
 
 export default {
@@ -52,7 +52,7 @@ export default {
   components: {
     TextEditor
   },
-  mixins: [nodeMixin],
+  mixins: [propsMixin],
   props: {
     text: {
       type: String,

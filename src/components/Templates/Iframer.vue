@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import { defaultSetting } from '../Setup/EditorSetting/SettingIframer'
 import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
 
@@ -21,7 +21,7 @@ export default {
   components: {
     GridGeneratorItem
   },
-  mixins: [nodeMixin]
+  mixins: [propsMixin]
 }
 </script>
 

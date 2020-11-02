@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 
 export default {
   name: 'Divider',
-  mixins: [nodeMixin],
+  mixins: [propsMixin],
   data() {
     return {
       isHover: false

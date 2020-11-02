@@ -1,6 +1,4 @@
 import { vmAppend, vmRemove } from '@/utils/vmMap'
-import { cloneJson, deepMerge } from '@/utils/tool'
-import { PROPS, VALUE, STYLES } from '@/const'
 
 let hoverNode = []
 
@@ -16,16 +14,6 @@ export default {
   computed: {
     node() {
       return this.nodesMap[this.id]
-    },
-    innerValue() {
-      return this.node[VALUE]
-    },
-    innerStyles() {
-      return this.node[STYLES] || {}
-    },
-    innerProps() {
-      const setting = cloneJson(this.$options.defaultSetting || {})
-      return deepMerge(setting, this.node[PROPS])
     }
   },
   activated() {

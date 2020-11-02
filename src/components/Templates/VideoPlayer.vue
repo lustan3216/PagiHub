@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import nodeMixin from '@/components/Templates/mixins/node'
+import propsMixin from '@/components/Templates/mixins/props'
 import { defaultSetting } from '../Setup/EditorSetting/SettingVideoPlayer'
 import VuePlyr from 'vue-plyr'
 import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
@@ -32,7 +32,7 @@ export default {
     VuePlyr,
     GridGeneratorItem
   },
-  mixins: [nodeMixin],
+  mixins: [propsMixin],
   data() {
     return {
       width: 16,

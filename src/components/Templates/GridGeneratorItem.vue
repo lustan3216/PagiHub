@@ -53,12 +53,13 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
-import nodeMixin from './mixins/node'
+import toolMixin from './mixins/tool'
+import propsMixin from './mixins/props'
 import childrenMixin from './mixins/children'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import { debounce, getValueByPath, resizeListener } from '@/utils/tool'
+import { getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestValidBreakpoint, isGroup, isTextEditor } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
@@ -70,7 +71,7 @@ export default {
     ComponentController,
     VueGridItem: GridItem
   },
-  mixins: [nodeMixin, childrenMixin],
+  mixins: [toolMixin, propsMixin, childrenMixin],
   inject: {
     // connect with GridGeneratorInner
     layouts: { required: true }
