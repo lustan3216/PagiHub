@@ -56,10 +56,6 @@
         type: Boolean,
         default: true
       },
-      autoCalcHeight: {
-        type: Boolean,
-        default: false
-      },
       colNum: {
         type: Number,
         default: 12

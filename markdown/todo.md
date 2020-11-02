@@ -16,15 +16,12 @@ https://www.npmjs.com/package/sanitize-html
 
 Designing tool + page builder + design sharing = No more prototype + No more coding + No more engineering cost
 
-Just click publish, then you will have a real RWD website 
-
-
+Just click publish, then you will have a real RWD website
 
 bug
 
 - height %
-- button 的 text 無法 focus
-- griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 可以採用無條件捨去，且 % vw vh 可小數點一位
+- griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug
 - 修復 shared page copy and ux
 - video ratio, ratio 要跟 wh 合併
 - ratio might has bug when using vh, vw, %, is that possible to use px only

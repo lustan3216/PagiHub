@@ -168,10 +168,10 @@ export default {
 
       return {
         // might be string from selectUnit, so parse it
-        x: parseInt(this.currentGrid.x) || 0,
-        y: parseInt(this.currentGrid.y) || 0,
-        w: parseInt(this.currentGrid.w) || 0,
-        h: parseInt(this.currentGrid.h) || 0,
+        x: Number(this.currentGrid.x) || 0,
+        y: Number(this.currentGrid.y) || 0,
+        w: Number(this.currentGrid.w) || 0,
+        h: Number(this.currentGrid.h) || 0,
 
         unitH: this.currentGrid.unitH,
         unitW: this.currentGrid.unitW,

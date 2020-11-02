@@ -69,6 +69,7 @@
           :number.sync="w"
           :unit.sync="unitW"
           :min="0"
+          :step="unitW === 'px' ? 1 : 0.1"
           :units="['%', 'px', 'vw', 'vh']"
           separate
         />
@@ -88,6 +89,7 @@
           :disabled="heightDisabled || hasSlider"
           :number.sync="h"
           :min="0"
+          :step="unitW === 'px' ? 1 : 0.1"
           :unit.sync="unitH"
           :units="['px', 'vw', 'vh']"
           separate

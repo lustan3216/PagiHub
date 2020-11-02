@@ -136,6 +136,7 @@
   let interact = require('interactjs')
   import { getValueByPath, resizeListener, debounce } from '@/utils/tool'
   import { getAbsoluteHeight } from '@/utils/style'
+  import { toPrecision } from '@/utils/number'
   const store = Vue.observable({ hideHandler: false })
 
   export default {
@@ -356,7 +357,7 @@
     mounted: function() {
       this.cols = this.width
 
-      this.lockItemInLayout = !this.parent.autoCalcHeight
+      this.lockItemInLayout = !this.parent.autoHeight
       this.containerWidth = this.parent.width !== null ? this.parent.width : 100
 
       if (this.isDraggable === null) {
@@ -851,8 +852,19 @@
         // width = colWidth * w - (margin * (w - 1))
         // ...
         // w = (width + margin) / (colWidth + margin)
-        let w = Math.round(width / this.colWidth)
-        let h = Math.round(height / this.colHeight)
+        let w
+        if (this.unitW === 'px') {
+          w = Math.round(width / this.colWidth)
+        }else {
+          w = toPrecision(width / this.colWidth, 1)
+        }
+
+        let h
+        if (this.unitW === 'px') {
+          h = Math.round(height / this.colHeight)
+        }else {
+          h = toPrecision(height / this.colWidth, 1)
+        }
 
         // Capping
         w = Math.max(Math.min(w, this.cols - this.innerX), 0)
