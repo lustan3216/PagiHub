@@ -1,22 +1,19 @@
 import store from '../store'
+import listToTree from './listToTree'
 import { toArray } from './array'
 import { getValueByPath, isUndefined } from './tool'
 import { humanize } from './string'
-import listToTree from './listToTree'
 import { gridGenerator } from '../templateJson/basic'
 import {
   NODE_TYPE,
   LABEL,
-  LAYERS,
   GRID_GENERATOR_ITEM,
   POLYMORPHISM,
   GRID_GENERATOR,
   CAROUSEL,
   SOFT_DELETE,
-  BREAK_POINTS_MAP,
   STYLES
 } from '@/const'
-import { vmGet } from '@/utils/vmMap'
 
 export function wrapByGrid(nodesMap, ids) {
   const childrenArray = []
@@ -235,10 +232,6 @@ export function closestGridItem(node, fn) {
   }
 
   return find(node)
-}
-
-export function isOverlapComponent(node) {
-  return [LAYERS].includes(node.tag)
 }
 
 export function isGridItem(node) {

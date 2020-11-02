@@ -299,8 +299,12 @@ export default {
   margin: 0;
 }
 
-.el-carousel__item {
-  background-color: #9c9c9c;
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #e4e4e6;
 }
 
 ::v-deep {

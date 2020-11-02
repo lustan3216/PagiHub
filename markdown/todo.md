@@ -14,6 +14,12 @@ https://www.npmjs.com/package/xss
 https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
 
+Designing tool + page builder + design sharing = No more prototype + No more coding + No more engineering cost
+
+Just click publish, then you will have a real RWD website 
+
+
+
 bug
 
 - height %
@@ -29,7 +35,7 @@ bug
 - panel component 可以拖拉
 - 自動對齊
 - style, setting refactor
-- autoHeight 有時還是會失靈
+- autoHeight 有時還是會失靈 (發生在寬度變的時候)
 - userDrag checkbox
 - add component or group, align 都有 unit 轉換的 bug
 - 測試 style

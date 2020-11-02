@@ -6,6 +6,7 @@ const state = {
   gridResizing: false,
   windowWidth: 0,
   windowHeight: 0,
+  backgroundHeight: 0,
   scaleRatio: 1
 }
 

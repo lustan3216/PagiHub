@@ -11,6 +11,7 @@
     :extra-style="extraStyle"
     :data-addable-id="id"
     data-node
+    @height-updated="$emit('height-updated', $event)"
     @layout-updated="layoutUpdated($event)"
   >
     <controller-layer

@@ -8,11 +8,12 @@
     :class="{ 'cross-hair': isAdding }"
     controller
     class="background"
+    @height-updated="heightUpdated"
   />
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import toolMixin from '@/components/Templates/mixins/tool'
 import propsMixin from '@/components/Templates/mixins/props'
 // childrenMixin 要拿來新增刪除小孩的
@@ -30,7 +31,20 @@ export default {
   },
   mixins: [toolMixin, propsMixin, childrenMixin],
   computed: {
-    ...mapState('app', ['isAdding'])
+    ...mapState('app', ['isAdding']),
+    ...mapState('layout', ['windowWidth']),
+    percentUnitW() {
+      // for @/utils/layout unitConvert only
+      return this.windowWidth / 100
+    }
+  },
+  methods: {
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    heightUpdated(height) {
+      this.LAYOUT_SET({
+        backgroundHeight: parseInt(height)
+      })
+    }
   }
 }
 </script>

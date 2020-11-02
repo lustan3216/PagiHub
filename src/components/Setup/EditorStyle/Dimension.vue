@@ -101,11 +101,12 @@
 import { mapActions, mapGetters } from 'vuex'
 import Tip from '@/components/Tip/TipPopper'
 import SelectUnit from '@/components/Components/SelectUnit'
-import { COLUMNS, GRID } from '@/const'
+import { GRID } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
 import { isGroup, isSlider, isTextEditor } from '@/utils/node'
+import { unitConvert } from '@/utils/layout'
 
 export default {
   name: 'Dimension',
@@ -177,7 +178,9 @@ export default {
         return this.currentGrid.unitH
       },
       set(value) {
+        const newH = unitConvert(this.lastNode.id, this.h, this.unitH, value)
         this.recordStore('unitH', value)
+        this.recordStore('h', newH)
       }
     },
     unitW: {
@@ -185,7 +188,10 @@ export default {
         return this.currentGrid.unitW
       },
       set(value) {
+        const newW = unitConvert(this.lastNode.id, this.w, this.unitW, value)
+
         this.recordStore('unitW', value)
+        this.recordStore('w', newW)
       }
     },
     ratioW() {

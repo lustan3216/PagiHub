@@ -318,6 +318,7 @@
        containerHeight: function() {
         if (this.autoHeight) {
           const containerHeight = bottom(this.layout) + 'px'
+          this.$emit('height-updated', containerHeight)
           return containerHeight
         }
         else {

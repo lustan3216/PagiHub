@@ -211,6 +211,10 @@ export default {
     },
     shouldAutoHeight() {
       return this.isTextEditor || this.isGroup
+    },
+    percentUnitW() {
+      // for @/utils/layout unitConvert only
+      return (this.$refs.gridItem.containerWidth || 0) / 100
     }
   },
   watch: {

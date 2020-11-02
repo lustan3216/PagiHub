@@ -1,11 +1,17 @@
 <script>
 import { cloneJson } from '@/utils/tool'
 import { arrayUniq } from '@/utils/array'
-import { isGroup, closestValidBreakpoint, getGroupRect } from '@/utils/node'
+import {
+  isGroup,
+  closestValidBreakpoint,
+  getGroupRect,
+  closestValidGrid
+} from '@/utils/node'
 import { mapActions, mapGetters } from 'vuex'
 import { BREAK_POINTS_ARRAY, GRID } from '@/const'
 import { group } from '@/templateJson/basic'
 import { vmAddNodeToParent, vmRemoveNode } from '@/utils/vmMap'
+import { unitConvert } from '@/utils/layout'
 
 export default {
   name: 'ComponentGroup',
@@ -28,19 +34,20 @@ export default {
     ...mapActions('node', ['record']),
     group() {
       const { x, y, w, h } = getGroupRect(this.selectedComponentNodes)
-
+      const { parentId } = this.selectedComponentNodes[0]
       const children = this.selectedComponentNodes.map(node => {
+        const currentGrid = closestValidGrid(node, this.currentBreakpoint)
         node = cloneJson(node)
-        const currentGrid = node.grid[this.currentBreakpoint]
         node.grid = {
           [this.currentBreakpoint]: {
             x: Math.round(currentGrid.x - x),
             y: Math.round(currentGrid.y - y),
             w: Math.round(currentGrid.w),
             h: Math.round(currentGrid.h),
-            unitH: 'px',
-            unitW: 'px'
+            unitH: currentGrid.unitH,
+            unitW: currentGrid.unitW
           }
+          // overwrite all original breakpoint
         }
 
         return node
@@ -48,11 +55,18 @@ export default {
 
       const tree = group({
         grid: {
-          [this.currentBreakpoint]: { x, y, w, h }
+          [this.currentBreakpoint]: {
+            x,
+            y,
+            w: unitConvert(parentId, w, 'px', '%'),
+            h,
+            unitH: 'px',
+            unitW: '%'
+          }
         },
         children
       })
-      vmAddNodeToParent(children[0].parentId, tree)
+      vmAddNodeToParent(parentId, tree)
       this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
     },
     ungroup() {
