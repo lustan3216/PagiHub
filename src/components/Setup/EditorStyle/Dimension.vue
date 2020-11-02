@@ -286,7 +286,7 @@ export default {
   position: absolute;
   top: 9px;
   left: -12px;
-  background: white;
+  background: white !important;
   padding: 5px !important;
 }
 </style>

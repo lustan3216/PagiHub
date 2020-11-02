@@ -20,16 +20,12 @@ Just click publish, then you will have a real RWD website
 
 bug
 
-
 - griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 對其, will have a problem when stack mode container around
 - 修復 shared page copy and ux
-- video ratio, ratio 要跟 wh 合併
-- ratio might has bug when using vh, vw, %, is that possible to use px only
 - unitW 不是 px 時拉出邊界會有 bug
 - 提示 breakpoint 拉完就定型
 - panel component 可以拖拉
 - autoHeight 有時還是會失靈 (發生在寬度變的時候)
-- 測試 style
 - component border 會讓匡線走位
 - copy from other tab
 - height %
