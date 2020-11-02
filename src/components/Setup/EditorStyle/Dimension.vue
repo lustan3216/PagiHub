@@ -26,7 +26,6 @@
           v-model="x"
           :min="0"
           :units="['px']"
-          separate
         />
       </el-col>
 
@@ -44,7 +43,6 @@
           v-model="y"
           :min="0"
           :units="['px']"
-          separate
         />
       </el-col>
     </el-row>
@@ -133,7 +131,9 @@ export default {
       return COLUMNS
     },
     heightDisabled() {
-      const nodes = this.selectedComponentNodes.filter(node => isGroup(node) || isTextEditor(node))
+      const nodes = this.selectedComponentNodes.filter(
+        node => isGroup(node) || isTextEditor(node)
+      )
       return Boolean(nodes.length)
     },
     x: {

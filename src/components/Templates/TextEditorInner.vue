@@ -1,5 +1,5 @@
 <template>
-  <div class="editor ProseMirror over-hidden">
+  <div class="editor ProseMirror">
     <portal
       v-if="selected"
       to="QuickFunctionsTextEditor"
@@ -197,6 +197,10 @@ export default {
     canLink: {
       type: Boolean,
       default: true
+    },
+    defaultText: {
+      type: String,
+      default: 'text'
     }
   },
   data() {
@@ -232,7 +236,7 @@ export default {
     },
     text: {
       get() {
-        return this.innerValue
+        return this.innerValue || this.defaultText
       },
       set(value) {
         this.recordValue({

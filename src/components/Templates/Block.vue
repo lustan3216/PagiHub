@@ -11,7 +11,7 @@
 import GridGeneratorItem from './GridGeneratorItem'
 
 export default {
-  name: 'Rectangle',
+  name: 'Block',
   components: {
     GridGeneratorItem
   },

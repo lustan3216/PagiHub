@@ -34,10 +34,12 @@ export default {
         const currentGrid = node.grid[this.currentBreakpoint]
         node.grid = {
           [this.currentBreakpoint]: {
-            x: currentGrid.x - x,
-            y: currentGrid.y - y,
-            w: currentGrid.w,
-            h: currentGrid.h
+            x: Math.round(currentGrid.x - x),
+            y: Math.round(currentGrid.y - y),
+            w: Math.round(currentGrid.w),
+            h: Math.round(currentGrid.h),
+            unitH: 'px',
+            unitW: 'px'
           }
         }
 

@@ -31,9 +31,9 @@ export const gridGeneratorItem = function(options, grid) {
   }
 }
 
-export const rectangle = function(options, grid) {
+export const block = function(options, grid) {
   return {
-    [TAG]: 'rectangle',
+    [TAG]: 'block',
     grid,
     ...options
   }
@@ -161,7 +161,10 @@ export const flexButton = function(options, grid) {
     [TAG]: 'flex-button',
     [LABEL]: 'button',
     [STYLES]: {
-      [HTML]: { border: '1px solid #dcdfe6' }
+      [HTML]: {
+        border: '1px solid #dcdfe6',
+        textAlign: 'center'
+      }
     },
     grid
     // children: [
@@ -202,7 +205,7 @@ export const exampleMap = {
   'flex-button': flexButton,
   'flex-image': flexImage,
   'video-player': videoPlayer,
-  rectangle,
+  block,
   group
 }
 

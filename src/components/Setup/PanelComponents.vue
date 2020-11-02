@@ -28,9 +28,11 @@
 
           <component-name
             :id="data.id"
+            :text-show-content="
+              ['flex-button', 'text-editor'].includes(data.tag)
+            "
             class="text-left"
             editable
-            text-show-content
           >
             <template slot="icon">
               <element-icon

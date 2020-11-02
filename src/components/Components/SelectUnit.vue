@@ -186,8 +186,8 @@ export default {
           this.innerValue = result.toString()
         }
         else {
-          if (this.unit) {
-            result += this.unit
+          if (this.innerUnit) {
+            result += this.innerUnit
           }
           this.$emit('input', result)
           this.innerValue = result

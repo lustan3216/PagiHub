@@ -1,7 +1,6 @@
 <template>
   <grid-generator-item :id="id">
     <iframe
-      :style="innerStyles.html"
       v-bind="innerProps"
       width="100%"
       height="100%"

@@ -2,7 +2,7 @@
   <div>
     <el-divider content-position="left">ALIGN</el-divider>
     <el-form :disabled="!sameParent">
-      <el-button-group class="flex">
+      <div class="flex">
         <el-button
           plain
           class="flex1"
@@ -67,7 +67,7 @@
         >
           <b-icon-distribute-vertical />
         </el-button>
-      </el-button-group>
+      </div>
     </el-form>
   </div>
 </template>
@@ -111,6 +111,7 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
     ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['windowWidth', 'windowHeight']),
     sameParent() {
       const ids = this.selectedComponentNodes.map(node => node.parentId)
       return arrayUniq(ids).length === 1
@@ -124,7 +125,16 @@ export default {
         }
       })
 
-      return closestValidGrid(node)
+      if (isBackground(node)) {
+        return {
+          x: 0,
+          y: 0,
+          w: this.windowWidth,
+          h: this.windowHeight
+        }
+      }
+
+      return closestValidGrid(node, this.currentBreakpoint)
     },
     theSingleNode() {
       if (this.isSingleNode) return this.selectedComponentNodes[0]
@@ -350,4 +360,16 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+::v-deep.el-button {
+  border-color: transparent;
+  border-radius: 3px;
+  margin-left: 0;
+
+  &.is-disabled.is-plain,
+  &.is-disabled.is-plain:focus,
+  &.is-disabled.is-plain:hover {
+    border-color: transparent;
+  }
+}
+</style>

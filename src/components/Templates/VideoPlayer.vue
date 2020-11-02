@@ -1,22 +1,17 @@
 <template>
   <grid-generator-item :id="id">
-    <div
-      :style="innerStyles.html"
-      class="h-100 over-hidden"
+    <vue-plyr
+      ref="plyr"
+      :options="{ ...innerProps, ratio }"
+      :key="JSON.stringify({ ...innerProps, ratio })"
+      class="h-100"
+      @mouseleave="mouseleave"
     >
-      <vue-plyr
-        ref="plyr"
-        :options="{ ...innerProps, ratio }"
-        :key="JSON.stringify({ ...innerProps, ratio })"
-        class="h-100"
-        @mouseleave="mouseleave"
-      >
-        <div
-          :data-plyr-provider="innerProps.provider"
-          :data-plyr-embed-id="innerProps.embedId"
-        />
-      </vue-plyr>
-    </div>
+      <div
+        :data-plyr-provider="innerProps.provider"
+        :data-plyr-embed-id="innerProps.embedId"
+      />
+    </vue-plyr>
   </grid-generator-item>
 </template>
 

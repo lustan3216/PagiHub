@@ -115,6 +115,7 @@
     <div class="el-dropdown-menu__item--divided" />
 
     <lock
+      v-if="node"
       :id="node.id"
       type="text"
       visible

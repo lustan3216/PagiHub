@@ -24,6 +24,7 @@
       <text-editor-inner
         :id="id"
         :can-link="false"
+        default-text="Button"
         class="w-100"
       />
     </div>

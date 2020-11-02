@@ -14,10 +14,10 @@ https://www.npmjs.com/package/xss
 https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
 
+bug
+
 - 修復 shared page copy and ux
-- can move items together by keyboard or mouse
 - video ratio
-- xy axis, multi block moving
 - ratio might has bug when using vh, vw, %, is that possible to use px only
 - 對其, will have a problem when stack mode container around
 - ratio 要跟 wh 合併
@@ -27,10 +27,14 @@ https://www.npmjs.com/package/sanitize-html
 - panel component 可以拖拉
 - 自動對齊
 - style, setting refactor
-- panel 做個按鍵可以跑到右邊去
-- flexbutton
-- nested add component
+- autoHeight 有時還是會失靈
+- userDrag checkbox
+- add component or group, align 都有 unit 轉換的 bug
+- 測試 style
+- component border 會讓匡線走位
+- copy from other tab
 
+- iframe
 style 支援 每個 device 可客製化
 支援 icon
 距離輔助線
@@ -43,9 +47,7 @@ can setting put under style or new tab
 
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction 在弄就好
 image can put more effect
-when adding element, does it needs to with container along with, should we bind it together
 SEO / 跟後端在一起大改吧
-
 監聽事件 click/hover visible or / scroll
 event can trigger style component or animation component change
 event can animation component, animation component can trigger style component change

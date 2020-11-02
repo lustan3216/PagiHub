@@ -27,8 +27,6 @@
     right: auto;
     box-sizing: border-box;
     /* add right for rtl */
-  }
-  .grid-item:hover {
     &:before {
       position: absolute;
       left: 0;
@@ -38,6 +36,13 @@
       height: calc(100% - 2px);
       content: ' ';
       border: 1px solid #bcbcbc;
+      display: none;
+    }
+  }
+
+  .grid-item:hover {
+    &:before {
+      display: block;
     }
     > .resizable-handle {
       display: block;
@@ -52,14 +57,9 @@
 
   .selected {
     &:before {
-      position: absolute;
-      left: 0;
-      top: 0;
-      pointer-events: none;
-      width: calc(100% - 2px);
-      height: calc(100% - 2px);
-      content: ' ';
-      border: 2px solid $color-active;
+      border: 2px solid $color-active !important;
+      display: block;
+      margin: -1px;
     }
 
     > .resizable-handle {

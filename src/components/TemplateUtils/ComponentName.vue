@@ -23,7 +23,7 @@
       <slot name="icon" />
     </span>
 
-    <span v-if="textShowContent && isTextEditor">
+    <span v-if="textShowContent">
       {{ textName }} {{ shortId }}
     </span>
     <span v-else> {{ nodeShortName }} {{ shortId }} </span>

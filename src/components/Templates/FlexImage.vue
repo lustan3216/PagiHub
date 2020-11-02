@@ -1,9 +1,8 @@
 <template>
   <grid-generator-item :id="id">
     <el-image
-      :style="innerStyles.html"
       v-bind="innerProps"
-      class="wh-100 over-hidden"
+      class="wh-100"
       @dblclick.native="dblclick"
     >
       <div

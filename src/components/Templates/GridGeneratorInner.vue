@@ -11,7 +11,6 @@
     :extra-style="extraStyle"
     :data-addable-id="id"
     data-node
-    prevent-collision
     @layout-updated="layoutUpdated($event)"
   >
     <controller-layer

@@ -31,6 +31,7 @@
     moveElement,
     validateLayout,
     correctFixItemsBound,
+    getAllCollisions
   } from '../helpers/utils'
   //var eventBus = require('./eventBus');
 
@@ -378,27 +379,27 @@
         }
 
         let hasCollisions
-        // if (this.preventCollision) {
-        //   const collisions = getAllCollisions(this.layout, { ...l, w, h }).filter(
-        //     layoutItem => layoutItem.i !== l.i
-        //   )
-        //   hasCollisions = collisions.length > 0
-        //
-        //   // If we're colliding, we need adjust the placeholder.
-        //   console.log(collisions)
-        //   if (hasCollisions) {
-        //     // adjust w && h to maximum allowed space
-        //     let leastX = Infinity,
-        //         leastY = Infinity
-        //     collisions.forEach(layoutItem => {
-        //       if (layoutItem.x > l.x) leastX = Math.min(leastX, layoutItem.x)
-        //       if (layoutItem.y > l.y) leastY = Math.min(leastY, layoutItem.y)
-        //     })
-        //
-        //     if (Number.isFinite(leastX)) l.w = leastX - l.x
-        //     if (Number.isFinite(leastY)) l.h = leastY - l.y
-        //   }
-        // }
+        if (this.preventCollision) {
+          const collisions = getAllCollisions(this.layout, { ...l, w, h }).filter(
+            layoutItem => layoutItem.i !== l.i
+          )
+          hasCollisions = collisions.length > 0
+
+          // If we're colliding, we need adjust the placeholder.
+          console.log(collisions)
+          if (hasCollisions) {
+            // adjust w && h to maximum allowed space
+            let leastX = Infinity,
+                leastY = Infinity
+            collisions.forEach(layoutItem => {
+              if (layoutItem.x > l.x) leastX = Math.min(leastX, layoutItem.x)
+              if (layoutItem.y > l.y) leastY = Math.min(leastY, layoutItem.y)
+            })
+
+            if (Number.isFinite(leastX)) l.w = leastX - l.x
+            if (Number.isFinite(leastY)) l.h = leastY - l.y
+          }
+        }
 
         if (!hasCollisions) {
           // Set new width and height.

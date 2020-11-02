@@ -4,27 +4,25 @@
       HIDDEN WHEN
     </el-divider>
 
-    <el-button-group class="group">
-      <el-tooltip
-        v-for="(point, index) in descBreakpoints"
-        :content="content(point, index)"
-        :key="point"
-        effect="light"
-        placement="top"
+    <el-tooltip
+      v-for="(point, index) in descBreakpoints"
+      :content="content(point, index)"
+      :key="point"
+      effect="light"
+      placement="top"
+    >
+      <el-button
+        :disabled="!selectedComponentNodes.length"
+        :type="isHidden(point) ? 'primary' : ''"
+        plain
+        @click="click(point, !isHidden(point))"
       >
-        <el-button
-          :disabled="!selectedComponentNodes.length"
-          :type="isHidden(point) ? 'primary' : ''"
-          plain
-          @click="click(point, !isHidden(point))"
-        >
-          <button-device
-            :point-key="point"
-            icon-only
-          />
-        </el-button>
-      </el-tooltip>
-    </el-button-group>
+        <button-device
+          :point-key="point"
+          icon-only
+        />
+      </el-button>
+    </el-tooltip>
   </div>
 </template>
 
@@ -85,5 +83,19 @@ export default {
 .el-button--mini,
 .el-button--mini.is-round {
   padding: 7px 13px !important;
+}
+</style>
+
+<style scoped lang="scss">
+::v-deep.el-button {
+  border-color: transparent;
+  border-radius: 3px;
+  margin-left: 0;
+
+  &.is-disabled.is-plain,
+  &.is-disabled.is-plain:focus,
+  &.is-disabled.is-plain:hover {
+    border-color: transparent;
+  }
 }
 </style>

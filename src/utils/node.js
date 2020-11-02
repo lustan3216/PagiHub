@@ -119,7 +119,8 @@ export function cloneJsonWithoutChildren(tree) {
 export function sortDescByZIndex(children) {
   children = Array.from(children)
 
-  const getZIndex = node => getValueByPath(node, [STYLES, 'layout', 'zIndex'], 0)
+  const getZIndex = node =>
+    getValueByPath(node, [STYLES, 'layout', 'zIndex'], 0)
   return children.sort((a, b) => getZIndex(b) - getZIndex(a))
 }
 

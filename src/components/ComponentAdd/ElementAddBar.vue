@@ -45,7 +45,7 @@
 
     <el-tooltip
       effect="light"
-      content="Rectangle"
+      content="Block"
       placement="bottom"
     >
       <el-button
@@ -53,10 +53,10 @@
         size="small"
         class="button"
         style="margin-right: 0;"
-        @click="onClick('rectangle')"
+        @click="onClick('block')"
       >
         <element-icon
-          icon="rectangle"
+          icon="block"
           style="font-size: 18px;"
           class="gray-font-2"
         />
@@ -126,7 +126,7 @@ export default {
     ...mapGetters('app', ['selectedComponentNodes']),
     options() {
       return [
-        ['rectangle', 'rectangle'],
+        ['block', 'block'],
         ['flex-button', 'button'],
         ['carousel', 'carousel'],
         ['video-player', 'video'],
@@ -149,7 +149,7 @@ export default {
       return
     }
 
-    let startX, startY, originX, originY
+    let startX, startY, originX, originY, originW
     this.selection = new Selection({
       class: 'selection-area',
       startThreshold: 0,
@@ -162,9 +162,10 @@ export default {
       startY = evt.oe.clientY
 
       const element = evt.oe.path.find(node => node.dataset.addableId)
-      const { x, y } = element.getBoundingClientRect()
+      const { x, y, width } = element.getBoundingClientRect()
       originX = x
       originY = y
+      originW = width
       this.APP_SET({ beingAddedComponentId: element.dataset.addableId })
     })
 
@@ -173,8 +174,10 @@ export default {
         [this.currentBreakpoint]: {
           x: startX - originX,
           y: startY - originY,
-          w: evt.oe.clientX - startX,
-          h: evt.oe.clientY - startY
+          w: Math.round(((evt.oe.clientX - startX) / originW) * 100),
+          h: evt.oe.clientY - startY,
+          unitW: '%',
+          unitH: 'px'
         }
       }
 
