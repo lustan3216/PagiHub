@@ -225,6 +225,7 @@ export default {
       else {
         this.LAYOUT_SET({ gridResizing: false })
         this.SET_SELECTED_COMPONENT_ID(this.id)
+        store.lastEditId = this.id
         setTimeout(() => {
           const element = document.getElementById(`tree-node-${this.id}`)
           if (element) {

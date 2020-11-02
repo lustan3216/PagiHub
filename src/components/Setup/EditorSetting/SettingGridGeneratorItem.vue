@@ -1,8 +1,14 @@
 <template>
-  <rules-generator
-    :id="id"
-    :rules="spec"
-  />
+  <div>
+    <p class="font-12 gray-font-2 m-b-5">
+      Allow client user interact with items when page published.
+    </p>
+
+    <rules-generator
+      :id="id"
+      :rules="spec"
+    />
+  </div>
 </template>
 
 <script>
@@ -31,12 +37,8 @@ export default {
           // select('isDraggable', { options }),
           // select('isResizable', { options }),
           // select('static', { options }),
-          boolean('userCanDrag', {
-            info: 'Allow client user play with dragging when published.'
-          }),
-          boolean('userCanResize', {
-            info: 'Allow client user play with resizing when published.'
-          })
+          boolean('userCanDrag', { title: 'Draggable' }),
+          boolean('userCanResize', { title: 'Resizable' })
         ],
         defaultSetting
       )

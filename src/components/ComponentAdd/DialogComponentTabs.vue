@@ -56,20 +56,18 @@
             style="width: 225px;"
           />
 
-          <keep-alive>
-            <menu-component-sets
-              v-model="currentComponentId"
-              :except-ids="[editingComponentSetId]"
-              :category="currentCategory.name"
-              :key="currentCategory.name"
-              :text="search"
-              :tags="tags"
-              :default-tags="defaultTags"
-              class="flex-column over-scroll"
-              style="flex: 1.5;"
-              @add="addTemplate"
-            />
-          </keep-alive>
+          <menu-component-sets
+            v-model="currentComponentId"
+            :except-ids="[editingComponentSetId]"
+            :category="currentCategory.name"
+            :key="currentCategory.name"
+            :text="search"
+            :tags="tags"
+            :default-tags="defaultTags"
+            class="flex-column over-scroll"
+            style="flex: 1.5;"
+            @add="addTemplate"
+          />
 
           <div
             style="flex: 6"

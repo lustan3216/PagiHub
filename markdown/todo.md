@@ -15,7 +15,9 @@ https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
 
 bug
-- griditem 如果都用Math.round，在縮小width位置的時候會有bug, 可以採用無條件捨去，且 % vw vh 可小數點一位
+
+- button 的 text 無法 focus
+- griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 可以採用無條件捨去，且 % vw vh 可小數點一位
 - 修復 shared page copy and ux
 - video ratio, ratio 要跟 wh 合併
 - ratio might has bug when using vh, vw, %, is that possible to use px only
@@ -34,15 +36,15 @@ bug
 - copy from other tab
 
 - iframe
-style 支援 每個 device 可客製化
-支援 icon
-距離輔助線
-hover click
-animation
-style component
-container can transform
-form input
-can setting put under style or new tab
+  style 支援 每個 device 可客製化
+  支援 icon
+  距離輔助線
+  hover click
+  animation
+  style component
+  container can transform
+  form input
+  can setting put under style or new tab
 
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction 在弄就好
 image can put more effect

@@ -1,20 +1,33 @@
 <template>
-  <div v-if="canSetUp">
-    <el-divider content-position="left">
-      SETTINGS
-    </el-divider>
+  <div class="settings">
+    <div
+      v-if="isBackground"
+      class="flex-center h-100"
+    >
+      <p class="small-title gray-font-2">No Settings</p>
+    </div>
 
+    <template v-else>
+      <el-divider content-position="left">
+        INTERACTION
+      </el-divider>
 
+      <setting-grid-generator-item :id="lastNode.id" />
 
-    <keep-alive>
-      <component
-        v-if="lastNode"
-        :is="vueComponentTag"
-        :key="lastNode.id"
-        :id="lastNode.id"
-        class="m-t-10 settings"
-      />
-    </keep-alive>
+      <template v-if="canSetUp">
+        <el-divider content-position="left">
+          SETTINGS
+        </el-divider>
+
+        <component
+          v-if="lastNode"
+          :is="vueComponentTag"
+          :key="lastNode.id"
+          :id="lastNode.id"
+          class="m-t-10"
+        />
+      </template>
+    </template>
   </div>
 </template>
 
@@ -23,6 +36,7 @@ import { mapGetters } from 'vuex'
 import { bigCamelCase } from '@/utils/string'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { vmGet } from '@/utils/vmMap'
+import { isBackground } from '@/utils/node'
 
 const self = {
   name: 'PanelSettings',
@@ -56,6 +70,9 @@ const self = {
   },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
+    isBackground() {
+      return isBackground(this.lastNode)
+    },
     lastNode() {
       return arrayLast(this.selectedComponentNodes)
     },
@@ -86,6 +103,8 @@ export default self
 
 <style scoped lang="scss">
 ::v-deep.settings {
+  height: 100%;
+
   .el-col.el-col-24 {
     margin-bottom: 10px;
   }

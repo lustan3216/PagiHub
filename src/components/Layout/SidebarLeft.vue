@@ -30,12 +30,10 @@
       </template>
 
       <template slot="paneR">
-        <keep-alive>
-          <panel-components
-            v-if="componentSetLoaded"
-            :key="editingComponentSetId"
-          />
-        </keep-alive>
+        <panel-components
+          v-if="componentSetLoaded"
+          :key="editingComponentSetId"
+        />
       </template>
     </split-pane>
   </div>
