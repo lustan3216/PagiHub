@@ -231,7 +231,7 @@ export default {
         })
 
         queue.forEach(async(node, index) => {
-          const carousel = await asyncGetValue(() => vmGet(node.parentId))
+          const { $parent: carousel } = await asyncGetValue(() => vmGet(node.parentId))
           carousel.setAnimation(false)
           carousel.setActiveIndex(node.id)
 

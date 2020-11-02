@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import toolMixin from '@/components/Templates/mixins/tool'
 import propsMixin from '@/components/Templates/mixins/props'
 // childrenMixin 要拿來新增刪除小孩的
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -37,7 +38,7 @@ export default {
     GridGeneratorInner,
     ControllerLayer
   },
-  mixins: [propsMixin, childrenMixin],
+  mixins: [propsMixin, childrenMixin, toolMixin],
   props: {
     controller: {
       type: Boolean,

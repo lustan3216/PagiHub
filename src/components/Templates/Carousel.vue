@@ -126,7 +126,7 @@ export default {
       canNotDrag: false,
       currentIndex: 0,
       inViewPort: false,
-      animation: false,
+      animation: true,
       options: {
         callback: isVisible => {
           this.inViewPort = isVisible
