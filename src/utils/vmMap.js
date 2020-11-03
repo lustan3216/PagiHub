@@ -1,3 +1,4 @@
+import app from '@/main'
 import store from '../store'
 import { CAN_NEW_ITEM } from '../const'
 import { isGridItem, traversalAncestorAndSelf, wrapByGrid } from '@/utils/node'
@@ -59,60 +60,18 @@ export async function vmPasteNodes() {
   // the component should get from tmpComponentsMap to prevent data modified after copy or cross browser
   const { tmpComponentsMap } = store.state.node
   const { copyComponentIds } = store.state.app
-  const { selectedComponentIds } = store.state.app
 
-  const shouldDuplicate = arrayEquals(selectedComponentIds, copyComponentIds)
+  copyComponentIds.forEach(id => vmAddNode(tmpComponentsMap[id]))
 
-  if (copyComponentIds.length === 1) {
-    const node = tmpComponentsMap[copyComponentIds[0]]
-    vmPasteInside(node)
-  }
-  else if (copyComponentIds.length > 1 && shouldDuplicate) {
-    copyComponentIds.forEach(id => vmAddNode(tmpComponentsMap[id]))
-  }
-  else if (copyComponentIds.length > 1) {
-    const nodeTree = wrapByGrid(tmpComponentsMap, copyComponentIds)
-    vmPasteInside(nodeTree)
-  }
-}
-
-export function vmPasteInside(sourceNode) {
-  if (!sourceNode) {
-    return
-  }
-
-  const { nodesMap } = store.state.node
-  const { selectedComponentIds } = store.state.app
-
-  selectedComponentIds.forEach(targetId => {
-    const targetNode = nodesMap[targetId]
-    if (sourceNode.id === targetId) {
-      vmAddNode(sourceNode)
-    }
-    else if (isGridItem(sourceNode)) {
-      if (isGridItem(targetNode)) {
-        vmAddNodeToParent(targetId, sourceNode)
-      }
-      else {
-        vmRemoveNode(targetNode)
-        vmAddNodeToParent(targetNode.parentId, sourceNode)
-      }
-    }
-    else {
-      if (isGridItem(targetNode)) {
-        vmCleanChildren(targetNode)
-        vmAddNodeToParent(targetId, sourceNode)
-      }
-      else {
-        vmRemoveNode(targetNode)
-        vmAddNodeToParent(targetNode.parentId, sourceNode)
-      }
-    }
+  app.$nextTick(() => {
+    store.commit(
+      'app/SET',
+      {
+        selectedComponentIds: copyComponentIds
+      },
+      { root: true }
+    )
   })
-}
-
-export function vmCleanChildren(node) {
-  node.children.forEach(child => vmRemoveNode(child))
 }
 
 export function vmAddNode(node) {

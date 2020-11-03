@@ -9,7 +9,7 @@ import {
   isCarousel,
   isGridItem,
   cloneJsonWithoutChildren,
-  isGrid
+  isGrid, isGroup
 } from '@/utils/node'
 import { getExample } from '@/templateJson/basic'
 
@@ -120,21 +120,21 @@ export default {
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
       this.record(records)
 
-      // this.$nextTick(() => {
-      //   if (isCarousel(this.node) || isGrid(this.node)) {
-      //     this.SET_SELECTED_COMPONENT_ID(this.node.parentId)
-      //
-      //     if (this.node.children.length === 0) {
-      //       this.record({
-      //         path: this.node.id,
-      //         value: undefined
-      //       })
-      //     }
-      //   }
-      //   else if (this.node) {
-      //     this.SET_SELECTED_COMPONENT_ID(this.node.id)
-      //   }
-      // })
+      this.$nextTick(() => {
+        if (isCarousel(this.node) || isGroup(this.node)) {
+          this.SET_SELECTED_COMPONENT_ID(this.node.parentId)
+
+          if (this.node.children.length === 0) {
+            this.record({
+              path: this.node.id,
+              value: undefined
+            })
+          }
+        }
+        else if (this.node) {
+          this.SET_SELECTED_COMPONENT_ID(this.node.id)
+        }
+      })
     }
   }
 }

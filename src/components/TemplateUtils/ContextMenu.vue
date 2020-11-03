@@ -136,10 +136,8 @@
 
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
-import { isGridItem } from '@/utils/node'
 import { isMac } from '@/utils/device'
 import {
-  vmAddNode,
   vmPasteNodes,
   vmRemoveNode,
   vmBecomeMaster
@@ -192,6 +190,10 @@ export default {
           divided: true
         },
         {
+          name: 'Paste',
+          shortKey: [this.metaKey, 'V']
+        },
+        {
           name: 'Cut',
           shortKey: [this.metaKey, 'X'],
           disabled: this.selectedComponentIds.length !== 1
@@ -228,7 +230,7 @@ export default {
         default:
           this.selectedComponentNodes.forEach(node => {
             switch (command) {
-              case 'Replace':
+              case 'Paste':
                 vmPasteNodes()
                 break
               case 'Delete':

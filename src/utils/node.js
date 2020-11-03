@@ -14,6 +14,7 @@ import {
   SOFT_DELETE,
   STYLES
 } from '@/const'
+import { unitConvert } from '@/utils/layout'
 
 export function wrapByGrid(nodesMap, ids) {
   const childrenArray = []
@@ -46,7 +47,7 @@ export function wrapByGrid(nodesMap, ids) {
   })
 }
 
-export function getGroupRect(nodes) {
+export function getGroupPxRect(nodes) {
   const rect = {
     minX: Infinity,
     minY: Infinity,
@@ -58,11 +59,13 @@ export function getGroupRect(nodes) {
 
   nodes.forEach(node => {
     const point = closestValidBreakpoint(node, currentBreakpoint)
-    const { x, y, w, h } = node.grid[point]
+    const { x, y, w, h, unitH, unitW } = node.grid[point]
+    const pxW = unitConvert(node.id, w, unitW, 'px')
+    const pxH = unitConvert(node.id, h, unitH, 'px')
     if (x <= rect.minX) rect.minX = x
     if (y <= rect.minY) rect.minY = y
-    if (x + w >= rect.maxX) rect.maxX = x + w
-    if (y + h >= rect.maxY) rect.maxY = y + h
+    if (x + pxW >= rect.maxX) rect.maxX = x + pxW
+    if (y + pxH >= rect.maxY) rect.maxY = y + pxH
   })
 
   return {

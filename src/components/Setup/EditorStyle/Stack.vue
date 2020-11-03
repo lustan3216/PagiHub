@@ -73,12 +73,10 @@ export default {
             value: value || undefined
           })
 
-          if (!value) {
-            this.record({
-              path: [node.id, STYLES, 'layout', 'position'],
-              value: undefined
-            })
-          }
+          this.record({
+            path: [node.id, STYLES, 'layout', 'position'],
+            value: undefined
+          })
         })
       }
     },

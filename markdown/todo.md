@@ -23,8 +23,6 @@ Just click publish, then you will have a real RWD website
 
 bug
 
-- pasty html style
-- multi copy 時也要多個選中
 - 修復 shared page copy and ux
 - autoHeight 有時還是會失靈 (發生在寬度變的時候)
 - panel component click bug when compoent is carousel

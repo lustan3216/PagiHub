@@ -4,7 +4,7 @@ import { arrayUniq } from '@/utils/array'
 import {
   isGroup,
   closestValidBreakpoint,
-  getGroupRect,
+  getGroupPxRect,
   closestValidGrid
 } from '@/utils/node'
 import { mapActions, mapGetters } from 'vuex'
@@ -12,6 +12,7 @@ import { BREAK_POINTS_ARRAY, GRID } from '@/const'
 import { group } from '@/templateJson/basic'
 import { vmAddNodeToParent, vmRemoveNode } from '@/utils/vmMap'
 import { unitConvert } from '@/utils/layout'
+import { toPrecision } from '@/utils/number'
 
 export default {
   name: 'ComponentGroup',
@@ -33,16 +34,23 @@ export default {
   methods: {
     ...mapActions('node', ['record']),
     group() {
-      const { x, y, w, h } = getGroupRect(this.selectedComponentNodes)
+      const { x, y, w, h } = getGroupPxRect(this.selectedComponentNodes)
       const { parentId } = this.selectedComponentNodes[0]
+
       const children = this.selectedComponentNodes.map(node => {
         const currentGrid = closestValidGrid(node, this.currentBreakpoint)
         node = cloneJson(node)
+
+        let nodeW = currentGrid.w
+        if (currentGrid.unitW === '%') {
+          nodeW = (unitConvert(node.id, currentGrid.w, '%', 'px') / w) * 100
+        }
+
         node.grid = {
           [this.currentBreakpoint]: {
             x: Math.round(currentGrid.x - x),
             y: Math.round(currentGrid.y - y),
-            w: Math.round(currentGrid.w),
+            w: toPrecision(nodeW, 1),
             h: Math.round(currentGrid.h),
             unitH: currentGrid.unitH,
             unitW: currentGrid.unitW
@@ -82,6 +90,15 @@ export default {
         BREAK_POINTS_ARRAY.forEach(point => {
           const grid = node.grid[point]
           if (!grid) return
+
+          if (grid.unitW === '%') {
+            const nodePx = unitConvert(node.id, grid.w, '%', 'px')
+
+            records.push({
+              path: [node.id, GRID, point, 'w'],
+              value: unitConvert(group.id, nodePx, 'px', '%')
+            })
+          }
 
           const currentGroupGird = this.closestValidGrid(group, point)
           records.push({

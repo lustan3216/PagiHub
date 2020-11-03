@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import { isMac } from '@/utils/device'
 import { vmCreateEmptyItem, vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
 import { arrayLast } from '@/utils/array'
@@ -84,6 +84,7 @@ export default {
   },
   methods: {
     ...mapMutations('node', ['REDO', 'UNDO']),
+    ...mapActions('app', ['setCopySelectedNodeId']),
     isMac,
     vmPasteNodes,
     vmCreateEmptyItem() {

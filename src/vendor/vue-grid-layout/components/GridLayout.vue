@@ -30,7 +30,6 @@
     getLayoutItem,
     moveElement,
     validateLayout,
-    correctFixItemsBound,
     getAllCollisions
   } from '../helpers/utils'
   //var eventBus = require('./eventBus');
@@ -156,7 +155,9 @@
           // lots-design
           self.updateHeight()
           self.onWindowResize()
-          const off1 = resizeListener(self.$refs.item, self.onWindowResize)
+          const off1 = resizeListener(self.$refs.item, () => {
+            requestAnimationFrame(self.onWindowResize)
+          })
 
           this.offListeners.push(off1)
         })
@@ -246,11 +247,6 @@
 
           default:
             return 1
-        }
-      },
-      correctFixItemsBound() {
-        if (this.boundaryElement) {
-          correctFixItemsBound(this.layout, this.boundaryElement.clientHeight)
         }
       },
       layoutUpdate() {
