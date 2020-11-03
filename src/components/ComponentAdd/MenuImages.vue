@@ -88,7 +88,7 @@
           >
             <div style="margin: 5px 0;">
               1. Import the <b>private images</b> in private pages instead of
-              public page or component.
+              public page.
             </div>
 
             <div style="margin: 5px 0;">
