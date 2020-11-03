@@ -2,7 +2,7 @@
   <div class="editor ProseMirror">
     <portal to="TextEditorSimpleStyle">
       <text-editor-simple-style
-        v-if="element"
+        v-if="element && editing"
         :element="element"
       />
     </portal>
