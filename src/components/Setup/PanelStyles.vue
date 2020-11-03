@@ -8,7 +8,10 @@
 
       <dimension />
 
-      <text-editor-simple-style />
+      <portal-target
+        name="TextEditorSimpleStyle"
+        slim
+      />
 
       <item-hidden-controller />
 

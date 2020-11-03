@@ -260,6 +260,7 @@ export default {
     },
     handleMousemove(e) {
       if (!this.clicking) return
+      if (Math.abs(this.lastPosition - e.clientY) < 1) return
 
       const value = this.lastPosition > e.clientY ? this.step : -1 * this.step
 
@@ -267,6 +268,7 @@ export default {
         return
       }
 
+      this.lastPosition = e.clientY
       this.innerNumber += value
     },
     isInvalid(value) {

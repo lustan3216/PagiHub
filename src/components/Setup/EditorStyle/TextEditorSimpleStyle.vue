@@ -1,5 +1,5 @@
 <template>
-  <div v-if="node && element">
+  <div v-if="node">
     <el-divider content-position="left">FONT</el-divider>
 
     <el-row
@@ -38,6 +38,7 @@
       <el-col :span="16">
         <select-unit
           ref="fontSize"
+          :clearable="false"
           v-model="fontSize"
         />
       </el-col>
@@ -52,6 +53,7 @@
       <el-col :span="16">
         <select-unit
           ref="letterSpacing"
+          :clearable="false"
           v-model="letterSpacing"
         />
       </el-col>
@@ -66,6 +68,7 @@
       <el-col :span="16">
         <select-unit
           ref="lineHeight"
+          :clearable="false"
           v-model="lineHeight"
         />
       </el-col>
@@ -81,7 +84,6 @@ import { getValueByPath } from '@/utils/tool'
 import { STYLES, HTML } from '@/const'
 import { mapGetters, mapActions } from 'vuex'
 import { arrayLast } from '@/utils/array'
-import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'TextEditorSimpleStyle',
@@ -90,6 +92,11 @@ export default {
     FontSelector,
     Tip
   },
+  props: {
+    element: {
+      required: true
+    }
+  },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
     node() {
@@ -97,10 +104,6 @@ export default {
     },
     style() {
       return getValueByPath(this.node, [STYLES, HTML], {})
-    },
-    element() {
-      const vm = vmGet(this.node.id)
-      return getValueByPath(vm, 'content.$el')
     },
     computedStyle() {
       return window.getComputedStyle(this.element)

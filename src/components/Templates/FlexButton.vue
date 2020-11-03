@@ -39,6 +39,7 @@ import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { deleteBy } from '@/utils/array'
 import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
 import TextEditorInner from './TextEditorInner'
+import ControllerLayer from '../TemplateUtils/ControllerLayer'
 
 export default {
   defaultSetting,

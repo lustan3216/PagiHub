@@ -1,6 +1,9 @@
 <template>
   <grid-generator-item :id="id">
-    <text-editor-inner :id="id" />
+    <text-editor-inner
+      :id="id"
+      :can-link="false"
+    />
   </grid-generator-item>
 </template>
 <script>

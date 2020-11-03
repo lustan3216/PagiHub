@@ -6,7 +6,7 @@
     class="quick-functions flex-center"
   >
     <portal-target
-      v-if="isTextEditor && itemEditing"
+      v-if="itemEditing"
       :style="textEditorStyle"
       name="QuickFunctionsTextEditor"
       slim
@@ -176,9 +176,6 @@ export default {
     },
     isButton() {
       return this.node.tag === 'flex-button'
-    },
-    isTextEditor() {
-      return isTextEditor(this.node)
     }
   },
   mounted() {

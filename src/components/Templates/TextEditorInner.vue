@@ -1,5 +1,11 @@
 <template>
   <div class="editor ProseMirror">
+    <portal to="TextEditorSimpleStyle">
+      <text-editor-simple-style
+        v-if="element"
+        :element="element"
+      />
+    </portal>
     <portal
       v-if="selected"
       to="QuickFunctionsTextEditor"
@@ -172,10 +178,12 @@ import {
   BIconLink
 } from 'bootstrap-vue'
 import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
+import TextEditorSimpleStyle from '@/components/Setup/EditorStyle/TextEditorSimpleStyle'
 
 export default {
   name: 'TextEditorInner',
   components: {
+    TextEditorSimpleStyle,
     ColorPicker,
     ElPopover: Popover,
     ContentEditable,
@@ -207,7 +215,8 @@ export default {
     return {
       editor: null,
       linkMenuIsActive: false,
-      headingHover: false
+      headingHover: false,
+      element: null
     }
   },
   computed: {
@@ -336,7 +345,7 @@ export default {
       }
     }
   },
-  created() {
+  beforeMount() {
     const families = this.findFontNames(this.innerValue || '')
 
     if (families.length) {
@@ -348,6 +357,9 @@ export default {
         }
       })
     }
+  },
+  mounted() {
+    this.element = this.$refs.content.$el
   },
   methods: {
     ...mapActions('node', ['record']),
