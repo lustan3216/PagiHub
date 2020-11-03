@@ -103,8 +103,6 @@ export default self
 
 <style scoped lang="scss">
 ::v-deep.settings {
-  height: 100%;
-
   .el-col.el-col-24 {
     margin-bottom: 10px;
   }

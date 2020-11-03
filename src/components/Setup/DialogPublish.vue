@@ -4,7 +4,10 @@
     type="text"
     @click.stop="open"
   >
-    <b-icon-cloud-arrow-up style="padding-top: 1px;" />
+    <b-icon-cloud-arrow-up
+      style="padding-top: 1px;"
+      class="m-r-5"
+    />
 
     <dialog-username
       ref="dialogUsername"

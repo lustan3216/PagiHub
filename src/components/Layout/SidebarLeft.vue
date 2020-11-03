@@ -107,6 +107,7 @@ export default {
 .sidebar-left {
   background-color: white;
   border-right: 1px solid $color-grey;
+  border-top: 1px solid $color-grey;
   height: 100%;
   overflow: hidden;
 }

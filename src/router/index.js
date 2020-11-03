@@ -58,7 +58,7 @@ export default new VueRouter({
     {
       path: '/workboard/:projectId',
       name: 'Workboard',
-      meta: { noFbChat: true },
+      meta: { noFbChat: true, noNavbar: true },
       component: () => import('@/components/Layout/PanelDraft')
     },
     {

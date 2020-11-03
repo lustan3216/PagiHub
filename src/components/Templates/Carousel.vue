@@ -8,22 +8,22 @@
         <i
           v-shortkey="['arrowup']"
           v-if="canUp"
-          @shortkey="carousel.prev()"
+          @shortkey="carousel.prev"
         />
         <i
           v-shortkey="['arrowdown']"
           v-if="canDown"
-          @shortkey="carousel.next()"
+          @shortkey="carousel.next"
         />
         <i
           v-shortkey="['arrowleft']"
           v-if="canLeft"
-          @shortkey="carousel.prev()"
+          @shortkey="carousel.prev"
         />
         <i
           v-shortkey="['arrowright']"
           v-if="canRight"
-          @shortkey="carousel.next()"
+          @shortkey="carousel.next"
         />
       </template>
 
@@ -205,7 +205,7 @@ export default {
       return this.carousel.activeIndex === 0
     },
     isEnd() {
-      return this.innerChildren.length - 2 === this.carousel.activeIndex
+      return this.innerChildren.length - 1 === this.carousel.activeIndex
     },
     carousel() {
       return this.$refs.carousel

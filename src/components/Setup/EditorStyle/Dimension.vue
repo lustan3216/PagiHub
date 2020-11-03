@@ -1,12 +1,8 @@
 <template>
-  <div class="relative">
-    <el-divider content-position="left">
-      DIMENSION
-      <tip class="m-l-5">
-        Height will be disabled if Overflow is fit container.
-      </tip>
-    </el-divider>
-
+  <div
+    class="relative"
+    style="margin-top: 5px;"
+  >
     <div class="flex-column lock-outer">
       <el-button
         :icon="`el-icon-${ratio ? 'lock' : 'unlock'}`"
@@ -277,7 +273,7 @@ export default {
   border: 1px solid #d6dae2;
   border-radius: 9px 0 0 9px;
   border-right: none;
-  top: 28px;
+  top: 12px;
   left: 4px;
   width: 10px;
   z-index: 10;

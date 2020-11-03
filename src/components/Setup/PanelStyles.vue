@@ -6,19 +6,15 @@
     <template v-if="!hasBackground">
       <align />
 
+      <dimension />
+
       <text-editor-simple-style />
-
-      <stack />
-
-      <portal-target name="PanelStyles" />
 
       <item-hidden-controller />
 
-      <dimension />
+      <stack />
 
       <el-divider content-position="left">APPEARANCE</el-divider>
-
-      <position />
 
       <!--      <overflow />-->
 
@@ -70,7 +66,7 @@ import TextEditorSimpleStyle from './EditorStyle/TextEditorSimpleStyle'
 import Ratio from './EditorStyle/Ratio'
 import Position from '@/components/Setup/EditorStyle/Position'
 import Align from '@/components/Setup/EditorStyle/Align'
-import { isBackground } from '@/utils/node'
+import { isBackground, isGroup, isSlider } from '@/utils/node'
 
 export default {
   name: 'PanelStyles',
@@ -119,9 +115,7 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
     hasBackground() {
-      return this.selectedComponentIds.find(id =>
-        isBackground(this.nodesMap[id])
-      )
+      return this.selectedComponentNodes.find(node => isBackground(node))
     }
   }
 }

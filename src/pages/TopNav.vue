@@ -8,10 +8,6 @@
       LotsDesign
     </el-button>
 
-    <div>
-      <portal-target name="NavMiddle" />
-    </div>
-
     <div class="right">
       <el-button
         type="text"

@@ -43,6 +43,7 @@
           <el-col :span="16">
             <select-unit
               v-if="options[option.name]"
+              :disabled="canNotTransform"
               :value="option.value || options[option.name].default"
               :key="option.name"
               v-bind="options[option.name]"
@@ -53,6 +54,7 @@
           </el-col>
         </el-row>
       </portal>
+
       <el-row
         v-else
         :gutter="5"
@@ -67,6 +69,7 @@
         <el-col :span="13">
           <select-unit
             v-if="options[option.name]"
+            :disabled="canNotTransform"
             :value="option.value || options[option.name].default"
             :clearable="false"
             :key="option.name"
@@ -95,22 +98,29 @@ import { humanize } from '@/utils/string'
 import { cloneJson } from '@/utils/tool'
 import TransformOrigin from '@/components/Setup/EditorStyle/TransformOrigin'
 import { deleteBy } from '@/utils/array'
+import { isGroup, isSlider } from '@/utils/node'
 
 export default {
   name: 'Transform',
-  mixins: [forNodeMixins('transform')],
   components: {
     TransformOrigin,
     ElInputNumber: InputNumber,
     SelectUnit,
     InputUnit
   },
+  mixins: [forNodeMixins('transform')],
   data() {
     return {
       transformArray: []
     }
   },
   computed: {
+    canNotTransform() {
+      const nodes = this.selectedComponentNodes.filter(
+        node => isGroup(node) || isSlider(node)
+      )
+      return Boolean(nodes.length)
+    },
     options() {
       return {
         rotate: {

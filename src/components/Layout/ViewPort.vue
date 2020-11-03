@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <portal to="ViewPortController">
+    <portal to="BreakpointController">
       <div class="align-center">
         <el-tooltip
           v-if="isPreviewMode"
@@ -76,48 +76,48 @@
             icon="el-icon-more-outline"
           />
         </el-popover>
-
-        <el-divider direction="vertical" />
-
-        <el-dropdown
-          size="small"
-          split-button
-          type
-          @click="setBoundaryRect"
-        >
-          <i class="el-icon-refresh-left" />
-          <span
-            class="gray-font font-12"
-            style="width: 75px; display: inline-block;"
-          >
-            {{ style.w }} x {{ style.h }}
-          </span>
-
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              v-for="option in deviceOptions"
-              :key="option.name"
-              :value="option.name"
-              @click.native="setSize({ w: option.w, h: option.h })"
-            >
-              <div class="justify-between">
-                <span class="gray-font">{{ option.name }}</span>
-                <span
-                  class="m-l-15 gray-font"
-                >{{ option.w }} X {{ option.h }}</span>
-              </div>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-
-        <el-button
-          size="small"
-          icon="el-icon-refresh-left"
-          @click="style.scale = 1"
-        >
-          {{ scalePercent }} %
-        </el-button>
       </div>
+    </portal>
+
+    <portal to="ViewPortController">
+      <el-dropdown
+        size="small"
+        split-button
+        type
+        @click="setBoundaryRect"
+      >
+        <i class="el-icon-refresh-left" />
+        <span
+          class="gray-font font-12"
+          style="width: 75px; display: inline-block;"
+        >
+          {{ style.w }} x {{ style.h }}
+        </span>
+
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item
+            v-for="option in deviceOptions"
+            :key="option.name"
+            :value="option.name"
+            @click.native="setSize({ w: option.w, h: option.h })"
+          >
+            <div class="justify-between">
+              <span class="gray-font">{{ option.name }}</span>
+              <span
+                class="m-l-15 gray-font"
+              >{{ option.w }} X {{ option.h }}</span>
+            </div>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <el-button
+        size="small"
+        icon="el-icon-refresh-left"
+        @click="style.scale = 1"
+      >
+        {{ scalePercent }} %
+      </el-button>
     </portal>
   </div>
 </template>

@@ -1,33 +1,36 @@
 <template>
-  <el-row
-    type="flex"
-    align="middle"
-  >
-    <el-col :span="8">
-      <span class="title p-r-10">Position</span>
-    </el-col>
+  <div>
+    <el-divider content-position="left">FIX POSITION</el-divider>
+    <el-row
+      type="flex"
+      align="middle"
+    >
+      <el-col :span="8">
+        <span class="title p-r-10">Position</span>
+      </el-col>
 
-    <el-col :span="16">
-      <el-select v-model="position">
-        <el-option
-          label="Default"
-          value=""
-        />
-        <el-option
-          label="Fix when parent scrolling"
-          value="fixed"
-        />
-        <el-option
-          label="Fix on parent's bottom"
-          value="fixOnParentBottom"
-        />
-        <el-option
-          label="Stick to top"
-          value="verticalCompact"
-        />
-      </el-select>
-    </el-col>
-  </el-row>
+      <el-col :span="16">
+        <el-select v-model="position">
+          <el-option
+            label="Default"
+            value=""
+          />
+          <el-option
+            label="Fix when parent scrolling"
+            value="fixed"
+          />
+          <el-option
+            label="Fix on parent's bottom"
+            value="fixOnParentBottom"
+          />
+          <el-option
+            label="Stick to top"
+            value="verticalCompact"
+          />
+        </el-select>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>

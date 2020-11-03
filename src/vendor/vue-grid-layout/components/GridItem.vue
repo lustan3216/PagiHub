@@ -6,7 +6,7 @@
     :style="{
           ...style,
           ...styleProps,
-          zIndex: isDragging || isResizing ? 10000 : zIndex,
+          zIndex: isDragging || isResizing || selected ? 10000 : zIndex,
           position: fixItem ? 'fixed' : 'absolute'
         }"
   >
@@ -351,7 +351,7 @@
       }
     },
     mounted: function() {
-      this.cols = this.width
+      this.cols = this.parent.width
 
       this.lockItemInLayout = !this.parent.autoHeight
       this.containerWidth = this.parent.width !== null ? this.parent.width : 100
@@ -551,9 +551,9 @@
     },
     methods: {
       createStyle: function() {
-        if (this.x + this.pxW > this.cols) {
-          this.innerX = this.cols - this.pxW < 0 ? 0 : this.cols - this.pxW
-          this.innerW = (this.pxW > this.cols) ? this.cols : this.w
+        if (this.x + this.pxW > this.containerWidth) {
+          this.innerX = this.cols - this.pxW < 0 ? 0 : this.containerWidth - this.pxW
+          this.innerW = (this.pxW > this.containerWidth) ? this.containerWidth / this.colWidth : this.w
         } else {
           this.innerX = this.x
           this.innerW = this.w
@@ -617,6 +617,7 @@
             // console.log(event)
             // console.log(coreEvent.deltaX)
             newSize.width = this.resizing.width + event.deltaRect.right
+
             if (this.autoHeight) {
               pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH)
               newSize.height = pos.height
@@ -659,9 +660,9 @@
             break
           }
         }
-
         // Get new WH
         pos = this.calcWH(newSize.height, newSize.width)
+
         if (pos.w < this.minW) {
           pos.w = this.minW
         }

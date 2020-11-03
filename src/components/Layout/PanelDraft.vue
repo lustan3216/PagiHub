@@ -1,39 +1,36 @@
 <template>
-  <div
-    ref="panelDraft"
-    :class="{ draft: isDraftMode }"
-    class="editor"
-  >
-    <portal
-      v-if="isDraftMode"
-      to="NavMiddle"
-    >
-      <function-bar />
-    </portal>
+  <div>
+    <function-bar />
 
-    <sidebar-left v-if="isDraftMode" />
-
-    <view-port
+    <div
+      ref="panelDraft"
       :class="{ draft: isDraftMode }"
-      style="flex: 1"
+      class="editor"
     >
-      <transition
-        name="slide"
-        mode="out-in"
+      <sidebar-left v-if="isDraftMode" />
+
+      <view-port
+        :class="{ draft: isDraftMode }"
+        style="flex: 1"
       >
-        <keep-alive :include="rootComponentSetIds">
-          <art-board
-            :id="editingComponentSetId"
-            :key="editingComponentSetId"
-            class="draft-artboard"
-          />
-        </keep-alive>
-      </transition>
-    </view-port>
+        <transition
+          name="slide"
+          mode="out-in"
+        >
+          <keep-alive :include="rootComponentSetIds">
+            <art-board
+              :id="editingComponentSetId"
+              :key="editingComponentSetId"
+              class="draft-artboard"
+            />
+          </keep-alive>
+        </transition>
+      </view-port>
 
-    <sidebar-right v-if="isDraftMode" />
+      <sidebar-right v-if="isDraftMode" />
 
-    <preview-controller v-if="isPreviewMode" />
+      <preview-controller v-if="isPreviewMode" />
+    </div>
   </div>
 </template>
 

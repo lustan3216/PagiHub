@@ -68,7 +68,6 @@
       v-model="filterText"
       placeholder="Search Node"
       size="small"
-      class="m-b-10"
     />
   </div>
 </template>
@@ -231,7 +230,9 @@ export default {
         })
 
         queue.forEach(async(node, index) => {
-          const { $parent: carousel } = await asyncGetValue(() => vmGet(node.parentId))
+          const { $parent: carousel } = await asyncGetValue(() =>
+            vmGet(node.parentId)
+          )
           carousel.setAnimation(false)
           carousel.setActiveIndex(node.id)
 

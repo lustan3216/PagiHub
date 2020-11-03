@@ -16,7 +16,7 @@
       <el-col :span="6">
         <el-input
           v-model="search"
-          placeholder="Search name or description"
+          placeholder="Search name"
           size="small"
           clearable
         />

@@ -69,36 +69,39 @@
     </template>
 
     <template slot="paneR">
-      <tip
-        :closeable="false"
-        icon="el-icon-warning"
-        class="tip crucial"
-      >
-        <div style="margin: 5px 0;">
-          1. Import the <b>private images</b> in private pages instead of public
-          page or component.
-        </div>
-
-        <div style="margin: 5px 0;">
-          2. It can <span class="crucial">NOT</span> be deleted in public
-          component or page once it publish.
-        </div>
-
-        <div style="margin: 5px 0;">
-          3. Each image size limit is <b>{{ maxFileSize }}</b>.
-        </div>
-      </tip>
-
-      <div class="filepond-container">
-        <transition-group name="fade">
-          <img
-            v-if="hoverImage && hoverImage.url"
-            key="image"
-            :src="assetHost + hoverImage.url"
-            class="preview-image"
+      <transition-group name="fade">
+        <img
+          v-if="hoverImage && hoverImage.url"
+          key="image"
+          :src="assetHost + hoverImage.url"
+          class="preview-image"
+        >
+        <div
+          v-show="!hoverImage || !hoverImage.url"
+          key="updaloer"
+          class="filepond-container"
+        >
+          <tip
+            :closeable="false"
+            icon="el-icon-warning"
+            class="tip crucial"
           >
+            <div style="margin: 5px 0;">
+              1. Import the <b>private images</b> in private pages instead of
+              public page or component.
+            </div>
+
+            <div style="margin: 5px 0;">
+              2. It can <span class="crucial">NOT</span> be deleted in public
+              component or page once it publish.
+            </div>
+
+            <div style="margin: 5px 0;">
+              3. Each image size limit is <b>{{ maxFileSize }}</b>.
+            </div>
+          </tip>
+
           <file-pond
-            v-show="!hoverImage || !hoverImage.url"
             ref="pond"
             key="pong"
             :allow-multiple="true"
@@ -108,8 +111,8 @@
             :max-file-size="maxFileSize"
             accepted-file-types="image/gif, image/jpeg, image/jpg, image/png"
           />
-        </transition-group>
-      </div>
+        </div>
+      </transition-group>
     </template>
   </split-pane>
 </template>

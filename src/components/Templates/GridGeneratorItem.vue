@@ -38,6 +38,7 @@
       :class="{
         'h-100': !shouldAutoHeight
       }"
+      class="border-box"
     >
       <controller-layer
         v-if="isDraftMode"

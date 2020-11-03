@@ -18,28 +18,42 @@ Designing tool + page builder + design sharing = No more prototype + No more cod
 
 Just click publish, then you will have a real RWD website
 
+打包出去的 js file, 理論上應該可以 用 prerender 方式，因為已經發布了，所以固定定型了，理論上程式碼應該不用再動，
+要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
+
 bug
 
-- griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 對其, will have a problem when stack mode container around
+- multi copy 時也要多個選中
 - 修復 shared page copy and ux
-- unitW 不是 px 時拉出邊界會有 bug
-- 提示 breakpoint 拉完就定型
-- panel component 可以拖拉
 - autoHeight 有時還是會失靈 (發生在寬度變的時候)
-- component border 會讓匡線走位
+- panel component click bug when compoent is carousel
+- style will have bug if number clear
+- 照片的 link 坐在 magement 裡面
+- griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 對其, will have a problem when stack mode container around
+- button link 坐在 component operator 上
+- group scrollable
+- 快捷鍵選單
+
+- block copy can click option + move
+- panel component shift select
 - copy from other tab
-- height %
+- text 不用 link 和 button link 重疊了, 思考 text 的 link 要不要
+- panel component 可以拖拉
+
+* pan dragging
+* moving + shift can lock axis
 
 - iframe
-  style 支援 每個 device 可客製化
-  支援 icon
-  距離輔助線
-  hover click
-  animation
-  style component
-  container can transform
-  form input
-  can setting put under style or new tab
+- height %
+- style 支援 每個 device 可客製化
+- 支援 icon
+- 距離輔助線
+- hover click
+- animation
+- style component
+- container can transform
+- form input
+- can setting put under style or new tab
 
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction 在弄就好
 image can put more effect
@@ -55,26 +69,16 @@ form-create 整個拔掉
 
 <ol>
 每個用戶都有一個 playground 進去可以馬上玩
-width px, grid layout 底城如果用每單位 用 px 計算搞不好有機會
 sanitize-html
 <li>road map</li>
 </ol>
 
-svg/icon
-stylecomponent
-container 對其功能 , 距離輔助
-seo
 5<li>project's favicon and SEO can be edited in the project modal</li>
 5<li>seo sitemap page 要可以挑選</li>
 
 <li>radius 可加增神奇第二元素</li>
-
-update children 要做 queue
-
-<li>embed iframe,iframe 要可以自動 resize</li>
 5<li>避風港跟三振條款</li>
 <li>time line/ steps/ transfer / cascader / map / text-shadow</li>
-
 <li>aws 要做安全機制</li>
 <li>only one device can login</li>
 <li>like</li>

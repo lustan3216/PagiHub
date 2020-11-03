@@ -1,75 +1,72 @@
 <template>
-  <div>
-    <el-divider content-position="left">ALIGN</el-divider>
-    <el-form :disabled="!sameParent">
-      <div class="flex">
-        <el-button
-          plain
-          class="flex1"
-          @click="alignTop"
-        >
-          <b-icon-align-top />
-        </el-button>
+  <el-form :disabled="!sameParent">
+    <div class="flex">
+      <el-button
+        plain
+        class="flex1"
+        @click="alignTop"
+      >
+        <b-icon-align-top />
+      </el-button>
 
-        <el-button
-          plain
-          class="flex1"
-          @click="alignMiddle"
-        >
-          <b-icon-align-middle />
-        </el-button>
+      <el-button
+        plain
+        class="flex1"
+        @click="alignMiddle"
+      >
+        <b-icon-align-middle />
+      </el-button>
 
-        <el-button
-          plain
-          class="flex1"
-          @click="alignBottom"
-        >
-          <b-icon-align-bottom />
-        </el-button>
+      <el-button
+        plain
+        class="flex1"
+        @click="alignBottom"
+      >
+        <b-icon-align-bottom />
+      </el-button>
 
-        <el-button
-          plain
-          class="flex1"
-          @click="alignStart"
-        >
-          <b-icon-align-start />
-        </el-button>
+      <el-button
+        plain
+        class="flex1"
+        @click="alignStart"
+      >
+        <b-icon-align-start />
+      </el-button>
 
-        <el-button
-          plain
-          class="flex1"
-          @click="alignCenter"
-        >
-          <b-icon-align-center />
-        </el-button>
-        <el-button
-          plain
-          class="flex1"
-          @click="alignEnd"
-        >
-          <b-icon-align-end />
-        </el-button>
+      <el-button
+        plain
+        class="flex1"
+        @click="alignCenter"
+      >
+        <b-icon-align-center />
+      </el-button>
+      <el-button
+        plain
+        class="flex1"
+        @click="alignEnd"
+      >
+        <b-icon-align-end />
+      </el-button>
 
-        <el-button
-          :disabled="!canDistribute"
-          plain
-          class="flex1"
-          @click="distributeHorizontal"
-        >
-          <b-icon-distribute-horizontal />
-        </el-button>
+      <el-button
+        :disabled="!canDistribute"
+        plain
+        class="flex1"
+        @click="distributeHorizontal"
+      >
+        <b-icon-distribute-horizontal />
+      </el-button>
 
-        <el-button
-          :disabled="!canDistribute"
-          plain
-          class="flex1"
-          @click="distributeVertical"
-        >
-          <b-icon-distribute-vertical />
-        </el-button>
-      </div>
-    </el-form>
-  </div>
+      <el-button
+        :disabled="!canDistribute"
+        plain
+        class="flex1"
+        @click="distributeVertical"
+      >
+        <b-icon-distribute-vertical />
+      </el-button>
+    </div>
+  </el-form>
 </template>
 
 <script>

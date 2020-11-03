@@ -1,6 +1,6 @@
 <script>
 import {
-  BIconFonts,
+  BIconType,
   BIconImage,
   BIconSquare,
   BIconCameraVideo,
@@ -23,7 +23,7 @@ export default {
   render(h, context) {
     switch (context.props.icon) {
       case 'text-editor':
-        return h(BIconFonts, context.data)
+        return h(BIconType, context.data)
       case 'flex-image':
         return h(BIconImage, context.data)
       case 'block':

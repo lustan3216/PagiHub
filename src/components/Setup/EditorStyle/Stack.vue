@@ -1,15 +1,41 @@
 <template>
   <div>
-    <el-divider content-position="left">STACK MODE</el-divider>
+    <el-divider content-position="left">LAYOUT</el-divider>
 
     <el-checkbox
       v-model="isStack"
       :key="isStack"
     >
-      <span
-        class="font-12"
-      >Bounce away when two blocks colliding if both enable.</span>
+      <span class="font-12">
+        Bounce away when two blocks colliding if both enable
+      </span>
     </el-checkbox>
+
+    <el-checkbox
+      v-if="isStack"
+      v-model="verticalCompact"
+      :disabled="canNotVerticalCompact"
+      class="m-t-10"
+    >
+      <span class="font-12">Stick To Top</span>
+    </el-checkbox>
+
+    <template v-else>
+      <el-checkbox
+        v-model="fixOnParentBottom"
+        class="m-t-10"
+      >
+        <span class="font-12">Fix on the bottom when scrolling</span>
+      </el-checkbox>
+
+      <el-checkbox
+        v-model="fixed"
+        class="m-t-10"
+        style="margin-bottom: 25px;"
+      >
+        <span class="font-12">Fix position when scrolling</span>
+      </el-checkbox>
+    </template>
   </div>
 </template>
 
@@ -19,7 +45,6 @@ import { mapActions, mapGetters } from 'vuex'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { vmGet } from '@/utils/vmMap'
-import { closestGridItem } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 
 export default {
@@ -29,22 +54,96 @@ export default {
   },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
+    canNotVerticalCompact() {
+      return this.selectedComponentNodes.find(node => {
+        return getValueByPath(node, [STYLES, 'layout', 'stack']) === undefined
+      })
+    },
     isStack: {
       get() {
         const lastNode = arrayLast(this.selectedComponentNodes)
         if (lastNode) {
-          return getValueByPath(vmGet(lastNode.id), [
-            'innerStyles',
-            'layout',
-            'stack'
-          ])
+          return getValueByPath(lastNode, [STYLES, 'layout', 'stack'])
         }
       },
-      set() {
+      set(value) {
         this.selectedComponentNodes.forEach(node => {
           this.record({
             path: [node.id, STYLES, 'layout', 'stack'],
-            value: this.isStack ? undefined : true
+            value: value || undefined
+          })
+
+          if (!value) {
+            this.record({
+              path: [node.id, STYLES, 'layout', 'position'],
+              value: undefined
+            })
+          }
+        })
+      }
+    },
+    verticalCompact: {
+      get() {
+        const lastNode = arrayLast(this.selectedComponentNodes)
+        if (lastNode) {
+          return (
+            getValueByPath(vmGet(lastNode.id), [
+              STYLES,
+              'layout',
+              'position'
+            ]) === 'verticalCompact'
+          )
+        }
+      },
+      set(value) {
+        this.selectedComponentNodes.forEach(node => {
+          this.record({
+            path: [node.id, STYLES, 'layout', 'position'],
+            value: value ? 'verticalCompact' : undefined
+          })
+        })
+      }
+    },
+    fixOnParentBottom: {
+      get() {
+        const lastNode = arrayLast(this.selectedComponentNodes)
+        if (lastNode) {
+          return (
+            getValueByPath(vmGet(lastNode.id), [
+              STYLES,
+              'layout',
+              'position'
+            ]) === 'fixOnParentBottom'
+          )
+        }
+      },
+      set(value) {
+        this.selectedComponentNodes.forEach(node => {
+          this.record({
+            path: [node.id, STYLES, 'layout', 'position'],
+            value: value ? 'fixOnParentBottom' : undefined
+          })
+        })
+      }
+    },
+    fixed: {
+      get() {
+        const lastNode = arrayLast(this.selectedComponentNodes)
+        if (lastNode) {
+          return (
+            getValueByPath(vmGet(lastNode.id), [
+              STYLES,
+              'layout',
+              'position'
+            ]) === 'fixed'
+          )
+        }
+      },
+      set(value) {
+        this.selectedComponentNodes.forEach(node => {
+          this.record({
+            path: [node.id, STYLES, 'layout', 'position'],
+            value: value ? 'fixed' : undefined
           })
         })
       }

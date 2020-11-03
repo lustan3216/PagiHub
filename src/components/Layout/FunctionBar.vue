@@ -1,45 +1,32 @@
 <template>
-  <nav>
-    <i
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'c']"
-      :disabled="!selectedComponentIds.length"
-      @shortkey="setCopySelectedNodeId(null)"
-    />
+  <nav class="justify-between">
+    <div class="flex">
+      <function-menu style="margin-right: -5px;" />
 
-    <i
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'v']"
-      :disabled="!copyComponentIds.length"
-      @shortkey="vmPasteNodes"
-    />
+      <el-tooltip
+        effect="light"
+        content="Preview"
+        placement="bottom"
+      >
+        <el-button
+          v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
+          :disabled="!editingComponentSetId"
+          type="text"
+          @click="SET_PREVIEW_MODE"
+          @shortkey.native="SET_PREVIEW_MODE"
+        >
+          <b-icon-caret-right />
+        </el-button>
+      </el-tooltip>
 
-    <i
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'b']"
-      @shortkey="vmCreateEmptyItem"
-    />
-
-    <i
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'x']"
-      :disabled="selectedComponentIds.length !== 1"
-      @shortkey="cut"
-    />
-
-    <i
-      v-shortkey="{ del: ['del'], del: ['backspace'] }"
-      :disabled="!selectedComponentIds.length"
-      @shortkey="multiDelete"
-    />
-
-    <i
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'z']"
-      @shortkey="UNDO"
-      @click="UNDO"
-    />
-
-    <i
-      v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'z']"
-      @shortkey="REDO"
-      @click="REDO"
-    />
+      <el-tooltip
+        effect="light"
+        content="Publish"
+        placement="bottom"
+      >
+        <dialog-publish />
+      </el-tooltip>
+    </div>
 
     <el-form
       ref="form"
@@ -52,49 +39,30 @@
 
       <el-divider direction="vertical" />
 
-      <el-tooltip
-        effect="light"
-        content="Preview"
-        placement="bottom"
-      >
-        <el-button
-          v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
-          :disabled="!editingComponentSetId"
-          icon="el-icon-video-camera"
-          type="text"
-          @click="SET_PREVIEW_MODE"
-          @shortkey.native="SET_PREVIEW_MODE"
-        />
-      </el-tooltip>
-
-      <el-tooltip
-        effect="light"
-        content="Publish"
-        placement="bottom"
-      >
-        <dialog-publish />
-      </el-tooltip>
-
-      <el-divider direction="vertical" />
-
-      <portal-target name="ViewPortController" />
+      <portal-target name="BreakpointController" />
     </el-form>
+
+    <div class="align-center p-r-10">
+      <portal-target name="ViewPortController" />
+    </div>
   </nav>
 </template>
 
 <script>
-import { isMac } from '@/utils/device'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import DialogComponentSet from '../Setup/DialogComponentSet'
-import { vmPasteNodes, vmRemoveNode, vmCreateEmptyItem } from '@/utils/vmMap'
-import { arrayLast } from '@/utils/array'
 import DialogPublish from '@/components/Setup/DialogPublish'
 import ElementAddBar from '@/components/ComponentAdd/ElementAddBar'
 import DialogComponentTabs from '@/components/ComponentAdd/DialogComponentTabs'
+import { BIconCaretRight } from 'bootstrap-vue'
+import FunctionMenu from './FunctionMenu'
+import { isMac } from '@/utils/device'
 
 export default {
   name: 'FunctionBar',
   components: {
+    BIconCaretRight,
+    FunctionMenu,
     DialogComponentSet,
     DialogPublish,
     ElementAddBar,
@@ -115,19 +83,7 @@ export default {
   methods: {
     ...mapActions('app', ['setCopySelectedNodeId']),
     ...mapMutations('mode', ['SET_PREVIEW_MODE']),
-    ...mapMutations('node', ['REDO', 'UNDO']),
-    isMac,
-    vmPasteNodes,
-    vmCreateEmptyItem() {
-      vmCreateEmptyItem(arrayLast(this.selectedComponentNodes))
-    },
-    multiDelete() {
-      this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
-    },
-    cut() {
-      this.setCopySelectedNodeId(this.selectedComponentIds)
-      this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
-    }
+    isMac
   }
 }
 </script>
