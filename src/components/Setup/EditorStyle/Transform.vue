@@ -50,6 +50,7 @@
               prefix-icon="el-icon-refresh-right"
               clearable
               @input="onChange(index, $event)"
+              @clear="onChange(index, undefined)"
             />
           </el-col>
         </el-row>
@@ -75,6 +76,7 @@
             :key="option.name"
             v-bind="options[option.name]"
             @input="onChange(index, $event)"
+            @clear="onChange(index, undefined)"
           />
         </el-col>
 

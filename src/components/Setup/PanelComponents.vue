@@ -66,7 +66,7 @@
     <el-input
       v-shortkey.avoid
       v-model="filterText"
-      placeholder="Search Node"
+      placeholder="Can search name, type or text"
       size="small"
     />
   </div>
@@ -85,7 +85,6 @@ import Visible from './EditorStyle/Visible'
 import Hidden from './EditorStyle/Hidden'
 import {
   traversalSelfAndChildren,
-  isGrid,
   isSlider,
   isComponentSet,
   traversalAncestorAndSelf,

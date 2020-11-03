@@ -15,6 +15,7 @@
         :max="100"
         :step="1"
         prefix-icon="el-icon-sunset"
+        @clear="recordStyles({ opacity: undefined })"
       />
     </el-col>
   </el-row>

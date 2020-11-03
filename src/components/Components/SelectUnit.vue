@@ -17,6 +17,7 @@
     @focus="resizeCursor = false"
     @blur="resizeCursor = true"
     @change="$emit('change', innerValue)"
+    @clear="$emit('clear')"
   >
     <el-dropdown
       v-if="optionUnits.length > 1"
@@ -167,7 +168,7 @@ export default {
         let result
 
         if (this.isInvalid(number)) {
-          result = null
+          result = 0
         }
         else {
           result = toPrecision(number, this.precision)

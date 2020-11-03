@@ -14,6 +14,7 @@
         :min="0"
         prefix-icon="el-icon-rank"
         @input="emitAll($event)"
+        @clear="emitAll(undefined)"
       />
     </template>
 
@@ -23,6 +24,7 @@
         :min="0"
         prefix-icon="el-icon-top"
         @input="emitFour({ ...four, first: $event })"
+        @clear="emitFour({ ...four, first: undefined })"
       />
     </template>
 
@@ -32,6 +34,7 @@
         :min="0"
         prefix-icon="el-icon-bottom"
         @input="emitFour({ ...four, third: $event })"
+        @clear="emitFour({ ...four, third: undefined })"
       />
     </template>
 
@@ -41,6 +44,7 @@
         :min="0"
         prefix-icon="el-icon-back"
         @input="emitFour({ ...four, fourth: $event })"
+        @clear="emitFour({ ...four, fourth: undefined })"
       />
     </template>
 
@@ -50,6 +54,7 @@
         :min="0"
         prefix-icon="el-icon-right"
         @input="emitFour({ ...four, second: $event })"
+        @clear="emitFour({ ...four, second: undefined })"
       />
     </template>
   </four-attrs>

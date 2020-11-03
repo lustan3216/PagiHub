@@ -23,11 +23,11 @@ Just click publish, then you will have a real RWD website
 
 bug
 
+- pasty html style
 - multi copy 時也要多個選中
 - 修復 shared page copy and ux
 - autoHeight 有時還是會失靈 (發生在寬度變的時候)
 - panel component click bug when compoent is carousel
-- style will have bug if number clear
 - 照片的 link 坐在 magement 裡面
 - griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 對其, will have a problem when stack mode container around
 - button link 坐在 component operator 上

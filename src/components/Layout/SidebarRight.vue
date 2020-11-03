@@ -95,7 +95,7 @@ export default {
   .divider-with-button {
     display: flex;
     & > .el-dropdown {
-      margin-top: 6px;
+      margin-top: 10px;
       margin-left: 10px;
     }
 
