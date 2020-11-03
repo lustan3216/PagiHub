@@ -81,7 +81,12 @@ export function vmAddNode(node) {
 
   const { parentId, parentNode } = node
 
-  if (parentNode[CAN_NEW_ITEM]) {
+  if (!parentNode) {
+    // copy from other tab other page
+    const background = store.getters['node/backgroundNode']
+    vmAddNodeToParent(background.id, node)
+  }
+  else if (parentNode[CAN_NEW_ITEM]) {
     // if parentNode can new item, it means the node is one of layer-item, grid-item, carousel-item, form-item
     vmAddNodeToParent(parentId, node)
   }

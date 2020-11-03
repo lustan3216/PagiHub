@@ -416,4 +416,10 @@ export default {
   margin-right: 10px;
   margin-left: 10px;
 }
+
+.el-button,
+::v-deep .el-button {
+  border: none;
+  padding: 9px;
+}
 </style>

@@ -756,6 +756,17 @@
           case 'dragmove': {
             newPosition.left = this.dragging.left + (event.delta.x) / this.scaleRatio
             newPosition.top = this.dragging.top + (event.delta.y) / this.scaleRatio
+
+            if (event.shiftKey) {
+              console.log(event)
+              if (Math.abs(newPosition.left - this.previousX) > Math.abs(newPosition.top - this.previousY)) {
+                newPosition.top = this.previousY
+              }
+              else {
+                newPosition.left = this.previousX
+              }
+            }
+
             //                        console.log("### drag => " + event.type + ", x=" + x + ", y=" + y);
             //                        console.log("### drag => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
             //                        console.log("### drag end => " + JSON.stringify(newPosition));

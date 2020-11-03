@@ -224,6 +224,10 @@ const actions = {
 const getters = {
   projectNodes(state) {
     return state.projectIds.map(id => state.nodesMap[id]).filter(node => node)
+  },
+  backgroundNode(state) {
+    const componentSet = state.nodesMap[state.editingComponentSetId]
+    return componentSet.children[0]
   }
 }
 

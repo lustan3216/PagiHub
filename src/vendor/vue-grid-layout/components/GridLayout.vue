@@ -285,6 +285,9 @@
       },
       updateHeight: function() {
         const height = this.containerHeight()
+        if (this.mergedStyle.height !== height && this.autoHeight) {
+          this.$emit('height-updated', height)
+        }
         this.mergedStyle = { height }
       },
 
@@ -310,7 +313,6 @@
        containerHeight: function() {
         if (this.autoHeight) {
           const containerHeight = bottom(this.layout) + 'px'
-          this.$emit('height-updated', containerHeight)
           return containerHeight
         }
         else {

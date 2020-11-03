@@ -30,13 +30,11 @@ bug
 - griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 對其, will have a problem when stack mode container around
 - 快捷鍵選單
 - block copy can click option + move
-- panel component shift select
-- copy from other tab
-- panel component 可以拖拉
 - pan dragging
-- moving + shift can lock axis
 
 * iframe
+* panel component shift select
+* panel component 可以拖拉
 * height %
 * style 支援 每個 device 可客製化
 * 支援 icon
