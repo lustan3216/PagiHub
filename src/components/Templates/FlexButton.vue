@@ -17,6 +17,7 @@
         :to="`QuickFunctions${id}`"
       >
         <el-tooltip
+          v-if="editing"
           effect="light"
           content="Click only enable at preview or publish page."
           placement="top"
@@ -70,12 +71,6 @@ export default {
     GridGeneratorItem
   },
   mixins: [propsMixin, childrenMixin],
-  props: {
-    editing: {
-      type: Boolean,
-      default: false
-    }
-  },
   data() {
     return {
       clickEvents: []
@@ -84,6 +79,10 @@ export default {
   computed: {
     ...mapState('user', ['username', 'userId']),
     ...mapState('node', ['editingProjectId']),
+    ...mapState('app', ['editingPath']),
+    editing() {
+      return this.editingPath.includes(this.id)
+    },
     firstChild() {
       return this.innerChildren[0]
     },
@@ -131,11 +130,6 @@ export default {
         else {
           window.location.href = this.link
         }
-      }
-    },
-    onDraftClick() {
-      if (this.isDraftMode) {
-        this.click()
       }
     },
     onRealClick() {
