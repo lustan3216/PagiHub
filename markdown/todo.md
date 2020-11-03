@@ -31,9 +31,10 @@ bug
 - 照片的 link 坐在 magement 裡面
 - griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 對其, will have a problem when stack mode container around
 - button link 坐在 component operator 上
-- group scrollable
+- group scrollable 垂直 水平 scroll
 - 快捷鍵選單
 
+- 未登入 直接丟去 login
 - block copy can click option + move
 - panel component shift select
 - copy from other tab

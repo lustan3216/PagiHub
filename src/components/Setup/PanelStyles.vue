@@ -9,6 +9,17 @@
       <dimension />
 
       <portal-target
+        name="Rotate"
+        slim
+      />
+
+      <opacity />
+
+      <padding />
+
+      <radius />
+
+      <portal-target
         name="TextEditorSimpleStyle"
         slim
       />
@@ -17,20 +28,9 @@
 
       <stack />
 
-      <el-divider content-position="left">APPEARANCE</el-divider>
+      <!--      <el-divider content-position="left">APPEARANCE</el-divider>-->
 
       <!--      <overflow />-->
-
-      <padding />
-
-      <radius />
-
-      <opacity />
-
-      <portal-target
-        name="Rotate"
-        slim
-      />
 
       <background-color />
 

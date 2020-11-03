@@ -192,16 +192,6 @@ export default {
           divided: true
         },
         {
-          name: 'Paste Inside',
-          shortKey: [this.metaKey, 'V'],
-          disabled: isGridItem(this.node)
-        },
-        {
-          name: 'Replace',
-          shortKey: [this.metaKey, 'V'],
-          disabled: !isGridItem(this.node)
-        },
-        {
           name: 'Cut',
           shortKey: [this.metaKey, 'X'],
           disabled: this.selectedComponentIds.length !== 1
@@ -238,15 +228,8 @@ export default {
         default:
           this.selectedComponentNodes.forEach(node => {
             switch (command) {
-              case 'Paste Inside':
-                vmPasteNodes()
-                break
               case 'Replace':
                 vmPasteNodes()
-                break
-              case 'Duplicate':
-                this.APP_SET({ copyComponentIds: [node.id] })
-                vmAddNode(node)
                 break
               case 'Delete':
                 vmRemoveNode(node)

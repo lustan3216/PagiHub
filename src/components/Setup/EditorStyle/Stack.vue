@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-divider content-position="left">LAYOUT</el-divider>
+    <el-divider content-position="left">POSITION</el-divider>
 
     <el-checkbox
       v-model="isStack"
@@ -87,11 +87,8 @@ export default {
         const lastNode = arrayLast(this.selectedComponentNodes)
         if (lastNode) {
           return (
-            getValueByPath(vmGet(lastNode.id), [
-              STYLES,
-              'layout',
-              'position'
-            ]) === 'verticalCompact'
+            getValueByPath(lastNode, [STYLES, 'layout', 'position']) ===
+            'verticalCompact'
           )
         }
       },
@@ -109,11 +106,8 @@ export default {
         const lastNode = arrayLast(this.selectedComponentNodes)
         if (lastNode) {
           return (
-            getValueByPath(vmGet(lastNode.id), [
-              STYLES,
-              'layout',
-              'position'
-            ]) === 'fixOnParentBottom'
+            getValueByPath(lastNode, [STYLES, 'layout', 'position']) ===
+            'fixOnParentBottom'
           )
         }
       },
@@ -131,11 +125,7 @@ export default {
         const lastNode = arrayLast(this.selectedComponentNodes)
         if (lastNode) {
           return (
-            getValueByPath(vmGet(lastNode.id), [
-              STYLES,
-              'layout',
-              'position'
-            ]) === 'fixed'
+            getValueByPath(lastNode, [STYLES, 'layout', 'position']) === 'fixed'
           )
         }
       },

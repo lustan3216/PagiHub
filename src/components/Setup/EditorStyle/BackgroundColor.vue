@@ -14,22 +14,18 @@
       >
         Color
       </el-col>
-      <el-col :span="16">
+      <el-col :span="8">
         <color-picker v-model="backgroundColor" />
       </el-col>
-    </el-row>
 
-    <el-row
-      type="flex"
-      align="middle"
-    >
       <el-col
-        :span="8"
+        :span="16"
         class="title"
       >
         Gradient Color
       </el-col>
-      <el-col :span="16">
+
+      <el-col :span="8">
         <color-picker
           :key="selectedComponentIds.join()"
           v-model="backgroundImage"
@@ -37,6 +33,11 @@
         />
       </el-col>
     </el-row>
+
+    <el-row
+      type="flex"
+      align="middle"
+    />
   </div>
 </template>
 
