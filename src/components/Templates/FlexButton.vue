@@ -1,23 +1,43 @@
 <template>
-  <grid-generator-item :id="id">
+  <grid-generator-item
+    :id="id"
+    :div-style="{
+      border: '1px solid #dcdfe6',
+      background: '#fff',
+      textAlign: 'center'
+    }"
+  >
     <div
       :class="{ pointer: !isDraftMode }"
       class="flex-center h-100"
       @click="onRealClick"
     >
       <portal
-        v-if="link && isDraftMode"
+        v-if="isDraftMode"
         :to="`QuickFunctions${id}`"
       >
         <el-tooltip
           effect="light"
-          content="Replace all actions in this button for nicer editing UX. It only shows in Draft mode."
+          content="Click only enable at preview or publish page."
           placement="top"
         >
-          <el-button
-            icon="el-icon-thumb"
-            @click.stop="onDraftClick"
-          />
+          <el-select
+            v-model="link"
+            allow-create
+            filterable
+            clearable
+            no-data-text="No published page"
+            no-match-text="No published page"
+            placeholder="Put a URL or select a published page"
+            style="width: 260px;"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-tooltip>
       </portal>
 
@@ -39,7 +59,8 @@ import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
 import { deleteBy } from '@/utils/array'
 import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
 import TextEditorInner from './TextEditorInner'
-import ControllerLayer from '../TemplateUtils/ControllerLayer'
+import { mapState, mapActions } from 'vuex'
+import { PROPS } from '@/const'
 
 export default {
   defaultSetting,
@@ -61,23 +82,43 @@ export default {
     }
   },
   computed: {
+    ...mapState('user', ['username', 'userId']),
+    ...mapState('node', ['editingProjectId']),
     firstChild() {
       return this.innerChildren[0]
     },
-    link() {
-      return this.innerProps.link
+    link: {
+      get() {
+        return this.innerProps.link
+      },
+      set(value) {
+        this.record({
+          path: [this.id, PROPS, 'link'],
+          value: value || undefined
+        })
+      }
+    },
+    linkableComponentSet() {
+      return this.nodesMap[this.editingProjectId].children
+    },
+    options() {
+      const node = this.nodesMap[this.editingProjectId]
+      const { label } = node
+      const options = []
+      this.linkableComponentSet.forEach(node => {
+        if (node.version) {
+          options.push({
+            label: node.label,
+            value: `/${this.username || this.userId}/${label}/${node.label}`
+          })
+        }
+      })
+
+      return options
     }
-    // availableEvents() {
-    //   const events = this.clickEvents.map(x => x.fn)
-    //   if (this.firstChild || this.redirectComponentSet) {
-    //     return [...events, this.redirect]
-    //   }
-    //   else {
-    //     return events
-    //   }
-    // }
   },
   methods: {
+    ...mapActions('node', ['record']),
     click() {
       if (this.link) {
         const link = this.link.replace(location.origin, '')
@@ -137,6 +178,13 @@ export default {
   .ql-editor {
     padding: 0;
     min-height: inherit;
+  }
+}
+
+::v-deep {
+  .el-input--mini .el-input__inner {
+    height: 30px;
+    line-height: 30px;
   }
 }
 </style>

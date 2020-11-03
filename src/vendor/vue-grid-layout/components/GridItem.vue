@@ -167,10 +167,6 @@
         type: Boolean,
         default: false
       },
-      fixOnParentBottom: {
-        type: Boolean,
-        default: false
-      },
       autoHeight: {
         type: Boolean,
         default: false
@@ -383,11 +379,6 @@
           }
         }
       },
-      fixOnParentBottom(value) {
-        if (value) {
-          this.parent.correctFixItemsBound()
-        }
-      },
       isDragging(value) {
         if (value) {
           store.hideHandler = true
@@ -516,7 +507,7 @@
         }
       },
       fixItem() {
-        return this.fixed || this.fixOnParentBottom
+        return this.fixed
       },
       boundaryElement() {
         return getBoundaryEl(this.$el.parentNode)

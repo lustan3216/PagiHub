@@ -11,11 +11,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
-import { select, assignDefaultValue, boolean } from './utils/ruleTool'
-
-const LINK = 'link'
+import { assignDefaultValue, boolean } from './utils/ruleTool'
 const NEW_TAB = 'newTab'
 
 export const defaultSetting = {
@@ -34,40 +31,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', ['username', 'userId']),
-    ...mapState('node', ['editingProjectId']),
-    linkableComponentSet() {
-      return this.nodesMap[this.editingProjectId].children
-    },
-    options() {
-      const node = this.nodesMap[this.editingProjectId]
-      const { label } = node
-      const options = []
-      this.linkableComponentSet.forEach(node => {
-        if (node.version) {
-          options.push({
-            label: node.label,
-            value: `/${this.username || this.userId}/${label}/${
-              node.label
-            }`
-          })
-        }
-      })
-
-      return options
-    },
     spec() {
-      const specArray = [
-        select(LINK, {
-          props: {
-            allowCreate: true,
-            filterable: true,
-            placeholder: 'Can Create by typing'
-          },
-          options: this.options
-        }),
-        boolean(NEW_TAB)
-      ]
+      const specArray = [boolean(NEW_TAB)]
 
       return assignDefaultValue(specArray, defaultSetting)
     }

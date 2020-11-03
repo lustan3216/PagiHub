@@ -6,30 +6,10 @@
       slim
     />
 
-    <!--    <el-tooltip-->
-    <!--      effect="light"-->
-    <!--      content="Lock"-->
-    <!--      placement="top"-->
-    <!--    >-->
-    <!--      <lock-->
-    <!--        :id="id"-->
-    <!--        visible-->
-    <!--        allow-multi-->
-    <!--      />-->
-    <!--    </el-tooltip>-->
-
-    <!--    <el-button-->
-    <!--      v-if="isImage"-->
-    <!--      class="icon"-->
-    <!--      @click="openImageAsset"-->
-    <!--    >-->
-    <!--      Replace-->
-    <!--    </el-button>-->
-
-    <template v-if="isCarousel">
+    <template v-if="isSlider">
       <el-button
         class="icon"
-        @click="vmCreateEmptyItem"
+        @click="createSlider"
       >
         <i class="el-icon-plus" />
         Slider
@@ -55,9 +35,8 @@ import {
   BIconAspectRatio,
   BIconLink
 } from 'bootstrap-vue'
-import { isCarousel, isComponentSet } from '@/utils/node'
+import { isComponentSet, isSlider, isButton } from '@/utils/node'
 import Lock from '../Setup/EditorStyle/Lock'
-import { IMAGE_ASSET } from '@/components/ComponentAdd/MenuCategories'
 
 export default {
   name: 'OftenUseMenu',
@@ -82,17 +61,20 @@ export default {
     isComponentSet() {
       return isComponentSet(this.node)
     },
-    isCarousel() {
-      return isCarousel(this.node)
+    isSlider() {
+      return isSlider(this.node)
+    },
+    isButton() {
+      return isButton(this.node)
     }
   },
   methods: {
     ...mapActions('app', ['setBeingAddedComponentId']),
-    vmCreateEmptyItem(tag) {
-      vmCreateEmptyItem(this.node)
+    createSlider() {
+      vmCreateEmptyItem(this.node.parentNode)
     },
     deleteSlider() {
-      vmGet(this.node.id, this.isExample).removeCurrentSlider()
+      vmGet(this.node.parentId, this.isExample).removeCurrentSlider()
     },
     tryToAddComponent() {
       this.setBeingAddedComponentId(this.id)

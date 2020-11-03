@@ -261,6 +261,12 @@ export function isSlider(node) {
   }
 }
 
+export function isButton(node) {
+  if (node) {
+    return node[POLYMORPHISM] === 'flex-button'
+  }
+}
+
 export function isTextEditor(node) {
   if (node) {
     return node.tag === 'text-editor'

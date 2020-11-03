@@ -35,7 +35,7 @@ const actions = {
       dispatch('getCurrentRemoteUser')
     }
     catch {
-      router.push('/')
+      router.push('/login')
       commit('INIT')
     }
   },
@@ -46,7 +46,7 @@ const actions = {
       commit('SET', parseCognitoUser(user))
     }
     else {
-      router.push('/')
+      router.push('/login')
       commit('INIT')
     }
   },

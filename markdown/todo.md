@@ -23,36 +23,30 @@ Just click publish, then you will have a real RWD website
 
 bug
 
+- position fix element x,y should use %, - group scrollable 垂直 水平 scroll
 - 修復 shared page copy and ux
-- autoHeight 有時還是會失靈 (發生在寬度變的時候)
 - panel component click bug when compoent is carousel
 - 照片的 link 坐在 magement 裡面
 - griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 對其, will have a problem when stack mode container around
-- button link 坐在 component operator 上
-- group scrollable 垂直 水平 scroll
 - 快捷鍵選單
-
-- 未登入 直接丟去 login
 - block copy can click option + move
 - panel component shift select
 - copy from other tab
-- text 不用 link 和 button link 重疊了, 思考 text 的 link 要不要
 - panel component 可以拖拉
+- pan dragging
+- moving + shift can lock axis
 
-* pan dragging
-* moving + shift can lock axis
-
-- iframe
-- height %
-- style 支援 每個 device 可客製化
-- 支援 icon
-- 距離輔助線
-- hover click
-- animation
-- style component
-- container can transform
-- form input
-- can setting put under style or new tab
+* iframe
+* height %
+* style 支援 每個 device 可客製化
+* 支援 icon
+* 距離輔助線
+* hover click
+* animation
+* style component
+* container can transform
+* form input
+* can setting put under style or new tab
 
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction 在弄就好
 image can put more effect

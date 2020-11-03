@@ -18,7 +18,6 @@
     :is-resizable="computedLayout.isResizable"
     :is-draggable="isDraggable"
     :fixed="computedLayout.fixed"
-    :fix-on-parent-bottom="computedLayout.fixOnParentBottom"
     :vertical-compact="computedLayout.verticalCompact"
     :class="{ 'no-action': lock }"
     :auto-height="shouldAutoHeight"
@@ -183,7 +182,6 @@ export default {
         isDraggable: this.isDraggable,
 
         fixed: position === 'fixed',
-        fixOnParentBottom: position === 'fixOnParentBottom',
         verticalCompact: position === 'verticalCompact',
 
         id: this.id,
@@ -191,12 +189,9 @@ export default {
       }
     },
     isDraggable() {
-      const { position } = this.styleLayout
       const { userCanDrag } = this.innerProps
       return (
-        (!this.isAdding &&
-          this.isDraftMode &&
-          position !== 'fixOnParentBottom') ||
+        (!this.isAdding && this.isDraftMode) ||
         (this.isProductionMode && userCanDrag)
       )
     },

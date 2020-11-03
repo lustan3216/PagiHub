@@ -161,12 +161,6 @@ export const flexButton = function(options, grid) {
     [TAG]: 'flex-button',
     [LABEL]: 'button',
     [CAN_BE_EDITED]: true,
-    [STYLES]: {
-      [HTML]: {
-        border: '1px solid #dcdfe6',
-        textAlign: 'center'
-      }
-    },
     grid
     // children: [
     //   textEditor({

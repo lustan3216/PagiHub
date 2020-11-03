@@ -16,26 +16,19 @@
       v-model="verticalCompact"
       :disabled="canNotVerticalCompact"
       class="m-t-10"
+      style="margin-bottom: 25px;"
     >
       <span class="font-12">Stick To Top</span>
     </el-checkbox>
 
-    <template v-else>
-      <el-checkbox
-        v-model="fixOnParentBottom"
-        class="m-t-10"
-      >
-        <span class="font-12">Fix on the bottom when scrolling</span>
-      </el-checkbox>
-
-      <el-checkbox
-        v-model="fixed"
-        class="m-t-10"
-        style="margin-bottom: 25px;"
-      >
-        <span class="font-12">Fix position when scrolling</span>
-      </el-checkbox>
-    </template>
+    <el-checkbox
+      v-else
+      v-model="fixed"
+      class="m-t-10"
+      style="margin-bottom: 25px;"
+    >
+      <span class="font-12">Fix position when scrolling</span>
+    </el-checkbox>
   </div>
 </template>
 
@@ -95,25 +88,6 @@ export default {
           this.record({
             path: [node.id, STYLES, 'layout', 'position'],
             value: value ? 'verticalCompact' : undefined
-          })
-        })
-      }
-    },
-    fixOnParentBottom: {
-      get() {
-        const lastNode = arrayLast(this.selectedComponentNodes)
-        if (lastNode) {
-          return (
-            getValueByPath(lastNode, [STYLES, 'layout', 'position']) ===
-            'fixOnParentBottom'
-          )
-        }
-      },
-      set(value) {
-        this.selectedComponentNodes.forEach(node => {
-          this.record({
-            path: [node.id, STYLES, 'layout', 'position'],
-            value: value ? 'fixOnParentBottom' : undefined
           })
         })
       }
