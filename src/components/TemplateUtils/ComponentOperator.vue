@@ -14,43 +14,43 @@
     />
 
     <div class="wrapper flex top">
-      <!--      <div-->
-      <!--        v-if="selectedComponentIds.length === 1"-->
-      <!--        class="flex"-->
-      <!--        @mouseenter="mouseenter"-->
-      <!--        @mouseleave="mouseleave"-->
-      <!--      >-->
-      <!--        <div class="component-name">-->
-      <!--          <transition-group-->
-      <!--            name="full-slide"-->
-      <!--            class="align-center"-->
-      <!--          >-->
-      <!--            <template v-for="(node, index) in nodesPath">-->
-      <!--              <i-->
-      <!--                v-if="hovering && index"-->
-      <!--                :key="node.id + 'i'"-->
-      <!--                class="el-icon-arrow-left"-->
-      <!--              />-->
-      <!--              <component-name-->
-      <!--                v-if="hovering || node.id === id"-->
-      <!--                :key="node.id"-->
-      <!--                :id="node.id"-->
-      <!--                :editable="false"-->
-      <!--                :is-example="isExample"-->
-      <!--                @click="SET_SELECTED_COMPONENT_ID(node.id)"-->
-      <!--              >-->
-      <!--                <i-->
-      <!--                  v-if="node.id === id"-->
-      <!--                  :class="[-->
-      <!--                    itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank'-->
-      <!--                  ]"-->
-      <!--                  class="m-l-5"-->
-      <!--                />-->
-      <!--              </component-name>-->
-      <!--            </template>-->
-      <!--          </transition-group>-->
-      <!--        </div>-->
-      <!--      </div>-->
+      <div
+        v-if="selectedComponentIds.length === 1"
+        class="flex"
+        @mouseenter="mouseenter"
+        @mouseleave="mouseleave"
+      >
+        <div class="component-name">
+          <transition-group
+            name="full-slide"
+            class="align-center"
+          >
+            <template v-for="(node, index) in nodesPath">
+              <i
+                v-if="hovering && index"
+                :key="node.id + 'i'"
+                class="el-icon-arrow-left"
+              />
+              <component-name
+                v-if="hovering || node.id === id"
+                :key="node.id"
+                :id="node.id"
+                :editable="false"
+                :is-example="isExample"
+                @click="SET_SELECTED_COMPONENT_ID(node.id)"
+              >
+                <i
+                  v-if="node.id === id"
+                  :class="[
+                    itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank'
+                  ]"
+                  class="m-l-5"
+                />
+              </component-name>
+            </template>
+          </transition-group>
+        </div>
+      </div>
 
       <often-use-menu
         v-if="isDraftMode && !isExample && isLastOne"
