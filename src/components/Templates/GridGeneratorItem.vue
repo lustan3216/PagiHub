@@ -25,8 +25,10 @@
     drag-ignore-from=".item-editing"
     drag-allow-from="div"
     data-node
-    @move="itemChanging"
-    @resize="itemChanging"
+    @moveStart="prepareDuplicateNode"
+    @move="move"
+    @moved="duplicateNode = null"
+    @resize="LAYOUT_SET({ gridResizing: true })"
   >
     <div
       ref="content"
@@ -58,10 +60,11 @@ import childrenMixin from './mixins/children'
 import ControllerLayer from '../TemplateUtils/ControllerLayer'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import { getValueByPath, resizeListener } from '@/utils/tool'
+import { cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestValidBreakpoint, isGroup, isTextEditor } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
+import { appendIds } from '@/utils/nodeId'
 
 export default {
   name: 'GridGeneratorItem',
@@ -85,7 +88,9 @@ export default {
     return {
       exampleBoundary: 'xs',
       offResizeListener: null,
-      layout: {}
+      layout: {},
+      duplicateNode: null,
+      pressAltKey: false
     }
   },
   computed: {
@@ -244,6 +249,20 @@ export default {
       else {
         this.$set(this.layouts, this.id, this.layout)
       }
+    },
+    pressAltKey(value) {
+      if (value) {
+        this.record({
+          path: this.duplicateNode.id,
+          value: this.duplicateNode
+        })
+      }
+      else {
+        this.record({
+          path: this.duplicateNode.id,
+          value: undefined
+        })
+      }
     }
   },
   updated() {
@@ -268,7 +287,14 @@ export default {
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('layout', ['resizeNodeQuickFn']),
-    itemChanging() {
+    ...mapActions('node', ['record']),
+    prepareDuplicateNode() {
+      const node = cloneJson(this.node)
+      appendIds(node)
+      this.duplicateNode = node
+    },
+    move(i, x, y, event) {
+      this.pressAltKey = event.altKey
       this.LAYOUT_SET({ gridResizing: true })
     },
     updateLayout(layout = this.computedLayout) {

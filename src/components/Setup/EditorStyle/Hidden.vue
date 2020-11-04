@@ -47,10 +47,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     storeRecord() {
       if (this.hidden) {
-        this.record({
+        this.debounceRecord({
           path: `${this.id}.${STYLES}.${this.currentBreakpoint}.hidden`,
           value: undefined
         })

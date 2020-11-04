@@ -166,9 +166,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     recordStore(id, key, value) {
-      this.record([
+      this.debounceRecord([
         {
           path: [id, GRID, this.currentBreakpoint, key],
           value

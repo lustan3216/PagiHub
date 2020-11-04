@@ -156,7 +156,7 @@ export default {
     this.$bus.$off('dialog-component-tabs-jump', this.chooseCategory)
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     ...mapActions('app', ['removeBeingAddedComponentId']),
     ...mapActions('layout', ['resizeNodeQuickFn']),
     chooseCategory(category) {
@@ -175,7 +175,7 @@ export default {
           // 為了不拿到componentSet
           template = template.children[0]
 
-          this.record({
+          this.debounceRecord({
             path: `${node.id}.${STYLES}.${HTML}.overflow`,
             value: 'scroll'
           })

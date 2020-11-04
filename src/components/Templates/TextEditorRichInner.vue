@@ -401,7 +401,7 @@ export default {
               })
             }
 
-            this.record(records)
+            this.debounceRecord(records)
           }
         })
       }
@@ -430,7 +430,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     findFontNames(string) {
       if (typeof string === 'object') {
         string = JSON.stringify(string)

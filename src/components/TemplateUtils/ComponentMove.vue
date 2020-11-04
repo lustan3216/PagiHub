@@ -53,7 +53,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     getZIndex(node) {
       const vm = vmGet(node.id)
       const value = getValueByPath(vm, ['innerStyles', 'layout', 'zIndex'], 0)
@@ -64,7 +64,7 @@ export default {
       positive.forEach((zI, i) => {
         const ids = this.zIndexMap[zI]
         ids.forEach(id => {
-          this.record({
+          this.debounceRecord({
             path: [id, STYLES, 'layout', 'zIndex'],
             value: i || undefined
           })
@@ -75,7 +75,7 @@ export default {
       negative.forEach((zI, i) => {
         const ids = this.zIndexMap[zI]
         ids.forEach(id => {
-          this.record({
+          this.debounceRecord({
             path: [id, STYLES, 'layout', 'zIndex'],
             value: -i || undefined
           })
@@ -83,7 +83,7 @@ export default {
       })
     },
     recordValue(value) {
-      this.record({
+      this.debounceRecord({
         path: [this.node.id, STYLES, 'layout', 'zIndex'],
         value
       })

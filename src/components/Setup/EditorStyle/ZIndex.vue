@@ -41,9 +41,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     click() {
-      this.record({
+      this.debounceRecord({
         path: [this.lastId, STYLES, 'layout', 'zIndex'],
         value: this.hasIndex ? undefined : 1
       })

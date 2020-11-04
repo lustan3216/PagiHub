@@ -46,7 +46,7 @@ export default {
       'CLEAN_SELECTED_COMPONENT_ID'
     ]),
     ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
 
     addNodeToParent(nodeTree = {}) {
       // nodeTree should be single node instead of an array
@@ -74,7 +74,7 @@ export default {
         })
       })
 
-      this.record(records)
+      this.debounceRecord(records)
 
       this.$nextTick(() => {
         this.SET_SELECTED_COMPONENT_ID(nodeTree.id)
@@ -118,14 +118,14 @@ export default {
 
       const ids = records.map(x => x.path)
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
-      this.record(records)
+      this.debounceRecord(records)
 
       this.$nextTick(() => {
         if (isCarousel(this.node) || isGroup(this.node)) {
           this.SET_SELECTED_COMPONENT_ID(this.node.parentId)
 
           if (this.node.children.length === 0) {
-            this.record({
+            this.debounceRecord({
               path: this.node.id,
               value: undefined
             })

@@ -40,7 +40,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     recordStyles(object) {
       const records = []
 
@@ -55,7 +55,7 @@ export default {
         })
       }
 
-      this.record(records)
+      this.debounceRecord(records)
     }
   }
 }

@@ -116,7 +116,7 @@ export default {
       // const IndicatorGrid = this.nodesMap[this.id][CHILDREN].find(
       //   x => x[POLYMORPHISM] === 'indicators'
       // )
-      // this.record([
+      // this.debounceRecord([
       //   {
       //     path: `${IndicatorGrid.id}.${SOFT_DELETE}`,
       //     value: value !== 'custom'
@@ -125,7 +125,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record'])
+    ...mapActions('node', ['debounceRecord'])
   }
 }
 </script>

@@ -74,7 +74,7 @@ export default {
       // the node is deleted
       this.interactWithButton(node)
       if (!node && !this.isExample) {
-        this.record([
+        this.debounceRecord([
           {
             path: `${this.id}.${PROPS}.buttonCanCloseId`,
             value: undefined
@@ -87,7 +87,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     interactWithButton(visible) {
       // the child vm not mount yet even Drawer mounted.
       if (visible) {

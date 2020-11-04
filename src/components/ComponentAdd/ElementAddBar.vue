@@ -201,7 +201,7 @@ export default {
     this.$bus.$off('image-add', this.addImage)
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     ...mapActions('app', ['setBeingAddedComponentId']),
     ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapMutations('asset', ['OPEN_ASSET']),
@@ -236,7 +236,7 @@ export default {
         })
       })
 
-      this.record(records)
+      this.debounceRecord(records)
     }
   }
 }

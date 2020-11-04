@@ -6,7 +6,7 @@
     :style="{
           ...style,
           ...styleProps,
-          zIndex,
+          zIndex: isDragging || isResizing ? 10000 : zIndex,
           position: fixItem ? 'fixed' : 'absolute'
         }"
   >
@@ -616,6 +616,7 @@
 
             let parentRect
             let clientRect
+
             if (this.fixItem) {
               parentRect = this.boundaryElement.getBoundingClientRect()
               clientRect = event.target.getBoundingClientRect()
@@ -771,7 +772,7 @@
         // this.lastY = y
 
         if (this.innerX !== pos.x || this.innerY !== pos.y) {
-          this.$emit('move', this.i, pos.x, pos.y)
+          this.$emit('move', this.i, pos.x, pos.y, event)
         }
         if (event.type === 'dragend') {
           if ((this.lockItemInLayout || this.fixItem) && pos.y * this.scaleRatio > parentRect.height - clientRect.height) {

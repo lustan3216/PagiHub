@@ -49,18 +49,18 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     click() {
       if (this.allowMulti) {
         this.selectedComponentIds.forEach(id => {
-          this.record({
+          this.debounceRecord({
             path: [id, 'lock'],
             value: this.lock ? undefined : true
           })
         })
       }
       else {
-        this.record({
+        this.debounceRecord({
           path: [this.id, 'lock'],
           value: this.lock ? undefined : true
         })

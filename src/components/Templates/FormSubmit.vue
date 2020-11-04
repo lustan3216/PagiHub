@@ -112,12 +112,12 @@ export default {
             value: this.id
           })
         })
-        this.record(records)
+        this.debounceRecord(records)
       })
       .catch(() => {})
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     submit() {
       const data = []
       const invalidFields = []

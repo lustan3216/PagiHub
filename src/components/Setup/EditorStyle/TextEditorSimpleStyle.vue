@@ -114,7 +114,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.record({
+          this.debounceRecord({
             path: `${node.id}.${STYLES}.${HTML}.fontFamily`,
             value: value || undefined
           })
@@ -127,7 +127,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.record({
+          this.debounceRecord({
             path: `${node.id}.${STYLES}.${HTML}.fontSize`,
             value: value || undefined
           })
@@ -144,7 +144,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.record({
+          this.debounceRecord({
             path: `${node.id}.${STYLES}.${HTML}.letterSpacing`,
             value: value || undefined
           })
@@ -157,7 +157,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.record({
+          this.debounceRecord({
             path: `${node.id}.${STYLES}.${HTML}.lineHeight`,
             value: value || undefined
           })
@@ -166,7 +166,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     openGoogleFont() {
       const win = window.open('https://fonts.google.com/', '_blank')
       win.focus()

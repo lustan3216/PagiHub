@@ -362,12 +362,12 @@ export default {
     this.element = this.$refs.content.$el
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     recordValue(object) {
       if (this.isExample) {
         return
       }
-      this.record(object)
+      this.debounceRecord(object)
     },
     findFontNames(string) {
       if (typeof string === 'object') {

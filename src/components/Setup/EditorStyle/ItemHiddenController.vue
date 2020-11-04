@@ -42,7 +42,7 @@ export default {
     ...mapGetters('layout', ['descBreakpoints'])
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     content(key, index) {
       return index
         ? `Hidden when screen ${BREAK_POINTS_MAP[key]}px - ${
@@ -73,7 +73,7 @@ export default {
         })
       })
 
-      this.record(records)
+      this.debounceRecord(records)
     }
   }
 }

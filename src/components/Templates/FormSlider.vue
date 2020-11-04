@@ -22,7 +22,7 @@ export default {
   watch: {
     'innerProps.isRange'(value) {
       if (value && !this.isExample) {
-        this.record([
+        this.debounceRecord([
           {
             path: `${this.id}.${PROPS}.showInput`,
             value: undefined
@@ -32,7 +32,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record'])
+    ...mapActions('node', ['debounceRecord'])
   }
 }
 </script>

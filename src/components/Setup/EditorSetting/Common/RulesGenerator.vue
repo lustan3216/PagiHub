@@ -65,7 +65,7 @@ export default {
     ...mapGetters('app', ['selectedComponentNodes'])
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     transformRule(rule) {
       const vmProps = vmGet(this.id).innerProps
       const path = rule.path ? `${rule.path}.${rule.field}` : `${rule.field}`
@@ -105,7 +105,7 @@ export default {
         records.push({ path, value })
       })
 
-      this.record(records)
+      this.debounceRecord(records)
     }
   }
 }

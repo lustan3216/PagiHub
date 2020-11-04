@@ -20,7 +20,7 @@ export default function(attr) {
       }
     },
     methods: {
-      ...mapActions('node', ['record']),
+      ...mapActions('node', ['debounceRecord']),
       recordStyles(object) {
         const records = []
 
@@ -35,7 +35,7 @@ export default function(attr) {
           })
         }
 
-        this.record(records)
+        this.debounceRecord(records)
       }
     }
   }

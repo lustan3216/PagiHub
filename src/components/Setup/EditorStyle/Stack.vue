@@ -61,12 +61,12 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.record({
+          this.debounceRecord({
             path: [node.id, STYLES, 'layout', 'stack'],
             value: value || undefined
           })
 
-          this.record({
+          this.debounceRecord({
             path: [node.id, STYLES, 'layout', 'position'],
             value: undefined
           })
@@ -85,7 +85,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.record({
+          this.debounceRecord({
             path: [node.id, STYLES, 'layout', 'position'],
             value: value ? 'verticalCompact' : undefined
           })
@@ -103,7 +103,7 @@ export default {
       },
       set(value) {
         this.selectedComponentNodes.forEach(node => {
-          this.record({
+          this.debounceRecord({
             path: [node.id, STYLES, 'layout', 'position'],
             value: value ? 'fixed' : undefined
           })
@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record'])
+    ...mapActions('node', ['debounceRecord'])
   }
 }
 </script>

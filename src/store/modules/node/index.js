@@ -214,9 +214,14 @@ const mutations = {
 }
 
 const actions = {
-  record({ rootGetters }, payLoad) {
+  debounceRecord({ rootGetters }, payLoad) {
     if (rootGetters['mode/isDraftMode']) {
       jsonHistory.debounceRecord(payLoad, 300)
+    }
+  },
+  record({ rootGetters }, payLoad) {
+    if (rootGetters['mode/isDraftMode']) {
+      jsonHistory.record(payLoad)
     }
   }
 }

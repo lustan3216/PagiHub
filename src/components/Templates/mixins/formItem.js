@@ -85,10 +85,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     updateRecord(value) {
       if (this.isExample) return
-      this.record([{ path: `${this.id}.${VALUE}`, value }])
+      this.debounceRecord([{ path: `${this.id}.${VALUE}`, value }])
     }
   }
 }

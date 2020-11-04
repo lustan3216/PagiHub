@@ -109,7 +109,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     layoutUpdated(newChildren) {
       if (this.isExample) {
         return
@@ -155,7 +155,7 @@ export default {
       })
 
       if (records.length) {
-        this.record(records)
+        this.debounceRecord(records)
       }
     }
   }

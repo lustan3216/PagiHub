@@ -214,14 +214,14 @@ export default {
     ...mapActions('asset', ['deleteAsset', 'postAsset']),
     ...mapMutations('asset', ['CLOSE_ASSET']),
     ...mapMutations('app', { APP_SET: 'SET' }),
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     replace(data) {
       const ids = this.beingAddedComponentId
         ? [this.beingAddedComponentId]
         : this.selectedImageNodes.map(node => node.id)
 
       ids.forEach(id => {
-        this.record({
+        this.debounceRecord({
           path: [id, PROPS, 'src'],
           value: this.assetHost + data.url
         })

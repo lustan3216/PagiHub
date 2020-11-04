@@ -32,7 +32,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     group() {
       const { x, y, w, h } = getGroupPxRect(this.selectedComponentNodes)
       const { parentId } = this.selectedComponentNodes[0]
@@ -117,7 +117,7 @@ export default {
         })
       })
 
-      this.record(records)
+      this.debounceRecord(records)
     },
     closestValidGrid(group, currentBreakpoint) {
       const point = closestValidBreakpoint(group, currentBreakpoint)

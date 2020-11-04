@@ -90,7 +90,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     click(name, hidden) {
       const records = []
 
@@ -101,7 +101,7 @@ export default {
         })
       })
 
-      this.record(records)
+      this.debounceRecord(records)
     }
   }
 }

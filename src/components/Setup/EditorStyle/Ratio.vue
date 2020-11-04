@@ -85,7 +85,7 @@ export default {
           })
         })
 
-        this.record(records)
+        this.debounceRecord(records)
       }
     },
     ratioH: {
@@ -102,12 +102,12 @@ export default {
           })
         })
 
-        this.record(records)
+        this.debounceRecord(records)
       }
     }
   },
   methods: {
-    ...mapActions('node', ['record'])
+    ...mapActions('node', ['debounceRecord'])
   }
 }
 </script>

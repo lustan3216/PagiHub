@@ -112,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     click(event) {
       observable.editingId = null
       this.$emit('click', event)
@@ -127,7 +127,7 @@ export default {
       observable.editingId = null
 
       if (this.name && this.name !== this.nodeShortName) {
-        this.record({
+        this.debounceRecord({
           path: `${this.id}.${LABEL}`,
           value: this.name
         })

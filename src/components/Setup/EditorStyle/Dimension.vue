@@ -180,7 +180,7 @@ export default {
           })
         })
 
-        this.record(records)
+        this.debounceRecord(records)
       }
     },
     x: {
@@ -244,7 +244,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     recordStore(key, value) {
       const records = []
 
@@ -255,7 +255,7 @@ export default {
         })
       })
 
-      this.record(records)
+      this.debounceRecord(records)
     }
   }
 }

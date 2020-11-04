@@ -85,7 +85,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     ...mapMutations('node', {
       NODE_SET: 'SET'
     }),
@@ -101,7 +101,7 @@ export default {
         })
       })
 
-      this.record(records)
+      this.debounceRecord(records)
     },
     reset() {
       const records = [
@@ -119,7 +119,7 @@ export default {
         }
       ]
 
-      this.record(records)
+      this.debounceRecord(records)
     }
   }
 }

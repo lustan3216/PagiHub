@@ -114,7 +114,7 @@ export default {
     this.isUniq = this.checkIsUniq()
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     changeUniq(uniq) {
       this.isUniq = uniq
       if (uniq) {
@@ -191,7 +191,7 @@ export default {
         })
       }
 
-      this.record(records)
+      this.debounceRecord(records)
     }
   }
 }

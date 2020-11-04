@@ -91,7 +91,7 @@ export default {
         return this.innerProps.link
       },
       set(value) {
-        this.record({
+        this.debounceRecord({
           path: [this.id, PROPS, 'link'],
           value: value || undefined
         })
@@ -117,7 +117,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     click() {
       if (this.link) {
         const link = this.link.replace(location.origin, '')
