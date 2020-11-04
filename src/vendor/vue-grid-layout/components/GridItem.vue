@@ -6,7 +6,7 @@
     :style="{
           ...style,
           ...styleProps,
-          zIndex: isDragging || isResizing || selected ? 10000 : zIndex,
+          zIndex,
           position: fixItem ? 'fixed' : 'absolute'
         }"
   >

@@ -99,8 +99,8 @@ export function vmRemoveNode(node) {
   vmGet(node.parentId).removeNodeFromParent(node)
 }
 
-export function vmAddNodeToParent(id, nodes) {
-  vmGet(id).addNodeToParent(nodes)
+export function vmAddNodeToParent(id, nodeTree) {
+  vmGet(id).addNodeToParent(nodeTree)
 }
 
 export function vmBecomeMaster(node) {

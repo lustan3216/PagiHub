@@ -1,7 +1,7 @@
 <template>
   <four-attrs
     v-model="padding"
-    title="spacing"
+    title="padding"
     empty-value="0"
   >
     <template #button>

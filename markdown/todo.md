@@ -24,17 +24,20 @@ Just click publish, then you will have a real RWD website
 bug
 
 - position fix element x,y should use %, - group scrollable 垂直 水平 scroll
+- carousel 放完東西 preview 有 bug
+- 解決 image 加入用拖拉的
+- 照片可以直接拖進去
+- 元件可以直接拖入 carousel
 - 修復 shared page copy and ux
-- panel component click bug when compoent is carousel
-- 照片的 link 坐在 magement 裡面
-- griditem 如果都用 Math.round，在縮小 width 位置的時候會有 bug, 對其, will have a problem when stack mode container around
+- panel component click bug when component is carousel
+- autoHeight 有 bug
 - 快捷鍵選單
-- block copy can click option + move
-- pan dragging
 
+* panel component 可以拖拉
+* block copy can click option + move
+* 照片的 link 坐在 magement 裡面
 * iframe
 * panel component shift select
-* panel component 可以拖拉
 * height %
 * style 支援 每個 device 可客製化
 * 支援 icon
@@ -53,10 +56,6 @@ SEO / 跟後端在一起大改吧
 event can trigger style component or animation component change
 event can animation component, animation component can trigger style component change
 animation control timing and transition, rest of stuff will be control by style component
-
-refactor
-style 試試看能不能全部放在 當個 component 裡面，style 用 props 傳遞
-form-create 整個拔掉
 
 <ol>
 每個用戶都有一個 playground 進去可以馬上玩
