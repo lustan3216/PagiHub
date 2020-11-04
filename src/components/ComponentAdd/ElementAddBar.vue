@@ -53,10 +53,10 @@
         size="small"
         class="button"
         style="margin-right: 0;"
-        @click="onClick('block')"
+        @click="onClick('rectangle')"
       >
         <element-icon
-          icon="block"
+          icon="rectangle"
           style="font-size: 18px;"
           class="gray-font-2"
         />
@@ -126,7 +126,7 @@ export default {
     ...mapGetters('app', ['selectedComponentNodes']),
     options() {
       return [
-        ['block', 'block'],
+        ['rectangle', 'rectangle'],
         ['flex-button', 'button'],
         ['carousel', 'carousel'],
         ['video-player', 'video'],

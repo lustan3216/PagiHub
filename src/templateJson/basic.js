@@ -31,9 +31,9 @@ export const gridGeneratorItem = function(options, grid) {
   }
 }
 
-export const block = function(options, grid) {
+export const rectangle = function(options, grid) {
   return {
-    [TAG]: 'block',
+    [TAG]: 'rectangle',
     grid,
     ...options
   }
@@ -200,7 +200,7 @@ export const exampleMap = {
   'flex-button': flexButton,
   'flex-image': flexImage,
   'video-player': videoPlayer,
-  block,
+  rectangle,
   group
 }
 
@@ -212,7 +212,7 @@ export const descriptionMap = {
     'Carousel could nested with multi carousels to have more creation',
   [TEXT_EDITOR]: 'Support 900+ Google font',
   iframer: 'For embedding service you like, such as your website or youtube',
-  'flex-button': 'A functioning block you can redirect page',
+  'flex-button': 'A functioning rectangle you can redirect page',
   'flex-image': 'Just image = = ',
   'video-player': 'Support Youtube and Viemo'
 }

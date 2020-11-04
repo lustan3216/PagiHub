@@ -26,7 +26,7 @@ export default {
         return h(BIconType, context.data)
       case 'flex-image':
         return h(BIconImage, context.data)
-      case 'block':
+      case 'rectangle':
         return h(BIconSquare, context.data)
       case 'grid-generator-item':
         return h(BIconSquare, context.data)

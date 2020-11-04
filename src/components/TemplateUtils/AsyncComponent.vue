@@ -15,7 +15,7 @@ export default {
   },
   components: {
     Group: () => import('../Templates/Group'),
-    Block: () => import('../Templates/Block'),
+    Rectangle: () => import('../Templates/Rectangle'),
     ComponentSet: () => import('../Templates/ComponentSet'),
     FlexImage: () => import('../Templates/FlexImage'),
     FlexButton: () => import('../Templates/FlexButton'),
