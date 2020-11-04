@@ -45,7 +45,7 @@
 
     <el-tooltip
       effect="light"
-      content="Block"
+      content="Rectangle"
       placement="bottom"
     >
       <el-button
