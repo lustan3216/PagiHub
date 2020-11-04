@@ -40,21 +40,6 @@
     }
   }
 
-  .grid-item:hover {
-    &:before {
-      display: block;
-    }
-    > .resizable-handle {
-      display: block;
-    }
-  }
-
-  .selected:hover {
-    &:before {
-      border-color: $color-active;
-    }
-  }
-
   .selected {
     &:before {
       border: 2px solid $color-active !important;
@@ -616,6 +601,10 @@
               newSize.height = this.resizing.height + event.deltaRect.bottom
             }
 
+            if (event.shiftKey) {
+              newSize.height = newSize.width
+            }
+
             ///console.log("### resize => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
             this.resizing = newSize
             break
@@ -758,7 +747,6 @@
             newPosition.top = this.dragging.top + (event.delta.y) / this.scaleRatio
 
             if (event.shiftKey) {
-              console.log(event)
               if (Math.abs(newPosition.left - this.previousX) > Math.abs(newPosition.top - this.previousY)) {
                 newPosition.top = this.previousY
               }

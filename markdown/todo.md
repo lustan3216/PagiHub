@@ -23,6 +23,7 @@ Just click publish, then you will have a real RWD website
 
 bug
 
+- 沒有 zindex 之後，拖拉 要怎麼放到最上層
 - position fix element x,y should use %, - group scrollable 垂直 水平 scroll
 - carousel 放完東西 preview 有 bug
 - 解決 image 加入用拖拉的
