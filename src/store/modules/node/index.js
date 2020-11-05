@@ -22,18 +22,14 @@ const state = {
 const callbacks = {
   componentAddNew(node) {
     this._vm.$bus.$emit('component-add-new', node)
-    store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   },
   componentDelete(node) {
     this._vm.$bus.$emit('component-delete', node)
-    store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   },
-  componentUpdate(tree, key, value) {
+  componentUpdate(tree, key) {
     if (key === 'zIndex') {
       this._vm.$bus.$emit('component-update-zindex')
     }
-
-    store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   }
 }
 

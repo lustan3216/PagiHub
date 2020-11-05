@@ -7,6 +7,7 @@
       'item-editing': itemEditing
     }"
     class="relative z-index1"
+    @mouseenter="hoveringId = id"
     @mousedown="mousedown"
     @mouseup="mouseup"
     @dblclick.stop="dblclick"
@@ -24,10 +25,16 @@
       />
 
       <component-operator
-        v-if="!gridResizing && selected"
+        v-if="rect && !isAdding"
+        v-show="!gridResizing && (hoveringId === id || selected)"
         :id="id"
         :key="id"
+        :rect="rect"
         :is-example="isExample"
+        @mousedown="mousedown"
+        @mouseup="mouseup"
+        @dblclick.stop="dblclick"
+        @contextmenu.stop.prevent="contextmenu($event)"
       />
     </portal>
 
@@ -69,11 +76,12 @@ import { arrayLast, findIndexBy } from '@/utils/array'
 
 const store = vue.observable({
   lastEditId: null,
-  contextMenu: {}
+  contextMenu: {},
+  hoveringId: null
 })
 
 export default {
-  name: 'ControllerLayer',
+  name: 'EventController',
   inject: {
     isExample: { default: false }
   },
@@ -89,9 +97,9 @@ export default {
   },
   data() {
     return {
-      hovering: false,
       previousX: null,
-      previousY: null
+      previousY: null,
+      rect: null
     }
   },
   computed: {
@@ -126,6 +134,27 @@ export default {
     },
     sameHeightAsParent() {
       return !this.isTextEditor && !this.isGroup
+    },
+    hoveringId: {
+      get() {
+        return store.hoveringId
+      },
+      set(value) {
+        store.hoveringId = value
+      }
+    }
+  },
+  watch: {
+    hoveringId(value) {
+      if (value) {
+        this.rect = this.$el.getBoundingClientRect()
+      }
+    },
+    'node.grid': {
+      handler() {
+        this.rect = this.$el.getBoundingClientRect()
+      },
+      deep: true
     }
   },
   methods: {
@@ -187,17 +216,18 @@ export default {
       this.closeContextmenu()
       // don't change selected component ids when dragging item,
       // otherwise vue-resizable-handle will cause a bug here
-
       if (!this.isExample) {
         if (this.itemEditing) {
-          if (store.lastEditId === this.id && !event.shiftKey) {
-            // when clicking text-editor in the editing condition
-            // should return to prevent component rerender to lose focus
-            return
-          }
-          const index = findIndexBy(this.editingPath, this.id)
-          const editingPath = Array.from(this.editingPath).splice(index)
-          this.APP_SET({ editingPath })
+          // if (store.lastEditId === this.id && !event.shiftKey) {
+          //   // when clicking text-editor in the editing condition
+          //   // should return to prevent component rerender to lose focus
+          //   return
+          // }
+          // const index = findIndexBy(this.editingPath, this.id)
+          // const editingPath = Array.from(this.editingPath).splice(index)
+          // this.APP_SET({ editingPath })
+          // this.selectedComponent()
+          // console.log(editingPath)
         }
         else {
           let editingInChildren = false
@@ -215,17 +245,13 @@ export default {
         }
       }
 
-      if (event.target.classList.contains('vue-resizable-handle')) {
-        return
-      }
-
       if (event.shiftKey) {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)
       }
       else {
         this.LAYOUT_SET({ gridResizing: false })
         this.SET_SELECTED_COMPONENT_ID(this.id)
-        store.lastEditId = this.id
+        // store.lastEditId = this.id
         setTimeout(() => {
           const element = document.getElementById(`tree-node-${this.id}`)
           if (element) {

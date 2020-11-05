@@ -14,15 +14,6 @@ const mutations = {
   SET
 }
 
-const actions = {
-  resizeNodeQuickFn({ commit }) {
-    this._vm.$nextTick(() => {
-      this._vm.$bus.$emit('quick-function-resize')
-      commit('SET', { gridResizing: false })
-    })
-  }
-}
-
 const getters = {
   breakpointsMap(state, getters, rootState) {
     const { nodesMap, editingComponentSetId } = rootState.node
@@ -47,6 +38,5 @@ export default {
   namespaced: true,
   state,
   mutations,
-  getters,
-  actions
+  getters
 }

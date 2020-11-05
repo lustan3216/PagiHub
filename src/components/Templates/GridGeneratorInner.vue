@@ -10,11 +10,10 @@
     :auto-height="shouldAutoHeight"
     :extra-style="extraStyle"
     :data-addable-id="id"
-    data-node
     @height-updated="$emit('height-updated', $event)"
     @layout-updated="layoutUpdated($event)"
   >
-    <controller-layer
+    <event-controller
       v-if="controller && isDraftMode"
       :id="id"
     >
@@ -23,7 +22,7 @@
         :key="child.id"
         :id="child.id"
       />
-    </controller-layer>
+    </event-controller>
 
     <template v-else>
       <component-giver
@@ -42,7 +41,7 @@ import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { getValueByPath } from '@/utils/tool'
 import { isBackground, isSlider } from '@/utils/node'
-import ControllerLayer from '../TemplateUtils/ControllerLayer'
+import EventController from '../TemplateUtils/EventController'
 
 export default {
   name: 'GridGeneratorInner',
@@ -50,7 +49,7 @@ export default {
     VueGridGenerator: GridLayout,
     // 因為loop call AsyncComponent, 這裏不用 async import 會噴bug
     ComponentGiver: () => import('../TemplateUtils/ComponentGiver'),
-    ControllerLayer
+    EventController
   },
   mixins: [childrenMixin],
   provide() {

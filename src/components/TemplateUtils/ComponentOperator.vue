@@ -1,9 +1,15 @@
 <template>
   <div
-    v-if="node && visible"
-    :id="`quick-fn-${id}`"
+    v-if="node"
     :style="styles"
+    :class="{
+      'no-action': static || itemEditing
+    }"
     class="quick-functions flex-center"
+    @mousedown.stop="$emit('mousedown', $event)"
+    @mouseup.stop="$emit('mouseup', $event)"
+    @dblclick.stop="$emit('dblclick', $event)"
+    @contextmenu="$emit('contextmenu', $event)"
   >
     <portal-target
       v-if="itemEditing"
@@ -15,12 +21,26 @@
 
     <div class="wrapper flex top">
       <div
-        v-if="selectedComponentIds.length === 1"
-        class="flex"
-        @mouseenter="mouseenter"
-        @mouseleave="mouseleave"
+        v-if="selected && isLastOne"
+        class="component-name flex"
       >
-        <div class="component-name">
+        <i
+          v-if="!isSlider && !isBackground"
+          :class="
+            itemEditing && !hoverIcon ? 'el-icon-edit-outline' : 'el-icon-rank'
+          "
+          :style="{ cursor: itemEditing && !hoverIcon ? 'default' : 'move' }"
+          class="move-icon"
+          type="text"
+          style="padding: 8px 2px 8px 5px;"
+          @mouseenter="hoverIcon = true"
+          @mouseleave="hoverIcon = false"
+        />
+
+        <div
+          @mouseenter="mouseenter"
+          @mouseleave="mouseleave"
+        >
           <transition-group
             name="full-slide"
             class="align-center"
@@ -38,15 +58,7 @@
                 :editable="false"
                 :is-example="isExample"
                 @click="SET_SELECTED_COMPONENT_ID(node.id)"
-              >
-                <i
-                  v-if="node.id === id"
-                  :class="[
-                    itemEditing ? 'el-icon-edit-outline' : 'el-icon-rank'
-                  ]"
-                  class="m-l-5"
-                />
-              </component-name>
+              />
             </template>
           </transition-group>
         </div>
@@ -58,6 +70,15 @@
         class="flex backface-hidden"
       />
     </div>
+
+    <template v-if="selected">
+      <template v-if="!shouldAutoHeight">
+        <div class="resizable-handle-both" />
+        <div class="resizable-handle-bottom" />
+      </template>
+
+      <div class="resizable-handle-right" />
+    </template>
   </div>
 </template>
 
@@ -68,26 +89,18 @@ import { Popover } from 'element-ui'
 import {
   isGrid,
   isBackground,
+  traversalAncestorAndSelf,
   isTextEditor,
-  traversalAncestorAndSelf
+  isGroup,
+  isSlider
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { vmCreateEmptyItem } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
-import { debounce } from '@/utils/tool'
 import { BIconPlusSquareFill } from 'bootstrap-vue'
 import OftenUseMenu from './OftenUseMenu'
-
-const topShared = window.innerHeight / 2
-const leftShared = window.innerWidth / 2
-const widthShared = 0
-const heightShared = 0
-
-export const quickFnMap = {}
-
-if (process.env.NODE_ENV !== 'production') {
-  window.quickFnMap = quickFnMap
-}
+import { CAN_BE_EDITED } from '@/const'
+import interact from 'interactjs'
 
 let timeId
 
@@ -107,37 +120,64 @@ export default {
     isExample: {
       type: Boolean,
       default: false
+    },
+    rect: {
+      type: DOMRect,
+      required: true
     }
   },
   data() {
     return {
-      top: topShared,
-      left: leftShared,
-      width: widthShared,
-      height: heightShared,
+      top: 0,
+      left: 0,
+      width: 0,
+      height: 0,
       zIndex: this.isExample ? 2005 : 2000,
       animationId: null,
       canGoBack: null,
       hovering: false,
-      visible: false
+      visible: false,
+      hoverIcon: false
     }
   },
   computed: {
     ...mapState('app', [
       'copyComponentIds',
       'selectedComponentIds',
-      'editingPath'
+      'editingPath',
+      'isAdding'
     ]),
     ...mapState('layout', ['gridResizing', 'windowHeight']),
     ...mapGetters('app', ['selectedComponentNodes']),
     styles() {
       return {
-        top: this.top + 'px',
-        left: this.left + 'px',
-        width: this.width + 'px',
-        height: this.height + 'px',
+        top: this.rect.y + 'px',
+        left: this.rect.x + 'px',
+        width: this.rect.width + 1 + 'px',
+        height: this.rect.height + 'px',
         zIndex: this.zIndex
       }
+    },
+    canBeEdited() {
+      return this.node && this.node[CAN_BE_EDITED]
+    },
+    node() {
+      return this.nodesMap[this.id]
+    },
+    shouldAutoHeight() {
+      return isTextEditor(this.node) || isGroup(this.node)
+    },
+    isBackground() {
+      return isBackground(this.node)
+    },
+    isButton() {
+      return this.node.tag === 'flex-button'
+    },
+    isSlider() {
+      return isSlider(this.node)
+    },
+    selected() {
+      return this.selectedComponentIds.includes(this.id)
     },
     itemEditing() {
       return this.editingPath.includes(this.id)
@@ -165,99 +205,94 @@ export default {
     metaKey() {
       return isMac() ? '&#8984;' : '&#8963;'
     },
-    node() {
-      return this.nodesMap[this.id]
-    },
     isLastOne() {
       return arrayLast(this.selectedComponentIds) === this.id
     },
-    isBackground() {
-      return isBackground(this.node)
+    static() {
+      return this.node.lock || this.isBackground || isSlider(this.node)
     },
-    isButton() {
-      return this.node.tag === 'flex-button'
+    isDraggable() {
+      const { userCanDrag } = this.node.props || {}
+      return (
+        (!this.isAdding && this.isDraftMode) ||
+        (this.isProductionMode && userCanDrag)
+      )
+    },
+    isResizable() {
+      const { userCanResize } = this.node.props || {}
+      return this.isDraftMode || userCanResize
+    }
+  },
+  watch: {
+    static() {
+      this.tryMakeDraggable()
+      this.tryMakeResizable()
+    },
+    isDraggable() {
+      this.tryMakeDraggable()
+    },
+    isResizable() {
+      this.tryMakeResizable()
     }
   },
   mounted() {
-    this.resize()
-    this.$bus.$on('quick-function-resize', this.resize)
+    this.interactObj = interact(this.$el)
+    this.tryMakeDraggable()
+    this.tryMakeResizable()
   },
   beforeDestroy() {
-    this.$bus.$off('quick-function-resize', this.resize)
+    this.interactObj.unset()
   },
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
     ...mapActions('app', ['setCopySelectedNodeId', 'setBeingAddedComponentId']),
+    tryMakeDraggable: function() {
+      if (this.isDraggable && !this.static) {
+        const opts = {
+          ignoreFrom: '.item-editing',
+          allowFrom: 'div, .move-icon'
+        }
+        this.interactObj.draggable(opts)
+        this.interactObj.on('dragstart dragmove dragend', event => {
+          this.$bus.$emit(`handle-drag-${this.id}`, event)
+        })
+      }
+      else {
+        this.interactObj.draggable({
+          enabled: false
+        })
+      }
+    },
+    tryMakeResizable: function() {
+      if (this.isResizable && !this.static) {
+        const opts = {
+          preserveAspectRatio: true,
+          edges: {
+            left: false,
+            right: '.resizable-handle-both, .resizable-handle-right',
+            bottom: '.resizable-handle-both, .resizable-handle-bottom',
+            top: false
+          },
+          ignoreFrom: '.item-editing'
+        }
+
+        this.interactObj.resizable(opts)
+        this.interactObj.on('resizestart resizemove resizeend', event => {
+          this.$bus.$emit(`handle-resize-${this.id}`, event)
+        })
+      }
+      else {
+        this.interactObj.resizable({
+          enabled: false
+        })
+      }
+    },
     tryToAddComponent() {
       this.setBeingAddedComponentId(this.id)
     },
     vmCreateEmptyItem() {
       vmCreateEmptyItem(this.node)
     },
-    animate() {
-      if (!this.node) {
-        if (process.env.NODE_ENV === 'production') {
-          console.warn('component operator has no node')
-        }
-        return
-      }
-
-      const element = document.querySelector(
-        `[data-node][id='${this.node.id}']`
-      )
-
-      if (!element) {
-        return
-      }
-
-      const rect = element.getBoundingClientRect()
-
-      let { x: left, y: top, width, height } = rect
-
-      const bounderNode = element.closest('.art-board')
-
-      if (!bounderNode) {
-        return
-      }
-
-      const { y: top1, height: height1 } = bounderNode.getBoundingClientRect()
-
-      top = top < top1 ? top1 : top
-      height =
-        rect.top + height >= top1 + height1
-          ? top1 + height1 - top
-          : rect.top < top1
-            ? rect.top + height - top1
-            : height
-
-      if (height < 5 || left < 10 || top < 10) {
-        return
-      }
-
-      Object.assign(this.$data, {
-        left: left + 1,
-        top,
-        width: width - 2,
-        height: height - 2,
-        visible: true
-      })
-
-      const progress = +new Date() - this.startTime
-      if (progress < 250) {
-        this.animateId = window.requestAnimationFrame(this.animate)
-      }
-    },
-    resize: debounce(function() {
-      if (this.animateId) {
-        cancelAnimationFrame(this.animateId)
-      }
-
-      this.$nextTick(() => {
-        this.visible = false
-        this.startTime = +new Date()
-        this.animateId = requestAnimationFrame(this.animate)
-      })
-    }, 80),
     mouseenter() {
       timeId = setTimeout(() => {
         this.hovering = true
@@ -274,10 +309,11 @@ export default {
 <style scoped lang="scss">
 .quick-functions {
   position: absolute;
-  pointer-events: none;
+  touch-action: none;
   border: 1px solid $color-active;
   top: 0;
   left: 0;
+  box-sizing: border-box;
 }
 
 .wrapper {
@@ -328,5 +364,40 @@ export default {
   opacity: 0.9;
   pointer-events: all;
   width: 125px;
+}
+.resizable-handle {
+  &-both,
+  &-right,
+  &-bottom {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border: 1px solid $color-active;
+    background-position: bottom right;
+    padding: 0 3px 3px 0;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    box-sizing: border-box;
+    z-index: 100;
+    display: block;
+    background-color: #fff;
+  }
+
+  &-both {
+    bottom: -4px;
+    right: -4px;
+  }
+
+  &-right {
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &-bottom {
+    left: 50%;
+    bottom: -5px;
+    transform: translateX(-50%);
+  }
 }
 </style>

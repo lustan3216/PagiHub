@@ -11,14 +11,6 @@
         }"
   >
     <slot/>
-
-    <template v-if="!autoHeight">
-      <span v-show="!hideHandler" v-if="resizableAndNotStatic" :class="resizableHandleClass"/>
-      <span v-show="!hideHandler" v-if="resizableAndNotStatic" :class="resizableHandleClass" class="bottom"/>
-    </template>
-
-    <span v-show="!hideHandler" v-if="resizableAndNotStatic" :class="resizableHandleClass" class="right"/>
-    <!--<span v-if="draggable" ref="dragHandle" class="draggable-handle"></span>-->
   </div>
 </template>
 <style scoped lang="scss">
@@ -27,34 +19,10 @@
     right: auto;
     box-sizing: border-box;
     /* add right for rtl */
-    &:before {
-      position: absolute;
-      left: 0;
-      top: 0;
-      pointer-events: none;
-      width: calc(100% - 2px);
-      height: calc(100% - 2px);
-      content: ' ';
-      border: 1px solid #bcbcbc;
-      display: none;
-    }
-  }
-
-  .selected {
-    &:before {
-      border: 2px solid $color-active !important;
-      display: block;
-      margin: -1px;
-    }
-
-    > .resizable-handle {
-      border-color: $color-active !important;
-      display: block !important;
-    }
   }
 
   .transition {
-    transition: transform 200ms ease;
+    /*transition: transform 200ms ease;*/
   }
 
   .grid-item.no-touch {
@@ -64,7 +32,6 @@
 
   .grid-item.resizing {
     opacity: 0.6;
-    z-index: 3;
   }
 
   .grid-item.draggable-dragging {
@@ -80,33 +47,6 @@
     opacity: 0.9;
     border-radius: 3px;
     transition-timing-function: ease;
-  }
-
-  .grid-item > .resizable-handle {
-    position: absolute;
-    width: 9px;
-    height: 9px;
-    bottom: -4px;
-    right: -4px;
-    border: 1px solid #bcbcbc;
-    background-position: bottom right;
-    padding: 0 3px 3px 0;
-    background-repeat: no-repeat;
-    background-origin: content-box;
-    box-sizing: border-box;
-    z-index: 100;
-    display: none;
-    background-color: #fff;
-  }
-
-  .grid-item > .bottom {
-    left: 50%;
-    margin-left: -5px;
-  }
-
-  .grid-item > .right {
-    top: 50%;
-    margin-top: -5px;
   }
 
   .grid-item.disable-userselect {
@@ -315,6 +255,8 @@
         }
       }
 
+      this.$bus.$on(`handle-resize-${this.i}`, this.handleResize)
+      this.$bus.$on(`handle-drag-${this.i}`, this.handleDrag)
       this.eventBus.$on('updateWidth', self.updateWidthHandler)
       this.eventBus.$on('compact', self.compactHandler)
       this.eventBus.$on('setDraggable', self.setDraggableHandler)
@@ -322,6 +264,8 @@
     },
     beforeDestroy: function() {
       //Remove listeners
+      this.$bus.$off(`handle-drag-${this.i}`, this.handleDrag)
+      this.$bus.$off(`handle-resize-${this.i}`, this.handleResize)
       this.$bus.$off('moveTogether', this.moveTogether)
       this.eventBus.$off('updateWidth', this.updateWidthHandler)
       this.eventBus.$off('compact', this.compactHandler)
@@ -508,8 +452,7 @@
           'draggable-dragging': this.isDragging,
           'disable-userselect': this.isDragging,
           'no-touch': this.isAndroid && this.draggableOrResizableAndNotStatic,
-          transition: process.env.NODE_ENV !== 'test',
-          selected: this.selected
+          transition: process.env.NODE_ENV !== 'test'
         }
       },
       resizableAndNotStatic() {
@@ -601,6 +544,10 @@
               newSize.height = this.resizing.height + event.deltaRect.bottom
             }
 
+            if (this.ratio) {
+              newSize.width = this.previousW * this.colWidth / this.previousH * this.colHeight * newSize.height
+            }
+
             if (event.shiftKey) {
               newSize.height = newSize.width
             }
@@ -674,6 +621,7 @@
         if (event.type === 'resizestart') {
           this.$emit('resizeStart', this.i, pos.h, pos.w, newSize.height, newSize.width)
         }
+
         this.eventBus.$emit('resizeEvent', event.type, this.i, this.innerX, this.innerY, pos.h, pos.w)
       },
       handleDrag(event) {
@@ -867,87 +815,87 @@
         this.createStyle()
       },
       tryMakeDraggable: function() {
-        const self = this
-        if (this.interactObj === null || this.interactObj === undefined) {
-          this.interactObj = interact(this.$refs.item)
-        }
-        if (this.draggable && !this.static) {
-          const opts = {
-            ignoreFrom: this.dragIgnoreFrom,
-            allowFrom: this.dragAllowFrom
-          }
-          this.interactObj.draggable(opts)
-          /*this.interactObj.draggable({allowFrom: '.draggable-handle'});*/
-          if (!this.dragEventSet) {
-            this.dragEventSet = true
-            this.interactObj.on('dragstart dragmove dragend', function(event) {
-              self.handleDrag(event)
-            })
-          }
-        } else {
-          this.interactObj.draggable({
-            enabled: false
-          })
-        }
+        // const self = this
+        // if (this.interactObj === null || this.interactObj === undefined) {
+        //   this.interactObj = interact(this.$refs.item)
+        // }
+        // if (this.draggable && !this.static) {
+        //   const opts = {
+        //     ignoreFrom: this.dragIgnoreFrom,
+        //     allowFrom: this.dragAllowFrom
+        //   }
+        //   this.interactObj.draggable(opts)
+        //   /*this.interactObj.draggable({allowFrom: '.draggable-handle'});*/
+        //   if (!this.dragEventSet) {
+        //     this.dragEventSet = true
+        //     this.interactObj.on('dragstart dragmove dragend', function(event) {
+        //       self.handleDrag(event)
+        //     })
+        //   }
+        // } else {
+        //   this.interactObj.draggable({
+        //     enabled: false
+        //   })
+        // }
       },
       tryMakeResizable: function() {
-        const self = this
-        if (this.interactObj === null || this.interactObj === undefined) {
-          this.interactObj = interact(this.$refs.item)
-        }
-        if (this.resizable && !this.static) {
-          let maximum = this.calcPosition(0, 0, this.maxW, this.maxH)
-          let minimum = this.calcPosition(0, 0, this.minW, this.minH)
-
-          // console.log("### MAX " + JSON.stringify(maximum));
-          // console.log("### MIN " + JSON.stringify(minimum));
-
-          const opts = {
-            preserveAspectRatio: true,
-            // allowFrom: "." + this.resizableHandleClass,
-            edges: {
-              left: false,
-              right: true,
-              bottom: !this.autoHeight,
-              top: false
-            },
-            ignoreFrom: this.resizeIgnoreFrom,
-            restrictSize: {
-              min: {
-                height: minimum.height,
-                width: minimum.width
-              },
-              max: {
-                height: maximum.height,
-                width: maximum.width
-              }
-            }
-          }
-
-          if (this.ratio) {
-            opts.modifiers = [
-              interact.modifiers.aspectRatio({
-                // make sure the width is always double the height
-                ratio: this.pxW / this.pxH
-              })
-            ]
-          } else {
-            opts.modifiers = []
-          }
-
-          this.interactObj.resizable(opts)
-          if (!this.resizeEventSet) {
-            this.resizeEventSet = true
-            this.interactObj
-              .on('resizestart resizemove resizeend', function(event) {
-                self.handleResize(event)
-              })
-          }
-        } else {
-          this.interactObj.resizable({
-            enabled: false
-          })
-        }
+        // const self = this
+        // if (this.interactObj === null || this.interactObj === undefined) {
+        //   this.interactObj = interact(this.$refs.item)
+        // }
+        // if (this.resizable && !this.static) {
+        //   let maximum = this.calcPosition(0, 0, this.maxW, this.maxH)
+        //   let minimum = this.calcPosition(0, 0, this.minW, this.minH)
+        //
+        //   // console.log("### MAX " + JSON.stringify(maximum));
+        //   // console.log("### MIN " + JSON.stringify(minimum));
+        //
+        //   const opts = {
+        //     preserveAspectRatio: true,
+        //     // allowFrom: "." + this.resizableHandleClass,
+        //     edges: {
+        //       left: false,
+        //       right: true,
+        //       bottom: !this.autoHeight,
+        //       top: false
+        //     },
+        //     ignoreFrom: this.resizeIgnoreFrom,
+        //     restrictSize: {
+        //       min: {
+        //         height: minimum.height,
+        //         width: minimum.width
+        //       },
+        //       max: {
+        //         height: maximum.height,
+        //         width: maximum.width
+        //       }
+        //     }
+        //   }
+        //
+        //   if (this.ratio) {
+        //     opts.modifiers = [
+        //       interact.modifiers.aspectRatio({
+        //         // make sure the width is always double the height
+        //         ratio: this.pxW / this.pxH
+        //       })
+        //     ]
+        //   } else {
+        //     opts.modifiers = []
+        //   }
+        //
+        //   this.interactObj.resizable(opts)
+        //   if (!this.resizeEventSet) {
+        //     this.resizeEventSet = true
+        //     this.interactObj
+        //       .on('resizestart resizemove resizeend', function(event) {
+        //         self.handleResize(event)
+        //       })
+        //   }
+        // } else {
+        //   this.interactObj.resizable({
+        //     enabled: false
+        //   })
+        // }
       },
       autoSize() {
         // ok here we want to calculate if a resize is needed

@@ -1,5 +1,4 @@
 <script>
-import ControllerLayer from '@/components/TemplateUtils/ControllerLayer'
 import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import { isComponentSet, isGrid, isGridItem } from '@/utils/node'

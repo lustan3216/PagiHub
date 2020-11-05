@@ -85,7 +85,6 @@ export default {
 
         this.LAYOUT_SET({ gridResizing: true })
         timeId = setTimeout(() => {
-          this.resizeNodeQuickFn()
           timeId = null
         }, 50)
       },
@@ -98,7 +97,6 @@ export default {
     ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapMutations('mode', ['SET_DRAFT_MODE']),
-    ...mapActions('layout', ['resizeNodeQuickFn']),
     ...mapActions('asset', ['getAssets'])
   }
 }

@@ -22,13 +22,11 @@
     :class="{ 'no-action': lock }"
     :auto-height="shouldAutoHeight"
     :selected="selected"
-    drag-ignore-from=".item-editing"
-    drag-allow-from="div"
-    data-node
     @moveStart="prepareDuplicateNode"
     @move="move"
-    @moved="duplicateNode = null"
+    @moved="moved"
     @resize="LAYOUT_SET({ gridResizing: true })"
+    @resized="LAYOUT_SET({ gridResizing: false })"
   >
     <div
       ref="content"
@@ -41,12 +39,12 @@
       }"
       class="border-box"
     >
-      <controller-layer
+      <event-controller
         v-if="isDraftMode"
         :id="id"
       >
         <slot />
-      </controller-layer>
+      </event-controller>
       <slot v-else />
     </div>
   </vue-grid-item>
@@ -57,7 +55,7 @@ import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
 import toolMixin from './mixins/tool'
 import propsMixin from './mixins/props'
 import childrenMixin from './mixins/children'
-import ControllerLayer from '../TemplateUtils/ControllerLayer'
+import EventController from '../TemplateUtils/EventController'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import { cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
@@ -69,7 +67,7 @@ import { appendIds } from '@/utils/nodeId'
 export default {
   name: 'GridGeneratorItem',
   components: {
-    ControllerLayer,
+    EventController,
     ComponentController,
     VueGridItem: GridItem
   },
@@ -286,7 +284,6 @@ export default {
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
-    ...mapActions('layout', ['resizeNodeQuickFn']),
     ...mapActions('node', ['record']),
     prepareDuplicateNode() {
       const node = cloneJson(this.node)
@@ -305,6 +302,10 @@ export default {
       else {
         this.$set(this.layouts, this.id, this.layout)
       }
+    },
+    moved() {
+      this.duplicateNode = null
+      this.LAYOUT_SET({ gridResizing: false })
     }
   }
 }

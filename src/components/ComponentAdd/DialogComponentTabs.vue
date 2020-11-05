@@ -143,10 +143,6 @@ export default {
   watch: {
     currentCategory(value) {
       this.defaultTags = value.tags || []
-      this.resizeNodeQuickFn()
-    },
-    currentComponentId() {
-      this.resizeNodeQuickFn()
     }
   },
   mounted() {
@@ -158,7 +154,6 @@ export default {
   methods: {
     ...mapActions('node', ['debounceRecord']),
     ...mapActions('app', ['removeBeingAddedComponentId']),
-    ...mapActions('layout', ['resizeNodeQuickFn']),
     chooseCategory(category) {
       this.currentCategory = { name: category }
     },

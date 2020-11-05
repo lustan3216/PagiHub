@@ -74,7 +74,7 @@ store.watch(
 store.watch(
   state => state.app.selectedComponentIds,
   newValue => {
-    store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
+    // store.dispatch('layout/resizeNodeQuickFn', {}, { root: true })
   }
 )
 

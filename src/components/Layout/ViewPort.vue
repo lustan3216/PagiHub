@@ -234,7 +234,6 @@ export default {
 
         this.$nextTick(() => {
           this.LAYOUT_SET({ gridResizing: false })
-          this.resizeNodeQuickFn()
         })
       },
       deep: true
@@ -305,7 +304,6 @@ export default {
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
-    ...mapActions('layout', ['resizeNodeQuickFn']),
     reset() {
       this.setBoundaryRect()
       this.style.scale = 1

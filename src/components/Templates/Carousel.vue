@@ -135,8 +135,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds', 'isAdding']),
+    ...mapState('app', ['selectedComponentIds', 'isAdding', 'editingPath']),
     ...mapGetters('layout', ['currentBreakpoint']),
+    editing() {
+      return this.editingPath.includes(this.id)
+    },
     cursor() {
       if (this.isAdding) {
         return 'crosshair'
@@ -211,6 +214,15 @@ export default {
       return this.$refs.carousel
     }
   },
+  watch: {
+    editing(value, rew) {
+      console.log(value, rew)
+      if (value) {
+        const slider = this.innerChildren[this.currentIndex]
+        this.SET_SELECTED_COMPONENT_ID(slider.id)
+      }
+    }
+  },
   mounted() {
     let i = true
     const position = { x: 0, y: 0 }
@@ -257,9 +269,11 @@ export default {
     })
   },
   methods: {
-    ...mapMutations('app', ['CLEAN_SELECTED_COMPONENT_ID']),
+    ...mapMutations('app', [
+      'CLEAN_SELECTED_COMPONENT_ID',
+      'SET_SELECTED_COMPONENT_ID'
+    ]),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
-    ...mapActions('layout', ['resizeNodeQuickFn']),
     checkSelectedComponent(index, oldIndex) {
       const { id } = this.sliders[oldIndex]
       const node = this.nodesMap[id]
@@ -269,9 +283,6 @@ export default {
 
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
       this.LAYOUT_SET({ gridResizing: true })
-      setTimeout(() => {
-        this.resizeNodeQuickFn()
-      }, 700)
     },
     removeCurrentSlider() {
       const node = this.children[this.currentIndex]

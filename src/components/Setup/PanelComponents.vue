@@ -150,7 +150,6 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
-    ...mapActions('layout', ['resizeNodeQuickFn']),
     renderTree() {
       const tree = this.componentSetNode
 
@@ -208,7 +207,6 @@ export default {
         setTimeout(
           () => {
             this.vmMap[id].$el.scrollIntoView(false)
-            this.resizeNodeQuickFn()
           },
           sliders.length ? 100 : 0
         )

@@ -28,7 +28,6 @@ export default {
     GridGeneratorItem: () => import('../Templates/GridGeneratorItem'),
 
     VideoPlayer: () => import('../Templates/VideoPlayer'),
-    Drawer: () => import('../Templates/Drawer'),
     Iframer: () => import('../Templates/Iframer')
 
     // FormTextarea: () => import('../Templates/FormTextarea'),
