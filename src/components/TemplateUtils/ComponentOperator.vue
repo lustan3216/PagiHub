@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="node && visible"
+    v-if="node"
     :style="styles"
     :class="{
       'no-action': static || itemEditing || isBackground || scrolling
@@ -120,10 +120,6 @@ export default {
       required: true
     },
     isExample: {
-      type: Boolean,
-      default: false
-    },
-    visible: {
       type: Boolean,
       default: false
     },

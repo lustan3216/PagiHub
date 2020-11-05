@@ -26,7 +26,7 @@
 
       <component-operator
         v-if="rect && !isAdding"
-        :visible="!gridResizing && (hoveringId === id || selected)"
+        v-show="!gridResizing && (hoveringId === id || selected)"
         :id="id"
         :key="id"
         :rect="rect"
