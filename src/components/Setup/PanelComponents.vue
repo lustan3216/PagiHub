@@ -75,7 +75,7 @@
 <script>
 import Tree from '@/vendor/element-ui/tree'
 import { SOFT_DELETE } from '@/const'
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { asyncGetValue, cloneJson } from '@/utils/tool'
 import ElementIcon from '@/components/Components/ElementIcon'
 import ComponentController from '../TemplateUtils/ComponentController'
@@ -92,8 +92,6 @@ import {
   sortDescByZIndex
 } from '@/utils/node'
 import { vmGet } from '@/utils/vmMap'
-
-require('smoothscroll-polyfill').polyfill()
 
 export default {
   name: 'PanelComponents',
@@ -205,7 +203,11 @@ export default {
 
       if (this.vmMap[id]) {
         // 可能被device hidden 所以map找不到
-        this.vmMap[id].$el.scrollIntoView(false)
+        this.vmMap[id].$el.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'nearest'
+        })
 
         setTimeout(() => {
           this.$bus.$emit('carousel-transition', true)
@@ -225,6 +227,8 @@ export default {
 
           if (isComponentSet(node)) return false
         })
+
+        if (!queue.length) resolve()
 
         queue.forEach(async(node, index) => {
           const { $parent: carousel } = await asyncGetValue(() =>

@@ -16,6 +16,9 @@ import formCreate from '@form-create/element-ui'
 import vmMap from '@/utils/vmMap'
 import jsonHistory from '@/store/jsonHistory'
 import i18n from './i18n'
+import smoothscroll from 'smoothscroll-polyfill'
+smoothscroll.polyfill()
+
 import ElementUiInstall from './install/elementUi'
 ElementUiInstall(Vue)
 

@@ -140,6 +140,9 @@ export default {
     sameHeightAsParent() {
       return !this.isTextEditor && !this.isGroup
     },
+    isBackground() {
+      return isBackground(this.node)
+    },
     hoveringId: {
       get() {
         return store.hoveringId
@@ -179,7 +182,12 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     getRect() {
-      this.rect = this.$el.getBoundingClientRect()
+      if (this.isBackground) {
+        this.rect = this.$el.closest('.art-board').getBoundingClientRect()
+      }
+      else {
+        this.rect = this.$el.getBoundingClientRect()
+      }
     },
 
     finEditingPath() {
@@ -267,7 +275,11 @@ export default {
         setTimeout(() => {
           const element = document.getElementById(`tree-node-${this.id}`)
           if (element) {
-            element.scrollIntoView(false)
+            element.scrollIntoView({
+              behavior: 'smooth',
+              block: 'nearest',
+              inline: 'nearest'
+            })
           }
         }, 100)
       }
