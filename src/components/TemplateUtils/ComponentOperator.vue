@@ -322,8 +322,8 @@ export default {
 }
 
 .top {
-  left: 0;
-  top: -35px;
+  left: -1px;
+  top: -32px;
 }
 
 .bottom {
@@ -342,7 +342,7 @@ export default {
   padding-right: 5px;
   padding-left: 5px;
   border: 1px solid $color-active;
-  border-radius: 5px;
+  border-radius: 3px;
   color: $color-active !important;
   font-size: 12px;
   font-weight: 500;
