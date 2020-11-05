@@ -729,7 +729,7 @@
           this.$emit('moved', this.i, pos.x, pos.y)
         }
         if (event.type === 'dragstart') {
-          this.$emit('moveStart', this.i, pos.x, pos.y)
+          this.$emit('moveStart', this.i, pos.x, pos.y, event)
         }
 
         this.eventBus.$emit('dragEvent', event.type, this.i, pos.x, pos.y, this.innerH, this.innerW)

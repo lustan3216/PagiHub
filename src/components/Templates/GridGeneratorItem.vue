@@ -22,19 +22,11 @@
     :class="{ 'no-action': lock }"
     :auto-height="shouldAutoHeight"
     :selected="selected"
-    @moveStart="moveStart"
     @move="move"
     @moved="moved"
     @resize="LAYOUT_SET({ gridResizing: true })"
     @resized="LAYOUT_SET({ gridResizing: false })"
   >
-    <i
-      v-shortkey.push="['alt']"
-      v-if="moving"
-      :disabled="!selectedComponentIds.length"
-      @shortkey="pressAltKey = !pressAltKey"
-    />
-
     <div
       ref="content"
       :style="{
@@ -46,9 +38,17 @@
       }"
       class="border-box"
     >
+      <i
+        v-shortkey.push="['alt']"
+        v-if="moving"
+        @shortkey="pressAltKey = !$event.keyup"
+      />
+
       <event-controller
         v-if="isDraftMode"
         :id="id"
+        @mousedown="mousedown"
+        @mouseup="moved"
       >
         <slot />
       </event-controller>
@@ -96,7 +96,7 @@ export default {
       layout: {},
       duplicateNode: null,
       pressAltKey: false,
-      moving: true
+      moving: false
     }
   },
   computed: {
@@ -255,6 +255,22 @@ export default {
       else {
         this.$set(this.layouts, this.id, this.layout)
       }
+    },
+    pressAltKey(value) {
+      if (!this.moving) return
+
+      if (value) {
+        this.record({
+          path: this.duplicateNode.id,
+          value: this.duplicateNode
+        })
+      }
+      else if (this.duplicateNode) {
+        this.record({
+          path: this.duplicateNode.id,
+          value: undefined
+        })
+      }
     }
   },
   updated() {
@@ -279,10 +295,10 @@ export default {
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('node', ['record']),
-    moveStart() {
+    mousedown(event) {
       this.prepareDuplicateNode()
-      this.pressAltKey = false
       this.moving = true
+      this.pressAltKey = event.altKey
     },
     prepareDuplicateNode() {
       const node = cloneJson(this.node)
@@ -291,19 +307,6 @@ export default {
     },
     move() {
       this.LAYOUT_SET({ gridResizing: true })
-
-      if (this.pressAltKey) {
-        this.record({
-          path: this.duplicateNode.id,
-          value: this.duplicateNode
-        })
-      }
-      else {
-        this.record({
-          path: this.duplicateNode.id,
-          value: undefined
-        })
-      }
     },
     updateLayout(layout = this.computedLayout) {
       this.layout = layout
@@ -316,8 +319,10 @@ export default {
     },
     moved() {
       this.moving = false
-      this.duplicateNode = null
       this.LAYOUT_SET({ gridResizing: false })
+      this.$nextTick(() => {
+        this.pressAltKey = false
+      })
     }
   }
 }

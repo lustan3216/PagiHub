@@ -23,17 +23,15 @@ Just click publish, then you will have a real RWD website
 
 bug
 
-- position fix element x,y should use %, - group scrollable 垂直 水平 scroll
-- carousel 放完東西 preview 有 bug
-- 元件可以直接拖入 carousel
 - 修復 shared page copy and ux
+- 快捷鍵選單
+- carousel 放完東西 preview 有 bug
 - autoHeight 有 bug 打字時有 bug
 - panel component click bug when component is carousel
-
-- 沒有 zindex 之後，拖拉 要怎麼放到最上層
-- 解決 image 加入用拖拉的
+- position fix element x,y should use %, - group scrollable 垂直 水平 scroll
+- 元件可以直接拖入 carousel
 - 照片可以直接拖進去
-- 快捷鍵選單
+
 
 
 * panel component 可以拖拉

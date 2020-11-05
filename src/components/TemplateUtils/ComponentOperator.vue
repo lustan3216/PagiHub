@@ -97,6 +97,7 @@ import {
 import { arrayLast } from '@/utils/array'
 import { vmCreateEmptyItem } from '@/utils/vmMap'
 import { isMac } from '@/utils/device'
+import { getValueByPath } from '@/utils/tool'
 import { BIconPlusSquareFill } from 'bootstrap-vue'
 import OftenUseMenu from './OftenUseMenu'
 import { CAN_BE_EDITED } from '@/const'
@@ -212,14 +213,17 @@ export default {
       return this.node.lock || this.isBackground || isSlider(this.node)
     },
     isDraggable() {
-      const { userCanDrag } = this.node.props || {}
+      const userCanDrag = getValueByPath(this.node, ['props', 'userCanDrag'])
       return (
         (!this.isAdding && this.isDraftMode) ||
         (this.isProductionMode && userCanDrag)
       )
     },
     isResizable() {
-      const { userCanResize } = this.node.props || {}
+      const userCanResize = getValueByPath(this.node, [
+        'props',
+        'userCanResize'
+      ])
       return this.isDraftMode || userCanResize
     }
   },

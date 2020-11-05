@@ -191,6 +191,7 @@ export default {
       }
     },
     mousedown(event) {
+      this.$emit('mousedown', event)
       this.previousX = event.clientX
       this.previousY = event.clientY
     },
