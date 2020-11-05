@@ -147,12 +147,12 @@ export default {
   watch: {
     hoveringId(value) {
       if (value) {
-        this.rect = this.$el.getBoundingClientRect()
+        this.getRect()
       }
     },
     'node.grid': {
       handler() {
-        this.rect = this.$el.getBoundingClientRect()
+        this.getRect()
       },
       deep: true
     }
@@ -170,6 +170,9 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
+    getRect() {
+      this.rect = this.$el.getBoundingClientRect()
+    },
 
     finEditingPath() {
       const editingPath = []
@@ -196,6 +199,7 @@ export default {
       this.previousY = event.clientY
     },
     mouseup(event) {
+      this.getRect()
       if (
         this.previousX !== event.clientX &&
         this.previousY !== event.clientY

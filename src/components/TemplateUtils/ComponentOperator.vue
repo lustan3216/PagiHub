@@ -71,7 +71,7 @@
       />
     </div>
 
-    <template v-if="selected">
+    <template v-if="selected && !isSlider">
       <template v-if="!shouldAutoHeight">
         <div class="resizable-handle-both" />
         <div class="resizable-handle-bottom" />
