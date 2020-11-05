@@ -13,30 +13,34 @@
     @contextmenu="$emit('contextmenu', $event)"
     @wheel="onWheel"
   >
-    <portal-target
-      v-if="itemEditing && !isExample && isTextEditor"
-      :style="textEditorStyle"
-      name="QuickFunctionsTextEditor"
-      slim
-      class="can-action"
-    />
-
     <div class="wrapper flex top">
       <div
         v-if="selected && isLastOne"
         class="component-name flex"
       >
+        <portal to="asd">
+          <el-button
+            v-if="!isBackground"
+            @click="copy"
+          >
+            Copy Design
+          </el-button>
+        </portal>
+
         <i
-          v-if="!isSlider && !isBackground && !isExample"
+          v-if="!isSlider && !isBackground"
           :class="
-            itemEditing && !hoverIcon ? 'el-icon-edit-outline' : 'el-icon-rank'
+            itemEditing && !hoverIcon
+              ? 'el-icon-edit-outline'
+              : 'el-icon-copy-document'
           "
-          :style="{ cursor: itemEditing && !hoverIcon ? 'default' : 'move' }"
+          :style="{ cursor: itemEditing && !hoverIcon ? 'default' : 'pointer' }"
           class="move-icon"
           type="text"
           style="padding: 8px 2px 8px 5px;"
           @mouseenter="hoverIcon = true"
           @mouseleave="hoverIcon = false"
+          @copy="copy"
         />
 
         <div
@@ -58,29 +62,14 @@
                 :key="node.id"
                 :id="node.id"
                 :editable="false"
-                :is-example="isExample"
+                is-example
                 @click="SET_SELECTED_COMPONENT_ID(node.id)"
               />
             </template>
           </transition-group>
         </div>
       </div>
-
-      <often-use-menu
-        v-if="isDraftMode && !isExample && isLastOne"
-        :id="id"
-        class="flex backface-hidden"
-      />
     </div>
-
-    <template v-if="selected && !isSlider && !isBackground && !isExample">
-      <template v-if="!shouldAutoHeight">
-        <div class="resizable-handle-both" />
-        <div class="resizable-handle-bottom" />
-      </template>
-
-      <div class="resizable-handle-right" />
-    </template>
   </div>
 </template>
 
@@ -97,15 +86,15 @@ import {
   isSlider
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
-import { getValueByPath } from '@/utils/tool'
+import { cloneJson, getValueByPath } from '@/utils/tool'
 import { BIconPlusSquareFill } from 'bootstrap-vue'
 import OftenUseMenu from './OftenUseMenu'
-import interact from 'interactjs'
+import { CAN_BE_EDITED } from '@/const'
 
 let timeId
 
 export default {
-  name: 'ComponentOperator',
+  name: 'ExampleOperator',
   components: {
     ComponentName,
     ElPopover: Popover,
@@ -116,10 +105,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-    isExample: {
-      type: Boolean,
-      default: false
     },
     rect: {
       type: DOMRect,
@@ -132,12 +117,12 @@ export default {
       left: 0,
       width: 0,
       height: 0,
-      zIndex: this.isExample ? 2005 : 2000,
       animationId: null,
       canGoBack: null,
       hovering: false,
       hoverIcon: false,
-      scrolling: false
+      scrolling: false,
+      zIndex: 2030
     }
   },
   computed: {
@@ -155,8 +140,11 @@ export default {
         left: this.rect.x + 'px',
         width: this.rect.width + 1 + 'px',
         height: this.rect.height + 'px',
-        zIndex: this.selected ? this.zIndex + 1 : this.zIndex
+        zIndex: this.zIndex
       }
+    },
+    canBeEdited() {
+      return this.node && this.node[CAN_BE_EDITED]
     },
     node() {
       return this.nodesMap[this.id]
@@ -166,9 +154,6 @@ export default {
     },
     isBackground() {
       return isBackground(this.node)
-    },
-    isTextEditor() {
-      return isTextEditor(this.node)
     },
     isButton() {
       return this.node.tag === 'flex-button'
@@ -181,15 +166,6 @@ export default {
     },
     itemEditing() {
       return this.editingPath.includes(this.id)
-    },
-    textEditorStyle() {
-      const shouldOnLeftSide = this.width + this.left + 400 > window.innerWidth
-      if (shouldOnLeftSide) {
-        return { right: 'calc(100% + 10px)' }
-      }
-      else {
-        return { left: 'calc(100% + 10px)' }
-      }
     },
     nodesPath() {
       const nodes = []
@@ -223,30 +199,14 @@ export default {
       return this.isDraftMode || userCanResize
     }
   },
-  watch: {
-    static() {
-      this.tryMakeDraggable()
-      this.tryMakeResizable()
-    },
-    isDraggable() {
-      this.tryMakeDraggable()
-    },
-    isResizable() {
-      this.tryMakeResizable()
-    }
-  },
   mounted() {
-    this.interactObj = interact(this.$el)
-    this.tryMakeDraggable()
-    this.tryMakeResizable()
-  },
-  beforeDestroy() {
-    if (this.interactObj) {
-      this.interactObj.unset()
-    }
+    const dialog = document.getElementById('examples-dialog')
+    const dialogIndex = dialog.style.zIndex
+    this.zIndex = parseInt(dialogIndex) + 1
   },
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
+    ...mapActions('app', ['setCopySelectedNodeId', 'setBeingAddedComponentId']),
     onWheel() {
       clearTimeout(timeId)
       this.scrolling = true
@@ -254,47 +214,6 @@ export default {
         this.scrolling = false
         timeId = null
       }, 50)
-    },
-    tryMakeDraggable: function() {
-      if (this.isDraggable && !this.static) {
-        const opts = {
-          ignoreFrom: '.item-editing',
-          allowFrom: 'div, .move-icon'
-        }
-        this.interactObj.draggable(opts)
-        this.interactObj.on('dragstart dragmove dragend', event => {
-          this.$bus.$emit(`handle-drag-${this.id}`, event)
-        })
-      }
-      else {
-        this.interactObj.draggable({
-          enabled: false
-        })
-      }
-    },
-    tryMakeResizable: function() {
-      if (this.isResizable && !this.static) {
-        const opts = {
-          preserveAspectRatio: true,
-          edges: {
-            left: false,
-            right: '.resizable-handle-both, .resizable-handle-right',
-            bottom: '.resizable-handle-both, .resizable-handle-bottom',
-            top: false
-          },
-          ignoreFrom: '.item-editing'
-        }
-
-        this.interactObj.resizable(opts)
-        this.interactObj.on('resizestart resizemove resizeend', event => {
-          this.$bus.$emit(`handle-resize-${this.id}`, event)
-        })
-      }
-      else {
-        this.interactObj.resizable({
-          enabled: false
-        })
-      }
     },
     mouseenter() {
       timeId = setTimeout(() => {
@@ -304,6 +223,10 @@ export default {
     mouseleave() {
       clearTimeout(timeId)
       this.hovering = false
+    },
+    copy() {
+      this.$bus.$emit('node-tree-add', cloneJson(this.node))
+      this.$bus.$emit('dialog-component-visible', false)
     }
   }
 }

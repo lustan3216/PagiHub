@@ -1,6 +1,6 @@
 <template>
   <div>
-    <function-bar />
+    <function-bar v-if="isDraftMode" />
 
     <div
       ref="panelDraft"

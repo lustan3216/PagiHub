@@ -414,7 +414,6 @@ $color-grey: #b2b2b2;
   padding: 0.3rem;
   position: absolute;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  left: calc(100% + 10px) !important;
 }
 
 .el-color-picker {

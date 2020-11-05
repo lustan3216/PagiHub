@@ -1,6 +1,6 @@
 <template>
   <tip><b>Copy</b> is also powerful here, you can copy any single design from page
-  to paste in the artboard.</tip>
+  then paste into your page.</tip>
 </template>
 
 <script>

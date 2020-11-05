@@ -34,7 +34,7 @@
                 v-model="form.label"
                 :disabled="isExist"
                 data-cy="project-name-input"
-                placeholder="At least 6 letters"
+                placeholder="At least 3 letters"
               />
             </el-form-item>
 
@@ -42,9 +42,7 @@
               The project name will be part of url which is <b>unchangeable</b>.
               Furthermore, it can be browsed when published.
             </p>
-            <a
-              class="link font-13"
-            >
+            <a class="link font-13">
               {{ exampleUrl }}
             </a>
 
@@ -126,9 +124,9 @@ export default {
       visible: false,
       dirty: false,
       form: {
-        label: node ? node.label : '',
-        description: node ? node.description : '',
-        tags: node ? node.tags : []
+        label: '',
+        description: '',
+        tags: []
       },
       rules: {
         label
@@ -136,13 +134,45 @@ export default {
       loading: false
     }
   },
+  created() {
+    if (this.node) {
+      this.form.label = this.node.label
+      this.form.description = this.node.description
+      this.form.tags = this.node.tags
+    }
+
+    this.rules.label = [...label, this.nameCheck]
+  },
   computed: {
     ...mapState('user', ['userId', 'username']),
+    node() {
+      return this.nodesMap[this.id]
+    },
     exampleUrl() {
-      return `https://lots.design/${this.username || 'username'}/${this.form.label || 'project-name'}/page-name`
+      return `https://lots.design/${this.username || 'username'}/${this.form
+        .label || 'project-name'}/page-name`
     },
     isExist() {
       return Boolean(this.id)
+    },
+    ...mapState('node', ['projectIds']),
+    projectLabels() {
+      // components可能會因為Example裡面的跟當下project的混在一起
+      return this.projectIds.map(id => this.nodesMap[id].label.trim())
+    },
+    nameCheck() {
+      const nameCheck = (rule, value, callback) => {
+        if (this.node && this.node.label === value) {
+          callback()
+        }
+        else if (this.projectLabels.includes(value.trim())) {
+          callback(new Error('The name has been used'))
+        }
+        else {
+          callback()
+        }
+      }
+      return { required: true, validator: nameCheck, trigger: 'change' }
     }
   },
   watch: {

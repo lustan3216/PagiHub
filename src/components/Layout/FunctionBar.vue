@@ -5,15 +5,22 @@
 
       <el-tooltip
         effect="light"
-        content="Preview"
         placement="bottom"
       >
+        <div slot="content">
+          Text
+          <i
+            v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
+            class="gray-font-2 m-l-10"
+            @shortkey="preview"
+            v-html="`${ctrlKeyIcon}&#8679;P`"
+          />
+        </div>
+
         <el-button
-          v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
           :disabled="!editingComponentSetId"
           type="text"
-          @click="SET_PREVIEW_MODE"
-          @shortkey.native="SET_PREVIEW_MODE"
+          @click="preview"
         >
           <b-icon-caret-right />
         </el-button>
@@ -39,12 +46,10 @@
 
       <el-divider direction="vertical" />
 
-      <portal-target name="BreakpointController" />
+      <portal-target name="ViewPortController" />
     </el-form>
 
     <div class="align-center p-r-10">
-      <portal-target name="ViewPortController" />
-
       <el-button
         type="text"
         @click="$router.push({ name: 'Dashboard' })"
@@ -88,12 +93,20 @@ export default {
     ]),
     selected() {
       return this.selectedComponentIds.includes(this.id)
+    },
+    ctrlKeyIcon() {
+      return isMac() ? '&#8984;' : '&#8963;'
     }
   },
   methods: {
     ...mapActions('app', ['setCopySelectedNodeId']),
     ...mapMutations('mode', ['SET_PREVIEW_MODE']),
-    isMac
+    isMac,
+    preview() {
+      if (this.editingComponentSetId) {
+        this.SET_PREVIEW_MODE()
+      }
+    }
   }
 }
 </script>

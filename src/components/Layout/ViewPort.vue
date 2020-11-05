@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <portal to="BreakpointController">
+    <portal to="ViewPortController">
       <div class="align-center">
         <el-tooltip
           v-if="isPreviewMode"

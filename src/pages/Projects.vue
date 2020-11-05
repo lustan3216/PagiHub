@@ -100,14 +100,10 @@ export default {
   },
   methods: {
     ...mapActions('node', ['getProjects']),
-    ...mapMutations('node', {
-      NODE_SET: 'SET'
-    }),
     time(time) {
       return dayjs().to(dayjs(time))
     },
     redirect(id) {
-      this.NODE_SET({ editingProjectId: id })
       this.$router.push(`/workboard/${id}`)
     }
   }

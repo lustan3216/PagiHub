@@ -24,13 +24,13 @@
         @close="closeContextmenu"
       />
 
-      <component-operator
+      <component
         v-if="rect && !isAdding"
         v-show="!gridResizing && (hoveringId === id || selected)"
+        :is="isExample ? 'example-operator' : 'component-operator'"
         :id="id"
         :key="id"
         :rect="rect"
-        :is-example="isExample"
         @mousedown="mousedown"
         @mouseup="mouseup"
         @dblclick.stop="dblclick"
@@ -72,6 +72,7 @@ import {
   traversalAncestorAndSelf
 } from '@/utils/node'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
+import ExampleOperator from '@/components/TemplateUtils/ExampleOperator'
 import { arrayLast, findIndexBy } from '@/utils/array'
 
 const store = vue.observable({
@@ -87,6 +88,7 @@ export default {
   },
   components: {
     ContextMenu,
+    ExampleOperator,
     ComponentOperator: () => import('./ComponentOperator')
   },
   props: {
@@ -204,10 +206,7 @@ export default {
 
     dblclick() {
       if (this.canBeEdited) {
-        if (!this.isExample) {
-          this.finEditingPath()
-        }
-
+        this.finEditingPath()
         this.SET_SELECTED_COMPONENT_ID(this.id)
       }
     },
@@ -241,14 +240,14 @@ export default {
       // otherwise vue-resizable-handle will cause a bug here
       if (!this.isExample) {
         if (this.itemEditing) {
-          // if (store.lastEditId === this.id && !event.shiftKey) {
-          //   // when clicking text-editor in the editing condition
-          //   // should return to prevent component rerender to lose focus
-          //   return
-          // }
-          // const index = findIndexBy(this.editingPath, this.id)
-          // const editingPath = Array.from(this.editingPath).splice(index)
-          // this.APP_SET({ editingPath })
+          if (store.lastEditId === this.id && !event.shiftKey) {
+            // when clicking text-editor in the editing condition
+            // should return to prevent component rerender to lose focus
+            return
+          }
+          const index = findIndexBy(this.editingPath, this.id)
+          const editingPath = Array.from(this.editingPath).splice(index)
+          this.APP_SET({ editingPath })
           // this.selectedComponent()
           // console.log(editingPath)
         }
@@ -293,6 +292,7 @@ export default {
       store.contextMenu = {}
     },
     contextmenu(event) {
+      if (this.isExample) return
       const y =
         window.innerHeight > event.clientY + 400
           ? event.clientY

@@ -3,7 +3,7 @@
     <i
       v-shortkey="['esc']"
       v-if="creatingComponentTag"
-      @shortkey="finish"
+      @shortkey="cleanState"
     />
 
     <el-tooltip
@@ -146,7 +146,8 @@ export default {
       creatingComponentTag: null,
       selection: null,
       scrollTop: 0,
-      imageSrc: null
+      imageSrc: null,
+      nodeTree: null
     }
   },
   computed: {
@@ -165,7 +166,7 @@ export default {
     }
   },
   watch: {
-    creatingComponentTag(value) {
+    isAdding(value) {
       if (value) {
         this.selection.enable()
       }
@@ -216,19 +217,29 @@ export default {
         options.props = { src: this.imageSrc }
       }
 
-      const node = getExample(this.creatingComponentTag, options, grid)
+      let node
+      if (this.nodeTree) {
+        node = this.nodeTree
+        node.grid = grid
+      }
+      else {
+        node = getExample(this.creatingComponentTag, options, grid)
+      }
+
       vmAddNodeToParent(this.beingAddedComponentId, node)
-      this.finish()
+      this.cleanState()
     })
 
     this.selection.disable()
 
     this.$bus.$on('art-board-scroll-top', this.updateScrollTop)
     this.$bus.$on('image-add', this.addImage)
+    this.$bus.$on('node-tree-add', this.addNodeTree)
   },
   beforeDestroy() {
     this.$bus.$off('art-board-scroll-top', this.updateScrollTop)
     this.$bus.$off('image-add', this.addImage)
+    this.$bus.$off('node-tree-add', this.addNodeTree)
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),
@@ -236,9 +247,11 @@ export default {
     ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapMutations('asset', ['OPEN_ASSET']),
     capitalize,
-    finish() {
+    cleanState() {
       this.selection.disable()
       this.creatingComponentTag = null
+      this.imageSrc = null
+      this.nodeTree = null
       this.APP_SET({
         beingAddedComponentId: null,
         isAdding: false
@@ -246,7 +259,7 @@ export default {
     },
     onClick(name) {
       this.creatingComponentTag = name
-      this.APP_SET({ isAdding: name })
+      this.APP_SET({ isAdding: true })
     },
     updateScrollTop(value) {
       this.scrollTop = value
@@ -254,6 +267,10 @@ export default {
     addImage(src) {
       this.imageSrc = src
       this.creatingComponentTag = 'flex-image'
+      this.APP_SET({ isAdding: true })
+    },
+    addNodeTree(nodeTree) {
+      this.nodeTree = nodeTree
       this.APP_SET({ isAdding: true })
     },
     recordStyles(value) {

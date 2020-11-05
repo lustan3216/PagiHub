@@ -1,6 +1,5 @@
 <template>
   <el-dialog
-    id="examples-dialog"
     ref="dialog"
     :visible="visible"
     class="dialog"

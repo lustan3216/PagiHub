@@ -48,9 +48,17 @@ export const actions = {
 
   async createComponentSet(
     { commit, state, dispatch, rootGetters },
-    { label, description, tags }
+    { label, description, tags, copyComponentSet }
   ) {
-    const tree = background()
+    let tree
+
+    if (copyComponentSet) {
+      tree = copyComponentSet.children[0]
+    }
+    else {
+      tree = background()
+    }
+
     appendIds(tree)
 
     const {

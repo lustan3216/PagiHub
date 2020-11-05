@@ -58,7 +58,7 @@
 
           <menu-component-sets
             v-model="currentComponentId"
-            :except-ids="[editingComponentSetId]"
+            :except-ids="exceptDds"
             :category="currentCategory.name"
             :key="currentCategory.name"
             :text="search"
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import { cloneJson } from '@/utils/tool'
 import { isComponentSet } from '@/utils/node'
 import { Tag } from 'element-ui'
@@ -105,7 +105,6 @@ import CardComponentSet from './CardComponentSet'
 import { BIconFiles } from 'bootstrap-vue'
 import MenuCategories, { LOCAL_PAGES } from './MenuCategories'
 import MenuComponentSets from './MenuComponentSets'
-import MenuExamples from './MenuExamples'
 import MenuImages from './MenuImages'
 
 export default {
@@ -116,7 +115,6 @@ export default {
     }
   },
   components: {
-    MenuExamples,
     MenuCategories,
     MenuComponentSets,
     MenuImages,
@@ -137,25 +135,33 @@ export default {
     }
   },
   computed: {
-    ...mapState('node', ['editingComponentSetId', 'rootComponentSetIds']),
-    ...mapState('app', ['beingAddedComponentId'])
+    ...mapState('node', ['editingProjectId']),
+    ...mapState('app', ['beingAddedComponentId']),
+    exceptDds() {
+      const project = this.nodesMap[this.editingProjectId]
+      return project ? project.children.map(node => node.id) : []
+    }
   },
   watch: {
     currentCategory(value) {
       this.defaultTags = value.tags || []
+    },
+    visible() {
+      this.APP_SET({ selectedComponentIds: [] })
     }
   },
   mounted() {
-    this.$bus.$on('dialog-component-tabs-jump', this.chooseCategory)
+    this.$bus.$on('dialog-component-visible', this.setVisible)
   },
   beforeDestroy() {
-    this.$bus.$off('dialog-component-tabs-jump', this.chooseCategory)
+    this.$bus.$off('dialog-component-visible', this.setVisible)
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),
     ...mapActions('app', ['removeBeingAddedComponentId']),
-    chooseCategory(category) {
-      this.currentCategory = { name: category }
+    ...mapMutations('app', { APP_SET: 'SET' }),
+    setVisible(visible) {
+      this.visible = visible
     },
     addTemplate(template) {
       const node = this.nodesMap[this.beingAddedComponentId]

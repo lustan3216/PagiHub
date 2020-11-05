@@ -73,7 +73,7 @@ import { DEVICE_OPTIONS } from '@/components/Layout/ViewPort'
 import elementResizeDetectorMaker from 'element-resize-detector'
 
 export default {
-  name: 'ViewPort',
+  name: 'ExampleViewPort',
   components: {
     ButtonDevice
   },

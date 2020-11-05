@@ -1,23 +1,33 @@
 <template>
   <div
-    v-if="component"
-    :id="`example-${component.id}`"
+    v-if="componentSet"
     class="example-card"
   >
     <tip-copy class="m-b-10" />
 
     <div class="p-10 justify-between">
-      <span style="visibility: hidden">ADD</span>
       <b style="line-height: 28px; font-size: 24px;">
-        {{ component.label }}
+        {{ componentSet.label }}
       </b>
 
-      <el-button
-        type="primary"
-        @click="$emit('add', component)"
-      >
-        ADD
-      </el-button>
+      <div class="flex">
+        <portal-target name="asd" class="copy-button">
+          <el-button disabled>
+            Copy Design
+          </el-button>
+        </portal-target>
+
+        <el-button @click="replaceCurrentPage">
+          Replace Current Page
+        </el-button>
+
+        <dialog-component-set
+          :copy-component-set="componentSet"
+          text="Add To New Page"
+          type
+          @created="closeTab"
+        />
+      </div>
     </div>
 
     <div class="relative z-index1 p-1">
@@ -26,12 +36,12 @@
       </example-view-port>
     </div>
 
-    <div v-if="component.tags && component.tags.length">
+    <div v-if="componentSet.tags && componentSet.tags.length">
       <div class="p-15">
         <p class="title p-t-5 bold">Tags</p>
 
         <el-tag
-          v-for="tag in component.tags"
+          v-for="tag in componentSet.tags"
           :key="tag"
           effect="plain"
           class="m-r-5"
@@ -42,12 +52,12 @@
     </div>
 
     <div
-      v-if="component.description"
+      v-if="componentSet.description"
       class="p-15"
     >
       <b class="title">Description</b>
 
-      <p v-html="component.description" />
+      <p v-html="componentSet.description" />
     </div>
   </div>
 </template>
@@ -57,9 +67,11 @@ import { shortTagName } from '@/utils/node'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import TipCopy from '../Tip/TipCopy'
 import { Tag } from 'element-ui'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import ExampleViewPort from './ExampleViewPort'
 import ArtBoard from '@/components/Layout/ArtBoard'
+import DialogComponentSet from '@/components/Setup/DialogComponentSet'
+import { vmRemoveNode, vmAddNodeToParent } from '@/utils/vmMap'
 
 export default {
   name: 'CardComponentSet',
@@ -68,6 +80,7 @@ export default {
     TipCopy,
     ComponentGiver,
     ElTag: Tag,
+    DialogComponentSet,
     ExampleViewPort
   },
   props: {
@@ -77,16 +90,24 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['beingAddedComponentId']),
-    component() {
+    ...mapGetters('node', ['backgroundNode']),
+    componentSet() {
       return this.nodesMap[this.id]
-    },
-    node() {
-      return this.nodesMap[this.beingAddedComponentId]
     }
   },
   methods: {
-    shortTagName
+    shortTagName,
+    closeTab() {
+      this.$bus.$emit('dialog-component-visible', false)
+    },
+    replaceCurrentPage() {
+      const background = this.componentSet.children[0]
+      background.children.forEach(node =>
+        vmAddNodeToParent(this.backgroundNode.id, node)
+      )
+      this.backgroundNode.children.forEach(node => vmRemoveNode(node))
+      this.closeTab()
+    }
   }
 }
 </script>
@@ -102,4 +123,10 @@ export default {
   border: 1px solid $color-grey;
   padding: 5px;
 }
+  ::v-deep.copy-button{
+    .el-button {
+      height: 32px;
+      margin-right: 10px;
+    }
+  }
 </style>

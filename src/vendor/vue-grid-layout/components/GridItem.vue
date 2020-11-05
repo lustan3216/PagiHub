@@ -566,10 +566,10 @@
 
             if (this.fixItem) {
               parentRect = this.boundaryElement.getBoundingClientRect()
-              clientRect = event.target.getBoundingClientRect()
+              clientRect = this.$el.getBoundingClientRect()
             }
             else if (this.lockItemInLayout) {
-              parentRect = this.getParent(event.target).getBoundingClientRect()
+              parentRect = this.getParent(this.$el).getBoundingClientRect()
             }
 
             if (this.fixItem && clientRect.top + clientRect.height > parentRect.top + parentRect.height) {

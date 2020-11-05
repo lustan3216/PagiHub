@@ -106,13 +106,14 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { label } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
 import { Message } from 'element-ui'
 import TextEditorRich from '@/components/Components/TextEditorRich'
 import TipPage from '@/components/Tip/TipPage'
+import { cloneJson } from '@/utils/tool'
 
 export default {
   name: 'DialogComponentSet',
@@ -142,6 +143,10 @@ export default {
     firstTime: {
       type: Boolean,
       default: false
+    },
+    copyComponentSet: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -167,14 +172,44 @@ export default {
       this.form.tags = this.node.tags
       this.form.isPrivate = this.node.isPrivate
     }
+
+    this.rules.label = [...label, this.nameCheck]
   },
   computed: {
     ...mapState('node', ['editingProjectId']),
+    componentSetIds() {
+      const project = this.nodesMap[this.editingProjectId]
+      return project ? project.children.map(node => node.id) : []
+    },
+    componentSetLabels() {
+      // components可能會因為Example裡面的跟當下project的混在一起
+      return this.componentSetIds.map(id => this.nodesMap[id].label.trim())
+    },
+    nameCheck() {
+      const nameCheck = (rule, value, callback) => {
+        if (this.node && this.node.label === value) {
+          callback()
+        }
+        else if (this.componentSetLabels.includes(value.trim())) {
+          callback(new Error('The name has been used'))
+        }
+        else {
+          callback()
+        }
+      }
+      return { required: true, validator: nameCheck, trigger: 'change' }
+    },
+    ...mapState('node', ['editingProjectId']),
     ...mapState('user', ['userId', 'username']),
     title() {
-      return this.firstTime
-        ? "Let's build the first page"
-        : 'A powerful page can reuse and share...'
+      if (this.copyComponentSet) {
+        return `Copy a page from ${this.copyComponentSet.label}`
+      }
+      else {
+        return this.firstTime
+          ? "Let's build the first page"
+          : 'A powerful page can reuse and share...'
+      }
     },
     origin() {
       return location.origin
@@ -212,6 +247,12 @@ export default {
   },
   watch: {
     visible(value) {
+      if (value && this.copyComponentSet) {
+        this.form.label = this.copyComponentSet.label
+        this.form.description = this.copyComponentSet.description
+        this.form.tags = this.copyComponentSet.tags
+      }
+
       if (value) {
         this.$emit('open')
       }
@@ -247,7 +288,11 @@ export default {
               })
             }
             else {
-              await this.createComponentSet(this.form)
+              await this.createComponentSet({
+                copyComponentSet: cloneJson(this.copyComponentSet),
+                ...this.form
+              })
+              this.$emit('created')
             }
           }
           catch (e) {
