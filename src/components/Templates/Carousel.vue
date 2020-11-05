@@ -258,6 +258,11 @@ export default {
         }
       }
     })
+
+    this.$bus.$on('carousel-transition', this.setAnimation)
+  },
+  beforeDestroy() {
+    this.$bus.$on('carousel-transition', this.setAnimation)
   },
   methods: {
     ...mapMutations('app', [

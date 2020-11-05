@@ -200,16 +200,16 @@ export default {
     },
 
     async scrollIntoView(id) {
-      const sliders = await this.jumpToCorrectSliders(id)
+      this.$bus.$emit('carousel-transition', false)
+      await this.jumpToCorrectSliders(id)
 
       if (this.vmMap[id]) {
         // 可能被device hidden 所以map找不到
-        setTimeout(
-          () => {
-            this.vmMap[id].$el.scrollIntoView(false)
-          },
-          sliders.length ? 100 : 0
-        )
+        this.vmMap[id].$el.scrollIntoView(false)
+
+        setTimeout(() => {
+          this.$bus.$emit('carousel-transition', true)
+        }, 200)
       }
     },
 
@@ -230,12 +230,8 @@ export default {
           const { $parent: carousel } = await asyncGetValue(() =>
             vmGet(node.parentId)
           )
-          carousel.setAnimation(false)
-          carousel.setActiveIndex(node.id)
 
-          this.$nextTick(() => {
-            carousel.setAnimation(true)
-          })
+          carousel.setActiveIndex(node.id)
 
           if (index === queue.length - 1) {
             resolve(queue)
