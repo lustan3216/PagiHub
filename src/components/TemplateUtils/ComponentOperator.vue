@@ -3,13 +3,15 @@
     v-if="node"
     :style="styles"
     :class="{
-      'no-action': static || itemEditing || isBackground
+      'no-action': static || itemEditing || isBackground || scrolling,
+      'z-index1': selected
     }"
     class="quick-functions flex-center"
     @mousedown.stop="$emit('mousedown', $event)"
     @mouseup.stop="$emit('mouseup', $event)"
     @dblclick.stop="$emit('dblclick', $event)"
     @contextmenu="$emit('contextmenu', $event)"
+    @wheel="onWheel"
   >
     <portal-target
       v-if="itemEditing"
@@ -138,7 +140,8 @@ export default {
       canGoBack: null,
       hovering: false,
       visible: false,
-      hoverIcon: false
+      hoverIcon: false,
+      scrolling: false
     }
   },
   computed: {
@@ -250,6 +253,14 @@ export default {
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
     ...mapActions('app', ['setCopySelectedNodeId', 'setBeingAddedComponentId']),
+    onWheel() {
+      clearTimeout(timeId)
+      this.scrolling = true
+      timeId = setTimeout(() => {
+        this.scrolling = false
+        timeId = null
+      }, 50)
+    },
     tryMakeDraggable: function() {
       if (this.isDraggable && !this.static) {
         const opts = {
