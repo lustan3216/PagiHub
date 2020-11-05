@@ -1,5 +1,4 @@
 <template>
-  <!--  v-if="isGridItemParent"-->
   <grid-generator-inner
     :style="innerStyles.html"
     :id="id"

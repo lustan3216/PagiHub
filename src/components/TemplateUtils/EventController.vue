@@ -182,11 +182,13 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     getRect() {
-      if (this.isBackground) {
-        this.rect = this.$el.closest('.art-board').getBoundingClientRect()
-      }
-      else {
-        this.rect = this.$el.getBoundingClientRect()
+      if (this.hoveringId === this.id || this.selected) {
+        if (this.isBackground) {
+          this.rect = this.$el.closest('.art-board').getBoundingClientRect()
+        }
+        else {
+          this.rect = this.$el.getBoundingClientRect()
+        }
       }
     },
 

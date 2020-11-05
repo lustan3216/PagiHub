@@ -3,7 +3,7 @@
     v-if="node"
     :style="styles"
     :class="{
-      'no-action': static || itemEditing
+      'no-action': static || itemEditing || isBackground
     }"
     class="quick-functions flex-center"
     @mousedown.stop="$emit('mousedown', $event)"
