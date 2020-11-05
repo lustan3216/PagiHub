@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="node"
+    v-if="node && visible"
     :style="styles"
     :class="{
       'no-action': static || itemEditing || isBackground || scrolling
@@ -123,6 +123,10 @@ export default {
       type: Boolean,
       default: false
     },
+    visible: {
+      type: Boolean,
+      default: false
+    },
     rect: {
       type: DOMRect,
       required: true
@@ -138,7 +142,6 @@ export default {
       animationId: null,
       canGoBack: null,
       hovering: false,
-      visible: false,
       hoverIcon: false,
       scrolling: false
     }

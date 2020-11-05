@@ -26,7 +26,7 @@
 
       <component-operator
         v-if="rect && !isAdding"
-        v-show="!gridResizing && (hoveringId === id || selected)"
+        :visible="!gridResizing && (hoveringId === id || selected)"
         :id="id"
         :key="id"
         :rect="rect"
@@ -286,6 +286,7 @@ export default {
         }, 100)
       }
 
+      this.LAYOUT_SET({ gridResizing: false })
       document.getSelection().removeAllRanges()
     },
     closeContextmenu() {
