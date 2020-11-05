@@ -1,9 +1,19 @@
 <template>
   <el-tooltip
     effect="light"
-    content="Shared pages"
     placement="bottom"
   >
+    <div slot="content">
+      Shared pages
+      <i
+        v-shortkey="['s']"
+        class="gray-font-2 m-l-10"
+        @shortkey="visible = true"
+      >
+        S
+      </i>
+    </div>
+
     <el-button
       type="text"
       @click="visible = !visible"

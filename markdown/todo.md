@@ -22,7 +22,6 @@ Just click publish, then you will have a real RWD website
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
 bug
-scale 壞掉了
 2- carousel 放完東西 preview 有 bug
 4- autoHeight 有 bug 打字時有 bug
 20- position fix element x,y should use %, - group scrollable 垂直 水平 scroll

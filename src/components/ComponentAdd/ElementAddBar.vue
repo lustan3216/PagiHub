@@ -105,15 +105,26 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item
           v-for="option in options"
-          :key="option[1]"
-          :command="option[0]"
+          :key="option.tag"
+          :command="option.tag"
         >
-          <div class="align-center gray-font-2">
-            <element-icon
-              :icon="option[0]"
-              class="m-r-10"
-            />
-            {{ capitalize(option[1]) }}
+          <div class="gray-font-2 justify-between align-center">
+            <span>
+              <element-icon
+                :icon="option.tag"
+                class="m-r-10"
+              />
+              {{ option.label }}
+            </span>
+
+            <i
+              v-shortkey="option.shortKey"
+              v-if="option.shortKey"
+              class="m-l-10"
+              @shortkey="onClick(option.tag)"
+            >
+              {{ option.shortKeyString }}
+            </i>
           </div>
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -157,11 +168,32 @@ export default {
     ...mapGetters('app', ['selectedComponentNodes']),
     options() {
       return [
-        ['rectangle', 'rectangle'],
-        ['flex-button', 'button'],
-        ['carousel', 'carousel'],
-        ['video-player', 'video'],
-        ['iframer', 'iframe']
+        {
+          tag: 'rectangle',
+          label: 'Rectangle',
+          shortKey: ['r'],
+          shortKeyString: 'R'
+        },
+        {
+          tag: 'flex-button',
+          label: 'Button',
+          shortKey: ['b'],
+          shortKeyString: 'B'
+        },
+        {
+          tag: 'carousel',
+          label: 'Carousel',
+          shortKey: ['c'],
+          shortKeyString: 'C'
+        },
+        {
+          tag: 'video-player',
+          label: 'Video'
+        },
+        {
+          tag: 'iframer',
+          label: 'Iframe'
+        }
       ]
     }
   },
