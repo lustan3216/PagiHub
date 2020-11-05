@@ -103,8 +103,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds', 'editingPath', 'isAdding']),
-    ...mapState('layout', ['gridResizing']),
+    ...mapState('app', [
+      'selectedComponentIds',
+      'editingPath',
+      'isAdding',
+      'gridResizing'
+    ]),
+    ...mapState('layout', ['gridResizing', 'windowHeight', 'windowWidth']),
     lock() {
       return this.node.lock
     },
@@ -145,6 +150,9 @@ export default {
     }
   },
   watch: {
+    gridResizing() {
+      this.getRect()
+    },
     hoveringId(value) {
       if (value) {
         this.getRect()
@@ -254,7 +262,6 @@ export default {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)
       }
       else {
-        this.LAYOUT_SET({ gridResizing: false })
         this.SET_SELECTED_COMPONENT_ID(this.id)
         // store.lastEditId = this.id
         setTimeout(() => {

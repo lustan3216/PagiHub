@@ -214,14 +214,6 @@ export default {
       return this.$refs.carousel
     }
   },
-  watch: {
-    editing(value) {
-      if (value) {
-        const slider = this.innerChildren[this.currentIndex]
-        this.SET_SELECTED_COMPONENT_ID(slider.id)
-      }
-    }
-  },
   mounted() {
     let i = true
     const position = { x: 0, y: 0 }
@@ -281,7 +273,6 @@ export default {
       traversalSelfAndChildren(node, ({ id }) => ids.push(id))
 
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
-      this.LAYOUT_SET({ gridResizing: true })
     },
     removeCurrentSlider() {
       const node = this.children[this.currentIndex]

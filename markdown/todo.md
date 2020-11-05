@@ -24,7 +24,6 @@ Just click publish, then you will have a real RWD website
 bug
 
 6- 修復 shared page copy and ux
-3- 快捷鍵選單
 2- carousel 放完東西 preview 有 bug
 4- autoHeight 有 bug 打字時有 bug
 4 - panel component click bug when component is carousel
@@ -32,22 +31,20 @@ bug
 20 - 元件可以直接拖入 carousel
 10 - 照片可以直接拖進去
 
-
-
-* panel component 可以拖拉
-* 照片的 link 坐在 magement 裡面
-* iframe
-* panel component shift select
-* height %
-* style 支援 每個 device 可客製化
-* 支援 icon
-* 距離輔助線
-* hover click
-* animation
-* style component
-* container can transform
-* form input
-* can setting put under style or new tab
+- panel component 可以拖拉
+- 照片的 link 坐在 magement 裡面
+- iframe
+- panel component shift select
+- height %
+- style 支援 每個 device 可客製化
+- 支援 icon
+- 距離輔助線
+- hover click
+- animation
+- style component
+- container can transform
+- form input
+- can setting put under style or new tab
 
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction 在弄就好
 image can put more effect

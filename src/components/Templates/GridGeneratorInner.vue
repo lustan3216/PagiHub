@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
 import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
@@ -108,6 +108,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('node', ['debounceRecord']),
     layoutUpdated(newChildren) {
       if (this.isExample) {
@@ -151,6 +152,10 @@ export default {
             value: { ...oldValue, ...newValue }
           })
         }
+      })
+
+      this.LAYOUT_SET({
+        gridResizing: false
       })
 
       if (records.length) {

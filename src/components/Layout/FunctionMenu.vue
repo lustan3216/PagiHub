@@ -138,7 +138,7 @@ export default {
         },
         {
           name: 'Delete',
-          shortKey: ['del'],
+          shortKey: { a: ['backspace'], b: ['del'] },
           shortKeyString: ['&#9003;'],
           disabled: !this.selectedComponentIds.length,
           fn: this.multiDelete

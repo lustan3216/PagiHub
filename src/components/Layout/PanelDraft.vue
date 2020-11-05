@@ -85,6 +85,7 @@ export default {
 
         this.LAYOUT_SET({ gridResizing: true })
         timeId = setTimeout(() => {
+          this.LAYOUT_SET({ gridResizing: false })
           timeId = null
         }, 50)
       },

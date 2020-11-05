@@ -22,10 +22,9 @@
     :class="{ 'no-action': lock }"
     :auto-height="shouldAutoHeight"
     :selected="selected"
-    @move="move"
+    @move="LAYOUT_SET({ gridResizing: true })"
     @moved="moved"
     @resize="LAYOUT_SET({ gridResizing: true })"
-    @resized="LAYOUT_SET({ gridResizing: false })"
   >
     <div
       ref="content"
@@ -304,9 +303,6 @@ export default {
       const node = cloneJson(this.node)
       appendIds(node)
       this.duplicateNode = node
-    },
-    move() {
-      this.LAYOUT_SET({ gridResizing: true })
     },
     updateLayout(layout = this.computedLayout) {
       this.layout = layout
