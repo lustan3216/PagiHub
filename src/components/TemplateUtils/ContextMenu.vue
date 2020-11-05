@@ -68,7 +68,7 @@
           <span
             v-if="option.shortKey"
             class="m-l-15"
-            v-html="option.shortKey.join(' + ')"
+            v-html="option.shortKey.join('')"
           />
         </div>
       </div>
@@ -94,7 +94,7 @@
           >
             <div class="justify-between">
               <span>Group</span>
-              <span v-html="`${metaKey} + G`" />
+              <span v-html="`${ctrlKeyIcon}G`" />
             </div>
           </div>
 
@@ -126,7 +126,7 @@
           <span>{{ lock ? 'Unlock' : 'Lock' }}</span>
           <span
             class="m-l-15"
-            v-html="`${metaKey} + L`"
+            v-html="`${ctrlKeyIcon} L`"
           />
         </div>
       </template>
@@ -137,11 +137,7 @@
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import { isMac } from '@/utils/device'
-import {
-  vmPasteNodes,
-  vmRemoveNode,
-  vmBecomeMaster
-} from '@/utils/vmMap'
+import { vmPasteNodes, vmRemoveNode, vmBecomeMaster } from '@/utils/vmMap'
 import ComponentMove from './ComponentMove'
 import ComponentGroup from './ComponentGroup'
 import Lock from '../Setup/EditorStyle/Lock'
@@ -179,26 +175,25 @@ export default {
     node() {
       return arrayLast(this.selectedComponentNodes)
     },
-    metaKey() {
+    ctrlKeyIcon() {
       return isMac() ? '&#8984;' : '&#8963;'
     },
     options() {
       return [
         {
           name: 'Copy',
-          shortKey: [this.metaKey, 'C'],
+          shortKey: [this.ctrlKeyIcon, 'C'],
           divided: true
         },
         {
           name: 'Paste',
-          shortKey: [this.metaKey, 'V']
+          shortKey: [this.ctrlKeyIcon, 'V']
         },
         {
           name: 'Cut',
-          shortKey: [this.metaKey, 'X'],
+          shortKey: [this.ctrlKeyIcon, 'X'],
           disabled: this.selectedComponentIds.length !== 1
         },
-        { name: 'Duplicate', disabled: !this.selectedComponentNodes.length },
         {
           name: 'Delete',
           shortKey: ['&#9003;'],

@@ -44,6 +44,16 @@
 
     <div class="align-center p-r-10">
       <portal-target name="ViewPortController" />
+
+      <el-button
+        type="text"
+        @click="$router.push({ name: 'Dashboard' })"
+      >
+        <span
+          style="line-height: 19px;"
+          class="gray-font-2 small-title"
+        >Dashboard</span>
+      </el-button>
     </div>
   </nav>
 </template>

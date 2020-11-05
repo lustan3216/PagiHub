@@ -8,9 +8,19 @@
 
     <el-tooltip
       effect="light"
-      content="Image Asset"
       placement="bottom"
     >
+      <div slot="content">
+        Image Asset
+        <i
+          v-shortkey="['i']"
+          class="gray-font-2 m-l-10"
+          @shortkey="OPEN_ASSET"
+        >
+          I
+        </i>
+      </div>
+
       <el-button
         type="text"
         size="small"
@@ -27,9 +37,19 @@
 
     <el-tooltip
       effect="light"
-      content="Text"
       placement="bottom"
     >
+      <div slot="content">
+        Text
+        <i
+          v-shortkey="['t']"
+          class="gray-font-2 m-l-10"
+          @shortkey="onClick('text-editor')"
+        >
+          T
+        </i>
+      </div>
+
       <el-button
         type="text"
         size="small"
@@ -45,9 +65,19 @@
 
     <el-tooltip
       effect="light"
-      content="Rectangle"
       placement="bottom"
     >
+      <div slot="content">
+        Rectangle
+        <i
+          v-shortkey="['r']"
+          class="gray-font-2 m-l-10"
+          @shortkey="onClick('rectangle')"
+        >
+          R
+        </i>
+      </div>
+
       <el-button
         type="text"
         size="small"
