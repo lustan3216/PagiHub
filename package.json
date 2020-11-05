@@ -21,7 +21,7 @@
     "bootstrap-vue": "^2.17.3",
     "compressorjs": "^1.0.6",
     "dayjs": "^1.8.36",
-    "element-ui": "^2.11.1",
+    "element-ui": "^2.14.0",
     "filepond": "^4.19.2",
     "filepond-plugin-file-validate-size": "^2.2.1",
     "filepond-plugin-file-validate-type": "^1.2.5",

@@ -108,7 +108,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('node', ['debounceRecord']),
     layoutUpdated(newChildren) {
       if (this.isExample) {
@@ -152,10 +151,6 @@ export default {
             value: { ...oldValue, ...newValue }
           })
         }
-      })
-
-      this.LAYOUT_SET({
-        gridResizing: false
       })
 
       if (records.length) {

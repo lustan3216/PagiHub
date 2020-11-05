@@ -66,10 +66,7 @@
 
             <button class="menububble__button">
               <color-picker v-model="color">
-                <i
-                  style="font-size: 14px;"
-                  class="el-icon-s-open"
-                />
+                <b-icon-circle-half style="font-size: 14px;" />
               </color-picker>
             </button>
           </div>
@@ -175,7 +172,8 @@ import {
   BIconTextLeft,
   BIconTextCenter,
   BIconTextRight,
-  BIconLink
+  BIconLink,
+  BIconCircleHalf
 } from 'bootstrap-vue'
 import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
 import TextEditorSimpleStyle from '@/components/Setup/EditorStyle/TextEditorSimpleStyle'
@@ -191,6 +189,7 @@ export default {
     BIconTextCenter,
     BIconTextRight,
     BIconLink,
+    BIconCircleHalf,
     GridGeneratorItem
   },
   inject: {

@@ -25,6 +25,7 @@
     @move="LAYOUT_SET({ gridResizing: true })"
     @moved="moved"
     @resize="LAYOUT_SET({ gridResizing: true })"
+    @resized="LAYOUT_SET({ gridResizing: false })"
   >
     <div
       ref="content"
@@ -228,9 +229,12 @@ export default {
         this.$nextTick(() => {
           if (value) {
             this.$refs.gridItem.autoSize()
-            this.offResizeListener = resizeListener(this.$refs.content, () =>
-              requestAnimationFrame(this.$refs.gridItem.autoSize)
-            )
+            this.offResizeListener = resizeListener(this.$refs.content, () => {
+              requestAnimationFrame(() => {
+                this.$refs.gridItem.autoSize()
+                this.$bus.$emit('resize-operator')
+              })
+            })
           }
           else if (this.offResizeListener) {
             this.offResizeListener()
