@@ -22,12 +22,19 @@
     :class="{ 'no-action': lock }"
     :auto-height="shouldAutoHeight"
     :selected="selected"
-    @moveStart="prepareDuplicateNode"
+    @moveStart="moveStart"
     @move="move"
     @moved="moved"
     @resize="LAYOUT_SET({ gridResizing: true })"
     @resized="LAYOUT_SET({ gridResizing: false })"
   >
+    <i
+      v-shortkey.push="['alt']"
+      v-if="moving"
+      :disabled="!selectedComponentIds.length"
+      @shortkey="pressAltKey = !pressAltKey"
+    />
+
     <div
       ref="content"
       :style="{
@@ -88,7 +95,8 @@ export default {
       offResizeListener: null,
       layout: {},
       duplicateNode: null,
-      pressAltKey: false
+      pressAltKey: false,
+      moving: true
     }
   },
   computed: {
@@ -247,20 +255,6 @@ export default {
       else {
         this.$set(this.layouts, this.id, this.layout)
       }
-    },
-    pressAltKey(value) {
-      if (value) {
-        this.record({
-          path: this.duplicateNode.id,
-          value: this.duplicateNode
-        })
-      }
-      else {
-        this.record({
-          path: this.duplicateNode.id,
-          value: undefined
-        })
-      }
     }
   },
   updated() {
@@ -285,14 +279,31 @@ export default {
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('node', ['record']),
+    moveStart() {
+      this.prepareDuplicateNode()
+      this.pressAltKey = false
+      this.moving = true
+    },
     prepareDuplicateNode() {
       const node = cloneJson(this.node)
       appendIds(node)
       this.duplicateNode = node
     },
-    move(i, x, y, event) {
-      this.pressAltKey = event.altKey
+    move() {
       this.LAYOUT_SET({ gridResizing: true })
+
+      if (this.pressAltKey) {
+        this.record({
+          path: this.duplicateNode.id,
+          value: this.duplicateNode
+        })
+      }
+      else {
+        this.record({
+          path: this.duplicateNode.id,
+          value: undefined
+        })
+      }
     },
     updateLayout(layout = this.computedLayout) {
       this.layout = layout
@@ -304,6 +315,7 @@ export default {
       }
     },
     moved() {
+      this.moving = false
       this.duplicateNode = null
       this.LAYOUT_SET({ gridResizing: false })
     }

@@ -215,8 +215,7 @@ export default {
     }
   },
   watch: {
-    editing(value, rew) {
-      console.log(value, rew)
+    editing(value) {
       if (value) {
         const slider = this.innerChildren[this.currentIndex]
         this.SET_SELECTED_COMPONENT_ID(slider.id)
