@@ -23,7 +23,6 @@ Just click publish, then you will have a real RWD website
 
 bug
 scale 壞掉了
-6- 修復 shared page copy and ux
 2- carousel 放完東西 preview 有 bug
 4- autoHeight 有 bug 打字時有 bug
 20- position fix element x,y should use %, - group scrollable 垂直 水平 scroll

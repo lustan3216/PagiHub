@@ -247,11 +247,15 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
-    onWheel() {
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    onWheel(event) {
+      event.preventDefault()
       clearTimeout(timeId)
       this.scrolling = true
+      this.LAYOUT_SET({ gridResizing: true })
       timeId = setTimeout(() => {
         this.scrolling = false
+        this.LAYOUT_SET({ gridResizing: false })
         timeId = null
       }, 50)
     },
