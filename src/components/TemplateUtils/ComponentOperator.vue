@@ -3,8 +3,7 @@
     v-if="node"
     :style="styles"
     :class="{
-      'no-action': static || itemEditing || isBackground || scrolling,
-      'z-index1': selected
+      'no-action': static || itemEditing || isBackground || scrolling
     }"
     class="quick-functions flex-center"
     @mousedown.stop="$emit('mousedown', $event)"
@@ -159,7 +158,7 @@ export default {
         left: this.rect.x + 'px',
         width: this.rect.width + 1 + 'px',
         height: this.rect.height + 'px',
-        zIndex: this.zIndex
+        zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
     },
     canBeEdited() {
