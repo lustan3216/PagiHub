@@ -30,6 +30,8 @@
         :id="id"
         :key="id"
         :rect="rect"
+        @move="getRect"
+        @resize="getRect"
         @mouseup="mouseup"
         @dblclick.stop="dblclick"
         @contextmenu.stop.prevent="contextmenu($event)"

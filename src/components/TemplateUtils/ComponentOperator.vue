@@ -268,6 +268,18 @@ export default {
         }
         this.interactObj.draggable(opts)
         this.interactObj.on('dragstart dragmove dragend', event => {
+          switch (event.type) {
+            case 'dragstart':
+              this.$emit('moveStart')
+              break
+            case 'dragmove':
+              this.$emit('move')
+              break
+            case 'resizeend':
+              this.$emit('moved')
+              break
+          }
+
           this.$bus.$emit(`handle-drag-${this.id}`, event)
         })
       }
@@ -292,6 +304,18 @@ export default {
 
         this.interactObj.resizable(opts)
         this.interactObj.on('resizestart resizemove resizeend', event => {
+          switch (event.type) {
+            case 'resizestart':
+              this.$emit('resizeStart')
+              break
+            case 'resizemove':
+              this.$emit('resize')
+              break
+            case 'resizeend':
+              this.$emit('resized')
+              break
+          }
+
           this.$bus.$emit(`handle-resize-${this.id}`, event)
         })
       }
