@@ -1,11 +1,5 @@
 <template>
   <div class="editor ProseMirror">
-    <portal to="TextEditorSimpleStyle">
-      <text-editor-simple-style
-        v-if="element && editing"
-        :element="element"
-      />
-    </portal>
     <portal
       v-if="selected"
       to="QuickFunctionsTextEditor"
@@ -14,134 +8,147 @@
         id="menu-bubble"
         class="menububble"
       >
-        <form
-          v-if="linkMenuIsActive && canLink"
-          class="menububble__form"
-          @submit.prevent="linkMenuIsActive = false"
-        >
-          <input
-            ref="linkInput"
-            v-model="link"
-            class="menububble__input"
-            type="text"
-            placeholder="https://"
-            @keydown.esc="linkMenuIsActive = false"
+        <div class="function-wrapper">
+          <form
+            v-if="linkMenuIsActive && canLink"
+            class="menububble__form"
+            @submit.prevent="linkMenuIsActive = false"
           >
-          <button
-            class="menububble__button"
-            type="button"
-            @click="removeLink"
-          >
-            <img
-              svg-inline
-              src="icons/remove.svg"
+            <input
+              ref="linkInput"
+              v-model="link"
+              class="menububble__input"
+              type="text"
+              placeholder="https://"
+              @keydown.esc="linkMenuIsActive = false"
             >
-          </button>
-        </form>
-
-        <div
-          v-else
-          class="flex-column"
-        >
-          <div class="heading flex">
             <button
-              :class="{ 'is-active': tag === 'p' }"
               class="menububble__button"
-              @click="tag = tag === 'p' ? undefined : 'p'"
+              type="button"
+              @click="removeLink"
             >
-              P
+              <img
+                svg-inline
+                src="icons/remove.svg"
+              >
             </button>
-
-            <button
-              v-for="level in [1, 2, 3, 4, 5, 6]"
-              :key="level"
-              :class="{
-                'is-active': tag === `h${level}`
-              }"
-              class="menububble__button"
-              @click="tag = tag === `h${level}` ? undefined : `h${level}`"
-            >
-              H{{ level }}
-            </button>
-
-            <button class="menububble__button">
-              <color-picker v-model="color">
-                <b-icon-circle-half style="font-size: 14px;" />
-              </color-picker>
-            </button>
-          </div>
+          </form>
 
           <div
-            class="flex"
-            style="margin-top: 3px;"
+            v-else
+            class="flex-column"
           >
-            <button
-              v-if="canLink"
-              class="menububble__button"
-              @click="showLinkMenu"
-            >
-              <b-icon-link class="font-14" />
-            </button>
+            <div class="heading flex">
+              <button
+                :class="{ 'is-active': tag === 'p' }"
+                class="menububble__button"
+                @click="tag = tag === 'p' ? undefined : 'p'"
+              >
+                P
+              </button>
 
-            <button
-              :class="{ 'is-active': fontWeight === 'bold' }"
-              class="menububble__button"
-              @click="fontWeight = fontWeight === 'bold' ? undefined : 'bold'"
-            >
-              <span>B</span>
-            </button>
+              <button
+                v-for="level in [1, 2, 3, 4, 5, 6]"
+                :key="level"
+                :class="{
+                  'is-active': tag === `h${level}`
+                }"
+                class="menububble__button"
+                @click="tag = tag === `h${level}` ? undefined : `h${level}`"
+              >
+                H{{ level }}
+              </button>
 
-            <button
-              :class="{ 'is-active': fontStyle === 'italic' }"
-              class="menububble__button"
-              @click="fontStyle = fontStyle === 'italic' ? undefined : 'italic'"
-            >
-              <span style="fontStyle: italic">I</span>
-            </button>
+              <button class="menububble__button">
+                <color-picker v-model="color">
+                  <b-icon-circle-half style="font-size: 14px;" />
+                </color-picker>
+              </button>
+            </div>
 
-            <button
-              :class="{ 'is-active': textDecoration === 'line-through' }"
-              class="menububble__button"
-              @click="
-                textDecoration =
-                  textDecoration === 'line-through' ? undefined : 'line-through'
-              "
+            <div
+              class="flex"
+              style="margin-top: 3px;"
             >
-              <span style="textDecoration: line-through;">S</span>
-            </button>
+              <button
+                v-if="canLink"
+                class="menububble__button"
+                @click="showLinkMenu"
+              >
+                <b-icon-link class="font-14" />
+              </button>
 
-            <button
-              :class="{ 'is-active': textDecoration === 'underline' }"
-              class="menububble__button"
-              @click="
-                textDecoration =
-                  textDecoration === 'underline' ? undefined : 'underline'
-              "
-            >
-              <span style="textDecoration: underline;">U</span>
-            </button>
+              <button
+                :class="{ 'is-active': fontWeight === 'bold' }"
+                class="menububble__button"
+                @click="fontWeight = fontWeight === 'bold' ? undefined : 'bold'"
+              >
+                <span>B</span>
+              </button>
 
-            <button
-              :class="{ 'is-active': textAlign === 'left' }"
-              class="menububble__button"
-              @click="textAlign = textAlign === 'left' ? undefined : 'left'"
-            >
-              <b-icon-text-left class="font-14" />
-            </button>
-            <button
-              :class="{ 'is-active': textAlign === 'center' }"
-              class="menububble__button"
-              @click="textAlign = textAlign === 'center' ? undefined : 'center'"
-            >
-              <b-icon-text-center class="font-14" />
-            </button>
-            <button
-              :class="{ 'is-active': textAlign === 'right' }"
-              class="menububble__button"
-              @click="textAlign = textAlign === 'right' ? undefined : 'right'"
-            >
-              <b-icon-text-right class="font-14" />
-            </button>
+              <button
+                :class="{ 'is-active': fontStyle === 'italic' }"
+                class="menububble__button"
+                @click="
+                  fontStyle = fontStyle === 'italic' ? undefined : 'italic'
+                "
+              >
+                <span style="fontStyle: italic">I</span>
+              </button>
+
+              <button
+                :class="{ 'is-active': textDecoration === 'line-through' }"
+                class="menububble__button"
+                @click="
+                  textDecoration =
+                    textDecoration === 'line-through'
+                      ? undefined
+                      : 'line-through'
+                "
+              >
+                <span style="textDecoration: line-through;">S</span>
+              </button>
+
+              <button
+                :class="{ 'is-active': textDecoration === 'underline' }"
+                class="menububble__button"
+                @click="
+                  textDecoration =
+                    textDecoration === 'underline' ? undefined : 'underline'
+                "
+              >
+                <span style="textDecoration: underline;">U</span>
+              </button>
+
+              <button
+                :class="{ 'is-active': textAlign === 'left' }"
+                class="menububble__button"
+                @click="textAlign = textAlign === 'left' ? undefined : 'left'"
+              >
+                <b-icon-text-left class="font-14" />
+              </button>
+              <button
+                :class="{ 'is-active': textAlign === 'center' }"
+                class="menububble__button"
+                @click="
+                  textAlign = textAlign === 'center' ? undefined : 'center'
+                "
+              >
+                <b-icon-text-center class="font-14" />
+              </button>
+              <button
+                :class="{ 'is-active': textAlign === 'right' }"
+                class="menububble__button"
+                @click="textAlign = textAlign === 'right' ? undefined : 'right'"
+              >
+                <b-icon-text-right class="font-14" />
+              </button>
+            </div>
+
+            <text-editor-simple-style
+              v-if="element && editing"
+              :element="element"
+            />
           </div>
         </div>
       </div>
@@ -407,14 +414,6 @@ $color-grey: #b2b2b2;
   z-index: 10;
 }
 
-.menububble {
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 0.3rem;
-  position: absolute;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-
 .el-color-picker {
   margin-left: -18px;
   margin-top: -7px;
@@ -422,10 +421,21 @@ $color-grey: #b2b2b2;
   overflow: hidden;
 }
 
+.function-wrapper {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 0.3rem;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
 ::v-deep.menububble {
   font-size: 12px;
   display: flex;
   z-index: 900;
+  align-items: center;
+  height: 300px;
+  position: absolute;
+  background: transparent;
 
   &__button {
     background: transparent;

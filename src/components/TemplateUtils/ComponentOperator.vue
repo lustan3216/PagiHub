@@ -183,12 +183,13 @@ export default {
       return this.editingPath.includes(this.id)
     },
     textEditorStyle() {
-      const shouldOnLeftSide = this.width + this.left + 400 > window.innerWidth
+      const shouldOnLeftSide =
+        this.rect.width + this.rect.left + 600 > window.innerWidth
       if (shouldOnLeftSide) {
-        return { right: 'calc(100% + 10px)' }
+        return { right: this.rect.width + 10 + 'px' }
       }
       else {
-        return { left: 'calc(100% + 10px)' }
+        return { left: this.rect.width + 10 + 'px' }
       }
     },
     nodesPath() {
@@ -262,7 +263,7 @@ export default {
     tryMakeDraggable: function() {
       if (this.isDraggable && !this.static) {
         const opts = {
-          ignoreFrom: '.item-editing',
+          ignoreFrom: '.item-editing, .menububble',
           allowFrom: 'div, .move-icon'
         }
         this.interactObj.draggable(opts)

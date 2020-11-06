@@ -17,6 +17,7 @@ import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { resizeListener } from '@/utils/tool'
 import { getRectWithoutPadding } from '@/utils/style'
 
+let timeId
 export default {
   name: 'ArtBoard',
   components: {
@@ -46,8 +47,11 @@ export default {
     if (!this.isExample) {
       this.offResizeListener = resizeListener(this.$el, this.setBoundaryRect)
     }
+
+    this.$el.addEventListener('scroll', this.handleGridResizing)
   },
   beforeDestroy() {
+    this.$el.removeEventListener('scroll', this.handleGridResizing)
     this.$el.removeEventListener('scroll', this.updateScrollTop)
     if (this.offResizeListener) {
       this.offResizeListener()
@@ -61,6 +65,18 @@ export default {
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    handleGridResizing() {
+      if (!this.isDraftMode) {
+        return
+      }
+      clearTimeout(timeId)
+
+      this.LAYOUT_SET({ gridResizing: true })
+      timeId = setTimeout(() => {
+        this.LAYOUT_SET({ gridResizing: false })
+        timeId = null
+      }, 50)
+    },
     updateScrollTop() {
       this.scrollTop = this.$el.scrollTop
       this.$bus.$emit('art-board-scroll-top', this.scrollTop)

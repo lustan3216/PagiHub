@@ -19,11 +19,6 @@
 
       <radius />
 
-      <portal-target
-        name="TextEditorSimpleStyle"
-        slim
-      />
-
       <item-hidden-controller />
 
       <stack />

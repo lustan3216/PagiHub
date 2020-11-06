@@ -41,7 +41,6 @@ import ArtBoard from './ArtBoard'
 import SidebarLeft from '@/components/Layout/SidebarLeft'
 import SidebarRight from '@/components/Layout/SidebarRight'
 
-let timeId
 export default {
   name: 'PanelDraft',
   components: {
@@ -74,29 +73,9 @@ export default {
       this.$router.push({ name: 'Dashboard' })
     }
   },
-  mounted() {
-    document.addEventListener(
-      'scroll',
-      e => {
-        if (!this.isDraftMode) {
-          return
-        }
-        clearTimeout(timeId)
-
-        this.LAYOUT_SET({ gridResizing: true })
-        timeId = setTimeout(() => {
-          this.LAYOUT_SET({ gridResizing: false })
-          timeId = null
-        }, 50)
-      },
-      true
-    )
-  },
-
   methods: {
     ...mapMutations('node', ['INIT_NODE_STORE']),
     ...mapMutations('node', { NODE_SET: 'SET' }),
-    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapMutations('mode', ['SET_DRAFT_MODE']),
     ...mapActions('asset', ['getAssets'])
   }

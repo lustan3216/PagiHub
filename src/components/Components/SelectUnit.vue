@@ -19,6 +19,10 @@
     @change="$emit('change', innerValue)"
     @clear="$emit('clear')"
   >
+    <template slot="prefix">
+      <slot />
+    </template>
+
     <el-dropdown
       v-if="optionUnits.length > 1"
       slot="append"
@@ -248,15 +252,15 @@ export default {
     releaseClick() {
       this.clicking = false
       this.lastPosition = 0
-      document.removeEventListener('mousemove', this.handleMousemove)
-      document.removeEventListener('mouseup', this.releaseClick)
+      document.removeEventListener('mousemove', this.handleMousemove, true)
+      document.removeEventListener('mouseup', this.releaseClick, true)
     },
     mousedown(e) {
       this.clicking = true
       this.lastPosition = e.clientY
 
-      document.addEventListener('mousemove', this.handleMousemove)
-      document.addEventListener('mouseup', this.releaseClick)
+      document.addEventListener('mousemove', this.handleMousemove, true)
+      document.addEventListener('mouseup', this.releaseClick, true)
     },
     handleMousemove(e) {
       if (!this.clicking) return
