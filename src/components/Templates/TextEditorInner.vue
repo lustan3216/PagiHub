@@ -433,7 +433,7 @@ $color-grey: #b2b2b2;
   display: flex;
   z-index: 900;
   align-items: center;
-  height: 300px;
+  height: 260px;
   position: absolute;
   background: transparent;
 

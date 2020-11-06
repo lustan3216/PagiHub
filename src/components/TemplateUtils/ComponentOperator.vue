@@ -14,7 +14,7 @@
     @wheel="onWheel"
   >
     <portal-target
-      v-if="itemEditing && !isExample && isTextEditor"
+      v-if="itemEditing && !isExample && isLastOne"
       :style="textEditorStyle"
       name="QuickFunctionsTextEditor"
       slim
