@@ -391,6 +391,7 @@ export default {
     z-index: 100;
     display: block;
     background-color: #fff;
+    pointer-events: all;
   }
 
   &-both {

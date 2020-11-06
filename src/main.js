@@ -73,6 +73,7 @@ const $bus = new Vue()
 Vue.prototype.$t = key => i18n[key]
 Vue.prototype.$Log = console.log
 Vue.prototype.$log = console.log
+Vue.prototype.$tra = console.trace
 Vue.prototype.$bus = $bus
 
 Vue.config.productionTip = false

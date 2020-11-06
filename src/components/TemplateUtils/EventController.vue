@@ -8,7 +8,6 @@
     }"
     class="relative z-index1"
     @mouseenter="hoveringId = id"
-    @mousedown="mousedown"
     @mouseup="mouseup"
     @dblclick.stop="dblclick"
     @contextmenu.stop.prevent="contextmenu($event)"
@@ -31,7 +30,6 @@
         :id="id"
         :key="id"
         :rect="rect"
-        @mousedown="mousedown"
         @mouseup="mouseup"
         @dblclick.stop="dblclick"
         @contextmenu.stop.prevent="contextmenu($event)"
@@ -216,20 +214,15 @@ export default {
         this.SET_SELECTED_COMPONENT_ID(this.id)
       }
     },
-    mousedown(event) {
-      this.$emit('mousedown', event)
-      this.previousX = event.clientX
-      this.previousY = event.clientY
-    },
     mouseup(event) {
       this.getRect()
-      if (
-        this.previousX !== event.clientX &&
-        this.previousY !== event.clientY
-      ) {
-        // moving
-        return
-      }
+      // if (
+      //   this.previousX !== event.clientX &&
+      //   this.previousY !== event.clientY
+      // ) {
+      //   // moving
+      //   return
+      // }
 
       if (this.isAdding) {
         return

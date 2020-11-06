@@ -24,8 +24,6 @@
     :selected="selected"
     @move="LAYOUT_SET({ gridResizing: true })"
     @moved="moved"
-    @resize="LAYOUT_SET({ gridResizing: true })"
-    @resized="LAYOUT_SET({ gridResizing: false })"
   >
     <div
       ref="content"
@@ -319,7 +317,6 @@ export default {
     },
     moved() {
       this.moving = false
-      this.LAYOUT_SET({ gridResizing: false })
       this.$nextTick(() => {
         this.pressAltKey = false
       })
