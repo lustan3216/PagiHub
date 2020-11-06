@@ -37,7 +37,10 @@
 
                 <div class="justify-between">
                   <span>Group</span>
-                  <span v-html="`${ctrlKeyIcon}G`" />
+                  <i
+                    class="gray-font-2"
+                    v-html="`${ctrlKeyIcon}G`"
+                  />
                 </div>
               </el-menu-item>
 
@@ -63,9 +66,9 @@
           />
           <div class="justify-between">
             {{ option.name }}
-            <span
+            <i
               v-if="option.shortKeyString"
-              class="m-l-15"
+              class="m-l-15 gray-font-2"
               v-html="option.shortKeyString.join('')"
             />
           </div>

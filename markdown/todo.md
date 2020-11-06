@@ -22,11 +22,14 @@ Just click publish, then you will have a real RWD website
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
 bug
-2- carousel 放完東西 preview 有 bug
-4- autoHeight 有 bug 打字時有 bug
+
+autoheight 在拉寬時，會閃爍
+group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示
 20- position fix element x,y should use %, - group scrollable 垂直 水平 scroll
 20 - 元件可以直接拖入 carousel
 10 - 照片可以直接拖進去
+
+4- autoHeight 有 bug 打字時有 bug
 
 - panel component 可以拖拉
 - 照片的 link 坐在 magement 裡面

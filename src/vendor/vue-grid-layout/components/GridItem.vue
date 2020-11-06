@@ -62,7 +62,6 @@
   import { getValueByPath, resizeListener, debounce } from '@/utils/tool'
   import { getAbsoluteHeight } from '@/utils/style'
   import { toPrecision } from '@/utils/number'
-  const store = Vue.observable({ hideHandler: false })
 
   export default {
     name: 'GridItem',
@@ -308,15 +307,6 @@
           }
         }
       },
-      isDragging(value) {
-        if (value) {
-          store.hideHandler = true
-        } else {
-          setTimeout(() => {
-            store.hideHandler = false
-          }, 300)
-        }
-      },
       isDraggable: function() {
         this.draggable = this.isDraggable
       },
@@ -440,9 +430,6 @@
       },
       boundaryElement() {
         return getBoundaryEl(this.$el.parentNode)
-      },
-      hideHandler() {
-        return store.hideHandler
       },
       classObj() {
         return {

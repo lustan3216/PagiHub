@@ -65,9 +65,9 @@
       >
         <div class="justify-between">
           <span>{{ option.name }}</span>
-          <span
+          <i
             v-if="option.shortKey"
-            class="m-l-15"
+            class="m-l-15 gray-font-2"
             v-html="option.shortKey.join('')"
           />
         </div>
@@ -94,7 +94,10 @@
           >
             <div class="justify-between">
               <span>Group</span>
-              <span v-html="`${ctrlKeyIcon}G`" />
+              <i
+                class="gray-font-2"
+                v-html="`${ctrlKeyIcon}G`"
+              />
             </div>
           </div>
 
@@ -124,8 +127,8 @@
       <template v-slot="{ lock }">
         <div class="justify-between">
           <span>{{ lock ? 'Unlock' : 'Lock' }}</span>
-          <span
-            class="m-l-15"
+          <i
+            class="m-l-15 gray-font-2"
             v-html="`${ctrlKeyIcon} L`"
           />
         </div>
