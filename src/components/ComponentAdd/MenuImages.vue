@@ -20,6 +20,7 @@
             class="justify-between relative w-100 over-hidden"
             @mouseenter="hoverImage = data"
             @mouseleave="hoverImage = null"
+            @dblclick="dblclick(data)"
           >
             <div class="align-center">
               <div
@@ -215,6 +216,14 @@ export default {
     ...mapMutations('asset', ['CLOSE_ASSET']),
     ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapActions('node', ['debounceRecord']),
+    dblclick(data) {
+      if (this.isImageBeingAdded || this.selectedImageNodes.length) {
+        this.replace(data)
+      }
+      else {
+        this.addImage(data)
+      }
+    },
     replace(data) {
       const ids = this.beingAddedComponentId
         ? [this.beingAddedComponentId]

@@ -79,11 +79,11 @@
             [`carousel-item-${id}`]: true
           }"
         >
-          <grid-generator
+          <slider
             v-if="index === currentIndex"
             :id="child.id"
-            data-image-droppable
             :style="{ cursor }"
+            data-image-droppable
             controller
           />
         </el-carousel-item>
@@ -100,7 +100,7 @@ import { CHILDREN, POLYMORPHISM, STYLES } from '@/const'
 import { Carousel } from 'element-ui'
 import propsMixin from '@/components/Templates/mixins/props'
 import childrenMixin from '@/components/Templates/mixins/children'
-import GridGenerator from './GridGenerator'
+import Slider from './Slider'
 import GridGeneratorItem from './GridGeneratorItem'
 import CarouselItem from '@/vendor/element-ui/CarouselItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
@@ -113,7 +113,7 @@ export default {
   defaultSetting,
   name: 'Carousel',
   components: {
-    GridGenerator,
+    Slider,
     GridGeneratorItem,
     ElCarouselItem: CarouselItem,
     ElCarousel: Carousel

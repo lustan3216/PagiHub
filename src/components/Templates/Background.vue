@@ -5,6 +5,9 @@
     :inner-props="innerProps"
     :inner-styles="innerStyles"
     :class="{ 'cross-hair': isAdding }"
+    :extra-style="{
+      minHeight: '100%'
+    }"
     controller
     data-image-droppable
     class="background"

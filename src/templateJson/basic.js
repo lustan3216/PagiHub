@@ -73,6 +73,14 @@ export const gridGenerator = function(options, grid) {
   }
 }
 
+export const slider = function(options, grid) {
+  return {
+    [TAG]: 'slider',
+    grid,
+    ...options
+  }
+}
+
 export const group = function(options, grid) {
   return {
     [TAG]: 'group',
@@ -138,9 +146,9 @@ export const carousel = function(options, grid) {
       //     }
       //   ]
       // }),
-      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
-      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' }),
-      gridGenerator({ [LABEL]: 'slider', [POLYMORPHISM]: 'slider' })
+      slider(),
+      slider(),
+      slider()
     ]
   }
 }

@@ -7,9 +7,9 @@
       border: !isBackground && !gridResizing
     }"
     class="quick-functions flex-center"
-    @mousedown.stop="$emit('mousedown', $event)"
-    @mouseup.stop="$emit('mouseup', $event)"
-    @dblclick.stop="dblclick"
+    @mousedown="$emit('mousedown', $event)"
+    @mouseup="$emit('mouseup', $event)"
+    @dblclick="dblclick"
     @contextmenu="$emit('contextmenu', $event)"
     @wheel="onWheel"
     @dragover="APP_SET({ isAdding: true })"

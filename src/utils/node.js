@@ -12,7 +12,7 @@ import {
   GRID_GENERATOR,
   CAROUSEL,
   SOFT_DELETE,
-  STYLES
+  STYLES, TAG
 } from '@/const'
 import { unitConvert } from '@/utils/layout'
 
@@ -200,7 +200,7 @@ export function shortTagName(node) {
     return
   }
 
-  const tag = node[LABEL] || node[POLYMORPHISM] || node.tag
+  const tag = node[LABEL] || node[POLYMORPHISM] || node[TAG]
   if (cache[tag]) {
     return cache[tag]
   }
@@ -239,25 +239,25 @@ export function closestGridItem(node, fn) {
 
 export function isGridItem(node) {
   if (node) {
-    return node.tag === GRID_GENERATOR_ITEM
+    return node[TAG] === GRID_GENERATOR_ITEM
   }
 }
 
 export function isCarousel(node) {
   if (node) {
-    return node.tag === CAROUSEL
+    return node[TAG] === CAROUSEL
   }
 }
 
 export function isGrid(node) {
   if (node) {
-    return node.tag === GRID_GENERATOR && !node[POLYMORPHISM]
+    return node[TAG] === GRID_GENERATOR && !node[POLYMORPHISM]
   }
 }
 
 export function isSlider(node) {
   if (node) {
-    return node[POLYMORPHISM] === 'slider'
+    return node[TAG] === 'slider'
   }
 }
 
@@ -269,37 +269,37 @@ export function isButton(node) {
 
 export function isTextEditor(node) {
   if (node) {
-    return node.tag === 'text-editor'
+    return node[TAG] === 'text-editor'
   }
 }
 
 export function isRectangle(node) {
   if (node) {
-    return node.tag === 'rectangle'
+    return node[TAG] === 'rectangle'
   }
 }
 
 export function isBackground(node) {
   if (node) {
-    return node.tag === 'background'
+    return node[TAG] === 'background'
   }
 }
 
 export function isImage(node) {
   if (node) {
-    return node.tag === 'flex-image'
+    return node[TAG] === 'flex-image'
   }
 }
 
 export function isGroup(node) {
   if (node) {
-    return node.tag === 'group'
+    return node[TAG] === 'group'
   }
 }
 
 export function isProject(node) {
   if (node) {
-    return node.tag === NODE_TYPE.PROJECT
+    return node[TAG] === NODE_TYPE.PROJECT
   }
 }
 
@@ -311,13 +311,13 @@ export function isComponent(node) {
 
 export function isFolder(node) {
   if (node) {
-    return node.tag === NODE_TYPE.FOLDER
+    return node[TAG] === NODE_TYPE.FOLDER
   }
 }
 
 export function isComponentSet(node) {
   if (node) {
-    return node.tag === NODE_TYPE.COMPONENT_SET
+    return node[TAG] === NODE_TYPE.COMPONENT_SET
   }
 }
 

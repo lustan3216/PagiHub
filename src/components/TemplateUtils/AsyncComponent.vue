@@ -10,9 +10,6 @@
 <script>
 export default {
   name: 'AsyncComponent',
-  inject: {
-    isExample: { default: false }
-  },
   components: {
     Group: () => import('../Templates/Group'),
     Rectangle: () => import('../Templates/Rectangle'),
@@ -24,8 +21,6 @@ export default {
     TextEditor: () => import('../Templates/TextEditor'),
 
     Background: () => import('../Templates/Background'),
-    GridGenerator: () => import('../Templates/GridGenerator'),
-    GridGeneratorItem: () => import('../Templates/GridGeneratorItem'),
 
     VideoPlayer: () => import('../Templates/VideoPlayer'),
     Iframer: () => import('../Templates/Iframer')

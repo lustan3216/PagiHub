@@ -37,11 +37,7 @@
 
   import GridItem from './GridItem.vue'
   import propsMixin from '@/components/Templates/mixins/props'
-  import { addWindowEventListener, removeWindowEventListener } from '../helpers/DOM'
-  import { debounce } from '@/utils/tool'
   import interact from 'interactjs'
-  import { unitConvert } from '@/utils/layout'
-  import { traversalSelfAndChildren } from '@/utils/node'
 
   export default {
     name: 'GridLayout',
@@ -57,6 +53,10 @@
     },
     props: {
       // If true, the container height swells and contracts to fit contents
+      freeBoundary: {
+        type: Boolean,
+        default: false
+      },
       autoExtendHeight: {
         type: Boolean,
         default: true

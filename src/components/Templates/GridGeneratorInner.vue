@@ -1,5 +1,5 @@
 <template>
-<!--  data-addable-id 不能刪，add element要用的-->
+  <!--  data-addable-id 不能刪，add element要用的-->
   <vue-grid-generator
     ref="gridGenerator"
     v-bind="innerProps"
@@ -43,7 +43,7 @@ import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { getValueByPath } from '@/utils/tool'
-import { isBackground, isSlider, traversalSelfAndChildren } from '@/utils/node'
+import { traversalSelfAndChildren } from '@/utils/node'
 import EventController from '../TemplateUtils/EventController'
 import { unitConvert } from '@/utils/layout'
 
@@ -77,9 +77,17 @@ export default {
       type: Object,
       default: () => ({})
     },
+    extraStyle: {
+      type: Object,
+      default: () => ({})
+    },
     controller: {
       type: Boolean,
       default: false
+    },
+    autoExtendHeight: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -89,26 +97,9 @@ export default {
   },
   computed: {
     ...mapState('layout', ['windowWidth']),
-    ...mapGetters('layout', ['currentBreakpoint', 'vh']),
-    autoExtendHeight() {
-      return !isSlider(this.node)
-    },
-    overflow() {
-      return getValueByPath(this.node.parentNode, 'styles.html.overflow')
-    },
+    ...mapGetters('layout', ['currentBreakpoint']),
     layout() {
       return Object.values(this.layouts)
-    },
-    isBackground() {
-      return isBackground(this.node)
-    },
-    extraStyle() {
-      const style = {}
-      if (this.isBackground) {
-        style.minHeight = '100%'
-      }
-
-      return style
     }
   },
   methods: {

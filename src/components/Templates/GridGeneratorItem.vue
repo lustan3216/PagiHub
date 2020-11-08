@@ -65,7 +65,7 @@ import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import { cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
-import { closestValidBreakpoint, isGroup, isTextEditor } from '@/utils/node'
+import { closestValidBreakpoint } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
 import { appendIds } from '@/utils/nodeId'
 
@@ -85,6 +85,10 @@ export default {
     divStyle: {
       type: Object,
       default: () => ({})
+    },
+    autoResizeHeight: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -206,15 +210,6 @@ export default {
     },
     stack() {
       return this.styleLayout.stack
-    },
-    isTextEditor() {
-      return isTextEditor(this.node)
-    },
-    isGroup() {
-      return isGroup(this.node)
-    },
-    autoResizeHeight() {
-      return this.isTextEditor || this.isGroup
     }
   },
   watch: {

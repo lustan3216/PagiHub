@@ -6,7 +6,8 @@
     :id="id"
     :inner-props="innerProps"
     :inner-styles="innerStyles"
-    :controller="controller"
+    :auto-extend-height="false"
+    controller
   />
   <!--  <div-->
   <!--    v-else-->
@@ -29,20 +30,13 @@ import propsMixin from '@/components/Templates/mixins/props'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridGeneratorInner from './GridGeneratorInner'
 import { defaultSetting } from '../Setup/EditorSetting/SettingGridGenerator'
-import { unitConvert } from '@/utils/layout'
 
 export default {
   defaultSetting,
-  name: 'GridGenerator',
+  name: 'Slider',
   components: {
     GridGeneratorInner
   },
-  mixins: [propsMixin, childrenMixin, toolMixin],
-  props: {
-    controller: {
-      type: Boolean,
-      default: false
-    }
-  }
+  mixins: [propsMixin, childrenMixin, toolMixin]
 }
 </script>
