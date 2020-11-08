@@ -1,4 +1,5 @@
 import { vmAppend, vmRemove } from '@/utils/vmMap'
+import { isBackground, isCarousel, isGroup, isSlider } from '@/utils/node'
 
 let hoverNode = []
 
@@ -23,7 +24,10 @@ export default {
     this.init()
   },
   mounted() {
-    this.init()
+    this.$nextTick(() => {
+      // undo在redo 的時候 如果不放nextTick, 不知為啥 beforeDestroy這個會跑在mounted 前面
+      this.init()
+    })
   },
   beforeDestroy() {
     if (this.isDraftMode) {
@@ -35,6 +39,14 @@ export default {
     }
   },
   methods: {
+    percentUnitW() {
+      // for @/utils/layout unitConvert only
+      if (isBackground(this.node) || isSlider(this.node) || isGroup(this.node)) {
+        return this.$el.clientWidth / 100
+      }
+      return (this.$refs.gridItem.containerWidth || 0) / 100
+
+    },
     init() {
       // Don't put in created to prevent some component fail before mount
       if (this.isDraftMode) {

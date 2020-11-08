@@ -25,7 +25,6 @@ bug
 group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
 20- position fix element x,y should use %, - group scrollable 垂直 水平 scroll
 20 - 元件可以直接拖入 carousel
-10 - 照片可以直接拖進去
 
 - panel component 可以拖拉
 - 照片的 link 坐在 magement 裡面

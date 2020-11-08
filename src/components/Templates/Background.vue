@@ -6,7 +6,7 @@
     :inner-styles="innerStyles"
     :class="{ 'cross-hair': isAdding }"
     controller
-    data-droppable
+    data-image-droppable
     class="background"
     @height-updated="heightUpdated"
   />
@@ -29,12 +29,7 @@ export default {
   },
   mixins: [toolMixin, propsMixin, childrenMixin],
   computed: {
-    ...mapState('app', ['isAdding']),
-    ...mapState('layout', ['windowWidth']),
-    percentUnitW() {
-      // for @/utils/layout unitConvert only
-      return this.windowWidth / 100
-    }
+    ...mapState('app', ['isAdding'])
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),

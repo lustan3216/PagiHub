@@ -26,10 +26,8 @@ const callbacks = {
   componentDelete(node) {
     this._vm.$bus.$emit('component-delete', node)
   },
-  componentUpdate(tree, key) {
-    if (key === 'zIndex') {
-      this._vm.$bus.$emit('component-update-zindex')
-    }
+  componentUpdate(tree, key, value) {
+    this._vm.$bus.$emit('component-update', tree, key, value)
   }
 }
 

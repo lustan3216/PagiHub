@@ -3,6 +3,7 @@
   <vue-grid-generator
     ref="gridGenerator"
     v-bind="innerProps"
+    :id="id"
     :layout="layout"
     :col-num="windowWidth"
     :vertical-compact="false"

@@ -1,5 +1,5 @@
 <template>
-  <grid-generator-item :id="id" data-droppable>
+  <grid-generator-item :id="id" data-image-droppable>
     <div
       v-observe-visibility="options"
       class="h-100 over-hidden"
@@ -82,7 +82,7 @@
           <grid-generator
             v-if="index === currentIndex"
             :id="child.id"
-            data-droppable
+            data-image-droppable
             :style="{ cursor }"
             controller
           />

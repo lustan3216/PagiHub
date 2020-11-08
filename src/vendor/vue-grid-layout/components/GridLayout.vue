@@ -21,6 +21,7 @@
   import Vue from 'vue'
 
   import {
+    cloneJson,
     resizeListener
   } from '@/utils/tool'
 
@@ -35,8 +36,12 @@
   //var eventBus = require('./eventBus');
 
   import GridItem from './GridItem.vue'
+  import propsMixin from '@/components/Templates/mixins/props'
   import { addWindowEventListener, removeWindowEventListener } from '../helpers/DOM'
   import { debounce } from '@/utils/tool'
+  import interact from 'interactjs'
+  import { unitConvert } from '@/utils/layout'
+  import { traversalSelfAndChildren } from '@/utils/node'
 
   export default {
     name: 'GridLayout',
@@ -46,6 +51,7 @@
         parent: this
       }
     },
+    mixins: [propsMixin],
     components: {
       GridItem
     },
@@ -60,6 +66,10 @@
         default: 12
       },
       isDraggable: {
+        type: Boolean,
+        default: true
+      },
+      isDroppable: {
         type: Boolean,
         default: true
       },
@@ -105,7 +115,8 @@
         lastBreakpoint: null, // store last active breakpoint
         originalLayout: null, // store original Layout
         boundaryElement: null,
-        offListeners: []
+        offListeners: [],
+        interactObj: null
       }
     },
     computed: {
@@ -128,6 +139,9 @@
       this.eventBus.$destroy()
 
       this.offListeners.forEach(off => off())
+      if (this.interactObj) {
+        this.interactObj.unset()
+      }
     },
     beforeMount: function() {
       this.$emit('layout-before-mount', this.layout)
@@ -136,6 +150,7 @@
       this.onWindowResize()
     },
     mounted: function() {
+      this.tryMakeDroppable()
       this.$emit('layout-mounted', this.layout)
       this.$nextTick(function() {
         validateLayout(this.layout)
@@ -164,6 +179,12 @@
       })
     },
     watch: {
+      isDroppable: {
+        handler(){
+          this.tryMakeDroppable()
+        }
+      },
+
       width: function(newval, oldval) {
         const self = this
         this.$nextTick(function() {
@@ -214,6 +235,70 @@
     },
     methods: {
       ...mapActions('layout', ['resizeNodeQuickFn']),
+      ...mapActions('node', ['debounceRecord']),
+
+      tryMakeDroppable() {
+        if (!this.isDroppable) return
+
+        if (!this.interactObj) {
+          this.interactObj = interact(this.$el)
+        }
+
+        this.interactObj.dropzone({
+          overlap: 0.4,
+          ondrop: (event) => {
+            const dropNode = event.target.__vue__.node
+            const dragNode = event.relatedTarget.__vue__.node
+
+            if (!dropNode || !dragNode) return
+            let invalidAction = false
+
+            traversalSelfAndChildren(dropNode, node => {
+              invalidAction = node.parentId === dragNode.id
+              if (invalidAction) return false
+            })
+
+            if (invalidAction) return
+
+            const { x: dropX, y: dropY } = event.target.getBoundingClientRect()
+            const { x: dragX, y: dragY } = event.relatedTarget.getBoundingClientRect()
+
+            const newGrid = {}
+            for (const breakpoint in dragNode.grid) {
+              const currentGrid = dragNode.grid[breakpoint]
+
+              const dragW = unitConvert(dragNode.id, currentGrid.w, currentGrid.unitW, 'px')
+              const dragH = unitConvert(dragNode.id, currentGrid.h, currentGrid.unitH, 'px')
+
+              newGrid[breakpoint] = {
+                x: dragX - dropX,
+                y: dragY - dropY,
+                w: unitConvert(dropNode.id, dragW, 'px', currentGrid.unitW),
+                h: unitConvert(dropNode.id, dragH, 'px', currentGrid.unitH),
+                unitW: currentGrid.unitW,
+                unitH: currentGrid.unitH
+              }
+
+              // if (isNaN(newGrid[breakpoint].w)) debugger
+            }
+
+            this.$nextTick(() => {
+              // the $nextTick here will make this record after the grid-item layout-updated event when dragged
+              // otherwise layout-updated will cause a bug
+              this.debounceRecord([
+                {
+                  path: [dragNode.id, 'grid'],
+                  value: newGrid
+                },
+                {
+                  path: [dragNode.id, 'parentId'],
+                  value: dropNode.id
+                }
+              ])
+            })
+          }
+        })
+      },
 
       colWidth(item) {
         switch (item.unitW) {

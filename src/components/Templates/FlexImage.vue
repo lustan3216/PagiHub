@@ -1,5 +1,5 @@
 <template>
-  <grid-generator-item data-droppable :id="id">
+  <grid-generator-item data-image-droppable :id="id">
     <el-image
       v-bind="innerProps"
       class="wh-100"

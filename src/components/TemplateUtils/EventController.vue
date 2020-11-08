@@ -25,7 +25,7 @@
 
       <component
         v-if="rect && !isAdding"
-        v-show="!gridResizing && (hoveringId === id || selected)"
+        v-show="(hoveringId === id || selected)"
         :is="isExample ? 'example-operator' : 'component-operator'"
         :id="id"
         :key="id"
@@ -101,15 +101,15 @@ export default {
     return {
       previousX: null,
       previousY: null,
-      rect: null
+      rect: null,
+      moving: false
     }
   },
   computed: {
     ...mapState('app', [
       'selectedComponentIds',
       'editingPath',
-      'isAdding',
-      'gridResizing'
+      'isAdding'
     ]),
     ...mapState('layout', ['gridResizing', 'windowHeight', 'windowWidth']),
     lock() {

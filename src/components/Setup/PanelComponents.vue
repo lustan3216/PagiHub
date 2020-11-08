@@ -131,16 +131,16 @@ export default {
       })
     }
   },
-  created() {
+  beforeMount() {
     this.renderTree()
     this.$bus.$on('component-add-new', this.renderTree)
     this.$bus.$on('component-delete', this.renderTree)
-    this.$bus.$on('component-update-zindex', this.renderTree)
+    this.$bus.$on('component-update', this.renderTree)
   },
   beforeDestroy() {
     this.$bus.$off('component-add-new', this.renderTree)
     this.$bus.$off('component-delete', this.renderTree)
-    this.$bus.$off('component-update-zindex', this.renderTree)
+    this.$bus.$off('component-update', this.renderTree)
   },
   methods: {
     ...mapMutations('app', [
@@ -148,6 +148,11 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    componentUpdate(tree, key) {
+      if (['zIndex', 'parentId'].includes(key)) {
+        this.renderTree()
+      }
+    },
     renderTree() {
       const tree = this.componentSetNode
 

@@ -1,6 +1,6 @@
 <template>
   <grid-generator-item
-    data-droppable
+    data-image-droppable
     :div-style="{
       background: '#E8E8E9'
     }"

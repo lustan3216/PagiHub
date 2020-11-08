@@ -215,10 +215,6 @@ export default {
     },
     shouldAutoHeight() {
       return this.isTextEditor || this.isGroup
-    },
-    percentUnitW() {
-      // for @/utils/layout unitConvert only
-      return (this.$refs.gridItem.containerWidth || 0) / 100
     }
   },
   watch: {
@@ -318,6 +314,7 @@ export default {
     moved() {
       this.moving = false
       this.$nextTick(() => {
+        // here need to put in $nextTick to update data after $watch
         this.pressAltKey = false
       })
     }

@@ -98,15 +98,16 @@
   pointer-events: none !important;
 }
 
-.hover-cover {
+.hover-cover:before {
   position: absolute;
+  content: ' ';
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
   z-index: 100;
   pointer-events: none;
-  background-color: rgba(88, 159, 248, 0.2) !important;
+  background-color: rgba(50, 95, 146, 0.69) !important;
 }
 
 .opacity0 {

@@ -713,7 +713,7 @@
           if ((this.lockItemInLayout || this.fixItem) && pos.y * this.scaleRatio > parentRect.height - clientRect.height) {
             pos.y = (parentRect.height - clientRect.height) / this.scaleRatio
           }
-          this.$emit('moved', this.i, pos.x, pos.y)
+          this.$emit('moved', this.i, pos.x, pos.y, event)
         }
         if (event.type === 'dragstart') {
           this.$emit('moveStart', this.i, pos.x, pos.y, event)

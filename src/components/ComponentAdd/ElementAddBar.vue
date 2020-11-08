@@ -2,7 +2,7 @@
   <div class="align-center">
     <i
       v-shortkey="['esc']"
-      v-if="creatingComponentTag"
+      v-if="isAdding"
       @shortkey="cleanState"
     />
 

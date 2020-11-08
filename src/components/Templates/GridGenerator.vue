@@ -1,6 +1,7 @@
 <template>
   <!--  v-if="isGridItemParent"-->
   <grid-generator-inner
+    ref="grid"
     :style="innerStyles.html"
     :id="id"
     :inner-props="innerProps"
@@ -28,6 +29,7 @@ import propsMixin from '@/components/Templates/mixins/props'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridGeneratorInner from './GridGeneratorInner'
 import { defaultSetting } from '../Setup/EditorSetting/SettingGridGenerator'
+import { unitConvert } from '@/utils/layout'
 
 export default {
   defaultSetting,

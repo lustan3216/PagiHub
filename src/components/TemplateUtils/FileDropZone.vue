@@ -210,7 +210,7 @@
         })
       },
       drop(event) {
-        const { x, y } = event.target.closest('[data-droppable]').getBoundingClientRect()
+        const { x, y } = event.target.closest('[data-image-droppable]').getBoundingClientRect()
         const droppedNode = this.getNode(event)
 
         this.dropEvent = {
@@ -256,7 +256,7 @@
         }, 100)
       },
       getNode(event) {
-        const element = event.target.closest('[data-droppable]')
+        const element = event.target.closest('[data-image-droppable]')
         if (element) {
           return element.__vue__.$parent.node
         }

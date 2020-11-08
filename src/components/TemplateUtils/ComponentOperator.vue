@@ -4,7 +4,7 @@
     :style="styles"
     :class="{
       'no-action': static || itemEditing || isBackground || scrolling,
-      border: !isBackground
+      border: !isBackground && !gridResizing
     }"
     class="quick-functions flex-center"
     @mousedown.stop="$emit('mousedown', $event)"
@@ -14,73 +14,75 @@
     @wheel="onWheel"
     @dragover="APP_SET({ isAdding: true })"
   >
-    <portal-target
-      v-if="itemEditing && !isExample && isLastOne"
-      :style="textEditorStyle"
-      name="QuickFunctionsTextEditor"
-      slim
-      class="can-action"
-    />
+    <template v-if="!gridResizing">
+      <portal-target
+        v-if="itemEditing && !isExample && isLastOne"
+        :style="textEditorStyle"
+        name="QuickFunctionsTextEditor"
+        slim
+        class="can-action"
+      />
 
-    <div class="wrapper flex top">
-      <div
-        v-if="selected && isLastOne"
-        class="component-name flex"
-      >
-        <i
-          v-if="!isSlider && !isBackground && !isExample"
-          :class="
+      <div class="wrapper flex top">
+        <div
+          v-if="selected && isLastOne"
+          class="component-name flex"
+        >
+          <i
+            v-if="!isSlider && !isBackground && !isExample"
+            :class="
             itemEditing && !hoverIcon ? 'el-icon-edit-outline' : 'el-icon-rank'
           "
-          :style="{ cursor: itemEditing && !hoverIcon ? 'default' : 'move' }"
-          class="move-icon"
-          type="text"
-          style="padding: 8px 2px 8px 5px;"
-          @mouseenter="hoverIcon = true"
-          @mouseleave="hoverIcon = false"
-        />
+            :style="{ cursor: itemEditing && !hoverIcon ? 'default' : 'move' }"
+            class="move-icon"
+            type="text"
+            style="padding: 8px 2px 8px 5px;"
+            @mouseenter="hoverIcon = true"
+            @mouseleave="hoverIcon = false"
+          />
 
-        <div
-          @mouseenter="mouseenter"
-          @mouseleave="mouseleave"
-        >
-          <transition-group
-            name="full-slide"
-            class="align-center"
+          <div
+            @mouseenter="mouseenter"
+            @mouseleave="mouseleave"
           >
-            <template v-for="(node, index) in nodesPath">
-              <i
-                v-if="hovering && index"
-                :key="node.id + 'i'"
-                class="el-icon-arrow-left"
-              />
-              <component-name
-                v-if="hovering || node.id === id"
-                :key="node.id"
-                :id="node.id"
-                :editable="false"
-                :is-example="isExample"
-                @click="SET_SELECTED_COMPONENT_ID(node.id)"
-              />
-            </template>
-          </transition-group>
+            <transition-group
+              name="full-slide"
+              class="align-center"
+            >
+              <template v-for="(node, index) in nodesPath">
+                <i
+                  v-if="hovering && index"
+                  :key="node.id + 'i'"
+                  class="el-icon-arrow-left"
+                />
+                <component-name
+                  v-if="hovering || node.id === id"
+                  :key="node.id"
+                  :id="node.id"
+                  :editable="false"
+                  :is-example="isExample"
+                  @click="SET_SELECTED_COMPONENT_ID(node.id)"
+                />
+              </template>
+            </transition-group>
+          </div>
         </div>
+
+        <often-use-menu
+          v-if="isDraftMode && !isExample && isLastOne"
+          :id="id"
+          class="flex backface-hidden"
+        />
       </div>
 
-      <often-use-menu
-        v-if="isDraftMode && !isExample && isLastOne"
-        :id="id"
-        class="flex backface-hidden"
-      />
-    </div>
+      <template v-if="selected && !isSlider && !isBackground && !isExample">
+        <template v-if="!shouldAutoHeight">
+          <div class="resizable-handle-both" />
+          <div class="resizable-handle-bottom" />
+        </template>
 
-    <template v-if="selected && !isSlider && !isBackground && !isExample">
-      <template v-if="!shouldAutoHeight">
-        <div class="resizable-handle-both" />
-        <div class="resizable-handle-bottom" />
+        <div class="resizable-handle-right" />
       </template>
-
-      <div class="resizable-handle-right" />
     </template>
   </div>
 </template>
@@ -267,7 +269,13 @@ export default {
       if (this.isDraggable && !this.static) {
         const opts = {
           ignoreFrom: '.item-editing, .menububble',
-          allowFrom: 'div, .move-icon'
+          allowFrom: 'div, .move-icon',
+          modifiers: [
+            interact.modifiers.restrictRect({
+              restriction: 'parent',
+              endOnly: true
+            })
+          ]
         }
         this.interactObj.draggable(opts)
         this.interactObj.on('dragstart dragmove dragend', event => {

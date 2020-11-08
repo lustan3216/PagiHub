@@ -1,6 +1,6 @@
 <template>
-  <grid-generator-item data-droppable :id="id">
-    <grid-generator-inner data-droppable :id="id" />
+  <grid-generator-item data-image-droppable :id="id">
+    <grid-generator-inner data-image-droppable :id="id" />
   </grid-generator-item>
 </template>
 
