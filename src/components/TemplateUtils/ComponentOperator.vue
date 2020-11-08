@@ -9,9 +9,10 @@
     class="quick-functions flex-center"
     @mousedown.stop="$emit('mousedown', $event)"
     @mouseup.stop="$emit('mouseup', $event)"
-    @dblclick.stop="$emit('dblclick', $event)"
+    @dblclick.stop="dblclick"
     @contextmenu="$emit('contextmenu', $event)"
     @wheel="onWheel"
+    @dragover="APP_SET({ isAdding: true })"
   >
     <portal-target
       v-if="itemEditing && !isExample && isLastOne"
@@ -94,7 +95,7 @@ import {
   traversalAncestorAndSelf,
   isTextEditor,
   isGroup,
-  isSlider
+  isSlider, isImage
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
@@ -248,7 +249,9 @@ export default {
   },
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
+    ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    ...mapMutations('asset', ['OPEN_ASSET']),
     onWheel(event) {
       event.preventDefault()
       clearTimeout(timeId)
@@ -333,6 +336,13 @@ export default {
     mouseleave() {
       clearTimeout(timeId)
       this.hovering = false
+    },
+    dblclick(event) {
+      this.$emit('dblclick', event)
+      if (isImage(this.node)) {
+        this.APP_SET({ beingAddedComponentId: this.id })
+        this.OPEN_ASSET()
+      }
     }
   }
 }

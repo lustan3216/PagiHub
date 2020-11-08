@@ -26,7 +26,7 @@ export function postAsset(
     quality: 0.8,
     success(result) {
       const formData = new FormData()
-      const pathArray = file._relativePath.split('/')
+      const pathArray = file._relativePath ? file._relativePath.split('/') : []
 
       pathArray.pop()
       formData.append('file', result, file.name)

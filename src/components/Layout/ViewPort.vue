@@ -402,7 +402,7 @@ export default {
     padding: 15px;
   }
   &.draft {
-    @include calc-vh('height', '100vh - 80px');
+    @include calc-vh('height', '100vh - 75px');
   }
 }
 

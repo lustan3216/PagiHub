@@ -1,4 +1,5 @@
 <template>
+<!--  data-addable-id 不能刪，add element要用的-->
   <vue-grid-generator
     ref="gridGenerator"
     v-bind="innerProps"
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'

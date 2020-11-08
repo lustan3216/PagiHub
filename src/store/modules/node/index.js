@@ -219,6 +219,11 @@ const actions = {
     if (rootGetters['mode/isDraftMode']) {
       jsonHistory.record(payLoad)
     }
+  },
+  irreversibleRecord({ rootGetters }, payLoad) {
+    if (rootGetters['mode/isDraftMode']) {
+      jsonHistory.irreversibleRecord(payLoad)
+    }
   }
 }
 

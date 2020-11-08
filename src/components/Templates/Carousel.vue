@@ -1,5 +1,5 @@
 <template>
-  <grid-generator-item :id="id">
+  <grid-generator-item :id="id" data-droppable>
     <div
       v-observe-visibility="options"
       class="h-100 over-hidden"
@@ -82,6 +82,7 @@
           <grid-generator
             v-if="index === currentIndex"
             :id="child.id"
+            data-droppable
             :style="{ cursor }"
             controller
           />
@@ -93,16 +94,16 @@
 
 <script>
 import interactjs from 'interactjs'
-import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
+import { CHILDREN, POLYMORPHISM, STYLES } from '@/const'
+import { Carousel } from 'element-ui'
 import propsMixin from '@/components/Templates/mixins/props'
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridGenerator from './GridGenerator'
 import GridGeneratorItem from './GridGeneratorItem'
-import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
-import { CHILDREN, POLYMORPHISM, STYLES } from '@/const'
-import { Carousel } from 'element-ui'
 import CarouselItem from '@/vendor/element-ui/CarouselItem'
+import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { isSlider, traversalSelfAndChildren } from '@/utils/node'
 import { vmRemoveNode } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
@@ -290,6 +291,9 @@ export default {
     },
     setAnimation(value) {
       this.animation = value
+    },
+    currentSliderNode() {
+      return this.sliders[this.currentIndex]
     },
     setActiveIndex(childId) {
       this.currentIndex = findIndexBy(this.sliders, 'id', childId)

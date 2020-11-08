@@ -1,9 +1,8 @@
 <template>
-  <grid-generator-item :id="id">
+  <grid-generator-item data-droppable :id="id">
     <el-image
       v-bind="innerProps"
       class="wh-100"
-      @dblclick.native="dblclick"
     >
       <div
         slot="error"
@@ -21,7 +20,6 @@ import { defaultSetting } from '../Setup/EditorSetting/SettingFlexImage'
 import { Image } from 'element-ui'
 import { isComponentSet, isSlider, traversalAncestor } from '@/utils/node'
 import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
-import { mapMutations } from 'vuex'
 
 export default {
   defaultSetting,
@@ -46,14 +44,6 @@ export default {
         return false
       }
     })
-  },
-  methods: {
-    ...mapMutations('asset', ['OPEN_ASSET']),
-    ...mapMutations('app', { APP_SET: 'SET' }),
-    dblclick() {
-      this.APP_SET({ beingAddedComponentId: this.id })
-      this.OPEN_ASSET()
-    }
   }
 }
 </script>

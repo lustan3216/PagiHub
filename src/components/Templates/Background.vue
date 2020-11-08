@@ -6,6 +6,7 @@
     :inner-styles="innerStyles"
     :class="{ 'cross-hair': isAdding }"
     controller
+    data-droppable
     class="background"
     @height-updated="heightUpdated"
   />

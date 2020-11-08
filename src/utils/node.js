@@ -273,6 +273,12 @@ export function isTextEditor(node) {
   }
 }
 
+export function isRectangle(node) {
+  if (node) {
+    return node.tag === 'rectangle'
+  }
+}
+
 export function isBackground(node) {
   if (node) {
     return node.tag === 'background'

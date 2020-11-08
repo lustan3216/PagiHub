@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <file-drop-zone>
     <function-bar v-if="isDraftMode" />
 
     <div
@@ -23,6 +23,7 @@
               :key="editingComponentSetId"
               class="draft-artboard"
             />
+
           </keep-alive>
         </transition>
       </view-port>
@@ -31,7 +32,7 @@
 
       <preview-controller v-if="isPreviewMode" />
     </div>
-  </div>
+  </file-drop-zone>
 </template>
 
 <script>
@@ -40,6 +41,7 @@ import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
 import SidebarLeft from '@/components/Layout/SidebarLeft'
 import SidebarRight from '@/components/Layout/SidebarRight'
+import FileDropZone from '@/components/TemplateUtils/FileDropZone'
 
 export default {
   name: 'PanelDraft',
@@ -48,6 +50,7 @@ export default {
     ViewPort,
     SidebarRight,
     SidebarLeft,
+    FileDropZone,
     PreviewController: () => import('@/components/Layout/PreviewController'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
     PanelDraft: () => import('@/components/Layout/PanelDraft')
@@ -89,6 +92,6 @@ export default {
   background-color: $color-grey;
 }
 .draft.editor {
-  @include calc-vh('height', '100vh - 50px');
+  @include calc-vh('height', '100vh - 45px');
 }
 </style>
