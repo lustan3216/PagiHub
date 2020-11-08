@@ -245,8 +245,11 @@ export default {
         color: style.color,
         textAlign: style.textAlign,
         textDecoration: style.textDecoration,
-        fontWeight: style.fontWeight,
-        fontStyle: style.fontStyle
+        letterSpacing: style.letterSpacing,
+        fontStyle: style.fontStyle,
+        lineHeight: style.lineHeight,
+        fontFamily: style.fontFamily,
+        fontSize: style.fontSize
       }
     },
     text: {
