@@ -12,6 +12,7 @@
     :auto-height="shouldAutoHeight"
     :extra-style="extraStyle"
     :data-addable-id="id"
+    @drop="handleDrop"
     @height-updated="$emit('height-updated', $event)"
     @layout-updated="layoutUpdated($event)"
   >
@@ -42,8 +43,9 @@ import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { getValueByPath } from '@/utils/tool'
-import { isBackground, isSlider } from '@/utils/node'
+import { isBackground, isSlider, traversalSelfAndChildren } from '@/utils/node'
 import EventController from '../TemplateUtils/EventController'
+import { unitConvert } from '@/utils/layout'
 
 export default {
   name: 'GridGeneratorInner',
@@ -111,6 +113,64 @@ export default {
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),
+    handleDrop(event) {
+      const dropNode = event.target.__vue__.node
+      const dragNode = event.relatedTarget.__vue__.node
+
+      if (!dropNode || !dragNode) return
+      let inTheSameTree = false
+
+      traversalSelfAndChildren(dropNode, node => {
+        inTheSameTree = node.parentId === dragNode.id
+        if (inTheSameTree) return false
+      })
+
+      if (inTheSameTree) return
+
+      traversalSelfAndChildren(dragNode, node => {
+        inTheSameTree = node.parentId === dropNode.id
+        if (inTheSameTree) return false
+      })
+
+      if (inTheSameTree) return
+
+      const { x: dropX, y: dropY } = event.target.getBoundingClientRect()
+      const { x: dragX, y: dragY } = event.relatedTarget.getBoundingClientRect()
+
+      const newGrid = {}
+      for (const breakpoint in dragNode.grid) {
+        const currentGrid = dragNode.grid[breakpoint]
+
+        const dragW = unitConvert(dragNode.id, currentGrid.w, currentGrid.unitW, 'px')
+        const dragH = unitConvert(dragNode.id, currentGrid.h, currentGrid.unitH, 'px')
+
+        newGrid[breakpoint] = {
+          x: dragX - dropX,
+          y: dragY - dropY,
+          w: unitConvert(dropNode.id, dragW, 'px', currentGrid.unitW),
+          h: unitConvert(dropNode.id, dragH, 'px', currentGrid.unitH),
+          unitW: currentGrid.unitW,
+          unitH: currentGrid.unitH
+        }
+
+        // if (isNaN(newGrid[breakpoint].w)) debugger
+      }
+
+      this.$nextTick(() => {
+        // the $nextTick here will make this record after the grid-item layout-updated event when dragged
+        // otherwise layout-updated will cause a bug
+        this.debounceRecord([
+          {
+            path: [dragNode.id, 'grid'],
+            value: newGrid
+          },
+          {
+            path: [dragNode.id, 'parentId'],
+            value: dropNode.id
+          }
+        ])
+      })
+    },
     layoutUpdated(newChildren) {
       if (this.isExample) {
         return

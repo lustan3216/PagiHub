@@ -41,9 +41,10 @@ export default {
   methods: {
     percentUnitW() {
       // for @/utils/layout unitConvert only
-      if (isBackground(this.node) || isSlider(this.node) || isGroup(this.node)) {
+      if (isBackground(this.node) || isSlider(this.node)) {
         return this.$el.clientWidth / 100
       }
+
       return (this.$refs.gridItem.containerWidth || 0) / 100
 
     },

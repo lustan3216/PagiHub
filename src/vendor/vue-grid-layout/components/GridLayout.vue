@@ -235,7 +235,6 @@
     },
     methods: {
       ...mapActions('layout', ['resizeNodeQuickFn']),
-      ...mapActions('node', ['debounceRecord']),
 
       tryMakeDroppable() {
         if (!this.isDroppable) return
@@ -247,55 +246,7 @@
         this.interactObj.dropzone({
           overlap: 0.4,
           ondrop: (event) => {
-            const dropNode = event.target.__vue__.node
-            const dragNode = event.relatedTarget.__vue__.node
-
-            if (!dropNode || !dragNode) return
-            let invalidAction = false
-
-            traversalSelfAndChildren(dropNode, node => {
-              invalidAction = node.parentId === dragNode.id
-              if (invalidAction) return false
-            })
-
-            if (invalidAction) return
-
-            const { x: dropX, y: dropY } = event.target.getBoundingClientRect()
-            const { x: dragX, y: dragY } = event.relatedTarget.getBoundingClientRect()
-
-            const newGrid = {}
-            for (const breakpoint in dragNode.grid) {
-              const currentGrid = dragNode.grid[breakpoint]
-
-              const dragW = unitConvert(dragNode.id, currentGrid.w, currentGrid.unitW, 'px')
-              const dragH = unitConvert(dragNode.id, currentGrid.h, currentGrid.unitH, 'px')
-
-              newGrid[breakpoint] = {
-                x: dragX - dropX,
-                y: dragY - dropY,
-                w: unitConvert(dropNode.id, dragW, 'px', currentGrid.unitW),
-                h: unitConvert(dropNode.id, dragH, 'px', currentGrid.unitH),
-                unitW: currentGrid.unitW,
-                unitH: currentGrid.unitH
-              }
-
-              // if (isNaN(newGrid[breakpoint].w)) debugger
-            }
-
-            this.$nextTick(() => {
-              // the $nextTick here will make this record after the grid-item layout-updated event when dragged
-              // otherwise layout-updated will cause a bug
-              this.debounceRecord([
-                {
-                  path: [dragNode.id, 'grid'],
-                  value: newGrid
-                },
-                {
-                  path: [dragNode.id, 'parentId'],
-                  value: dropNode.id
-                }
-              ])
-            })
+            this.$emit('drop', event)
           }
         })
       },
