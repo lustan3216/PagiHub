@@ -57,7 +57,7 @@
     },
     props: {
       // If true, the container height swells and contracts to fit contents
-      autoHeight: {
+      autoExtendHeight: {
         type: Boolean,
         default: true
       },
@@ -244,7 +244,7 @@
         }
 
         this.interactObj.dropzone({
-          overlap: 0.4,
+          overlap: 0.65,
           ondrop: (event) => {
             this.$emit('drop', event)
           }
@@ -321,7 +321,7 @@
       },
       updateHeight: function() {
         const height = this.containerHeight()
-        if (this.mergedStyle.height !== height && this.autoHeight) {
+        if (this.mergedStyle.height !== height && this.autoExtendHeight) {
           this.$emit('height-updated', height)
         }
         this.mergedStyle = { height }
@@ -347,7 +347,7 @@
         })
       },
        containerHeight: function() {
-        if (this.autoHeight) {
+        if (this.autoExtendHeight) {
           const containerHeight = bottom(this.layout) + 'px'
           return containerHeight
         }

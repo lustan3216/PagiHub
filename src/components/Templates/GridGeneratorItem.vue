@@ -20,7 +20,7 @@
     :fixed="computedLayout.fixed"
     :vertical-compact="computedLayout.verticalCompact"
     :class="{ 'no-action': lock }"
-    :auto-height="shouldAutoHeight"
+    :auto-resize-height="autoResizeHeight"
     :selected="selected"
     @move="LAYOUT_SET({ gridResizing: true })"
     @moved="moved"
@@ -32,7 +32,7 @@
         ...innerStyles.html
       }"
       :class="{
-        'h-100': !shouldAutoHeight
+        'h-100': !autoResizeHeight
       }"
       class="border-box"
     >
@@ -213,12 +213,12 @@ export default {
     isGroup() {
       return isGroup(this.node)
     },
-    shouldAutoHeight() {
+    autoResizeHeight() {
       return this.isTextEditor || this.isGroup
     }
   },
   watch: {
-    shouldAutoHeight: {
+    autoResizeHeight: {
       handler(value) {
         this.$nextTick(() => {
           if (value) {

@@ -91,7 +91,7 @@
         type: Boolean,
         default: false
       },
-      autoHeight: {
+      autoResizeHeight: {
         type: Boolean,
         default: false
       },
@@ -277,7 +277,7 @@
     mounted: function() {
       this.cols = this.parent.width
 
-      this.lockItemInLayout = !this.parent.autoHeight
+      this.lockItemInLayout = !this.parent.autoExtendHeight
       this.containerWidth = this.parent.width !== null ? this.parent.width : 100
 
       if (this.isDraggable === null) {
@@ -524,7 +524,7 @@
             // console.log(coreEvent.deltaX)
             newSize.width = this.resizing.width + event.deltaRect.right
 
-            if (this.autoHeight) {
+            if (this.autoResizeHeight) {
               pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH)
               newSize.height = pos.height
             } else {
@@ -843,7 +843,7 @@
         //     edges: {
         //       left: false,
         //       right: true,
-        //       bottom: !this.autoHeight,
+        //       bottom: !this.autoResizeHeight,
         //       top: false
         //     },
         //     ignoreFrom: this.resizeIgnoreFrom,
@@ -889,7 +889,7 @@
         // if (process.env.NODE_ENV !== 'production') {
         //   console.warn('autoSize')
         // }
-        if (!this.autoHeight) {
+        if (!this.autoResizeHeight) {
           return
         }
 

@@ -9,7 +9,7 @@
     :vertical-compact="false"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
-    :auto-height="shouldAutoHeight"
+    :auto-extend-height="autoExtendHeight"
     :extra-style="extraStyle"
     :data-addable-id="id"
     @drop="handleDrop"
@@ -90,7 +90,7 @@ export default {
   computed: {
     ...mapState('layout', ['windowWidth']),
     ...mapGetters('layout', ['currentBreakpoint', 'vh']),
-    shouldAutoHeight() {
+    autoExtendHeight() {
       return !isSlider(this.node)
     },
     overflow() {
