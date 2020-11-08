@@ -3,13 +3,13 @@
 </template>
 
 <script>
-  import PanelProduction from '@/components/Layout/PanelProduction'
-  export default {
-    name: 'Help',
-    components: {
-      PanelProduction
-    }
+import PanelProduction from '@/components/Layout/PanelProduction'
+export default {
+  name: 'Help',
+  components: {
+    PanelProduction
   }
+}
 </script>
 
 <style scoped lang="scss"></style>

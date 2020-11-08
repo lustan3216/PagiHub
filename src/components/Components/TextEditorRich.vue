@@ -99,7 +99,10 @@
             </button>
           </div>
 
-          <div class="flex" style="margin-top: 3px;">
+          <div
+            class="flex"
+            style="margin-top: 3px;"
+          >
             <button
               class="menububble__button"
               @click.prevent="showLinkMenu(getMarkAttrs('link'))"

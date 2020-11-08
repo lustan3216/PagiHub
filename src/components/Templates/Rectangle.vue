@@ -1,10 +1,10 @@
 <template>
   <grid-generator-item
-    data-image-droppable
     :div-style="{
       background: '#E8E8E9'
     }"
     :id="id"
+    data-image-droppable
   />
 </template>
 

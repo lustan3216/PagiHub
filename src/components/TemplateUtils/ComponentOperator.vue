@@ -31,8 +31,8 @@
           <i
             v-if="!isSlider && !isBackground && !isExample"
             :class="
-            itemEditing && !hoverIcon ? 'el-icon-edit-outline' : 'el-icon-rank'
-          "
+              itemEditing && !hoverIcon ? 'el-icon-edit-outline' : 'el-icon-rank'
+            "
             :style="{ cursor: itemEditing && !hoverIcon ? 'default' : 'move' }"
             class="move-icon"
             type="text"

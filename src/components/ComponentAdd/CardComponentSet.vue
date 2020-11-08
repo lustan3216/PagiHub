@@ -11,7 +11,10 @@
       </b>
 
       <div class="flex">
-        <portal-target name="asd" class="copy-button">
+        <portal-target
+          name="asd"
+          class="copy-button"
+        >
           <el-button disabled>
             Copy Design
           </el-button>

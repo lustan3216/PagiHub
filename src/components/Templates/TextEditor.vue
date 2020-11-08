@@ -1,5 +1,8 @@
 <template>
-  <grid-generator-item :id="id" auto-resize-height>
+  <grid-generator-item
+    :id="id"
+    auto-resize-height
+  >
     <text-editor-inner
       :id="id"
       :can-link="false"

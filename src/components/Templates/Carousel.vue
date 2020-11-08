@@ -1,5 +1,8 @@
 <template>
-  <grid-generator-item :id="id" data-image-droppable>
+  <grid-generator-item
+    :id="id"
+    data-image-droppable
+  >
     <div
       v-observe-visibility="options"
       class="h-100 over-hidden"

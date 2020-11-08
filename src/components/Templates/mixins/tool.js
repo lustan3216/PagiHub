@@ -46,7 +46,6 @@ export default {
       }
 
       return (this.$refs.gridItem.containerWidth || 0) / 100
-
     },
     init() {
       // Don't put in created to prevent some component fail before mount

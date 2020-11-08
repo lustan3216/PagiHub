@@ -1,6 +1,13 @@
 <template>
-  <grid-generator-item data-image-droppable :id="id" auto-resize-height>
-    <grid-generator-inner data-image-droppable :id="id" />
+  <grid-generator-item
+    :id="id"
+    data-image-droppable
+    auto-resize-height
+  >
+    <grid-generator-inner
+      :id="id"
+      data-image-droppable
+    />
   </grid-generator-item>
 </template>
 

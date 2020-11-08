@@ -1,4 +1,4 @@
-import { traversalSelfAndChildren } from "@/utils/node"
+import { traversalSelfAndChildren } from '@/utils/node'
 const Mock = require('better-mock')
 // Mock.XHR.prototype.proxy_send = Mock.XHR.prototype.send
 // Mock.XHR.prototype.send = function() {

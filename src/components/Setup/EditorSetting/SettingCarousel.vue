@@ -75,7 +75,7 @@ export default {
           select('arrow', {
             info: '',
             options: ['always', 'hover', 'never']
-          }),
+          })
           // select('type', {
           //   info: '',
           //   options: [{ label: 'Default', value: '' }, 'card']

@@ -88,7 +88,7 @@ export default {
     if (!this.visible) {
       return
     }
-    let vnode = null
+    const vnode = null
 
     // if (!this.controller || isGrid(this.node) || isComponentSet(this.node)) {
     //   vnode =
