@@ -28,6 +28,11 @@
         </transition>
       </view-port>
 
+      <dialog-image-tabs
+        v-if="isDraftMode"
+        :visible="isImageDialogOpen"
+      />
+
       <sidebar-right v-if="isDraftMode" />
 
       <preview-controller v-if="isPreviewMode" />
@@ -53,14 +58,16 @@ export default {
     FileDropZone,
     PreviewController: () => import('@/components/Layout/PreviewController'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
-    PanelDraft: () => import('@/components/Layout/PanelDraft')
+    PanelDraft: () => import('@/components/Layout/PanelDraft'),
+    DialogImageTabs: () => import('@/components/ComponentAdd/DialogImageTabs')
   },
   computed: {
     ...mapState('node', [
       'editingProjectId',
       'editingComponentSetId',
       'rootComponentSetIds'
-    ])
+    ]),
+    ...mapState('asset', ['isImageDialogOpen']),
   },
   async created() {
     this.INIT_NODE_STORE()

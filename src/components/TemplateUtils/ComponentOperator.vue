@@ -23,7 +23,7 @@
         class="can-action"
       />
 
-      <div class="wrapper flex top">
+      <div :class="componentNameOnTop ? 'top': 'bottom'" class="wrapper flex">
         <div
           v-if="selected && isLastOne"
           class="component-name flex"
@@ -150,14 +150,23 @@ export default {
       'editingPath',
       'isAdding'
     ]),
-    ...mapState('layout', ['gridResizing', 'windowHeight']),
+    ...mapState('layout', ['gridResizing', 'windowHeight', 'windowY']),
     ...mapGetters('app', ['selectedComponentNodes']),
+    componentNameOnTop() {
+      return this.rect.y - this.windowY > 50
+    },
     styles() {
+      const windowBottom = this.windowY + this.windowHeight
+      const height = windowBottom > this.rect.y + this.rect.height
+        ? this.windowY > this.rect.y
+          ? this.rect.y + this.rect.height - this.windowY
+          : this.rect.height
+        : windowBottom - this.rect.y
       return {
-        top: this.rect.y + 'px',
+        top: (this.windowY < this.rect.y ? this.rect.y : this.windowY) + 'px',
         left: this.rect.x + 'px',
         width: this.rect.width + 1 + 'px',
-        height: this.rect.height + 'px',
+        height: height + 'px',
         zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
     },

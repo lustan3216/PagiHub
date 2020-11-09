@@ -9,34 +9,21 @@
       multiple
     />
 
-    <dialog-image-tabs
-      v-if="isDraftMode"
-      :visible="isImageDialogOpen"
-    />
-
     <facebook-chat />
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import TopNav from '@/pages/TopNav'
 
 export default {
   name: 'App',
   components: {
     TopNav,
-    FacebookChat: () => import('@/pages/FacebookChat'),
-    DialogImageTabs: () => import('@/components/ComponentAdd/DialogImageTabs')
-  },
-  data() {
-    return {
-      uploading: false
-    }
+    FacebookChat: () => import('@/pages/FacebookChat')
   },
   computed: {
-    ...mapState('app', ['selectedComponentIds']),
-    ...mapState('asset', ['isImageDialogOpen']),
     needNavBar() {
       return !this.$route.meta.noNavbar && !this.isPreviewMode
     }

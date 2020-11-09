@@ -82,11 +82,13 @@ export default {
       this.$bus.$emit('art-board-scroll-top', this.scrollTop)
     },
     setBoundaryRect() {
-      const { height, width } = getRectWithoutPadding(this.$el)
+      const { height, width, x, y } = getRectWithoutPadding(this.$el)
 
       this.LAYOUT_SET({
         windowWidth: width,
-        windowHeight: height
+        windowHeight: height,
+        windowX: x,
+        windowY: y
       })
     }
   }
