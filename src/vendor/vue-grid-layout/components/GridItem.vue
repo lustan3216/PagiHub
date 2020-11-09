@@ -59,7 +59,7 @@
   import { setTopLeft, setTopRight, setTransformRtl, setTransform, getBoundaryEl } from '../helpers/utils'
 
   let interact = require('interactjs')
-  import { getValueByPath, resizeListener, debounce } from '@/utils/tool'
+  import { getValueByPath, resizeListener, debounce, cloneJson } from '@/utils/tool'
   import { getAbsoluteHeight } from '@/utils/style'
   import { toPrecision } from '@/utils/number'
 
@@ -104,10 +104,6 @@
         type: Boolean,
         required: false,
         default: null
-      },
-      selected: {
-        type: Boolean,
-        default: false
       },
       static: {
         type: Boolean,
@@ -221,7 +217,7 @@
         innerY: this.y,
         innerW: this.w,
         innerH: this.h,
-        lockItemInLayout: false
+        lockBottomInLayout: false
       }
     },
     created() {
@@ -248,12 +244,6 @@
         }
       }
 
-      self.moveTogether = function(event) {
-        if (self.i !== event.id) {
-          self.handleDrag(event)
-        }
-      }
-
       this.$bus.$on(`handle-resize-${this.i}`, this.handleResize)
       this.$bus.$on(`handle-drag-${this.i}`, this.handleDrag)
       this.eventBus.$on('updateWidth', self.updateWidthHandler)
@@ -265,7 +255,6 @@
       //Remove listeners
       this.$bus.$off(`handle-drag-${this.i}`, this.handleDrag)
       this.$bus.$off(`handle-resize-${this.i}`, this.handleResize)
-      this.$bus.$off('moveTogether', this.moveTogether)
       this.eventBus.$off('updateWidth', this.updateWidthHandler)
       this.eventBus.$off('compact', this.compactHandler)
       this.eventBus.$off('setDraggable', this.setDraggableHandler)
@@ -277,7 +266,7 @@
     mounted: function() {
       this.cols = this.parent.width
 
-      this.lockItemInLayout = !this.parent.autoExtendHeight
+      this.lockBottomInLayout = !this.parent.autoExtendHeight
       this.containerWidth = this.parent.width !== null ? this.parent.width : 100
 
       if (this.isDraggable === null) {
@@ -297,16 +286,6 @@
       })
     },
     watch: {
-      selected: {
-        handler(value) {
-          if (value) {
-            this.$bus.$on('moveTogether', this.moveTogether)
-          }
-          else {
-            this.$bus.$off('moveTogether', this.moveTogether)
-          }
-        }
-      },
       isDraggable: function() {
         this.draggable = this.isDraggable
       },
@@ -506,6 +485,7 @@
 
         const newSize = { width: 0, height: 0 }
         let pos
+
         switch (event.type) {
           case 'resizestart': {
             this.previousW = this.innerW
@@ -555,14 +535,14 @@
               parentRect = this.boundaryElement.getBoundingClientRect()
               clientRect = this.$el.getBoundingClientRect()
             }
-            else if (this.lockItemInLayout) {
+            else if (this.lockBottomInLayout) {
               parentRect = this.getParent(this.$el).getBoundingClientRect()
             }
 
             if (this.fixItem && clientRect.top + clientRect.height > parentRect.top + parentRect.height) {
               newSize.height = (parentRect.height / this.scaleRatio) - (clientRect.top - parentRect.top)
             }
-            else if (this.lockItemInLayout && (pos.height + pos.top) * this.scaleRatio > parentRect.height) {
+            else if (this.lockBottomInLayout && (pos.height + pos.top) * this.scaleRatio > parentRect.height) {
               newSize.height = (parentRect.height / this.scaleRatio) - pos.top
             }
             else {
@@ -615,22 +595,21 @@
         if (this.static) return
         if (this.isResizing) return
 
-        if (event.id && !this.selectedComponentIds.includes(event.id)) {
-          return
-        }
-
-        if (!event.isFakeEvent) {
-          // to prevent other item call self and be called by self again
-          event.isFakeEvent = true
-          event.id = this.i
-          this.$bus.$emit('moveTogether', event)
-        }
-
         // const position = getControlPosition(event)
 
         // Get the current drag point from the event. This is used as the offset.
         // if (position === null) return // not possible but satisfies flow
-        // const { x, y } = position
+
+        if (!event.isFakeEvent) {
+          // to prevent other item call self and be called by self again
+          event.isFakeEvent = true
+
+          if (this.selectedComponentIds.includes(this.i)) {
+            this.selectedComponentIds.forEach(id => {
+              if (id !== this.i) this.$bus.$emit(`handle-drag-${id}`, event)
+            })
+          }
+        }
 
         let parentRect
         let clientRect
@@ -710,7 +689,7 @@
           this.$emit('move', this.i, pos.x, pos.y, event)
         }
         if (event.type === 'dragend') {
-          if ((this.lockItemInLayout || this.fixItem) && pos.y * this.scaleRatio > parentRect.height - clientRect.height) {
+          if ((this.lockBottomInLayout || this.fixItem) && pos.y * this.scaleRatio > parentRect.height - clientRect.height) {
             pos.y = (parentRect.height - clientRect.height) / this.scaleRatio
           }
           this.$emit('moved', this.i, pos.x, pos.y, event)
@@ -775,14 +754,14 @@
         let w
         if (this.unitW === 'px') {
           w = Math.round(width / this.colWidth)
-        }else {
+        } else {
           w = toPrecision(width / this.colWidth, 1)
         }
 
         let h
         if (this.unitH === 'px') {
           h = Math.round(height / this.colHeight)
-        }else {
+        } else {
           h = toPrecision(height / this.colWidth, 1)
         }
 

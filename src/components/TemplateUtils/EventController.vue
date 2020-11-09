@@ -8,6 +8,7 @@
     }"
     class="relative z-index1"
     @mouseenter="hoveringId = id"
+    @mousedown="$emit('mousedown', $event)"
     @mouseup="mouseup"
     @dblclick.stop="dblclick"
     @contextmenu.stop.prevent="contextmenu($event)"
@@ -30,8 +31,9 @@
         :id="id"
         :key="id"
         :rect="rect"
-        @move="getRect"
+        @move="move"
         @resize="getRect"
+        @mousedown="$emit('mousedown', $event)"
         @mouseup="mouseup"
         @dblclick.stop="dblclick"
         @contextmenu.stop.prevent="contextmenu($event)"
@@ -99,8 +101,6 @@ export default {
   },
   data() {
     return {
-      previousX: null,
-      previousY: null,
       rect: null,
       moving: false
     }
@@ -170,12 +170,6 @@ export default {
       deep: true
     }
   },
-  mounted() {
-    this.$bus.$on('resize-operator', this.getRect)
-  },
-  beforeDestroy() {
-    this.$bus.$off('resize-operator', this.getRect)
-  },
   methods: {
     isMac,
     ...mapMutations('layout', {
@@ -187,7 +181,8 @@ export default {
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_ID',
-      'TOGGLE_SELECTED_COMPONENT_IN_IDS'
+      'TOGGLE_SELECTED_COMPONENT_IN_IDS',
+      'PUSH_SELECTED_COMPONENT_ID'
     ]),
     getRect() {
       if (this.hoveringId === this.id || this.selected) {
@@ -216,15 +211,15 @@ export default {
         this.SET_SELECTED_COMPONENT_ID(this.id)
       }
     },
-    mouseup(event) {
+    move() {
+      this.LAYOUT_SET({ gridResizing: true })
+      this.moving = true
       this.getRect()
-      // if (
-      //   this.previousX !== event.clientX &&
-      //   this.previousY !== event.clientY
-      // ) {
-      //   // moving
-      //   return
-      // }
+    },
+    mouseup(event) {
+      this.$emit('mouseup', event)
+      this.getRect()
+      this.LAYOUT_SET({ gridResizing: false })
 
       if (this.isAdding) {
         return
@@ -268,7 +263,11 @@ export default {
         }
       }
 
-      if (event.shiftKey) {
+      if (this.moving) {
+        this.moving = false
+        this.PUSH_SELECTED_COMPONENT_ID(this.id)
+      }
+      else if (event.shiftKey) {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)
       }
       else {
@@ -286,7 +285,6 @@ export default {
         }, 100)
       }
 
-      this.LAYOUT_SET({ gridResizing: false })
       document.getSelection().removeAllRanges()
     },
     closeContextmenu() {

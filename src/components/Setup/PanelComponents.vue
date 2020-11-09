@@ -28,9 +28,7 @@
 
           <component-name
             :id="data.id"
-            :text-show-content="
-              ['flex-button', 'text-editor'].includes(data.tag)
-            "
+            :show-text-content="['flex-button', 'text-editor'].includes(data.tag)"
             class="text-left"
             editable
           >

@@ -3,10 +3,10 @@
   <vue-grid-generator
     ref="gridGenerator"
     v-bind="innerProps"
-    :id="id"
     :layout="layout"
     :col-num="windowWidth"
     :vertical-compact="false"
+    :is-droppable="isDroppable"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
     :auto-extend-height="autoExtendHeight"
@@ -43,7 +43,7 @@ import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { getValueByPath } from '@/utils/tool'
-import { traversalSelfAndChildren } from '@/utils/node'
+import { isGroup, traversalSelfAndChildren } from '@/utils/node'
 import EventController from '../TemplateUtils/EventController'
 import { unitConvert } from '@/utils/layout'
 
@@ -88,6 +88,10 @@ export default {
     autoExtendHeight: {
       type: Boolean,
       default: true
+    },
+    isDroppable: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -108,22 +112,24 @@ export default {
       const dropNode = event.target.__vue__.node
       const dragNode = event.relatedTarget.__vue__.node
 
+      if (isGroup(dragNode.parentNode)) return
+
       if (!dropNode || !dragNode) return
-      let inTheSameTree = false
+      let inTheSameFamily = false
 
       traversalSelfAndChildren(dropNode, node => {
-        inTheSameTree = node.parentId === dragNode.id
-        if (inTheSameTree) return false
+        inTheSameFamily = node.parentId === dragNode.id
+        if (inTheSameFamily) return false
       })
 
-      if (inTheSameTree) return
+      if (inTheSameFamily) return
 
       traversalSelfAndChildren(dragNode, node => {
-        inTheSameTree = node.parentId === dropNode.id
-        if (inTheSameTree) return false
+        inTheSameFamily = node.parentId === dropNode.id
+        if (inTheSameFamily) return false
       })
 
-      if (inTheSameTree) return
+      if (inTheSameFamily) return
 
       const { x: dropX, y: dropY } = event.target.getBoundingClientRect()
       const { x: dragX, y: dragY } = event.relatedTarget.getBoundingClientRect()
@@ -200,7 +206,7 @@ export default {
 
         if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
           records.push({
-            path: `${child.id}.${GRID}.${this.currentBreakpoint}`,
+            path: [child.id, GRID, this.currentBreakpoint],
             value: { ...oldValue, ...newValue }
           })
         }

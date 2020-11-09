@@ -2,7 +2,6 @@
   <vue-grid-item
     v-if="!hidden"
     ref="gridItem"
-    :id="id"
     :i="computedLayout.i"
     :x="computedLayout.x"
     :y="computedLayout.y"
@@ -22,7 +21,6 @@
     :class="{ 'no-action': lock }"
     :auto-resize-height="autoResizeHeight"
     :selected="selected"
-    @move="LAYOUT_SET({ gridResizing: true })"
     @moved="moved"
   >
     <div
@@ -221,7 +219,6 @@ export default {
             this.offResizeListener = resizeListener(this.$refs.content, () => {
               requestAnimationFrame(() => {
                 this.$refs.gridItem.autoSize()
-                this.$bus.$emit('resize-operator')
               })
             })
           }
@@ -285,7 +282,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapActions('node', ['record']),
     mousedown(event) {
       this.prepareDuplicateNode()

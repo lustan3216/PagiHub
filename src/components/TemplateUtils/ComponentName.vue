@@ -23,7 +23,7 @@
       <slot name="icon" />
     </span>
 
-    <span v-if="textShowContent">
+    <span v-if="showTextContent">
       {{ textName }} {{ shortId }}
     </span>
     <span v-else> {{ nodeShortName }} {{ shortId }} </span>
@@ -61,7 +61,7 @@ export default {
       type: Boolean,
       default: false
     },
-    textShowContent: {
+    showTextContent: {
       type: Boolean,
       default: false
     },
@@ -92,7 +92,7 @@ export default {
           .replace(/<\/?[^>]+(>|$)/g, '')
           .replace(/&nbsp;/g, '')
           .slice(0, 15)
-        : 'TextEditor'
+        : this.node.label
     },
     nodeShortName() {
       return isComponentSet(this.node)

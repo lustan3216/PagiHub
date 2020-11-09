@@ -6,6 +6,7 @@
   >
     <grid-generator-inner
       :id="id"
+      :is-droppable="false"
       data-image-droppable
     />
   </grid-generator-item>

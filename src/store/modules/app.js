@@ -30,6 +30,11 @@ const mutations = {
       state.selectedComponentIds = [id]
     }
   },
+  PUSH_SELECTED_COMPONENT_ID(state, id) {
+    if (!state.selectedComponentIds.includes(id)) {
+      state.selectedComponentIds.push(id)
+    }
+  },
   TOGGLE_SELECTED_COMPONENT_ID(state, id) {
     const isExist = state.selectedComponentIds.includes(id)
     state.selectedComponentIds = isExist ? [] : [id]

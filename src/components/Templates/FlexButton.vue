@@ -144,17 +144,6 @@ export default {
       else if (this.firstChild) {
         this.vmMap[this.firstChild.id].toggleVisibility()
       }
-    },
-    registerClickEvent(id, fn) {
-      if (this.redirectComponentSet) {
-        Message.eroor('Already link to a componentSet')
-      }
-      else {
-        this.clickEvents.push({ id, fn })
-      }
-    },
-    removeClickEvent(id) {
-      deleteBy(this.clickEvents, 'id', id)
     }
   }
 }

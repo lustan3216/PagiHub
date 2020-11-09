@@ -1,8 +1,7 @@
 import app from '@/main'
 import store from '../store'
 import { CAN_NEW_ITEM } from '../const'
-import { isGridItem, traversalAncestorAndSelf, wrapByGrid } from '@/utils/node'
-import { arrayEquals } from '@/utils/array'
+import { isGridItem, traversalAncestorAndSelf } from '@/utils/node'
 import { getValueByPath, setValueByPath } from '@/utils/tool'
 
 const vmMap = {}

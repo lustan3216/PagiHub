@@ -21,7 +21,6 @@
   import Vue from 'vue'
 
   import {
-    cloneJson,
     resizeListener
   } from '@/utils/tool'
 
@@ -36,7 +35,6 @@
   //var eventBus = require('./eventBus');
 
   import GridItem from './GridItem.vue'
-  import propsMixin from '@/components/Templates/mixins/props'
   import interact from 'interactjs'
 
   export default {
@@ -47,16 +45,11 @@
         parent: this
       }
     },
-    mixins: [propsMixin],
     components: {
       GridItem
     },
     props: {
       // If true, the container height swells and contracts to fit contents
-      freeBoundary: {
-        type: Boolean,
-        default: false
-      },
       autoExtendHeight: {
         type: Boolean,
         default: true
