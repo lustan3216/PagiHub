@@ -58,10 +58,13 @@
       <el-col :span="10">
         <select-unit
           :clearable="false"
-          v-model="x"
           :disabled="hasSlider"
+          :number.sync="x"
           :min="0"
-          :units="['px']"
+          :step="unitX === 'px' ? 1 : 0.1"
+          :unit.sync="unitX"
+          :units="['px', 'vw']"
+          separate
         />
       </el-col>
     </el-row>
@@ -112,10 +115,13 @@
       <el-col :span="10">
         <select-unit
           :clearable="false"
-          v-model="y"
           :disabled="hasSlider"
+          :number.sync="y"
           :min="0"
-          :units="['px']"
+          :step="unitY === 'px' ? 1 : 0.1"
+          :unit.sync="unitY"
+          :units="['px', 'vh']"
+          separate
         />
       </el-col>
     </el-row>
@@ -234,6 +240,28 @@ export default {
 
         this.recordStore('unitW', value)
         this.recordStore('w', newW)
+      }
+    },
+    unitX: {
+      get() {
+        return this.currentGrid.unitX || 'px'
+      },
+      set(value) {
+        const newX = unitWConvert(this.lastNode.id, this.x, this.unitX, value)
+
+        this.recordStore('unitX', value)
+        this.recordStore('x', newX)
+      }
+    },
+    unitY: {
+      get() {
+        return this.currentGrid.unitY || 'px'
+      },
+      set(value) {
+        const newY = unitWConvert(this.lastNode.id, this.y, this.unitY, value)
+
+        this.recordStore('unitY', value)
+        this.recordStore('y', newY)
       }
     },
     ratioW() {

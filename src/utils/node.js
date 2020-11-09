@@ -13,6 +13,29 @@ import {
   STYLES, TAG
 } from '@/const'
 import { unitWConvert, unitHConvert } from '@/utils/layout'
+import { vmGet } from '@/utils/vmMap'
+
+export function nodePosition(id) {
+  const vm = vmGet(id)
+  const elRect = vm.$el.getBoundingClientRect()
+  const documentRect = document.getElementById('art-board').getBoundingClientRect()
+
+  return {
+    x: elRect.x - documentRect.x,
+    y: elRect.y - documentRect.y
+  }
+}
+
+export function nodeRelativePosition(id) {
+  const vm = vmGet(id)
+  const elRect = vm.$el.getBoundingClientRect()
+  const documentRect = vm.$el.closest('.grid-layout').getBoundingClientRect()
+
+  return {
+    x: elRect.x - documentRect.x,
+    y: elRect.y - documentRect.y
+  }
+}
 
 export function getGroupPxRect(nodes) {
   const rect = {

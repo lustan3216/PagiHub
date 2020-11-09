@@ -187,7 +187,9 @@ export default {
           h: oldGrid.h,
           w: oldGrid.w,
           unitH: oldGrid.unitH,
-          unitW: oldGrid.unitW
+          unitW: oldGrid.unitW,
+          unitX: oldGrid.unitX,
+          unitY: oldGrid.unitY
         }
 
         if (process.env.NODE_ENV !== 'production' && child.w === 1) {
@@ -200,7 +202,9 @@ export default {
           h: child.h,
           w: child.w,
           unitH: child.unitH,
-          unitW: child.unitW
+          unitW: child.unitW,
+          unitX: child.unitX,
+          unitY: child.unitY
         }
 
         if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {

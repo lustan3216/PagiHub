@@ -7,7 +7,7 @@
           ...style,
           ...styleProps,
           zIndex: isDragging || isResizing ? 10000 : zIndex,
-          position: fixItem ? 'fixed' : 'absolute'
+          position: fixed ? 'fixed' : 'absolute'
         }"
   >
     <slot/>
@@ -136,11 +136,19 @@
       },
       unitW: {
         type: String,
-        default: ''
+        default: 'px'
       },
       unitH: {
         type: String,
-        default: ''
+        default: 'px'
+      },
+      unitX: {
+        type: String,
+        default: 'px'
+      },
+      unitY: {
+        type: String,
+        default: 'px'
       },
       ratio: {
         type: Boolean,
@@ -191,8 +199,6 @@
     },
     data: function() {
       return {
-        cols: 1,
-        containerWidth: 100,
         draggable: null,
         resizable: null,
 
@@ -224,10 +230,6 @@
       let self = this
 
       // Accessible refernces of functions for removing in beforeDestroy
-      self.updateWidthHandler = function(width) {
-        self.updateWidth(width)
-      }
-
       self.compactHandler = function(layout) {
         self.compact(layout)
       }
@@ -246,7 +248,6 @@
 
       this.$bus.$on(`handle-resize-${this.i}`, this.handleResize)
       this.$bus.$on(`handle-drag-${this.i}`, this.handleDrag)
-      this.eventBus.$on('updateWidth', self.updateWidthHandler)
       this.eventBus.$on('compact', self.compactHandler)
       this.eventBus.$on('setDraggable', self.setDraggableHandler)
       this.eventBus.$on('setResizable', self.setResizableHandler)
@@ -255,7 +256,6 @@
       //Remove listeners
       this.$bus.$off(`handle-drag-${this.i}`, this.handleDrag)
       this.$bus.$off(`handle-resize-${this.i}`, this.handleResize)
-      this.eventBus.$off('updateWidth', this.updateWidthHandler)
       this.eventBus.$off('compact', this.compactHandler)
       this.eventBus.$off('setDraggable', this.setDraggableHandler)
       this.eventBus.$off('setResizable', this.setResizableHandler)
@@ -264,11 +264,7 @@
       }
     },
     mounted: function() {
-      this.cols = this.parent.width
-
-
       this.lockBottomInLayout = !this.parent.autoExtendHeight
-      this.containerWidth = this.parent.width !== null ? this.parent.width : 100
 
       if (this.isDraggable === null) {
         this.draggable = this.parent.isDraggable
@@ -300,28 +296,23 @@
       isResizable: function() {
         this.resizable = this.isResizable
       },
-      unitW() {
+      triggerCreateStyle() {
         this.$nextTick(() => {
           this.autoSize()
           this.createStyle()
         })
       },
-      unitH() {
-        this.$nextTick(() => {
-          this.autoSize()
-          this.createStyle()
-        })
+      windowHeight() {
+        if (this.fixed && (this.pxY + this.pxH > this.windowHeight)) {
+          const { x, y } = this.calcXY(this.windowHeight - this.pxH, 0)
+          this.innerY = y
+        }
       },
       ratio() {
         this.tryMakeResizable()
       },
       resizable: function() {
         this.tryMakeResizable()
-      },
-      cols: function() {
-        this.tryMakeResizable()
-        this.createStyle()
-        this.emitContainerResized()
       },
       containerWidth: function() {
         this.tryMakeResizable()
@@ -361,11 +352,23 @@
     },
     computed: {
       ...mapState('app', ['selectedComponentIds']),
-      ...mapState('layout', ['scaleRatio']),
+      ...mapState('layout', ['scaleRatio', 'windowHeight']),
       ...mapGetters('layout', ['vw', 'vh']),
       // Helper for generating column width
+      triggerCreateStyle() {
+        return [this.colX, this.colY, this.colHeight, this.colWidth].join(' ')
+      },
       containerHeight() {
         return this.parent.height
+      },
+      containerWidth() {
+        return this.parent.width
+      },
+      pxX() {
+        return Math.round(this.colX * this.x)
+      },
+      pxY() {
+        return Math.round(this.colY * this.y)
       },
       pxW() {
         return Math.round(this.colWidth * this.w)
@@ -373,6 +376,25 @@
       pxH() {
         return Math.round(this.colHeight * this.h)
       },
+      colX() {
+        switch (this.unitX) {
+          case 'vw':
+            return this.vw
+
+          default:
+            return 1
+        }
+      },
+      colY() {
+        switch (this.unitY) {
+          case 'vh':
+            return this.vh
+
+          default:
+            return 1
+        }
+      },
+      // Helper for generating column width
       colHeight() {
         switch (this.unitH) {
           case '%':
@@ -408,9 +430,6 @@
             return 1
         }
       },
-      fixItem() {
-        return this.fixed
-      },
       boundaryElement() {
         return getBoundaryEl(this.$el.parentNode)
       },
@@ -441,7 +460,7 @@
     methods: {
       createStyle: function() {
         if (this.x + this.pxW > this.containerWidth) {
-          this.innerX = this.cols - this.pxW < 0 ? 0 : this.containerWidth - this.pxW
+          this.innerX = this.containerWidth - this.pxW < 0 ? 0 : this.containerWidth - this.pxW
           this.innerW = (this.pxW > this.containerWidth) ? this.containerWidth / this.colWidth : this.w
         } else {
           this.innerX = this.x
@@ -535,7 +554,7 @@
             let parentRect
             let clientRect
 
-            if (this.fixItem) {
+            if (this.fixed) {
               parentRect = this.boundaryElement.getBoundingClientRect()
               clientRect = this.$el.getBoundingClientRect()
             }
@@ -543,7 +562,7 @@
               parentRect = this.getParent(this.$el).getBoundingClientRect()
             }
 
-            if (this.fixItem && clientRect.top + clientRect.height > parentRect.top + parentRect.height) {
+            if (this.fixed && clientRect.top + clientRect.height > parentRect.top + parentRect.height) {
               newSize.height = (parentRect.height / this.scaleRatio) - (clientRect.top - parentRect.top)
             }
             else if (this.lockBottomInLayout && (pos.height + pos.top) * this.scaleRatio > parentRect.height) {
@@ -626,7 +645,7 @@
             this.previousX = this.innerX
             this.previousY = this.innerY
 
-            if (this.fixItem) {
+            if (this.fixed) {
               parentRect = this.boundaryElement.getBoundingClientRect()
             }
             else {
@@ -644,7 +663,7 @@
           }
           case 'dragend': {
             if (!this.isDragging) return
-            if (this.fixItem) {
+            if (this.fixed) {
               parentRect = this.boundaryElement.getBoundingClientRect()
             }
             else {
@@ -694,7 +713,7 @@
           this.$emit('move', this.i, pos.x, pos.y, event)
         }
         if (event.type === 'dragend') {
-          if ((this.lockBottomInLayout || this.fixItem) && pos.y * this.scaleRatio > parentRect.height - clientRect.height) {
+          if ((this.lockBottomInLayout || this.fixed) && pos.y * this.scaleRatio > parentRect.height - clientRect.height) {
             pos.y = (parentRect.height - clientRect.height) / this.scaleRatio
           }
           this.$emit('moved', this.i, pos.x, pos.y, event)
@@ -712,8 +731,8 @@
 
       calcPosition: function(x, y, w, h) {
         return {
-          left: Math.round(x),
-          top: Math.round(y),
+          left: Math.round(this.colX * x),
+          top: Math.round(this.colY * y),
           // 0 * Infinity === NaN, which causes problems with resize constriants;
           // Fix this if it occurs.
           // Note we do it here rather than later because Math.round(Infinity) causes deopt
@@ -736,8 +755,19 @@
         // l - m = x(c + m)
         // (l - m) / (c + m) = x
         // x = (left - margin) / (coldWidth + margin)
-        let x = Math.round(left)
-        let y = Math.round(top)
+        let x
+        if (this.unitX === 'px') {
+          x = Math.round(left)
+        } else {
+          x = toPrecision(left / this.colX, 1)
+        }
+
+        let y
+        if (this.unitY === 'px') {
+          y = Math.round(top)
+        } else {
+          y = toPrecision(top / this.colY, 1)
+        }
 
         // Capping
         x = Math.max(x, 0)
@@ -774,13 +804,6 @@
         w = Math.max(w, 0)
         h = Math.max(h, 0)
         return { w, h }
-      },
-      updateWidth: function(width, colNum) {
-        this.containerWidth = width
-        this.cols = width
-        if (colNum !== undefined && colNum !== null) {
-          this.cols = colNum
-        }
       },
       compact: function() {
         this.createStyle()

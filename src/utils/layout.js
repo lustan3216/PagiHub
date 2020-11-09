@@ -16,9 +16,6 @@ export function unitHConvert(id, distance, inputUnit, outputUnit) {
 function unitConvert(id, distance, inputUnit, outputUnit, percentUnit) {
   let distanceInPx
   switch (inputUnit) {
-    case 'px':
-      distanceInPx = distance
-      break
     case '%':
       distanceInPx = distance * percentUnit
       break
@@ -28,10 +25,12 @@ function unitConvert(id, distance, inputUnit, outputUnit, percentUnit) {
     case 'vh':
       distanceInPx = distance * store.getters['layout/vh']
       break
+    default:
+      // 'px'
+      distanceInPx = distance
+      break
   }
   switch (outputUnit) {
-    case 'px':
-      return toPrecision(distanceInPx, 0)
     case '%':
       distanceInPx = distanceInPx / percentUnit
       return toPrecision(distanceInPx, 1)
@@ -41,6 +40,9 @@ function unitConvert(id, distance, inputUnit, outputUnit, percentUnit) {
     case 'vh':
       distanceInPx = distanceInPx / store.getters['layout/vh']
       return toPrecision(distanceInPx, 1)
+    default:
+      // 'px'
+      return toPrecision(distanceInPx, 0)
   }
 }
 

@@ -19,9 +19,11 @@
 
       <radius />
 
+      <stack />
+
       <item-hidden-controller />
 
-      <stack />
+      <position />
 
       <!--      <el-divider content-position="left">APPEARANCE</el-divider>-->
 
@@ -58,13 +60,13 @@ import Transform from './EditorStyle/Transform'
 import TransformOrigin from './EditorStyle/TransformOrigin'
 import Opacity from './EditorStyle/Opacity'
 import Stack from './EditorStyle/Stack'
+import Position from './EditorStyle/Position'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
 import TextEditorSimpleStyle from './EditorStyle/TextEditorSimpleStyle'
 import Ratio from './EditorStyle/Ratio'
-import Position from '@/components/Setup/EditorStyle/Position'
 import Align from '@/components/Setup/EditorStyle/Align'
-import { isBackground, isGroup, isSlider } from '@/utils/node'
+import { isBackground } from '@/utils/node'
 
 export default {
   name: 'PanelStyles',

@@ -1,87 +1,173 @@
 <template>
   <div>
-    <el-divider content-position="left">FIX POSITION</el-divider>
-    <el-row
-      type="flex"
-      align="middle"
-    >
-      <el-col :span="8">
-        <span class="title p-r-10">Position</span>
-      </el-col>
+    <el-divider content-position="left">POSITION</el-divider>
 
-      <el-col :span="16">
-        <el-select v-model="position">
-          <el-option
-            label="Default"
-            value=""
-          />
-          <el-option
-            label="Fix when parent scrolling"
-            value="fixed"
-          />
-          <el-option
-            label="Fix on parent's bottom"
-            value="fixOnParentBottom"
-          />
-          <el-option
-            label="Stick to top"
-            value="verticalCompact"
-          />
-        </el-select>
-      </el-col>
-    </el-row>
+    <el-checkbox
+      v-if="isStack"
+      v-model="verticalCompact"
+      :disabled="canNotVerticalCompact"
+      class="m-t-10"
+      style="margin-bottom: 25px;"
+    >
+      <span class="font-12">Stick to upper stack mode element's bottom</span>
+    </el-checkbox>
+
+    <el-checkbox
+      v-else
+      v-model="fixed"
+      class="m-t-10"
+      style="margin-bottom: 25px;"
+    >
+      <span class="font-12">Fix position when scrolling</span>
+    </el-checkbox>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { vmGet } from '@/utils/vmMap'
+import { Tooltip } from 'element-ui'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
+import { vmGet } from '@/utils/vmMap'
 import { arrayLast } from '@/utils/array'
+import { nodePosition, nodeRelativePosition } from '@/utils/node'
+import { unitWConvert, unitHConvert } from '@/utils/layout'
 
 export default {
   name: 'Position',
+  components: {
+    ElTooltip: Tooltip
+  },
   computed: {
+    ...mapState('layout', ['windowHeight']),
     ...mapGetters('app', ['selectedComponentNodes']),
-    allValues() {
-      return this.selectedComponentNodes.map(node => {
-        const vm = vmGet(node.id, this.isExample)
-        return getValueByPath(vm, ['innerStyles', 'layout', 'position'], '')
+    ...mapGetters('layout', ['currentBreakpoint']),
+    canNotVerticalCompact() {
+      return this.selectedComponentNodes.find(node => {
+        return getValueByPath(node, [STYLES, 'layout', 'stack']) === undefined
       })
     },
-    position: {
+    isStack: {
       get() {
-        const node = arrayLast(this.selectedComponentNodes)
-        if (!node) return ''
-        const vm = vmGet(node.id, this.isExample)
-        return getValueByPath(vm, ['innerStyles', 'layout', 'position'], '')
+        const lastNode = arrayLast(this.selectedComponentNodes)
+        if (lastNode) {
+          return getValueByPath(lastNode, [STYLES, 'layout', 'stack'])
+        }
+      }
+    },
+    verticalCompact: {
+      get() {
+        const lastNode = arrayLast(this.selectedComponentNodes)
+        if (lastNode) {
+          return (
+            getValueByPath(lastNode, [STYLES, 'layout', 'position']) ===
+              'verticalCompact'
+          )
+        }
       },
       set(value) {
-        this.recordStyles({ position: value || undefined })
+        this.selectedComponentNodes.forEach(node => {
+          this.debounceRecord({
+            path: [node.id, STYLES, 'layout', 'position'],
+            value: value ? 'verticalCompact' : undefined
+          })
+        })
+      }
+    },
+    fixed: {
+      get() {
+        const lastNode = arrayLast(this.selectedComponentNodes)
+        if (lastNode) {
+          return (
+            getValueByPath(lastNode, [STYLES, 'layout', 'position']) === 'fixed'
+          )
+        }
+      },
+      set(value) {
+        this.selectedComponentNodes.forEach(node => {
+          if (value) {
+            const vm = vmGet(node.id)
+            const currentGrid = getValueByPath(vm, ['currentGrid'])
+            const { x, y } = nodePosition(node.id)
+
+            this.debounceRecord([
+              {
+                path: [node.id, STYLES, 'layout', 'position'],
+                value: 'fixed'
+              },
+              {
+                path: [node.id, STYLES, 'layout', 'stack'],
+                value: undefined
+              },
+              {
+                path: [node.id, 'grid'],
+                value: {
+                  [this.currentBreakpoint]: {
+                    ...currentGrid,
+                    unitX: 'vw',
+                    unitY: 'vh',
+                    x: unitWConvert(node.id, x, 'px', 'vw'),
+                    y: unitHConvert(node.id, y, 'px', 'vh')
+                  }
+                }
+              }
+            ])
+          }
+          else {
+            const vm = vmGet(node.id)
+            const currentGrid = getValueByPath(vm, ['currentGrid'])
+            const { x, y } = nodeRelativePosition(node.id)
+
+            this.debounceRecord([
+              {
+                path: [node.id, STYLES, 'layout', 'position'],
+                value: undefined
+              },
+              {
+                path: [node.id, STYLES, 'layout', 'stack'],
+                value: undefined
+              },
+              {
+                path: [node.id, 'grid'],
+                value: {
+                  [this.currentBreakpoint]: {
+                    ...currentGrid,
+                    unitX: 'px',
+                    unitY: 'px',
+                    x,
+                    y
+                  }
+                }
+              }
+            ])
+          }
+        })
       }
     }
   },
   methods: {
-    ...mapActions('node', ['debounceRecord']),
-    recordStyles(object) {
-      const records = []
-
-      for (const key in object) {
-        const value = object[key]
-
-        this.selectedComponentNodes.forEach(node => {
-          records.push({
-            path: [node.id, STYLES, 'layout', key],
-            value
-          })
-        })
-      }
-
-      this.debounceRecord(records)
-    }
+    ...mapActions('node', ['debounceRecord'])
   }
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .isStack,
+  .isStack:hover,
+  .isStack:focus {
+    background: $color-active;
+    color: white !important;
+  }
+
+  ::v-deep.el-checkbox {
+    display: flex;
+
+    .el-checkbox__input {
+      margin-top: 4px;
+    }
+
+    .el-checkbox__label {
+      white-space: normal;
+    }
+  }
+</style>

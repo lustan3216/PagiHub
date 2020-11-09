@@ -24,11 +24,18 @@ Just click publish, then you will have a real RWD website
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
 bug
+breakpoint 切換時， 清掉原本的
+stick tip 壞了
+stack mode 壞了
+vh vw 變幻時 item要跟著值變
+stack mode要做顯眼點
+autoheight 的height可以變成auto
 opeator will cover navbar
 如果update 500 直接 overwrite
 carousle button will be covered
 20- position fix element x,y should use %
 fix position when scolling 僅限於background層級
+style 有關grid unit的變換 要檢查rwd  
 
 // group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
 

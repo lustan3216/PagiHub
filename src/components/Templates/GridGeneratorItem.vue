@@ -9,6 +9,8 @@
     :h="computedLayout.h"
     :unit-h="computedLayout.unitH"
     :unit-w="computedLayout.unitW"
+    :unit-x="computedLayout.unitX"
+    :unit-y="computedLayout.unitY"
     :static="lock"
     :stack="stack"
     :hidden="computedLayout.hidden"
@@ -185,6 +187,8 @@ export default {
 
         unitH: this.currentGrid.unitH,
         unitW: this.currentGrid.unitW,
+        unitX: this.currentGrid.unitX,
+        unitY: this.currentGrid.unitY,
 
         stack: this.stack,
         hidden: this.hidden,

@@ -163,7 +163,7 @@ export default {
         this.getRect()
       }
     },
-    'node.grid': {
+    node: {
       handler() {
         this.getRect()
       },
