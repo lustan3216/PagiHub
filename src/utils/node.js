@@ -1,9 +1,7 @@
 import store from '../store'
-import listToTree from './listToTree'
 import { toArray } from './array'
 import { getValueByPath, isUndefined } from './tool'
 import { humanize } from './string'
-import { gridGenerator } from '../templateJson/basic'
 import {
   NODE_TYPE,
   LABEL,
@@ -15,37 +13,6 @@ import {
   STYLES, TAG
 } from '@/const'
 import { unitConvert } from '@/utils/layout'
-
-export function wrapByGrid(nodesMap, ids) {
-  const childrenArray = []
-
-  ids.forEach(id => {
-    const node = nodesMap[id]
-
-    traversalAncestorAndSelf(node, node => {
-      const pureNode = cloneJsonWithoutChildren(node)
-
-      if (isGridItem(node)) {
-        delete pureNode.parentId
-        childrenArray.push(pureNode)
-        return false
-      }
-      else if (node.id === id) {
-        traversalSelfAndChildren(node, node => {
-          const pureNode = cloneJsonWithoutChildren(node)
-          childrenArray.push(pureNode)
-        })
-      }
-      else {
-        childrenArray.push(pureNode)
-      }
-    })
-  })
-
-  return gridGenerator({
-    children: listToTree(childrenArray).tree
-  })
-}
 
 export function getGroupPxRect(nodes) {
   const rect = {
