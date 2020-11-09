@@ -27,13 +27,9 @@ bug
 breakpoint 切換時， 清掉原本的
 stick tip 壞了
 stack mode 壞了
-vh vw 變幻時 item要跟著值變
-stack mode要做顯眼點
-autoheight 的height可以變成auto
 opeator will cover navbar
 如果update 500 直接 overwrite
 carousle button will be covered
-20- position fix element x,y should use %
 fix position when scolling 僅限於background層級
 style 有關grid unit的變換 要檢查rwd  
 
