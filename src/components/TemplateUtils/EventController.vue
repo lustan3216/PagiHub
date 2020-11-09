@@ -239,6 +239,7 @@ export default {
           if (store.lastEditId === this.id && !event.shiftKey) {
             // when clicking text-editor in the editing condition
             // should return to prevent component rerender to lose focus
+            this.SET_SELECTED_COMPONENT_ID(this.id)
             return
           }
           const index = findIndexBy(this.editingPath, this.id)

@@ -740,7 +740,7 @@
         let y = Math.round(top)
 
         // Capping
-        x = Math.max(Math.min(x, this.cols - this.innerW), 0)
+        x = Math.max(x, 0)
         y = Math.max(y, 0)
 
         return { x, y }
@@ -758,14 +758,14 @@
         // w = (width + margin) / (colWidth + margin)
         let w
         if (this.unitW === 'px') {
-          w = Math.round(width / this.colWidth)
+          w = Math.round(width)
         } else {
           w = toPrecision(width / this.colWidth, 1)
         }
 
         let h
         if (this.unitH === 'px') {
-          h = Math.round(height / this.colHeight)
+          h = Math.round(height)
         } else {
           h = toPrecision(height / this.colHeight, 1)
         }

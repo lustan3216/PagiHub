@@ -16,12 +16,6 @@ import {
   CAN_NOT_DELETE
 } from '../const'
 
-const mapPoints = (object, grid) => {
-  return {
-    [grid]: object
-  }
-}
-
 export const gridGeneratorItem = function(options, grid) {
   return {
     [TAG]: GRID_GENERATOR_ITEM,
