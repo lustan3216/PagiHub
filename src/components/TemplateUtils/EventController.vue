@@ -181,8 +181,7 @@ export default {
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_ID',
-      'TOGGLE_SELECTED_COMPONENT_IN_IDS',
-      'PUSH_SELECTED_COMPONENT_ID'
+      'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     getRect() {
       if (this.hoveringId === this.id || this.selected) {
@@ -266,7 +265,6 @@ export default {
 
       if (this.moving) {
         this.moving = false
-        this.PUSH_SELECTED_COMPONENT_ID(this.id)
       }
       else if (event.shiftKey) {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)
