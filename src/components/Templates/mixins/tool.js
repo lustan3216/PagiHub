@@ -47,6 +47,14 @@ export default {
 
       return (this.$refs.gridItem.containerWidth || 0) / 100
     },
+    percentUnitH() {
+      // for @/utils/layout unitConvert only
+      if (isBackground(this.node) || isSlider(this.node)) {
+        return this.$el.clientHeight / 100
+      }
+
+      return this.$refs.gridItem.containerHeight / 100
+    },
     init() {
       // Don't put in created to prevent some component fail before mount
       if (this.isDraftMode) {

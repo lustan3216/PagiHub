@@ -11,7 +11,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { BREAK_POINTS_ARRAY, GRID } from '@/const'
 import { group } from '@/templateJson/basic'
 import { vmAddNodeToParent, vmRemoveNode } from '@/utils/vmMap'
-import { unitConvert } from '@/utils/layout'
+import { unitWConvert, unitHConvert } from '@/utils/layout'
 import { toPrecision } from '@/utils/number'
 
 export default {
@@ -42,16 +42,20 @@ export default {
         node = cloneJson(node)
 
         let nodeW = currentGrid.w
+        let nodeH = currentGrid.h
         if (currentGrid.unitW === '%') {
-          nodeW = (unitConvert(node.id, currentGrid.w, '%', 'px') / w) * 100
+          nodeW = (unitWConvert(node.id, currentGrid.w, '%', 'px') / w) * 100
+        }
+        if (currentGrid.unitH === '%') {
+          nodeH = (unitHConvert(node.id, currentGrid.h, '%', 'px') / h) * 100
         }
 
         node.grid = {
           [this.currentBreakpoint]: {
             x: Math.round(currentGrid.x - x),
             y: Math.round(currentGrid.y - y),
-            w: toPrecision(nodeW, 1),
-            h: Math.round(currentGrid.h),
+            w: nodeW,
+            h: nodeH,
             unitH: currentGrid.unitH,
             unitW: currentGrid.unitW
           }
@@ -66,7 +70,7 @@ export default {
           [this.currentBreakpoint]: {
             x,
             y,
-            w: unitConvert(parentId, w, 'px', '%'),
+            w: unitWConvert(parentId, w, 'px', '%'),
             h,
             unitH: 'px',
             unitW: '%'
@@ -92,11 +96,20 @@ export default {
           if (!grid) return
 
           if (grid.unitW === '%') {
-            const nodePx = unitConvert(node.id, grid.w, '%', 'px')
+            const nodePx = unitWConvert(node.id, grid.w, '%', 'px')
 
             records.push({
               path: [node.id, GRID, point, 'w'],
-              value: unitConvert(group.id, nodePx, 'px', '%')
+              value: unitWConvert(group.id, nodePx, 'px', '%')
+            })
+          }
+
+          if (grid.unitH === '%') {
+            const nodePx = unitHConvert(node.id, grid.h, '%', 'px')
+
+            records.push({
+              path: [node.id, GRID, point, 'h'],
+              value: unitHConvert(group.id, nodePx, 'px', '%')
             })
           }
 

@@ -81,7 +81,7 @@ import {
   BIconDistributeVertical
 } from 'bootstrap-vue'
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { arrayFirst, arrayUniq } from '@/utils/array'
+import { arrayUniq } from '@/utils/array'
 import { GRID, STYLES } from '@/const'
 import {
   isBackground,
@@ -91,7 +91,7 @@ import {
   isGroup
 } from '@/utils/node'
 import { vmGet } from '@/utils/vmMap'
-import { unitConvert } from '@/utils/layout'
+import { unitHConvert, unitWConvert } from '@/utils/layout'
 
 export default {
   name: 'Align',
@@ -126,7 +126,7 @@ export default {
       return node
     },
     parentHeight() {
-      return unitConvert(
+      return unitHConvert(
         this.gridParent.id,
         this.validParentGrid.h,
         this.validParentGrid.unitH,
@@ -134,7 +134,7 @@ export default {
       )
     },
     parentWidth() {
-      return unitConvert(
+      return unitWConvert(
         this.gridParent.id,
         this.validParentGrid.w,
         this.validParentGrid.unitW,
@@ -181,11 +181,11 @@ export default {
     },
     nodeHeight(id) {
       const vm = vmGet(id)
-      return unitConvert(id, vm.currentGrid.h, vm.currentGrid.unitH, 'px')
+      return unitHConvert(id, vm.currentGrid.h, vm.currentGrid.unitH, 'px')
     },
     nodeWidth(id) {
       const vm = vmGet(id)
-      return unitConvert(id, vm.currentGrid.w, vm.currentGrid.unitW, 'px')
+      return unitWConvert(id, vm.currentGrid.w, vm.currentGrid.unitW, 'px')
     },
     currentGrid(node) {
       const vm = vmGet(node.id)

@@ -266,6 +266,7 @@
     mounted: function() {
       this.cols = this.parent.width
 
+
       this.lockBottomInLayout = !this.parent.autoExtendHeight
       this.containerWidth = this.parent.width !== null ? this.parent.width : 100
 
@@ -363,6 +364,9 @@
       ...mapState('layout', ['scaleRatio']),
       ...mapGetters('layout', ['vw', 'vh']),
       // Helper for generating column width
+      containerHeight() {
+        return this.parent.height
+      },
       pxW() {
         return Math.round(this.colWidth * this.w)
       },
@@ -371,10 +375,10 @@
       },
       colHeight() {
         switch (this.unitH) {
-          // case '%':
-          //   const colHeight = this.containerHeight / 100
-          //   // console.log("### COLS=" + this.cols + " COL WIDTH=" + colHeight + " MARGIN " + this.margin[0]);
-          //   return colHeight
+          case '%':
+            const colHeight = this.parent.height / 100
+            // console.log("### COLS=" + this.cols + " COL WIDTH=" + colHeight + " MARGIN " + this.margin[0]);
+            return colHeight
 
           case 'vw':
             return this.vw
@@ -555,6 +559,7 @@
             break
           }
         }
+
         // Get new WH
         pos = this.calcWH(newSize.height, newSize.width)
 
@@ -762,11 +767,11 @@
         if (this.unitH === 'px') {
           h = Math.round(height / this.colHeight)
         } else {
-          h = toPrecision(height / this.colWidth, 1)
+          h = toPrecision(height / this.colHeight, 1)
         }
 
         // Capping
-        w = Math.max(Math.min(w, this.cols - this.innerX), 0)
+        w = Math.max(w, 0)
         h = Math.max(h, 0)
         return { w, h }
       },

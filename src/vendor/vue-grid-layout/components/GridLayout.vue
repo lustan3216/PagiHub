@@ -94,6 +94,7 @@
         // lots-design
         showPlaceHolder: false,
         width: null,
+        height: null,
         mergedStyle: {},
         lastLayoutLength: 0,
         isDragging: false,
@@ -179,8 +180,7 @@
       },
 
       width: function(newval, oldval) {
-        const self = this
-        this.$nextTick(function() {
+        this.$nextTick(() => {
           //this.$broadcast("updateWidth", this.width);
           this.eventBus.$emit('updateWidth', this.width)
           if (oldval === null) {
@@ -205,12 +205,18 @@
              invistigate stable sizes of GridItem-s.
              */
             this.$nextTick(() => {
-              this.$emit('layout-ready', self.layout)
+              this.$emit('layout-ready', this.layout)
             })
           }
 
           // lots-design
           this.updateHeight()
+        })
+      },
+      height: function(newval) {
+        this.$nextTick(() => {
+          //this.$broadcast("updateWidth", this.width);
+          this.eventBus.$emit('updateHeight', newval)
         })
       },
       layout: function() {
@@ -263,10 +269,10 @@
       },
       colHeight(item) {
         switch (item.unitH) {
-          // case '%':
-          //   const colHeight = (this.width || 0) / 100
-          //   // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
-          //   return colHeight
+          case '%':
+            const colHeight = (this.height || 0) / 100
+            // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+            return colHeight
 
           case 'vw':
             return this.vw
@@ -314,9 +320,7 @@
       },
       updateHeight: function() {
         const height = this.containerHeight()
-        if (this.mergedStyle.height !== height && this.autoExtendHeight) {
-          this.$emit('height-updated', height)
-        }
+        this.height = this.$refs.item.offsetHeight
         this.mergedStyle = { height }
       },
 

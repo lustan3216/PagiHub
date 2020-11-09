@@ -95,7 +95,7 @@
           :min="0"
           :step="unitW === 'px' ? 1 : 0.1"
           :unit.sync="unitH"
-          :units="['px', 'vw', 'vh']"
+          :units="['%', 'px', 'vw', 'vh']"
           separate
         />
       </el-col>
@@ -131,7 +131,7 @@ import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
 import { isGroup, isSlider, isTextEditor } from '@/utils/node'
-import { unitConvert } from '@/utils/layout'
+import { unitWConvert, unitHConvert } from '@/utils/layout'
 
 export default {
   name: 'Dimension',
@@ -220,7 +220,7 @@ export default {
         return this.currentGrid.unitH
       },
       set(value) {
-        const newH = unitConvert(this.lastNode.id, this.h, this.unitH, value)
+        const newH = unitHConvert(this.lastNode.id, this.h, this.unitH, value)
         this.recordStore('unitH', value)
         this.recordStore('h', newH)
       }
@@ -230,7 +230,7 @@ export default {
         return this.currentGrid.unitW
       },
       set(value) {
-        const newW = unitConvert(this.lastNode.id, this.w, this.unitW, value)
+        const newW = unitWConvert(this.lastNode.id, this.w, this.unitW, value)
 
         this.recordStore('unitW', value)
         this.recordStore('w', newW)

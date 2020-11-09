@@ -13,7 +13,6 @@
     :extra-style="extraStyle"
     :data-addable-id="id"
     @drop="handleDrop"
-    @height-updated="$emit('height-updated', $event)"
     @layout-updated="layoutUpdated($event)"
   >
     <event-controller
@@ -45,7 +44,7 @@ import childrenMixin from '@/components/Templates/mixins/children'
 import { getValueByPath } from '@/utils/tool'
 import { isGroup, traversalSelfAndChildren } from '@/utils/node'
 import EventController from '../TemplateUtils/EventController'
-import { unitConvert } from '@/utils/layout'
+import { unitWConvert, unitHConvert } from '@/utils/layout'
 
 export default {
   name: 'GridGeneratorInner',
@@ -138,14 +137,14 @@ export default {
       for (const breakpoint in dragNode.grid) {
         const currentGrid = dragNode.grid[breakpoint]
 
-        const dragW = unitConvert(dragNode.id, currentGrid.w, currentGrid.unitW, 'px')
-        const dragH = unitConvert(dragNode.id, currentGrid.h, currentGrid.unitH, 'px')
+        const dragW = unitWConvert(dragNode.id, currentGrid.w, currentGrid.unitW, 'px')
+        const dragH = unitHConvert(dragNode.id, currentGrid.h, currentGrid.unitH, 'px')
 
         newGrid[breakpoint] = {
           x: dragX - dropX,
           y: dragY - dropY,
-          w: unitConvert(dropNode.id, dragW, 'px', currentGrid.unitW),
-          h: unitConvert(dropNode.id, dragH, 'px', currentGrid.unitH),
+          w: unitWConvert(dropNode.id, dragW, 'px', currentGrid.unitW),
+          h: unitHConvert(dropNode.id, dragH, 'px', currentGrid.unitH),
           unitW: currentGrid.unitW,
           unitH: currentGrid.unitH
         }
