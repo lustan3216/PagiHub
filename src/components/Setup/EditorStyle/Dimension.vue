@@ -58,7 +58,7 @@
       <el-col :span="10">
         <select-unit
           :clearable="false"
-          :disabled="hasSlider"
+          :disabled="hasSlider || anyFixed"
           :number.sync="x"
           :min="0"
           :step="unitX === 'px' ? 1 : 0.1"
@@ -115,7 +115,7 @@
       <el-col :span="10">
         <select-unit
           :clearable="false"
-          :disabled="hasSlider"
+          :disabled="hasSlider || anyFixed"
           :number.sync="y"
           :min="0"
           :step="unitY === 'px' ? 1 : 0.1"
@@ -160,6 +160,9 @@ export default {
       else {
         return {}
       }
+    },
+    anyFixed() {
+      return this.selectedComponentNodes.find(node => getValueByPath(node, [STYLES, 'layout', 'position']) === 'fixed')
     },
     hasSlider() {
       return Boolean(

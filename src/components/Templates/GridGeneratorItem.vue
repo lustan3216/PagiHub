@@ -65,7 +65,7 @@ import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import { cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
-import { closestValidBreakpoint } from '@/utils/node'
+import { closestValidBreakpoint, isBackground } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
 import { appendIds } from '@/utils/nodeId'
 
@@ -196,7 +196,7 @@ export default {
         isResizable: this.isDraftMode || userCanResize,
         isDraggable: this.isDraggable,
 
-        fixed: position === 'fixed',
+        fixed: position === 'fixed' && isBackground(this.node.parentNode),
         verticalCompact: position === 'verticalCompact',
 
         id: this.id,

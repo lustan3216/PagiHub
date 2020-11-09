@@ -15,6 +15,7 @@
     <el-checkbox
       v-else
       v-model="fixed"
+      :disabled="canNotFixed"
       class="m-t-10"
       style="margin-bottom: 25px;"
     >
@@ -30,7 +31,7 @@ import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { vmGet } from '@/utils/vmMap'
 import { arrayLast } from '@/utils/array'
-import { nodePosition, nodeRelativePosition } from '@/utils/node'
+import { isBackground, nodePosition, nodeRelativePosition } from '@/utils/node'
 import { unitWConvert, unitHConvert } from '@/utils/layout'
 
 export default {
@@ -42,6 +43,9 @@ export default {
     ...mapState('layout', ['windowHeight']),
     ...mapGetters('app', ['selectedComponentNodes']),
     ...mapGetters('layout', ['currentBreakpoint']),
+    canNotFixed() {
+      return this.selectedComponentNodes.find(node => !isBackground(node.parentNode))
+    },
     canNotVerticalCompact() {
       return this.selectedComponentNodes.find(node => {
         return getValueByPath(node, [STYLES, 'layout', 'stack']) === undefined
