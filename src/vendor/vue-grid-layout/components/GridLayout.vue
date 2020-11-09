@@ -410,7 +410,7 @@
           hasCollisions = collisions.length > 0
 
           // If we're colliding, we need adjust the placeholder.
-          console.log(collisions)
+
           if (hasCollisions) {
             // adjust w && h to maximum allowed space
             let leastX = Infinity,
