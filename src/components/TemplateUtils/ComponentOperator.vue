@@ -281,13 +281,7 @@ export default {
       if (this.isDraggable && !this.static) {
         const opts = {
           ignoreFrom: '.item-editing, .menububble',
-          allowFrom: 'div, .move-icon',
-          modifiers: [
-            interact.modifiers.restrictRect({
-              restriction: 'parent',
-              endOnly: true
-            })
-          ]
+          allowFrom: 'div, .move-icon'
         }
         this.interactObj.draggable(opts)
         this.interactObj.on('dragstart dragmove dragend', event => {
