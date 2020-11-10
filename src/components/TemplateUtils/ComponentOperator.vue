@@ -150,7 +150,7 @@ export default {
     ...mapState('layout', ['gridResizing', 'windowHeight', 'windowY']),
     ...mapGetters('app', ['selectedComponentNodes']),
     componentNameOnTop() {
-      return this.rect.y - this.windowY > 50
+      return this.rect.y - this.windowY > 50 || isBackground(this.node)
     },
     styles() {
       const windowBottom = this.windowY + this.windowHeight

@@ -64,7 +64,7 @@ import childrenMixin from './mixins/children'
 import EventController from '../TemplateUtils/EventController'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import { cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
+import { asyncGetValue, cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestValidBreakpoint, isBackground } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
@@ -224,24 +224,8 @@ export default {
     }
   },
   watch: {
-    autoResizeHeight: {
-      handler(value) {
-        this.$nextTick(() => {
-          if (value) {
-            this.$refs.gridItem.autoSize()
-            this.offResizeListener = resizeListener(this.$refs.content, () => {
-              requestAnimationFrame(() => {
-                this.$refs.gridItem.autoSize()
-              })
-            })
-          }
-          else if (this.offResizeListener) {
-            this.offResizeListener()
-            this.offResizeListener = null
-          }
-        })
-      },
-      immediate: true
+    autoResizeHeight() {
+      this.handleAutoHeight()
     },
     computedLayout: {
       handler(value) {
@@ -287,6 +271,9 @@ export default {
       })
     }
   },
+  mounted() {
+    this.handleAutoHeight()
+  },
   beforeDestroy() {
     this.$delete(this.layouts, this.id)
     if (this.offResizeListener) {
@@ -296,6 +283,20 @@ export default {
   },
   methods: {
     ...mapActions('node', ['record']),
+    handleAutoHeight(value = this.autoResizeHeight) {
+      if (value) {
+        this.$refs.gridItem.autoSize()
+        this.offResizeListener = resizeListener(this.$refs.content, () => {
+          requestAnimationFrame(() => {
+            this.$refs.gridItem.autoSize()
+          })
+        })
+      }
+      else if (this.offResizeListener) {
+        this.offResizeListener()
+        this.offResizeListener = null
+      }
+    },
     mousedown(event) {
       this.prepareDuplicateNode()
       this.moving = true
