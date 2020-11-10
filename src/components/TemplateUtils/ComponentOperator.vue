@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="node"
+    v-if="node && visible"
     :style="styles"
     :class="{
       'no-action': static || itemEditing || isBackground || scrolling,
@@ -135,9 +135,6 @@ export default {
       left: 0,
       width: 0,
       height: 0,
-      zIndex: this.isExample ? 2005 : 2000,
-      animationId: null,
-      canGoBack: null,
       hovering: false,
       hoverIcon: false,
       scrolling: false
@@ -162,13 +159,18 @@ export default {
           ? this.rect.y + this.rect.height - this.windowY
           : this.rect.height
         : windowBottom - this.rect.y
+
       return {
         top: (this.windowY < this.rect.y ? this.rect.y : this.windowY) + 'px',
         left: this.rect.x + 'px',
         width: this.rect.width + 1 + 'px',
         height: height + 'px',
-        zIndex: this.selected ? this.zIndex + 1 : this.zIndex
+        zIndex: this.selected ? 2001 : 2000
       }
+    },
+    visible() {
+      const windowBottom = this.windowY + this.windowHeight
+      return this.rect.y < windowBottom && this.rect.y > this.windowY
     },
     node() {
       return this.nodesMap[this.id]

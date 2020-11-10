@@ -23,11 +23,15 @@ Just click publish, then you will have a real RWD website
 打包出去的 js file, 理論上應該可以 用 prerender 方式，因為已經發布了，所以固定定型了，理論上程式碼應該不用再動，
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
-bug
+檢查
+rwd
+button連結
+
+
+bug 
 breakpoint 切換時， 清掉原本的
 stick tip 壞了
 stack mode 壞了
-opeator will cover navbar
 如果update 500 直接 overwrite
 carousle button will be covered
 fix position when scolling 僅限於background層級

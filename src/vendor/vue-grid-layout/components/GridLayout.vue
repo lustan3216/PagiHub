@@ -320,13 +320,13 @@
       },
       updateHeight: function() {
         const height = this.containerHeight()
-        this.height = this.$refs.item.offsetHeight
+        this.height = this.$el.offsetHeight
         this.mergedStyle = { height }
       },
 
       onWindowResize: function() {
         if (this.$refs !== null && this.$refs.item !== null && this.$refs.item !== undefined) {
-          this.width = this.$refs.item.offsetWidth
+          this.width = this.$el.offsetWidth
         }
 
         this.eventBus.$emit('resizeEvent')

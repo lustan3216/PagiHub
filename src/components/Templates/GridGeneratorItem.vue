@@ -13,6 +13,7 @@
     :unit-y="computedLayout.unitY"
     :static="lock"
     :stack="stack"
+    :style-props="gridItemStyle"
     :hidden="computedLayout.hidden"
     :ratio="styleLayout.ratio"
     :z-index="styleLayout.zIndex"
@@ -22,14 +23,13 @@
     :vertical-compact="computedLayout.verticalCompact"
     :class="{ 'no-action': lock }"
     :auto-resize-height="autoResizeHeight"
-    :selected="selected"
     @moved="moved"
   >
     <div
       ref="content"
       :style="{
         ...divStyle,
-        ...innerStyles.html
+        ...htmlStyle
       }"
       :class="{
         'h-100': !autoResizeHeight
@@ -43,8 +43,9 @@
       />
 
       <event-controller
-        v-if="isDraftMode"
+        v-if="isDraftMode && $el"
         :id="id"
+        :element="$el"
         @mousedown="mousedown"
         @mouseup="moved"
       >
@@ -113,6 +114,14 @@ export default {
       'descBreakpoints',
       'vh'
     ]),
+    gridItemStyle() {
+      const { padding, ...restOfStyles } = this.innerStyles.html || {}
+      return { padding }
+    },
+    htmlStyle() {
+      const { padding, ...restOfStyles } = this.innerStyles.html || {}
+      return restOfStyles
+    },
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },

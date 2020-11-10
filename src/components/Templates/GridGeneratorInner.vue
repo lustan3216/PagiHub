@@ -16,8 +16,9 @@
     @layout-updated="layoutUpdated($event)"
   >
     <event-controller
-      v-if="controller && isDraftMode"
+      v-if="controller && isDraftMode && $el"
       :id="id"
+      :element="$el"
     >
       <component-giver
         v-for="child in children"
@@ -99,6 +100,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('app', ['isAdding']),
     ...mapState('layout', ['windowWidth']),
     ...mapGetters('layout', ['currentBreakpoint']),
     layout() {
@@ -108,6 +110,8 @@ export default {
   methods: {
     ...mapActions('node', ['debounceRecord']),
     handleDrop(event) {
+      if (this.isAdding) return
+
       const dropNode = event.target.__vue__.node
       const dragNode = event.relatedTarget.__vue__.node
 

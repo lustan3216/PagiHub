@@ -97,6 +97,10 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    element: {
+      type: HTMLDivElement,
+      required: true
     }
   },
   data() {
@@ -189,7 +193,7 @@ export default {
           this.rect = this.$el.closest('.art-board').getBoundingClientRect()
         }
         else {
-          this.rect = this.$el.getBoundingClientRect()
+          this.rect = this.element.getBoundingClientRect()
         }
       }
     },
