@@ -1,8 +1,10 @@
 <template>
   <!--  data-addable-id 不能刪，add element要用的-->
+  <!-- :id 不能刪， 要印在dom上，data-image-droppable or data-droppable會用 -->
   <vue-grid-generator
     ref="gridGenerator"
     v-bind="innerProps"
+    :id="id"
     :layout="layout"
     :col-num="windowWidth"
     :vertical-compact="false"
@@ -12,6 +14,7 @@
     :auto-extend-height="autoExtendHeight"
     :extra-style="extraStyle"
     :data-addable-id="id"
+    :data-droppable="isDroppable ? '' : undefined"
     @drop="handleDrop"
     @layout-updated="layoutUpdated($event)"
   >
@@ -112,7 +115,8 @@ export default {
     handleDrop(event) {
       if (this.isAdding) return
 
-      const dropNode = event.target.__vue__.node
+      const droppableId = event.target.closest('[data-droppable]').id
+      const dropNode = this.nodesMap[droppableId]
       const dragNode = event.relatedTarget.__vue__.node
 
       if (isGroup(dragNode.parentNode)) return

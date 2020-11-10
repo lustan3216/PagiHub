@@ -12,7 +12,7 @@ import { mapActions } from 'vuex'
 import RulesGenerator from './Common/RulesGenerator'
 import { assignDefaultValue, boolean, select, number } from './utils/ruleTool'
 import { getValueByPath } from '@/utils/tool'
-import { SOFT_DELETE, CHILDREN, POLYMORPHISM } from '@/const'
+import 'element-ui/lib/theme-chalk/carousel.css'
 
 // https://gs-shop.github.io/vue-slick-carousel/#/api
 // data-swiper-parallax 在grid item設定

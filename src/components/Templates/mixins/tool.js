@@ -1,5 +1,5 @@
 import { vmAppend, vmRemove } from '@/utils/vmMap'
-import { isBackground, isCarousel, isGroup, isSlider } from '@/utils/node'
+import { isBackground, isSlider } from '@/utils/node'
 
 let hoverNode = []
 

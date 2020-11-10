@@ -34,7 +34,6 @@ stick tip 壞了
 stack mode 壞了
 如果update 500 直接 overwrite
 carousle button will be covered
-fix position when scolling 僅限於background層級
 style 有關grid unit的變換 要檢查rwd  
 
 // group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
