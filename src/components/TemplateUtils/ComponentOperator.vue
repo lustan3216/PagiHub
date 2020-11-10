@@ -1,10 +1,10 @@
 <template>
   <div
-    v-if="node && visible"
+    v-if="node"
     :style="styles"
     :class="{
       'no-action': static || itemEditing || isBackground || scrolling,
-      border: !isBackground && !gridResizing
+      border: !isBackground && !gridResizing && visible
     }"
     class="quick-functions flex-center"
     @mousedown="$emit('mousedown', $event)"
@@ -14,7 +14,7 @@
     @wheel="onWheel"
     @dragover="APP_SET({ isAdding: true })"
   >
-    <template v-if="!gridResizing">
+    <template v-if="!gridResizing && visible">
       <portal-target
         v-if="itemEditing && !isExample && isLastOne"
         :style="textEditorStyle"
@@ -170,7 +170,7 @@ export default {
     },
     visible() {
       const windowBottom = this.windowY + this.windowHeight
-      return this.rect.y < windowBottom && this.rect.y > this.windowY
+      return this.rect.y < windowBottom && this.rect.y + this.rect.height > this.windowY
     },
     node() {
       return this.nodesMap[this.id]
@@ -239,7 +239,8 @@ export default {
     }
   },
   watch: {
-    static() {
+    static(value) {
+      console.log(value)
       this.tryMakeDraggable()
       this.tryMakeResizable()
     },
