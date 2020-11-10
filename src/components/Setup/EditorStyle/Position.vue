@@ -47,7 +47,7 @@ export default {
       return !!this.selectedComponentNodes.find(node => !isBackground(node.parentNode))
     },
     canNotVerticalCompact() {
-      return this.selectedComponentNodes.find(node => {
+      return !!this.selectedComponentNodes.find(node => {
         return getValueByPath(node, [STYLES, 'layout', 'stack']) === undefined
       })
     },

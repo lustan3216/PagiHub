@@ -4,7 +4,7 @@
     :style="styles"
     :class="{
       'no-action': static || itemEditing || isBackground || scrolling,
-      border: !isBackground && !gridResizing && visible
+      border: !gridResizing && visible
     }"
     class="quick-functions flex-center"
     @mousedown="$emit('mousedown', $event)"

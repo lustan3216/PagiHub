@@ -169,7 +169,9 @@ export default {
     },
     node: {
       handler() {
-        this.getRect()
+        setTimeout(() => {
+          this.getRect()
+        }, 20)
       },
       deep: true
     }
@@ -188,16 +190,14 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS'
     ]),
     getRect() {
-      setTimeout(() => {
-        if (this.hoveringId === this.id || this.selected) {
-          if (this.isBackground) {
-            this.rect = this.$el.closest('.art-board').getBoundingClientRect()
-          }
-          else {
-            this.rect = this.element.getBoundingClientRect()
-          }
+      if (this.hoveringId === this.id || this.selected) {
+        if (this.isBackground) {
+          this.rect = this.$el.closest('.art-board').getBoundingClientRect()
         }
-      }, 30)
+        else {
+          this.rect = this.element.getBoundingClientRect()
+        }
+      }
     },
 
     finEditingPath() {
