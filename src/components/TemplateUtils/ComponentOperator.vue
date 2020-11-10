@@ -240,7 +240,6 @@ export default {
   },
   watch: {
     static(value) {
-      console.log(value)
       this.tryMakeDraggable()
       this.tryMakeResizable()
     },

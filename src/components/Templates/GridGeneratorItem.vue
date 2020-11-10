@@ -224,9 +224,6 @@ export default {
     }
   },
   watch: {
-    autoResizeHeight() {
-      this.handleAutoHeight()
-    },
     computedLayout: {
       handler(value) {
         // 一定要轉成data，不然第一次computed 會因為不能assign值出bug
@@ -262,17 +259,16 @@ export default {
   updated() {
     this.updateLayout()
   },
-  created() {
-    if (this.isExample) {
-      this.$nextTick(() => {
+  mounted() {
+    this.$nextTick(() => {
+      if (this.isExample) {
         const el = this.$el.closest('.art-board')
         const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
         this.exampleBoundary = closestValidBreakpoint(this.node, currentPoint)
-      })
-    }
-  },
-  mounted() {
-    this.handleAutoHeight()
+      }
+
+      this.handleAutoHeight()
+    })
   },
   beforeDestroy() {
     this.$delete(this.layouts, this.id)

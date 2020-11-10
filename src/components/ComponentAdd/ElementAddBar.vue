@@ -259,7 +259,6 @@ export default {
       }
 
       vmAddNodeToParent(this.beingAddedComponentId, node)
-      this.cleanState()
     })
 
     this.selection.disable()
@@ -290,8 +289,13 @@ export default {
       })
     },
     onClick(name) {
-      this.creatingComponentTag = name
-      this.APP_SET({ isAdding: true })
+      if (this.creatingComponentTag) {
+        this.cleanState()
+      }
+      else {
+        this.creatingComponentTag = name
+        this.APP_SET({ isAdding: true })
+      }
     },
     updateScrollTop(value) {
       this.scrollTop = value
