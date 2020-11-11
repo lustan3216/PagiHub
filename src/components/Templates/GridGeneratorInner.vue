@@ -8,7 +8,7 @@
     :layout="layout"
     :col-num="windowWidth"
     :vertical-compact="false"
-    :is-droppable="isDroppable"
+    :is-droppable="isDroppable && isDraftMode"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
     :auto-extend-height="autoExtendHeight"
