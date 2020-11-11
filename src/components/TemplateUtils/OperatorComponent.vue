@@ -44,31 +44,7 @@
             @mouseleave="hoverIcon = false"
           />
 
-          <div
-            @mouseenter="mouseenter"
-            @mouseleave="mouseleave"
-          >
-            <transition-group
-              name="full-slide"
-              class="align-center"
-            >
-              <template v-for="(node, index) in nodesPath">
-                <i
-                  v-if="hovering && index"
-                  :key="node.id + 'i'"
-                  class="el-icon-arrow-left"
-                />
-                <component-name
-                  v-if="hovering || node.id === id"
-                  :style="{ cursor: index ? 'pointer' : 'default' }"
-                  :key="node.id"
-                  :id="node.id"
-                  :editable="false"
-                  @click="SET_SELECTED_COMPONENT_ID(node.id)"
-                />
-              </template>
-            </transition-group>
-          </div>
+          <component-names :id="id"/>
         </div>
 
         <often-use-menu
@@ -92,14 +68,12 @@
 
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
-import ComponentName from './ComponentName'
+import ComponentNames from './ComponentNames'
 import {
-  isGrid,
   isBackground,
-  traversalAncestorAndSelf,
   isTextEditor,
   isGroup,
-  isSlider, isImage, isCarousel
+  isSlider, isImage
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
@@ -111,7 +85,7 @@ let timeId
 export default {
   name: 'OperatorComponent',
   components: {
-    ComponentName,
+    ComponentNames,
     OftenUseMenu
   },
   props: {
@@ -130,7 +104,6 @@ export default {
       left: 0,
       width: 0,
       height: 0,
-      hovering: false,
       hoverIcon: false,
       scrolling: false,
       resizeEventSet: false,
@@ -158,9 +131,9 @@ export default {
         : windowBottom - this.rect.y
 
       return {
-        top: (this.windowY < this.rect.y ? this.rect.y : this.windowY) + 'px',
-        left: this.rect.x + 'px',
-        width: this.rect.width + 1 + 'px',
+        top: (this.windowY < this.rect.y ? this.rect.y : this.windowY) + 1 + 'px',
+        left: this.rect.x + 1 + 'px',
+        width: this.rect.width + 'px',
         height: height + 'px',
         zIndex: this.selected ? 2001 : 2000
       }
@@ -187,9 +160,6 @@ export default {
     isSlider() {
       return isSlider(this.node)
     },
-    isCarousel() {
-      return isCarousel(this.node)
-    },
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },
@@ -205,21 +175,6 @@ export default {
       else {
         return { left: this.rect.width + 10 + 'px' }
       }
-    },
-    nodesPath() {
-      if (!this.isDraftMode) {
-        return [this.node]
-      }
-
-      const nodes = []
-      traversalAncestorAndSelf(this.node, node => {
-        if (!isGrid(node)) {
-          nodes.push(node)
-        }
-
-        return !isBackground(node)
-      })
-      return nodes.slice(0, 4)
     },
     isLastOne() {
       return arrayLast(this.selectedComponentIds) === this.id
@@ -262,7 +217,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
     ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     ...mapMutations('asset', ['OPEN_ASSET']),
@@ -348,15 +302,6 @@ export default {
           enabled: false
         })
       }
-    },
-    mouseenter() {
-      timeId = setTimeout(() => {
-        this.hovering = true
-      }, 100)
-    },
-    mouseleave() {
-      clearTimeout(timeId)
-      this.hovering = false
     },
     dblclick(event) {
       this.$emit('dblclick', event)

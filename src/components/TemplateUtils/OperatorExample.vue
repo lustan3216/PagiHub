@@ -3,7 +3,7 @@
     v-if="node"
     :style="styles"
     :class="{
-      'no-action': static || itemEditing || isBackground || scrolling,
+      'no-action': static || isBackground || scrolling,
       border: !isBackground
     }"
     class="quick-functions flex-center"
@@ -43,31 +43,7 @@
           @copy="copy"
         />
 
-        <div
-          @mouseenter="mouseenter"
-          @mouseleave="mouseleave"
-        >
-          <transition-group
-            name="full-slide"
-            class="align-center"
-          >
-            <template v-for="(node, index) in nodesPath">
-              <i
-                v-if="hovering && index"
-                :key="node.id + 'i'"
-                class="el-icon-arrow-left"
-              />
-              <component-name
-                v-if="hovering || node.id === id"
-                :key="node.id"
-                :id="node.id"
-                :editable="false"
-                is-example
-                @click="SET_SELECTED_COMPONENT_ID(node.id)"
-              />
-            </template>
-          </transition-group>
-        </div>
+        <component-names :id="id"/>
       </div>
     </div>
   </div>
@@ -75,11 +51,9 @@
 
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
-import ComponentName from './ComponentName'
+import ComponentNames from './ComponentNames'
 import {
-  isGrid,
   isBackground,
-  traversalAncestorAndSelf,
   isTextEditor,
   isGroup,
   isSlider
@@ -93,7 +67,7 @@ let timeId
 export default {
   name: 'OperatorExample',
   components: {
-    ComponentName
+    ComponentNames
   },
   props: {
     id: {
@@ -113,7 +87,6 @@ export default {
       height: 0,
       animationId: null,
       canGoBack: null,
-      hovering: false,
       hoverIcon: false,
       scrolling: false,
       zIndex: 2030
@@ -161,17 +134,6 @@ export default {
     itemEditing() {
       return this.editingPath.includes(this.id)
     },
-    nodesPath() {
-      const nodes = []
-      traversalAncestorAndSelf(this.node, node => {
-        if (!isGrid(node)) {
-          nodes.push(node)
-        }
-
-        return !isBackground(node)
-      })
-      return nodes.slice(0, 4)
-    },
     isLastOne() {
       return arrayLast(this.selectedComponentIds) === this.id
     },
@@ -211,15 +173,6 @@ export default {
         this.LAYOUT_SET({ gridResizing: false })
         timeId = null
       }, 50)
-    },
-    mouseenter() {
-      timeId = setTimeout(() => {
-        this.hovering = true
-      }, 100)
-    },
-    mouseleave() {
-      clearTimeout(timeId)
-      this.hovering = false
     },
     copy() {
       this.$bus.$emit('node-tree-add', cloneJson(this.node))
