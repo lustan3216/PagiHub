@@ -19,9 +19,9 @@
     @layout-updated="layoutUpdated($event)"
   >
     <event-controller
-      v-if="controller && isDraftMode && $el"
+      v-if="controller && isDraftMode && element"
       :id="id"
-      :element="$el"
+      :element="element"
     >
       <component-giver
         v-for="child in children"
@@ -99,7 +99,8 @@ export default {
   },
   data() {
     return {
-      layouts: {}
+      layouts: {},
+      element: null
     }
   },
   computed: {
@@ -109,6 +110,9 @@ export default {
     layout() {
       return Object.values(this.layouts)
     }
+  },
+  mounted() {
+    this.element = this.$el
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),

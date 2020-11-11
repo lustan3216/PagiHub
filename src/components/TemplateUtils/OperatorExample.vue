@@ -76,7 +76,6 @@
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import ComponentName from './ComponentName'
-import { Popover } from 'element-ui'
 import {
   isGrid,
   isBackground,
@@ -87,8 +86,6 @@ import {
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { cloneJson, getValueByPath } from '@/utils/tool'
-import { BIconPlusSquareFill } from 'bootstrap-vue'
-import OftenUseMenu from './OftenUseMenu'
 import { CAN_BE_EDITED } from '@/const'
 
 let timeId
@@ -96,10 +93,7 @@ let timeId
 export default {
   name: 'OperatorExample',
   components: {
-    ComponentName,
-    ElPopover: Popover,
-    BIconPlusSquareFill,
-    OftenUseMenu
+    ComponentName
   },
   props: {
     id: {

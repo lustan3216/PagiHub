@@ -65,6 +65,7 @@
 
       <el-carousel
         ref="carousel"
+        :id="id"
         :key="sliders.length"
         v-bind="innerProps"
         :indicator-position="hasIndicator"
@@ -275,7 +276,6 @@ export default {
     ]),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     checkSelectedComponent(index, oldIndex) {
-      this.LAYOUT_SET({ gridResizing: true })
       const { id } = this.sliders[oldIndex]
       const node = this.nodesMap[id]
       const ids = []
@@ -283,10 +283,6 @@ export default {
       traversalSelfAndChildren(node, ({ id }) => ids.push(id))
 
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
-      setTimeout(() => {
-        this.LAYOUT_SET({ gridResizing: false })
-        // special case to resolve operator get the right position
-      }, 500)
     },
     removeCurrentSlider() {
       const node = this.children[this.currentIndex]

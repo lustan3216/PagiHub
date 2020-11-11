@@ -93,18 +93,16 @@
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import ComponentName from './ComponentName'
-import { Popover } from 'element-ui'
 import {
   isGrid,
   isBackground,
   traversalAncestorAndSelf,
   isTextEditor,
   isGroup,
-  isSlider, isImage
+  isSlider, isImage, isCarousel
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
-import { BIconPlusSquareFill } from 'bootstrap-vue'
 import OftenUseMenu from './OftenUseMenu'
 import interact from 'interactjs'
 
@@ -114,8 +112,6 @@ export default {
   name: 'OperatorComponent',
   components: {
     ComponentName,
-    ElPopover: Popover,
-    BIconPlusSquareFill,
     OftenUseMenu
   },
   props: {
@@ -190,6 +186,9 @@ export default {
     },
     isSlider() {
       return isSlider(this.node)
+    },
+    isCarousel() {
+      return isCarousel(this.node)
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)
