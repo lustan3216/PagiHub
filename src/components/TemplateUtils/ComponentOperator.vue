@@ -3,7 +3,7 @@
     v-if="node"
     :style="styles"
     :class="{
-      'no-action': itemEditing || isBackground || scrolling,
+      'no-action': static || itemEditing || isBackground || scrolling,
       border: !gridResizing && visible
     }"
     class="quick-functions flex-center"
