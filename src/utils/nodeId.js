@@ -18,36 +18,36 @@ export function appendIds(
   }
 
   traversalSelfAndChildren(nodes, (node, parentNode) => {
-    const inheritLoop = inheritParentIds.includes(node.id)
+    // const inheritLoop = inheritParentIds.includes(node.id)
+    //
+    // if (inheritLoop) {
+    //   appendIdsWithoutInherit(node, parentNode.id)
+    //   return false
+    // }
 
-    if (inheritLoop) {
-      appendIdsWithoutInherit(node, parentNode.id)
-      return false
-    }
+    // const inheritable = canInherit(node)
+    // if (inheritable) {
+    //   node.inheritance = {
+    //     isInstanceParent: true
+    //   }
+    //
+    //   const masterId = getMasterId(node)
+    //   if (masterId) {
+    //     inheritParentIds.push(masterId)
+    //   }
+    //
+    //   inheritParentIds.push(node.id)
+    //
+    //   canSetMasterIdForInstance = true
+    // }
 
-    const inheritable = canInherit(node)
-    if (inheritable) {
-      node.inheritance = {
-        isInstanceParent: true
-      }
-
-      const masterId = getMasterId(node)
-      if (masterId) {
-        inheritParentIds.push(masterId)
-      }
-
-      inheritParentIds.push(node.id)
-
-      canSetMasterIdForInstance = true
-    }
-
-    if (canSetMasterIdForInstance) {
-      instanceBeforeAppend && instanceBeforeAppend(node)
-      setMasterId(node, node[ID])
-    }
-    else if (!inheritable) {
-      delete node.inheritance
-    }
+    // if (canSetMasterIdForInstance) {
+    //   instanceBeforeAppend && instanceBeforeAppend(node)
+    //   setMasterId(node, node[ID])
+    // }
+    // else if (!inheritable) {
+    //   delete node.inheritance
+    // }
 
     // set ulid 一定要在 setMasterId 後面
     node[ID] = ulid()

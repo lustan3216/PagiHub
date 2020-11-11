@@ -56,14 +56,14 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import toolMixin from './mixins/tool'
 import propsMixin from './mixins/props'
 import childrenMixin from './mixins/children'
 import EventController from '../TemplateUtils/EventController'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import { asyncGetValue, cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
+import { cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestValidBreakpoint, isBackground } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
@@ -244,7 +244,7 @@ export default {
       if (value) {
         this.record({
           path: this.duplicateNode.id,
-          value: this.duplicateNode
+          value: cloneJson(this.duplicateNode)
         })
       }
       else if (this.duplicateNode) {
@@ -299,6 +299,9 @@ export default {
     prepareDuplicateNode() {
       const node = cloneJson(this.node)
       appendIds(node)
+      if (getValueByPath(node, [STYLES, 'layout', 'stack'])) {
+        delete node[STYLES].layout.stack
+      }
       this.duplicateNode = node
     },
     updateLayout(layout = this.computedLayout) {
