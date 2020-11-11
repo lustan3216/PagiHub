@@ -257,7 +257,7 @@ export function getStatics(layout: Layout): Array<LayoutItem> {
  */
 export function moveElement(layout: Layout, l: LayoutItem, x: Number, y: Number, isUserAction: Boolean, preventCollision: Boolean): Layout {
   if (l.static) return layout;
-
+  console.log(123)
   // Short-circuit if nothing to do.
   //if (l.colY === y && l.colX === x) return layout;
 

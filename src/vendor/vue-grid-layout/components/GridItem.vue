@@ -318,6 +318,10 @@
         this.tryMakeResizable()
         this.createStyle()
         this.emitContainerResized()
+
+        if (this.ratio) {
+          
+        }
       },
       x: function(newVal) {
         this.innerX = newVal
@@ -551,7 +555,12 @@
             }
 
             if (this.ratio) {
-              newSize.width = this.previousW * this.colWidth / this.previousH * this.colHeight * newSize.height
+              if (event.deltaRect.right) {
+                newSize.height = (this.previousH * this.colHeight) / (this.previousW * this.colWidth) * newSize.width
+              }
+              else {
+                newSize.width = (this.previousW * this.colWidth) / (this.previousH * this.colHeight) * newSize.height
+              }
             }
 
             if (event.shiftKey) {
@@ -812,11 +821,13 @@
         // width = colWidth * w - (margin * (w - 1))
         // ...
         // w = (width + margin) / (colWidth + margin)
+        let maxW = (this.containerWidth - this.pxX) / this.colWidth
         let w
         if (this.unitW === 'px') {
           w = Math.floor(width)
         } else {
           w = toPrecision(width / this.colWidth, 1)
+          maxW = toPrecision(maxW, 1)
         }
 
         let h
@@ -827,7 +838,7 @@
         }
 
         // Capping
-        w = Math.max(w, 0)
+        w = Math.max(Math.min(maxW, w), 0)
         h = Math.max(h, 0)
         return { w, h }
       },

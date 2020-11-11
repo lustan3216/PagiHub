@@ -332,7 +332,7 @@
           this.width = this.$el.offsetWidth
         }
 
-        this.eventBus.$emit('resizeEvent')
+        this.resizeEvent()
       },
       calcPx() {
         this.layout.forEach(item => {

@@ -30,11 +30,11 @@ btton連結
 
 
 bug
+
 ratio, 變形時要保持ratio
-opeator 應該可以放在 inner 底下吧？！可以解決 carousel覆蓋的問題，但有必要嗎
+opeator 應該可以放在 inner 底下吧？！可以解決 carousel覆蓋的問題，但有必要嗎 / carousle button will be covered
 client dragging / resizing 
 如果update 500 直接 overwrite
-carousle button will be covered
 style 有關grid unit的變換 要檢查rwd  
 
 // group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
