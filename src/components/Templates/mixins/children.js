@@ -125,10 +125,7 @@ export default {
           this.SET_SELECTED_COMPONENT_ID(this.node.parentId)
 
           if (this.node.children.length === 0) {
-            this.debounceRecord({
-              path: this.node.id,
-              value: undefined
-            })
+            this.removeNodeFromParent(this.node)
           }
         }
         else if (this.node) {

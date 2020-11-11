@@ -378,8 +378,16 @@
       },
       colX() {
         switch (this.unitX) {
+          case '%':
+            const colWidth = this.containerWidth / 100
+            // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
+            return colWidth
+
           case 'vw':
             return this.vw
+
+          case 'vh':
+            return this.vh
 
           default:
             return 1
@@ -387,6 +395,14 @@
       },
       colY() {
         switch (this.unitY) {
+          case '%':
+            const colHeight = this.parent.height / 100
+            // console.log("### COLS=" + this.cols + " COL WIDTH=" + colHeight + " MARGIN " + this.margin[0]);
+            return colHeight
+
+          case 'vw':
+            return this.vw
+
           case 'vh':
             return this.vh
 
@@ -459,8 +475,8 @@
     },
     methods: {
       createStyle: function() {
-        if (this.x + this.pxW > this.containerWidth) {
-          this.innerX = this.containerWidth - this.pxW < 0 ? 0 : this.containerWidth - this.pxW
+        if (this.pxX + this.pxW > this.containerWidth) {
+          this.innerX = this.containerWidth - this.pxW < 0 ? 0 : (this.containerWidth - this.pxW) / this.colX
           this.innerW = (this.pxW > this.containerWidth) ? this.containerWidth / this.colWidth : this.w
         } else {
           this.innerX = this.x
@@ -623,20 +639,11 @@
 
         // Get the current drag point from the event. This is used as the offset.
         // if (position === null) return // not possible but satisfies flow
-
-        if (!event.isFakeEvent) {
-          // to prevent other item call self and be called by self again
-          event.isFakeEvent = true
-
-          if (this.selectedComponentIds.includes(this.i)) {
-            this.selectedComponentIds.forEach(id => {
-              if (id !== this.i) this.$bus.$emit(`handle-drag-${id}`, event)
-            })
-          }
-        }
-
         let parentRect
         let clientRect
+
+        // 當stick to top時會發生 dragging 莫名變成null且查不到原因，這個直接先return 暫無大礙
+        if (this.dragging === null && event.type === 'dragmove') return
 
         // let shouldUpdate = false;
         let newPosition = { top: 0, left: 0 }
@@ -661,26 +668,6 @@
             this.isDragging = true
             break
           }
-          case 'dragend': {
-            if (!this.isDragging) return
-            if (this.fixed) {
-              parentRect = this.boundaryElement.getBoundingClientRect()
-            }
-            else {
-              parentRect = this.getParent(this.$el).getBoundingClientRect()
-            }
-            clientRect = this.$el.getBoundingClientRect()
-            //                        Add rtl support
-            newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
-
-            newPosition.top = (clientRect.top - parentRect.top) / this.scaleRatio
-            //                        console.log("### drag end => " + JSON.stringify(newPosition));
-            //                        console.log("### DROP: " + JSON.stringify(newPosition));
-            this.dragging = null
-            this.isDragging = false
-            // shouldUpdate = true;
-            break
-          }
           case 'dragmove': {
             newPosition.left = this.dragging.left + (event.delta.x) / this.scaleRatio
             newPosition.top = this.dragging.top + (event.delta.y) / this.scaleRatio
@@ -700,12 +687,48 @@
             this.dragging = newPosition
             break
           }
+          case 'dragend': {
+            if (!this.isDragging) return
+            if (this.fixed) {
+              parentRect = this.boundaryElement.getBoundingClientRect()
+            }
+            else {
+              parentRect = this.getParent(this.$el).getBoundingClientRect()
+            }
+            clientRect = this.$el.getBoundingClientRect()
+            //                        Add rtl support
+            newPosition.left = (clientRect.left - parentRect.left) / this.scaleRatio
+
+            newPosition.top = (clientRect.top - parentRect.top) / this.scaleRatio
+            //                        console.log("### drag end => " + JSON.stringify(newPosition));
+            //                        console.log("### DROP: " + JSON.stringify(newPosition));
+
+            this.dragging = null
+            this.isDragging = false
+            // shouldUpdate = true;
+            break
+          }
         }
 
+        if (!event.isFakeEvent) {
+          // to prevent other item call self and be called by self again
+          const fakeEvent = {
+            ...event,
+            isFakeEvent: true
+          }
+          if (this.selectedComponentIds.includes(this.i)) {
+            this.selectedComponentIds.forEach(id => {
+              if (id !== this.i) {
+                this.$bus.$emit(`handle-drag-${id}`, fakeEvent)
+              }
+            })
+          }
+        }
+        // console.log(newPosition.top)
         // Get new XY
         let pos
         pos = this.calcXY(newPosition.top, newPosition.left)
-
+        // console.log(pos.y)
         // this.lastX = x
         // this.lastY = y
 

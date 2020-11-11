@@ -118,8 +118,8 @@ export default {
       const droppableId = event.target.closest('[data-droppable]').id
       const dropNode = this.nodesMap[droppableId]
       const dragNode = event.relatedTarget.__vue__.node
-
-      if (isGroup(dragNode.parentNode)) return
+      console.log(!dragNode)
+      if (!dragNode || isGroup(dragNode.parentNode)) return
 
       if (!dropNode || !dragNode) return
       let inTheSameFamily = false

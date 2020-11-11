@@ -25,13 +25,14 @@ Just click publish, then you will have a real RWD website
 
 檢查
 rwd
-button連結
+btton連結
+發布後 的share page and browsing
 
 
-bug 
+bug
+opeator 應該可以放在 inner 底下吧？！可以解決 carousel覆蓋的問題，但有必要嗎
+client dragging / resizing 
 breakpoint 切換時， 清掉原本的
-stick tip 壞了
-stack mode 壞了
 如果update 500 直接 overwrite
 carousle button will be covered
 style 有關grid unit的變換 要檢查rwd  
@@ -43,7 +44,6 @@ style 有關grid unit的變換 要檢查rwd
 - 照片的 link 坐在 magement 裡面
 - iframe
 - panel component shift select
-- height %
 - style 支援 每個 device 可客製化
 - 支援 icon
 - 距離輔助線

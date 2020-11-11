@@ -28,7 +28,7 @@ export type Size = {width: number, height: number};
 export function bottom(layout: Layout): number {
   let max = 0, bottomY;
   for (let i = 0, len = layout.length; i < len; i++) {
-    bottomY = layout[i].y + layout[i].pxH;
+    bottomY = layout[i].colY * layout[i].y + layout[i].colH * layout[i].h;
     if (bottomY > max) max = bottomY;
   }
   return max;
@@ -45,7 +45,7 @@ export function cloneLayout(layout: Layout): Layout {
 // Fast path to cloning, since this is monomorphic
 export function cloneLayoutItem(layoutItem: LayoutItem): LayoutItem {
   /*return {
-    w: layoutItem.pxW, h: layoutItem.pxH, x: layoutItem.x, y: layoutItem.y, i: layoutItem.i,
+    w: layoutItem.colW, h: layoutItem.colH, x: layoutItem.colX, y: layoutItem.colY, i: layoutItem.i,
     minW: layoutItem.minW, maxW: layoutItem.maxW, minH: layoutItem.minH, maxH: layoutItem.maxH,
     moved: Boolean(layoutItem.moved), static: Boolean(layoutItem.static),
     // These can be null
@@ -61,15 +61,17 @@ export function cloneLayoutItem(layoutItem: LayoutItem): LayoutItem {
  */
 export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
   if (l1.stack && l2.stack) {
-    const fix1 = l1.fixed || l1.fixOnParentBottom
-    const fix2 = l2.fixed || l2.fixOnParentBottom
-
-    if ((fix1 && fix2) || (!fix1 && !fix2)) {
+    if ((l1.fixed && l2.fixed) || (!l1.fixed && !l2.fixed)) {
       if (l1 === l2) return false; // same element
-      if (l1.x + l1.pxW <= l2.x) return false; // l1 is left of l2
-      if (l1.x >= l2.x + l2.pxW) return false; // l1 is right of l2
-      if (l1.y + l1.pxH <= l2.y) return false; // l1 is above l2
-      if (l1.y >= l2.y + l2.pxH) return false; // l1 is below l2
+      if (l1.colX * l1.x + l1.w * l1.colW <= l2.x * l2.colX) return false; // l1 is left of l2
+      if (l1.colX * l1.x >= l2.x * l2.colX + l2.w * l2.colW) return false; // l1 is right of l2
+      if (l1.colY * l1.y + l1.h * l1.colH <= l2.y * l2.colY) return false; // l1 is above l2
+      if (l1.colY * l1.y >= l2.y * l2.colY + l2.h * l2.colH) return false; // l1 is below l2
+      // if (l1 === l2) return false; // same element
+      // if (l1.x + l1.pxW <= l2.x) return false; // l1 is left of l2
+      // if (l1.x >= l2.x + l2.pxW) return false; // l1 is right of l2
+      // if (l1.y + l1.pxH <= l2.y) return false; // l1 is above l2
+      // if (l1.y >= l2.y + l2.pxH) return false; // l1 is below l2
       return true; // boxes overlap
     }
   }
@@ -84,7 +86,7 @@ export function correctFixItemsBound(layout: Layout, height) {
     let l = layout[i]
 
     if (l.fixOnParentBottom) {
-      l.y = height - l.pxH
+      l.colY = height - l.colH
 
       l.moved = false;
     }
@@ -141,14 +143,14 @@ export function compactItem(compareWith: Layout, l: LayoutItem, verticalCompact:
   if (verticalCompact) {
     // Move the element up as far as it can go without colliding.
     while (l.y > 0 && !getFirstCollision(compareWith, l)) {
-      l.y--;
+      l.y = Math.max(l.y - (1 / l.colY), 0)
     }
   }
 
   // Move it down, and keep moving it down if it's colliding.
   let collides;
   while((collides = getFirstCollision(compareWith, l))) {
-    l.y = collides.y + collides.pxH;
+    l.y = (collides.y * collides.colY + collides.h * collides.colH) / l.colY
   }
   return l;
 }
@@ -164,18 +166,20 @@ export function correctBounds(layout: Layout, bounds: {cols: number}): Layout {
   for (let i = 0, len = layout.length; i < len; i++) {
     const l = layout[i];
     // Overflows right
-    if (l.x + l.pxW > bounds.cols) l.x = bounds.cols - l.pxW;
+    if (l.colX + l.colW > bounds.cols) {
+      l.colX = bounds.cols - l.colW;
+    }
     // Overflows left
-    if (l.x < 0) {
-      l.x = 0;
-      l.pxW = bounds.cols;
+    if (l.colX < 0) {
+      l.colX = 0;
+      l.colW = bounds.cols;
     }
     if (!l.static) collidesWith.push(l);
     else {
       // If this is static and collides with other statics, we must move it down.
       // We have to do something nicer than just letting them overlap.
       while(getFirstCollision(collidesWith, l)) {
-        l.y++;
+        l.colY++;
       }
     }
   }
@@ -237,15 +241,20 @@ export function moveElement(layout: Layout, l: LayoutItem, x: Number, y: Number,
   if (l.static) return layout;
 
   // Short-circuit if nothing to do.
-  //if (l.y === y && l.x === x) return layout;
+  //if (l.colY === y && l.colX === x) return layout;
 
   const oldX = l.x;
   const oldY = l.y;
 
   const movingUp = y && l.y > y;
+  // console.log(l.y, y, y && l.y > y, l.i)
   // This is quite a bit faster than extending the object
-  if (typeof x === 'number') l.x = x;
-  if (typeof y === 'number') l.y = y;
+  if (typeof x === 'number') {
+    l.x = x;
+  }
+  if (typeof y === 'number') {
+    l.y = y
+  };
   l.moved = true;
 
   // If this collides with anything, move it.
@@ -272,7 +281,7 @@ export function moveElement(layout: Layout, l: LayoutItem, x: Number, y: Number,
     if (collision.moved) continue;
 
     // This makes it feel a bit more precise by waiting to swap for just a bit when moving up.
-    if (l.y > collision.y && l.y - collision.y > collision.pxH / 4) continue;
+    if ((l.y * l.colY) > (collision.y * collision.colY) && (l.y * l.colY) - (collision.y * collision.colY) > collision.h * collision.colH / 4) continue;
 
     // Don't move static items - we have to move *this* element away
     if (collision.static) {
@@ -305,13 +314,10 @@ export function moveElementAwayFromCollision(layout: Layout, collidesWith: Layou
   if (isUserAction) {
     // Make a mock item so we don't modify the item here, only modify in moveElement.
     const fakeItem: LayoutItem = {
-      x: itemToMove.x,
-      y: itemToMove.y,
-      w: itemToMove.pxW,
-      h: itemToMove.pxH,
+      ...itemToMove,
       i: '-1'
     };
-    fakeItem.y = Math.max(collidesWith.y - itemToMove.pxH, 0);
+    fakeItem.y = Math.max(collidesWith.y * collidesWith.colY - itemToMove.h * itemToMove.colH, 0) / fakeItem.colY;
     if (!getFirstCollision(layout, fakeItem)) {
       return moveElement(layout, itemToMove, undefined, fakeItem.y, preventCollision);
     }
@@ -319,7 +325,7 @@ export function moveElementAwayFromCollision(layout: Layout, collidesWith: Layou
 
   // Previously this was optimized to move below the collision directly, but this can cause problems
   // with cascading moves, as an item may actually leapflog a collision and cause a reversal in order.
-  return moveElement(layout, itemToMove, undefined, itemToMove.y + 1, preventCollision);
+  return moveElement(layout, itemToMove, undefined, itemToMove.y + (1 /itemToMove.colY), preventCollision);
 }
 
 /**
@@ -407,11 +413,16 @@ export function setTopRight(top, right, width, height): Object {
  */
 export function sortLayoutItemsByRowCol(layout: Layout): Layout {
   return [].concat(layout).sort(function(a, b) {
-    if (a.y === b.y && a.x === b.x) {
+    const aPxX = a.x * a.colX
+    const aPxY = a.y * a.colY
+    const bPxX = b.x * b.colX
+    const bPxY = b.y * b.colY
+
+    if (aPxY === bPxY && aPxX === bPxX) {
       return 0;
     }
 
-    if (a.y > b.y || (a.y === b.y && a.x > b.x)) {
+    if (aPxY > bPxY || (aPxY === bPxY && aPxX > bPxX)) {
       return 1;
     }
 
@@ -458,9 +469,9 @@ export function synchronizeLayoutWithChildren(initialLayout: Layout, children: A
         // Validated; add it to the layout. Bottom 'y' possible is the bottom of the layout.
         // This allows you to do nice stuff like specify {y: Infinity}
         if (verticalCompact) {
-          newItem = cloneLayoutItem({...g, y: Math.min(bottom(layout), g.y), i: child.key});
+          newItem = cloneLayoutItem({...g, y: Math.min(bottom(layout), g.colY), i: child.key});
         } else {
-          newItem = cloneLayoutItem({...g, y: g.y, i: child.key});
+          newItem = cloneLayoutItem({...g, y: g.colY, i: child.key});
         }
       }
       // Nothing provided: ensure this is added to the bottom

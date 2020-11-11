@@ -63,7 +63,7 @@
           :min="0"
           :step="unitX === 'px' ? 1 : 0.1"
           :unit.sync="unitX"
-          :units="['px', 'vw']"
+          :units="['%', 'px', 'vw', 'vh']"
           separate
         />
       </el-col>
@@ -120,7 +120,7 @@
           :min="0"
           :step="unitY === 'px' ? 1 : 0.1"
           :unit.sync="unitY"
-          :units="['px', 'vh']"
+          :units="['%', 'px', 'vw', 'vh']"
           separate
         />
       </el-col>
@@ -261,7 +261,7 @@ export default {
         return this.currentGrid.unitY || 'px'
       },
       set(value) {
-        const newY = unitWConvert(this.lastNode.id, this.y, this.unitY, value)
+        const newY = unitHConvert(this.lastNode.id, this.y, this.unitY, value)
 
         this.recordStore('unitY', value)
         this.recordStore('y', newY)

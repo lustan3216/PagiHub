@@ -224,7 +224,9 @@ export default {
     mouseup(event) {
       this.$emit('mouseup', event)
       this.getRect()
-      this.LAYOUT_SET({ gridResizing: false })
+      setTimeout(() => {
+        this.LAYOUT_SET({ gridResizing: false })
+      }, 220)
 
       if (this.isAdding) {
         return
