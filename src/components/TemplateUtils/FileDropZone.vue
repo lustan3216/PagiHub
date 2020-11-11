@@ -23,7 +23,7 @@ import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 import { isBackground, isCarousel, isGroup, isImage, isRectangle } from '@/utils/node'
 import { flexImage } from '@/templateJson/basic'
 import { vmGet, vmRemoveNode } from '@/utils/vmMap'
-import { unitWConvert } from '@/utils/layout'
+import { horizontalUnitConvert } from '@/utils/layout'
 import { Message } from 'element-ui'
 import { appendIds } from '@/utils/nodeId'
 
@@ -162,7 +162,7 @@ export default {
             [this.currentBreakpoint]: {
               x: clientX - x - (w / 2) + (30 * this.dropEvent.uploadingIndex),
               y: clientY - y - (h / 2) + (30 * this.dropEvent.uploadingIndex),
-              w: unitWConvert(droppedNode.id, w, 'px', '%'),
+              w: horizontalUnitConvert(droppedNode.id, w, 'px', '%'),
               h,
               unitH: 'px',
               unitW: '%'

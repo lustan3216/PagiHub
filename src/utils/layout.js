@@ -3,12 +3,22 @@ import { BREAK_POINTS_MAP } from '@/const'
 import { vmGet } from '@/utils/vmMap'
 import { toPrecision } from '@/utils/number'
 
-export function unitWConvert(id, distance, inputUnit, outputUnit) {
+export function horizontalUnitPercentFromTo(fromId, toId, distance) {
+  const fromPx = horizontalUnitConvert(fromId, distance, '%', 'px')
+  return horizontalUnitConvert(toId, fromPx, 'px', '%')
+}
+
+export function verticalUnitPercentFromTo(fromId, toId, distance) {
+  const fromPx = verticalUnitConvert(fromId, distance, '%', 'px')
+  return verticalUnitConvert(toId, fromPx, 'px', '%')
+}
+
+export function horizontalUnitConvert(id, distance, inputUnit, outputUnit) {
   const vm = vmGet(id)
   return unitConvert(id, distance, inputUnit, outputUnit, vm.percentUnitW())
 }
 
-export function unitHConvert(id, distance, inputUnit, outputUnit) {
+export function verticalUnitConvert(id, distance, inputUnit, outputUnit) {
   const vm = vmGet(id)
   return unitConvert(id, distance, inputUnit, outputUnit, vm.percentUnitH())
 }

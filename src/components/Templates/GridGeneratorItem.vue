@@ -12,7 +12,6 @@
     :unit-x="computedLayout.unitX"
     :unit-y="computedLayout.unitY"
     :static="lock"
-    :stack="stack"
     :style-props="gridItemStyle"
     :hidden="computedLayout.hidden"
     :ratio="styleLayout.ratio"

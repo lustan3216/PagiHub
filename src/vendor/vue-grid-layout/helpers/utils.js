@@ -1,4 +1,6 @@
 // @flow
+import { toPrecision } from '@/utils/number'
+
 export type LayoutItemRequired = {w: number, h: number, x: number, y: number, i: string};
 export type LayoutItem = LayoutItemRequired &
                          {minW?: number, minH?: number, maxW?: number, maxH?: number,
@@ -63,10 +65,11 @@ export function collides(l1: LayoutItem, l2: LayoutItem): boolean {
   if (l1.stack && l2.stack) {
     if ((l1.fixed && l2.fixed) || (!l1.fixed && !l2.fixed)) {
       if (l1 === l2) return false; // same element
-      if (l1.colX * l1.x + l1.w * l1.colW <= l2.x * l2.colX) return false; // l1 is left of l2
-      if (l1.colX * l1.x >= l2.x * l2.colX + l2.w * l2.colW) return false; // l1 is right of l2
-      if (l1.colY * l1.y + l1.h * l1.colH <= l2.y * l2.colY) return false; // l1 is above l2
-      if (l1.colY * l1.y >= l2.y * l2.colY + l2.h * l2.colH) return false; // l1 is below l2
+
+      if (Math.floor(l1.colX * l1.x + l1.w * l1.colW) <= Math.floor(l2.x * l2.colX)) return false; // l1 is left of l2
+      if (Math.floor(l1.colX * l1.x) >= Math.floor(l2.x * l2.colX + l2.w * l2.colW)) return false; // l1 is right of l2
+      if (Math.floor(l1.colY * l1.y + l1.h * l1.colH) <= Math.floor(l2.y * l2.colY)) return false; // l1 is above l2
+      if (Math.floor(l1.colY * l1.y) >= Math.floor(l2.y * l2.colY + l2.h * l2.colH)) return false; // l1 is below l2
       // if (l1 === l2) return false; // same element
       // if (l1.x + l1.pxW <= l2.x) return false; // l1 is left of l2
       // if (l1.x >= l2.x + l2.pxW) return false; // l1 is right of l2
@@ -153,6 +156,21 @@ export function compactItem(compareWith: Layout, l: LayoutItem, verticalCompact:
     l.y = (collides.y * collides.colY + collides.h * collides.colH) / l.colY
   }
   return l;
+}
+
+export function corretHorizontalBounds(layout, width) {
+  if (!width) return
+  for (let i = 0, len = layout.length; i < len; i++) {
+    const item = layout[i]
+
+    // console.log(item.x, item.colX, item.w * item.colW, width)
+
+    if (item.x * item.colX + item.w * item.colW > width) {
+      item.x = width - (item.w * item.colW) < 0 ? 0 : (width - (item.w * item.colW)) / item.colW
+      // item.w = (item.w * item.colW > width) ? width / item.colW : item.w
+    }
+  }
+
 }
 
 /**

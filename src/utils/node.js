@@ -12,7 +12,7 @@ import {
   SOFT_DELETE,
   STYLES, TAG
 } from '@/const'
-import { unitWConvert, unitHConvert } from '@/utils/layout'
+import { horizontalUnitConvert, verticalUnitConvert } from '@/utils/layout'
 import { vmGet } from '@/utils/vmMap'
 
 export function nodePosition(id) {
@@ -50,8 +50,8 @@ export function getGroupPxRect(nodes) {
   nodes.forEach(node => {
     const point = closestValidBreakpoint(node, currentBreakpoint)
     const { x, y, w, h, unitH, unitW } = node.grid[point]
-    const pxW = unitWConvert(node.id, w, unitW, 'px')
-    const pxH = unitHConvert(node.id, h, unitH, 'px')
+    const pxW = horizontalUnitConvert(node.id, w, unitW, 'px')
+    const pxH = verticalUnitConvert(node.id, h, unitH, 'px')
     if (x <= rect.minX) rect.minX = x
     if (y <= rect.minY) rect.minY = y
     if (x + pxW >= rect.maxX) rect.maxX = x + pxW

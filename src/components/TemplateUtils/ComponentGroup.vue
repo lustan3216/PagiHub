@@ -11,8 +11,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { BREAK_POINTS_ARRAY, GRID } from '@/const'
 import { group } from '@/templateJson/basic'
 import { vmAddNodeToParent, vmRemoveNode } from '@/utils/vmMap'
-import { unitWConvert, unitHConvert } from '@/utils/layout'
-import { toPrecision } from '@/utils/number'
+import { horizontalUnitConvert, verticalUnitConvert, verticalUnitPercentFromTo, horizontalUnitPercentFromTo } from '@/utils/layout'
 
 export default {
   name: 'ComponentGroup',
@@ -44,10 +43,10 @@ export default {
         let nodeW = currentGrid.w
         let nodeH = currentGrid.h
         if (currentGrid.unitW === '%') {
-          nodeW = (unitWConvert(node.id, currentGrid.w, '%', 'px') / w) * 100
+          nodeW = (horizontalUnitConvert(node.id, currentGrid.w, '%', 'px') / w) * 100
         }
         if (currentGrid.unitH === '%') {
-          nodeH = (unitHConvert(node.id, currentGrid.h, '%', 'px') / h) * 100
+          nodeH = (verticalUnitConvert(node.id, currentGrid.h, '%', 'px') / h) * 100
         }
 
         node.grid = {
@@ -57,7 +56,9 @@ export default {
             w: nodeW,
             h: nodeH,
             unitH: currentGrid.unitH,
-            unitW: currentGrid.unitW
+            unitW: currentGrid.unitW,
+            unitX: 'px',
+            unitY: 'px'
           }
           // overwrite all original breakpoint
         }
@@ -70,10 +71,12 @@ export default {
           [this.currentBreakpoint]: {
             x,
             y,
-            w: unitWConvert(parentId, w, 'px', '%'),
+            w: horizontalUnitConvert(parentId, w, 'px', '%'),
             h,
             unitH: 'px',
-            unitW: '%'
+            unitW: '%',
+            unitX: 'px',
+            unitY: 'px'
           }
         },
         children
@@ -96,31 +99,27 @@ export default {
           if (!grid) return
 
           if (grid.unitW === '%') {
-            const nodePx = unitWConvert(node.id, grid.w, '%', 'px')
-
             records.push({
               path: [node.id, GRID, point, 'w'],
-              value: unitWConvert(group.id, nodePx, 'px', '%')
+              value: horizontalUnitPercentFromTo(node.id, group.id, grid.w)
             })
           }
 
           if (grid.unitH === '%') {
-            const nodePx = unitHConvert(node.id, grid.h, '%', 'px')
-
             records.push({
               path: [node.id, GRID, point, 'h'],
-              value: unitHConvert(group.id, nodePx, 'px', '%')
+              value: verticalUnitPercentFromTo(node.id, group.id, grid.h)
             })
           }
 
           const currentGroupGird = this.closestValidGrid(group, point)
           records.push({
             path: [node.id, GRID, point, 'x'],
-            value: node.grid[point].x + currentGroupGird.x
+            value: horizontalUnitConvert(node.id, grid.x, grid.unitX, 'px') + horizontalUnitConvert(group.id, currentGroupGird.x, currentGroupGird.unitX, 'px')
           })
           records.push({
             path: [node.id, GRID, point, 'y'],
-            value: node.grid[point].y + currentGroupGird.y
+            value: verticalUnitConvert(node.id, grid.y, grid.unitY, 'px') + verticalUnitConvert(group.id, currentGroupGird.y, currentGroupGird.unitY, 'px')
           })
         })
 

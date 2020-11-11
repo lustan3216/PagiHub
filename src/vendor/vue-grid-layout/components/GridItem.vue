@@ -21,9 +21,9 @@
     /* add right for rtl */
   }
 
-  .transition {
-    /*transition: transform 200ms ease;*/
-  }
+  /*.transition {*/
+  /*  !*transition: transform 200ms ease;*!*/
+  /*}*/
 
   .grid-item.no-touch {
     -ms-touch-action: none;
@@ -365,16 +365,16 @@
         return this.parent.width
       },
       pxX() {
-        return Math.round(this.colX * this.x)
+        return Math.floor(this.colX * this.x)
       },
       pxY() {
-        return Math.round(this.colY * this.y)
+        return Math.floor(this.colY * this.y)
       },
       pxW() {
-        return Math.round(this.colWidth * this.w)
+        return Math.floor(this.colWidth * this.w)
       },
       pxH() {
-        return Math.round(this.colHeight * this.h)
+        return Math.floor(this.colHeight * this.h)
       },
       colX() {
         switch (this.unitX) {
@@ -754,13 +754,13 @@
 
       calcPosition: function(x, y, w, h) {
         return {
-          left: Math.round(this.colX * x),
-          top: Math.round(this.colY * y),
+          left: Math.floor(this.colX * x),
+          top: Math.floor(this.colY * y),
           // 0 * Infinity === NaN, which causes problems with resize constriants;
           // Fix this if it occurs.
-          // Note we do it here rather than later because Math.round(Infinity) causes deopt
-          width: w === Infinity ? w : Math.round(this.colWidth * w),
-          height: h === Infinity ? h : Math.round(this.colHeight * h)
+          // Note we do it here rather than later because Math.floor(Infinity) causes deopt
+          width: w === Infinity ? w : Math.floor(this.colWidth * w),
+          height: h === Infinity ? h : Math.floor(this.colHeight * h)
         }
       },
       /**
@@ -780,14 +780,14 @@
         // x = (left - margin) / (coldWidth + margin)
         let x
         if (this.unitX === 'px') {
-          x = Math.round(left)
+          x = Math.floor(left)
         } else {
           x = toPrecision(left / this.colX, 1)
         }
 
         let y
         if (this.unitY === 'px') {
-          y = Math.round(top)
+          y = Math.floor(top)
         } else {
           y = toPrecision(top / this.colY, 1)
         }
@@ -811,14 +811,14 @@
         // w = (width + margin) / (colWidth + margin)
         let w
         if (this.unitW === 'px') {
-          w = Math.round(width)
+          w = Math.floor(width)
         } else {
           w = toPrecision(width / this.colWidth, 1)
         }
 
         let h
         if (this.unitH === 'px') {
-          h = Math.round(height)
+          h = Math.floor(height)
         } else {
           h = toPrecision(height / this.colHeight, 1)
         }

@@ -32,7 +32,7 @@ import { STYLES } from '@/const'
 import { vmGet } from '@/utils/vmMap'
 import { arrayLast } from '@/utils/array'
 import { isBackground, nodePosition, nodeRelativePosition } from '@/utils/node'
-import { unitWConvert, unitHConvert } from '@/utils/layout'
+import { horizontalUnitConvert, verticalUnitConvert } from '@/utils/layout'
 
 export default {
   name: 'Position',
@@ -110,8 +110,8 @@ export default {
                     ...currentGrid,
                     unitX: 'vw',
                     unitY: 'vh',
-                    x: unitWConvert(node.id, x, 'px', 'vw'),
-                    y: unitHConvert(node.id, y, 'px', 'vh')
+                    x: horizontalUnitConvert(node.id, x, 'px', 'vw'),
+                    y: verticalUnitConvert(node.id, y, 'px', 'vh')
                   }
                 }
               }

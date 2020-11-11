@@ -187,7 +187,8 @@ export default {
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_ID',
-      'TOGGLE_SELECTED_COMPONENT_IN_IDS'
+      'TOGGLE_SELECTED_COMPONENT_IN_IDS',
+      'PUSH_SELECTED_COMPONENT_ID'
     ]),
     getRect() {
       if (this.hoveringId === this.id || this.selected) {
@@ -224,6 +225,7 @@ export default {
     mouseup(event) {
       this.$emit('mouseup', event)
       this.getRect()
+
       setTimeout(() => {
         this.LAYOUT_SET({ gridResizing: false })
       }, 220)
@@ -273,6 +275,9 @@ export default {
 
       if (this.moving) {
         this.moving = false
+        if (!this.selected) {
+          this.SET_SELECTED_COMPONENT_ID(this.id)
+        }
       }
       else if (event.shiftKey) {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(this.id)

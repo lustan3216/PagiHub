@@ -240,7 +240,9 @@ export default {
           w: Math.round(((evt.oe.clientX - startX) / originW) * 100),
           h: evt.oe.clientY - startY,
           unitW: '%',
-          unitH: 'px'
+          unitH: 'px',
+          unitX: 'px',
+          unitY: 'px'
         }
       }
 

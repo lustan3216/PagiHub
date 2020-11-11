@@ -96,7 +96,7 @@
           :disabled="heightDisabled || hasSlider"
           :number.sync="h"
           :min="0"
-          :step="unitW === 'px' ? 1 : 0.1"
+          :step="unitH === 'px' ? 1 : 0.1"
           :unit.sync="unitH"
           :units="['%', 'px', 'vw', 'vh']"
           separate
@@ -137,7 +137,7 @@ import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import { vmGet } from '@/utils/vmMap'
 import { isGroup, isSlider, isTextEditor } from '@/utils/node'
-import { unitWConvert, unitHConvert } from '@/utils/layout'
+import { horizontalUnitConvert, verticalUnitConvert } from '@/utils/layout'
 
 export default {
   name: 'Dimension',
@@ -229,9 +229,15 @@ export default {
         return this.currentGrid.unitH
       },
       set(value) {
-        const newH = unitHConvert(this.lastNode.id, this.h, this.unitH, value)
+        this.selectedComponentNodes.forEach(node => {
+          const vm = vmGet(node.id)
+          this.debounceRecord({
+            path: [node.id, GRID, this.currentBreakpoint, 'h'],
+            value: verticalUnitConvert(node.id, vm.currentGrid.h, vm.currentGrid.unitH, value)
+          })
+        })
+
         this.recordStore('unitH', value)
-        this.recordStore('h', newH)
       }
     },
     unitW: {
@@ -239,32 +245,48 @@ export default {
         return this.currentGrid.unitW
       },
       set(value) {
-        const newW = unitWConvert(this.lastNode.id, this.w, this.unitW, value)
+        this.selectedComponentNodes.forEach(node => {
+          const vm = vmGet(node.id)
+          this.debounceRecord({
+            path: [node.id, GRID, this.currentBreakpoint, 'w'],
+            value: horizontalUnitConvert(node.id, vm.currentGrid.w, vm.currentGrid.unitW, value)
+          })
+        })
 
         this.recordStore('unitW', value)
-        this.recordStore('w', newW)
       }
     },
     unitX: {
       get() {
-        return this.currentGrid.unitX || 'px'
+        return this.currentGrid.unitX
       },
       set(value) {
-        const newX = unitWConvert(this.lastNode.id, this.x, this.unitX, value)
+        this.selectedComponentNodes.forEach(node => {
+          const vm = vmGet(node.id)
+
+          this.debounceRecord({
+            path: [node.id, GRID, this.currentBreakpoint, 'x'],
+            value: horizontalUnitConvert(node.id, vm.currentGrid.x, vm.currentGrid.unitX, value)
+          })
+        })
 
         this.recordStore('unitX', value)
-        this.recordStore('x', newX)
       }
     },
     unitY: {
       get() {
-        return this.currentGrid.unitY || 'px'
+        return this.currentGrid.unitY
       },
       set(value) {
-        const newY = unitHConvert(this.lastNode.id, this.y, this.unitY, value)
+        this.selectedComponentNodes.forEach(node => {
+          const vm = vmGet(node.id)
+          this.debounceRecord({
+            path: [node.id, GRID, this.currentBreakpoint, 'y'],
+            value: horizontalUnitConvert(node.id, vm.currentGrid.y, vm.currentGrid.unitY, value)
+          })
+        })
 
         this.recordStore('unitY', value)
-        this.recordStore('y', newY)
       }
     },
     ratioW() {

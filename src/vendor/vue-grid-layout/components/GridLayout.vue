@@ -30,7 +30,8 @@
     getLayoutItem,
     moveElement,
     validateLayout,
-    getAllCollisions
+    getAllCollisions,
+    corretHorizontalBounds
   } from '../helpers/utils'
   //var eventBus = require('./eventBus');
 
@@ -158,6 +159,7 @@
           //self.width = self.$el.offsetWidth;
           // addWindowEventListener('resize', self.onWindowResize)
           this.calcPx()
+          corretHorizontalBounds(this.layout, this.width)
           compact(self.layout, self.verticalCompact)
 
           // lots-design
@@ -309,7 +311,7 @@
           }
 
           this.calcPx()
-
+          corretHorizontalBounds(this.layout, this.width)
           compact(this.layout, this.verticalCompact)
           this.eventBus.$emit('updateWidth', this.width)
           // lots-design
@@ -338,16 +340,6 @@
           item.colH = this.colVertical(item.unitH)
           item.colX = this.colHorizontal(item.unitX)
           item.colY = this.colVertical(item.unitY)
-
-          // item.pxW = Math.round(this.colWidth(item) * item.w)
-          // item.pxH = Math.round(this.colHeight(item) * item.h)
-          // item.pxX = Math.round(this.colX(item) * item.x)
-          // item.pxY = Math.round(this.colY(item) * item.y)
-          //
-          // if (item.pxX + item.pxW > this.colNum) {
-          //   item.pxW = (item.pxW > this.colNum) ? this.colNum : item.w
-          //   item.x = this.colNum - item.pxW < 0 ? 0 : (this.colNum - item.pxW) / this.colWidth(item)
-          // }
         })
       },
        containerHeight: function() {
@@ -364,6 +356,7 @@
       dragEvent: function(eventName, id, x, y, h, w) {
         //console.log(eventName + " id=" + id + ", x=" + x + ", y=" + y);
         this.calcPx()
+        corretHorizontalBounds(this.layout, this.width)
         let l = getLayoutItem(this.layout, id)
         //GetLayoutItem sometimes returns null object
         if (l === undefined || l === null) {
@@ -408,7 +401,7 @@
           l.h = h
         }
         this.calcPx()
-
+        corretHorizontalBounds(this.layout, this.width)
         //GetLayoutItem sometimes return null object
         if (l === undefined || l === null) {
           l = { h: 0, w: 0 }

@@ -48,7 +48,7 @@ import childrenMixin from '@/components/Templates/mixins/children'
 import { getValueByPath } from '@/utils/tool'
 import { isGroup, traversalSelfAndChildren } from '@/utils/node'
 import EventController from '../TemplateUtils/EventController'
-import { unitWConvert, unitHConvert } from '@/utils/layout'
+import { horizontalUnitConvert, verticalUnitConvert } from '@/utils/layout'
 
 export default {
   name: 'GridGeneratorInner',
@@ -118,7 +118,7 @@ export default {
       const droppableId = event.target.closest('[data-droppable]').id
       const dropNode = this.nodesMap[droppableId]
       const dragNode = event.relatedTarget.__vue__.node
-      console.log(!dragNode)
+
       if (!dragNode || isGroup(dragNode.parentNode)) return
 
       if (!dropNode || !dragNode) return
@@ -145,16 +145,18 @@ export default {
       for (const breakpoint in dragNode.grid) {
         const currentGrid = dragNode.grid[breakpoint]
 
-        const dragW = unitWConvert(dragNode.id, currentGrid.w, currentGrid.unitW, 'px')
-        const dragH = unitHConvert(dragNode.id, currentGrid.h, currentGrid.unitH, 'px')
+        const dragW = horizontalUnitConvert(dragNode.id, currentGrid.w, currentGrid.unitW, 'px')
+        const dragH = verticalUnitConvert(dragNode.id, currentGrid.h, currentGrid.unitH, 'px')
 
         newGrid[breakpoint] = {
           x: dragX - dropX,
           y: dragY - dropY,
-          w: unitWConvert(dropNode.id, dragW, 'px', currentGrid.unitW),
-          h: unitHConvert(dropNode.id, dragH, 'px', currentGrid.unitH),
+          w: horizontalUnitConvert(dropNode.id, dragW, 'px', currentGrid.unitW),
+          h: verticalUnitConvert(dropNode.id, dragH, 'px', currentGrid.unitH),
           unitW: currentGrid.unitW,
-          unitH: currentGrid.unitH
+          unitH: currentGrid.unitH,
+          unitX: currentGrid.unitX,
+          unitY: currentGrid.unitY
         }
 
         // if (isNaN(newGrid[breakpoint].w)) debugger

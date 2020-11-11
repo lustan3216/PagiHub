@@ -91,7 +91,7 @@ import {
   isGroup
 } from '@/utils/node'
 import { vmGet } from '@/utils/vmMap'
-import { unitHConvert, unitWConvert } from '@/utils/layout'
+import { verticalUnitConvert, horizontalUnitConvert } from '@/utils/layout'
 
 export default {
   name: 'Align',
@@ -126,7 +126,7 @@ export default {
       return node
     },
     parentHeight() {
-      return unitHConvert(
+      return verticalUnitConvert(
         this.gridParent.id,
         this.validParentGrid.h,
         this.validParentGrid.unitH,
@@ -134,7 +134,7 @@ export default {
       )
     },
     parentWidth() {
-      return unitWConvert(
+      return horizontalUnitConvert(
         this.gridParent.id,
         this.validParentGrid.w,
         this.validParentGrid.unitW,
@@ -149,7 +149,9 @@ export default {
           w: this.windowWidth,
           h: this.backgroundHeight,
           unitH: 'px',
-          unitW: 'px'
+          unitW: 'px',
+          unitX: 'px',
+          unitY: 'px'
         }
       }
 
@@ -181,11 +183,11 @@ export default {
     },
     nodeHeight(id) {
       const vm = vmGet(id)
-      return unitHConvert(id, vm.currentGrid.h, vm.currentGrid.unitH, 'px')
+      return verticalUnitConvert(id, vm.currentGrid.h, vm.currentGrid.unitH, 'px')
     },
     nodeWidth(id) {
       const vm = vmGet(id)
-      return unitWConvert(id, vm.currentGrid.w, vm.currentGrid.unitW, 'px')
+      return horizontalUnitConvert(id, vm.currentGrid.w, vm.currentGrid.unitW, 'px')
     },
     currentGrid(node) {
       const vm = vmGet(node.id)
