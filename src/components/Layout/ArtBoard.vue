@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
 import { resizeListener } from '@/utils/tool'
 import { getRectWithoutPadding } from '@/utils/style'
@@ -38,8 +38,14 @@ export default {
     }
   },
   computed: {
+    ...mapState('layout', ['gridResizing']),
     node() {
       return this.nodesMap[this.id]
+    }
+  },
+  watch: {
+    gridResizing() {
+      this.setBoundaryRect()
     }
   },
   mounted() {

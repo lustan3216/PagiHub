@@ -66,7 +66,7 @@ export default {
       'editingComponentSetId',
       'rootComponentSetIds'
     ]),
-    ...mapState('asset', ['isImageDialogOpen']),
+    ...mapState('asset', ['isImageDialogOpen'])
   },
   async created() {
     this.INIT_NODE_STORE()

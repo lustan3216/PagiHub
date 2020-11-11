@@ -23,7 +23,10 @@
         class="can-action"
       />
 
-      <div :class="componentNameOnTop ? 'top': 'bottom'" class="wrapper flex">
+      <div
+        :class="componentNameOnTop ? 'top': 'bottom'"
+        class="wrapper flex"
+      >
         <div
           v-if="selected && isLastOne"
           class="component-name flex"
