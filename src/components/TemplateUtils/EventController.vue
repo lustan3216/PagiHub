@@ -75,7 +75,7 @@ const store = vue.observable({
 })
 
 export default {
-  name: 'OperatorExample',
+  name: 'EventController',
   inject: {
     isExample: { default: false }
   },

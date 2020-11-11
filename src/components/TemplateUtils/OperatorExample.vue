@@ -94,7 +94,7 @@ import { CAN_BE_EDITED } from '@/const'
 let timeId
 
 export default {
-  name: 'ExampleOperator',
+  name: 'OperatorExample',
   components: {
     ComponentName,
     ElPopover: Popover,

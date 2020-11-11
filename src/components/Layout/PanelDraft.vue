@@ -1,5 +1,5 @@
 <template>
-  <file-drop-zone>
+  <component :is="isDraftMode ? 'file-drop-zone' : 'div'">
     <function-bar v-if="isDraftMode" />
 
     <div
@@ -37,7 +37,7 @@
 
       <preview-controller v-if="isPreviewMode" />
     </div>
-  </file-drop-zone>
+  </component>
 </template>
 
 <script>
@@ -46,7 +46,6 @@ import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
 import SidebarLeft from '@/components/Layout/SidebarLeft'
 import SidebarRight from '@/components/Layout/SidebarRight'
-import FileDropZone from '@/components/TemplateUtils/FileDropZone'
 
 export default {
   name: 'PanelDraft',
@@ -55,7 +54,7 @@ export default {
     ViewPort,
     SidebarRight,
     SidebarLeft,
-    FileDropZone,
+    FileDropZone: () => import('@/components/TemplateUtils/FileDropZone'),
     PreviewController: () => import('@/components/Layout/PreviewController'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
     PanelDraft: () => import('@/components/Layout/PanelDraft'),

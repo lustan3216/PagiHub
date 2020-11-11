@@ -269,11 +269,9 @@ export default {
   },
   mounted() {
     if (this.isExample) {
-      this.$nextTick(() => {
-        const el = this.$el.closest('.art-board')
-        const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
-        this.exampleBoundary = closestValidBreakpoint(this.node, currentPoint)
-      })
+      const el = this.$el.closest('.art-board')
+      const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
+      this.exampleBoundary = closestValidBreakpoint(this.node, currentPoint)
     }
     this.handleAutoHeight()
   },

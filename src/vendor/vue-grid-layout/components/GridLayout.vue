@@ -112,7 +112,9 @@
         originalLayout: null, // store original Layout
         boundaryElement: null,
         offListeners: [],
-        interactObj: null
+        interactObj: null,
+
+        dropEventSet: false
       }
     },
     computed: {
@@ -176,10 +178,8 @@
       })
     },
     watch: {
-      isDroppable: {
-        handler(){
-          this.tryMakeDroppable()
-        }
+      isDroppable() {
+        this.tryMakeDroppable()
       },
 
       width: function(newval, oldval) {
@@ -239,18 +239,24 @@
       ...mapActions('layout', ['resizeNodeQuickFn']),
 
       tryMakeDroppable() {
-        if (!this.isDroppable) return
-
         if (!this.interactObj) {
           this.interactObj = interact(this.$el)
         }
 
-        this.interactObj.dropzone({
-          overlap: 0.65,
-          ondrop: (event) => {
-            this.$emit('drop', event)
+        if (this.isDroppable) {
+          this.interactObj.dropzone({ overlap: 0.65 })
+
+          if (!this.dropEventSet) {
+            this.dropEventSet = true
+
+            this.interactObj.on('drop', event => {
+              this.$emit('drop', event)
+            })
           }
-        })
+        }
+        else {
+          this.interactObj.dropzone({ enabled: false })
+        }
       },
 
       colHorizontal(unit) {
