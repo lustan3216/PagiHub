@@ -104,6 +104,7 @@ import { getValueByPath } from '@/utils/tool'
 import { BIconPlusSquareFill } from 'bootstrap-vue'
 import OftenUseMenu from './OftenUseMenu'
 import interact from 'interactjs'
+import { STYLES } from '@/const'
 
 let timeId
 
@@ -323,6 +324,15 @@ export default {
           },
           ignoreFrom: '.item-editing'
         }
+
+        // if (this.ratio) {
+        //   opts.modifiers = [
+        //     interact.modifiers.aspectRatio({
+        //       // make sure the width is always double the height
+        //       ratio: this.pxW / this.pxH
+        //     })
+        //   ]
+        // }
 
         this.interactObj.resizable(opts)
         if (!this.resizeEventSet) {

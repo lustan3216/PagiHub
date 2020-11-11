@@ -282,7 +282,7 @@ export default {
           const vm = vmGet(node.id)
           this.debounceRecord({
             path: [node.id, GRID, this.currentBreakpoint, 'y'],
-            value: horizontalUnitConvert(node.id, vm.currentGrid.y, vm.currentGrid.unitY, value)
+            value: verticalUnitConvert(node.id, vm.currentGrid.y, vm.currentGrid.unitY, value)
           })
         })
 
