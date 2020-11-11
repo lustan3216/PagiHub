@@ -33,7 +33,6 @@ bug
 ratio, 變形時要保持ratio
 opeator 應該可以放在 inner 底下吧？！可以解決 carousel覆蓋的問題，但有必要嗎
 client dragging / resizing 
-breakpoint 切換時， 清掉原本的
 如果update 500 直接 overwrite
 carousle button will be covered
 style 有關grid unit的變換 要檢查rwd  

@@ -78,6 +78,7 @@ export default {
       }, 50)
     },
     updateScrollTop() {
+      if (this.isExample) return
       this.scrollTop = this.$el.scrollTop
       this.$bus.$emit('art-board-scroll-top', this.scrollTop)
     },

@@ -115,7 +115,7 @@ export default {
       'editingPath',
       'isAdding'
     ]),
-    ...mapState('layout', ['gridResizing', 'windowHeight', 'windowWidth']),
+    ...mapState('layout', ['gridResizing', 'windowHeight', 'windowWidth', 'scaleRatio']),
     lock() {
       return this.node.lock
     },
@@ -159,6 +159,9 @@ export default {
     }
   },
   watch: {
+    scaleRatio() {
+      this.getRect()
+    },
     gridResizing() {
       this.getRect()
     },
@@ -191,14 +194,16 @@ export default {
       'PUSH_SELECTED_COMPONENT_ID'
     ]),
     getRect() {
-      if (this.hoveringId === this.id || this.selected) {
-        if (this.isBackground) {
-          this.rect = this.$el.closest('.art-board').getBoundingClientRect()
+      requestAnimationFrame(() => {
+        if (this.hoveringId === this.id || this.selected) {
+          if (this.isBackground) {
+            this.rect = this.$el.closest('.art-board').getBoundingClientRect()
+          }
+          else {
+            this.rect = this.element.getBoundingClientRect()
+          }
         }
-        else {
-          this.rect = this.element.getBoundingClientRect()
-        }
-      }
+      })
     },
 
     finEditingPath() {

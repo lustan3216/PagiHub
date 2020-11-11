@@ -778,23 +778,26 @@
         // l - m = x(c + m)
         // (l - m) / (c + m) = x
         // x = (left - margin) / (coldWidth + margin)
-        let x
+        let maxX = (this.containerWidth - this.pxW) / this.colX
+        let maxY = (this.containerHeight - this.pxH) / this.colY
+        let x,y
         if (this.unitX === 'px') {
           x = Math.floor(left)
         } else {
           x = toPrecision(left / this.colX, 1)
+          maxX = toPrecision(maxX, 1)
         }
 
-        let y
         if (this.unitY === 'px') {
           y = Math.floor(top)
         } else {
           y = toPrecision(top / this.colY, 1)
+          maxY = toPrecision(maxY, 1)
         }
 
         // Capping
-        x = Math.max(x, 0)
-        y = Math.max(y, 0)
+        x = Math.max(Math.min(x, maxX), 0)
+        y = Math.max(Math.min(y, maxY), 0)
 
         return { x, y }
       },
