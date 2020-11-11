@@ -16,7 +16,7 @@
   >
     <template v-if="!gridResizing && visible">
       <portal-target
-        v-if="itemEditing && !isExample && isLastOne"
+        v-if="itemEditing && isLastOne"
         :style="textEditorStyle"
         name="QuickFunctionsTextEditor"
         slim
@@ -29,7 +29,7 @@
           class="component-name flex"
         >
           <i
-            v-if="!isSlider && !isBackground && !isExample"
+            v-if="!isSlider && !isBackground && isDraggable"
             :class="
               itemEditing && !hoverIcon ? 'el-icon-edit-outline' : 'el-icon-rank'
             "
@@ -57,10 +57,10 @@
                 />
                 <component-name
                   v-if="hovering || node.id === id"
+                  :style="{ cursor: index ? 'pointer' : 'default' }"
                   :key="node.id"
                   :id="node.id"
                   :editable="false"
-                  :is-example="isExample"
                   @click="SET_SELECTED_COMPONENT_ID(node.id)"
                 />
               </template>
@@ -69,13 +69,13 @@
         </div>
 
         <often-use-menu
-          v-if="isDraftMode && !isExample && isLastOne"
+          v-if="isDraftMode && isLastOne"
           :id="id"
           class="flex backface-hidden"
         />
       </div>
 
-      <template v-if="selected && !isSlider && !isBackground && !isExample">
+      <template v-if="selected && !isSlider && !isBackground && isResizable">
         <template v-if="!shouldAutoHeight">
           <div class="resizable-handle-both" />
           <div class="resizable-handle-bottom" />
@@ -108,7 +108,7 @@ import interact from 'interactjs'
 let timeId
 
 export default {
-  name: 'ComponentOperator',
+  name: 'OperatorComponent',
   components: {
     ComponentName,
     ElPopover: Popover,
@@ -119,10 +119,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-    isExample: {
-      type: Boolean,
-      default: false
     },
     rect: {
       type: DOMRect,
@@ -209,6 +205,10 @@ export default {
       }
     },
     nodesPath() {
+      if (!this.isDraftMode) {
+        return [this.node]
+      }
+
       const nodes = []
       traversalAncestorAndSelf(this.node, node => {
         if (!isGrid(node)) {
@@ -226,18 +226,15 @@ export default {
       return this.node.lock || this.isBackground || isSlider(this.node)
     },
     isDraggable() {
-      const userCanDrag = getValueByPath(this.node, ['props', 'userCanDrag'])
-      return (
-        (!this.isAdding && this.isDraftMode) ||
-        (this.isProductionMode && userCanDrag)
-      )
+      if (this.isDraftMode) {
+        return !this.isAdding
+      }
+      else {
+        return getValueByPath(this.node, ['props', 'userCanDrag'])
+      }
     },
     isResizable() {
-      const userCanResize = getValueByPath(this.node, [
-        'props',
-        'userCanResize'
-      ])
-      return this.isDraftMode || userCanResize
+      return this.isDraftMode || getValueByPath(this.node, ['props', 'userCanResize'])
     }
   },
   watch: {

@@ -30,8 +30,6 @@ btton連結
 
 
 bug
-
-ratio, 變形時要保持ratio
 opeator 應該可以放在 inner 底下吧？！可以解決 carousel覆蓋的問題，但有必要嗎 / carousle button will be covered
 client dragging / resizing 
 如果update 500 直接 overwrite

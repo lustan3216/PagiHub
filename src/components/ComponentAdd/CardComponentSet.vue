@@ -12,7 +12,7 @@
 
       <div class="flex">
         <portal-target
-          name="asd"
+          name="CopyDesignButton"
           class="copy-button"
         >
           <el-button disabled>

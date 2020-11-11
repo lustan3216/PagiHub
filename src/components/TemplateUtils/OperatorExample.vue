@@ -18,7 +18,7 @@
         v-if="selected && isLastOne"
         class="component-name flex"
       >
-        <portal to="asd">
+        <portal to="CopyDesignButton">
           <el-button
             v-if="!isBackground"
             @click="copy"
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import ComponentName from './ComponentName'
 import { Popover } from 'element-ui'
 import {

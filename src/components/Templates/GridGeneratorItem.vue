@@ -42,7 +42,7 @@
       />
 
       <event-controller
-        v-if="isDraftMode && $el"
+        v-if="needController && $el"
         :id="id"
         :element="$el"
         @mousedown="mousedown"
@@ -113,6 +113,15 @@ export default {
       'descBreakpoints',
       'vh'
     ]),
+    needController() {
+      if (this.isDraftMode) {
+        return true
+      }
+      else {
+        const { userCanDrag, userCanResize } = getValueByPath(this.node, 'props', {})
+        return userCanDrag || userCanResize
+      }
+    },
     gridItemStyle() {
       const { padding, ...restOfStyles } = this.innerStyles.html || {}
       return { padding }

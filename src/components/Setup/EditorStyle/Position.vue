@@ -44,10 +44,10 @@ export default {
     ...mapGetters('app', ['selectedComponentNodes']),
     ...mapGetters('layout', ['currentBreakpoint']),
     canNotFixed() {
-      return !!this.selectedComponentNodes.find(node => !isBackground(node.parentNode))
+      return this.selectedComponentNodes.some(node => !isBackground(node.parentNode))
     },
     canNotVerticalCompact() {
-      return !!this.selectedComponentNodes.find(node => {
+      return this.selectedComponentNodes.some(node => {
         return getValueByPath(node, [STYLES, 'layout', 'stack']) === undefined
       })
     },

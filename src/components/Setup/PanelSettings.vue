@@ -1,33 +1,34 @@
 <template>
   <div class="settings">
-    <div
-      v-if="isBackground"
-      class="flex-center h-100"
-    >
-      <p class="small-title gray-font-2">No Settings</p>
-    </div>
-
-    <template v-else>
+    <template v-if="canInteract">
       <el-divider content-position="left">
         INTERACTION
       </el-divider>
 
       <setting-grid-generator-item :id="lastNode.id" />
-
-      <template v-if="canSetUp">
-        <el-divider content-position="left">
-          SETTINGS
-        </el-divider>
-
-        <component
-          v-if="lastNode"
-          :is="vueComponentTag"
-          :key="lastNode.id"
-          :id="lastNode.id"
-          class="m-t-10"
-        />
-      </template>
     </template>
+
+    <template v-if="canSetUp">
+      <el-divider content-position="left">
+        SETTINGS
+      </el-divider>
+
+      <component
+        v-if="lastNode"
+        :is="vueComponentTag"
+        :key="lastNode.id"
+        :id="lastNode.id"
+        class="m-t-10"
+      />
+    </template>
+
+    <div
+      v-else-if="!canInteract && !canSetUp"
+      class="flex-center h-100"
+    >
+      <p class="small-title gray-font-2">No Settings</p>
+    </div>
+
   </div>
 </template>
 
@@ -36,7 +37,7 @@ import { mapGetters } from 'vuex'
 import { bigCamelCase } from '@/utils/string'
 import { arrayLast, arrayUniq } from '@/utils/array'
 import { vmGet } from '@/utils/vmMap'
-import { isBackground } from '@/utils/node'
+import { isBackground, isCarousel, isGroup, isSlider } from '@/utils/node'
 
 const self = {
   name: 'PanelSettings',
@@ -89,8 +90,13 @@ const self = {
       const tags = this.selectedComponentNodes.map(node => node.tag)
       return arrayUniq(tags).length === 1
     },
+    canInteract() {
+      return !this.selectedComponentNodes.some(node => {
+        return isCarousel(node) || isBackground(node) || isSlider(node)
+      })
+    },
     canSetUp() {
-      return this.areSameTag && this.hasVueSettingComponent && this.vm
+      return this.areSameTag && this.hasVueSettingComponent && this.vm && !this.isBackground
     },
     vm() {
       return vmGet(this.lastNode.id) // when selecting component in example

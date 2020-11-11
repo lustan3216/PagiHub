@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="isDraftMode && node"
+    v-if="node"
     :class="{
       'h-100': sameHeightAsParent,
       'no-action': lock,
@@ -27,7 +27,7 @@
       <component
         v-if="rect && !isAdding"
         v-show="(hoveringId === id || selected)"
-        :is="isExample ? 'example-operator' : 'component-operator'"
+        :is="isExample ? 'operator-example' : 'operator-component'"
         :id="id"
         :key="id"
         :rect="rect"
@@ -52,14 +52,6 @@
 
     <slot v-else />
   </div>
-
-  <div
-    v-else-if="node"
-    :class="{ 'h-100': sameHeightAsParent }"
-    class="relative z-index1"
-  >
-    <slot />
-  </div>
 </template>
 
 <script>
@@ -74,7 +66,6 @@ import {
   traversalAncestorAndSelf
 } from '@/utils/node'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
-import ExampleOperator from '@/components/TemplateUtils/ExampleOperator'
 import { arrayLast, findIndexBy } from '@/utils/array'
 
 const store = vue.observable({
@@ -84,14 +75,14 @@ const store = vue.observable({
 })
 
 export default {
-  name: 'EventController',
+  name: 'OperatorExample',
   inject: {
     isExample: { default: false }
   },
   components: {
     ContextMenu,
-    ExampleOperator,
-    ComponentOperator: () => import('./ComponentOperator')
+    OperatorExample: () => import('./OperatorExample'),
+    OperatorComponent: () => import('./OperatorComponent')
   },
   props: {
     id: {
@@ -308,7 +299,8 @@ export default {
       store.contextMenu = {}
     },
     contextmenu(event) {
-      if (this.isExample) return
+      if (this.isExample || !this.isDraftMode) return
+
       const y =
         window.innerHeight > event.clientY + 400
           ? event.clientY

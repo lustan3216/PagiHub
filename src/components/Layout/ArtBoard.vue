@@ -66,9 +66,6 @@ export default {
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     handleGridResizing() {
-      if (!this.isDraftMode) {
-        return
-      }
       clearTimeout(timeId)
 
       this.LAYOUT_SET({ gridResizing: true })

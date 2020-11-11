@@ -162,7 +162,7 @@ export default {
       }
     },
     anyFixed() {
-      return !!this.selectedComponentNodes.find(node => getValueByPath(node, [STYLES, 'layout', 'position']) === 'fixed')
+      return this.selectedComponentNodes.some(node => getValueByPath(node, [STYLES, 'layout', 'position']) === 'fixed')
     },
     hasSlider() {
       return Boolean(
