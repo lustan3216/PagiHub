@@ -148,13 +148,13 @@ export default {
       'editingPath',
       'isAdding'
     ]),
-    ...mapState('layout', ['gridResizing', 'windowHeight', 'windowY']),
+    ...mapState('layout', ['gridResizing', 'windowHeight', 'windowY', 'scaleRatio']),
     ...mapGetters('app', ['selectedComponentNodes']),
     componentNameOnTop() {
       return this.rect.y - this.windowY > 50 || isBackground(this.node)
     },
     styles() {
-      const windowBottom = this.windowY + this.windowHeight
+      const windowBottom = this.windowY + (this.windowHeight * this.scaleRatio)
       const height = windowBottom > this.rect.y + this.rect.height
         ? this.windowY > this.rect.y
           ? this.rect.y + this.rect.height - this.windowY

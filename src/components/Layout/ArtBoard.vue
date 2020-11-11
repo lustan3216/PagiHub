@@ -37,13 +37,16 @@ export default {
     }
   },
   computed: {
-    ...mapState('layout', ['gridResizing']),
+    ...mapState('layout', ['gridResizing', 'scaleRatio']),
     node() {
       return this.nodesMap[this.id]
     }
   },
   watch: {
     gridResizing() {
+      this.setBoundaryRect()
+    },
+    scaleRatio() {
       this.setBoundaryRect()
     }
   },

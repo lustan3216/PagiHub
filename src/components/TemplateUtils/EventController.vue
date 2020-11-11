@@ -170,6 +170,12 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    this.$bus.$on('operator-get-rect', this.getRect)
+  },
+  beforeDestroy() {
+    this.$bus.$off('operator-get-rect', this.getRect)
+  },
   methods: {
     isMac,
     ...mapMutations('layout', {

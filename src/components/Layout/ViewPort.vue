@@ -124,12 +124,13 @@
 
 <script>
 import interactjs from 'interactjs'
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import { Popover } from 'element-ui'
 import SettingBreakpoints from '../Setup/EditorSetting/SettingBreakpoints'
 import ButtonDevice from '../Components/ButtonDevice'
 import { directive } from '@/directive/freeView'
 import { getRectWithoutPadding } from '@/utils/style'
+import { globalDebounce } from '@/utils/tool'
 import gsap from 'gsap'
 
 export const DEVICE_OPTIONS = [
@@ -304,15 +305,21 @@ export default {
     reset() {
       this.setBoundaryRect()
       this.style.scale = 1
+      this.$bus.$emit('operator-get-rect')
     },
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.$el)
-
+      this.$bus.$emit('operator-get-rect')
       this.style.w = width
       this.style.h = height
     },
     scaleCallback(event, { scaleRatio }) {
+      this.LAYOUT_SET({ gridResizing: true })
       this.style.scale = scaleRatio
+
+      globalDebounce(() => {
+        this.LAYOUT_SET({ gridResizing: false })
+      }, 50)
     },
     setSize({ w, h }) {
       const { width, height } = getRectWithoutPadding(this.$el)
