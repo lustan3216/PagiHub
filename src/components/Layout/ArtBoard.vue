@@ -14,10 +14,9 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
-import { resizeListener } from '@/utils/tool'
+import { globalDebounce, resizeListener } from '@/utils/tool'
 import { getRectWithoutPadding } from '@/utils/style'
 
-let timeId
 export default {
   name: 'ArtBoard',
   components: {
@@ -50,11 +49,11 @@ export default {
   },
   mounted() {
     this.$el.addEventListener('scroll', this.updateScrollTop)
+    this.$el.addEventListener('scroll', this.handleGridResizing)
+
     if (!this.isExample) {
       this.offResizeListener = resizeListener(this.$el, this.setBoundaryRect)
     }
-
-    this.$el.addEventListener('scroll', this.handleGridResizing)
   },
   beforeDestroy() {
     this.$el.removeEventListener('scroll', this.handleGridResizing)
@@ -72,12 +71,10 @@ export default {
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     handleGridResizing() {
-      clearTimeout(timeId)
-
       this.LAYOUT_SET({ gridResizing: true })
-      timeId = setTimeout(() => {
+
+      globalDebounce(() => {
         this.LAYOUT_SET({ gridResizing: false })
-        timeId = null
       }, 50)
     },
     updateScrollTop() {

@@ -23,6 +23,17 @@ export {
   isUndefined
 }
 
+let timeIdMap = {}
+export function globalDebounce(fn, sec) {
+  const id = timeIdMap[fn]
+  if (id) clearTimeout(id)
+
+  timeIdMap = setTimeout(() => {
+    fn()
+    delete timeIdMap[fn]
+  }, sec)
+}
+
 export function resizeListener(element, fn) {
   if (element) {
     addResizeListener(element, fn)
