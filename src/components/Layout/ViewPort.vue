@@ -7,14 +7,17 @@
   >
     <!--   這層雖然多餘，但為了要限制 interact 的 size grab bar 被拉出去  -->
     <!--  interactjs.modifiers.restrictEdges({ outer: 'parent' })  -->
-    <div
-      ref="asd"
-      class="h-100"
-    >
+    <div class="h-100">
       <div
+        :style="{
+          top: '50%',
+          left: '50%',
+          transform: `translate(-50%, -50%) scale(${style.scale})`,
+          height: style.h ? style.h +'px' :'100%',
+          width: style.w ? style.w +'px' : undefined
+        }"
         ref="target"
         class="target free-view-target"
-        style="height: 100%;"
       >
         <template v-if="resizeBar">
           <div
@@ -131,7 +134,6 @@ import ButtonDevice from '../Components/ButtonDevice'
 import { directive } from '@/directive/freeView'
 import { getRectWithoutPadding } from '@/utils/style'
 import { globalDebounce } from '@/utils/tool'
-import gsap from 'gsap'
 
 export const DEVICE_OPTIONS = [
   { name: 'iMac', w: 2560, h: 1440 },
@@ -217,23 +219,6 @@ export default {
       if (value) {
         this.resizeBar = true
       }
-    },
-    style: {
-      handler(style) {
-        gsap.to(this.targetEl, {
-          height: style.h,
-          width: style.w,
-          x: '-50%',
-          y: '-50%',
-          z: 0,
-          scale: style.scale,
-          top: '50%',
-          left: '50%',
-          duration: 0,
-          ease: 'liner'
-        })
-      },
-      deep: true
     },
     'style.scale'(scaleRatio) {
       this.LAYOUT_SET({ scaleRatio })

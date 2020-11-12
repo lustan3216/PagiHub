@@ -7,10 +7,16 @@
     <!--  interactjs.modifiers.restrictEdges({ outer: 'parent' })  -->
     <div class="outer">
       <div
-        ref="target"
+        :style="{
+          top: '50%',
+          left: '50%',
+          transform: `translate(-50%, -50%) scale(${style.scale})`,
+          height: style.h ? style.h +'px' :'100%',
+          width: style.w ? style.w +'px' : undefined
+        }"
         id="example-view-port"
+        ref="target"
         class="target free-view-target"
-        style="height: 100%;"
       >
         <slot />
       </div>
@@ -68,7 +74,6 @@
 import { mapGetters, mapMutations } from 'vuex'
 import ButtonDevice from '../Components/ButtonDevice'
 import { getRectWithoutPadding } from '@/utils/style'
-import gsap from 'gsap'
 import { DEVICE_OPTIONS } from '@/components/Layout/ViewPort'
 import elementResizeDetectorMaker from 'element-resize-detector'
 
@@ -121,30 +126,6 @@ export default {
     },
     deviceOptions() {
       return DEVICE_OPTIONS
-    }
-  },
-  watch: {
-    style: {
-      handler(style) {
-        const { LAYOUT_SET } = this
-        gsap.to(this.targetEl, {
-          height: style.h,
-          width: style.w,
-          x: '-50%',
-          y: '-50%',
-          z: 0,
-          scale: style.scale,
-          top: '50%',
-          left: '50%',
-          onStart: () => {
-            LAYOUT_SET({ gridResizing: true })
-          },
-          onComplete: () => {
-            LAYOUT_SET({ gridResizing: false })
-          }
-        })
-      },
-      deep: true
     }
   },
   created() {

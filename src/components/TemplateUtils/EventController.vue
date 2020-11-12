@@ -200,7 +200,6 @@ export default {
             this.rect = this.$el.closest('.art-board').getBoundingClientRect()
           }
           else {
-            console.log(this.element.getBoundingClientRect())
             this.rect = this.element.getBoundingClientRect()
           }
         }

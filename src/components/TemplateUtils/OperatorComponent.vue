@@ -130,9 +130,11 @@ export default {
           : this.rect.height
         : windowBottom - this.rect.y
 
+      const top = (this.windowY < this.rect.y ? this.rect.y : this.windowY) + 1 + 'px'
+      const left = this.rect.x + 'px'
+
       return {
-        top: (this.windowY < this.rect.y ? this.rect.y : this.windowY) +1  + 'px',
-        left: this.rect.x + 'px',
+        transform: `translate(${left}, ${top}`,
         width: this.rect.width + 'px',
         height: height + 'px',
         zIndex: this.selected ? 2001 : 2000

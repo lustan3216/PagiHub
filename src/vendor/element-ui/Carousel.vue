@@ -6,19 +6,23 @@
     <div
       class="el-carousel__container"
       :style="{ height: height }">
-      <transition
-        v-if="arrowDisplay"
-        name="carousel-arrow-left">
-        <button
-          type="button"
-          v-show="(arrow === 'always' || hover) && (loop || activeIndex > 0)"
-          @mouseenter="handleButtonEnter('left')"
-          @mouseleave="handleButtonLeave"
-          @click.stop="throttledArrowClick(activeIndex - 1)"
-          class="el-carousel__arrow el-carousel__arrow--left">
-          <i class="el-icon-arrow-left"></i>
-        </button>
-      </transition>
+
+      <SendToTop>
+        <transition
+          v-if="arrowDisplay"
+          name="carousel-arrow-left">
+          <button
+            type="button"
+            v-show="(arrow === 'always' || hover) && (loop || activeIndex > 0)"
+            @mouseenter="handleButtonEnter('left')"
+            @mouseleave="handleButtonLeave"
+            @click.stop="throttledArrowClick(activeIndex - 1)"
+            class="el-carousel__arrow el-carousel__arrow--left">
+            <i class="el-icon-arrow-left"></i>
+          </button>
+        </transition>
+      </SendToTop>
+
       <transition
         v-if="arrowDisplay"
         name="carousel-arrow-right">
@@ -57,10 +61,13 @@
 <script>
 import throttle from 'throttle-debounce/throttle';
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
+import SendToTop from '@/components/TemplateUtils/SendToTop';
 
 export default {
   name: 'ElCarousel',
-
+  components: {
+    SendToTop
+  },
   props: {
     initialIndex: {
       type: Number,
