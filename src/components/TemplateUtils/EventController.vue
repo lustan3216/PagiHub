@@ -238,11 +238,11 @@ export default {
       }
     },
     getRect() {
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         if (this.hoveringId === this.id || this.selected) {
           this.calculateRect()
         }
-      }, 80)
+      })
     },
 
     finEditingPath() {

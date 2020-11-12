@@ -33,7 +33,7 @@
       :class="{
         'h-100': !autoResizeHeight
       }"
-      class="border-box"
+      class="border-box over-hidden"
     >
       <i
         v-shortkey.push="['alt']"

@@ -35,8 +35,6 @@
       border
     }"
       class="quick-functions flex-center"
-      @mousedown.stop="$emit('mousedown', $event)"
-      @mouseup.stop="$emit('mouseup', $event)"
       @dblclick.stop="$emit('dblclick', $event)"
       @contextmenu="$emit('contextmenu', $event)"
       @wheel="onWheel"
@@ -172,7 +170,7 @@ export default {
       return arrayLast(this.selectedComponentIds) === this.id
     },
     static() {
-      return this.node.lock || this.isBackground || isSlider(this.node)
+      return this.isBackground || isSlider(this.node)
     },
     isDraggable() {
       const userCanDrag = getValueByPath(this.node, ['props', 'userCanDrag'])
@@ -190,10 +188,6 @@ export default {
     }
   },
   mounted() {
-    const dialog = document.getElementById('examples-dialog')
-    const dialogIndex = dialog.style.zIndex
-    this.zIndex = parseInt(dialogIndex) + 1
-
     const { height, y } = document.getElementById('example-view-port').getBoundingClientRect()
     this.windowHeight = height
     this.windowY = y
