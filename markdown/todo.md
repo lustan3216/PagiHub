@@ -29,12 +29,9 @@ rwd
 btton連結
 發布後 的share page and browsing
 example 的 responsive button
-
-bug
-autoheigh/ auto exten height
 如果update 500 直接 overwrite
-  
 
+// resizeing docking 考慮
 // group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
 
 
