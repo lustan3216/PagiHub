@@ -86,25 +86,25 @@ export default {
       })
     },
     moveForward() {
-      if (this.canMoveForward) {
+      if (this.canMove) {
         this.cleanGap()
         this.recordValue(this.currentIndex + 1)
       }
     },
     moveToFront() {
-      if (this.canMoveForward) {
+      if (this.canMove) {
         this.cleanGap()
         this.recordValue(this.maxIndex + 1)
       }
     },
     moveToBackward() {
-      if (this.canMoveBackward) {
+      if (this.canMove) {
         this.cleanGap()
         this.recordValue(this.currentIndex - 1)
       }
     },
     moveToEnd() {
-      if (this.canMoveBackward) {
+      if (this.canMove) {
         this.cleanGap()
         this.recordValue(this.minIndex - 1)
       }
