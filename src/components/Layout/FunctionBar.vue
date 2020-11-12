@@ -8,7 +8,7 @@
         placement="bottom"
       >
         <div slot="content">
-          Text
+          Preview
           <i
             v-shortkey="[isMac ? 'meta' : 'ctrl', 'shift', 'p']"
             class="gray-font-2 m-l-10"

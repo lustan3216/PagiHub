@@ -3,8 +3,8 @@
     v-if="node"
     :style="styles"
     :class="{
-      'no-action': static || isBackground || scrolling,
-      border: !isBackground
+      'no-action': static || itemEditing || isBackground || !hovered,
+      border
     }"
     class="quick-functions flex-center"
     @mousedown.stop="$emit('mousedown', $event)"
@@ -13,9 +13,12 @@
     @contextmenu="$emit('contextmenu', $event)"
     @wheel="onWheel"
   >
-    <div class="wrapper flex top">
+    <div
+      v-if="!gridResizing && visible && selected"
+      class="wrapper flex top"
+    >
       <div
-        v-if="selected && isLastOne"
+        v-if="!gridResizing && isLastOne"
         class="component-name flex"
       >
         <portal to="CopyDesignButton">
@@ -120,6 +123,20 @@ export default {
         width: Math.round(this.rect.width) + 'px',
         height: Math.round(height) + 'px',
         zIndex: this.selected ? this.zIndex + 1 : this.zIndex
+      }
+    },
+    visible() {
+      const windowBottom = this.windowY + this.windowHeight
+      return this.rect.y < windowBottom && this.rect.y + this.rect.height > this.windowY
+    },
+    border() {
+      if (!this.gridResizing && this.inViewPort) {
+        if (this.isBackground) {
+          return this.selected
+        }
+        else {
+          return this.hovered || this.selected
+        }
       }
     },
     canBeEdited() {

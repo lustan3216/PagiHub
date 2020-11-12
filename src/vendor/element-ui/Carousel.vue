@@ -7,21 +7,19 @@
       class="el-carousel__container"
       :style="{ height: height }">
 
-      <SendToTop>
-        <transition
-          v-if="arrowDisplay"
-          name="carousel-arrow-left">
-          <button
-            type="button"
-            v-show="(arrow === 'always' || hover) && (loop || activeIndex > 0)"
-            @mouseenter="handleButtonEnter('left')"
-            @mouseleave="handleButtonLeave"
-            @click.stop="throttledArrowClick(activeIndex - 1)"
-            class="el-carousel__arrow el-carousel__arrow--left">
-            <i class="el-icon-arrow-left"></i>
-          </button>
-        </transition>
-      </SendToTop>
+      <transition
+        v-if="arrowDisplay"
+        name="carousel-arrow-left">
+        <button
+          type="button"
+          v-show="(arrow === 'always' || hover) && (loop || activeIndex > 0)"
+          @mouseenter="handleButtonEnter('left')"
+          @mouseleave="handleButtonLeave"
+          @click.stop="throttledArrowClick(activeIndex - 1)"
+          class="el-carousel__arrow el-carousel__arrow--left can-action">
+          <i class="el-icon-arrow-left"></i>
+        </button>
+      </transition>
 
       <transition
         v-if="arrowDisplay"
@@ -69,6 +67,10 @@ export default {
     SendToTop
   },
   props: {
+    id: {
+      type: String,
+      required: true
+    },
     initialIndex: {
       type: Number,
       default: 0

@@ -7,6 +7,8 @@
     <!--  interactjs.modifiers.restrictEdges({ outer: 'parent' })  -->
     <div class="outer">
       <div
+        id="example-view-port"
+        ref="target"
         :style="{
           top: '50%',
           left: '50%',
@@ -14,8 +16,6 @@
           height: style.h ? style.h +'px' :'100%',
           width: style.w ? style.w +'px' : undefined
         }"
-        id="example-view-port"
-        ref="target"
         class="target free-view-target"
       >
         <slot />

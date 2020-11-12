@@ -9,6 +9,7 @@
     <!--  interactjs.modifiers.restrictEdges({ outer: 'parent' })  -->
     <div class="h-100">
       <div
+        ref="target"
         :style="{
           top: '50%',
           left: '50%',
@@ -16,7 +17,6 @@
           height: style.h ? style.h +'px' :'100%',
           width: style.w ? style.w +'px' : undefined
         }"
-        ref="target"
         class="target free-view-target"
       >
         <template v-if="resizeBar">

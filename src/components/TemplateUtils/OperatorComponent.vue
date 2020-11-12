@@ -3,18 +3,15 @@
     v-if="node"
     :style="styles"
     :class="{
-      'no-action': static || itemEditing || isBackground || scrolling,
-      border: !gridResizing && visible
+      'no-action': static || itemEditing || isBackground || !hovered,
+      border
     }"
     class="quick-functions flex-center"
-    @mousedown="$emit('mousedown', $event)"
-    @mouseup="$emit('mouseup', $event)"
     @dblclick="dblclick"
-    @contextmenu="$emit('contextmenu', $event)"
     @wheel="onWheel"
     @dragover="APP_SET({ isAdding: true })"
   >
-    <template v-if="!gridResizing && visible">
+    <template v-if="!gridResizing && inViewPort && selected">
       <portal-target
         v-if="itemEditing && isLastOne"
         :style="textEditorStyle"
@@ -28,7 +25,7 @@
         class="wrapper flex"
       >
         <div
-          v-if="selected && isLastOne"
+          v-if="isLastOne"
           class="component-name flex"
         >
           <i
@@ -54,7 +51,7 @@
         />
       </div>
 
-      <template v-if="selected && !isSlider && !isBackground && isResizable">
+      <template v-if="!isSlider && !isBackground && isResizable">
         <template v-if="!shouldAutoHeight">
           <div class="resizable-handle-both" />
           <div class="resizable-handle-bottom" />
@@ -73,7 +70,8 @@ import {
   isBackground,
   isTextEditor,
   isGroup,
-  isSlider, isImage
+  isSlider,
+  isImage
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
@@ -95,6 +93,10 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    hovered: {
+      type: Boolean,
+      default: false
     },
     rect: {
       type: DOMRect,
@@ -144,9 +146,19 @@ export default {
         zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
     },
-    visible() {
+    inViewPort() {
       const windowBottom = this.windowY + this.windowHeight
       return this.rect.y < windowBottom && this.rect.y + this.rect.height > this.windowY
+    },
+    border() {
+      if (!this.gridResizing && this.inViewPort) {
+        if (this.isBackground) {
+          return this.selected
+        }
+        else {
+          return this.hovered || this.selected
+        }
+      }
     },
     node() {
       return this.nodesMap[this.id]

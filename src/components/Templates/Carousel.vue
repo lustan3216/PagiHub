@@ -110,7 +110,7 @@ import CarouselItem from '@/vendor/element-ui/CarouselItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
 import { isSlider, traversalSelfAndChildren } from '@/utils/node'
 import { vmRemoveNode } from '@/utils/vmMap'
-import { getValueByPath } from '@/utils/tool'
+import { getValueByPath, globalDebounce } from '@/utils/tool'
 import { findIndexBy } from '@/utils/array'
 
 export default {
@@ -276,6 +276,8 @@ export default {
     ]),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     checkSelectedComponent(index, oldIndex) {
+      this.LAYOUT_SET({ scrolling: true })
+
       const { id } = this.sliders[oldIndex]
       const node = this.nodesMap[id]
       const ids = []
@@ -283,6 +285,10 @@ export default {
       traversalSelfAndChildren(node, ({ id }) => ids.push(id))
 
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
+
+      globalDebounce(() => {
+        this.LAYOUT_SET({ scrolling: false })
+      }, 500)
     },
     removeCurrentSlider() {
       const node = this.children[this.currentIndex]

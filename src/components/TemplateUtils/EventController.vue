@@ -7,7 +7,7 @@
       'item-editing': itemEditing
     }"
     class="relative z-index1"
-    @mouseenter="hoveringId = id"
+    @mouseenter.stop="hoveringId = id"
     @mousedown="$emit('mousedown', $event)"
     @mouseup="mouseup"
     @dblclick.stop="dblclick"
@@ -26,17 +26,18 @@
 
       <component
         v-if="rect && !isAdding && !scrolling"
-        v-show="(hoveringId === id || selected)"
+        :hovered="hoveringId === id"
         :is="isExample ? 'operator-example' : 'operator-component'"
         :id="id"
         :key="id"
         :rect="rect"
         @move="move"
         @resize="getRect"
-        @mousedown="$emit('mousedown', $event)"
-        @mouseup="mouseup"
-        @dblclick.stop="dblclick"
-        @contextmenu.stop.prevent="contextmenu($event)"
+        @mouseenter.native="hoveringId = id"
+        @mouseup.native="mouseup"
+        @mousedown.native="$emit('mousedown', $event)"
+        @dblclick.native.stop="dblclick"
+        @contextmenu.native.stop.prevent="contextmenu($event)"
       />
     </portal>
 
@@ -230,6 +231,8 @@ export default {
     mouseup(event) {
       this.$emit('mouseup', event)
       this.getRect()
+
+      this.hoveringId = null
 
       setTimeout(() => {
         this.LAYOUT_SET({ gridResizing: false })

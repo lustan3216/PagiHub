@@ -3,6 +3,7 @@
     v-if="node"
     ref="generator"
     :id="id"
+    :key="JSON.stringify(spec)"
     :rules="spec"
   />
 </template>
