@@ -6,7 +6,7 @@
       'no-action': lock
     }"
     class="relative z-index1"
-    @mouseenter.stop="hoveringId = id"
+    @mouseenter="hoveringId = id"
     @mousedown="$emit('mousedown', $event)"
     @mouseup="mouseup"
     @dblclick.stop="dblclick"
@@ -237,7 +237,6 @@ export default {
               height: itemRect.height
             }
           }
-
         }
       }, 100)
     },
