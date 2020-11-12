@@ -96,6 +96,10 @@ export default {
     id: {
       type: String,
       required: true
+    },
+    element: {
+      type: HTMLDivElement,
+      required: true
     }
   },
   data() {
@@ -224,7 +228,7 @@ export default {
           }
           else {
             const gridRect = this.$el.closest('.grid-layout').getBoundingClientRect()
-            const itemRect = this.$el.getBoundingClientRect()
+            const itemRect = this.element.getBoundingClientRect()
 
             this.rect = {
               x: (itemRect.x - gridRect.x),

@@ -42,8 +42,9 @@
       />
 
       <event-controller
-        v-if="needController"
+        v-if="needController && $el"
         :id="id"
+        :element="$el"
         @mousedown="mousedown"
         @mouseup="moved"
       >
