@@ -134,13 +134,13 @@ export default {
           : this.rect.height
         : windowBottom - this.rect.y
 
-      const top = (this.windowY < this.rect.y ? this.rect.y : this.windowY) + 1 + 'px'
-      const left = this.rect.x + 'px'
+      const top = (this.windowY < this.rect.y ? this.rect.y : this.windowY)
+      const left = this.rect.x
 
       return {
-        transform: `translate(${left}, ${top}`,
-        width: this.rect.width + 'px',
-        height: height + 'px',
+        transform: `translate(${Math.round(left)}px, ${Math.round(top)}px`,
+        width: Math.round(this.rect.width) + 'px',
+        height: Math.round(height) + 'px',
         zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
     },
