@@ -7,7 +7,7 @@
       'no-action': static || itemEditing || isBackground || wheeling,
       border
     }"
-    class="quick-functions flex-center"
+    class="quick-functions"
     @dblclick="dblclick"
     @wheel="onWheel"
     @dragover="APP_SET({ isAdding: true })"

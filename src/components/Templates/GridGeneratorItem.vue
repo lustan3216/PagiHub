@@ -63,7 +63,7 @@ import childrenMixin from './mixins/children'
 import EventController from '../TemplateUtils/EventController'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import { cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
+import { asyncGetValue, cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestValidBreakpoint, isBackground } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
@@ -289,7 +289,7 @@ export default {
     ...mapActions('node', ['record']),
     handleAutoHeight(value = this.autoResizeHeight) {
       if (value) {
-        this.$refs.gridItem.autoSize()
+        asyncGetValue(() => this.$refs.gridItem).then(item => item.autoSize())
         this.offResizeListener = resizeListener(this.$refs.content, () => {
           requestAnimationFrame(() => {
             this.$refs.gridItem.autoSize()

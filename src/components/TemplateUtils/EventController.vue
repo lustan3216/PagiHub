@@ -195,6 +195,7 @@ export default {
     }
   },
   mounted() {
+    this.calculateRect()
     this.$bus.$on('operator-get-rect', this.getRect)
   },
   beforeDestroy() {
@@ -214,31 +215,34 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
       'PUSH_SELECTED_COMPONENT_ID'
     ]),
+    calculateRect() {
+      if (this.isBackground) {
+        const rect = this.$el.closest('.art-board').getBoundingClientRect()
+        this.rect = {
+          x: 0,
+          y: 0,
+          width: rect.width,
+          height: rect.height
+        }
+      }
+      else {
+        const gridRect = this.$el.closest('.grid-layout').getBoundingClientRect()
+        const itemRect = this.element.getBoundingClientRect()
+
+        this.rect = {
+          x: (itemRect.x - gridRect.x),
+          y: (itemRect.y - gridRect.y),
+          width: itemRect.width,
+          height: itemRect.height
+        }
+      }
+    },
     getRect() {
       setTimeout(() => {
         if (this.hoveringId === this.id || this.selected) {
-          if (this.isBackground) {
-            const rect = this.$el.closest('.art-board').getBoundingClientRect()
-            this.rect = {
-              x: 0,
-              y: 0,
-              width: rect.width,
-              height: rect.height
-            }
-          }
-          else {
-            const gridRect = this.$el.closest('.grid-layout').getBoundingClientRect()
-            const itemRect = this.element.getBoundingClientRect()
-
-            this.rect = {
-              x: (itemRect.x - gridRect.x),
-              y: (itemRect.y - gridRect.y),
-              width: itemRect.width,
-              height: itemRect.height
-            }
-          }
+          this.calculateRect()
         }
-      }, 100)
+      }, 80)
     },
 
     finEditingPath() {
