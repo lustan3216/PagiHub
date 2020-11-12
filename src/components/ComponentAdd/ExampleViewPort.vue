@@ -1,6 +1,5 @@
 <template>
   <div
-    id="view-port"
     :class="{ resizeBar }"
     class="fake-transform view-port"
   >
@@ -9,6 +8,7 @@
     <div class="outer">
       <div
         ref="target"
+        id="example-view-port"
         class="target free-view-target"
         style="height: 100%;"
       >

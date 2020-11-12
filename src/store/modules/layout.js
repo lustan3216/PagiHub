@@ -4,6 +4,7 @@ import { BREAK_POINTS_MAP } from '@/const'
 
 const state = {
   gridResizing: false,
+  scrolling: false,
   windowX: 0,
   windowY: 0,
   windowWidth: 0,

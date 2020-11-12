@@ -4,7 +4,7 @@
     :visible="visible"
     class="dialog"
     top="5vh"
-    width="80vw"
+    width="95vw"
     @close="CLOSE_ASSET"
   >
     <el-row

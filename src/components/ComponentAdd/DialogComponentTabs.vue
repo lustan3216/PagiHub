@@ -28,7 +28,7 @@
         class="dialog"
         top="5vh"
         append-to-body
-        width="80vw"
+        width="95vw"
         @close="visible = false"
       >
         <el-row
@@ -84,7 +84,7 @@
             class="content"
           >
             <card-component-set
-              v-if="currentComponentId"
+              v-if="currentComponentId && visible"
               :id="currentComponentId"
               @add="addTemplate"
             />

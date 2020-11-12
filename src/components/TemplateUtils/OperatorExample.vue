@@ -89,7 +89,9 @@ export default {
       canGoBack: null,
       hoverIcon: false,
       scrolling: false,
-      zIndex: 2030
+      zIndex: 2030,
+      windowHeight: 0,
+      windowY: 0
     }
   },
   computed: {
@@ -99,15 +101,22 @@ export default {
       'editingPath',
       'isAdding'
     ]),
-    ...mapState('layout', ['gridResizing', 'windowHeight']),
+    ...mapState('layout', ['gridResizing']),
     ...mapGetters('app', ['selectedComponentNodes']),
     styles() {
+      const windowBottom = this.windowY + (this.windowHeight)
+      const height = windowBottom > this.rect.y + this.rect.height
+        ? this.windowY > this.rect.y
+          ? this.rect.y + this.rect.height - this.windowY
+          : this.rect.height
+        : windowBottom - this.rect.y
+
       return {
-        top: this.rect.y + 'px',
-        left: this.rect.x + 'px',
-        width: this.rect.width + 1 + 'px',
-        height: this.rect.height + 'px',
-        zIndex: this.zIndex
+        top: (this.windowY < this.rect.y ? this.rect.y : this.windowY) + 1 + 'px',
+        left: this.rect.x + 1 + 'px',
+        width: this.rect.width + 'px',
+        height: height + 'px',
+        zIndex: this.selected ? 3001 : 3000
       }
     },
     canBeEdited() {
@@ -159,6 +168,10 @@ export default {
     const dialog = document.getElementById('examples-dialog')
     const dialogIndex = dialog.style.zIndex
     this.zIndex = parseInt(dialogIndex) + 1
+
+    const { height, y } = document.getElementById('example-view-port').getBoundingClientRect()
+    this.windowHeight = height
+    this.windowY = y
   },
   methods: {
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),

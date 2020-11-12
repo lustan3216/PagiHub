@@ -1,5 +1,9 @@
 //$--font-path: '~element-ui/lib/theme-chalk/fonts';
 
+.el-dialog {
+  max-width: 1400px;
+}
+
 .el-collapse-item__header,
 .el-collapse-item__wrap {
   background-color: transparent !important;

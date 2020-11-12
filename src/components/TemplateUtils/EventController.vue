@@ -25,7 +25,7 @@
       />
 
       <component
-        v-if="rect && !isAdding"
+        v-if="rect && !isAdding && !scrolling"
         v-show="(hoveringId === id || selected)"
         :is="isExample ? 'operator-example' : 'operator-component'"
         :id="id"
@@ -106,7 +106,7 @@ export default {
       'editingPath',
       'isAdding'
     ]),
-    ...mapState('layout', ['gridResizing', 'windowHeight', 'windowWidth', 'scaleRatio']),
+    ...mapState('layout', ['gridResizing', 'scrolling', 'windowHeight', 'windowWidth', 'scaleRatio']),
     lock() {
       return this.node.lock
     },
@@ -160,6 +160,9 @@ export default {
       if (value) {
         this.getRect()
       }
+    },
+    scrolling() {
+      this.getRect()
     },
     node: {
       handler() {

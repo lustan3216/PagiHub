@@ -74,11 +74,11 @@ export default {
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     handleGridResizing() {
-      this.LAYOUT_SET({ gridResizing: true })
+      this.LAYOUT_SET({ scrolling: true })
 
       globalDebounce(() => {
-        this.LAYOUT_SET({ gridResizing: false })
-      }, 50)
+        this.LAYOUT_SET({ scrolling: false })
+      }, 150)
     },
     updateScrollTop() {
       if (this.isExample) return

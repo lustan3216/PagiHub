@@ -12,8 +12,7 @@ const state = {
   beingAddedComponentId: null,
   selectedComponentIds: [],
   copyComponentIds: [],
-  editingPath: [],
-  dialog: null
+  editingPath: []
 }
 
 const mutations = {
