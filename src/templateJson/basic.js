@@ -70,6 +70,7 @@ export const gridGenerator = function(options, grid) {
 export const slider = function(options, grid) {
   return {
     [TAG]: 'slider',
+    [CAN_NEW_ITEM]: true,
     grid,
     ...options
   }
