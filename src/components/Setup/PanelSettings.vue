@@ -52,21 +52,21 @@ const self = {
     SettingCarousel: () => import('./EditorSetting/SettingCarousel'),
     SettingIframer: () => import('./EditorSetting/SettingIframer'),
 
-    SettingFormSubmit: () => import('./EditorSetting/SettingFormSubmit'),
-    SettingFormCheckbox: () => import('./EditorSetting/SettingFormCheckbox'),
-    SettingFormColorPicker: () =>
-      import('./EditorSetting/SettingFormColorPicker'),
-    SettingFormDatePicker: () =>
-      import('./EditorSetting/SettingFormDatePicker'),
-    SettingFormInput: () => import('./EditorSetting/SettingFormInput'),
-    SettingFormNumber: () => import('./EditorSetting/SettingFormNumber'),
-    SettingFormRadio: () => import('./EditorSetting/SettingFormRadio'),
-    SettingFormRate: () => import('./EditorSetting/SettingFormRate'),
-    SettingFormSelect: () => import('./EditorSetting/SettingFormSelect'),
-    SettingFormSlider: () => import('./EditorSetting/SettingFormSlider'),
-    SettingFormSwitch: () => import('./EditorSetting/SettingFormSwitch'),
-    SettingFormTextarea: () => import('./EditorSetting/SettingFormTextarea'),
-    SettingFormTimePicker: () => import('./EditorSetting/SettingFormTimePicker')
+    // SettingFormSubmit: () => import('./EditorSetting/SettingFormSubmit'),
+    // SettingFormCheckbox: () => import('./EditorSetting/SettingFormCheckbox'),
+    // SettingFormColorPicker: () =>
+    //   import('./EditorSetting/SettingFormColorPicker'),
+    // SettingFormDatePicker: () =>
+    //   import('./EditorSetting/SettingFormDatePicker'),
+    // SettingFormInput: () => import('./EditorSetting/SettingFormInput'),
+    // SettingFormNumber: () => import('./EditorSetting/SettingFormNumber'),
+    // SettingFormRadio: () => import('./EditorSetting/SettingFormRadio'),
+    // SettingFormRate: () => import('./EditorSetting/SettingFormRate'),
+    // SettingFormSelect: () => import('./EditorSetting/SettingFormSelect'),
+    // SettingFormSlider: () => import('./EditorSetting/SettingFormSlider'),
+    // SettingFormSwitch: () => import('./EditorSetting/SettingFormSwitch'),
+    // SettingFormTextarea: () => import('./EditorSetting/SettingFormTextarea'),
+    // SettingFormTimePicker: () => import('./EditorSetting/SettingFormTimePicker')
   },
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
