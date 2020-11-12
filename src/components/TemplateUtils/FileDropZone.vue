@@ -26,6 +26,8 @@ import { vmGet, vmRemoveNode } from '@/utils/vmMap'
 import { horizontalUnitConvert } from '@/utils/layout'
 import { Message } from 'element-ui'
 import { appendIds } from '@/utils/nodeId'
+import { GRID, STYLES } from '@/const'
+import jsonHistory from '@/store/jsonHistory'
 
 let timerId
 let hoverIds = []
@@ -135,18 +137,25 @@ export default {
           props: {
             src: await this.getBase64(file)
           },
-          grid: droppedNode.grid,
-          style: droppedNode.style
+          [GRID]: droppedNode[GRID],
+          [STYLES]: droppedNode[STYLES]
         })
+
 
         appendIds(newNode, droppedNode.parentId)
 
-        this.record({
-          path: newNode.id,
-          value: newNode
+        jsonHistory.recordsMerge(() => {
+          this.record([
+            {
+              path: newNode.id,
+              value: newNode
+            },
+            {
+              path: droppedNode.id,
+              value: undefined
+            }
+          ])
         })
-
-        vmRemoveNode(droppedNode)
       }
 
       else if (isBackground(droppedNode) || isGroup(droppedNode) || isCarousel(droppedNode)) {
