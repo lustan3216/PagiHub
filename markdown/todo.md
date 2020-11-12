@@ -24,6 +24,8 @@ Just click publish, then you will have a real RWD website
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
 檢查
+有node會沒刪乾淨
+照片redo undo 會把base64回覆，要改delta
 style 有關grid unit的變換 要檢查rwd
 rwd
 btton連結

@@ -1,5 +1,5 @@
 <template>
-  <div class="settings">
+  <div class="settings" v-if="lastNode">
     <template v-if="canInteract">
       <el-divider content-position="left">
         INTERACTION
@@ -14,7 +14,6 @@
       </el-divider>
 
       <component
-        v-if="lastNode"
         :is="vueComponentTag"
         :key="lastNode.id"
         :id="lastNode.id"

@@ -17,6 +17,7 @@
       >
         <el-select
           :value="src"
+          placeholder="Select an image"
           allow-create
           filterable
           class="m-b-10 w-100"
@@ -92,7 +93,11 @@ export default {
       const node = arrayLast(this.selectedComponentNodes)
       if (!node) return
       const vm = vmGet(node.id)
-      return vm.innerProps.src
+      const { src } = vm.innerProps
+      if (src.includes('data:image')) {
+        return
+      }
+      return src
     },
     imageOptions() {
       return this.images.map(image => {

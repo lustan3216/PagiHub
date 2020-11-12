@@ -141,7 +141,6 @@ export default {
           [STYLES]: droppedNode[STYLES]
         })
 
-
         appendIds(newNode, droppedNode.parentId)
 
         jsonHistory.recordsMerge(() => {
@@ -195,6 +194,7 @@ export default {
         })
       }
       this.fileNodeMap[file.upload.uuid] = newNode
+      this.dropEvent.uploadingIndex++
     },
     error(file, message) {
       this.dropzone.removeFile(file)
