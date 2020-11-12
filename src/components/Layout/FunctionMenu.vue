@@ -190,11 +190,22 @@ export default {
 .dashboard-menu {
   top: 40px !important;
 
+  .el-menu-item {
+    padding: 0 20px !important;
+    color: #606266 !important;
+    :hover {
+      color: #66b1ff;
+    }
+  }
   [role='menuitem'],
   .el-submenu__title {
     font-size: 13px;
     line-height: 27px !important;
     height: 27px !important;
+  }
+
+  .el-submenu__title {
+    padding: 0 10px !important;
   }
 }
 </style>
