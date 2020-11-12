@@ -100,7 +100,7 @@ import { humanize } from '@/utils/string'
 import { cloneJson } from '@/utils/tool'
 import TransformOrigin from '@/components/Setup/EditorStyle/TransformOrigin'
 import { deleteBy } from '@/utils/array'
-import { isGroup, isSlider } from '@/utils/node'
+import { isCarousel, isGroup, isSlider } from '@/utils/node'
 
 export default {
   name: 'Transform',
@@ -119,7 +119,7 @@ export default {
   computed: {
     canNotTransform() {
       const nodes = this.selectedComponentNodes.filter(
-        node => isGroup(node) || isSlider(node)
+        node => isGroup(node) || isSlider(node) || isCarousel(node)
       )
       return Boolean(nodes.length)
     },
