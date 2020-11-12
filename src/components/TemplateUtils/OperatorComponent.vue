@@ -37,6 +37,7 @@ import { arrayLast } from '@/utils/array'
 import { getValueByPath, globalDebounce } from '@/utils/tool'
 import OftenUseMenu from './OftenUseMenu'
 import interact from 'interactjs'
+import { STYLES } from '@/const'
 
 export default {
   name: 'OperatorComponent',
@@ -60,7 +61,6 @@ export default {
   },
   data() {
     return {
-      zIndex: 10,
       hoverIcon: false,
       wheeling: false,
       resizeEventSet: false,
@@ -83,6 +83,9 @@ export default {
         height: Math.round(this.rect.height / this.scaleRatio) + 'px',
         zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
+    },
+    zIndex() {
+      return getValueByPath(this.node, [STYLES, 'layout', 'zIndex'], 0) + 10
     },
     resizeHandler() {
       return !this.gridResizing && this.selected && this.isResizable

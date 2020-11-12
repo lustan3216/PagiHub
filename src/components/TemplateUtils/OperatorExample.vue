@@ -66,7 +66,7 @@ import {
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { cloneJson, getValueByPath, globalDebounce } from '@/utils/tool'
-import { CAN_BE_EDITED } from '@/const'
+import { CAN_BE_EDITED, STYLES } from '@/const'
 import { Popover } from 'element-ui'
 
 export default {
@@ -102,7 +102,6 @@ export default {
       canGoBack: null,
       hoverIcon: false,
       wheeling: false,
-      zIndex: 10,
       windowHeight: 0,
       windowY: 0
     }
@@ -126,6 +125,9 @@ export default {
         height: Math.round(this.rect.height / this.scale) + 'px',
         zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
+    },
+    zIndex() {
+      return getValueByPath(this.node, [STYLES, 'layout', 'zIndex'], 0) + 10
     },
     visible() {
       const windowBottom = this.windowY + this.windowHeight
