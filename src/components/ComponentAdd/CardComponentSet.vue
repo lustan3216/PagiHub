@@ -119,7 +119,6 @@ export default {
 .example-card {
   border-radius: 5px;
   height: 100%;
-  padding: 0 10px 10px;
 }
 .example {
   overflow: scroll;

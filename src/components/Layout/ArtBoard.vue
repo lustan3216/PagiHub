@@ -3,6 +3,10 @@
     id="art-board"
     class="art-board"
   >
+    <portal-target
+      name="ArtBoard"
+      multiple
+    />
     <component-giver
       v-if="node"
       :id="id"

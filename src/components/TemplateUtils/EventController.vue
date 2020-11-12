@@ -3,8 +3,7 @@
     v-if="node"
     :class="{
       'h-100': sameHeightAsParent,
-      'no-action': lock,
-      'item-editing': itemEditing
+      'no-action': lock
     }"
     class="relative z-index1"
     @mouseenter.stop="hoveringId = id"
@@ -13,6 +12,28 @@
     @dblclick.stop="dblclick"
     @contextmenu.stop.prevent="contextmenu($event)"
   >
+
+    <portal
+      :to="operatorTo"
+      :disabled="!operatorTo"
+    >
+      <component
+        v-if="rect && !isAdding"
+        :hovered="hoveringId === id"
+        :is="isExample ? 'operator-example' : 'operator-component'"
+        :id="id"
+        :key="id"
+        :rect="rect"
+        @move="move"
+        @resize="resize"
+        @mouseenter.native="hoveringId = id"
+        @mouseup.native.stop="mouseup"
+        @mousedown.native="$emit('mousedown', $event)"
+        @dblclick.native.stop="dblclick"
+        @contextmenu.native.stop.prevent="contextmenu($event)"
+      />
+    </portal>
+
     <portal to="App">
       <context-menu
         v-if="contextMenu.id === id && !gridResizing"
@@ -23,23 +44,8 @@
         class="absolute"
         @close="closeContextmenu"
       />
-
-      <component
-        v-if="rect && !isAdding && !scrolling"
-        :hovered="hoveringId === id"
-        :is="isExample ? 'operator-example' : 'operator-component'"
-        :id="id"
-        :key="id"
-        :rect="rect"
-        @move="move"
-        @resize="getRect"
-        @mouseenter.native="hoveringId = id"
-        @mouseup.native="mouseup"
-        @mousedown.native="$emit('mousedown', $event)"
-        @dblclick.native.stop="dblclick"
-        @contextmenu.native.stop.prevent="contextmenu($event)"
-      />
     </portal>
+
 
     <div
       v-if="canBeEdited"
@@ -62,8 +68,8 @@ import { CAN_BE_EDITED } from '@/const'
 import { isMac } from '@/utils/device'
 import {
   isBackground,
-  isGroup,
-  isTextEditor,
+  isGroup, isSlider,
+  isTextEditor, traversalAncestor,
   traversalAncestorAndSelf
 } from '@/utils/node'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
@@ -72,7 +78,8 @@ import { arrayLast, findIndexBy } from '@/utils/array'
 const store = vue.observable({
   lastEditId: null,
   contextMenu: {},
-  hoveringId: null
+  hoveringId: null,
+  resizing: false
 })
 
 export default {
@@ -89,10 +96,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-    element: {
-      type: HTMLDivElement,
-      required: true
     }
   },
   data() {
@@ -107,9 +110,27 @@ export default {
       'editingPath',
       'isAdding'
     ]),
-    ...mapState('layout', ['gridResizing', 'scrolling', 'windowHeight', 'windowWidth', 'scaleRatio']),
+    ...mapState('layout', ['gridResizing', 'scaleRatio']),
     lock() {
       return this.node.lock
+    },
+    operatorTo() {
+      if (isBackground(this.node)) {
+        return 'ArtBoard'
+      }
+      if (isSlider(this.node)) {
+        return 'GridInner-' + this.node.id
+      }
+      let to = ''
+
+      traversalAncestor(this.node, node => {
+        if (isBackground(node) || isGroup(node) || isSlider(node)) {
+          to = 'GridInner-' + node.id
+          return false
+        }
+      })
+
+      return to
     },
     itemEditing() {
       return this.editingPath.includes(this.id)
@@ -162,14 +183,9 @@ export default {
         this.getRect()
       }
     },
-    scrolling() {
-      this.getRect()
-    },
     node: {
       handler() {
-        setTimeout(() => {
-          this.getRect()
-        }, 20)
+        this.getRect()
       },
       deep: true
     }
@@ -195,16 +211,31 @@ export default {
       'PUSH_SELECTED_COMPONENT_ID'
     ]),
     getRect() {
-      requestAnimationFrame(() => {
+      setTimeout(() => {
         if (this.hoveringId === this.id || this.selected) {
           if (this.isBackground) {
-            this.rect = this.$el.closest('.art-board').getBoundingClientRect()
+            const rect = this.$el.closest('.art-board').getBoundingClientRect()
+            this.rect = {
+              x: 0,
+              y: 0,
+              width: rect.width,
+              height: rect.height
+            }
           }
           else {
-            this.rect = this.element.getBoundingClientRect()
+            const gridRect = this.$el.closest('.grid-layout').getBoundingClientRect()
+            const itemRect = this.$el.getBoundingClientRect()
+
+            this.rect = {
+              x: (itemRect.x - gridRect.x),
+              y: (itemRect.y - gridRect.y),
+              width: itemRect.width,
+              height: itemRect.height
+            }
           }
+
         }
-      })
+      }, 100)
     },
 
     finEditingPath() {
@@ -228,11 +259,20 @@ export default {
       this.moving = true
       this.getRect()
     },
+    resize() {
+      store.resizing = true
+      this.getRect()
+    },
     mouseup(event) {
       this.$emit('mouseup', event)
       this.getRect()
 
       this.hoveringId = null
+
+      if (store.resizing) {
+        store.resizing = false
+        return
+      }
 
       setTimeout(() => {
         this.LAYOUT_SET({ gridResizing: false })

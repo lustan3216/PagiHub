@@ -30,6 +30,7 @@
         v-for="point in descBreakpoints"
         v-if="point !== 'xs'"
         :key="point"
+        :active="findBreakpoint(point)"
         :point-key="point"
         @click="setSize({ w: $event })"
       />
@@ -47,7 +48,7 @@
           class="gray-font font-12"
           style="width: 75px; display: inline-block;"
         >
-          {{ width }} x {{ height }}
+          {{ style.w }} x {{ style.h }}
         </span>
 
         <el-dropdown-menu slot="dropdown">
@@ -71,16 +72,22 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import ButtonDevice from '../Components/ButtonDevice'
 import { getRectWithoutPadding } from '@/utils/style'
+import { findBreakpoint, sortDescBreakpoint } from '@/utils/layout'
 import { DEVICE_OPTIONS } from '@/components/Layout/ViewPort'
-import elementResizeDetectorMaker from 'element-resize-detector'
+import { resizeListener } from '@/utils/tool'
 
 export default {
   name: 'ExampleViewPort',
   components: {
     ButtonDevice
+  },
+  provide() {
+    return {
+      exampleViewPort: this.style
+    }
   },
   props: {
     id: {
@@ -98,18 +105,15 @@ export default {
   },
   data() {
     return {
-      erd: null,
+      offResizeListener: null,
       style: {
         h: 0,
         w: 0,
         scale: 1
-      },
-      width: 0,
-      height: 0
+      }
     }
   },
   computed: {
-    ...mapGetters('layout', ['descBreakpoints']),
     scalePercent() {
       return Math.ceil(+this.style.scale * 100)
     },
@@ -124,36 +128,44 @@ export default {
         return this.componentSet.breakpointsMap
       }
     },
+    descBreakpoints() {
+      const points = Object.keys(this.breakpointsMap)
+      return sortDescBreakpoint(points)
+    },
     deviceOptions() {
       return DEVICE_OPTIONS
     }
   },
-  created() {
-    this.$nextTick(() => {
-      this.erd = elementResizeDetectorMaker({
-        strategy: 'scroll',
-        callOnAdd: true
-      })
-      this.erd.listenTo(this.targetEl, () => {
-        this.width = this.targetEl.clientWidth
-        this.height = this.targetEl.clientHeight
-      })
+  mounted() {
+    const { clientHeight, clientWidth } = document.getElementById('example-view-port')
+    this.style.h = clientHeight
+    this.style.w = clientWidth
+
+    this.offResizeListener = resizeListener(document.getElementById('example-view-port'), () => {
+      const { clientHeight, clientWidth } = document.getElementById('example-view-port')
+      this.style.h = clientHeight
+      this.style.w = clientWidth
     })
   },
   beforeDestroy() {
-    if (this.erd) {
-      this.erd.uninstall(this.targetEl)
+    if (this.offResizeListener) {
+      this.offResizeListener()
+      this.offResizeListener = null
     }
   },
   methods: {
     ...mapMutations('layout', {
       LAYOUT_SET: 'SET'
     }),
+    findBreakpoint(point) {
+      return point === findBreakpoint(this.breakpointsMap, this.style.w)
+    },
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.targetEl.parentNode)
       this.style.scale = 1
       this.style.w = width
       this.style.h = height
+      this.$bus.$emit('operator-get-rect')
     },
     setSize({ w, h }) {
       const { width, height } = getRectWithoutPadding(this.targetEl.parentNode)
@@ -169,6 +181,7 @@ export default {
       }
       this.style.w = w
       this.style.h = h
+      this.$bus.$emit('operator-get-rect')
     }
   }
 }
@@ -237,9 +250,8 @@ export default {
 }
 
 .outer {
-  height: 50vh;
-  overflow: scroll;
-  padding: 15px;
+  height: 60vh;
+  padding: 15px 5px;
   border-radius: 3px;
   border: 1px solid $color-grey;
 }

@@ -244,7 +244,7 @@
         }
 
         if (this.isDroppable) {
-          this.interactObj.dropzone({ overlap: 0.65 })
+          this.interactObj.dropzone({ overlap: 0.75 })
 
           if (!this.dropEventSet) {
             this.dropEventSet = true

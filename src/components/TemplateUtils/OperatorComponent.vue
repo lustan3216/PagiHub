@@ -1,9 +1,10 @@
 <template>
+  <!--  dragover isAdding is for image dropping-->
   <div
     v-if="node"
     :style="styles"
     :class="{
-      'no-action': static || itemEditing || isBackground || !hovered,
+      'no-action': static || itemEditing || isBackground || wheeling,
       border
     }"
     class="quick-functions flex-center"
@@ -11,54 +12,13 @@
     @wheel="onWheel"
     @dragover="APP_SET({ isAdding: true })"
   >
-    <template v-if="!gridResizing && inViewPort && selected">
-      <portal-target
-        v-if="itemEditing && isLastOne"
-        :style="textEditorStyle"
-        name="QuickFunctionsTextEditor"
-        slim
-        class="can-action"
-      />
-
-      <div
-        :class="componentNameOnTop ? 'top': 'bottom'"
-        class="wrapper flex"
-      >
-        <div
-          v-if="isLastOne"
-          class="component-name flex"
-        >
-          <i
-            v-if="!isSlider && !isBackground && isDraggable"
-            :class="
-              itemEditing && !hoverIcon ? 'el-icon-edit-outline' : 'el-icon-rank'
-            "
-            :style="{ cursor: itemEditing && !hoverIcon ? 'default' : 'move' }"
-            class="move-icon"
-            type="text"
-            style="padding: 8px 2px 8px 5px;"
-            @mouseenter="hoverIcon = true"
-            @mouseleave="hoverIcon = false"
-          />
-
-          <component-names :id="id"/>
-        </div>
-
-        <often-use-menu
-          v-if="isDraftMode && isLastOne"
-          :id="id"
-          class="flex backface-hidden"
-        />
-      </div>
-
-      <template v-if="!isSlider && !isBackground && isResizable">
-        <template v-if="!shouldAutoHeight">
-          <div class="resizable-handle-both" />
-          <div class="resizable-handle-bottom" />
-        </template>
-
-        <div class="resizable-handle-right" />
+    <template v-if="!isSlider && !isBackground && resizeHandler">
+      <template v-if="!shouldAutoHeight">
+        <div class="resizable-handle-both" />
+        <div class="resizable-handle-bottom" />
       </template>
+
+      <div class="resizable-handle-right" />
     </template>
   </div>
 </template>
@@ -74,14 +34,9 @@ import {
   isImage
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
-import { getValueByPath } from '@/utils/tool'
+import { getValueByPath, globalDebounce } from '@/utils/tool'
 import OftenUseMenu from './OftenUseMenu'
 import interact from 'interactjs'
-import {
-  PopupManager
-} from 'element-ui/src/utils/popup'
-
-let timeId
 
 export default {
   name: 'OperatorComponent',
@@ -99,19 +54,15 @@ export default {
       default: false
     },
     rect: {
-      type: DOMRect,
+      type: Object,
       required: true
     }
   },
   data() {
     return {
-      top: 0,
-      left: 0,
-      width: 0,
-      height: 0,
-      zIndex: PopupManager.nextZIndex(),
+      zIndex: 10,
       hoverIcon: false,
-      scrolling: false,
+      wheeling: false,
       resizeEventSet: false,
       dragEventSet: false
     }
@@ -125,35 +76,24 @@ export default {
     ]),
     ...mapState('layout', ['gridResizing', 'windowHeight', 'windowY', 'scaleRatio']),
     ...mapGetters('app', ['selectedComponentNodes']),
-    componentNameOnTop() {
-      return this.rect.y - this.windowY > 50 || isBackground(this.node)
-    },
     styles() {
-      const windowBottom = this.windowY + (this.windowHeight * this.scaleRatio)
-      const height = windowBottom > this.rect.y + this.rect.height
-        ? this.windowY > this.rect.y
-          ? this.rect.y + this.rect.height - this.windowY
-          : this.rect.height
-        : windowBottom - this.rect.y
-
-      const top = (this.windowY < this.rect.y ? this.rect.y : this.windowY)
-      const left = this.rect.x
-
       return {
-        transform: `translate(${Math.round(left)}px, ${Math.round(top)}px`,
-        width: Math.round(this.rect.width) + 'px',
-        height: Math.round(height) + 'px',
+        transform: `translate(${Math.round(this.rect.x / this.scaleRatio)}px, ${Math.round(this.rect.y / this.scaleRatio)}px`,
+        width: Math.round(this.rect.width / this.scaleRatio) + 'px',
+        height: Math.round(this.rect.height / this.scaleRatio) + 'px',
         zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
     },
-    inViewPort() {
-      const windowBottom = this.windowY + this.windowHeight
-      return this.rect.y < windowBottom && this.rect.y + this.rect.height > this.windowY
+    resizeHandler() {
+      return !this.gridResizing && this.selected && this.isResizable
     },
     border() {
-      if (!this.gridResizing && this.inViewPort) {
+      if (!this.gridResizing) {
         if (this.isBackground) {
           return this.selected
+        }
+        else if (isGroup(this.node)) {
+          return this.itemEditing || this.hovered || this.selected
         }
         else {
           return this.hovered || this.selected
@@ -183,16 +123,6 @@ export default {
     },
     itemEditing() {
       return this.editingPath.includes(this.id)
-    },
-    textEditorStyle() {
-      const shouldOnLeftSide =
-        this.rect.width + this.rect.left + 600 > window.innerWidth
-      if (shouldOnLeftSide) {
-        return { right: this.rect.width + 10 + 'px' }
-      }
-      else {
-        return { left: this.rect.width + 10 + 'px' }
-      }
     },
     isLastOne() {
       return arrayLast(this.selectedComponentIds) === this.id
@@ -240,19 +170,16 @@ export default {
     ...mapMutations('asset', ['OPEN_ASSET']),
     onWheel(event) {
       event.preventDefault()
-      clearTimeout(timeId)
-      this.scrolling = true
-      this.LAYOUT_SET({ gridResizing: true })
-      timeId = setTimeout(() => {
-        this.scrolling = false
-        this.LAYOUT_SET({ gridResizing: false })
-        timeId = null
+      this.wheeling = true
+
+      globalDebounce(() => {
+        this.wheeling = false
       }, 50)
     },
     tryMakeDraggable: function() {
       if (this.isDraggable && !this.static) {
         const opts = {
-          ignoreFrom: '.item-editing, .menububble',
+          ignoreFrom: '.menububble',
           allowFrom: 'div, .move-icon'
         }
         this.interactObj.draggable(opts)
@@ -291,8 +218,7 @@ export default {
             right: '.resizable-handle-both, .resizable-handle-right',
             bottom: '.resizable-handle-both, .resizable-handle-bottom',
             top: false
-          },
-          ignoreFrom: '.item-editing'
+          }
         }
 
         this.interactObj.resizable(opts)

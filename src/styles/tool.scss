@@ -183,3 +183,11 @@
 .rotate90 {
   transform: rotate(90deg);
 }
+
+.hide-popper {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  min-width: 10px !important;
+}

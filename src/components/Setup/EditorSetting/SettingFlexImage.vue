@@ -25,7 +25,7 @@
         >
           <el-option
             v-for="option in imageOptions"
-            :key="option.label"
+            :key="option.value"
             :label="option.label"
             :value="option.value"
           />

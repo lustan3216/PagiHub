@@ -14,7 +14,7 @@
     placement="bottom"
   >
     <el-button
-      :type="type || (pointKey === currentBreakpoint ? 'primary' : 'text')"
+      :type="computedType"
       :class="buttonConfig.class"
       :size="size"
       class="shortcut-button"
@@ -52,6 +52,10 @@ export default {
       type: String,
       default: ''
     },
+    active: {
+      type: Boolean,
+      default: null
+    },
     size: {
       type: String,
       default: 'mini'
@@ -63,6 +67,17 @@ export default {
   },
   computed: {
     ...mapGetters('layout', ['currentBreakpoint']),
+    computedType() {
+      if (this.type) {
+        return this.type
+      }
+      else if (this.active !== null) {
+        return this.active ? 'primary' : 'text'
+      }
+      else {
+        return this.pointKey === this.currentBreakpoint ? 'primary' : 'text'
+      }
+    },
     point() {
       return BREAK_POINTS_MAP[this.pointKey] || 320
     },

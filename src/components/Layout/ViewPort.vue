@@ -320,6 +320,7 @@ export default {
       }
       this.style.w = w
       this.style.h = h
+      this.$bus.$emit('operator-get-rect')
     },
     handlerStart(position) {
       this.moveTop = false

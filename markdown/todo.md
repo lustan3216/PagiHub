@@ -24,15 +24,16 @@ Just click publish, then you will have a real RWD website
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
 檢查
+style 有關grid unit的變換 要檢查rwd
 rwd
 btton連結
 發布後 的share page and browsing
-
+example 的 responsive button
 
 bug
-opeator 應該可以放在 inner 底下吧？！可以解決 carousel覆蓋的問題，但有必要嗎 / carousle button will be covered
+autoheigh/ auto exten height
 如果update 500 直接 overwrite
-style 有關grid unit的變換 要檢查rwd  
+  
 
 // group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
 

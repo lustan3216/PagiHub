@@ -1,8 +1,13 @@
 <template>
   <div class="editor ProseMirror">
-    <portal
-      v-if="selected"
-      to="QuickFunctionsTextEditor"
+    <el-popover
+      :disabled="!isDraftMode"
+      :value="editing"
+      :visible-arrow="false"
+      effect="light"
+      placement="right"
+      trigger="manual"
+      popper-class="hide-popper"
     >
       <div
         id="menu-bubble"
@@ -152,17 +157,17 @@
           </div>
         </div>
       </div>
-    </portal>
 
-    <content-editable
-      v-popover:popover
-      ref="content"
-      :style="htmlStyles"
-      :tag="tag || 'div'"
-      v-model="text"
-      :content-editable="isDraftMode && !isExample"
-      tabindex="0"
-    />
+      <content-editable
+        slot="reference"
+        ref="content"
+        :style="htmlStyles"
+        :tag="tag || 'div'"
+        v-model="text"
+        :content-editable="isDraftMode && !isExample"
+        tabindex="0"
+      />
+    </el-popover>
   </div>
 </template>
 <script>
@@ -226,6 +231,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('layout', ['scrolling']),
     ...mapState('app', ['selectedComponentIds', 'editingPath']),
     ...mapGetters('app', ['selectedComponentNodes']),
     editing() {
@@ -436,9 +442,10 @@ $color-grey: #b2b2b2;
   display: flex;
   z-index: 900;
   align-items: center;
-  height: 260px;
+  height: 230px;
   position: absolute;
   background: transparent;
+  transform: translateY(-50%);
 
   &__button {
     background: transparent;

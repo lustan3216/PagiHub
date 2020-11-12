@@ -1,26 +1,47 @@
 <template>
-  <div
-    v-if="node"
-    :style="styles"
-    :class="{
-      'no-action': static || itemEditing || isBackground || !hovered,
+  <el-popover
+    :visible-arrow="false"
+    placement="top-start"
+    effect="light"
+    trigger="hover"
+    popper-class="hide-popper"
+  >
+    <div class="component-name flex">
+      <i
+        v-if="!isSlider && !isBackground"
+        :class="
+          itemEditing && !hoverIcon
+            ? 'el-icon-edit-outline'
+            : 'el-icon-copy-document'
+        "
+        :style="{ cursor: itemEditing && !hoverIcon ? 'default' : 'pointer' }"
+        class="move-icon"
+        type="text"
+        style="padding: 8px 2px 8px 5px;"
+        @mouseenter="hoverIcon = true"
+        @mouseleave="hoverIcon = false"
+        @click="copy"
+      />
+
+      <component-names :id="id"/>
+    </div>
+
+    <div
+      v-if="node"
+      slot="reference"
+      :style="styles"
+      :class="{
+      'no-action': static || itemEditing || isBackground || wheeling,
       border
     }"
-    class="quick-functions flex-center"
-    @mousedown.stop="$emit('mousedown', $event)"
-    @mouseup.stop="$emit('mouseup', $event)"
-    @dblclick.stop="$emit('dblclick', $event)"
-    @contextmenu="$emit('contextmenu', $event)"
-    @wheel="onWheel"
-  >
-    <div
-      v-if="!gridResizing && visible && selected"
-      class="wrapper flex top"
+      class="quick-functions flex-center"
+      @mousedown.stop="$emit('mousedown', $event)"
+      @mouseup.stop="$emit('mouseup', $event)"
+      @dblclick.stop="$emit('dblclick', $event)"
+      @contextmenu="$emit('contextmenu', $event)"
+      @wheel="onWheel"
     >
-      <div
-        v-if="!gridResizing && isLastOne"
-        class="component-name flex"
-      >
+      <template v-if="!gridResizing && visible && selected">
         <portal to="CopyDesignButton">
           <el-button
             v-if="!isBackground"
@@ -29,27 +50,9 @@
             Copy Design
           </el-button>
         </portal>
-
-        <i
-          v-if="!isSlider && !isBackground"
-          :class="
-            itemEditing && !hoverIcon
-              ? 'el-icon-edit-outline'
-              : 'el-icon-copy-document'
-          "
-          :style="{ cursor: itemEditing && !hoverIcon ? 'default' : 'pointer' }"
-          class="move-icon"
-          type="text"
-          style="padding: 8px 2px 8px 5px;"
-          @mouseenter="hoverIcon = true"
-          @mouseleave="hoverIcon = false"
-          @click="copy"
-        />
-
-        <component-names :id="id"/>
-      </div>
+      </template>
     </div>
-  </div>
+  </el-popover>
 </template>
 
 <script>
@@ -64,36 +67,42 @@ import {
 import { arrayLast } from '@/utils/array'
 import { cloneJson, getValueByPath, globalDebounce } from '@/utils/tool'
 import { CAN_BE_EDITED } from '@/const'
-import {
-  PopupManager
-} from 'element-ui/src/utils/popup'
+import { Popover } from 'element-ui'
 
 export default {
   name: 'OperatorExample',
   components: {
-    ComponentNames
+    ComponentNames,
+    ElPopover: Popover
+  },
+  inject: {
+    exampleViewPort: {
+      default: {
+        scale: 1
+      }
+    }
   },
   props: {
     id: {
       type: String,
       required: true
     },
+    hovered: {
+      type: Boolean,
+      default: false
+    },
     rect: {
-      type: DOMRect,
+      type: Object,
       required: true
     }
   },
   data() {
     return {
-      top: 0,
-      left: 0,
-      width: 0,
-      height: 0,
       animationId: null,
       canGoBack: null,
       hoverIcon: false,
-      scrolling: false,
-      zIndex: PopupManager.nextZIndex(),
+      wheeling: false,
+      zIndex: 10,
       windowHeight: 0,
       windowY: 0
     }
@@ -107,21 +116,14 @@ export default {
     ]),
     ...mapState('layout', ['gridResizing']),
     ...mapGetters('app', ['selectedComponentNodes']),
+    scale() {
+      return this.exampleViewPort.scale
+    },
     styles() {
-      const windowBottom = this.windowY + (this.windowHeight)
-      const height = windowBottom > this.rect.y + this.rect.height
-        ? this.windowY > this.rect.y
-          ? this.rect.y + this.rect.height - this.windowY
-          : this.rect.height
-        : windowBottom - this.rect.y
-
-      const top = this.windowY < this.rect.y ? this.rect.y : this.windowY
-      const left = this.rect.x
-
       return {
-        transform: `translate(${Math.round(left)}px, ${Math.round(top)}px`,
-        width: Math.round(this.rect.width) + 'px',
-        height: Math.round(height) + 'px',
+        transform: `translate(${Math.round(this.rect.x / this.scale)}px, ${Math.round(this.rect.y / this.scale)}px`,
+        width: Math.round(this.rect.width / this.scale) + 'px',
+        height: Math.round(this.rect.height / this.scale) + 'px',
         zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
     },
@@ -130,7 +132,7 @@ export default {
       return this.rect.y < windowBottom && this.rect.y + this.rect.height > this.windowY
     },
     border() {
-      if (!this.gridResizing && this.inViewPort) {
+      if (!this.gridResizing) {
         if (this.isBackground) {
           return this.selected
         }
@@ -198,13 +200,10 @@ export default {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     onWheel(event) {
       event.preventDefault()
-
-      this.scrolling = true
-      this.LAYOUT_SET({ scrolling: true })
+      this.wheeling = true
 
       globalDebounce(() => {
-        this.scrolling = false
-        this.LAYOUT_SET({ scrolling: false })
+        this.wheeling = false
       }, 50)
     },
     copy() {

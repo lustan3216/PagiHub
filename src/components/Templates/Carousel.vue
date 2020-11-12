@@ -30,68 +30,64 @@
         />
       </template>
 
-      <template v-if="innerProps.arrow === 'custom'">
-        <grid-generator
-          :id="customerIndicator.id"
-          class="customer-indicator"
-        />
-
-        <portal :to="`QuickFunctions${prevGridItemId}`">
-          <el-tooltip
-            effect="light"
-            content="Replace Prev action in this button for nicer editing UX. It only shows in Draft mode."
-            placement="top"
-          >
-            <el-button
-              icon="el-icon-thumb"
-              @click="carousel.prev()"
-            />
-          </el-tooltip>
-        </portal>
-
-        <portal :to="`QuickFunctions${nextGridItemId}`">
-          <el-tooltip
-            effect="light"
-            content="Replace Next action in this button for nicer editing UX. It only shows in Draft mode."
-            placement="top"
-          >
-            <el-button
-              icon="el-icon-thumb"
-              @click="carousel.next()"
-            />
-          </el-tooltip>
-        </portal>
-      </template>
-
-      <el-carousel
-        ref="carousel"
-        :id="id"
-        :key="sliders.length"
-        v-bind="innerProps"
-        :indicator-position="hasIndicator"
-        :class="{ indicatorTop, indicatorLeft }"
-        :arrow="arrow"
-        draggable="false"
-        class="wh-100"
-        @change="checkSelectedComponent"
+      <el-popover
+        :disabled="disabledSliderButton || !isDraftMode"
+        :value="editing"
+        :visible-arrow="false"
+        :placement="scrolling ? 'top' :'top-start'"
+        effect="light"
+        trigger="manual"
+        popper-class="hide-popper"
       >
-        <el-carousel-item
-          v-for="(child, index) in sliders"
-          :key="child.id"
-          :animation="animation"
-          :class="{
+        <el-button-group>
+          <el-button
+            class="icon"
+            @click="createSlider"
+          >
+            <i class="el-icon-plus" />
+            Slider
+          </el-button>
+
+          <el-button
+            class="icon"
+            @click="deleteSlider"
+          >
+            <i class="el-icon-delete" />
+            Slider
+          </el-button>
+        </el-button-group>
+
+        <el-carousel
+          slot="reference"
+          ref="carousel"
+          :id="id"
+          :key="sliders.length"
+          v-bind="innerProps"
+          :indicator-position="hasIndicator"
+          :class="{ indicatorTop, indicatorLeft }"
+          :arrow="arrow"
+          draggable="false"
+          class="wh-100"
+          @change="checkSelectedComponent"
+        >
+          <el-carousel-item
+            v-for="(child, index) in sliders"
+            :key="child.id"
+            :animation="animation"
+            :class="{
             [`carousel-item-${id}`]: true
           }"
-        >
-          <slider
-            v-if="index === currentIndex"
-            :id="child.id"
-            :style="{ cursor }"
-            data-image-droppable
-            controller
-          />
-        </el-carousel-item>
-      </el-carousel>
+          >
+            <slider
+              v-if="index === currentIndex"
+              :id="child.id"
+              :style="{ cursor }"
+              data-image-droppable
+              controller
+            />
+          </el-carousel-item>
+        </el-carousel>
+      </el-popover>
     </div>
   </grid-generator-item>
 </template>
@@ -100,7 +96,8 @@
 import interactjs from 'interactjs'
 import { mapState, mapMutations, mapGetters } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
-import { CHILDREN, POLYMORPHISM, STYLES } from '@/const'
+import { STYLES } from '@/const'
+import { Popover } from 'element-ui'
 import propsMixin from '@/components/Templates/mixins/props'
 import childrenMixin from '@/components/Templates/mixins/children'
 import Slider from './Slider'
@@ -108,9 +105,9 @@ import GridGeneratorItem from './GridGeneratorItem'
 import Carousel from '@/vendor/element-ui/Carousel'
 import CarouselItem from '@/vendor/element-ui/CarouselItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
-import { isSlider, traversalSelfAndChildren } from '@/utils/node'
-import { vmRemoveNode } from '@/utils/vmMap'
-import { getValueByPath, globalDebounce } from '@/utils/tool'
+import { isCarousel, traversalChildren, isSlider, traversalSelfAndChildren } from '@/utils/node'
+import { vmCreateEmptyItem, vmRemoveNode } from '@/utils/vmMap'
+import { getValueByPath } from '@/utils/tool'
 import { findIndexBy } from '@/utils/array'
 
 export default {
@@ -120,7 +117,8 @@ export default {
     Slider,
     GridGeneratorItem,
     ElCarouselItem: CarouselItem,
-    ElCarousel: Carousel
+    ElCarousel: Carousel,
+    ElPopover: Popover
   },
   directives: {
     ObserveVisibility
@@ -142,6 +140,29 @@ export default {
   computed: {
     ...mapState('app', ['selectedComponentIds', 'isAdding', 'editingPath']),
     ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['scrolling']),
+    disabledSliderButton() {
+      let show = this.selected || this.editing
+
+      traversalChildren(this.node, node => {
+        if (isSlider(node) && node.parentId === this.id) {
+          if (this.selectedComponentIds.includes(node.id) || this.editingPath.includes(node.id)) {
+            show = true
+          }
+        }
+        else if (isSlider(node) || isCarousel(node)) {
+          if (this.editingPath.includes(node.id)) {
+            show = false
+            return false
+          }
+        }
+      })
+
+      return !show
+    },
+    selected() {
+      return this.selectedComponentIds.includes(this.id)
+    },
     editing() {
       return this.editingPath.includes(this.id)
     },
@@ -167,18 +188,6 @@ export default {
         ])
         return isSlider(node) && !hidden
       })
-    },
-    customerIndicator() {
-      return this.innerChildren.find(x => x[POLYMORPHISM] === 'indicators')
-    },
-    customerIndicatorNode() {
-      return this.nodesMap[this.customerIndicator.id]
-    },
-    prevGridItemId() {
-      return this.customerIndicatorNode[CHILDREN][0].id
-    },
-    nextGridItemId() {
-      return this.customerIndicatorNode[CHILDREN][1].id
     },
     arrow() {
       return this.innerProps.arrow === 'custom'
@@ -274,10 +283,13 @@ export default {
       'CLEAN_SELECTED_COMPONENT_ID',
       'SET_SELECTED_COMPONENT_ID'
     ]),
-    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    createSlider() {
+      vmCreateEmptyItem(this.node.parentNode)
+    },
+    deleteSlider() {
+      this.removeCurrentSlider()
+    },
     checkSelectedComponent(index, oldIndex) {
-      this.LAYOUT_SET({ scrolling: true })
-
       const { id } = this.sliders[oldIndex]
       const node = this.nodesMap[id]
       const ids = []
@@ -285,10 +297,6 @@ export default {
       traversalSelfAndChildren(node, ({ id }) => ids.push(id))
 
       this.CLEAN_SELECTED_COMPONENT_ID(ids)
-
-      globalDebounce(() => {
-        this.LAYOUT_SET({ scrolling: false })
-      }, 500)
     },
     removeCurrentSlider() {
       const node = this.children[this.currentIndex]
@@ -351,5 +359,24 @@ export default {
   width: 100%;
   z-index: 10;
   pointer-events: none;
+}
+
+::v-deep.el-button-group {
+  border-radius: 5px;
+  background-color: white;
+
+  button {
+    padding: 8px;
+    color: $color-active;
+    border: 1px solid $color-active;
+  }
+
+  i {
+    color: $color-active;
+  }
+}
+
+.el-button {
+  padding: 4px 5px 2px;
 }
 </style>

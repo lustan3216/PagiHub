@@ -1,5 +1,4 @@
 <template>
-  <!--  v-if="isGridItemParent"-->
   <grid-generator-inner
     v-if="node"
     ref="grid"
@@ -10,18 +9,6 @@
     :auto-extend-height="false"
     controller
   />
-  <!--  <div-->
-  <!--    v-else-->
-  <!--    :style="innerStyles.default"-->
-  <!--    class="h-100 no-action"-->
-  <!--    @scroll.passive="onScroll"-->
-  <!--  >-->
-  <!--    <grid-generator-inner-->
-  <!--      :id="id"-->
-  <!--      :inner-props="innerProps"-->
-  <!--      class="can-action"-->
-  <!--    />-->
-  <!--  </div>-->
 </template>
 
 <script>

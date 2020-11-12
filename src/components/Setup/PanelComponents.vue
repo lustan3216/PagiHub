@@ -145,6 +145,7 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
       'TOGGLE_SELECTED_COMPONENT_ID'
     ]),
+    ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     componentUpdate(tree, key) {
       if (['zIndex', 'parentId'].includes(key)) {
@@ -186,6 +187,12 @@ export default {
         this.TOGGLE_SELECTED_COMPONENT_IN_IDS(id)
       }
       else {
+        const editingPath = []
+        traversalAncestorAndSelf(this.nodesMap[id], node => {
+          editingPath.push(node.id)
+        })
+
+        this.APP_SET({ editingPath })
         this.TOGGLE_SELECTED_COMPONENT_ID(id)
       }
       this.scrollIntoView(id)

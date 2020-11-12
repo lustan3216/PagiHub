@@ -142,7 +142,6 @@ export const carousel = function(options, grid) {
       //   ]
       // }),
       slider(),
-      slider(),
       slider()
     ]
   }

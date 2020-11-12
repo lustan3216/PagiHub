@@ -75,9 +75,6 @@ export default {
     },
     deleteSlider() {
       vmGet(this.node.parentId, this.isExample).removeCurrentSlider()
-    },
-    tryToAddComponent() {
-      this.setBeingAddedComponentId(this.id)
     }
   }
 }
