@@ -347,19 +347,20 @@ export default {
   bottom: 0;
 }
 
-.component-name {
+::v-deep.component-name {
   background-color: white;
   white-space: pre;
   padding-right: 5px;
   padding-left: 5px;
   border: 1px solid $color-active;
   border-radius: 3px;
-  color: $color-active !important;
   font-size: 12px;
   font-weight: 500;
   height: 28px;
   transition: all 0.3s ease;
+
   & * {
+    color: $color-active !important;
     transition: all 0.3s ease;
   }
 }

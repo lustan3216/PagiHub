@@ -59,7 +59,7 @@ import {
   isSlider
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
-import { cloneJson, getValueByPath } from '@/utils/tool'
+import { cloneJson, getValueByPath, globalDebounce } from '@/utils/tool'
 import { CAN_BE_EDITED } from '@/const'
 
 let timeId
@@ -178,13 +178,13 @@ export default {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     onWheel(event) {
       event.preventDefault()
-      clearTimeout(timeId)
+
       this.scrolling = true
-      this.LAYOUT_SET({ gridResizing: true })
-      timeId = setTimeout(() => {
+      this.LAYOUT_SET({ scrolling: true })
+
+      globalDebounce(() => {
         this.scrolling = false
-        this.LAYOUT_SET({ gridResizing: false })
-        timeId = null
+        this.LAYOUT_SET({ scrolling: false })
       }, 50)
     },
     copy() {
@@ -228,19 +228,20 @@ export default {
   bottom: 0;
 }
 
-.component-name {
+::v-deep.component-name {
   background-color: white;
   white-space: pre;
   padding-right: 5px;
   padding-left: 5px;
   border: 1px solid $color-active;
   border-radius: 3px;
-  color: $color-active !important;
   font-size: 12px;
   font-weight: 500;
   height: 28px;
   transition: all 0.3s ease;
+
   & * {
+    color: $color-active !important;
     transition: all 0.3s ease;
   }
 }
