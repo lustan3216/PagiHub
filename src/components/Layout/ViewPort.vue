@@ -54,7 +54,7 @@
             icon="el-icon-full-screen"
             class="shortcut-button"
             plain
-            @click="resizeBar = !resizeBar"
+            @click="hideResizeBar"
           />
         </el-tooltip>
 
@@ -287,6 +287,12 @@ export default {
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    hideResizeBar() {
+      this.resizeBar = !this.resizeBar
+      this.$nextTick(() => {
+        this.setBoundaryRect()
+      })
+    },
     reset() {
       this.setBoundaryRect()
       this.style.scale = 1
@@ -338,7 +344,7 @@ export default {
   position: absolute;
   opacity: 0.7;
   transition: opacity 1s;
-  background-color: rgba(169, 172, 179, 0.19);
+  background-color: rgba(169, 172, 179, 0.49);
   border-radius: 3px;
 
   &:hover {

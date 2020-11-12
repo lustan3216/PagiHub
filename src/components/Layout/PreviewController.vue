@@ -83,7 +83,7 @@ export default {
   transform: translateX(-50%);
   border-radius: 50px;
   box-shadow: rgba(0, 0, 0, 0.1) 1px 4px 22px;
-  background-color: rgba(253, 253, 253, 0.85);
+  background-color: rgba(253, 253, 253, 0.9);
 }
 .controller {
   padding-right: 20px;
