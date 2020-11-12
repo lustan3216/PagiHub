@@ -31,7 +31,7 @@ import {
   isTextEditor,
   isGroup,
   isSlider,
-  isImage
+  isImage, isButton
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath, globalDebounce } from '@/utils/tool'
@@ -85,7 +85,8 @@ export default {
       }
     },
     zIndex() {
-      return getValueByPath(this.node, [STYLES, 'layout', 'zIndex'], 0) + 10
+      const zIndex = getValueByPath(this.node, [STYLES, 'layout', 'zIndex'], 0) + 10
+      return this.isTextEditor ? zIndex + 5 : zIndex
     },
     resizeHandler() {
       return !this.gridResizing && this.selected && this.isResizable

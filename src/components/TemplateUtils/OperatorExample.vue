@@ -127,7 +127,8 @@ export default {
       }
     },
     zIndex() {
-      return getValueByPath(this.node, [STYLES, 'layout', 'zIndex'], 0) + 10
+      const zIndex = getValueByPath(this.node, [STYLES, 'layout', 'zIndex'], 0) + 10
+      return this.isTextEditor ? zIndex + 5 : zIndex
     },
     visible() {
       const windowBottom = this.windowY + this.windowHeight
