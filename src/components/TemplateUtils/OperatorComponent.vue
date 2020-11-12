@@ -79,6 +79,9 @@ import { arrayLast } from '@/utils/array'
 import { getValueByPath } from '@/utils/tool'
 import OftenUseMenu from './OftenUseMenu'
 import interact from 'interactjs'
+import {
+  PopupManager
+} from 'element-ui/src/utils/popup'
 
 let timeId
 
@@ -104,6 +107,7 @@ export default {
       left: 0,
       width: 0,
       height: 0,
+      zIndex: PopupManager.nextZIndex(),
       hoverIcon: false,
       scrolling: false,
       resizeEventSet: false,
@@ -137,7 +141,7 @@ export default {
         transform: `translate(${left}, ${top}`,
         width: this.rect.width + 'px',
         height: height + 'px',
-        zIndex: this.selected ? 2001 : 2000
+        zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
     },
     visible() {

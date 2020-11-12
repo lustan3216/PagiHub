@@ -61,6 +61,9 @@ import {
 import { arrayLast } from '@/utils/array'
 import { cloneJson, getValueByPath, globalDebounce } from '@/utils/tool'
 import { CAN_BE_EDITED } from '@/const'
+import {
+  PopupManager
+} from 'element-ui/src/utils/popup'
 
 export default {
   name: 'OperatorExample',
@@ -87,7 +90,7 @@ export default {
       canGoBack: null,
       hoverIcon: false,
       scrolling: false,
-      zIndex: 2030,
+      zIndex: PopupManager.nextZIndex(),
       windowHeight: 0,
       windowY: 0
     }
@@ -114,7 +117,7 @@ export default {
         left: this.rect.x + 'px',
         width: this.rect.width + 'px',
         height: height + 'px',
-        zIndex: this.selected ? 3001 : 3000
+        zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
     },
     canBeEdited() {
