@@ -7,7 +7,7 @@
       :key="isStack"
     >
       <span class="font-12">
-        Bounce away when two blocks colliding if both enable
+        Bounce to below when colliding with another stack element
       </span>
     </el-checkbox>
   </div>

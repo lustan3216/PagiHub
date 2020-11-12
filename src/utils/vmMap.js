@@ -99,9 +99,12 @@ export function vmRemoveNode(node) {
 }
 
 export function vmAddNodeToParent(id, nodeTree) {
-  vmGet(id).addNodeToParent(nodeTree)
-}
-
-export function vmBecomeMaster(node) {
-  vmGet(node.id).becomeMaster()
+  const vm = vmGet(id)
+  if (vm) {
+    vmGet(id).addNodeToParent(nodeTree)
+  }
+  else {
+    const background = store.getters['node/backgroundNode']
+    vmAddNodeToParent(background.id, nodeTree)
+  }
 }

@@ -140,7 +140,7 @@
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import { isMac } from '@/utils/device'
-import { vmPasteNodes, vmRemoveNode, vmBecomeMaster } from '@/utils/vmMap'
+import { vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
 import ComponentMove from './ComponentMove'
 import ComponentGroup from './ComponentGroup'
 import Lock from '../Setup/EditorStyle/Lock'
@@ -233,9 +233,6 @@ export default {
                 break
               case 'Delete':
                 vmRemoveNode(node)
-                break
-              case 'Make Master Component':
-                vmBecomeMaster(node)
                 break
             }
           })

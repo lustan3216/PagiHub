@@ -131,8 +131,8 @@ export default {
         : windowBottom - this.rect.y
 
       return {
-        top: (this.windowY < this.rect.y ? this.rect.y : this.windowY) + 1 + 'px',
-        left: this.rect.x + 1 + 'px',
+        top: (this.windowY < this.rect.y ? this.rect.y : this.windowY) +1  + 'px',
+        left: this.rect.x + 'px',
         width: this.rect.width + 'px',
         height: height + 'px',
         zIndex: this.selected ? 2001 : 2000

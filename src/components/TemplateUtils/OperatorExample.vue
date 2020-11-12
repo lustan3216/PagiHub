@@ -40,7 +40,7 @@
           style="padding: 8px 2px 8px 5px;"
           @mouseenter="hoverIcon = true"
           @mouseleave="hoverIcon = false"
-          @copy="copy"
+          @click="copy"
         />
 
         <component-names :id="id"/>
@@ -61,8 +61,6 @@ import {
 import { arrayLast } from '@/utils/array'
 import { cloneJson, getValueByPath, globalDebounce } from '@/utils/tool'
 import { CAN_BE_EDITED } from '@/const'
-
-let timeId
 
 export default {
   name: 'OperatorExample',
@@ -112,8 +110,8 @@ export default {
         : windowBottom - this.rect.y
 
       return {
-        top: (this.windowY < this.rect.y ? this.rect.y : this.windowY) + 1 + 'px',
-        left: this.rect.x + 1 + 'px',
+        top: (this.windowY < this.rect.y ? this.rect.y : this.windowY) + 'px',
+        left: this.rect.x + 'px',
         width: this.rect.width + 'px',
         height: height + 'px',
         zIndex: this.selected ? 3001 : 3000
