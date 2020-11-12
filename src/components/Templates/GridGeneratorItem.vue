@@ -273,7 +273,10 @@ export default {
       const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
       this.exampleBoundary = closestValidBreakpoint(this.node, currentPoint)
     }
-    this.handleAutoHeight()
+    this.$nextTick(() => {
+      // text 新增時，如果不放nextTick，會更新不到
+      this.handleAutoHeight()
+    })
   },
   beforeDestroy() {
     this.$delete(this.layouts, this.id)
