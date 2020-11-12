@@ -25,11 +25,8 @@ export default {
     hasSibling() {
       return this.gridParent.children.length > 1
     },
-    canMoveForward() {
-      return this.node && this.hasSibling
-    },
-    canMoveBackward() {
-      return this.node && this.hasSibling
+    canMove() {
+      return this.node && this.gridParent && this.hasSibling
     },
     zIndexMap() {
       return this.gridParent.children.reduce((map, node) => {
@@ -115,8 +112,8 @@ export default {
   },
   render() {
     return this.$scopedSlots.default({
-      canMoveForward: this.canMoveForward,
-      canMoveBackward: this.canMoveBackward,
+      canMoveForward: this.canMove,
+      canMoveBackward: this.canMove,
       moveForward: this.moveForward,
       moveToFront: this.moveToFront,
       moveToBackward: this.moveToBackward,
