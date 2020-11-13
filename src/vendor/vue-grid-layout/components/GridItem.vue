@@ -225,6 +225,9 @@
         lockBottomInLayout: false
       }
     },
+    beforeMount() {
+      store.shouldTransition = false
+    },
     created() {
       let self = this
 
@@ -278,8 +281,6 @@
 
       this.createStyle()
       this.$nextTick(() => {
-        this.transition = true
-
         if (this.autoResizeHeight) {
           this.autoSize()
         }
