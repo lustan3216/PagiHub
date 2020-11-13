@@ -1,7 +1,5 @@
 <template>
   <div>
-    <el-divider content-position="left">POSITION</el-divider>
-
     <el-checkbox
       v-if="isStack"
       v-model="verticalCompact"

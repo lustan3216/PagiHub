@@ -1,13 +1,13 @@
 <template>
   <div>
-    <el-divider content-position="left">STACK MODE</el-divider>
+    <el-divider content-position="left">LAYOUT</el-divider>
 
     <el-checkbox
       v-model="isStack"
       :key="isStack"
     >
       <span class="font-12">
-        Bounce to below when colliding with another stack element
+        Stack mode. Bounce to below when colliding with another stack element
       </span>
     </el-checkbox>
   </div>
