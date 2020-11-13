@@ -23,15 +23,15 @@ Just click publish, then you will have a real RWD website
 打包出去的 js file, 理論上應該可以 用 prerender 方式，因為已經發布了，所以固定定型了，理論上程式碼應該不用再動，
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
+
+照片redo undo 會把base64回覆，要改delta
 檢查
 group 要能拖進去拖出來嗎
 有node會沒刪乾淨
-照片redo undo 會把base64回覆，要改delta
 style 有關grid unit的變換 要檢查rwd
 rwd
 btton連結
 發布後 的share page and browsing
-example 的 responsive button
 如果update 500 直接 overwrite
 
 // resizeing docking 考慮

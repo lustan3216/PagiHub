@@ -251,7 +251,7 @@ export default {
 
 .outer {
   height: 60vh;
-  padding: 15px 5px;
+  padding: 15px;
   border-radius: 3px;
   border: 1px solid $color-grey;
 }
