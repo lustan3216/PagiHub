@@ -13,6 +13,11 @@
       @confirm="onSubmit"
       @close="initData"
     >
+      <i
+        v-shortkey="['esc']"
+        @shortkey.propgate="visible = false"
+      />
+
       <el-form
         ref="form"
         :rules="rules"

@@ -24,15 +24,18 @@ Just click publish, then you will have a real RWD website
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
 
-照片redo undo 會把base64回覆，要改delta
 檢查
+照片redo undo 會把base64回覆，要改delta
 group 要能拖進去拖出來嗎
+
 有node會沒刪乾淨
+
 style 有關grid unit的變換 要檢查rwd
 rwd
 btton連結
 發布後 的share page and browsing
 如果update 500 直接 overwrite
+
 
 // resizeing docking 考慮
 // group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮

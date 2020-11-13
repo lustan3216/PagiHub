@@ -7,6 +7,11 @@
     width="95vw"
     @close="CLOSE_ASSET"
   >
+    <i
+      v-shortkey="['esc']"
+      @shortkey.propgate="CLOSE_ASSET"
+    />
+
     <el-row
       :gutter="10"
       type="flex"

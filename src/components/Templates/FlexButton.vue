@@ -53,11 +53,9 @@
 </template>
 
 <script>
-import { Message } from 'element-ui'
 import propsMixin from '@/components/Templates/mixins/props'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexButton'
-import { deleteBy } from '@/utils/array'
 import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
 import TextEditorInner from './TextEditorInner'
 import { mapState, mapActions } from 'vuex'

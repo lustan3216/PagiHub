@@ -62,7 +62,7 @@
           <i
             v-shortkey="option.shortKey"
             :disabled="option.disabled"
-            @shortkey="option.fn"
+            @shortkey.propgate="option.fn"
           />
           <div class="justify-between">
             {{ option.name }}

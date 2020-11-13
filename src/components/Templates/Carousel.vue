@@ -364,6 +364,7 @@ export default {
 ::v-deep.el-button-group {
   border-radius: 5px;
   background-color: white;
+  margin-bottom: 0px;
 
   button {
     padding: 8px;

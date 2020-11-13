@@ -20,13 +20,14 @@ const bindValue = (value, el, binding, vnode) => {
   const avoid = binding.modifiers.avoid === true
   const focus = !binding.modifiers.focus === true
   const once = binding.modifiers.once === true
+  const propgate = binding.modifiers.propgate === true
   if (avoid) {
     objAvoided = objAvoided.filter((itm) => {
       return !itm === el;
     })
     objAvoided.push(el)
   } else {
-    mappingFunctions({b: value, push, once, focus, el: vnode.elm})
+    mappingFunctions({b: value, push, once, focus, propgate, el: vnode.elm})
   }
 }
 
@@ -114,8 +115,12 @@ const dispatchShortkeyEvent = (pKey, keyup = false) => {
   const e = new CustomEvent('shortkey', { bubbles: false })
   if (mapFunctions[pKey].key) e.srcKey = mapFunctions[pKey].key
   const elm = mapFunctions[pKey].el
-  e.keyup = keyup
-  elm[elm.length - 1].dispatchEvent(e)
+  if (!mapFunctions[pKey].propgate) {
+    e.keyup = keyup
+    elm[elm.length - 1].dispatchEvent(e)
+  } else {
+    elm.forEach(elmItem => elmItem.dispatchEvent(e))
+  }
 }
 
 ShortKey.keyDown = (pKey) => {
@@ -130,8 +135,10 @@ if (process && process.env && process.env.NODE_ENV !== 'test') {
       const decodedKey = ShortKey.decodeKey(pKey)
       // Check avoidable elements
       if (availableElement(decodedKey)) {
-        pKey.preventDefault()
-        pKey.stopPropagation()
+        if (!mapFunctions[decodedKey].propgate) {
+          pKey.preventDefault()
+          pKey.stopPropagation()
+        }
         if (mapFunctions[decodedKey].focus) {
           ShortKey.keyDown(decodedKey)
           keyPressed = true
@@ -146,8 +153,10 @@ if (process && process.env && process.env.NODE_ENV !== 'test') {
     document.addEventListener('keyup', (pKey) => {
       const decodedKey = ShortKey.decodeKey(pKey)
       if (availableElement(decodedKey)) {
-        pKey.preventDefault()
-        pKey.stopPropagation()
+        if (!mapFunctions[decodedKey].propgate) {
+          pKey.preventDefault()
+          pKey.stopPropagation()
+        }
         if (mapFunctions[decodedKey].once || mapFunctions[decodedKey].push) {
           dispatchShortkeyEvent(decodedKey, true);
         }
@@ -157,16 +166,18 @@ if (process && process.env && process.env.NODE_ENV !== 'test') {
   })()
 }
 
-const mappingFunctions = ({b, push, once, focus, el}) => {
+const mappingFunctions = ({b, push, once, focus, propgate, el}) => {
   for (let key in b) {
     const k = ShortKey.encodeKey(b[key])
     const elm = mapFunctions[k] && mapFunctions[k].el ? mapFunctions[k].el : []
+    const propagated = mapFunctions[k] && mapFunctions[k].propgate
     elm.push(el)
     mapFunctions[k] = {
       push,
       once,
       focus,
       key,
+      propgate: propagated || propgate,
       el: elm
     }
   }
