@@ -942,9 +942,9 @@
       },
       autoSize() {
         // ok here we want to calculate if a resize is needed
-        if (process.env.NODE_ENV !== 'production') {
-          console.warn('autoSize')
-        }
+        // if (process.env.NODE_ENV !== 'production') {
+        //   console.warn('autoSize')
+        // }
         if (!this.autoResizeHeight) {
           return
         }
