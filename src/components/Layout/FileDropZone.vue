@@ -212,7 +212,10 @@ export default {
       })
     },
     drop(event) {
-      const { x, y } = event.target.closest('[data-image-droppable]').getBoundingClientRect()
+      const element = event.target.closest('[data-image-droppable]')
+      if (!element) return
+
+      const { x, y } = element.getBoundingClientRect()
       const droppedNode = this.getNode(event)
 
       this.dropEvent = {

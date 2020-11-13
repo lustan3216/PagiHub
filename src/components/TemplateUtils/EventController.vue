@@ -64,7 +64,6 @@
 import vue from 'vue'
 import { mapState, mapMutations } from 'vuex'
 import { CAN_BE_EDITED } from '@/const'
-import { isMac } from '@/utils/device'
 import {
   isBackground,
   isGroup, isSlider,
@@ -206,7 +205,6 @@ export default {
     this.$bus.$off('operator-get-rect', this.getRect)
   },
   methods: {
-    isMac,
     ...mapMutations('layout', {
       LAYOUT_SET: 'SET'
     }),

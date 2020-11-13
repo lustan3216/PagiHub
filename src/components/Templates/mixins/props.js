@@ -1,5 +1,6 @@
-import { cloneJson, deepMerge } from '@/utils/tool'
+import { cloneJson, deepMerge, globalDebounce } from '@/utils/tool'
 import { PROPS, VALUE, STYLES } from '@/const'
+import { mapMutations } from 'vuex'
 
 export default {
   props: {
@@ -24,5 +25,21 @@ export default {
       const setting = cloneJson(this.$options.defaultSetting || {})
       return deepMerge(setting, this.node[PROPS])
     }
+  },
+  watch: {
+    innerStyles: {
+      handler() {
+        this.LAYOUT_SET({ gridResizing: true })
+        globalDebounce(() => {
+          this.LAYOUT_SET({ gridResizing: false })
+        }, 3000)
+      },
+      deep: true
+    }
+  },
+  methods: {
+    ...mapMutations('layout', {
+      LAYOUT_SET: 'SET'
+    })
   }
 }
