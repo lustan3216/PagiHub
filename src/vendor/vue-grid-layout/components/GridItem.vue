@@ -280,6 +280,10 @@
       this.createStyle()
       this.$nextTick(() => {
         this.transition = true
+
+        if (this.autoResizeHeight) {
+          this.autoSize()
+        }
       })
     },
     watch: {
@@ -974,6 +978,7 @@
         }
         if (this.previousW !== pos.w || this.previousH !== pos.h) {
           this.$emit('resized', this.i, pos.h, pos.w, height, width)
+          this.$emit('autoSized', this.i, pos.h, pos.w, height, width)
           this.eventBus.$emit('resizeEvent', 'autoSize', this.i, this.innerX, this.innerY, pos.h, this.innerW)
         }
       }

@@ -22,6 +22,7 @@
     :vertical-compact="computedLayout.verticalCompact"
     :class="{ 'no-action': lock }"
     :auto-resize-height="autoResizeHeight"
+    @autoSized="autoSized"
     @moved="moved"
   >
     <div
@@ -114,6 +115,7 @@ export default {
       'vh'
     ]),
     pxW() {
+      // 給operator 算zIndex用的
       return this.$refs.gridItem.pxW
     },
     pxH() {
@@ -279,10 +281,7 @@ export default {
       const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
       this.exampleBoundary = closestValidBreakpoint(this.node, currentPoint)
     }
-    this.$nextTick(() => {
-      // text 新增時，如果不放nextTick，會更新不到
-      this.handleAutoHeight()
-    })
+    this.handleAutoHeight()
   },
   beforeDestroy() {
     this.$delete(this.layouts, this.id)
@@ -293,13 +292,10 @@ export default {
   },
   methods: {
     ...mapActions('node', ['record']),
-    handleAutoHeight(value = this.autoResizeHeight) {
-      if (value) {
-        asyncGetValue(() => this.$refs.gridItem).then(item => item.autoSize())
+    handleAutoHeight() {
+      if (this.autoResizeHeight) {
         this.offResizeListener = resizeListener(this.$refs.content, () => {
-          requestAnimationFrame(() => {
-            this.$refs.gridItem.autoSize()
-          })
+          requestAnimationFrame(() => this.$refs.gridItem.autoSize)
         })
       }
       else if (this.offResizeListener) {
@@ -327,6 +323,11 @@ export default {
       }
       else {
         this.$set(this.layouts, this.id, this.layout)
+      }
+    },
+    autoSized() {
+      if (this.isDraftMode) {
+        this.$bus.$emit('operator-get-rect')
       }
     },
     moved() {

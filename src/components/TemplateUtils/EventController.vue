@@ -228,7 +228,6 @@ export default {
       else {
         const gridRect = this.$el.closest('.grid-layout').getBoundingClientRect()
         const itemRect = this.element.getBoundingClientRect()
-
         this.rect = {
           x: (itemRect.x - gridRect.x),
           y: (itemRect.y - gridRect.y),

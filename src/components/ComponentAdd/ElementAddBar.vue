@@ -2,7 +2,6 @@
   <div class="align-center">
     <i
       v-shortkey="['esc']"
-      v-if="isAdding"
       @shortkey="cleanState"
     />
 
@@ -141,6 +140,7 @@ import { capitalize } from '@/utils/string'
 import { getExample } from '@/templateJson/basic'
 import { vmAddNodeToParent } from '@/utils/vmMap'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { isTextEditor } from '@/utils/node'
 
 export default {
   name: 'ElementAddBar',
@@ -195,6 +195,9 @@ export default {
           label: 'Iframe'
         }
       ]
+    },
+    isTextEditor() {
+      return this.creatingComponentTag === 'text-editor'
     }
   },
   watch: {
@@ -238,7 +241,7 @@ export default {
           x: startX - originX,
           y: startY - originY,
           w: Math.round(((evt.oe.clientX - startX) / originW) * 100),
-          h: evt.oe.clientY - startY,
+          h: this.isTextEditor ? 18 : evt.oe.clientY - startY,
           unitW: '%',
           unitH: 'px',
           unitX: 'px',

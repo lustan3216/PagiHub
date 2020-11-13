@@ -229,7 +229,7 @@ export default {
   touch-action: none;
   position: relative;
   backface-visibility: hidden;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 15px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 15px;
 }
 
 .shortcut-button {
