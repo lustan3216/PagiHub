@@ -7,41 +7,42 @@
       textAlign: 'center'
     }"
   >
+    <el-popover
+      ref="popover"
+      :disabled="!isDraftMode"
+      :value="editing"
+      :visible-arrow="false"
+      effect="light"
+      trigger="manual"
+      popper-class="hide-popper"
+    >
+      <el-select
+        v-model="link"
+        allow-create
+        filterable
+        clearable
+        no-data-text="No published page"
+        no-match-text="No published page"
+        placeholder="Put a URL or select a published page"
+        style="width: 260px;"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+
+
+    </el-popover>
+
     <div
+      v-popover:popover
       :class="{ pointer: !isDraftMode }"
       class="flex-center h-100"
       @click="onRealClick"
     >
-      <portal
-        v-if="isDraftMode"
-        :to="`QuickFunctions${id}`"
-      >
-        <el-tooltip
-          v-if="editing"
-          effect="light"
-          content="Click only enable at preview or publish page."
-          placement="top"
-        >
-          <el-select
-            v-model="link"
-            allow-create
-            filterable
-            clearable
-            no-data-text="No published page"
-            no-match-text="No published page"
-            placeholder="Put a URL or select a published page"
-            style="width: 260px;"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-        </el-tooltip>
-      </portal>
-
       <text-editor-inner
         :id="id"
         :can-link="false"
@@ -60,13 +61,15 @@ import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
 import TextEditorInner from './TextEditorInner'
 import { mapState, mapActions } from 'vuex'
 import { PROPS } from '@/const'
+import { Popover } from 'element-ui'
 
 export default {
   defaultSetting,
   name: 'FlexButton',
   components: {
     TextEditorInner,
-    GridGeneratorItem
+    GridGeneratorItem,
+    ElPopover: Popover
   },
   mixins: [propsMixin, childrenMixin],
   data() {
