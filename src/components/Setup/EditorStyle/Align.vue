@@ -109,7 +109,7 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
     ...mapGetters('layout', ['currentBreakpoint']),
-    ...mapState('layout', ['windowWidth', 'backgroundHeight']),
+    ...mapState('layout', ['windowWidth', 'windowHeight']),
     sameParent() {
       const ids = this.selectedComponentNodes.map(node => node.parentId)
       return arrayUniq(ids).length === 1
@@ -147,7 +147,7 @@ export default {
           x: 0,
           y: 0,
           w: this.windowWidth,
-          h: this.backgroundHeight,
+          h: this.windowHeight,
           unitH: 'px',
           unitW: 'px',
           unitX: 'px',

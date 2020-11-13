@@ -27,6 +27,7 @@ Just click publish, then you will have a real RWD website
 
 unit select option 要標記
 effect bug
+font style unit bug
 shadow 有bug
 breakpoint setting 有bug
 檢查
