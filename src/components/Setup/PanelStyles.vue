@@ -49,7 +49,6 @@
 <script>
 // 永遠只會從EditBar裡面用bus.emit('currentSidebar')傳原始 style 過來
 import { mapGetters, mapState } from 'vuex'
-import { RadioGroup, RadioButton } from 'element-ui'
 import Radius from './EditorStyle/Radius'
 import Padding from './EditorStyle/Padding'
 import BackgroundColor from './EditorStyle/BackgroundColor'
@@ -65,7 +64,6 @@ import Stack from './EditorStyle/Stack'
 import Position from './EditorStyle/Position'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
-import TextEditorSimpleStyle from './EditorStyle/TextEditorNumberStyle'
 import Ratio from './EditorStyle/Ratio'
 import Align from '@/components/Setup/EditorStyle/Align'
 import { isBackground } from '@/utils/node'
@@ -89,10 +87,7 @@ export default {
     TransformOrigin,
     Transform,
     Stack,
-    ItemHiddenController,
-    TextEditorSimpleStyle,
-    ElRadioGroup: RadioGroup,
-    ElRadioButton: RadioButton
+    ItemHiddenController
   },
   props: {
     // styles: {

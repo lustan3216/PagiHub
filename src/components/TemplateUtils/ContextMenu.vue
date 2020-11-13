@@ -18,7 +18,13 @@
             type="text"
             @click="close(moveToFront)"
           >
-            <span>Move to the front</span>
+            <div class="justify-between">
+              <span>Move to Front</span>
+              <i
+                class="gray-font-2"
+                v-html="[altKeyIcon, ctrlKeyIcon, ']'].join('')"
+              />
+            </div>
           </div>
           <div
             :class="{ 'is-disabled': !canMoveForward }"
@@ -26,7 +32,13 @@
             type="text"
             @click="close(moveForward)"
           >
-            <span>Move Forward</span>
+            <div class="justify-between">
+              <span>Move Forward</span>
+              <i
+                class="gray-font-2"
+                v-html="[ctrlKeyIcon, ']'].join('')"
+              />
+            </div>
           </div>
           <div
             :class="{ 'is-disabled': !canMoveBackward }"
@@ -34,7 +46,13 @@
             type="text"
             @click="close(moveToBackward)"
           >
-            <span>Move Backward</span>
+            <div class="justify-between">
+              <span>Move Backward</span>
+              <i
+                class="gray-font-2"
+                v-html="[ctrlKeyIcon, '['].join('')"
+              />
+            </div>
           </div>
           <div
             :class="{ 'is-disabled': !canMoveBackward }"
@@ -42,7 +60,13 @@
             type="text"
             @click="close(moveToEnd)"
           >
-            <span>Move End</span>
+            <div class="justify-between">
+              <span>Move to End</span>
+              <i
+                class="gray-font-2"
+                v-html="[altKeyIcon, ctrlKeyIcon, '['].join('')"
+              />
+            </div>
           </div>
         </div>
       </template>
@@ -180,6 +204,9 @@ export default {
     },
     ctrlKeyIcon() {
       return isMac() ? '&#8984;' : '&#8963;'
+    },
+    altKeyIcon() {
+      return isMac() ? '&#8997;' : 'Alt'
     },
     options() {
       return [

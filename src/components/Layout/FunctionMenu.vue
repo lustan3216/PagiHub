@@ -14,7 +14,29 @@
 
       <el-submenu index="edit">
         <template slot="title">Edit</template>
+        <el-menu-item
+          v-for="(option, index) in editOptions"
+          :key="index"
+          @click="option.fn"
+        >
+          <i
+            v-shortkey="option.shortKey"
+            :disabled="option.disabled"
+            @shortkey.propgate="option.fn"
+          />
+          <div class="justify-between">
+            {{ option.name }}
+            <i
+              v-if="option.shortKeyString"
+              class="m-l-15 gray-font-2"
+              v-html="option.shortKeyString.join('')"
+            />
+          </div>
+        </el-menu-item>
+      </el-submenu>
 
+      <el-submenu index="arrange">
+        <template slot="title">Arrange</template>
         <component-group>
           <template
             v-slot="{
@@ -24,7 +46,7 @@
               ungroup
             }"
           >
-            <div>
+            <el-menu-item-group title="Group">
               <el-menu-item
                 :disabled="!canGroup"
                 @click="group"
@@ -50,29 +72,101 @@
               >
                 Ungroup
               </el-menu-item>
-            </div>
+            </el-menu-item-group>
           </template>
         </component-group>
 
-        <el-menu-item
-          v-for="(option, index) in editOptions"
-          :key="index"
-          @click="option.fn"
-        >
-          <i
-            v-shortkey="option.shortKey"
-            :disabled="option.disabled"
-            @shortkey.propgate="option.fn"
-          />
-          <div class="justify-between">
-            {{ option.name }}
-            <i
-              v-if="option.shortKeyString"
-              class="m-l-15 gray-font-2"
-              v-html="option.shortKeyString.join('')"
-            />
-          </div>
-        </el-menu-item>
+        <component-move>
+          <template
+            v-slot="{
+              canMoveForward,
+              canMoveBackward,
+              moveToFront,
+              moveForward,
+              moveToEnd,
+              moveToBackward
+            }"
+          >
+            <el-menu-item-group title="Align">
+              <el-menu-item
+                :disabled="!canMoveForward"
+                @click="moveToFront"
+              >
+                <i
+                  v-shortkey="[ctrlKey, altKey, ']']"
+                  :disabled="!canMoveForward"
+                  @shortkey.propgate="moveToFront"
+                />
+
+                <div class="justify-between">
+                  <span>Move to Front</span>
+                  <i
+                    class="gray-font-2"
+                    v-html="[altKeyIcon, ctrlKeyIcon, ']'].join('')"
+                  />
+                </div>
+              </el-menu-item>
+
+              <el-menu-item
+                :disabled="!canMoveForward"
+                @click="moveForward"
+              >
+                <i
+                  v-shortkey="[ctrlKey, ']']"
+                  :disabled="!canMoveForward"
+                  @shortkey="moveForward"
+                />
+
+                <div class="justify-between">
+                  <span>Move Forward</span>
+                  <i
+                    class="gray-font-2"
+                    v-html="[ctrlKeyIcon, ']'].join('')"
+                  />
+                </div>
+              </el-menu-item>
+
+              <el-menu-item
+                :disabled="!canMoveBackward"
+                @click="moveToBackward"
+              >
+                <i
+                  v-shortkey="[ctrlKey, '[']"
+                  :disabled="!canMoveBackward"
+                  @shortkey="moveToBackward"
+                />
+
+                <div class="justify-between">
+                  <span>Move Backward</span>
+                  <i
+                    class="gray-font-2"
+                    v-html="[ctrlKeyIcon, '['].join('')"
+                  />
+                </div>
+              </el-menu-item>
+
+              <el-menu-item
+                :disabled="!canMoveBackward"
+                @click="moveToEnd"
+              >
+                <i
+                  v-shortkey="[ctrlKey, altKey, '[']"
+                  :disabled="!canMoveBackward"
+                  @shortkey="moveToEnd"
+                />
+
+                <div class="justify-between">
+                  <span>Move to End</span>
+                  <i
+                    class="gray-font-2"
+                    v-html="[altKeyIcon, ctrlKeyIcon, '['].join('')"
+                  />
+                </div>
+              </el-menu-item>
+
+            </el-menu-item-group>
+          </template>
+        </component-move>
       </el-submenu>
     </el-submenu>
   </el-menu>
@@ -82,8 +176,9 @@
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import { isMac } from '@/utils/device'
 import { vmPasteNodes, vmRemoveNode, vmPasteNodesGrid, vmPasteNodesHtmlStyle } from '@/utils/vmMap'
-import { Menu, MenuItem, Submenu } from 'element-ui'
+import { Menu, MenuItem, Submenu, MenuItemGroup } from 'element-ui'
 import ComponentGroup from '@/components/TemplateUtils/ComponentGroup'
+import ComponentMove from '@/components/TemplateUtils/ComponentMove'
 import { BIconList } from 'bootstrap-vue'
 
 export default {
@@ -93,11 +188,19 @@ export default {
     ElMenu: Menu,
     ElMenuItem: MenuItem,
     ElSubmenu: Submenu,
-    ComponentGroup
+    ElMenuItemGroup: MenuItemGroup,
+    ComponentGroup,
+    ComponentMove
   },
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
+    altKey() {
+      return 'alt'
+    },
+    altKeyIcon() {
+      return isMac() ? '&#8997;' : 'Alt '
+    },
     ctrlKey() {
       return isMac() ? 'meta' : 'ctrl'
     },
@@ -226,6 +329,10 @@ export default {
 
   .el-submenu__title {
     padding: 0 20px !important;
+  }
+
+  .el-menu-item-group__title {
+    padding-left: 10px!important;
   }
 }
 </style>

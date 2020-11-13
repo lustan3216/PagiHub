@@ -24,6 +24,9 @@ Just click publish, then you will have a real RWD website
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
 
+
+shadow 有bug
+breakpoint setting 有bug
 檢查
 cut
 group 要能拖進去拖出來嗎
