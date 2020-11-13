@@ -3,8 +3,16 @@
     :id="id"
     data-image-droppable
   >
+    <img
+      v-if="base64Image"
+      :src="base64Image"
+      class="wh-100"
+    />
     <el-image
+      v-else
       v-bind="innerProps"
+      lazy
+      scroll-container="#art-board"
       class="wh-100"
     >
       <div
@@ -21,7 +29,6 @@
 import propsMixin from '@/components/Templates/mixins/props'
 import { defaultSetting } from '../Setup/EditorSetting/SettingFlexImage'
 import { Image } from 'element-ui'
-import { isComponentSet, isSlider, traversalAncestor } from '@/utils/node'
 import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
 
 export default {
@@ -34,19 +41,20 @@ export default {
   mixins: [propsMixin],
   data() {
     return {
-      lazy: true
+      base64Image: null
     }
   },
-  created() {
-    traversalAncestor(this.node, parentNode => {
-      if (isSlider(parentNode)) {
-        this.lazy = false
-        return false
+  methods: {
+    setBase64Preview(file) {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        this.base64Image = reader.result
       }
-      else if (isComponentSet(parentNode)) {
-        return false
+      reader.onerror = (error) => {
+        throw error
       }
-    })
+    }
   }
 }
 </script>

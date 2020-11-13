@@ -10,7 +10,6 @@
     @vdropzone-error="error"
     @vdropzone-sending="sending"
     @vdropzone-complete="init"
-    @vdropzone-success="appendImageUrl"
   >
     <slot/>
   </vue-dropzone>
@@ -22,12 +21,13 @@ import { Auth } from 'aws-amplify'
 import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
 import { isBackground, isCarousel, isGroup, isImage, isRectangle } from '@/utils/node'
 import { flexImage } from '@/templateJson/basic'
-import { vmGet, vmRemoveNode } from '@/utils/vmMap'
+import { vmGet } from '@/utils/vmMap'
 import { horizontalUnitConvert } from '@/utils/layout'
 import { Message } from 'element-ui'
 import { appendIds } from '@/utils/nodeId'
 import { GRID, STYLES } from '@/const'
-import jsonHistory from '@/store/jsonHistory'
+import { ulid } from 'ulid'
+import { asyncGetValue } from '@/utils/tool'
 
 let timerId
 let hoverIds = []
@@ -63,7 +63,6 @@ export default {
           'Cache-Control': null
         }
       },
-      fileNodeMap: {},
       dropEvent: {
         clientX: 0,
         clientY: 0,
@@ -84,6 +83,7 @@ export default {
     this.dropzoneOptions.url = `https://staging-api.lots.design/projects/${this.editingProjectId}/asset`
   },
   computed: {
+    ...mapState('user', ['userId']),
     ...mapState('node', ['editingProjectId']),
     ...mapGetters('mode', ['isDraftMode']),
     ...mapGetters('layout', ['currentBreakpoint']),
@@ -117,25 +117,21 @@ export default {
       this.dropzone.removeAllFiles()
     },
     sending(file, xhr, formData) {
+      const id = ulid()
+      formData.append('id', id)
       formData.append('label', file.name)
       formData.append('path', '')
-      this.queueComplete(file)
+      this.queueComplete(id, file)
     },
-    appendImageUrl(file, response) {
-      const node = this.fileNodeMap[file.upload.uuid]
-      this.irreversibleRecord({
-        path: [node.id, 'props', 'src'],
-        value: this.assetHost + response.data.url
-      })
-    },
-    async queueComplete(file) {
+    async queueComplete(id, file) {
       const { droppedNode, x, y, clientX, clientY } = this.dropEvent
+      const src = `${this.assetHost}${this.userId}/${id}/${file.name}`
 
       let newNode
       if (isImage(droppedNode) || isRectangle(droppedNode)) {
         newNode = flexImage({
           props: {
-            src: await this.getBase64(file)
+            src
           },
           [GRID]: droppedNode[GRID],
           [STYLES]: droppedNode[STYLES]
@@ -143,18 +139,16 @@ export default {
 
         appendIds(newNode, droppedNode.parentId)
 
-        jsonHistory.recordsMerge(() => {
-          this.record([
-            {
-              path: newNode.id,
-              value: newNode
-            },
-            {
-              path: droppedNode.id,
-              value: undefined
-            }
-          ])
-        })
+        this.record([
+          {
+            path: newNode.id,
+            value: newNode
+          },
+          {
+            path: droppedNode.id,
+            value: undefined
+          }
+        ])
       }
 
       else if (isBackground(droppedNode) || isGroup(droppedNode) || isCarousel(droppedNode)) {
@@ -164,7 +158,7 @@ export default {
 
         newNode = flexImage({
           props: {
-            src: await this.getBase64(file)
+            src
           },
           grid: {
             [this.currentBreakpoint]: {
@@ -193,7 +187,7 @@ export default {
           value: newNode
         })
       }
-      this.fileNodeMap[file.upload.uuid] = newNode
+      this.setBase64Preview(newNode.id, file)
       this.dropEvent.uploadingIndex++
     },
     error(file, message) {
@@ -231,17 +225,9 @@ export default {
         uploadingIndex: 0
       }
     },
-    getBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = function() {
-          resolve(reader.result)
-        }
-        reader.onerror = function(error) {
-          reject(error)
-        }
-      })
+    async setBase64Preview(id, file) {
+      const imageVm = await asyncGetValue(() => vmGet(id))
+      imageVm.$parent.setBase64Preview(file)
     },
     setIsAdding(event) {
       this.APP_SET({ isAdding: true })

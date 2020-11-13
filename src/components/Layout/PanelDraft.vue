@@ -54,7 +54,7 @@ export default {
     ViewPort,
     SidebarRight,
     SidebarLeft,
-    FileDropZone: () => import('@/components/TemplateUtils/FileDropZone'),
+    FileDropZone: () => import('@/components/Layout/FileDropZone'),
     PreviewController: () => import('@/components/Layout/PreviewController'),
     FunctionBar: () => import('@/components/Layout/FunctionBar'),
     PanelDraft: () => import('@/components/Layout/PanelDraft'),
