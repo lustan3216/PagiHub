@@ -21,9 +21,9 @@
     /* add right for rtl */
   }
 
-  /*.transition {*/
-  /*  !*transition: transform 200ms ease;*!*/
-  /*}*/
+  .transition {
+    transition: transform 200ms ease;
+  }
 
   .grid-item.no-touch {
     -ms-touch-action: none;
@@ -56,12 +56,11 @@
 <script>
   import Vue from 'vue'
   import { mapState, mapGetters } from 'vuex'
-  import { setTopLeft, setTopRight, setTransformRtl, setTransform, getBoundaryEl } from '../helpers/utils'
-
+  import { setTransform, getBoundaryEl } from '../helpers/utils'
   let interact = require('interactjs')
-  import { getValueByPath, resizeListener, debounce, cloneJson } from '@/utils/tool'
   import { getAbsoluteHeight } from '@/utils/style'
   import { toPrecision } from '@/utils/number'
+  const store = Vue.observable({ shouldTransition: false })
 
   export default {
     name: 'GridItem',
@@ -287,6 +286,9 @@
       })
     },
     watch: {
+      isDragging(value) {
+        store.shouldTransition = value
+      },
       isDraggable: function() {
         this.draggable = this.isDraggable
       },
@@ -465,7 +467,7 @@
           'draggable-dragging': this.isDragging,
           'disable-userselect': this.isDragging,
           'no-touch': this.isAndroid && this.draggableOrResizableAndNotStatic,
-          transition: process.env.NODE_ENV !== 'test'
+          transition: store.shouldTransition
         }
       },
       resizableAndNotStatic() {
