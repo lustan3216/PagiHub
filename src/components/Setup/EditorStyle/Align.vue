@@ -209,7 +209,7 @@ export default {
     alignMiddle() {
       if (this.isSingleNode) {
         const value =
-          this.parentHeight / 2 - vmGet(this.isSingleNode).pxH / 2
+          this.parentHeight / 2 - vmGet(this.theSingleNode.id).pxH / 2
         this.recordStore(this.theSingleNode.id, 'y', value)
       }
       else {
@@ -229,7 +229,7 @@ export default {
     },
     alignBottom() {
       if (this.isSingleNode) {
-        const value = this.parentHeight - vmGet(this.isSingleNode).pxH
+        const value = this.parentHeight - vmGet(this.theSingleNode.id).pxH
         this.recordStore(this.theSingleNode.id, 'y', value)
       }
       else {
@@ -264,7 +264,7 @@ export default {
     alignCenter() {
       if (this.isSingleNode) {
         const value =
-          this.parentWidth / 2 - vmGet(this.isSingleNode).pxW / 2
+          this.parentWidth / 2 - vmGet(this.theSingleNode.id).pxW / 2
         this.recordStore(this.theSingleNode.id, 'x', value)
       }
       else {
@@ -284,7 +284,7 @@ export default {
     },
     alignEnd() {
       if (this.isSingleNode) {
-        const value = this.parentWidth - vmGet(this.isSingleNode).pxW
+        const value = this.parentWidth - vmGet(this.theSingleNode.id).pxW
         this.recordStore(this.theSingleNode.id, 'x', value)
       }
       else {

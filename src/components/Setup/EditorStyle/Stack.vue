@@ -7,7 +7,7 @@
       :key="isStack"
     >
       <span class="font-12">
-        Stack mode. Bounce to below when colliding with another stack element
+        Stack mode. Shift to below when colliding with another stack element
       </span>
     </el-checkbox>
   </div>
