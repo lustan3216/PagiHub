@@ -37,7 +37,7 @@ import { arrayLast } from '@/utils/array'
 import { getValueByPath, globalDebounce } from '@/utils/tool'
 import OftenUseMenu from './OftenUseMenu'
 import interact from 'interactjs'
-import { STYLES } from '@/const'
+import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'OperatorComponent',
@@ -85,8 +85,10 @@ export default {
       }
     },
     zIndex() {
-      const zIndex = getValueByPath(this.node, [STYLES, 'layout', 'zIndex'], 0) + 10
-      return this.isTextEditor ? zIndex + 5 : zIndex
+      // w h 越小 zindex越大
+      const vm = vmGet(this.id)
+      const { pxW = 0, pxH = 0 } = vm
+      return Math.floor((10000 - pxW - pxH) / 100)
     },
     resizeHandler() {
       return !this.gridResizing && this.selected && this.isResizable

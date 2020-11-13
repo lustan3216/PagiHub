@@ -62,9 +62,10 @@ import {
   isGroup,
   isSlider
 } from '@/utils/node'
+import { vmGet } from '@/utils/vmMap'
 import { arrayLast } from '@/utils/array'
 import { cloneJson, getValueByPath, globalDebounce } from '@/utils/tool'
-import { CAN_BE_EDITED, STYLES } from '@/const'
+import { CAN_BE_EDITED } from '@/const'
 import { Popover } from 'element-ui'
 
 export default {
@@ -125,8 +126,10 @@ export default {
       }
     },
     zIndex() {
-      const zIndex = getValueByPath(this.node, [STYLES, 'layout', 'zIndex'], 0) + 10
-      return this.isTextEditor ? zIndex + 5 : zIndex
+      // w h 越小 zindex越大
+      const vm = vmGet(this.id)
+      const { pxW = 0, pxH = 0 } = vm
+      return Math.floor((10000 - pxW - pxH) / 100)
     },
     visible() {
       const windowBottom = this.windowY + this.windowHeight

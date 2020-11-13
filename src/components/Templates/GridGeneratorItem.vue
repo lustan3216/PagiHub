@@ -113,6 +113,12 @@ export default {
       'descBreakpoints',
       'vh'
     ]),
+    pxW() {
+      return this.$refs.gridItem.pxW
+    },
+    pxH() {
+      return this.$refs.gridItem.pxH
+    },
     needController() {
       if (this.isDraftMode) {
         return true
