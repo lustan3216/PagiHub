@@ -178,7 +178,8 @@ export default {
         fontStyle: style.fontStyle,
         lineHeight: style.lineHeight,
         fontFamily: style.fontFamily,
-        fontSize: style.fontSize
+        fontSize: style.fontSize,
+        fontWeight: style.fontWeight
       }
     },
     color: {
