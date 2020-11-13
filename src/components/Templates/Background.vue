@@ -10,7 +10,7 @@
     }"
     controller
     data-image-droppable
-    class="background"
+    class="background over-hidden"
     @height-updated="heightUpdated"
   />
 </template>
