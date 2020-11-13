@@ -253,7 +253,7 @@ export function isSlider(node) {
 
 export function isButton(node) {
   if (node) {
-    return node[POLYMORPHISM] === 'flex-button'
+    return node[TAG] === 'flex-button'
   }
 }
 

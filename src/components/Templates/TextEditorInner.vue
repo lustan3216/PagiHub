@@ -1,165 +1,169 @@
 <template>
-  <div class="editor ProseMirror">
-    <el-popover
-      :disabled="!isDraftMode"
-      :value="editing"
-      :visible-arrow="false"
-      effect="light"
-      placement="right"
-      trigger="manual"
-      popper-class="hide-popper"
+  <el-popover
+    ref="popover"
+    :disabled="!isDraftMode"
+    :value="selected"
+    :visible-arrow="false"
+    :popper-options="{
+        gpuAcceleration: true
+      }"
+    effect="light"
+    placement="right"
+    trigger="manual"
+    popper-class="hide-popper"
+  >
+    <div
+      id="menu-bubble"
+      class="menububble"
     >
-      <div
-        id="menu-bubble"
-        class="menububble"
-      >
-        <div class="function-wrapper">
-          <form
-            v-if="linkMenuIsActive && canLink"
-            class="menububble__form"
-            @submit.prevent="linkMenuIsActive = false"
+      <div class="function-wrapper">
+        <form
+          v-if="linkMenuIsActive && canLink"
+          class="menububble__form"
+          @submit.prevent="linkMenuIsActive = false"
+        >
+          <input
+            ref="linkInput"
+            v-model="link"
+            class="menububble__input"
+            type="text"
+            placeholder="https://"
+            @keydown.esc="linkMenuIsActive = false"
           >
-            <input
-              ref="linkInput"
-              v-model="link"
-              class="menububble__input"
-              type="text"
-              placeholder="https://"
-              @keydown.esc="linkMenuIsActive = false"
+          <button
+            class="menububble__button"
+            type="button"
+            @click="removeLink"
+          >
+            <img
+              svg-inline
+              src="icons/remove.svg"
             >
+          </button>
+        </form>
+
+        <div
+          v-else
+          class="flex-column"
+        >
+          <div class="heading flex">
             <button
+              :class="{ 'is-active': tag === 'p' }"
               class="menububble__button"
-              type="button"
-              @click="removeLink"
+              @click="tag = tag === 'p' ? undefined : 'p'"
             >
-              <img
-                svg-inline
-                src="icons/remove.svg"
-              >
+              P
             </button>
-          </form>
 
-          <div
-            v-else
-            class="flex-column"
-          >
-            <div class="heading flex">
-              <button
-                :class="{ 'is-active': tag === 'p' }"
-                class="menububble__button"
-                @click="tag = tag === 'p' ? undefined : 'p'"
-              >
-                P
-              </button>
-
-              <button
-                v-for="level in [1, 2, 3, 4, 5, 6]"
-                :key="level"
-                :class="{
+            <button
+              v-for="level in [1, 2, 3, 4, 5, 6]"
+              :key="level"
+              :class="{
                   'is-active': tag === `h${level}`
                 }"
-                class="menububble__button"
-                @click="tag = tag === `h${level}` ? undefined : `h${level}`"
-              >
-                H{{ level }}
-              </button>
-
-              <button class="menububble__button">
-                <color-picker v-model="color">
-                  <b-icon-circle-half style="font-size: 14px;" />
-                </color-picker>
-              </button>
-            </div>
-
-            <div
-              class="flex"
-              style="margin-top: 3px;"
+              class="menububble__button"
+              @click="tag = tag === `h${level}` ? undefined : `h${level}`"
             >
-              <button
-                v-if="canLink"
-                class="menububble__button"
-                @click="showLinkMenu"
-              >
-                <b-icon-link class="font-14" />
-              </button>
+              H{{ level }}
+            </button>
 
-              <button
-                :class="{ 'is-active': fontWeight === 'bold' }"
-                class="menububble__button"
-                @click="fontWeight = fontWeight === 'bold' ? undefined : 'bold'"
-              >
-                <span>B</span>
-              </button>
+            <button class="menububble__button">
+              <color-picker v-model="color">
+                <b-icon-circle-half style="font-size: 14px;" />
+              </color-picker>
+            </button>
+          </div>
 
-              <button
-                :class="{ 'is-active': fontStyle === 'italic' }"
-                class="menububble__button"
-                @click="
+          <div
+            class="flex"
+            style="margin-top: 3px;"
+          >
+            <button
+              v-if="canLink"
+              class="menububble__button"
+              @click="showLinkMenu"
+            >
+              <b-icon-link class="font-14" />
+            </button>
+
+            <button
+              :class="{ 'is-active': fontWeight === 'bold' }"
+              class="menububble__button"
+              @click="fontWeight = fontWeight === 'bold' ? undefined : 'bold'"
+            >
+              <span>B</span>
+            </button>
+
+            <button
+              :class="{ 'is-active': fontStyle === 'italic' }"
+              class="menububble__button"
+              @click="
                   fontStyle = fontStyle === 'italic' ? undefined : 'italic'
                 "
-              >
-                <span style="fontStyle: italic">I</span>
-              </button>
+            >
+              <span style="fontStyle: italic">I</span>
+            </button>
 
-              <button
-                :class="{ 'is-active': textDecoration === 'line-through' }"
-                class="menububble__button"
-                @click="
+            <button
+              :class="{ 'is-active': textDecoration === 'line-through' }"
+              class="menububble__button"
+              @click="
                   textDecoration =
                     textDecoration === 'line-through'
                       ? undefined
                       : 'line-through'
                 "
-              >
-                <span style="textDecoration: line-through;">S</span>
-              </button>
+            >
+              <span style="textDecoration: line-through;">S</span>
+            </button>
 
-              <button
-                :class="{ 'is-active': textDecoration === 'underline' }"
-                class="menububble__button"
-                @click="
+            <button
+              :class="{ 'is-active': textDecoration === 'underline' }"
+              class="menububble__button"
+              @click="
                   textDecoration =
                     textDecoration === 'underline' ? undefined : 'underline'
                 "
-              >
-                <span style="textDecoration: underline;">U</span>
-              </button>
+            >
+              <span style="textDecoration: underline;">U</span>
+            </button>
 
-              <button
-                :class="{ 'is-active': textAlign === 'left' }"
-                class="menububble__button"
-                @click="textAlign = textAlign === 'left' ? undefined : 'left'"
-              >
-                <b-icon-text-left class="font-14" />
-              </button>
-              <button
-                :class="{ 'is-active': textAlign === 'center' }"
-                class="menububble__button"
-                @click="
+            <button
+              :class="{ 'is-active': textAlign === 'left' }"
+              class="menububble__button"
+              @click="textAlign = textAlign === 'left' ? undefined : 'left'"
+            >
+              <b-icon-text-left class="font-14" />
+            </button>
+            <button
+              :class="{ 'is-active': textAlign === 'center' }"
+              class="menububble__button"
+              @click="
                   textAlign = textAlign === 'center' ? undefined : 'center'
                 "
-              >
-                <b-icon-text-center class="font-14" />
-              </button>
-              <button
-                :class="{ 'is-active': textAlign === 'right' }"
-                class="menububble__button"
-                @click="textAlign = textAlign === 'right' ? undefined : 'right'"
-              >
-                <b-icon-text-right class="font-14" />
-              </button>
-            </div>
-
-            <text-editor-simple-style
-              v-if="element && editing"
-              :element="element"
-            />
+            >
+              <b-icon-text-center class="font-14" />
+            </button>
+            <button
+              :class="{ 'is-active': textAlign === 'right' }"
+              class="menububble__button"
+              @click="textAlign = textAlign === 'right' ? undefined : 'right'"
+            >
+              <b-icon-text-right class="font-14" />
+            </button>
           </div>
+
+          <text-editor-simple-style
+            v-if="element"
+            :id="id"
+            :element="element"
+          />
         </div>
       </div>
+    </div>
 
+    <div slot="reference" class="editor ProseMirror">
       <content-editable
-        slot="reference"
         ref="content"
         :style="htmlStyles"
         :tag="tag || 'div'"
@@ -167,16 +171,17 @@
         :content-editable="isDraftMode && !isExample"
         tabindex="0"
       />
-    </el-popover>
-  </div>
+    </div>
+
+  </el-popover>
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { arrayUniq } from '@/utils/array'
+import { arrayLast, arrayUniq } from '@/utils/array'
 import { Popover } from 'element-ui'
 import WebFont from 'webfontloader'
 import ColorPicker from '@/components/Components/ColorPicker'
-import { HTML, STYLES, TEXT_EDITOR } from '@/const'
+import { HTML, STYLES } from '@/const'
 import { asyncGetValue } from '@/utils/tool'
 import ContentEditable from '@/components/Components/ContentEditable'
 import propsMixin from './mixins/props'
@@ -189,6 +194,7 @@ import {
 } from 'bootstrap-vue'
 import GridGeneratorItem from '@/components/Templates/GridGeneratorItem'
 import TextEditorSimpleStyle from '@/components/Setup/EditorStyle/TextEditorSimpleStyle'
+import { isButton, isTextEditor } from '@/utils/node'
 
 export default {
   name: 'TextEditorInner',
@@ -239,11 +245,13 @@ export default {
     },
     canEditStyle() {
       return this.selectedComponentNodes.every(node =>
-        [TEXT_EDITOR, 'flex-button'].includes(node.tag)
+        isTextEditor(node) || isButton(node)
       )
     },
     selected() {
-      return this.selectedComponentIds.includes(this.id)
+      const nodes = this.selectedComponentNodes.filter(node => isTextEditor(node) || isButton(node))
+      const node = arrayLast(nodes)
+      return node && node.id === this.id
     },
     htmlStyles() {
       const style = this.innerStyles.html || {}
@@ -264,7 +272,7 @@ export default {
       },
       set(value) {
         this.recordValue({
-          path: `${this.id}.value`,
+          path: `value`,
           value
         })
       }
@@ -275,7 +283,7 @@ export default {
       },
       set(value) {
         this.recordValue({
-          path: `${this.id}.${STYLES}.${HTML}.color`,
+          path: `${STYLES}.${HTML}.color`,
           value
         })
       }
@@ -286,7 +294,7 @@ export default {
       },
       set(value) {
         this.recordValue({
-          path: `${this.id}.${STYLES}.${HTML}.textAlign`,
+          path: `${STYLES}.${HTML}.textAlign`,
           value
         })
       }
@@ -297,7 +305,7 @@ export default {
       },
       set(value) {
         this.recordValue({
-          path: `${this.id}.${STYLES}.${HTML}.textDecoration`,
+          path: `${STYLES}.${HTML}.textDecoration`,
           value
         })
       }
@@ -308,7 +316,7 @@ export default {
       },
       set(value) {
         this.recordValue({
-          path: `${this.id}.${STYLES}.${HTML}.fontWeight`,
+          path: `${STYLES}.${HTML}.fontWeight`,
           value
         })
       }
@@ -319,7 +327,7 @@ export default {
       },
       set(value) {
         this.recordValue({
-          path: `${this.id}.${STYLES}.${HTML}.fontStyle`,
+          path: `${STYLES}.${HTML}.fontStyle`,
           value
         })
       }
@@ -330,7 +338,7 @@ export default {
       },
       set(value) {
         this.recordValue({
-          path: `${this.id}.props.tag`,
+          path: `props.tag`,
           value
         })
       }
@@ -341,7 +349,7 @@ export default {
       },
       set(value) {
         this.recordValue({
-          path: `${this.id}.props.link`,
+          path: `props.link`,
           value
         })
       }
@@ -382,7 +390,12 @@ export default {
       if (this.isExample) {
         return
       }
-      this.debounceRecord(object)
+      this.selectedComponentIds.forEach(id => {
+        this.debounceRecord({
+          path: [id, object.path].join('.'),
+          value: object.value
+        })
+      })
     },
     findFontNames(string) {
       if (typeof string === 'object') {

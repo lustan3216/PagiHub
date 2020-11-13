@@ -12,6 +12,9 @@
       :disabled="!isDraftMode"
       :value="editing"
       :visible-arrow="false"
+      :popper-options="{
+        gpuAcceleration: true
+      }"
       effect="light"
       trigger="manual"
       popper-class="hide-popper"

@@ -96,6 +96,10 @@ export default {
     BIconType
   },
   props: {
+    id: {
+      type: String,
+      required: true
+    },
     element: {
       required: true
     }
@@ -103,7 +107,7 @@ export default {
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
     node() {
-      return arrayLast(this.selectedComponentNodes)
+      return this.nodesMap[this.id]
     },
     style() {
       return getValueByPath(this.node, [STYLES, HTML], {})
