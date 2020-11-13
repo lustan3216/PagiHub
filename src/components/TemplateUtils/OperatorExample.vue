@@ -129,7 +129,8 @@ export default {
       // w h 越小 zindex越大
       const vm = vmGet(this.id, true)
       const { pxW = 0, pxH = 0 } = vm
-      return Math.floor((30000 - pxW - pxH) / 100)
+      const index = Math.floor((30000 - pxW - pxH) / 100)
+      return this.selected ? index * 2 : index
     },
     visible() {
       const windowBottom = this.windowY + this.windowHeight
