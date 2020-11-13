@@ -64,7 +64,7 @@ import childrenMixin from './mixins/children'
 import EventController from '../TemplateUtils/EventController'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import { asyncGetValue, cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
+import { cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestValidBreakpoint, isBackground } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
@@ -249,6 +249,14 @@ export default {
     }
   },
   watch: {
+    node: {
+      handler() {
+        if (this.autoResizeHeight) {
+          this.$refs.gridItem.autoSize()
+        }
+      },
+      deep: true
+    },
     computedLayout: {
       handler(value) {
         // 一定要轉成data，不然第一次computed 會因為不能assign值出bug
