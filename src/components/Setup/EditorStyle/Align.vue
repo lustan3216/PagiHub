@@ -170,6 +170,15 @@ export default {
   methods: {
     ...mapActions('node', ['debounceRecord']),
     recordStore(id, key, value) {
+      const vm = vmGet(id)
+
+      if (key === 'x') {
+        value = horizontalUnitConvert(id, value, 'px', vm.currentGrid.unitX)
+      }
+      else {
+        value = verticalUnitConvert(id, value, 'px', vm.currentGrid.unitY)
+      }
+
       this.debounceRecord([
         {
           path: [id, GRID, this.currentBreakpoint, key],
@@ -181,18 +190,6 @@ export default {
         }
       ])
     },
-    nodeHeight(id) {
-      const vm = vmGet(id)
-      return verticalUnitConvert(id, vm.currentGrid.h, vm.currentGrid.unitH, 'px')
-    },
-    nodeWidth(id) {
-      const vm = vmGet(id)
-      return horizontalUnitConvert(id, vm.currentGrid.w, vm.currentGrid.unitW, 'px')
-    },
-    currentGrid(node) {
-      const vm = vmGet(node.id)
-      return vm.currentGrid
-    },
     alignTop() {
       if (this.isSingleNode) {
         this.recordStore(this.theSingleNode.id, 'y', 0)
@@ -201,7 +198,7 @@ export default {
         let min = Infinity
         this.selectedComponentNodes.forEach(node => {
           const vm = vmGet(node.id)
-          if (min > vm.currentGrid.y) min = vm.currentGrid.y
+          if (min > vm.pxY) min = vm.pxY
         })
 
         this.selectedComponentNodes.forEach(node => {
@@ -212,38 +209,39 @@ export default {
     alignMiddle() {
       if (this.isSingleNode) {
         const value =
-          this.parentHeight / 2 - this.nodeHeight(this.theSingleNode.id) / 2
+          this.parentHeight / 2 - vmGet(this.isSingleNode).pxH / 2
         this.recordStore(this.theSingleNode.id, 'y', value)
       }
       else {
         let sum = 0
         this.selectedComponentNodes.forEach(node => {
           const vm = vmGet(node.id)
-          sum += vm.currentGrid.y + this.nodeHeight(node.id) / 2
+          sum += vm.pxY + vm.pxH / 2
         })
 
         const averageY = sum / this.selectedComponentNodes.length
 
         this.selectedComponentNodes.forEach(node => {
-          const h = this.nodeHeight(node.id)
-          this.recordStore(node.id, 'y', averageY - h / 2)
+          const vm = vmGet(node.id)
+          this.recordStore(node.id, 'y', averageY - vm.pxH / 2)
         })
       }
     },
     alignBottom() {
       if (this.isSingleNode) {
-        const value = this.parentHeight - this.nodeHeight(this.theSingleNode.id)
+        const value = this.parentHeight - vmGet(this.isSingleNode).pxH
         this.recordStore(this.theSingleNode.id, 'y', value)
       }
       else {
         let max = 0
         this.selectedComponentNodes.forEach(node => {
           const vm = vmGet(node.id)
-          if (max > vm.currentGrid.y) max = vm.currentGrid.y
+          if (max < vm.pxY + vm.pxH) max = vm.pxY + vm.pxH
         })
 
         this.selectedComponentNodes.forEach(node => {
-          this.recordStore(node.id, 'y', max)
+          const vm = vmGet(node.id)
+          this.recordStore(node.id, 'y', max - vm.pxH)
         })
       }
     },
@@ -255,7 +253,7 @@ export default {
         let min = Infinity
         this.selectedComponentNodes.forEach(node => {
           const vm = vmGet(node.id)
-          if (min > vm.currentGrid.x) min = vm.currentGrid.x
+          if (min > vm.pxX) min = vm.pxX
         })
 
         this.selectedComponentNodes.forEach(node => {
@@ -266,61 +264,61 @@ export default {
     alignCenter() {
       if (this.isSingleNode) {
         const value =
-          this.parentWidth / 2 - this.nodeWidth(this.theSingleNode.id) / 2
+          this.parentWidth / 2 - vmGet(this.isSingleNode).pxW / 2
         this.recordStore(this.theSingleNode.id, 'x', value)
       }
       else {
         let sum = 0
         this.selectedComponentNodes.forEach(node => {
           const vm = vmGet(node.id)
-          sum += vm.currentGrid.x + this.nodeWidth(node.id) / 2
+          sum += vm.pxX + vm.pxW / 2
         })
 
         const averageX = sum / this.selectedComponentNodes.length
 
         this.selectedComponentNodes.forEach(node => {
-          const w = this.nodeWidth(node.id)
-          this.recordStore(node.id, 'x', averageX - w / 2)
+          const vm = vmGet(node.id)
+          this.recordStore(node.id, 'x', averageX - vm.pxW / 2)
         })
       }
     },
     alignEnd() {
       if (this.isSingleNode) {
-        const value = this.parentWidth - this.currentGrid(this.theSingleNode).w
+        const value = this.parentWidth - vmGet(this.isSingleNode).pxW
         this.recordStore(this.theSingleNode.id, 'x', value)
       }
       else {
         let max = 0
         this.selectedComponentNodes.forEach(node => {
           const vm = vmGet(node.id)
-          if (max < vm.currentGrid.x) max = vm.currentGrid.x
+          if (max < vm.pxX + vm.pxW) max = vm.pxX + vm.pxW
         })
 
         this.selectedComponentNodes.forEach(node => {
-          this.recordStore(node.id, 'x', max)
+          const vm = vmGet(node.id)
+          this.recordStore(node.id, 'x', max - vm.pxW)
         })
       }
     },
     distributeHorizontal() {
       const sorted = this.selectedComponentNodes.sort((a, b) => {
-        return vmGet(a.id).currentGrid.x - vmGet(b.id).currentGrid.x
+        return vmGet(a.id).pxX - vmGet(b.id).pxX
       })
 
       let minX
       let maxX
       let sumW = 0
       sorted.forEach((node, index) => {
-        const grid = this.currentGrid(node)
+        const vm = vmGet(node.id)
         if (index === 0) {
-          minX = grid.x
+          minX = vm.pxX
         }
 
-        const w = this.nodeWidth(node.id)
         if (index === sorted.length - 1) {
-          maxX = grid.x + w
+          maxX = vm.pxX + vm.pxW
         }
 
-        sumW += w
+        sumW += vm.pxW
       })
 
       const width = maxX - minX
@@ -328,10 +326,10 @@ export default {
 
       let acc = minX
       sorted.forEach((node, index) => {
-        const w = this.nodeWidth(node.id)
+        const vm = vmGet(node.id)
 
         if (index === 0) {
-          acc += w + averageGap
+          acc += vm.pxW + averageGap
           return
         }
 
@@ -340,28 +338,28 @@ export default {
         }
 
         this.recordStore(node.id, 'x', acc)
-        acc += w + averageGap
+        acc += vm.pxW + averageGap
       })
     },
     distributeVertical() {
       const sorted = this.selectedComponentNodes.sort((a, b) => {
-        return vmGet(a.id).currentGrid.y - vmGet(b.id).currentGrid.y
+        return vmGet(a.id).pxY - vmGet(b.id).pxY
       })
 
       let minY
       let maxY
       let sumH = 0
       sorted.forEach((node, index) => {
-        const grid = this.currentGrid(node)
+        const vm = vmGet(node.id)
         if (index === 0) {
-          minY = grid.y
-        }
-        const h = this.nodeHeight(node.id)
-        if (index === sorted.length - 1) {
-          maxY = grid.y + h
+          minY = vm.pxY
         }
 
-        sumH += h
+        if (index === sorted.length - 1) {
+          maxY = vm.pxY + vm.pxH
+        }
+
+        sumH += vm.pxH
       })
 
       const width = maxY - minY
@@ -369,10 +367,10 @@ export default {
 
       let acc = minY
       sorted.forEach((node, index) => {
-        const h = this.nodeHeight(node.id)
+        const vm = vmGet(node.id)
 
         if (index === 0) {
-          acc += h + averageGap
+          acc += vm.pxH + averageGap
           return
         }
 
@@ -381,7 +379,7 @@ export default {
         }
 
         this.recordStore(node.id, 'y', acc)
-        acc += h + averageGap
+        acc += vm.pxH + averageGap
       })
     }
   }

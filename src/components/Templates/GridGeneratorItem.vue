@@ -114,11 +114,20 @@ export default {
       'descBreakpoints',
       'vh'
     ]),
+    pxX() {
+      // 給align用
+      return this.$refs.gridItem.pxX
+    },
+    pxY() {
+      // 給align用
+      return this.$refs.gridItem.pxY
+    },
     pxW() {
       // 給operator 算zIndex用的
       return this.$refs.gridItem.pxW
     },
     pxH() {
+      // 給operator 算zIndex用的
       return this.$refs.gridItem.pxH
     },
     needController() {

@@ -21,7 +21,6 @@ const mutations = {
     state.isAdding = null
     state.beingAddedComponentId = null
     state.selectedComponentIds = []
-    state.copyComponentIds = []
     state.editingPath = []
   },
   CLEAN_SELECTED_COMPONENT_ID(state, ids) {

@@ -210,7 +210,7 @@ const mutations = {
 const actions = {
   debounceRecord({ rootGetters }, payLoad) {
     if (rootGetters['mode/isDraftMode']) {
-      jsonHistory.debounceRecord(payLoad, 300)
+      jsonHistory.debounceRecord(payLoad, 200)
     }
   },
   record({ rootGetters }, payLoad) {
