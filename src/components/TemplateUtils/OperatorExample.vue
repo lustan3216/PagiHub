@@ -112,7 +112,7 @@ export default {
       'editingPath',
       'isAdding'
     ]),
-    ...mapState('layout', ['gridResizing']),
+    ...mapState('layout', ['gridResizing', 'scrolling']),
     ...mapGetters('app', ['selectedComponentNodes']),
     scale() {
       return this.exampleViewPort.scale
@@ -137,7 +137,7 @@ export default {
       return this.rect.y < windowBottom && this.rect.y + this.rect.height > this.windowY
     },
     border() {
-      if (!this.gridResizing) {
+      if (!this.gridResizing && !this.scrolling) {
         if (this.isBackground) {
           return this.selected
         }

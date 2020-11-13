@@ -18,7 +18,7 @@
       :disabled="!operatorTo"
     >
       <component
-        v-if="rect && !isAdding && !scrolling"
+        v-if="rect && !isAdding"
         :hovered="hoveringId === id"
         :is="isExample ? 'operator-example' : 'operator-component'"
         :id="id"

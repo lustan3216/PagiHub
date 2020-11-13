@@ -74,7 +74,7 @@ export default {
       'editingPath',
       'isAdding'
     ]),
-    ...mapState('layout', ['gridResizing', 'windowHeight', 'windowY', 'scaleRatio']),
+    ...mapState('layout', ['gridResizing', 'windowHeight', 'windowY', 'scaleRatio', 'scrolling']),
     ...mapGetters('app', ['selectedComponentNodes']),
     styles() {
       return {
@@ -95,7 +95,7 @@ export default {
       return !this.gridResizing && this.selected && this.isResizable
     },
     border() {
-      if (!this.gridResizing && this.isDraftMode) {
+      if (!this.gridResizing && this.isDraftMode && !this.scrolling) {
         if (this.isBackground) {
           return this.selected
         }
