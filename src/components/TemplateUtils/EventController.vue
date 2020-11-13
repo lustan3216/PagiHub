@@ -18,7 +18,7 @@
       :disabled="!operatorTo"
     >
       <component
-        v-if="rect && !isAdding"
+        v-if="rect && !isAdding && !scrolling"
         :hovered="hoveringId === id"
         :is="isExample ? 'operator-example' : 'operator-component'"
         :id="id"
@@ -45,7 +45,6 @@
         @close="closeContextmenu"
       />
     </portal>
-
 
     <div
       v-if="canBeEdited"
@@ -114,7 +113,7 @@ export default {
       'editingPath',
       'isAdding'
     ]),
-    ...mapState('layout', ['gridResizing', 'scaleRatio']),
+    ...mapState('layout', ['gridResizing', 'scaleRatio', 'scrolling']),
     lock() {
       return this.node.lock
     },
@@ -176,6 +175,11 @@ export default {
     }
   },
   watch: {
+    scrolling(value) {
+      if (!value) {
+        this.getRect()
+      }
+    },
     scaleRatio() {
       this.getRect()
     },
