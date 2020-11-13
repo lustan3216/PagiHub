@@ -107,6 +107,12 @@ export default {
     editOptions() {
       return [
         {
+          name: 'Clean Selection',
+          shortKey: ['esc'],
+          shortKeyString: ['Esc'],
+          fn: this.appState
+        },
+        {
           name: 'Undo',
           shortKey: [this.ctrlKey, 'z'],
           shortKeyString: [this.ctrlKeyIcon, 'Z'],
@@ -152,6 +158,7 @@ export default {
   methods: {
     ...mapMutations('node', ['REDO', 'UNDO']),
     ...mapActions('app', ['setCopySelectedNodeId']),
+    ...mapMutations('app', { APP_SET: 'SET' }),
 
     isMac,
     vmPasteNodes,
@@ -161,6 +168,14 @@ export default {
     cut() {
       this.setCopySelectedNodeId(this.selectedComponentIds)
       this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
+    },
+    appState() {
+      this.APP_SET({
+        isAdding: null,
+        beingAddedComponentId: null,
+        selectedComponentIds: [],
+        editingPath: []
+      })
     }
   }
 }
@@ -205,7 +220,7 @@ export default {
   }
 
   .el-submenu__title {
-    padding: 0 10px !important;
+    padding: 0 20px !important;
   }
 }
 </style>

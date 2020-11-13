@@ -1,10 +1,5 @@
 <template>
   <div class="align-center">
-    <i
-      v-shortkey="['esc']"
-      @shortkey="cleanState"
-    />
-
     <el-tooltip
       effect="light"
       placement="bottom"
@@ -140,7 +135,6 @@ import { capitalize } from '@/utils/string'
 import { getExample } from '@/templateJson/basic'
 import { vmAddNodeToParent } from '@/utils/vmMap'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { isTextEditor } from '@/utils/node'
 
 export default {
   name: 'ElementAddBar',
@@ -206,7 +200,7 @@ export default {
         this.selection.enable()
       }
       else {
-        this.selection.disable()
+        this.cleanState()
       }
     }
   },

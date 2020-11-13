@@ -295,7 +295,9 @@ export default {
     handleAutoHeight() {
       if (this.autoResizeHeight) {
         this.offResizeListener = resizeListener(this.$refs.content, () => {
-          requestAnimationFrame(() => this.$refs.gridItem.autoSize)
+          requestAnimationFrame(() => {
+            this.$refs.gridItem.autoSize()
+          })
         })
       }
       else if (this.offResizeListener) {

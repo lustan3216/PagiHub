@@ -43,7 +43,7 @@ Vue.use(VueRouter)
 Vue.use(formCreate)
 Vue.use(PortalVue)
 Vue.use(VueShortKey, {
-  prevent: ['input', 'textarea', '.ProseMirror', '[contenteditable="true"]']
+  prevent: ['input', 'textarea', '[contenteditable="true"]']
 })
 
 Vue.mixin({

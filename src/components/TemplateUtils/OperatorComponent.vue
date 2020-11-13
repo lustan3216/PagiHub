@@ -185,7 +185,7 @@ export default {
     tryMakeDraggable: function() {
       if (this.isDraggable && !this.static) {
         const opts = {
-          ignoreFrom: '.menububble',
+          ignoreFrom: '.menububble, .ProseMirror',
           allowFrom: 'div, .move-icon'
         }
         this.interactObj.draggable(opts)
