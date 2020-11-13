@@ -162,7 +162,7 @@ export default {
     innerNumber: {
       get() {
         if (this.separate) {
-          return this.number
+          return Number(this.number)
         }
         else {
           return toPrecision(this.match[0], this.precision)
@@ -187,8 +187,8 @@ export default {
         }
 
         if (this.separate) {
-          this.$emit('update:number', result.toString())
-          this.innerValue = result.toString()
+          this.$emit('update:number', result)
+          this.innerValue = result
         }
         else {
           if (this.innerUnit) {
@@ -273,7 +273,7 @@ export default {
       }
 
       this.lastPosition = e.clientY
-      this.innerNumber += value
+      this.innerNumber = Number(this.innerNumber) + value
     },
     isInvalid(value) {
       return (
