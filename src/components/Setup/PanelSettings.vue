@@ -1,5 +1,8 @@
 <template>
-  <div class="settings" v-if="lastNode">
+  <div
+    v-if="lastNode"
+    class="settings"
+  >
     <template v-if="canInteract">
       <el-divider content-position="left">
         INTERACTION
@@ -50,7 +53,7 @@ const self = {
       import('./EditorSetting/SettingGridGeneratorItem'),
     SettingVideoPlayer: () => import('./EditorSetting/SettingVideoPlayer'),
     SettingCarousel: () => import('./EditorSetting/SettingCarousel'),
-    SettingIframer: () => import('./EditorSetting/SettingIframer'),
+    SettingIframer: () => import('./EditorSetting/SettingIframer')
 
     // SettingFormSubmit: () => import('./EditorSetting/SettingFormSubmit'),
     // SettingFormCheckbox: () => import('./EditorSetting/SettingFormCheckbox'),

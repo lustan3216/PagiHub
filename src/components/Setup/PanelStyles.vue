@@ -8,6 +8,8 @@
 
       <dimension />
 
+      <item-hidden-controller />
+
       <portal-target
         name="Rotate"
         slim
@@ -19,9 +21,9 @@
 
       <radius />
 
-      <stack />
+      <portal-target name="FontStyle" />
 
-      <item-hidden-controller />
+      <stack />
 
       <position />
 
@@ -63,7 +65,7 @@ import Stack from './EditorStyle/Stack'
 import Position from './EditorStyle/Position'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
-import TextEditorSimpleStyle from './EditorStyle/TextEditorSimpleStyle'
+import TextEditorSimpleStyle from './EditorStyle/TextEditorNumberStyle'
 import Ratio from './EditorStyle/Ratio'
 import Align from '@/components/Setup/EditorStyle/Align'
 import { isBackground } from '@/utils/node'

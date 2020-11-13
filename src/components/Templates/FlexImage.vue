@@ -7,7 +7,7 @@
       v-if="base64Image"
       :src="base64Image"
       class="wh-100"
-    />
+    >
     <el-image
       v-else
       v-bind="innerProps"

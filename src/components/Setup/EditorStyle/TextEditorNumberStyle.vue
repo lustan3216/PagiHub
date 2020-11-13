@@ -6,7 +6,7 @@
       :gutter="5"
       type="flex"
       align="middle"
-      style="margin: 5px 0; "
+      style="margin-top: 5px;"
     >
       <el-col :span="2">
         <span class="title">
@@ -85,10 +85,9 @@ import { BIconType } from 'bootstrap-vue'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES, HTML } from '@/const'
 import { mapGetters, mapActions } from 'vuex'
-import { arrayLast } from '@/utils/array'
 
 export default {
-  name: 'TextEditorSimpleStyle',
+  name: 'TextEditorNumberStyle',
   components: {
     SelectUnit,
     FontSelector,

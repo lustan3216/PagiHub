@@ -5,7 +5,6 @@
   >
     <text-editor-inner
       :id="id"
-      :can-link="false"
     />
   </grid-generator-item>
 </template>

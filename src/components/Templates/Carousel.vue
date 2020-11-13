@@ -75,8 +75,8 @@
             :key="child.id"
             :animation="animation"
             :class="{
-            [`carousel-item-${id}`]: true
-          }"
+              [`carousel-item-${id}`]: true
+            }"
           >
             <slider
               v-if="index === currentIndex"

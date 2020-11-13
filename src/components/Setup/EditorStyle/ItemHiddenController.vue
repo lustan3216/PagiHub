@@ -1,29 +1,39 @@
 <template>
-  <div>
-    <el-divider content-position="left">
-      HIDDEN WHEN
-    </el-divider>
+  <el-row
+    type="flex"
+    align="middle"
+  >
 
-    <el-tooltip
-      v-for="(point, index) in descBreakpoints"
-      :content="content(point, index)"
-      :key="point"
-      effect="light"
-      placement="top"
+    <el-col :span="8">
+      <span class="title p-r-10">Hidden</span>
+    </el-col>
+
+    <el-col
+      :span="16"
+      class="flex w-100"
     >
-      <el-button
-        :disabled="!selectedComponentNodes.length"
-        :type="isHidden(point) ? 'primary' : ''"
-        plain
-        @click="click(point, !isHidden(point))"
+      <el-tooltip
+        v-for="(point, index) in descBreakpoints"
+        :content="content(point, index)"
+        :key="point"
+        effect="light"
+        placement="top"
       >
-        <button-device
-          :point-key="point"
-          icon-only
-        />
-      </el-button>
-    </el-tooltip>
-  </div>
+        <el-button
+          :disabled="!selectedComponentNodes.length"
+          :type="isHidden(point) ? 'primary' : ''"
+          plain
+          class="flex1"
+          @click="click(point, !isHidden(point))"
+        >
+          <button-device
+            :point-key="point"
+            icon-only
+          />
+        </el-button>
+      </el-tooltip>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -78,13 +88,6 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.el-button--mini,
-.el-button--mini.is-round {
-  padding: 7px 13px !important;
-}
-</style>
 
 <style scoped lang="scss">
 ::v-deep.el-button {

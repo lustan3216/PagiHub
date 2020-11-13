@@ -1,12 +1,5 @@
 <template>
-  <grid-generator-item
-    :id="id"
-    :div-style="{
-      border: '1px solid #dcdfe6',
-      background: '#fff',
-      textAlign: 'center'
-    }"
-  >
+  <grid-generator-item :id="id">
     <el-popover
       ref="popover"
       :disabled="!isDraftMode"
@@ -15,6 +8,7 @@
       :popper-options="{
         gpuAcceleration: true
       }"
+      placement="top"
       effect="light"
       trigger="manual"
       popper-class="hide-popper"
@@ -37,7 +31,6 @@
         />
       </el-select>
 
-
     </el-popover>
 
     <div
@@ -48,7 +41,6 @@
     >
       <text-editor-inner
         :id="id"
-        :can-link="false"
         default-text="Button"
         class="w-100"
       />

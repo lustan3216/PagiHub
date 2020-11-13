@@ -194,11 +194,11 @@ export default {
         },
         {
           name: 'Paste Style',
-          disabled: !this.copyComponentIds.length,
+          disabled: !this.copyComponentIds.length
         },
         {
           name: 'Paste Grid',
-          disabled: !this.copyComponentIds.length,
+          disabled: !this.copyComponentIds.length
         },
         {
           name: 'Cut',
