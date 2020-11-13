@@ -125,10 +125,9 @@ export default {
         if (valid) {
           try {
             this.loading = true
-            this.patchUser({
-              username: this.form.username
-            })
+            await this.patchUser({ username: this.form.username })
             this.visible = false
+            this.$emit('success')
           }
           finally {
             this.loading = false

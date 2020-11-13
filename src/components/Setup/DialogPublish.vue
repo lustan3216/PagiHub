@@ -13,6 +13,7 @@
       ref="dialogUsername"
       class="hidden"
       title="Sorry, we need a username to publish :)"
+      @success="visible = true"
     />
 
     <dialog-confirmable
