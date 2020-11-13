@@ -129,7 +129,7 @@ export default {
       // w h 越小 zindex越大
       const vm = vmGet(this.id)
       const { pxW = 0, pxH = 0 } = vm
-      return Math.floor((10000 - pxW - pxH) / 100)
+      return Math.floor((30000 - pxW - pxH) / 100)
     },
     visible() {
       const windowBottom = this.windowY + this.windowHeight
