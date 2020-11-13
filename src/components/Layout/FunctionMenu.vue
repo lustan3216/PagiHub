@@ -81,7 +81,7 @@
 <script>
 import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import { isMac } from '@/utils/device'
-import { vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
+import { vmPasteNodes, vmRemoveNode, vmPasteNodesGrid, vmPasteNodesHtmlStyle } from '@/utils/vmMap'
 import { Menu, MenuItem, Submenu } from 'element-ui'
 import ComponentGroup from '@/components/TemplateUtils/ComponentGroup'
 import { BIconList } from 'bootstrap-vue'
@@ -137,6 +137,16 @@ export default {
           shortKeyString: [this.ctrlKeyIcon, 'v'],
           disabled: !this.copyComponentIds.length,
           fn: this.vmPasteNodes
+        },
+        {
+          name: 'Paste Style',
+          disabled: !this.copyComponentIds.length,
+          fn: vmPasteNodesHtmlStyle
+        },
+        {
+          name: 'Paste Grid',
+          disabled: !this.copyComponentIds.length,
+          fn: vmPasteNodesGrid
         },
         {
           name: 'Cut',

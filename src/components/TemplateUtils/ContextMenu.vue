@@ -140,7 +140,7 @@
 <script>
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import { isMac } from '@/utils/device'
-import { vmPasteNodes, vmRemoveNode } from '@/utils/vmMap'
+import { vmPasteNodes, vmRemoveNode, vmPasteNodesHtmlStyle, vmPasteNodesGrid } from '@/utils/vmMap'
 import ComponentMove from './ComponentMove'
 import ComponentGroup from './ComponentGroup'
 import Lock from '../Setup/EditorStyle/Lock'
@@ -193,6 +193,14 @@ export default {
           shortKey: [this.ctrlKeyIcon, 'V']
         },
         {
+          name: 'Paste Style',
+          disabled: !this.copyComponentIds.length,
+        },
+        {
+          name: 'Paste Grid',
+          disabled: !this.copyComponentIds.length,
+        },
+        {
           name: 'Cut',
           shortKey: [this.ctrlKeyIcon, 'X'],
           disabled: this.selectedComponentIds.length !== 1
@@ -230,6 +238,12 @@ export default {
             switch (command) {
               case 'Paste':
                 vmPasteNodes()
+                break
+              case 'Paste Style':
+                vmPasteNodesHtmlStyle()
+                break
+              case 'Paste Grid':
+                vmPasteNodesGrid()
                 break
               case 'Delete':
                 vmRemoveNode(node)

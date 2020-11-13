@@ -1,8 +1,9 @@
 import app from '@/main'
 import store from '../store'
-import { CAN_NEW_ITEM } from '../const'
+import { CAN_NEW_ITEM, GRID, STYLES } from '../const'
 import { isGridItem, traversalAncestorAndSelf } from '@/utils/node'
 import { getValueByPath, setValueByPath } from '@/utils/tool'
+import { arrayLast } from '@/utils/array'
 
 const vmMap = {}
 
@@ -70,6 +71,36 @@ export async function vmPasteNodes() {
       },
       { root: true }
     )
+  })
+}
+
+export async function vmPasteNodesHtmlStyle() {
+  const { tmpComponentsMap } = store.state.node
+  const { copyComponentIds } = store.state.app
+
+  const id = arrayLast(copyComponentIds)
+  const node = tmpComponentsMap[id]
+
+  store.state.app.selectedComponentIds.forEach(id => {
+    store.dispatch('node/debounceRecord', {
+      path: [id, STYLES, 'html'],
+      value: node[STYLES].html
+    })
+  })
+}
+
+export async function vmPasteNodesGrid() {
+  const { tmpComponentsMap } = store.state.node
+  const { copyComponentIds } = store.state.app
+
+  const id = arrayLast(copyComponentIds)
+  const node = tmpComponentsMap[id]
+
+  store.state.app.selectedComponentIds.forEach(id => {
+    store.dispatch('node/debounceRecord', {
+      path: [id, GRID],
+      value: node[GRID]
+    })
   })
 }
 
