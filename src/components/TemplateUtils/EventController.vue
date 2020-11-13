@@ -220,32 +220,32 @@ export default {
       'PUSH_SELECTED_COMPONENT_ID'
     ]),
     calculateRect() {
-      if (this.isBackground) {
-        const rect = this.$el.closest('.art-board').getBoundingClientRect()
-        this.rect = {
-          x: 0,
-          y: 0,
-          width: rect.width,
-          height: rect.height
-        }
-      }
-      else {
-        const gridRect = this.$el.closest('.grid-layout').getBoundingClientRect()
-        const itemRect = this.element.getBoundingClientRect()
-        this.rect = {
-          x: (itemRect.x - gridRect.x),
-          y: (itemRect.y - gridRect.y),
-          width: itemRect.width,
-          height: itemRect.height
-        }
-      }
-    },
-    getRect() {
       requestAnimationFrame(() => {
-        if (this.hoveringId === this.id || this.selected || this.autoResizeHeight) {
-          this.calculateRect()
+        if (this.isBackground) {
+          const rect = this.$el.closest('.art-board').getBoundingClientRect()
+          this.rect = {
+            x: 0,
+            y: 0,
+            width: rect.width,
+            height: rect.height
+          }
+        }
+        else {
+          const gridRect = this.$el.closest('.grid-layout').getBoundingClientRect()
+          const itemRect = this.element.getBoundingClientRect()
+          this.rect = {
+            x: (itemRect.x - gridRect.x),
+            y: (itemRect.y - gridRect.y),
+            width: itemRect.width,
+            height: itemRect.height
+          }
         }
       })
+    },
+    getRect() {
+      if (this.hoveringId === this.id || this.selected || this.autoResizeHeight) {
+        this.calculateRect()
+      }
     },
 
     finEditingPath() {
