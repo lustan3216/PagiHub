@@ -59,13 +59,9 @@
 <script>
 import throttle from 'throttle-debounce/throttle';
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event';
-import SendToTop from '@/components/TemplateUtils/SendToTop';
 
 export default {
   name: 'ElCarousel',
-  components: {
-    SendToTop
-  },
   props: {
     id: {
       type: String,

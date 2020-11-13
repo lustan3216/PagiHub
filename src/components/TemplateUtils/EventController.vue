@@ -2,7 +2,7 @@
   <div
     v-if="node"
     :class="{
-      'h-100': sameHeightAsParent,
+      'h-100': !autoResizeHeight,
       'no-action': lock
     }"
     class="relative z-index1"
@@ -51,7 +51,7 @@
       v-if="canBeEdited"
       :class="{
         'no-action': !itemEditing && !isExample,
-        'h-100': sameHeightAsParent
+        'h-100': !autoResizeHeight
       }"
     >
       <slot />
@@ -160,8 +160,8 @@ export default {
     isGroup() {
       return isGroup(this.node)
     },
-    sameHeightAsParent() {
-      return !this.isTextEditor && !this.isGroup
+    autoResizeHeight() {
+      return this.isTextEditor || this.isGroup
     },
     isBackground() {
       return isBackground(this.node)
@@ -239,7 +239,7 @@ export default {
     },
     getRect() {
       requestAnimationFrame(() => {
-        if (this.hoveringId === this.id || this.selected) {
+        if (this.hoveringId === this.id || this.selected || this.autoResizeHeight) {
           this.calculateRect()
         }
       })
