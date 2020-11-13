@@ -45,7 +45,7 @@
 
             <p class="small-title">
               The project name will be part of url which is <b>unchangeable</b>.
-              Furthermore, it can be browsed when published.
+              In addition, it can be browsed when published.
             </p>
             <a class="link font-13">
               {{ exampleUrl }}
