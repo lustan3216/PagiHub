@@ -25,11 +25,10 @@ Just click publish, then you will have a real RWD website
 
 
 檢查
+cut
 照片redo undo 會把base64回覆，要改delta
 group 要能拖進去拖出來嗎
-
 有node會沒刪乾淨
-
 style 有關grid unit的變換 要檢查rwd
 rwd
 btton連結

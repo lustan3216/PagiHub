@@ -158,7 +158,7 @@ export default {
   methods: {
     ...mapMutations('node', ['REDO', 'UNDO']),
     ...mapActions('app', ['setCopySelectedNodeId']),
-    ...mapMutations('app', { APP_SET: 'SET' }),
+    ...mapMutations('app', ['APP_RESET']),
 
     isMac,
     vmPasteNodes,
@@ -170,12 +170,7 @@ export default {
       this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
     },
     appState() {
-      this.APP_SET({
-        isAdding: null,
-        beingAddedComponentId: null,
-        selectedComponentIds: [],
-        editingPath: []
-      })
+      this.APP_RESET()
     }
   }
 }
