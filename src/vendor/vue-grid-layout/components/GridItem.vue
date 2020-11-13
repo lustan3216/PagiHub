@@ -287,7 +287,14 @@
     },
     watch: {
       isDragging(value) {
-        store.shouldTransition = value
+        if (value) {
+          store.shouldTransition = value
+        }
+        else {
+          setTimeout(() => {
+            store.shouldTransition = value
+          }, 300)
+        }
       },
       isDraggable: function() {
         this.draggable = this.isDraggable
