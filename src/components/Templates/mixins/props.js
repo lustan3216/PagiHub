@@ -32,7 +32,7 @@ export default {
         this.LAYOUT_SET({ gridResizing: true })
         globalDebounce(() => {
           this.LAYOUT_SET({ gridResizing: false })
-        }, 3000)
+        }, 1500)
       },
       deep: true
     }

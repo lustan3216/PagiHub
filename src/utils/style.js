@@ -32,8 +32,8 @@ export function getAbsoluteHeight(el) {
   el = (typeof el === 'string') ? document.querySelector(el) : el
 
   const styles = window.getComputedStyle(el)
-  const margin = parseFloat(styles['marginTop']) +
-                 parseFloat(styles['marginBottom'])
+  const margin = parseFloat(styles['paddingTop']) +
+                 parseFloat(styles['paddingBottom'])
 
   return Math.ceil(el.offsetHeight + margin)
 }

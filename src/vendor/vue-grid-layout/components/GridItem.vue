@@ -942,9 +942,9 @@
       },
       autoSize() {
         // ok here we want to calculate if a resize is needed
-        // if (process.env.NODE_ENV !== 'production') {
-        //   console.warn('autoSize')
-        // }
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn('autoSize')
+        }
         if (!this.autoResizeHeight) {
           return
         }
@@ -955,7 +955,13 @@
 
         const { elm } = this.$slots.default[0]
 
-        const height = getAbsoluteHeight(elm)
+        const styles = window.getComputedStyle(elm.parentNode)
+        const padding = parseFloat(styles['paddingTop']) +
+                       parseFloat(styles['paddingBottom'])
+
+        // elm.parentNode 這裡要拿到gridInnerItem裡面的div, 有padding的那層
+
+        const height = elm.offsetHeight + padding
         const width = elm.clientWidth
         let pos = this.calcWH(height, width)
         // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
