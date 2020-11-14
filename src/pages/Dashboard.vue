@@ -56,7 +56,7 @@
 
 <script>
 import { Avatar } from 'element-ui'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'DashboardVue',
@@ -67,11 +67,17 @@ export default {
     ...mapState('user', ['email', 'username', 'coverPhoto']),
     ...mapGetters('user', ['isLogin'])
   },
-  created() {
+  beforeMount() {
     this.$router.push({ name: 'Projects' })
   },
+  mounted() {
+    this.PROJECT_INIT()
+    this.APP_RESET()
+  },
   methods: {
-    ...mapActions('user', ['logout'])
+    ...mapActions('user', ['logout']),
+    ...mapMutations('node', ['PROJECT_INIT']),
+    ...mapMutations('app', ['APP_RESET'])
   }
 }
 </script>

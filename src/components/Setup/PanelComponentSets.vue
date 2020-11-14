@@ -110,22 +110,25 @@ export default {
 
     await this.getProject(projectId)
 
-    if (!this.nodesMap[projectId]) {
-      this.$router.push({ name: 'Projects' })
-    }
-
-    this.NODE_SET({ editingProjectId: projectId })
-    this.getAssets(projectId)
-
-    if (this.editingComponentSetId) {
-      // preview mode 回來時
-      return
-    }
-
-    this.NODE_SET({ editingComponentSetId: null })
     this.$nextTick(() => {
+      if (!this.nodesMap[projectId]) {
+        this.$router.push({ name: 'Projects' })
+      }
+
+      this.NODE_SET({ editingProjectId: projectId })
+
+      if (this.editingComponentSetId) {
+        // preview mode 回來時
+        return
+      }
+
+      this.getAssets(projectId)
+
       const id = getValueByPath(this.componentSets, [0, 'id'])
-      if (!id) {
+      if (id) {
+        this.NODE_SET({ editingComponentSetId: id })
+      }
+      else {
         this.$refs.dialogComponentSet.open()
       }
     })
