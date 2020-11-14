@@ -2,7 +2,6 @@
   <el-button
     v-if="isIcon"
     type="text"
-    class="upload-icon"
     @click.stop="openUrl"
   >
     <template v-if="componentSet.version">
@@ -124,11 +123,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-  .upload-icon {
-    width: 20px;
-    text-align: center;
-    margin-left: 5px;
-  }
-</style>

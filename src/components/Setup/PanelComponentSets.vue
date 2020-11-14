@@ -26,7 +26,10 @@
         @mouseenter="mouseenter(componentSet.id)"
         @mouseleave="mouseleave"
       >
-        <publish-link :id="componentSet.id"/>
+        <publish-link
+          :id="componentSet.id"
+          class="upload-icon"
+        />
 
         <component-name
           :id="componentSet.id"
@@ -134,6 +137,7 @@ export default {
     })
   },
   methods: {
+    ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
     ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
@@ -141,6 +145,7 @@ export default {
     ...mapActions('asset', ['getAssets']),
     nodeClick(event, node) {
       this.SET_EDITING_COMPONENT_SET_ID(node.id)
+      this.APP_SET({ selectedComponentIds: [] })
     },
     mouseenter(id) {
       this.hoverId = id
@@ -185,5 +190,10 @@ export default {
   background: #f5f7fa;
   padding: 0 5px;
   height: 26px;
+}
+.upload-icon {
+  width: 20px;
+  text-align: center;
+  margin-left: 10px;
 }
 </style>
