@@ -102,8 +102,8 @@ export default {
         children
       })
 
-      vmAddNodeToParent(parentId, tree)
       this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
+      vmAddNodeToParent(parentId, tree)
     },
     ungroup() {
       this.selectedComponentNodes.forEach(group => {

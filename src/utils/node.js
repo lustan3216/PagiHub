@@ -48,14 +48,17 @@ export function getGroupPxRect(nodes) {
   const currentBreakpoint = store.getters['layout/currentBreakpoint']
 
   nodes.forEach(node => {
-    const point = closestValidBreakpoint(node, currentBreakpoint)
-    const { x, y, w, h, unitH, unitW } = node.grid[point]
+    const grid = closestValidGrid(node, currentBreakpoint)
+    const { x, y, w, h, unitH, unitW, unitX, unitY } = grid
+
     const pxW = horizontalUnitConvert(node.id, w, unitW, 'px')
+    const pxX = horizontalUnitConvert(node.id, x, unitX, 'px')
     const pxH = verticalUnitConvert(node.id, h, unitH, 'px')
-    if (x <= rect.minX) rect.minX = x
-    if (y <= rect.minY) rect.minY = y
-    if (x + pxW >= rect.maxX) rect.maxX = x + pxW
-    if (y + pxH >= rect.maxY) rect.maxY = y + pxH
+    const pxY = verticalUnitConvert(node.id, y, unitY, 'px')
+    if (pxX <= rect.minX) rect.minX = pxX
+    if (pxY <= rect.minY) rect.minY = pxY
+    if (pxX + pxW >= rect.maxX) rect.maxX = pxX + pxW
+    if (pxY + pxH >= rect.maxY) rect.maxY = pxY + pxH
   })
 
   return {
