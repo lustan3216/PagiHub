@@ -25,7 +25,6 @@ Just click publish, then you will have a real RWD website
 
 effect bug
 shadow 有bug
-breakpoint setting 有bug
 
 cut
 group 要能拖進去拖出來嗎

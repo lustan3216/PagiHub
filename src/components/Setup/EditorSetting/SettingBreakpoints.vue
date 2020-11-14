@@ -79,7 +79,7 @@
         class="justify-end"
       >
         <el-button
-          v-if="key !== 'xs'"
+          v-if="key !== 'xxs'"
           :type="isEnable(key) ? '' : 'primary'"
           plain
           @click="onclick(key, !isEnable(key))"
