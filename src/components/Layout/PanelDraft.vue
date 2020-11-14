@@ -42,10 +42,12 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { mobileAndTabletCheck } from '@/utils/device'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
 import SidebarLeft from '@/components/Layout/SidebarLeft'
 import SidebarRight from '@/components/Layout/SidebarRight'
+import { Message } from 'element-ui'
 
 export default {
   name: 'PanelDraft',
@@ -60,6 +62,11 @@ export default {
     PanelDraft: () => import('@/components/Layout/PanelDraft'),
     DialogImageTabs: () => import('@/components/ComponentAdd/DialogImageTabs')
   },
+  data() {
+    return {
+      isMobileOrTablet: false
+    }
+  },
   computed: {
     ...mapState('node', [
       'editingProjectId',
@@ -67,6 +74,17 @@ export default {
       'rootComponentSetIds'
     ]),
     ...mapState('asset', ['isImageDialogOpen'])
+  },
+  beforeMount() {
+    if (mobileAndTabletCheck()) {
+      this.$router.push({ name: 'Projects' })
+      this.$nextTick(() => {
+        Message.error({
+          message: 'Sorry, The editor is not supporting mobile or tablet yet.',
+          duration: 5000
+        })
+      })
+    }
   },
   async created() {
     this.INIT_NODE_STORE()
