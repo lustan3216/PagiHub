@@ -17,7 +17,7 @@
         :content="content(point, index)"
         :key="point"
         effect="light"
-        placement="top"
+        placement="bottom"
       >
         <el-button
           :disabled="!selectedComponentNodes.length"
