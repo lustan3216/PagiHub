@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import ViewPort from './ViewPort'
 import ArtBoard from './ArtBoard'
 import SidebarLeft from '@/components/Layout/SidebarLeft'
@@ -71,22 +71,10 @@ export default {
   async created() {
     this.INIT_NODE_STORE()
     this.SET_DRAFT_MODE()
-    this.NODE_SET({ editingComponentSetId: null })
-
-    const { projectId } = this.$route.params
-    if (projectId) {
-      this.NODE_SET({ editingProjectId: projectId })
-      this.getAssets(projectId)
-    }
-    else {
-      this.$router.push({ name: 'Dashboard' })
-    }
   },
   methods: {
     ...mapMutations('node', ['INIT_NODE_STORE']),
-    ...mapMutations('node', { NODE_SET: 'SET' }),
-    ...mapMutations('mode', ['SET_DRAFT_MODE']),
-    ...mapActions('asset', ['getAssets'])
+    ...mapMutations('mode', ['SET_DRAFT_MODE'])
   }
 }
 </script>

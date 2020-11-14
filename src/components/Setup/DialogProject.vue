@@ -47,9 +47,12 @@
               The project name will be part of url which is <b>unchangeable</b>.
               In addition, it can be browsed when published.
             </p>
-            <a class="link font-13">
+            <span
+              :style="{ cursor: 'default' }"
+              class="link font-13"
+            >
               {{ exampleUrl }}
-            </a>
+            </span>
 
             <el-form-item
               label="Tag"
@@ -123,8 +126,6 @@ export default {
     }
   },
   data() {
-    const { nodesMap } = this.$store.state.node
-    const node = nodesMap[this.id]
     return {
       visible: false,
       dirty: false,

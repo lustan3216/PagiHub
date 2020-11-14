@@ -71,7 +71,7 @@ export default {
     link() {
       const origin = location.origin
       const username = this.username || 'username'
-      const projectLabel = this.project.label
+      const projectLabel = this.projectLabel
 
       const url = `${origin}/${username}/${projectLabel}/${this.label}`
 
@@ -86,6 +86,9 @@ export default {
           return url
         }
       }
+    },
+    projectLabel() {
+      return this.project && this.project.label
     },
     privateLinkToken() {
       if (this.isExist && this.componentSet.isPrivate) {

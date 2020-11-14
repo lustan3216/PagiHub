@@ -101,7 +101,7 @@ export default {
         .sort((a, b) => b.label - a.label)
     }
   },
-  async created() {
+  async mounted() {
     const { projectId } = this.$route.params
 
     if (!projectId) {
@@ -110,25 +110,32 @@ export default {
 
     await this.getProject(projectId)
 
+    if (!this.nodesMap[projectId]) {
+      this.$router.push({ name: 'Projects' })
+    }
+
+    this.NODE_SET({ editingProjectId: projectId })
+    this.getAssets(projectId)
+
     if (this.editingComponentSetId) {
       // preview mode 回來時
       return
     }
 
+    this.NODE_SET({ editingComponentSetId: null })
     this.$nextTick(() => {
       const id = getValueByPath(this.componentSets, [0, 'id'])
-      if (id) {
-        this.SET_EDITING_COMPONENT_SET_ID(id)
-      }
-      else {
+      if (!id) {
         this.$refs.dialogComponentSet.open()
       }
     })
   },
   methods: {
+    ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
     ...mapMutations('node', ['SET_EDITING_COMPONENT_SET_ID']),
     ...mapActions('node', ['getProject']),
+    ...mapActions('asset', ['getAssets']),
     nodeClick(event, node) {
       this.SET_EDITING_COMPONENT_SET_ID(node.id)
     },
