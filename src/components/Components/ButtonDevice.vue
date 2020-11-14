@@ -1,12 +1,5 @@
 <template>
-  <b-icon-laptop
-    v-if="iconOnly && buttonConfig.icon === 'laptop'"
-    style="margin-bottom: -2px;"
-  />
-  <i
-    v-else-if="iconOnly"
-    :class="[buttonConfig.class, buttonConfig.icon]"
-  />
+  <component v-if="iconOnly" :is="buttonConfig.icon" />
   <el-tooltip
     v-else
     :content="`Set view port to ${point}px width`"
@@ -21,14 +14,7 @@
       plain
       @click="$emit('click', point)"
     >
-      <b-icon-laptop
-        v-if="buttonConfig.icon === 'laptop'"
-        style="margin-bottom: -2px;"
-      />
-      <i
-        v-else
-        :class="buttonConfig.icon"
-      />
+      <component :is="buttonConfig.icon" />
     </el-button>
   </el-tooltip>
 </template>
@@ -36,12 +22,17 @@
 <script>
 import { mapGetters } from 'vuex'
 import { BREAK_POINTS_MAP } from '@/const'
-import { BIconLaptop } from 'bootstrap-vue'
+import { BIconLaptop, BIconDisplay, BIconTabletLandscape, BIconTablet, BIconPhoneLandscape, BIconPhone } from 'bootstrap-vue'
 
 export default {
   name: 'ButtonDevice',
   components: {
-    BIconLaptop
+    BIconDisplay,
+    BIconLaptop,
+    BIconTabletLandscape,
+    BIconTablet,
+    BIconPhoneLandscape,
+    BIconPhone
   },
   props: {
     pointKey: {
@@ -84,23 +75,22 @@ export default {
     buttonConfig() {
       return {
         xl: {
-          icon: 'el-icon-data-line'
+          icon: 'BIconDisplay'
         },
         lg: {
-          icon: 'el-icon-monitor'
+          icon: 'BIconLaptop'
         },
         md: {
-          icon: 'laptop'
+          icon: 'BIconTabletLandscape'
         },
         sm: {
-          icon: 'el-icon-mobile'
+          icon: 'BIconTablet'
         },
         xs: {
-          icon: 'el-icon-mobile-phone',
-          class: 'rotate90'
+          icon: 'BIconPhoneLandscape'
         },
         xxs: {
-          icon: 'el-icon-mobile-phone'
+          icon: 'BIconPhone'
         }
       }[this.pointKey]
     }
