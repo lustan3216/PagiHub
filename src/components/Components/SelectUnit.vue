@@ -23,37 +23,67 @@
       <slot />
     </template>
 
-    <el-dropdown
-      v-if="optionUnits.length > 1"
-      slot="append"
-      :disabled="disabled"
-      size="small"
-      class="pointer"
-      @command="innerUnit = $event"
-    >
-      <span class="title">
-        {{ innerUnit }}
-      </span>
+    <template v-if="!noUnit">
+      <el-dropdown
+        v-if="optionUnits.length > 1"
+        slot="append"
+        :disabled="disabled"
+        size="small"
+        class="pointer"
+        @command="innerUnit = $event"
+      >
+        <span class="title">
+          {{ innerUnit }}
+        </span>
 
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item
-          v-for="unit in optionUnits"
-          :key="unit"
-          :command="unit"
-          class="sub-title"
-        >
-          {{ unit }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item
+            v-if="units.includes('px')"
+            command="px"
+            class="sub-title"
+          >
+            <div class="w-100 justify-between">
+              Fixed Pixel <span class="gray-font-2 m-l-15">px</span>
+            </div>
+          </el-dropdown-item>
+          <el-dropdown-item
+            v-if="units.includes('%')"
+            command="%"
+            class="sub-title"
+          >
+            <div class="w-100 justify-between">
+              Fluid Width <span class="gray-font-2 m-l-15">%</span>
+            </div>
+          </el-dropdown-item>
+          <el-dropdown-item
+            v-if="units.includes('vw')"
+            command="vw"
+            class="sub-title"
+          >
+            <div class="w-100 justify-between">
+              Viewport Width <span class="gray-font-2 m-l-15">vw</span>
+            </div>
+          </el-dropdown-item>
+          <el-dropdown-item
+            v-if="units.includes('vh')"
+            command="vh"
+            class="sub-title"
+          >
+            <div class="w-100 justify-between">
+              Viewport Height <span class="gray-font-2 m-l-15">vh</span>
+            </div>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
 
-    <span
-      v-else
-      slot="append"
-      class="no-action"
-    >
-      {{ optionUnits.length ? optionUnits[0] : ' - ' }}
+      <span
+        v-else
+        slot="append"
+        class="no-action"
+      >
+        {{ optionUnits.length ? optionUnits[0] : ' - ' }}
     </span>
+    </template>
   </el-input>
 </template>
 
@@ -103,6 +133,10 @@ export default {
     },
     number: {
       type: [String, Number]
+    },
+    noUnit: {
+      type: Boolean,
+      default: false
     },
     unit: {
       type: String

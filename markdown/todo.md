@@ -23,14 +23,10 @@ Just click publish, then you will have a real RWD website
 打包出去的 js file, 理論上應該可以 用 prerender 方式，因為已經發布了，所以固定定型了，理論上程式碼應該不用再動，
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
-
-
-unit select option 要標記
 effect bug
-font style unit bug
 shadow 有bug
 breakpoint setting 有bug
-檢查
+
 cut
 group 要能拖進去拖出來嗎
 有node會沒刪乾淨
@@ -46,7 +42,6 @@ btton連結
 
 
 - panel component 可以拖拉
-- 照片的 link 坐在 magement 裡面
 - iframe
 - panel component shift select
 - style 支援 每個 device 可客製化

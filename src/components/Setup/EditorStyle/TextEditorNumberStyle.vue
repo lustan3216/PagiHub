@@ -20,6 +20,8 @@
         </span>
       </el-col>
 
+      <slot/>
+
       <el-col :span="20">
         <font-selector
           ref="fontFamily"
@@ -28,17 +30,7 @@
         />
       </el-col>
 
-      <el-col :span="16">
-        <select-unit
-          ref="fontSize"
-          :clearable="false"
-          v-model="fontSize"
-        >
-          <span style="font-size: 15px;">
-            <b-icon-type style="margin-top: 6px;" />
-          </span>
-        </select-unit>
-      </el-col>
+
     </el-row>
 
     <el-row
@@ -48,8 +40,24 @@
     >
       <el-col :span="16">
         <select-unit
+          ref="fontSize"
+          :clearable="false"
+          :units="['px']"
+          no-unit
+          v-model="fontSize"
+        >
+          <span style="font-size: 15px;">
+            <b-icon-type style="margin-top: 6px;" />
+          </span>
+        </select-unit>
+      </el-col>
+
+      <el-col :span="16">
+        <select-unit
           ref="letterSpacing"
           :clearable="false"
+          :units="['px']"
+          no-unit
           v-model="letterSpacing"
         >
           <img
@@ -64,6 +72,8 @@
         <select-unit
           ref="lineHeight"
           :clearable="false"
+          :units="['px']"
+          no-unit
           v-model="lineHeight"
         >
           <img
