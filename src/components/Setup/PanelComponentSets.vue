@@ -28,6 +28,7 @@
       >
         <publish-link
           :id="componentSet.id"
+          :key="componentSet.isPrivate + componentSet.version"
           class="upload-icon"
         />
 

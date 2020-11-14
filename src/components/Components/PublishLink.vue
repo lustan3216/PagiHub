@@ -64,9 +64,6 @@ export default {
   computed: {
     ...mapState('node', ['editingProjectId']),
     ...mapState('user', ['userId', 'username']),
-    isExist() {
-      return Boolean(this.id)
-    },
     link() {
       const origin = location.origin
       const username = this.username || 'username'
@@ -90,10 +87,10 @@ export default {
       return this.project && this.project.label
     },
     privateLinkToken() {
-      if (this.isExist && this.componentSet.isPrivate) {
+      if (this.componentSet && this.componentSet.privateLinkToken) {
         return `?token=${this.componentSet.privateLinkToken}`
       }
-      else if (!this.isExist && this.isPrivate) {
+      else if (this.isPrivate) {
         return `?token=secret`
       }
       return ''
