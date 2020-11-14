@@ -12,28 +12,6 @@
       <div
         class="flex-column"
       >
-        <div class="heading flex m-b-5">
-          <button
-            :class="{ 'is-active': tag === 'p' }"
-            class="font-style__button"
-            @click.prevent="tag = tag === 'p' ? undefined : 'p'"
-          >
-            P
-          </button>
-
-          <button
-            v-for="level in [1, 2, 3, 4, 5, 6]"
-            :key="level"
-            :class="{
-              'is-active': tag === `h${level}`
-            }"
-            class="font-style__button"
-            @click.prevent="tag = tag === `h${level}` ? undefined : `h${level}`"
-          >
-            H{{ level }}
-          </button>
-        </div>
-
         <div
           class="flex m-b-5"
           style="margin-top: 3px;"
@@ -237,16 +215,8 @@ export default {
         })
       }
     },
-    tag: {
-      get() {
-        return this.innerProps.tag
-      },
-      set(value) {
-        this.recordValue({
-          path: `props.tag`,
-          value
-        })
-      }
+    tag() {
+      return this.innerProps.tag
     },
     content() {
       return this.$refs.content

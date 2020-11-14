@@ -8,8 +8,8 @@
       align="middle"
       style="margin-top: 5px;"
     >
-      <el-col :span="2">
-        <span class="title">
+      <el-col :span="3">
+        <span class="title text-center">
           <tip>
             <span
               class="link"
@@ -22,10 +22,11 @@
 
       <slot/>
 
-      <el-col :span="20">
+      <el-col :span="21">
         <font-selector
           ref="fontFamily"
           :value="fontFamily"
+          class="w-100"
           @change="fontFamily = $event"
         />
       </el-col>
@@ -141,11 +142,38 @@ export default {
         return this.style.fontSize || this.computedStyle.fontSize
       },
       set(value) {
+        const number = parseInt(value)
+        let tag = 'p'
+        if (number >= 40) {
+          tag = 'h1'
+        }
+        else if (number >= 32) {
+          tag = 'h2'
+        }
+        else if (number >= 26) {
+          tag = 'h3'
+        }
+        else if (number >= 22) {
+          tag = 'h4'
+        }
+        else if (number >= 20) {
+          tag = 'h5'
+        }
+        else if (number >= 18) {
+          tag = 'h6'
+        }
+
         this.selectedComponentNodes.forEach(node => {
-          this.debounceRecord({
-            path: `${node.id}.${STYLES}.${HTML}.fontSize`,
-            value: value || undefined
-          })
+          this.debounceRecord([
+            {
+              path: [node.id, STYLES, HTML, 'fontSize'],
+              value: value || undefined
+            },
+            {
+              path: [node.id, 'props', 'tag'],
+              value: tag
+            },
+          ])
         })
       }
     },

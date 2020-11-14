@@ -15,7 +15,7 @@
     @keyup.shift.native="shiftPress = false"
     @mousedown.native="mousedown"
     @focus="resizeCursor = false"
-    @blur="resizeCursor = true"
+    @blur="blur"
     @change="$emit('change', innerValue)"
     @clear="$emit('clear')"
   >
@@ -283,6 +283,11 @@ export default {
     }
   },
   methods: {
+    blur() {
+      this.resizeCursor = true
+      this.lastPosition = null
+      this.shiftPress = false
+    },
     releaseClick() {
       this.clicking = false
       this.lastPosition = 0
