@@ -229,6 +229,7 @@ export default {
           }
         }
         else {
+          if (this.$el.closest('.grid-layout') === null) return
           const gridRect = this.$el.closest('.grid-layout').getBoundingClientRect()
           const itemRect = this.element.getBoundingClientRect()
           this.rect = {
