@@ -16,6 +16,7 @@
     :data-addable-id="id"
     :data-droppable="isDroppable ? '' : undefined"
     @drop="handleDrop"
+    @layout-updated="layoutUpdated($event)"
   >
     <portal-target
       :name="`GridInner-${id}`"
