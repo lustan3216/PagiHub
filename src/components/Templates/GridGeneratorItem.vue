@@ -179,7 +179,7 @@ export default {
     },
     sm() {
       return (
-        (Number.isInteger(this.breakpointsMap.md) && this.innerGrid.sm) ||
+        (Number.isInteger(this.breakpointsMap.sm) && this.innerGrid.sm) ||
         this.xs
       )
     },
