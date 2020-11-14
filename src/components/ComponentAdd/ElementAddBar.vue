@@ -135,6 +135,7 @@ import { capitalize } from '@/utils/string'
 import { getExample } from '@/templateJson/basic'
 import { vmAddNodeToParent } from '@/utils/vmMap'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { toPrecision } from '@/utils/number'
 
 export default {
   name: 'ElementAddBar',
@@ -232,13 +233,13 @@ export default {
     this.selection.on('stop', evt => {
       const grid = {
         [this.currentBreakpoint]: {
-          x: startX - originX,
+          x: toPrecision((startX - originX) / originW * 100, 1),
           y: startY - originY,
-          w: Math.round(((evt.oe.clientX - startX) / originW) * 100),
+          w: toPrecision(((evt.oe.clientX - startX) / originW) * 100, 1),
           h: this.isTextEditor ? 18 : evt.oe.clientY - startY,
           unitW: '%',
           unitH: 'px',
-          unitX: 'px',
+          unitX: '%',
           unitY: 'px'
         }
       }

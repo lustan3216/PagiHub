@@ -155,6 +155,7 @@ export default {
         const imageRect = await this.getImageRect(file)
         const h = 300
         const w = imageRect.w / imageRect.h * h
+        const percentX = clientX - x - (w / 2) + (30 * this.dropEvent.uploadingIndex)
 
         newNode = flexImage({
           props: {
@@ -162,12 +163,14 @@ export default {
           },
           grid: {
             [this.currentBreakpoint]: {
-              x: clientX - x - (w / 2) + (30 * this.dropEvent.uploadingIndex),
+              x: horizontalUnitConvert(droppedNode.id, percentX, 'px', '%'),
               y: clientY - y - (h / 2) + (30 * this.dropEvent.uploadingIndex),
               w: horizontalUnitConvert(droppedNode.id, w, 'px', '%'),
               h,
               unitH: 'px',
-              unitW: '%'
+              unitW: '%',
+              unitX: '%',
+              unitY: 'px'
             }
           }
         })

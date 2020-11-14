@@ -12,6 +12,7 @@ import { BREAK_POINTS_ARRAY, GRID } from '@/const'
 import { group } from '@/templateJson/basic'
 import { vmAddNodeToParent, vmRemoveNode } from '@/utils/vmMap'
 import { horizontalUnitConvert, verticalUnitConvert, verticalUnitPercentFromTo, horizontalUnitPercentFromTo } from '@/utils/layout'
+import { toPrecision } from '@/utils/number'
 
 export default {
   name: 'ComponentGroup',
@@ -49,16 +50,35 @@ export default {
           nodeH = (verticalUnitConvert(node.id, currentGrid.h, '%', 'px') / h) * 100
         }
 
+        const pxX = horizontalUnitConvert(node.id, currentGrid.x, currentGrid.unitX, 'px')
+        const pxY = verticalUnitConvert(node.id, currentGrid.y, currentGrid.unitY, 'px')
+
+        let nodeX
+        if (currentGrid.unitX === '%') {
+          nodeX = toPrecision(((pxX - x) / w) * 100, 1)
+        }
+        else {
+          nodeX = horizontalUnitConvert(node.id, pxX - x, 'px', currentGrid.unitX)
+        }
+
+        let nodeY
+        if (currentGrid.unitY === '%') {
+          nodeY = toPrecision(((pxY - y) / h) * 100, 1)
+        }
+        else {
+          nodeY = verticalUnitConvert(node.id, pxY - y, 'px', currentGrid.unitY)
+        }
+
         node.grid = {
           [this.currentBreakpoint]: {
-            x: Math.round(currentGrid.x - x),
-            y: Math.round(currentGrid.y - y),
+            x: nodeX,
+            y: nodeY,
             w: nodeW,
             h: nodeH,
             unitH: currentGrid.unitH,
             unitW: currentGrid.unitW,
-            unitX: 'px',
-            unitY: 'px'
+            unitX: currentGrid.unitX,
+            unitY: currentGrid.unitY
           }
           // overwrite all original breakpoint
         }
@@ -69,18 +89,19 @@ export default {
       const tree = group({
         grid: {
           [this.currentBreakpoint]: {
-            x,
+            x: horizontalUnitConvert(parentId, x, 'px', '%'),
             y,
             w: horizontalUnitConvert(parentId, w, 'px', '%'),
             h,
             unitH: 'px',
             unitW: '%',
-            unitX: 'px',
+            unitX: '%',
             unitY: 'px'
           }
         },
         children
       })
+
       vmAddNodeToParent(parentId, tree)
       this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
     },
@@ -113,13 +134,18 @@ export default {
           }
 
           const currentGroupGird = this.closestValidGrid(group, point)
+          const nodeX = horizontalUnitConvert(node.id, grid.x, grid.unitX, 'px')
+          const nodeY = verticalUnitConvert(node.id, grid.y, grid.unitY, 'px')
+          const groupX = horizontalUnitConvert(group.id, currentGroupGird.x, currentGroupGird.unitX, 'px')
+          const groupY = verticalUnitConvert(group.id, currentGroupGird.y, currentGroupGird.unitY, 'px')
+
           records.push({
             path: [node.id, GRID, point, 'x'],
-            value: horizontalUnitConvert(node.id, grid.x, grid.unitX, 'px') + horizontalUnitConvert(group.id, currentGroupGird.x, currentGroupGird.unitX, 'px')
+            value: horizontalUnitConvert(group.id, nodeX + groupX, 'px', grid.unitX)
           })
           records.push({
             path: [node.id, GRID, point, 'y'],
-            value: verticalUnitConvert(node.id, grid.y, grid.unitY, 'px') + verticalUnitConvert(group.id, currentGroupGird.y, currentGroupGird.unitY, 'px')
+            value: verticalUnitConvert(group.id, nodeY + groupY, 'px', grid.unitY)
           })
         })
 
