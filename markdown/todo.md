@@ -25,11 +25,14 @@ Just click publish, then you will have a real RWD website
 
 effect bug
 shadow 有bug
+
 手機看頁面會壞掉
 編輯器此寸太小 要顯示不資源
-align 不要刪除stack
 w 預設都改為%
 考慮x y 可以負的
+
+
+align 不要刪除stack
 cut
 group 要能拖進去拖出來嗎
 有node會沒刪乾淨

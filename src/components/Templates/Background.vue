@@ -11,7 +11,6 @@
     controller
     data-image-droppable
     class="background over-hidden"
-    @height-updated="heightUpdated"
   />
 </template>
 
@@ -22,6 +21,7 @@ import propsMixin from '@/components/Templates/mixins/props'
 // childrenMixin 要拿來新增刪除小孩的
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridGeneratorInner from './GridGeneratorInner'
+import { resizeListener } from '@/utils/tool'
 
 export default {
   name: 'Background',
@@ -29,16 +29,26 @@ export default {
     GridGeneratorInner
   },
   mixins: [toolMixin, propsMixin, childrenMixin],
+  data() {
+    return {
+      offResizeListener: null
+    }
+  },
   computed: {
     ...mapState('app', ['isAdding'])
   },
-  methods: {
-    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
-    heightUpdated(height) {
+  mounted() {
+    this.offResizeListener = resizeListener(this.$el, () => {
       this.LAYOUT_SET({
-        backgroundHeight: parseInt(height)
+        backgroundHeight: parseInt(this.$el.clientHeight)
       })
-    }
+    })
+  },
+  beforeDestroy() {
+    this.offResizeListener()
+  },
+  methods: {
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' })
   }
 }
 </script>

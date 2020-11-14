@@ -109,7 +109,7 @@ export default {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
     ...mapGetters('layout', ['currentBreakpoint']),
-    ...mapState('layout', ['windowWidth', 'windowHeight']),
+    ...mapState('layout', ['windowWidth', 'backgroundHeight']),
     sameParent() {
       const ids = this.selectedComponentNodes.map(node => node.parentId)
       return arrayUniq(ids).length === 1
@@ -147,7 +147,7 @@ export default {
           x: 0,
           y: 0,
           w: this.windowWidth,
-          h: this.windowHeight,
+          h: this.backgroundHeight,
           unitH: 'px',
           unitW: 'px',
           unitX: 'px',
@@ -208,6 +208,7 @@ export default {
     },
     alignMiddle() {
       if (this.isSingleNode) {
+        console.log(this.parentHeight)
         const value =
           this.parentHeight / 2 - vmGet(this.theSingleNode.id).pxH / 2
         this.recordStore(this.theSingleNode.id, 'y', value)
