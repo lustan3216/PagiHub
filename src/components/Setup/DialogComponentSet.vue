@@ -48,17 +48,14 @@
               The name will be used as part of url, it can be browsed once
               publish.
             </p>
-            <component
-              :is="node && node.version ? 'a' : 'span'"
-              :href="href"
-              :class="[node && node.version ? 'link' : 'gray-font']"
-              class="font-13"
-              target="_blank"
-            >
-              {{ origin }}/{{ username || 'username' }}/{{
-                project && project.label
-              }}/{{ form.label || 'page-name' }}{{ privateLinkToken }}
-            </component>
+
+            <publish-link
+              :id="id"
+              :is-private="form.isPrivate"
+              :component-set-label="form.label"
+              changeable
+              type="text"
+            />
 
             <el-form-item
               label="Tag"
@@ -111,7 +108,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { label } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import SelectTag from '@/components/Components/SelectTag'
@@ -119,6 +116,7 @@ import { Message } from 'element-ui'
 import TextEditorRich from '@/components/Components/TextEditorRich'
 import TipPage from '@/components/Tip/TipPage'
 import { cloneJson } from '@/utils/tool'
+import PublishLink from '@/components/Components/PublishLink'
 
 export default {
   name: 'DialogComponentSet',
@@ -126,7 +124,8 @@ export default {
     DialogConfirmable,
     SelectTag,
     TextEditorRich,
-    TipPage
+    TipPage,
+    PublishLink
   },
   props: {
     // eslint-disable-next-line
@@ -216,9 +215,6 @@ export default {
           : 'A powerful page can reuse and share...'
       }
     },
-    origin() {
-      return location.origin
-    },
     node() {
       return this.nodesMap[this.id]
     },
@@ -227,27 +223,6 @@ export default {
     },
     isExist() {
       return Boolean(this.id)
-    },
-    href() {
-      let url = `/${this.username}/${this.project && this.project.label}/${
-        this.form.label
-      }`
-
-      if (this.node && this.node.privateLinkToken) {
-        url += `?token=${this.node.privateLinkToken}`
-      }
-
-      return url
-    },
-    privateLinkToken() {
-      if (this.form.isPrivate) {
-        if (this.node && this.node.privateLinkToken) {
-          return `?token=${this.node.privateLinkToken}`
-        }
-        else {
-          return `?privateLinkToken=secret`
-        }
-      }
     }
   },
   watch: {

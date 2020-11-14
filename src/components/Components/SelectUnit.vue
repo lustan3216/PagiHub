@@ -82,7 +82,7 @@
         class="no-action"
       >
         {{ optionUnits.length ? optionUnits[0] : ' - ' }}
-    </span>
+      </span>
     </template>
   </el-input>
 </template>

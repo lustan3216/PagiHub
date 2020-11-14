@@ -30,7 +30,6 @@
         />
       </el-col>
 
-
     </el-row>
 
     <el-row
@@ -43,8 +42,8 @@
           ref="fontSize"
           :clearable="false"
           :units="['px']"
-          no-unit
           v-model="fontSize"
+          no-unit
         >
           <span style="font-size: 15px;">
             <b-icon-type style="margin-top: 6px;" />
@@ -57,8 +56,8 @@
           ref="letterSpacing"
           :clearable="false"
           :units="['px']"
-          no-unit
           v-model="letterSpacing"
+          no-unit
         >
           <img
             style="margin-top: 9px; width: 12px;"
@@ -73,8 +72,8 @@
           ref="lineHeight"
           :clearable="false"
           :units="['px']"
-          no-unit
           v-model="lineHeight"
+          no-unit
         >
           <img
             svg-inline

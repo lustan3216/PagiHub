@@ -26,19 +26,7 @@
         @mouseenter="mouseenter(componentSet.id)"
         @mouseleave="mouseleave"
       >
-        <div class="upload-icon">
-          <template v-if="componentSet.version">
-            <b-icon-cloud-slash
-              v-if="componentSet.isPrivate"
-              class="gray-font-2 font-13"
-            />
-            <b-icon-cloud-arrow-up
-              v-else
-              class="gray-font-2 font-13"
-              style="margin-top: 3px;"
-            />
-          </template>
-        </div>
+        <publish-link :id="componentSet.id"/>
 
         <component-name
           :id="componentSet.id"
@@ -76,22 +64,22 @@ import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import DialogProject from './DialogProject'
 import PanelComponentSets from './PanelComponentSets'
 import DialogDelete from './DialogDelete'
+import PublishLink from '@/components/Components/PublishLink'
 import ComponentName from '../TemplateUtils/ComponentName'
 import DialogComponentSet from '@/components/Setup/DialogComponentSet'
 import { getValueByPath } from '@/utils/tool'
-import { BIconCloudArrowUp, BIconCloudSlash } from 'bootstrap-vue'
+
 
 export default {
   name: 'PanelComponentSets',
   components: {
+    PublishLink,
     DialogComponentSet,
     ElTree: Tree,
     DialogProject,
     PanelComponentSets,
     DialogDelete,
-    ComponentName,
-    BIconCloudArrowUp,
-    BIconCloudSlash
+    ComponentName
   },
   data() {
     return {
@@ -187,10 +175,5 @@ export default {
   background: #f5f7fa;
   padding: 0 5px;
   height: 26px;
-}
-.upload-icon {
-  width: 20px;
-  text-align: center;
-  margin-left: 5px;
 }
 </style>
