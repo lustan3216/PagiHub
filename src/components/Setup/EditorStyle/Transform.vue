@@ -152,14 +152,14 @@ export default {
         translateX: {
           name: 'translateX',
           step: 1,
-          allowNegative: true,
+          min: -Infinity,
           units: ['px', '%'],
           visible: true
         },
         translateY: {
           name: 'translateY',
           step: 1,
-          allowNegative: true,
+          min: -Infinity,
           units: ['px', '%'],
           visible: true
         },

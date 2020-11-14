@@ -27,8 +27,6 @@ effect bug
 shadow 有bug
 手機看頁面會壞掉
 編輯器此寸太小 要顯示不資源
-h1~h6要改，或是自動設定
-translate 要正負
 align 不要刪除stack
 w 預設都改為%
 考慮x y 可以負的

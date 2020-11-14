@@ -5,7 +5,7 @@
     :class="{ 'ns-resize': resizeCursor }"
     :prefix-icon="prefixIcon"
     :step="shiftPress ? step * 10 : step"
-    :min="allowNegative ? Infinity : min"
+    :min="min"
     :max="max"
     :disabled="disabled"
     :clearable="clearable"
@@ -106,10 +106,6 @@ export default {
       default: true
     },
     hasAuto: {
-      type: Boolean,
-      default: false
-    },
-    allowNegative: {
       type: Boolean,
       default: false
     },
