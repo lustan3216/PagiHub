@@ -208,7 +208,6 @@ export default {
     },
     alignMiddle() {
       if (this.isSingleNode) {
-        console.log(this.parentHeight)
         const value =
           this.parentHeight / 2 - vmGet(this.theSingleNode.id).pxH / 2
         this.recordStore(this.theSingleNode.id, 'y', value)
