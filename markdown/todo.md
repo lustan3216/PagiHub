@@ -27,7 +27,6 @@ effect bug
 shadow 有bug
 
 手機看頁面會壞掉
-編輯器此寸太小 要顯示不資源
 考慮x y 可以負的
 
 

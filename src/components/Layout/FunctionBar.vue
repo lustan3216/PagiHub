@@ -86,7 +86,6 @@ export default {
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
     ...mapState('node', ['editingComponentSetId']),
-    ...mapGetters('mode', ['isProductionMode', 'isPreviewMode', 'isDraftMode']),
     ...mapGetters('app', [
       'selectedComponentNodes',
       'theOnlySelectedComponentId'

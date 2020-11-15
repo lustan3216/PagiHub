@@ -51,6 +51,7 @@
       >
         <slot />
       </event-controller>
+
       <slot v-else />
     </div>
   </vue-grid-item>

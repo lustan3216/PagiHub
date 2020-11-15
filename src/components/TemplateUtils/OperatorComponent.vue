@@ -31,7 +31,7 @@ import {
   isTextEditor,
   isGroup,
   isSlider,
-  isImage, isButton
+  isImage
 } from '@/utils/node'
 import { arrayLast } from '@/utils/array'
 import { getValueByPath, globalDebounce } from '@/utils/tool'

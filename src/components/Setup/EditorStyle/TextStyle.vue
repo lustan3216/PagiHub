@@ -1,8 +1,5 @@
 <template>
-  <portal
-    v-if="isDraftMode"
-    to="FontStyle"
-  >
+  <portal to="FontStyle">
     <div
       v-if="selected"
       class="font-style"

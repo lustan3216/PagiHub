@@ -24,7 +24,7 @@
     />
 
     <event-controller
-      v-if="controller && isDraftMode && element"
+      v-if="controller && element"
       :id="id"
       :element="element"
     >

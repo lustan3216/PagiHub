@@ -1,6 +1,5 @@
 import {
   GRID_GENERATOR,
-  POLYMORPHISM,
   GRID_GENERATOR_ITEM,
   CAROUSEL,
   CAN_NEW_ITEM,
@@ -9,10 +8,8 @@ import {
   CAN_BE_EDITED,
   STYLES,
   LABEL,
-  GRID,
   TEXT_EDITOR,
   VALUE,
-  HTML,
   CAN_NOT_DELETE
 } from '../const'
 
@@ -205,25 +202,12 @@ export const exampleMap = {
   [GRID_GENERATOR_ITEM]: gridGeneratorItem,
   [CAROUSEL]: carousel,
   [TEXT_EDITOR]: textEditor,
-  iframer,
   'flex-button': flexButton,
   'flex-image': flexImage,
   'video-player': videoPlayer,
+  iframer,
   rectangle,
   group
-}
-
-export const descriptionMap = {
-  [GRID_GENERATOR]:
-    'Each container can only include an element to control element size',
-  [GRID_GENERATOR_ITEM]: 'not yet',
-  [CAROUSEL]:
-    'Carousel could nested with multi carousels to have more creation',
-  [TEXT_EDITOR]: 'Support 900+ Google font',
-  iframer: 'For embedding service you like, such as your website or youtube',
-  'flex-button': 'A functioning rectangle you can redirect page',
-  'flex-image': 'Just image = = ',
-  'video-player': 'Support Youtube and Viemo'
 }
 
 export function getExample(tag, options = {}, grid) {

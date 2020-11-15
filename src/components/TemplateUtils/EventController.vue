@@ -34,7 +34,10 @@
       />
     </portal>
 
-    <portal to="App">
+    <portal
+      :disabled="gridResizing"
+      to="App"
+    >
       <context-menu
         v-if="contextMenu.id === id && !gridResizing"
         :style="{

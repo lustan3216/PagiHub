@@ -30,12 +30,10 @@ export default {
     })
   },
   beforeDestroy() {
-    if (this.isDraftMode) {
-      vmRemove(this, this.isExample)
+    vmRemove(this, this.isExample)
 
-      if (!this.isExample) {
-        this.$bus.$off(`hover-${this.id}`, this.hoverCover)
-      }
+    if (!this.isExample) {
+      this.$bus.$off(`hover-${this.id}`, this.hoverCover)
     }
   },
   methods: {
@@ -57,15 +55,13 @@ export default {
     },
     init() {
       // Don't put in created to prevent some component fail before mount
-      if (this.isDraftMode) {
-        // for componentOperator using
-        this.$el.id = this.id
+      // for componentOperator using
+      this.$el.id = this.id
 
-        vmAppend(this, this.isExample)
+      vmAppend(this, this.isExample)
 
-        if (!this.isExample) {
-          this.$bus.$on(`hover-${this.id}`, this.hoverCover)
-        }
+      if (!this.isExample) {
+        this.$bus.$on(`hover-${this.id}`, this.hoverCover)
       }
     },
     hoverCover(hover) {

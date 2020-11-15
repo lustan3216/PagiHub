@@ -6,7 +6,7 @@
         :size="50"
       />
 
-      <h4 class="p m-b-10">Sign in as</h4>
+      <h4 class="p m-b-10 m-t-10">Sign in as</h4>
 
       <div
         v-if="username"

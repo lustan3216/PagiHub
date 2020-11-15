@@ -23,7 +23,7 @@
           :disabled="!selectedComponentNodes.length"
           :type="isHidden(point) ? 'primary' : ''"
           plain
-          class="flex1"
+          class="flex1 button"
           @click="click(point, !isHidden(point))"
         >
           <button-device
@@ -101,4 +101,7 @@ export default {
     border-color: transparent;
   }
 }
+  .button {
+    max-width: 40px;
+  }
 </style>
