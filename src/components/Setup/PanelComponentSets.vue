@@ -30,6 +30,7 @@
           :id="componentSet.id"
           :key="componentSet.isPrivate + componentSet.version"
           class="upload-icon"
+          style="line-height: 0;"
         />
 
         <component-name

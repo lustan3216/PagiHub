@@ -30,6 +30,7 @@ shadow 有bug
 考慮x y 可以負的
 
 
+
 align 不要刪除stack
 cut
 group 要能拖進去拖出來嗎
@@ -44,7 +45,6 @@ btton連結
 // resizeing docking 考慮
 // group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
 
-
 - panel component 可以拖拉
 - iframe
 - panel component shift select
@@ -56,7 +56,6 @@ btton連結
 - style component
 - container can transform
 - form input
-- can setting put under style or new tab
 
 button click 可指定 componennt 換成別的 set/ 考慮之後有 interaction 在弄就好
 image can put more effect
