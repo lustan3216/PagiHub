@@ -183,10 +183,6 @@ export default {
         {
           path: [id, GRID, this.currentBreakpoint, key],
           value
-        },
-        {
-          path: [id, STYLES, 'layout', 'stack'],
-          value: undefined
         }
       ])
     },
