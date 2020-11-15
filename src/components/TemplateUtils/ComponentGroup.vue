@@ -1,4 +1,5 @@
 <script>
+import { ulid } from 'ulid'
 import { cloneJson } from '@/utils/tool'
 import { arrayUniq } from '@/utils/array'
 import {
@@ -7,10 +8,10 @@ import {
   getGroupPxRect,
   closestValidGrid
 } from '@/utils/node'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { BREAK_POINTS_ARRAY, GRID } from '@/const'
 import { group } from '@/templateJson/basic'
-import { vmAddNodeToParent, vmRemoveNode } from '@/utils/vmMap'
+import { vmRemoveNode } from '@/utils/vmMap'
 import { horizontalUnitConvert, verticalUnitConvert, verticalUnitPercentFromTo, horizontalUnitPercentFromTo } from '@/utils/layout'
 import { toPrecision } from '@/utils/number'
 
@@ -32,12 +33,35 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('app', ['SET_SELECTED_COMPONENT_ID']),
     ...mapActions('node', ['debounceRecord']),
     group() {
       const { x, y, w, h } = getGroupPxRect(this.selectedComponentNodes)
       const { parentId } = this.selectedComponentNodes[0]
+      const groupId = ulid()
+      const records = []
 
-      const children = this.selectedComponentNodes.map(node => {
+      records.push({
+        path: groupId,
+        value: group({
+          id: groupId,
+          parentId,
+          grid: {
+            [this.currentBreakpoint]: {
+              x: horizontalUnitConvert(parentId, x, 'px', '%'),
+              y,
+              w: horizontalUnitConvert(parentId, w, 'px', '%'),
+              h,
+              unitH: 'px',
+              unitW: '%',
+              unitX: '%',
+              unitY: 'px'
+            }
+          }
+        })
+      })
+
+      this.selectedComponentNodes.forEach(node => {
         const currentGrid = closestValidGrid(node, this.currentBreakpoint)
         node = cloneJson(node)
 
@@ -69,41 +93,31 @@ export default {
           nodeY = verticalUnitConvert(node.id, pxY - y, 'px', currentGrid.unitY)
         }
 
-        node.grid = {
-          [this.currentBreakpoint]: {
-            x: nodeX,
-            y: nodeY,
-            w: nodeW,
-            h: nodeH,
-            unitH: currentGrid.unitH,
-            unitW: currentGrid.unitW,
-            unitX: currentGrid.unitX,
-            unitY: currentGrid.unitY
+        records.push({
+          path: [node.id, GRID],
+          value: {
+            [this.currentBreakpoint]: {
+              x: nodeX,
+              y: nodeY,
+              w: nodeW,
+              h: nodeH,
+              unitH: currentGrid.unitH,
+              unitW: currentGrid.unitW,
+              unitX: currentGrid.unitX,
+              unitY: currentGrid.unitY
+            }
+            // overwrite all original breakpoint
           }
-          // overwrite all original breakpoint
-        }
+        })
 
-        return node
+        records.push({
+          path: [node.id, 'parentId'],
+          value: groupId
+        })
       })
 
-      const tree = group({
-        grid: {
-          [this.currentBreakpoint]: {
-            x: horizontalUnitConvert(parentId, x, 'px', '%'),
-            y,
-            w: horizontalUnitConvert(parentId, w, 'px', '%'),
-            h,
-            unitH: 'px',
-            unitW: '%',
-            unitX: '%',
-            unitY: 'px'
-          }
-        },
-        children
-      })
-
-      this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
-      vmAddNodeToParent(parentId, tree)
+      this.debounceRecord(records)
+      this.SET_SELECTED_COMPONENT_ID(groupId)
     },
     ungroup() {
       this.selectedComponentNodes.forEach(group => {
