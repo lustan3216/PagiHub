@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="font-12 gray-font-2 m-b-5">
-      Allow client user interact with items when page published.
+      Allow client user interact with items on the published page.
     </p>
 
     <rules-generator
