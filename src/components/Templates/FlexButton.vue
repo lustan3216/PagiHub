@@ -1,8 +1,8 @@
 <template>
   <grid-generator-item :id="id">
     <el-popover
+      v-if="isDraftMode"
       ref="popover"
-      :disabled="!isDraftMode"
       :value="editing"
       :visible-arrow="false"
       :popper-options="{

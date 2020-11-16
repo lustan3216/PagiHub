@@ -13,6 +13,7 @@ form submit amount 1000, can be deleted, 前 1 萬筆免費，後面開始收錢
 connect to google sheet 跟上面一樣
 可上傳影音
 可以有預覽版本，分享給別人看，並且可以下 comment
+
 最終還是要做 payment 的...
 }
 上面的功能要跟 aws 一樣有免費制度

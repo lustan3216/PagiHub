@@ -41,6 +41,14 @@ btton連結
 發布後 的share page and browsing
 如果update 500 直接 overwrite
 
+group option複製會會掉，
+autoheight還是有問題
+ratio還是畫面拉大便小時，還是需要鎖變化
+加入文字會跑位
+carousle內無法單個對齊
+常會點不到字
+左右拉時 畫面東西一多，效能無法接受了
+ 
 
 // resizeing docking 考慮
 // group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
