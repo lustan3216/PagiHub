@@ -95,7 +95,7 @@ export default {
       return !this.gridResizing && this.selected && this.isResizable
     },
     border() {
-      if (!this.gridResizing && this.isDraftMode && !this.scrolling) {
+      if (!this.gridResizing && this.isResizable && !this.scrolling) {
         if (this.isBackground) {
           return this.selected
         }
