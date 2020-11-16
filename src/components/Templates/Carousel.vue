@@ -289,14 +289,8 @@ export default {
     deleteSlider() {
       this.removeCurrentSlider()
     },
-    checkSelectedComponent(index, oldIndex) {
-      const { id } = this.sliders[oldIndex]
-      const node = this.nodesMap[id]
-      const ids = []
+    checkSelectedComponent(index) {
       this.currentIndex = index
-      traversalSelfAndChildren(node, ({ id }) => ids.push(id))
-
-      this.CLEAN_SELECTED_COMPONENT_ID(ids)
     },
     removeCurrentSlider() {
       const node = this.children[this.currentIndex]

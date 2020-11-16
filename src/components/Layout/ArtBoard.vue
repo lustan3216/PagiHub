@@ -18,7 +18,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
-import { globalDebounce, resizeListener } from '@/utils/tool'
+import { debounce, globalDebounce, resizeListener } from '@/utils/tool'
 import { getRectWithoutPadding } from '@/utils/style'
 
 export default {
@@ -78,17 +78,20 @@ export default {
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
     handleGridResizing() {
-      this.LAYOUT_SET({ scrolling: true })
+      this.scrollingTrue()
 
       globalDebounce(() => {
         this.LAYOUT_SET({ scrolling: false })
       }, 150)
     },
-    updateScrollTop() {
+    scrollingTrue: debounce(function() {
+      this.LAYOUT_SET({ scrolling: true })
+    }, 100),
+    updateScrollTop: debounce(function() {
       if (this.isExample) return
       this.scrollTop = this.$el.scrollTop
       this.$bus.$emit('art-board-scroll-top', this.scrollTop)
-    },
+    }, 100),
     setBoundaryRect() {
       const { height, width, x, y } = getRectWithoutPadding(this.$el)
 
