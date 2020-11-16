@@ -51,7 +51,7 @@ export default {
     addNodeToParent(nodeTree = {}) {
       // nodeTree should be single node instead of an array
       // could be triggered by copy, delete
-      if (this.isExample) {
+      if (this.isExample || !this.isDraftMode) {
         return
       }
 
@@ -101,7 +101,7 @@ export default {
 
     removeNodeFromParent(theNodeGonnaRemove) {
       // should use vmMap method to call to keep consistency
-      if (this.isExample) {
+      if (this.isExample || !this.isDraftMode) {
         return
       }
 
