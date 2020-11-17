@@ -1,55 +1,47 @@
-step functions
-event bridge
-sub/pub/
-queue
-sns / sqs
-vpn
-kafka
+內容
 
-componentID 都一樣不用變
-masterId 記在 componentSet 就好
-每個 component 都要有 componentSetId
-form 裡面的設定的抓 componentSetId +componentId 如果有 master 就抓 masterId + componentId
-masterId 只要記得上一個複製的源頭就可以
-page interactions can’t be copied
 
-PM 直接做完，可以設計師接著做
-避風港機制 三振條款
+商業計劃
+https://docs.google.com/document/d/1ESnMLOHqbanGTu2C83eHxOogiGQyUcididwftV3UHQw/edit
+介紹、商業模式、市場分析、發展規劃、競爭分析、團隊介紹、財務規劃與預測、融資需求、退出機制等內容；一般按照敘述的邏輯展示。
+https://inboundnow.org/topics/824/shang-ye-ji-hua-shu-wan-mei-shang-ye-ji-hua-shu-quan-gong-lue-zhong-zi-tian-shi-lun-a-lun-b-lun-de-bp-you-nei-xie-qu-bie
 
-塗層越高越上面，狂狂在底層，ｐａｎｅｌ node 要可以點直接選到
-選擇 shift 要一次、上下選很多
+加速器
+https://startupaward.sme.gov.tw/
+https://www.cospace-taipei.com/%E5%AE%9A%E5%90%91%E5%8A%A0%E9%80%9F%E5%99%A8
+https://www.microsoft.com/taiwan/mtcaccelerator/new_recruiting.htm
+微軟
+https://sme.moeasmea.gov.tw/startup/modules/funding/index.php?inv_type=%E5%89%B5%E6%96%B0%E7%A0%94%E7%99%BC%E7%BC%BA%E8%B3%87%E9%87%91
+https://www.beaccelerator.com.tw/startup-programs-be-accelerator
 
-2. 每個 componentSet 可以設定自己的 route，發布後別人可以通過 route 連到該 componentSet
 
-3. Q 右側 style, setting 的面板要拆開嗎
-   A (拆開) 用快捷鍵解決
+1. 政府計劃
+2. 公司設立，額度要放多少
+3. 青創借貸 200 萬 https://sme.moeasmea.gov.tw/startup/modules/funding/detail/index.php?sId=15
+4. 法律
+5. 商標
+6. UX
 
-4. 當畫布中 component 選中時，怎麼提示使用者接下來的操作，有複製，刪除，隱藏，鎖住，可以拖拉元件等，可再剪下貼上，怎麼提示會比較好，需要 node 名字嗎
 
-5. 每個 component 的操作及說明改怎麼統一顯示，譬如 texteditor 操作有點豐富，很多快捷鍵以及指令的說明, 打 markdown 是方便的嗎
 
-6. Button 這個組建有個功能是，當點選後可指定畫布中的某個 compoennt 替換成另一個 component，這個功能需要介面
+資源
+https://tvc.itri.org.tw/d2_source.html
 
-7. 右邊那塊 style, setting 只需要優化排版和 UI，我自己會再補上 overflow, gradient color, text align, 這裡滿多功能壞掉，目前還不會去修
 
-9) 使用者可上傳 image, svg 。照片可以在 image component 內選用，svg 可在 text editor 裡面選用
 
-10) 右邊設定哪裡可以改進
+business 
+用戶體驗
+設計師為什麼要用？
 
-11) 右上的 node 需要顯示嗎
 
-12) 會希望怎麼選擇到 選不到的 node
 
-13) 要怎麼知道可以 copy / paste / delete / 或跨 component copy
+figma 靜態
+RWD切版時 
 
-14) 需要點兩下才能操作，怎麼讓使用人知道
+往動畫方向 dribble 
 
-15) 怎麼選擇 component 選擇，因為一個 layout 只能一個 component, 可以直接 layout 點了出現選單嗎，modal or sidebar
+從 溝通  做出來的東西跟時
+ 響應式設計
 
-16) 為什麼會需要 asset management
-
-17) 選到你要的 layout 可能要多次，編筐編筐
-
-18) webflow, blocsapp 有 form 嗎
-
-19) 如果想要只編輯 component 怎麼辦
+然後你今天說的股權的東西以及放履歷，一定都是可以的，！
+只是股權的東西我目前還比較沒有概念 

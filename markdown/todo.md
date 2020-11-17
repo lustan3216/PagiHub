@@ -29,9 +29,7 @@ shadow 有bug
 手機看頁面會壞掉
 考慮x y 可以負的
 
-
-
-align 不要刪除stack
+background event controller
 cut
 group 要能拖進去拖出來嗎
 有node會沒刪乾淨
@@ -42,13 +40,12 @@ btton連結
 如果update 500 直接 overwrite
 
 group option複製會會掉，
-autoheight還是有問題
 ratio還是畫面拉大便小時，還是需要鎖變化
 加入文字會跑位
 carousle內無法單個對齊
 常會點不到字
 左右拉時 畫面東西一多，效能無法接受了
- 
+ 每次註記的版本
 
 // resizeing docking 考慮
 // group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
@@ -101,3 +98,8 @@ https://tympanus.net/Development/HeaderEffects/
 
 協作 / 觀察 /註釋 Comment
 https://medium.com/as-a-product-designer/figma-design-tool-1c6542ae8dc1
+
+
+
+
+

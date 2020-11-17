@@ -1,28 +1,28 @@
 <template>
   <div>
-    <div class="divider-with-button">
-      <el-divider content-position="left">
-        TRANSFORM
-      </el-divider>
+<!--    <div class="divider-with-button">-->
+<!--      <el-divider content-position="left">-->
+<!--        TRANSFORM-->
+<!--      </el-divider>-->
 
-      <el-dropdown
-        size="small"
-        @command="add"
-      >
-        <span class="el-dropdown-link">
-          <el-button icon="el-icon-plus" />
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="option in selectableOptions"
-            :key="option.name"
-            :command="option.name"
-          >
-            {{ humanize(option.name) }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
+<!--      <el-dropdown-->
+<!--        size="small"-->
+<!--        @command="add"-->
+<!--      >-->
+<!--        <span class="el-dropdown-link">-->
+<!--          <el-button icon="el-icon-plus" />-->
+<!--        </span>-->
+<!--        <el-dropdown-menu slot="dropdown">-->
+<!--          <el-dropdown-item-->
+<!--            v-for="option in selectableOptions"-->
+<!--            :key="option.name"-->
+<!--            :command="option.name"-->
+<!--          >-->
+<!--            {{ humanize(option.name) }}-->
+<!--          </el-dropdown-item>-->
+<!--        </el-dropdown-menu>-->
+<!--      </el-dropdown>-->
+<!--    </div>-->
 
     <!--    <transform-origin :state="state" />-->
 
@@ -56,37 +56,37 @@
         </el-row>
       </portal>
 
-      <el-row
-        v-else
-        :gutter="5"
-        :key="option.name"
-        type="flex"
-        align="middle"
-      >
-        <el-col :span="8">
-          <span class="title">{{ humanize(option.name) }}</span>
-        </el-col>
+<!--      <el-row-->
+<!--        v-else-->
+<!--        :gutter="5"-->
+<!--        :key="option.name"-->
+<!--        type="flex"-->
+<!--        align="middle"-->
+<!--      >-->
+<!--        <el-col :span="8">-->
+<!--          <span class="title">{{ humanize(option.name) }}</span>-->
+<!--        </el-col>-->
 
-        <el-col :span="13">
-          <select-unit
-            v-if="options[option.name]"
-            :disabled="canNotTransform"
-            :value="option.value || options[option.name].default"
-            :clearable="false"
-            :key="option.name"
-            v-bind="options[option.name]"
-            @input="onChange(index, $event)"
-            @clear="onChange(index, undefined)"
-          />
-        </el-col>
+<!--        <el-col :span="13">-->
+<!--          <select-unit-->
+<!--            v-if="options[option.name]"-->
+<!--            :disabled="canNotTransform"-->
+<!--            :value="option.value || options[option.name].default"-->
+<!--            :clearable="false"-->
+<!--            :key="option.name"-->
+<!--            v-bind="options[option.name]"-->
+<!--            @input="onChange(index, $event)"-->
+<!--            @clear="onChange(index, undefined)"-->
+<!--          />-->
+<!--        </el-col>-->
 
-        <el-col :span="3">
-          <el-button
-            icon="el-icon-delete"
-            @click="itemRemove(index)"
-          />
-        </el-col>
-      </el-row>
+<!--        <el-col :span="3">-->
+<!--          <el-button-->
+<!--            icon="el-icon-delete"-->
+<!--            @click="itemRemove(index)"-->
+<!--          />-->
+<!--        </el-col>-->
+<!--      </el-row>-->
     </template>
   </div>
 </template>
@@ -149,20 +149,20 @@ export default {
           units: ['deg'],
           visible: true
         },
-        translateX: {
-          name: 'translateX',
-          step: 1,
-          min: -Infinity,
-          units: ['px', '%'],
-          visible: true
-        },
-        translateY: {
-          name: 'translateY',
-          step: 1,
-          min: -Infinity,
-          units: ['px', '%'],
-          visible: true
-        },
+        // translateX: {
+        //   name: 'translateX',
+        //   step: 1,
+        //   min: -Infinity,
+        //   units: ['px', '%'],
+        //   visible: true
+        // },
+        // translateY: {
+        //   name: 'translateY',
+        //   step: 1,
+        //   min: -Infinity,
+        //   units: ['px', '%'],
+        //   visible: true
+        // },
         scaleX: {
           name: 'scaleX',
           step: 0.01,

@@ -72,7 +72,6 @@ import {
 } from '@/utils/node'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { arrayLast, findIndexBy } from '@/utils/array'
-import { ObserveVisibility } from 'vue-observe-visibility'
 
 const store = vue.observable({
   lastEditId: null,
@@ -87,9 +86,6 @@ export default {
   inject: {
     isExample: { default: false },
     boundaryRect: { required: true }
-  },
-  directives: {
-    ObserveVisibility
   },
   components: {
     ContextMenu,

@@ -1,25 +1,13 @@
 <template>
-  <div>
-    <el-checkbox
-      v-if="isStack"
-      v-model="verticalCompact"
-      :disabled="canNotVerticalCompact"
-      class="m-t-10"
-      style="margin-bottom: 25px;"
-    >
-      <span class="font-12">Stick to upper stack mode element's bottom</span>
-    </el-checkbox>
-
-    <el-checkbox
-      v-else
-      v-model="fixed"
-      :disabled="canNotFixed"
-      class="m-t-10"
-      style="margin-bottom: 25px;"
-    >
-      <span class="font-12">Fix position when scrolling</span>
-    </el-checkbox>
-  </div>
+  <el-checkbox
+    v-if="!isStack"
+    v-model="fixed"
+    :disabled="canNotFixed"
+    class="m-t-10"
+    style="margin-bottom: 25px;"
+  >
+    <span class="font-12">Fix position when scrolling</span>
+  </el-checkbox>
 </template>
 
 <script>
@@ -44,36 +32,12 @@ export default {
     canNotFixed() {
       return this.selectedComponentNodes.some(node => !isBackground(node.parentNode))
     },
-    canNotVerticalCompact() {
-      return this.selectedComponentNodes.some(node => {
-        return getValueByPath(node, [STYLES, 'layout', 'stack']) === undefined
-      })
-    },
     isStack: {
       get() {
         const lastNode = arrayLast(this.selectedComponentNodes)
         if (lastNode) {
           return getValueByPath(lastNode, [STYLES, 'layout', 'stack'])
         }
-      }
-    },
-    verticalCompact: {
-      get() {
-        const lastNode = arrayLast(this.selectedComponentNodes)
-        if (lastNode) {
-          return (
-            getValueByPath(lastNode, [STYLES, 'layout', 'position']) ===
-              'verticalCompact'
-          )
-        }
-      },
-      set(value) {
-        this.selectedComponentNodes.forEach(node => {
-          this.debounceRecord({
-            path: [node.id, STYLES, 'layout', 'position'],
-            value: value ? 'verticalCompact' : undefined
-          })
-        })
       }
     },
     fixed: {

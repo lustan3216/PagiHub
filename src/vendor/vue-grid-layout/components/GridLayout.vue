@@ -16,6 +16,7 @@
     /*transition: height 200ms ease;*/
   }
 </style>
+
 <script>
   import { mapActions, mapGetters } from 'vuex'
   import Vue from 'vue'
@@ -220,9 +221,10 @@
           this.eventBus.$emit('updateHeight', newval)
         })
       },
-      // layout: function() {
-      //   this.layoutUpdate()
-      // },
+      layout: function() {
+      // 開了會造成dragend不見，不明原因
+        this.layoutUpdate()
+      },
       isDraggable: function() {
         this.eventBus.$emit('setDraggable', this.isDraggable)
       },
@@ -289,7 +291,6 @@
         }
       },
       layoutUpdate() {
-        console.log(123)
         if (this.layout !== undefined && this.originalLayout !== null) {
           if (this.layout.length !== this.originalLayout.length) {
             // console.log("### LAYOUT UPDATE!", this.layout.length, this.originalLayout.length);
@@ -344,7 +345,7 @@
           item.colY = this.colVertical(item.unitY)
         })
       },
-       containerHeight: function() {
+      containerHeight: function() {
         if (this.extendableHeight) {
           const containerHeight = bottom(this.layout) + 'px'
           return containerHeight

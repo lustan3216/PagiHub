@@ -21,7 +21,6 @@
     :is-resizable="computedLayout.isResizable"
     :is-draggable="isDraggable"
     :fixed="computedLayout.fixed"
-    :vertical-compact="computedLayout.verticalCompact"
     :class="{ 'no-action': lock }"
     :auto-resize-height="autoResizeHeight"
     @moved="moved"
@@ -102,11 +101,12 @@ export default {
   },
   data() {
     return {
-      inViewPort: false,
+      inViewPort: true,
       options: {
         callback: isVisible => {
-          this.inViewPort = isVisible
-        }
+          this.inViewPort = isVisible || this.moving
+        },
+        rootMargin: '300px 300px 300px 300px'
       },
       exampleBoundary: 'xs',
       layout: {},
@@ -116,7 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint', 'windowHeight']),
     ...mapState('app', [
       'beingAddedComponentId',
       'isAdding',
@@ -244,7 +244,6 @@ export default {
         isDraggable: this.isDraggable,
 
         fixed: position === 'fixed' && isBackground(this.node.parentNode),
-        verticalCompact: position === 'verticalCompact',
 
         id: this.id,
         i: this.id // should not happen, but just prevent crash in case
@@ -303,6 +302,8 @@ export default {
       const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
       this.exampleBoundary = closestValidBreakpoint(this.node, currentPoint)
     }
+
+    this.inViewPort = this.pxY < this.windowHeight
   },
   beforeDestroy() {
     this.$delete(this.layouts, this.id)

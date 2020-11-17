@@ -352,10 +352,6 @@
         this.tryMakeResizable()
         this.createStyle()
         // this.emitContainerResized()
-
-        if (this.ratio) {
-
-        }
       },
       x: function(newVal) {
         this.innerX = newVal
@@ -667,7 +663,7 @@
           this.$emit('resized', this.i, pos.h, pos.w, newSize.height, newSize.width)
         }
         if (event.type === 'resizestart') {
-          this.$emit('resizeStart', this.i, pos.h, pos.w, newSize.height, newSize.width)
+          this.$emit('resize-start', this.i, pos.h, pos.w, newSize.height, newSize.width)
         }
 
         this.eventBus.$emit('resizeEvent', event.type, this.i, this.innerX, this.innerY, pos.h, pos.w)
@@ -783,7 +779,7 @@
           this.$emit('moved', this.i, pos.x, pos.y, event)
         }
         if (event.type === 'dragstart') {
-          this.$emit('moveStart', this.i, pos.x, pos.y, event)
+          this.$emit('move-start', this.i, pos.x, pos.y, event)
         }
 
         this.eventBus.$emit('dragEvent', event.type, this.i, pos.x, pos.y, this.innerH, this.innerW)

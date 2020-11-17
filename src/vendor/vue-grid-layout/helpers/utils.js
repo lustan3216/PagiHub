@@ -139,10 +139,38 @@ export function compact(layout: Layout, verticalCompact: Boolean): Layout {
   return out;
 }
 
+export function isAnyStackElementOnTop(layout, l) {
+  const isStack = l.stack
+  const isFixed = l.fixed
+
+  if (!isStack && !isFixed) return false
+
+  return layout.find(item => {
+    const self = item.i === l.i
+    if (self) return
+
+    if (isStack && !item.stack) return
+    if (isFixed && !item.fixed) return
+
+    const itemLeft = item.x * item.colX
+    const itemRight = item.x * item.colX + item.w * item.colW
+    const itemBottom = item.y * item.colY + item.h * item.colH
+
+    const lLeft = l.x * l.colX
+    const lRight = l.x * l.colX + l.w * l.colW
+    const lTop = l.y * l.colY
+    const inBetween = !(itemRight <= lLeft || itemLeft >= lRight)
+
+    return inBetween && (lTop - itemBottom) < 130 && itemBottom < lTop
+  })
+}
+
 /**
  * Compact an item in the layout.
  */
-export function compactItem(compareWith: Layout, l: LayoutItem, verticalCompact: boolean): LayoutItem {
+export function compactItem(compareWith: Layout, l: LayoutItem): LayoutItem {
+  const verticalCompact = isAnyStackElementOnTop(compareWith, l)
+
   if (verticalCompact) {
     // Move the element up as far as it can go without colliding.
     while (l.y > 0 && !getFirstCollision(compareWith, l)) {
