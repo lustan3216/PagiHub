@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { BREAK_POINTS_MAP } from '@/const'
 import { BIconLaptop, BIconDisplay, BIconTabletLandscape, BIconTablet, BIconPhoneLandscape, BIconPhone } from 'bootstrap-vue'
 
@@ -57,7 +57,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     computedType() {
       if (this.type) {
         return this.type

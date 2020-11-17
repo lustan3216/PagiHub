@@ -16,10 +16,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import ComponentGiver from '../TemplateUtils/ComponentGiver'
-import { debounce, globalDebounce, resizeListener } from '@/utils/tool'
-import { getRectWithoutPadding } from '@/utils/style'
+import { debounce, throttle, resizeListener } from '@/utils/tool'
+import { findBreakpoint } from '@/utils/layout'
 
 export default {
   name: 'ArtBoard',
@@ -42,6 +42,7 @@ export default {
   },
   computed: {
     ...mapState('layout', ['gridResizing', 'scaleRatio']),
+    ...mapGetters('layout', ['breakpointsMap']),
     node() {
       return this.nodesMap[this.id]
     }
@@ -55,16 +56,14 @@ export default {
     }
   },
   mounted() {
-    this.$el.addEventListener('scroll', this.updateScrollTop)
-    this.$el.addEventListener('scroll', this.handleGridResizing)
-
+    this.$el.addEventListener('scroll', this.onScroll)
+    this.setBoundaryRect()
     if (!this.isExample) {
       this.offResizeListener = resizeListener(this.$el, this.setBoundaryRect)
     }
   },
   beforeDestroy() {
-    this.$el.removeEventListener('scroll', this.handleGridResizing)
-    this.$el.removeEventListener('scroll', this.updateScrollTop)
+    this.$el.removeEventListener('scroll', this.onScroll)
     if (this.offResizeListener) {
       this.offResizeListener()
     }
@@ -77,29 +76,27 @@ export default {
   },
   methods: {
     ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
-    handleGridResizing() {
-      this.scrollingTrue()
-
-      globalDebounce(() => {
-        this.LAYOUT_SET({ scrolling: false })
-      }, 150)
-    },
-    scrollingTrue: debounce(function() {
+    onScroll: throttle(function() {
       this.LAYOUT_SET({ scrolling: true })
+
+      this.scrollingEnd()
     }, 100),
-    updateScrollTop: debounce(function() {
+
+    scrollingEnd: debounce(function() {
+      this.LAYOUT_SET({ scrolling: false })
+
       if (this.isExample) return
       this.scrollTop = this.$el.scrollTop
-      this.$bus.$emit('art-board-scroll-top', this.scrollTop)
-    }, 100),
+      this.$bus.$emit('artBoardScrollTop', this.scrollTop)
+    }, 150),
+
     setBoundaryRect() {
-      const { height, width, x, y } = getRectWithoutPadding(this.$el)
+      const { clientWidth, clientHeight } = this.$el
 
       this.LAYOUT_SET({
-        windowWidth: width,
-        windowHeight: height,
-        windowX: x,
-        windowY: y
+        currentBreakpoint: findBreakpoint(this.breakpointsMap, clientWidth),
+        windowWidth: Math.round(clientWidth * this.scaleRatio),
+        windowHeight: Math.round(clientHeight * this.scaleRatio)
       })
     }
   }

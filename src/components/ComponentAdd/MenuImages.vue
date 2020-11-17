@@ -240,7 +240,7 @@ export default {
       this.APP_SET({ beingAddedComponentId: null })
     },
     addImage(data) {
-      this.$bus.$emit('image-add', this.assetHost + data.url)
+      this.$bus.$emit('imageAdd', this.assetHost + data.url)
       this.CLOSE_ASSET()
     },
     filterTagBySearching(value, { label, tag }) {

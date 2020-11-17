@@ -5,12 +5,10 @@ import { BREAK_POINTS_MAP } from '@/const'
 const state = {
   gridResizing: false,
   scrolling: false,
-  windowX: 0,
-  windowY: 0,
   windowWidth: 0,
   windowHeight: 0,
-  backgroundHeight: 0,
-  scaleRatio: 1
+  scaleRatio: 1,
+  currentBreakpoint: 'lg'
 }
 
 const mutations = {
@@ -25,9 +23,6 @@ const getters = {
   },
   descBreakpoints(state, getters) {
     return sortDescBreakpoint(Object.keys(getters.breakpointsMap))
-  },
-  currentBreakpoint({ windowWidth: width }, { breakpointsMap }) {
-    return findBreakpoint(breakpointsMap, width)
   },
   vh(state) {
     return state.windowHeight / 100

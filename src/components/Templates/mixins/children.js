@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     ...mapState('node', ['rootComponentSetIds', 'editingComponentSetId']),
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     node() {
       return this.nodesMap[this.id]
     },

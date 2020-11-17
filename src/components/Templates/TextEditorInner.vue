@@ -19,6 +19,7 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { arrayUniq } from '@/utils/array'
+import { resizeListener } from '@/utils/tool'
 import WebFont from 'webfontloader'
 import ContentEditable from '@/components/Components/ContentEditable'
 import propsMixin from './mixins/props'
@@ -42,7 +43,8 @@ export default {
     BIconCircleHalf
   },
   inject: {
-    isExample: { default: false }
+    isExample: { default: false },
+    gridItemAutoSize: { required: true }
   },
   mixins: [propsMixin],
   props: {
@@ -63,7 +65,8 @@ export default {
     return {
       editor: null,
       linkMenuIsActive: false,
-      element: null
+      element: null,
+      offResizeListener: null
     }
   },
   computed: {
@@ -145,8 +148,19 @@ export default {
       })
     }
   },
+  beforeDestroy() {
+    if (!this.offResizeListener) {
+      this.offResizeListener()
+    }
+  },
   mounted() {
     this.element = this.$refs.content.$el
+    this.gridItemAutoSize()
+    this.offResizeListener = resizeListener(this.element, () => {
+      requestAnimationFrame(() => {
+        this.gridItemAutoSize()
+      })
+    })
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),

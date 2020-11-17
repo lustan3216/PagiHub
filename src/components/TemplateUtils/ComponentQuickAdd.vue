@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { vmAddNodeToParent, vmCreateEmptyItem } from '@/utils/vmMap'
 import { getExample } from '@/templateJson/basic'
 import { cloneJson, getValueByPath } from '@/utils/tool'
@@ -91,7 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     node() {
       return this.nodesMap[this.id]
     },

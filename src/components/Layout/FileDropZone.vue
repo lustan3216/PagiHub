@@ -85,7 +85,7 @@ export default {
   computed: {
     ...mapState('user', ['userId']),
     ...mapState('node', ['editingProjectId']),
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     dropzone() {
       return this.$refs.dropzone
     }

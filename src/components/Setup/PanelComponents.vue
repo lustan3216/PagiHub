@@ -131,14 +131,14 @@ export default {
   },
   beforeMount() {
     this.renderTree()
-    this.$bus.$on('component-add-new', this.renderTree)
-    this.$bus.$on('component-delete', this.renderTree)
-    this.$bus.$on('component-update', this.renderTree)
+    this.$bus.$on('componentAddNew', this.renderTree)
+    this.$bus.$on('componentDelete', this.renderTree)
+    this.$bus.$on('componentUpdate', this.renderTree)
   },
   beforeDestroy() {
-    this.$bus.$off('component-add-new', this.renderTree)
-    this.$bus.$off('component-delete', this.renderTree)
-    this.$bus.$off('component-update', this.renderTree)
+    this.$bus.$off('componentAddNew', this.renderTree)
+    this.$bus.$off('componentDelete', this.renderTree)
+    this.$bus.$off('componentUpdate', this.renderTree)
   },
   methods: {
     ...mapMutations('app', [
@@ -208,7 +208,7 @@ export default {
     },
 
     async scrollIntoView(id) {
-      this.$bus.$emit('carousel-transition', false)
+      this.$bus.$emit('carouselTransition', false)
       await this.jumpToCorrectSliders(id)
 
       if (this.vmMap[id]) {
@@ -220,7 +220,7 @@ export default {
         })
 
         setTimeout(() => {
-          this.$bus.$emit('carousel-transition', true)
+          this.$bus.$emit('carouselTransition', true)
         }, 200)
       }
     },

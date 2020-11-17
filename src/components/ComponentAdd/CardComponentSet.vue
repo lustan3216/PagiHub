@@ -101,7 +101,7 @@ export default {
   methods: {
     shortTagName,
     closeTab() {
-      this.$bus.$emit('dialog-component-visible', false)
+      this.$bus.$emit('dialogComponentVisible', false)
     },
     replaceCurrentPage() {
       const background = this.componentSet.children[0]

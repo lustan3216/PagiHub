@@ -40,7 +40,7 @@ export default {
   computed: {
     ...mapState('layout', ['windowHeight']),
     ...mapGetters('app', ['selectedComponentNodes']),
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     canNotFixed() {
       return this.selectedComponentNodes.some(node => !isBackground(node.parentNode))
     },

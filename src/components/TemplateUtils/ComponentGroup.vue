@@ -8,7 +8,7 @@ import {
   getGroupPxRect,
   closestValidGrid
 } from '@/utils/node'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { BREAK_POINTS_ARRAY, GRID } from '@/const'
 import { group } from '@/templateJson/basic'
 import { vmRemoveNode } from '@/utils/vmMap'
@@ -18,7 +18,7 @@ import { toPrecision } from '@/utils/number'
 export default {
   name: 'ComponentGroup',
   computed: {
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     ...mapGetters('app', ['selectedComponentNodes']),
     canGroup() {
       let parentIds = this.selectedComponentNodes.map(node => node.parentId)

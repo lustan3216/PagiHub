@@ -45,7 +45,7 @@ export function getGroupPxRect(nodes) {
     maxY: 0
   }
 
-  const currentBreakpoint = store.getters['layout/currentBreakpoint']
+  const currentBreakpoint = store.state.layout.currentBreakpoint
 
   nodes.forEach(node => {
     const grid = closestValidGrid(node, currentBreakpoint)

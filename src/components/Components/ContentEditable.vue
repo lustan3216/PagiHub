@@ -1,5 +1,6 @@
 <template>
   <component
+    class="asd"
     ref="element"
     :is="tag"
     :contenteditable="contentEditable"
@@ -101,4 +102,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+  .asd {
+    transition: all 0.3s;
+  }
+</style>

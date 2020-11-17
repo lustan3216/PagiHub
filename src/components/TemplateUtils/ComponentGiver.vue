@@ -1,9 +1,7 @@
 <script>
-import AsyncComponent from '@/components/TemplateUtils/AsyncComponent'
-import { ObserveVisibility } from 'vue-observe-visibility'
-import { isComponentSet, isGrid, isGridItem } from '@/utils/node'
+import { isGridItem } from '@/utils/node'
 import { getValueByPath } from '@/utils/tool'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { STYLES } from '@/const'
 
 export default {
@@ -11,62 +9,43 @@ export default {
   inject: {
     isExample: { default: false }
   },
-  directives: {
-    ObserveVisibility
+  components: {
+    Group: () => import('../Templates/Group'),
+    Rectangle: () => import('../Templates/Rectangle'),
+    ComponentSet: () => import('../Templates/ComponentSet'),
+    FlexImage: () => import('../Templates/FlexImage'),
+    FlexButton: () => import('../Templates/FlexButton'),
+
+    Carousel: () => import('../Templates/Carousel'),
+    TextEditor: () => import('../Templates/TextEditor'),
+
+    Background: () => import('../Templates/Background'),
+
+    VideoPlayer: () => import('../Templates/VideoPlayer'),
+    Iframer: () => import('../Templates/Iframer')
+
+    // FormTextarea: () => import('../Templates/FormTextarea'),
+    // FormColorPicker: () => import('../Templates/FormColorPicker'),
+    // FormCheckbox: () => import('../Templates/FormCheckbox'),
+    // FormDatePicker: () => import('../Templates/FormDatePicker'),
+    // FormInput: () => import('../Templates/FormInput'),
+    // FormNumber: () => import('../Templates/FormNumber'),
+    // FormRadio: () => import('../Templates/FormRadio'),
+    // FormRate: () => import('../Templates/FormRate'),
+    // FormSelect: () => import('../Templates/FormSelect'),
+    // FormSlider: () => import('../Templates/FormSlider'),
+    // FormSubmit: () => import('../Templates/FormSubmit'),
+    // FormSwitch: () => import('../Templates/FormSwitch'),
+    // FormTimePicker: () => import('../Templates/FormTimePicker')
   },
   props: {
     id: {
       type: String,
       required: true
-    },
-    onceObserve: {
-      type: Boolean,
-      default: true
-    },
-    controller: {
-      type: Boolean,
-      default: true
-    }
-  },
-  data() {
-    return {
-      vIf: false,
-      options: null
-    }
-  },
-  created() {
-    if (!this.isExample && this.isDraftMode) {
-      this.vIf = true
-      this.options = false
-    }
-    else {
-      const node = this.nodesMap[this.id]
-
-      const options = {
-        once: this.onceObserve || this.isExample,
-        callback: isVisible => {
-          this.vIf = isVisible
-        },
-        intersection: {
-          root: this.isExample
-            ? document.getElementById(`example-${node.rootComponentSetId}`)
-            : document.getElementById('art-board'),
-          rootMargin: '300px 0px 0px 300px'
-        }
-      }
-
-      const thirdLayer = getValueByPath(
-        node,
-        'parentNode.parentNode.parentNode'
-      )
-      const isThirdLayer = isComponentSet(thirdLayer)
-
-      this.vIf = !isThirdLayer
-      this.options = isThirdLayer ? options : false
     }
   },
   computed: {
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     visible() {
       return this.node && !this.hidden
     },
@@ -88,39 +67,8 @@ export default {
     if (!this.visible) {
       return
     }
-    const vnode = null
 
-    // if (!this.controller || isGrid(this.node) || isComponentSet(this.node)) {
-    //   vnode =
-    // }
-    // else {
-    //   const scopedSlots = {}
-    //
-    //   if (this.vIf) {
-    //     scopedSlots.default = ref => {
-    //       return h(AsyncComponent, {
-    //         key: this.id,
-    //         props: {
-    //           id: this.id,
-    //           editing: ref.itemEditing
-    //         }
-    //       })
-    //     }
-    //   }
-    //
-    //   vnode = h(ControllerLayer, {
-    //     attrs: { id: this.id },
-    //     directives: [
-    //       {
-    //         name: 'observe-visibility',
-    //         value: this.options
-    //       }
-    //     ],
-    //     scopedSlots
-    //   })
-    // }
-
-    return h(AsyncComponent, {
+    return h(this.node.tag, {
       key: this.id,
       props: {
         id: this.id

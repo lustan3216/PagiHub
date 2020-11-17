@@ -4,6 +4,7 @@ import getValueByPath from 'lodash.get'
 import setValueByPath from 'lodash.set'
 import unsetValueByPath from 'lodash.unset'
 import debounce from 'lodash.debounce'
+import throttle from 'lodash.throttle'
 import { isArray } from '@/utils/array'
 import DeepMerge from 'deepmerge'
 import { objectHasAnyKey } from '@/utils/object'
@@ -18,6 +19,7 @@ export {
   setValueByPath,
   unsetValueByPath,
   debounce,
+  throttle,
   on,
   off,
   isUndefined

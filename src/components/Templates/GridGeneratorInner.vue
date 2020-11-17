@@ -1,20 +1,18 @@
 <template>
   <!--  data-addable-id 不能刪，add element要用的-->
-  <!-- :id 不能刪， 要印在dom上，data-image-droppable or data-droppable會用 -->
   <vue-grid-generator
     ref="gridGenerator"
     v-bind="innerProps"
     :id="id"
     :layout="layout"
-    :col-num="windowWidth"
     :vertical-compact="false"
     :is-droppable="isDroppable && isDraftMode"
     :is-draggable="isDraftMode"
     :is-resizable="isDraftMode"
-    :auto-extend-height="autoExtendHeight"
+    :extendable-height="extendableHeight"
     :extra-style="extraStyle"
-    :data-addable-id="id"
     :data-droppable="isDroppable ? '' : undefined"
+    data-addable
     @drop="handleDrop"
     @layout-updated="layoutUpdated($event)"
   >
@@ -46,11 +44,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
-import { getValueByPath } from '@/utils/tool'
+import { getValueByPath, resizeListener } from '@/utils/tool'
 import { isGroup, traversalSelfAndChildren } from '@/utils/node'
 import EventController from '../TemplateUtils/EventController'
 import { horizontalUnitConvert, verticalUnitConvert } from '@/utils/layout'
@@ -70,7 +68,8 @@ export default {
     }
   },
   inject: {
-    isExample: { default: false }
+    isExample: { default: false },
+    gridItemAutoSize: { required: true }
   },
   props: {
     id: {
@@ -93,7 +92,11 @@ export default {
       type: Boolean,
       default: false
     },
-    autoExtendHeight: {
+    autoResize: {
+      type: Boolean,
+      default: false
+    },
+    extendableHeight: {
       type: Boolean,
       default: true
     },
@@ -105,19 +108,28 @@ export default {
   data() {
     return {
       layouts: {},
-      element: null
+      element: null,
+      offResizeListener: null
     }
   },
   computed: {
     ...mapState('app', ['isAdding']),
-    ...mapState('layout', ['windowWidth']),
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     layout() {
       return Object.values(this.layouts)
     }
   },
   mounted() {
     this.element = this.$el
+    this.gridItemAutoSize()
+    if (this.autoResize) {
+      this.$watch('$refs.gridGenerator.width', () => {
+        this.gridItemAutoSize()
+      })
+      this.$watch('$refs.gridGenerator.height', () => {
+        this.gridItemAutoSize()
+      })
+    }
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),

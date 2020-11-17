@@ -15,40 +15,34 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import toolMixin from '@/components/Templates/mixins/tool'
 import propsMixin from '@/components/Templates/mixins/props'
 // childrenMixin 要拿來新增刪除小孩的
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridGeneratorInner from './GridGeneratorInner'
-import { resizeListener } from '@/utils/tool'
 
 export default {
   name: 'Background',
   components: {
     GridGeneratorInner
   },
-  mixins: [toolMixin, propsMixin, childrenMixin],
-  data() {
+  provide() {
     return {
-      offResizeListener: null
+      gridItemAutoSize: () => {},
+      boundaryRect: {
+        px: {
+          w: 0,
+          h: 0,
+          x: 0,
+          y: 0
+        }
+      }
     }
   },
+  mixins: [toolMixin, propsMixin, childrenMixin],
   computed: {
     ...mapState('app', ['isAdding'])
-  },
-  mounted() {
-    this.offResizeListener = resizeListener(this.$el, () => {
-      this.LAYOUT_SET({
-        backgroundHeight: parseInt(this.$el.clientHeight)
-      })
-    })
-  },
-  beforeDestroy() {
-    this.offResizeListener()
-  },
-  methods: {
-    ...mapMutations('layout', { LAYOUT_SET: 'SET' })
   }
 }
 </script>

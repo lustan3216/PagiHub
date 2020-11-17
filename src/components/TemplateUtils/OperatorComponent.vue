@@ -74,21 +74,19 @@ export default {
       'editingPath',
       'isAdding'
     ]),
-    ...mapState('layout', ['gridResizing', 'windowHeight', 'windowY', 'scaleRatio', 'scrolling']),
+    ...mapState('layout', ['gridResizing', 'windowHeight', 'scaleRatio', 'scrolling']),
     ...mapGetters('app', ['selectedComponentNodes']),
     styles() {
       return {
-        transform: `translate(${Math.round(this.rect.x / this.scaleRatio)}px, ${Math.round(this.rect.y / this.scaleRatio)}px`,
-        width: Math.round(this.rect.width / this.scaleRatio) + 'px',
-        height: Math.round(this.rect.height / this.scaleRatio) + 'px',
+        transform: `translate(${Math.round(this.rect.x / this.scaleRatio)}px, ${Math.round(this.rect.y / this.scaleRatio)}px)`,
+        width: Math.round(this.rect.w / this.scaleRatio) + 'px',
+        height: Math.round(this.rect.h / this.scaleRatio) + 'px',
         zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
     },
     zIndex() {
       // w h 越小 zindex越大
-      const vm = vmGet(this.id)
-      const { pxW = 0, pxH = 0 } = vm
-      const index = Math.floor((30000 - pxW - pxH) / 100)
+      const index = Math.floor((30000 - this.rect.w - this.rect.h) / 100)
       return this.selected ? index * 2 : index
     },
     resizeHandler() {
@@ -194,19 +192,20 @@ export default {
         if (!this.dragEventSet) {
           this.dragEventSet = true
           this.interactObj.on('dragstart dragmove dragend', event => {
-            switch (event.type) {
-              case 'dragstart':
-                this.$emit('moveStart')
-                break
-              case 'dragmove':
-                this.$emit('move')
-                break
-              case 'resizeend':
-                this.$emit('moved')
-                break
-            }
-
-            this.$bus.$emit(`handle-drag-${this.id}`, event)
+            requestAnimationFrame(() => {
+              switch (event.type) {
+                case 'dragstart':
+                  this.$emit('move-start')
+                  break
+                case 'dragmove':
+                  this.$emit('move')
+                  break
+                case 'resizeend':
+                  this.$emit('moved')
+                  break
+              }
+              this.$bus.$emit(`handleDrag-${this.id}`, event)
+            })
           })
         }
       }
@@ -232,19 +231,20 @@ export default {
         if (!this.resizeEventSet) {
           this.resizeEventSet = true
           this.interactObj.on('resizestart resizemove resizeend', event => {
-            switch (event.type) {
-              case 'resizestart':
-                this.$emit('resizeStart')
-                break
-              case 'resizemove':
-                this.$emit('resize')
-                break
-              case 'resizeend':
-                this.$emit('resized')
-                break
-            }
-
-            this.$bus.$emit(`handle-resize-${this.id}`, event)
+            requestAnimationFrame(() => {
+              switch (event.type) {
+                case 'resizestart':
+                  this.$emit('resize-start')
+                  break
+                case 'resizemove':
+                  this.$emit('resize')
+                  break
+                case 'resizeend':
+                  this.$emit('resized')
+                  break
+              }
+              this.$bus.$emit(`handleResize-${this.id}`, event)
+            })
           })
         }
       }

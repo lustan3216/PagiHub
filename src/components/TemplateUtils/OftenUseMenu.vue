@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { vmCreateEmptyItem, vmGet } from '@/utils/vmMap'
 import {
   BIconFonts,
@@ -54,7 +54,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     node() {
       return this.nodesMap[this.id]
     },

@@ -60,11 +60,6 @@ export default {
       width: 260
     }
   },
-  created() {
-    this.$bus.$on('open-panel-asset', () => {
-      this.activePanel = 'PanelAsset'
-    })
-  },
   mounted() {
     interactjs(this.$el).resizable({
       edges: { left: false, right: true, bottom: false, top: false },

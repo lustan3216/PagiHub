@@ -188,6 +188,14 @@
         default: 'a, button'
       }
     },
+    provide() {
+      return {
+        boundaryRect: {
+          px: this.instantPx
+        },
+        gridItemAutoSize: this.autoSize
+      }
+    },
     inject: {
       eventBus: {
         required: true
@@ -222,7 +230,13 @@
         innerY: this.y,
         innerW: this.w,
         innerH: this.h,
-        lockBottomInLayout: false
+        lockBottomInLayout: false,
+        instantPx: {
+          w: 0,
+          h: 0,
+          x: 0,
+          y: 0,
+        }
       }
     },
     beforeMount() {
@@ -248,16 +262,27 @@
         }
       }
 
-      this.$bus.$on(`handle-resize-${this.i}`, this.handleResize)
-      this.$bus.$on(`handle-drag-${this.i}`, this.handleDrag)
+      this.instantPx.x = Math.floor(this.x * this.colX)
+      this.instantPx.y = Math.floor(this.y * this.colY)
+      this.instantPx.h = Math.floor(this.h * this.colHeight)
+      this.instantPx.w = Math.floor(this.w * this.colWidth)
+
+      this.$bus.$on(`handleResize-${this.i}`, this.handleResize)
+      this.$bus.$on(`handleDrag-${this.i}`, this.handleDrag)
       this.eventBus.$on('compact', self.compactHandler)
       this.eventBus.$on('setDraggable', self.setDraggableHandler)
       this.eventBus.$on('setResizable', self.setResizableHandler)
     },
+    updated() {
+      this.instantPx.x = Math.floor(this.x * this.colX)
+      this.instantPx.y = Math.floor(this.y * this.colY)
+      this.instantPx.h = Math.floor(this.h * this.colHeight)
+      this.instantPx.w = Math.floor(this.w * this.colWidth)
+    },
     beforeDestroy: function() {
       //Remove listeners
-      this.$bus.$off(`handle-drag-${this.i}`, this.handleDrag)
-      this.$bus.$off(`handle-resize-${this.i}`, this.handleResize)
+      this.$bus.$off(`handleDrag-${this.i}`, this.handleDrag)
+      this.$bus.$off(`handleResize-${this.i}`, this.handleResize)
       this.eventBus.$off('compact', this.compactHandler)
       this.eventBus.$off('setDraggable', this.setDraggableHandler)
       this.eventBus.$off('setResizable', this.setResizableHandler)
@@ -266,7 +291,7 @@
       }
     },
     mounted: function() {
-      this.lockBottomInLayout = !this.parent.autoExtendHeight
+      this.lockBottomInLayout = !this.parent.extendableHeight
 
       if (this.isDraggable === null) {
         this.draggable = this.parent.isDraggable
@@ -280,11 +305,6 @@
       }
 
       this.createStyle()
-      this.$nextTick(() => {
-        if (this.autoResizeHeight) {
-          this.autoSize()
-        }
-      })
     },
     watch: {
       isDragging(value) {
@@ -310,11 +330,11 @@
       isResizable: function() {
         this.resizable = this.isResizable
       },
-      triggerCreateStyle() {
-        this.$nextTick(() => {
-          this.autoSize()
+      instantPx: {
+        handler() {
           this.createStyle()
-        })
+        },
+        deep: true
       },
       windowHeight() {
         if (this.fixed && (this.pxY + this.pxH > this.windowHeight)) {
@@ -331,7 +351,7 @@
       containerWidth: function() {
         this.tryMakeResizable()
         this.createStyle()
-        this.emitContainerResized()
+        // this.emitContainerResized()
 
         if (this.ratio) {
 
@@ -339,20 +359,20 @@
       },
       x: function(newVal) {
         this.innerX = newVal
-        this.createStyle()
+        // this.createStyle()
       },
       y: function(newVal) {
         this.innerY = newVal
-        this.createStyle()
+        // this.createStyle()
       },
       h: function(newVal, old) {
         this.innerH = newVal
-        this.createStyle()
+        // this.createStyle()
         // this.emitContainerResized();
       },
       w: function(newVal) {
         this.innerW = newVal
-        this.createStyle()
+        // this.createStyle()
         // this.emitContainerResized();
       },
       minH: function() {
@@ -373,9 +393,6 @@
       ...mapState('layout', ['scaleRatio', 'windowHeight']),
       ...mapGetters('layout', ['vw', 'vh']),
       // Helper for generating column width
-      triggerCreateStyle() {
-        return [this.colX, this.colY, this.colHeight, this.colWidth].join(' ')
-      },
       containerHeight() {
         return this.parent.height
       },
@@ -530,6 +547,7 @@
           }
           styleProps[prop] = matches[1]
         }
+
         this.$emit('container-resized', this.i, this.h, this.w, styleProps.height, styleProps.width)
       },
       handleResize: function(event) {
@@ -782,8 +800,8 @@
           // 0 * Infinity === NaN, which causes problems with resize constriants;
           // Fix this if it occurs.
           // Note we do it here rather than later because Math.floor(Infinity) causes deopt
-          width: w === Infinity ? w : Math.floor(this.colWidth * w),
-          height: h === Infinity ? h : Math.floor(this.colHeight * h)
+          width: Math.floor(this.colWidth * w),
+          height: Math.floor(this.colHeight * h)
         }
       },
       /**
@@ -943,60 +961,59 @@
       },
       autoSize() {
         // ok here we want to calculate if a resize is needed
+
         // if (process.env.NODE_ENV !== 'production') {
-        //   console.warn('autoSize')
+        //   console.trace('autoSize')
         // }
-        if (!this.autoResizeHeight) {
-          return
-        }
 
-        this.previousW = this.innerW
-        this.previousH = this.innerH
+        requestAnimationFrame(() => {
+          this.previousW = this.innerW
+          this.previousH = this.innerH
 
 
-        const { elm } = this.$slots.default[0]
+          const { elm } = this.$slots.default[0]
 
-        const styles = window.getComputedStyle(elm.parentNode)
-        const padding = parseFloat(styles['paddingTop']) +
-                       parseFloat(styles['paddingBottom'])
+          const styles = window.getComputedStyle(elm.parentNode)
+          const padding = parseFloat(styles['paddingTop'] || 0) +
+                          parseFloat(styles['paddingBottom'] || 0)
 
-        // elm.parentNode 這裡要拿到gridInnerItem裡面的div, 有padding的那層
+          // elm.parentNode 這裡要拿到gridInnerItem裡面的div, 有padding的那層
 
-        const height = elm.offsetHeight + padding
-        const width = elm.clientWidth
-        let pos = this.calcWH(height, width)
-        // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
-        if (pos.w < this.minW) {
-          pos.w = this.minW
-        }
-        if (pos.w > this.maxW) {
-          pos.w = this.maxW
-        }
-        if (pos.h < this.minH) {
-          pos.h = this.minH
-        }
-        if (pos.h > this.maxH) {
-          pos.h = this.maxH
-        }
+          const height = elm.offsetHeight + padding
+          const width = elm.clientWidth
+          let pos = this.calcWH(height, width)
+          // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)
+          if (pos.w < this.minW) {
+            pos.w = this.minW
+          }
+          if (pos.w > this.maxW) {
+            pos.w = this.maxW
+          }
+          if (pos.h < this.minH) {
+            pos.h = this.minH
+          }
+          if (pos.h > this.maxH) {
+            pos.h = this.maxH
+          }
 
-        if (pos.h < 1) {
-          pos.h = 1
-        }
-        if (pos.w < 1) {
-          pos.w = 1
-        }
+          if (pos.h < 1) {
+            pos.h = 1
+          }
+          if (pos.w < 1) {
+            pos.w = 1
+          }
 
-        // this.lastW = x; // basically, this is copied from resizehandler, but shouldn't be needed
-        // this.lastH = y;
+          // this.lastW = x; // basically, this is copied from resizehandler, but shouldn't be needed
+          // this.lastH = y;
 
-        if (this.innerW !== pos.w || this.innerH !== pos.h) {
-          this.$emit('resize', this.i, pos.h, pos.w, height, width)
-        }
-        if (this.previousW !== pos.w || this.previousH !== pos.h) {
-          this.$emit('resized', this.i, pos.h, pos.w, height, width)
-          this.$emit('autoSized', this.i, pos.h, pos.w, height, width)
-          this.eventBus.$emit('resizeEvent', 'autoSize', this.i, this.innerX, this.innerY, pos.h, this.innerW)
-        }
+          if (this.innerW !== pos.w || this.innerH !== pos.h) {
+            this.$emit('resize', this.i, pos.h, pos.w, height, width)
+          }
+          if (this.previousW !== pos.w || this.previousH !== pos.h) {
+            this.$emit('resized', this.i, pos.h, pos.w, height, width)
+            this.eventBus.$emit('resizeEvent', 'autoSize', this.i, this.innerX, this.innerY, pos.h, this.innerW)
+          }
+        })
       }
     }
   }

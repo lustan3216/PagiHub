@@ -52,13 +52,9 @@
     },
     props: {
       // If true, the container height swells and contracts to fit contents
-      autoExtendHeight: {
+      extendableHeight: {
         type: Boolean,
         default: true
-      },
-      colNum: {
-        type: Number,
-        default: 12
       },
       isDraggable: {
         type: Boolean,
@@ -170,7 +166,9 @@
           self.updateHeight()
           self.onWindowResize()
           const off1 = resizeListener(self.$refs.item, () => {
-            requestAnimationFrame(self.onWindowResize)
+            requestAnimationFrame(() => {
+              self.onWindowResize()
+            })
           })
 
           this.offListeners.push(off1)
@@ -222,12 +220,9 @@
           this.eventBus.$emit('updateHeight', newval)
         })
       },
-      layout: function() {
-        this.layoutUpdate()
-      },
-      colNum: function(val) {
-        this.eventBus.$emit('setColNum', val)
-      },
+      // layout: function() {
+      //   this.layoutUpdate()
+      // },
       isDraggable: function() {
         this.eventBus.$emit('setDraggable', this.isDraggable)
       },
@@ -294,6 +289,7 @@
         }
       },
       layoutUpdate() {
+        console.log(123)
         if (this.layout !== undefined && this.originalLayout !== null) {
           if (this.layout.length !== this.originalLayout.length) {
             // console.log("### LAYOUT UPDATE!", this.layout.length, this.originalLayout.length);
@@ -319,7 +315,7 @@
           this.calcPx()
           corretHorizontalBounds(this.layout, this.width)
           compact(this.layout, this.verticalCompact)
-          this.eventBus.$emit('updateWidth', this.width)
+          this.eventBus.$emit('compact', this.width)
           // lots-design
           this.updateHeight()
 
@@ -349,7 +345,7 @@
         })
       },
        containerHeight: function() {
-        if (this.autoExtendHeight) {
+        if (this.extendableHeight) {
           const containerHeight = bottom(this.layout) + 'px'
           return containerHeight
         }
@@ -362,6 +358,7 @@
       dragEvent: function(eventName, id, x, y, h, w) {
         //console.log(eventName + " id=" + id + ", x=" + x + ", y=" + y);
         this.calcPx()
+
         corretHorizontalBounds(this.layout, this.width)
         let l = getLayoutItem(this.layout, id)
         //GetLayoutItem sometimes returns null object
@@ -390,15 +387,15 @@
             this.isDragging = false
           })
         }
-
         // Move the element to the dragged location.
         this.layout = moveElement(this.layout, l, x, y, true, l.verticalCompact || this.preventCollision)
-        // compact(this.layout, this.verticalCompact)
+        compact(this.layout, this.verticalCompact)
 
         // needed because vue can't detect changes on array element properties
         this.eventBus.$emit('compact')
         // lots-design
         this.updateHeight()
+
         if (eventName === 'dragend') this.$emit('layout-updated', this.layout)
       },
       resizeEvent: function(eventName, id, x, y, h, w) {
@@ -465,7 +462,6 @@
         this.eventBus.$emit('compact')
         // lots-design
         this.updateHeight()
-
         if (eventName === 'resizeend') {
           this.$emit('layout-updated', this.layout)
         }

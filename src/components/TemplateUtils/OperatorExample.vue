@@ -120,8 +120,8 @@ export default {
     styles() {
       return {
         transform: `translate(${Math.round(this.rect.x / this.scale)}px, ${Math.round(this.rect.y / this.scale)}px`,
-        width: Math.round(this.rect.width / this.scale) + 'px',
-        height: Math.round(this.rect.height / this.scale) + 'px',
+        width: Math.round(this.rect.w / this.scale) + 'px',
+        height: Math.round(this.rect.h / this.scale) + 'px',
         zIndex: this.selected ? this.zIndex + 1 : this.zIndex
       }
     },
@@ -208,8 +208,8 @@ export default {
       }, 50)
     },
     copy() {
-      this.$bus.$emit('node-tree-add', cloneJson(this.node))
-      this.$bus.$emit('dialog-component-visible', false)
+      this.$bus.$emit('nodeTreeAdd', cloneJson(this.node))
+      this.$bus.$emit('dialogComponentVisible', false)
     }
   }
 }

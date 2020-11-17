@@ -66,6 +66,7 @@
           :indicator-position="hasIndicator"
           :class="{ indicatorTop, indicatorLeft }"
           :arrow="arrow"
+          :autoplay="inViewPort ? innerProps.autoplay : false"
           draggable="false"
           class="wh-100"
           @change="checkSelectedComponent"
@@ -105,7 +106,7 @@ import GridGeneratorItem from './GridGeneratorItem'
 import Carousel from '@/vendor/element-ui/Carousel'
 import CarouselItem from '@/vendor/element-ui/CarouselItem'
 import { defaultSetting } from '../Setup/EditorSetting/SettingCarousel'
-import { isCarousel, traversalChildren, isSlider, traversalSelfAndChildren } from '@/utils/node'
+import { isCarousel, traversalChildren, isSlider } from '@/utils/node'
 import { vmCreateEmptyItem, vmRemoveNode } from '@/utils/vmMap'
 import { getValueByPath } from '@/utils/tool'
 import { findIndexBy } from '@/utils/array'
@@ -139,7 +140,7 @@ export default {
   },
   computed: {
     ...mapState('app', ['selectedComponentIds', 'isAdding', 'editingPath']),
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     ...mapState('layout', ['scrolling']),
     disabledSliderButton() {
       let show = this.selected || this.editing
@@ -273,10 +274,10 @@ export default {
       }
     })
 
-    this.$bus.$on('carousel-transition', this.setAnimation)
+    this.$bus.$on('carouselTransition', this.setAnimation)
   },
   beforeDestroy() {
-    this.$bus.$on('carousel-transition', this.setAnimation)
+    this.$bus.$on('carouselTransition', this.setAnimation)
   },
   methods: {
     ...mapMutations('app', [

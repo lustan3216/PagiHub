@@ -92,6 +92,7 @@ import {
 } from '@/utils/node'
 import { vmGet } from '@/utils/vmMap'
 import { verticalUnitConvert, horizontalUnitConvert } from '@/utils/layout'
+import { getDomById } from '@/utils/domNode'
 
 export default {
   name: 'Align',
@@ -108,8 +109,8 @@ export default {
   computed: {
     ...mapState('app', ['selectedComponentIds']),
     ...mapGetters('app', ['selectedComponentNodes']),
-    ...mapGetters('layout', ['currentBreakpoint']),
-    ...mapState('layout', ['windowWidth', 'backgroundHeight']),
+    ...mapState('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['windowWidth']),
     sameParent() {
       const ids = this.selectedComponentNodes.map(node => node.parentId)
       return arrayUniq(ids).length === 1
@@ -125,38 +126,6 @@ export default {
 
       return node
     },
-    parentHeight() {
-      return verticalUnitConvert(
-        this.gridParent.id,
-        this.validParentGrid.h,
-        this.validParentGrid.unitH,
-        'px'
-      )
-    },
-    parentWidth() {
-      return horizontalUnitConvert(
-        this.gridParent.id,
-        this.validParentGrid.w,
-        this.validParentGrid.unitW,
-        'px'
-      )
-    },
-    validParentGrid() {
-      if (isBackground(this.gridParent)) {
-        return {
-          x: 0,
-          y: 0,
-          w: this.windowWidth,
-          h: this.backgroundHeight,
-          unitH: 'px',
-          unitW: 'px',
-          unitX: 'px',
-          unitY: 'px'
-        }
-      }
-
-      return closestValidGrid(this.gridParent, this.currentBreakpoint)
-    },
     theSingleNode() {
       if (this.isSingleNode) return this.selectedComponentNodes[0]
     },
@@ -169,6 +138,40 @@ export default {
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),
+    parentHeight() {
+      const parentGrid = this.validParentGrid()
+      return verticalUnitConvert(
+        this.gridParent.id,
+        parentGrid.h,
+        parentGrid.unitH,
+        'px'
+      )
+    },
+    parentWidth() {
+      const parentGrid = this.validParentGrid()
+      return horizontalUnitConvert(
+        this.gridParent.id,
+        parentGrid.w,
+        parentGrid.unitW,
+        'px'
+      )
+    },
+    validParentGrid() {
+      if (isBackground(this.gridParent)) {
+        return {
+          x: 0,
+          y: 0,
+          w: this.windowWidth,
+          h: getDomById(this.gridParent.id).style.clientHeight,
+          unitH: 'px',
+          unitW: 'px',
+          unitX: 'px',
+          unitY: 'px'
+        }
+      }
+
+      return closestValidGrid(this.gridParent, this.currentBreakpoint)
+    },
     recordStore(id, key, value) {
       const vm = vmGet(id)
 
@@ -205,7 +208,7 @@ export default {
     alignMiddle() {
       if (this.isSingleNode) {
         const value =
-          this.parentHeight / 2 - vmGet(this.theSingleNode.id).pxH / 2
+          this.parentHeight() / 2 - vmGet(this.theSingleNode.id).pxH / 2
         this.recordStore(this.theSingleNode.id, 'y', value)
       }
       else {
@@ -225,7 +228,7 @@ export default {
     },
     alignBottom() {
       if (this.isSingleNode) {
-        const value = this.parentHeight - vmGet(this.theSingleNode.id).pxH
+        const value = this.parentHeight() - vmGet(this.theSingleNode.id).pxH
         this.recordStore(this.theSingleNode.id, 'y', value)
       }
       else {
@@ -260,7 +263,7 @@ export default {
     alignCenter() {
       if (this.isSingleNode) {
         const value =
-          this.parentWidth / 2 - vmGet(this.theSingleNode.id).pxW / 2
+          this.parentWidth() / 2 - vmGet(this.theSingleNode.id).pxW / 2
         this.recordStore(this.theSingleNode.id, 'x', value)
       }
       else {
@@ -280,7 +283,7 @@ export default {
     },
     alignEnd() {
       if (this.isSingleNode) {
-        const value = this.parentWidth - vmGet(this.theSingleNode.id).pxW
+        const value = this.parentWidth() - vmGet(this.theSingleNode.id).pxW
         this.recordStore(this.theSingleNode.id, 'x', value)
       }
       else {

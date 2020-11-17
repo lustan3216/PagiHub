@@ -21,13 +21,13 @@ const state = {
 
 const callbacks = {
   componentAddNew(node) {
-    this._vm.$bus.$emit('component-add-new', node)
+    this._vm.$bus.$emit('componentAddNew', node)
   },
   componentDelete(node) {
-    this._vm.$bus.$emit('component-delete', node)
+    this._vm.$bus.$emit('componentDelete', node)
   },
   componentUpdate(tree, key, value) {
-    this._vm.$bus.$emit('component-update', tree, key, value)
+    this._vm.$bus.$emit('componentUpdate', tree, key, value)
   }
 }
 

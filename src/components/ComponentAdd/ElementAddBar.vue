@@ -159,7 +159,7 @@ export default {
   computed: {
     ...mapState('asset', ['images']),
     ...mapState('app', ['beingAddedComponentId', 'isAdding']),
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     ...mapGetters('app', ['selectedComponentNodes']),
     options() {
       return [
@@ -222,12 +222,12 @@ export default {
       startX = evt.oe.clientX
       startY = evt.oe.clientY
 
-      const element = evt.oe.path.find(node => node.dataset.addableId)
+      const element = evt.oe.path.find(node => node.dataset.addable === '')
       const { x, y, width } = element.getBoundingClientRect()
       originX = x
       originY = y
       originW = width
-      this.APP_SET({ beingAddedComponentId: element.dataset.addableId })
+      this.APP_SET({ beingAddedComponentId: element.id })
     })
 
     this.selection.on('stop', evt => {
@@ -263,14 +263,14 @@ export default {
 
     this.selection.disable()
 
-    this.$bus.$on('art-board-scroll-top', this.updateScrollTop)
-    this.$bus.$on('image-add', this.addImage)
-    this.$bus.$on('node-tree-add', this.addNodeTree)
+    this.$bus.$on('artBoardScrollTop', this.updateScrollTop)
+    this.$bus.$on('imageAdd', this.addImage)
+    this.$bus.$on('nodeTreeAdd', this.addNodeTree)
   },
   beforeDestroy() {
-    this.$bus.$off('art-board-scroll-top', this.updateScrollTop)
-    this.$bus.$off('image-add', this.addImage)
-    this.$bus.$off('node-tree-add', this.addNodeTree)
+    this.$bus.$off('artBoardScrollTop', this.updateScrollTop)
+    this.$bus.$off('imageAdd', this.addImage)
+    this.$bus.$off('nodeTreeAdd', this.addNodeTree)
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),

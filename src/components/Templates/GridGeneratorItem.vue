@@ -1,7 +1,9 @@
 <template>
   <vue-grid-item
+    v-observe-visibility="options"
     v-if="!hidden"
     ref="gridItem"
+    :id="id"
     :i="computedLayout.i"
     :x="computedLayout.x"
     :y="computedLayout.y"
@@ -22,7 +24,6 @@
     :vertical-compact="computedLayout.verticalCompact"
     :class="{ 'no-action': lock }"
     :auto-resize-height="autoResizeHeight"
-    @autoSized="autoSized"
     @moved="moved"
   >
     <div
@@ -36,23 +37,25 @@
       }"
       class="border-box over-hidden"
     >
-      <i
-        v-shortkey.push="['alt']"
-        v-if="moving"
-        @shortkey="pressAltKey = !$event.keyup"
-      />
+      <template v-if="inViewPort">
+        <i
+          v-shortkey.push="['alt']"
+          v-if="moving"
+          @shortkey="pressAltKey = !$event.keyup"
+        />
 
-      <event-controller
-        v-if="needController && $el"
-        :id="id"
-        :element="$el"
-        @mousedown="mousedown"
-        @mouseup="moved"
-      >
-        <slot />
-      </event-controller>
+        <event-controller
+          v-if="needController && $el"
+          :id="id"
+          :element="$el"
+          @mousedown="mousedown"
+          @mouseup="moved"
+        >
+          <slot />
+        </event-controller>
 
-      <slot v-else />
+        <slot v-else />
+      </template>
     </div>
   </vue-grid-item>
 </template>
@@ -65,11 +68,12 @@ import childrenMixin from './mixins/children'
 import EventController from '../TemplateUtils/EventController'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
-import { cloneJson, getValueByPath, resizeListener } from '@/utils/tool'
+import { cloneJson, getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 import { closestValidBreakpoint, isBackground } from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
 import { appendIds } from '@/utils/nodeId'
+import { ObserveVisibility } from 'vue-observe-visibility'
 
 export default {
   name: 'GridGeneratorItem',
@@ -93,10 +97,18 @@ export default {
       default: false
     }
   },
+  directives: {
+    ObserveVisibility
+  },
   data() {
     return {
+      inViewPort: false,
+      options: {
+        callback: isVisible => {
+          this.inViewPort = isVisible
+        }
+      },
       exampleBoundary: 'xs',
-      offResizeListener: null,
       layout: {},
       duplicateNode: null,
       pressAltKey: false,
@@ -104,13 +116,13 @@ export default {
     }
   },
   computed: {
+    ...mapState('layout', ['currentBreakpoint']),
     ...mapState('app', [
       'beingAddedComponentId',
       'isAdding',
       'selectedComponentIds'
     ]),
     ...mapGetters('layout', [
-      'currentBreakpoint',
       'breakpointsMap',
       'descBreakpoints',
       'vh'
@@ -250,14 +262,6 @@ export default {
     }
   },
   watch: {
-    node: {
-      handler() {
-        if (this.autoResizeHeight) {
-          this.$refs.gridItem.autoSize()
-        }
-      },
-      deep: true
-    },
     computedLayout: {
       handler(value) {
         // 一定要轉成data，不然第一次computed 會因為不能assign值出bug
@@ -299,7 +303,6 @@ export default {
       const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
       this.exampleBoundary = closestValidBreakpoint(this.node, currentPoint)
     }
-    this.handleAutoHeight()
   },
   beforeDestroy() {
     this.$delete(this.layouts, this.id)
@@ -310,19 +313,6 @@ export default {
   },
   methods: {
     ...mapActions('node', ['record']),
-    handleAutoHeight() {
-      if (this.autoResizeHeight) {
-        this.offResizeListener = resizeListener(this.$refs.content, () => {
-          requestAnimationFrame(() => {
-            this.$refs.gridItem.autoSize()
-          })
-        })
-      }
-      else if (this.offResizeListener) {
-        this.offResizeListener()
-        this.offResizeListener = null
-      }
-    },
     mousedown(event) {
       this.prepareDuplicateNode()
       this.moving = true
@@ -343,11 +333,6 @@ export default {
       }
       else {
         this.$set(this.layouts, this.id, this.layout)
-      }
-    },
-    autoSized() {
-      if (this.isDraftMode) {
-        this.$bus.$emit('operator-get-rect')
       }
     },
     moved() {

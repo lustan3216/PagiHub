@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { getValueByPath } from '@/utils/tool'
 import { STYLES } from '@/const'
 
@@ -34,7 +34,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     node() {
       return this.nodesMap[this.id]
     },

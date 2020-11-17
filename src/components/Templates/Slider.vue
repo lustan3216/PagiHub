@@ -6,7 +6,7 @@
     :id="id"
     :inner-props="innerProps"
     :inner-styles="innerStyles"
-    :auto-extend-height="false"
+    :extendable-height="false"
     controller
   />
 </template>

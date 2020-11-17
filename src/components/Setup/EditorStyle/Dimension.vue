@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import Tip from '@/components/Tip/TipPopper'
 import SelectUnit from '@/components/Components/SelectUnit'
 import { GRID, STYLES } from '@/const'
@@ -148,7 +148,7 @@ export default {
 
   computed: {
     ...mapGetters('app', ['selectedComponentNodes']),
-    ...mapGetters('layout', ['currentBreakpoint']),
+    ...mapState('layout', ['currentBreakpoint']),
     lastNode() {
       return arrayLast(this.selectedComponentNodes)
     },

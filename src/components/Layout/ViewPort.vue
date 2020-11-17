@@ -143,7 +143,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('layout', ['windowWidth', 'windowHeight']),
+    ...mapState('layout', ['windowWidth']),
     ...mapGetters('layout', ['descBreakpoints']),
     ...mapState('mode', ['mode']),
     scalePercent() {
@@ -197,26 +197,25 @@ export default {
           const { scale } = this.style
 
           const deltaX =
-            this.moveLeft || this.moveRight
-              ? (event.client.x - lastPositionX) * 2
-              : 0
+                  this.moveLeft || this.moveRight
+                    ? (event.client.x - lastPositionX) * 2
+                    : 0
           const deltaY =
-            this.moveTop || this.moveBottom
-              ? (event.client.y - lastPositionY) * 2
-              : 0
+                  this.moveTop || this.moveBottom
+                    ? (event.client.y - lastPositionY) * 2
+                    : 0
 
           const h = this.style.h + (this.moveTop ? -deltaY : deltaY) / scale
           const w = this.style.w + (this.moveLeft ? -deltaX : deltaX) / scale
 
           lastPositionX = event.client.x
           lastPositionY = event.client.y
+
           Object.assign(this.style, {
             h: parseInt(h),
             w: parseInt(w),
             scale
           })
-
-          this.$emit('resize', event)
         },
         end: event => {
           lastPositionX = null
@@ -249,11 +248,9 @@ export default {
     reset() {
       this.setBoundaryRect()
       this.style.scale = 1
-      this.$bus.$emit('operator-get-rect')
     },
     setBoundaryRect() {
       const { height, width } = getRectWithoutPadding(this.$el)
-      this.$bus.$emit('operator-get-rect')
       this.style.w = width
       this.style.h = height
     },
@@ -279,7 +276,6 @@ export default {
       }
       this.style.w = w
       this.style.h = h
-      this.$bus.$emit('operator-get-rect')
     },
     handlerStart(position) {
       this.moveTop = false

@@ -165,7 +165,6 @@ export default {
       this.style.scale = 1
       this.style.w = width
       this.style.h = height
-      this.$bus.$emit('operator-get-rect')
     },
     setSize({ w, h }) {
       const { width, height } = getRectWithoutPadding(this.targetEl.parentNode)
@@ -181,7 +180,6 @@ export default {
       }
       this.style.w = w
       this.style.h = h
-      this.$bus.$emit('operator-get-rect')
     }
   }
 }

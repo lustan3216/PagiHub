@@ -13,10 +13,7 @@
     @contextmenu.stop.prevent="contextmenu($event)"
   >
 
-    <portal
-      :to="operatorTo"
-      :disabled="!operatorTo"
-    >
+    <portal :to="operatorTo">
       <component
         v-if="rect && !isAdding"
         :hovered="hoveringId === id"
@@ -24,8 +21,8 @@
         :id="id"
         :key="id"
         :rect="rect"
-        @move="move"
-        @resize="resize"
+        @move-start="moveStart"
+        @resize-start="resizeStart"
         @mouseenter.native="hoveringId = id"
         @mouseup.native.stop="mouseup"
         @mousedown.native="$emit('mousedown', $event)"
@@ -75,18 +72,24 @@ import {
 } from '@/utils/node'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { arrayLast, findIndexBy } from '@/utils/array'
+import { ObserveVisibility } from 'vue-observe-visibility'
 
 const store = vue.observable({
   lastEditId: null,
   contextMenu: {},
   hoveringId: null,
-  resizing: false
+  resizingId: null,
+  movingId: null
 })
 
 export default {
   name: 'EventController',
   inject: {
-    isExample: { default: false }
+    isExample: { default: false },
+    boundaryRect: { required: true }
+  },
+  directives: {
+    ObserveVisibility
   },
   components: {
     ContextMenu,
@@ -105,8 +108,12 @@ export default {
   },
   data() {
     return {
-      rect: null,
-      moving: false
+      inViewPort: false,
+      options: {
+        callback: isVisible => {
+          this.inViewPort = isVisible
+        }
+      }
     }
   },
   computed: {
@@ -116,6 +123,12 @@ export default {
       'isAdding'
     ]),
     ...mapState('layout', ['gridResizing', 'scaleRatio', 'scrolling']),
+    portalDisabled() {
+      if (store.resizingId || store.movingId) {
+        return ![store.movingId, store.resizingId].includes(this.id)
+      }
+      return false
+    },
     lock() {
       return this.node.lock
     },
@@ -174,38 +187,10 @@ export default {
       set(value) {
         store.hoveringId = value
       }
+    },
+    rect() {
+      return this.boundaryRect.px
     }
-  },
-  watch: {
-    scrolling(value) {
-      if (!value) {
-        this.getRect()
-      }
-    },
-    scaleRatio() {
-      this.getRect()
-    },
-    gridResizing() {
-      this.getRect()
-    },
-    hoveringId(value) {
-      if (value) {
-        this.getRect()
-      }
-    },
-    node: {
-      handler() {
-        this.getRect()
-      },
-      deep: true
-    }
-  },
-  mounted() {
-    this.calculateRect()
-    this.$bus.$on('operator-get-rect', this.getRect)
-  },
-  beforeDestroy() {
-    this.$bus.$off('operator-get-rect', this.getRect)
   },
   methods: {
     ...mapMutations('layout', {
@@ -220,36 +205,6 @@ export default {
       'TOGGLE_SELECTED_COMPONENT_IN_IDS',
       'PUSH_SELECTED_COMPONENT_ID'
     ]),
-    calculateRect() {
-      requestAnimationFrame(() => {
-        if (this.isBackground) {
-          const rect = this.$el.closest('.art-board').getBoundingClientRect()
-          this.rect = {
-            x: 0,
-            y: 0,
-            width: rect.width,
-            height: rect.height
-          }
-        }
-        else {
-          if (this.$el.closest('.grid-layout') === null) return
-          const gridRect = this.$el.closest('.grid-layout').getBoundingClientRect()
-          const itemRect = this.element.getBoundingClientRect()
-          this.rect = {
-            x: (itemRect.x - gridRect.x),
-            y: (itemRect.y - gridRect.y),
-            width: itemRect.width,
-            height: itemRect.height
-          }
-        }
-      })
-    },
-    getRect() {
-      if (this.hoveringId === this.id || this.selected || this.autoResizeHeight) {
-        this.calculateRect()
-      }
-    },
-
     finEditingPath() {
       const editingPath = []
       traversalAncestorAndSelf(this.node, node => {
@@ -266,23 +221,20 @@ export default {
         this.SET_SELECTED_COMPONENT_ID(this.id)
       }
     },
-    move() {
+    moveStart() {
       this.LAYOUT_SET({ gridResizing: true })
-      this.moving = true
-      this.getRect()
+      store.movingId = this.id
     },
-    resize() {
-      store.resizing = true
-      this.getRect()
+    resizeStart() {
+      store.resizingId = this.id
     },
     mouseup(event) {
       this.$emit('mouseup', event)
-      this.getRect()
 
       this.hoveringId = null
 
-      if (store.resizing) {
-        store.resizing = false
+      if (store.resizingId) {
+        store.resizingId = null
         return
       }
 
@@ -333,8 +285,8 @@ export default {
         }
       }
 
-      if (this.moving) {
-        this.moving = false
+      if (store.movingId) {
+        store.movingId = null
         if (!this.selected) {
           this.SET_SELECTED_COMPONENT_ID(this.id)
         }

@@ -160,10 +160,10 @@ export default {
     }
   },
   mounted() {
-    this.$bus.$on('dialog-component-visible', this.setVisible)
+    this.$bus.$on('dialogComponentVisible', this.setVisible)
   },
   beforeDestroy() {
-    this.$bus.$off('dialog-component-visible', this.setVisible)
+    this.$bus.$off('dialogComponentVisible', this.setVisible)
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),
