@@ -356,6 +356,7 @@
         // this.createStyle()
       },
       y: function(newVal) {
+        console.trace(1)
         this.innerY = newVal
         // this.createStyle()
       },

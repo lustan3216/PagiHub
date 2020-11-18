@@ -36,7 +36,6 @@ btton連結
 如果update 500 直接 overwrite
 
 加入文字會跑位
-carousle內無法單個對齊
 常會點不到字
  每次註記的版本
  

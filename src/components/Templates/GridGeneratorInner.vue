@@ -14,8 +14,8 @@
     :data-droppable="isDroppable ? '' : undefined"
     data-addable
     @drop="handleDrop"
-    @width-updated="$emit('update:width', $event)"
-    @height-updated="$emit('update:height', $event)"
+    @width-updated="widthUpdated"
+    @height-updated="heightUpdated"
     @layout-updated="layoutUpdated($event)"
   >
     <portal-target
@@ -121,27 +121,23 @@ export default {
       return Object.values(this.layouts)
     }
   },
-  watch: {
-    height: {
-      handler(value) {
-        console.log(value)
-      }
-    }
-  },
   mounted() {
     this.element = this.$el
-    if (this.autoResize) {
-      this.$watch('$refs.gridGenerator.width', value => {
-        this.gridItemAutoSize()
-      })
-
-      this.$watch('$refs.gridGenerator.height', value => {
-        this.gridItemAutoSize()
-      })
-    }
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),
+    widthUpdated(width) {
+      if (this.autoResize) {
+        this.gridItemAutoSize()
+      }
+      this.$emit('update:width', width)
+    },
+    heightUpdated(height) {
+      if (this.autoResize) {
+        this.gridItemAutoSize()
+      }
+      this.$emit('update:height', height)
+    },
     handleDrop(event) {
       if (this.isAdding) return
 
