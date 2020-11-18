@@ -315,7 +315,7 @@
 
           this.calcPx()
           corretHorizontalBounds(this.layout, this.width)
-          compact(this.layout, this.verticalCompact)
+          compact(this.layout)
           this.eventBus.$emit('compact', this.width)
           // lots-design
           this.updateHeight()
@@ -390,7 +390,7 @@
         }
         // Move the element to the dragged location.
         this.layout = moveElement(this.layout, l, x, y, true, l.verticalCompact || this.preventCollision)
-        compact(this.layout, this.verticalCompact)
+        compact(this.layout, id)
 
         // needed because vue can't detect changes on array element properties
         this.eventBus.$emit('compact')
@@ -459,7 +459,7 @@
           })
         }
 
-        compact(this.layout, this.verticalCompact)
+        compact(this.layout, id)
         this.eventBus.$emit('compact')
         // lots-design
         this.updateHeight()

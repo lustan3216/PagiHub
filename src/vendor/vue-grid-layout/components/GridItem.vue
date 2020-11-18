@@ -336,7 +336,7 @@
       },
       windowHeight() {
         if (this.fixed && (this.pxY + this.pxH > this.windowHeight)) {
-          const { x, y } = this.calcXY(this.windowHeight - this.pxH, 0)
+          const { y } = this.calcXY(this.windowHeight - this.pxH, 0)
           this.innerY = y
         }
       },

@@ -68,7 +68,7 @@ import EventController from '../TemplateUtils/EventController'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import { cloneJson, getValueByPath } from '@/utils/tool'
-import { CAN_NOT_DELETE, STYLES } from '@/const'
+import { STYLES } from '@/const'
 import {
   cloneJsonWithoutChildren,
   closestValidBreakpoint,
@@ -86,6 +86,9 @@ export default {
     ComponentController,
     VueGridItem: GridItem
   },
+  directives: {
+    ObserveVisibility
+  },
   mixins: [toolMixin, propsMixin, childrenMixin],
   inject: {
     // connect with GridGeneratorInner
@@ -100,9 +103,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-  directives: {
-    ObserveVisibility
   },
   data() {
     return {

@@ -106,7 +106,7 @@ export function correctFixItemsBound(layout: Layout, height) {
  *   vertically.
  * @return {Array}       Compacted Layout.
  */
-export function compact(layout: Layout, verticalCompact: Boolean): Layout {
+export function compact(layout: Layout, movingId): Layout {
     // Statics go in the compareWith array right away so items flow around them.
   const compareWith = getStatics(layout);
   // We go through the items by row and column.
@@ -119,10 +119,9 @@ export function compact(layout: Layout, verticalCompact: Boolean): Layout {
     let l = sorted[i];
     // Don't move static elements
     if (!l.static) {
-
-      // // lot-design 原本是下面這樣，但改成每個element可以自己控制 verticalCompact
-      // l = compactItem(compareWith, l, verticalCompact);
-      l = compactItem(compareWith, l, l.verticalCompact || verticalCompact);
+      // if movingId === undefine means width changing, whole grid item should compact if it needs
+      // if has movingId means some grid item is moving by user
+      l = compactItem(compareWith, l, movingId === undefined ? l.i : movingId);
 
       // Add to comparison array. We only collide with items before this one.
       // Statics are already in this array.
@@ -168,8 +167,8 @@ export function isAnyStackElementOnTop(layout, l) {
 /**
  * Compact an item in the layout.
  */
-export function compactItem(compareWith: Layout, l: LayoutItem): LayoutItem {
-  const verticalCompact = isAnyStackElementOnTop(compareWith, l)
+export function compactItem(compareWith: Layout, l: LayoutItem, movingId): LayoutItem {
+  const verticalCompact = movingId === l.id ? isAnyStackElementOnTop(compareWith, l) : false
 
   if (verticalCompact) {
     // Move the element up as far as it can go without colliding.
