@@ -1,4 +1,4 @@
-import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
+import { mapMutations, mapState, mapActions } from 'vuex'
 import { CAN_NOT_DELETE, CHILDREN, SOFT_DELETE } from '@/const'
 import { arrayLast } from '@/utils/array'
 import { vmRemoveNode } from '@/utils/vmMap'
@@ -9,7 +9,7 @@ import {
   isCarousel,
   isGridItem,
   cloneJsonWithoutChildren,
-  isGrid, isGroup
+  isGroup
 } from '@/utils/node'
 import { getExample } from '@/templateJson/basic'
 
