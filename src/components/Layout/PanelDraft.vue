@@ -1,5 +1,8 @@
 <template>
-  <component :is="isDraftMode ? 'file-drop-zone' : 'div'">
+  <component
+    :class="{ 'cross-hair': isAdding }"
+    :is="isDraftMode ? 'file-drop-zone' : 'div'"
+  >
     <function-bar v-if="isDraftMode" />
 
     <div
@@ -73,6 +76,7 @@ export default {
       'editingComponentSetId',
       'rootComponentSetIds'
     ]),
+    ...mapState('app', ['isAdding']),
     ...mapState('asset', ['isImageDialogOpen'])
   },
   beforeMount() {
@@ -93,7 +97,7 @@ export default {
   methods: {
     ...mapMutations('node', ['INIT_NODE_STORE']),
     ...mapMutations('mode', ['SET_DRAFT_MODE'])
-  }
+  },
 }
 </script>
 

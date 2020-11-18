@@ -4,7 +4,6 @@
     :id="id"
     :inner-props="innerProps"
     :inner-styles="innerStyles"
-    :class="{ 'cross-hair': isAdding }"
     :extra-style="{
       minHeight: '100%'
     }"
@@ -40,10 +39,7 @@ export default {
       }
     }
   },
-  mixins: [toolMixin, propsMixin, childrenMixin],
-  computed: {
-    ...mapState('app', ['isAdding'])
-  }
+  mixins: [toolMixin, propsMixin, childrenMixin]
 }
 </script>
 
