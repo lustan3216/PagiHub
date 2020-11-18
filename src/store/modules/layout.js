@@ -1,5 +1,5 @@
 import { SET } from '../index'
-import { findBreakpoint, sortDescBreakpoint } from '@/utils/layout'
+import { sortDescBreakpoint } from '@/utils/layout'
 import { BREAK_POINTS_MAP } from '@/const'
 
 const state = {

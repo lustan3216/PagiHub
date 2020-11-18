@@ -224,10 +224,10 @@
           this.$emit('height-updated', newval)
         })
       },
-      layout: function() {
-      // 開了會造成dragend不見，不明原因
-        this.layoutUpdate()
-      },
+      // layout: function() {
+      // // 開了會造成dragend不見，不明原因
+      //   this.layoutUpdate()
+      // },
       isDraggable: function() {
         this.eventBus.$emit('setDraggable', this.isDraggable)
       },

@@ -23,6 +23,7 @@
     :fixed="computedLayout.fixed"
     :class="{ 'no-action': lock }"
     :auto-resize-height="autoResizeHeight"
+    @auto-sized="autoSizedHeight = $event"
     @moved="moved"
   >
     <div
@@ -116,7 +117,8 @@ export default {
       layout: {},
       duplicateNodeRecords: [],
       pressAltKey: false,
-      moving: false
+      moving: false,
+      autoSizedHeight: 0
     }
   },
   computed: {
@@ -234,7 +236,7 @@ export default {
         x: Number(this.currentGrid.x) || 0,
         y: Number(this.currentGrid.y) || 0,
         w: Number(this.currentGrid.w) || 0,
-        h: Number(this.currentGrid.h) || 0,
+        h: this.autoSizedHeight || Number(this.currentGrid.h) || 0,
 
         unitH: this.currentGrid.unitH,
         unitW: this.currentGrid.unitW,

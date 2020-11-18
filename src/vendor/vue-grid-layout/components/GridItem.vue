@@ -355,8 +355,7 @@
         this.innerX = newVal
         // this.createStyle()
       },
-      y: function(newVal) {
-        console.trace(1)
+      y: function(newVal, old) {
         this.innerY = newVal
         // this.createStyle()
       },
@@ -512,7 +511,7 @@
         this.realPx.h = Math.floor(this.h * this.colHeight) * this.scaleRatio
         this.realPx.w = Math.floor(this.w * this.colWidth) * this.scaleRatio
       },
-      createStyle: function(heightChanged) {
+      createStyle: function() {
         if (this.pxX + this.pxW > this.containerWidth) {
           this.innerX = this.containerWidth - this.pxW < 0 ? 0 : (this.containerWidth - this.pxW) / this.colX
           this.innerW = (this.pxW > this.containerWidth) ? this.containerWidth / this.colWidth : this.w
@@ -969,7 +968,6 @@
         // if (process.env.NODE_ENV !== 'production') {
         //   console.trace('autoSize')
         // }
-
         requestAnimationFrame(() => {
           this.previousW = this.innerW
           this.previousH = this.innerH
@@ -1008,7 +1006,7 @@
 
           // this.lastW = x; // basically, this is copied from resizehandler, but shouldn't be needed
           // this.lastH = y;
-
+          this.$emit('auto-sized', height)
           if (this.innerW !== pos.w || this.innerH !== pos.h) {
             this.$emit('resize', this.i, pos.h, pos.w, height, width)
           }

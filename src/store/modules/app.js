@@ -8,7 +8,7 @@ import {
 } from '@/utils/node'
 
 const state = {
-  isAdding: null,
+  isAdding: false,
   beingAddedComponentId: null,
   selectedComponentIds: [],
   copyComponentIds: [],
@@ -18,7 +18,7 @@ const state = {
 const mutations = {
   SET,
   APP_RESET(state) {
-    state.isAdding = null
+    state.isAdding = false
     state.beingAddedComponentId = null
     state.selectedComponentIds = []
     state.editingPath = []
