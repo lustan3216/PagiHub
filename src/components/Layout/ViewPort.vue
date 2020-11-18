@@ -144,8 +144,8 @@ export default {
   },
   computed: {
     ...mapState('layout', ['windowWidth']),
-    ...mapGetters('layout', ['descBreakpoints']),
     ...mapState('mode', ['mode']),
+    ...mapGetters('layout', ['descBreakpoints']),
     scalePercent() {
       return Math.ceil(+this.style.scale * 100)
     },

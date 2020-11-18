@@ -262,10 +262,7 @@
         }
       }
 
-      this.realPx.x = Math.floor(this.x * this.colX) * this.scaleRatio
-      this.realPx.y = Math.floor(this.y * this.colY) * this.scaleRatio
-      this.realPx.h = Math.floor(this.h * this.colHeight) * this.scaleRatio
-      this.realPx.w = Math.floor(this.w * this.colWidth) * this.scaleRatio
+      this.updateRealPx()
 
       this.$bus.$on(`handleResize-${this.i}`, this.handleResize)
       this.$bus.$on(`handleDrag-${this.i}`, this.handleDrag)
@@ -274,10 +271,7 @@
       this.eventBus.$on('setResizable', self.setResizableHandler)
     },
     updated() {
-      this.realPx.x = Math.floor(this.x * this.colX) * this.scaleRatio
-      this.realPx.y = Math.floor(this.y * this.colY) * this.scaleRatio
-      this.realPx.h = Math.floor(this.h * this.colHeight) * this.scaleRatio
-      this.realPx.w = Math.floor(this.w * this.colWidth) * this.scaleRatio
+      this.updateRealPx()
     },
     beforeDestroy: function() {
       //Remove listeners
@@ -307,6 +301,10 @@
       this.createStyle()
     },
     watch: {
+      gridResizing(value) {
+        if (value) return
+        this.updateRealPx()
+      },
       isDragging(value) {
         if (value) {
           store.shouldTransition = value
@@ -386,7 +384,7 @@
     },
     computed: {
       ...mapState('app', ['selectedComponentIds']),
-      ...mapState('layout', ['scaleRatio', 'windowHeight']),
+      ...mapState('layout', ['scaleRatio', 'windowHeight', 'gridResizing']),
       ...mapGetters('layout', ['vw', 'vh']),
       // Helper for generating column width
       containerHeight() {
@@ -505,6 +503,12 @@
       }
     },
     methods: {
+      updateRealPx() {
+        this.realPx.x = Math.floor(this.x * this.colX) * this.scaleRatio
+        this.realPx.y = Math.floor(this.y * this.colY) * this.scaleRatio
+        this.realPx.h = Math.floor(this.h * this.colHeight) * this.scaleRatio
+        this.realPx.w = Math.floor(this.w * this.colWidth) * this.scaleRatio
+      },
       createStyle: function() {
         if (this.pxX + this.pxW > this.containerWidth) {
           this.innerX = this.containerWidth - this.pxW < 0 ? 0 : (this.containerWidth - this.pxW) / this.colX
