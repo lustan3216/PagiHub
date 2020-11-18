@@ -102,7 +102,7 @@ export default {
   },
   methods: {
     ...mapMutations('app', { APP_SET: 'SET' }),
-    ...mapActions('node', ['irreversibleRecord', 'record']),
+    ...mapActions('node', ['irreversibleRecord', 'debounceRecord']),
     init() {
       this.dropEvent = {
         clientX: 0,
@@ -138,7 +138,7 @@ export default {
 
         appendIds(newNode, droppedNode.parentId)
 
-        this.record([
+        this.debounceRecord([
           {
             path: newNode.id,
             value: newNode
@@ -184,7 +184,7 @@ export default {
 
         appendIds(newNode, parentId)
 
-        this.record({
+        this.debounceRecord({
           path: newNode.id,
           value: newNode
         })

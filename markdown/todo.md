@@ -39,7 +39,6 @@ btton連結
 發布後 的share page and browsing
 如果update 500 直接 overwrite
 
-group option複製會會掉，
 ratio還是畫面拉大便小時，還是需要鎖變化
 加入文字會跑位
 carousle內無法單個對齊

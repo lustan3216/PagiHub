@@ -68,8 +68,13 @@ import EventController from '../TemplateUtils/EventController'
 import ComponentController from '../TemplateUtils/ComponentController'
 import GridItem from '@/vendor/vue-grid-layout/components/GridItem'
 import { cloneJson, getValueByPath } from '@/utils/tool'
-import { STYLES } from '@/const'
-import { closestValidBreakpoint, isBackground } from '@/utils/node'
+import { CAN_NOT_DELETE, STYLES } from '@/const'
+import {
+  cloneJsonWithoutChildren,
+  closestValidBreakpoint,
+  isBackground,
+  traversalSelfAndChildren
+} from '@/utils/node'
 import { findBreakpoint } from '@/utils/layout'
 import { appendIds } from '@/utils/nodeId'
 import { ObserveVisibility } from 'vue-observe-visibility'
@@ -109,7 +114,7 @@ export default {
       },
       exampleBoundary: 'xs',
       layout: {},
-      duplicateNode: null,
+      duplicateNodeRecords: [],
       pressAltKey: false,
       moving: false
     }
@@ -276,18 +281,17 @@ export default {
       }
     },
     pressAltKey(value) {
-      if (!this.moving) return
+      if (!this.moving || !this.isDraftMode || this.isExample) return
 
       if (value) {
-        this.record({
-          path: this.duplicateNode.id,
-          value: cloneJson(this.duplicateNode)
-        })
+        this.debounceRecord(this.duplicateNodeRecords)
       }
-      else if (this.duplicateNode) {
-        this.record({
-          path: this.duplicateNode.id,
-          value: undefined
+      else {
+        this.duplicateNodeRecords.forEach(record => {
+          this.debounceRecord({
+            ...record,
+            value: undefined
+          })
         })
       }
     }
@@ -312,19 +316,28 @@ export default {
     }
   },
   methods: {
-    ...mapActions('node', ['record']),
+    ...mapActions('node', ['debounceRecord']),
     mousedown(event) {
-      this.prepareDuplicateNode()
+      this.prepareDuplicateNodeRecords()
       this.moving = true
       this.pressAltKey = event.altKey
     },
-    prepareDuplicateNode() {
+    prepareDuplicateNodeRecords() {
       const node = cloneJson(this.node)
       appendIds(node)
       if (getValueByPath(node, [STYLES, 'layout', 'stack'])) {
         delete node[STYLES].layout.stack
       }
-      this.duplicateNode = node
+
+      const records = []
+      traversalSelfAndChildren(node, node => {
+        records.push({
+          path: node.id,
+          value: cloneJsonWithoutChildren(node)
+        })
+      })
+
+      this.duplicateNodeRecords = records
     },
     updateLayout(layout = this.computedLayout) {
       this.layout = layout
