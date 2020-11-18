@@ -1,3 +1,3 @@
 export function getDomById(id) {
-  document.getElementById(id)
+  return document.getElementById(id)
 }

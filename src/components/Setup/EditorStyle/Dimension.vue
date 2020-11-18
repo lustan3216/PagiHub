@@ -6,6 +6,7 @@
     <div class="flex-column lock-outer">
       <el-button
         :icon="`el-icon-${ratio ? 'lock' : 'unlock'}`"
+        :disabled="heightDisabled"
         type="text"
         class="lock"
         @click="ratio = !ratio"
