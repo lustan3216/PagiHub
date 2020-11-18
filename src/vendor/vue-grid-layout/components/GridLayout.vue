@@ -214,12 +214,14 @@
 
           // lots-design
           this.updateHeight()
+          this.$emit('width-updated', newval)
         })
       },
       height: function(newval) {
         this.$nextTick(() => {
           //this.$broadcast("updateWidth", this.width);
           this.eventBus.$emit('updateHeight', newval)
+          this.$emit('height-updated', newval)
         })
       },
       layout: function() {

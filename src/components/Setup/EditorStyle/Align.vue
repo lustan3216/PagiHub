@@ -88,7 +88,7 @@ import {
   closestValidGrid,
   isSlider,
   traversalAncestor,
-  isGroup
+  isGroup, isCarousel
 } from '@/utils/node'
 import { vmGet } from '@/utils/vmMap'
 import { verticalUnitConvert, horizontalUnitConvert } from '@/utils/layout'
@@ -118,7 +118,7 @@ export default {
     gridParent() {
       let node
       traversalAncestor(this.selectedComponentNodes[0], parent => {
-        if (isSlider(parent) || isBackground(parent) || isGroup(parent)) {
+        if (isCarousel(parent) || isBackground(parent) || isGroup(parent)) {
           node = parent
           return false
         }
@@ -162,7 +162,7 @@ export default {
           x: 0,
           y: 0,
           w: this.windowWidth,
-          h: getDomById(this.gridParent.id).style.clientHeight,
+          h: getDomById(this.gridParent.id).clientHeight,
           unitH: 'px',
           unitW: 'px',
           unitX: 'px',

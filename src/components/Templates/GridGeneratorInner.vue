@@ -14,6 +14,8 @@
     :data-droppable="isDroppable ? '' : undefined"
     data-addable
     @drop="handleDrop"
+    @width-updated="$emit('update:width', $event)"
+    @height-updated="$emit('update:height', $event)"
     @layout-updated="layoutUpdated($event)"
   >
     <portal-target
@@ -48,7 +50,7 @@ import { mapActions, mapState } from 'vuex'
 import { GRID } from '@/const'
 import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
-import { getValueByPath, resizeListener } from '@/utils/tool'
+import { getValueByPath } from '@/utils/tool'
 import { isGroup, traversalSelfAndChildren } from '@/utils/node'
 import EventController from '../TemplateUtils/EventController'
 import { horizontalUnitConvert, verticalUnitConvert } from '@/utils/layout'
@@ -119,14 +121,21 @@ export default {
       return Object.values(this.layouts)
     }
   },
+  watch: {
+    height: {
+      handler(value) {
+        console.log(value)
+      }
+    }
+  },
   mounted() {
     this.element = this.$el
-    // this.gridItemAutoSize()
     if (this.autoResize) {
-      this.$watch('$refs.gridGenerator.width', () => {
+      this.$watch('$refs.gridGenerator.width', value => {
         this.gridItemAutoSize()
       })
-      this.$watch('$refs.gridGenerator.height', () => {
+
+      this.$watch('$refs.gridGenerator.height', value => {
         this.gridItemAutoSize()
       })
     }

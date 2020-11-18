@@ -27,11 +27,9 @@ Just click publish, then you will have a real RWD website
 手機看頁面會壞掉
 考慮x y 可以負的
 
-background event controller
 cut
 group 要能拖進去拖出來嗎
 有node會沒刪乾淨
-style 有關grid unit的變換 要檢查rwd
 rwd
 btton連結
 發布後 的share page and browsing
