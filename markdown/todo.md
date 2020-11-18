@@ -23,8 +23,6 @@ Just click publish, then you will have a real RWD website
 打包出去的 js file, 理論上應該可以 用 prerender 方式，因為已經發布了，所以固定定型了，理論上程式碼應該不用再動，
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
-effect bug
-shadow 有bug
 
 手機看頁面會壞掉
 考慮x y 可以負的

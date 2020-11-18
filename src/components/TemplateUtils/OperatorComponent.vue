@@ -37,7 +37,6 @@ import { arrayLast } from '@/utils/array'
 import { getValueByPath, globalDebounce } from '@/utils/tool'
 import OftenUseMenu from './OftenUseMenu'
 import interact from 'interactjs'
-import { vmGet } from '@/utils/vmMap'
 
 export default {
   name: 'OperatorComponent',

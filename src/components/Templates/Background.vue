@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import toolMixin from '@/components/Templates/mixins/tool'
 import propsMixin from '@/components/Templates/mixins/props'
+import { mapState } from 'vuex'
 // childrenMixin 要拿來新增刪除小孩的
 import childrenMixin from '@/components/Templates/mixins/children'
 import GridGeneratorInner from './GridGeneratorInner'
@@ -30,16 +30,38 @@ export default {
     return {
       gridItemAutoSize: () => {},
       boundaryRect: {
-        px: {
-          w: 0,
-          h: 0,
-          x: 0,
-          y: 0
-        }
+        px: this.px
       }
     }
   },
-  mixins: [toolMixin, propsMixin, childrenMixin]
+  mixins: [toolMixin, propsMixin, childrenMixin],
+  data() {
+    return {
+      px: {
+        w: 0,
+        h: 0,
+        x: 0,
+        y: 0
+      }
+    }
+  },
+  computed: {
+    ...mapState('layout', ['windowHeight', 'windowWidth'])
+  },
+  watch: {
+    windowWidth: {
+      handler(value) {
+        this.px.w = value
+      },
+      immediate: true
+    },
+    windowHeight: {
+      handler(value) {
+        this.px.h = value
+      },
+      immediate: true
+    },
+  }
 }
 </script>
 
