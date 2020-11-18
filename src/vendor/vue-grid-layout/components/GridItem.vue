@@ -150,8 +150,8 @@
         default: 'px'
       },
       ratio: {
-        type: Boolean,
-        default: false
+        type: Number,
+        default: 0
       },
       x: {
         type: Number,
@@ -348,7 +348,7 @@
       },
       containerWidth: function() {
         this.tryMakeResizable()
-        this.createStyle()
+        this.createStyle(true)
         // this.emitContainerResized()
       },
       x: function(newVal) {
@@ -361,6 +361,8 @@
       },
       h: function(newVal, old) {
         this.innerH = newVal
+
+
         // this.createStyle()
         // this.emitContainerResized();
       },
@@ -509,7 +511,7 @@
         this.realPx.h = Math.floor(this.h * this.colHeight) * this.scaleRatio
         this.realPx.w = Math.floor(this.w * this.colWidth) * this.scaleRatio
       },
-      createStyle: function() {
+      createStyle: function(heightChanged) {
         if (this.pxX + this.pxW > this.containerWidth) {
           this.innerX = this.containerWidth - this.pxW < 0 ? 0 : (this.containerWidth - this.pxW) / this.colX
           this.innerW = (this.pxW > this.containerWidth) ? this.containerWidth / this.colWidth : this.w
@@ -757,10 +759,11 @@
             ...event,
             isFakeEvent: true
           }
-          if (this.selectedComponentIds.includes(this.i)) {
+          const isSelfMoving = this.selectedComponentIds.includes(this.i)
+          if (isSelfMoving) {
             this.selectedComponentIds.forEach(id => {
               if (id !== this.i) {
-                this.$bus.$emit(`handle-drag-${id}`, fakeEvent)
+                this.$bus.$emit(`handleDrag-${id}`, fakeEvent)
               }
             })
           }

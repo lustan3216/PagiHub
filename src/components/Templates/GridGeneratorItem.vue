@@ -16,7 +16,7 @@
     :static="lock"
     :style-props="gridItemStyle"
     :hidden="computedLayout.hidden"
-    :ratio="styleLayout.ratio"
+    :ratio="computedLayout.ratio"
     :z-index="styleLayout.zIndex"
     :is-resizable="computedLayout.isResizable"
     :is-draggable="isDraggable"
@@ -226,8 +226,8 @@ export default {
       return getValueByPath(this.node, [STYLES, this.validBreakpoint, 'hidden'])
     },
     computedLayout() {
-      const { position } = this.styleLayout
-      const { userCanResize } = this.innerProps
+      const { position, ratio } = this.styleLayout
+      const { userCanResize, userCanDrag } = this.innerProps
 
       return {
         // might be string from selectUnit, so parse it
@@ -243,9 +243,10 @@ export default {
 
         stack: this.stack,
         hidden: this.hidden,
+        ratio,
 
         isResizable: this.isDraftMode || userCanResize,
-        isDraggable: this.isDraggable,
+        isDraggable: this.isDraggable || userCanDrag,
 
         fixed: position === 'fixed' && isBackground(this.node.parentNode),
 

@@ -184,6 +184,14 @@ export default {
         const records = []
 
         this.selectedComponentNodes.forEach(node => {
+          const vm = vmGet(node.id)
+          if (value) {
+            const pxW = horizontalUnitConvert(node.id, vm.currentGrid.w, vm.currentGrid.unitW, 'px')
+            const pxH = verticalUnitConvert(node.id, vm.currentGrid.h, vm.currentGrid.unitH, 'px')
+
+            value = pxW / pxH
+          }
+
           records.push({
             path: [node.id, STYLES, 'layout', 'ratio'],
             value: value || undefined
@@ -191,23 +199,6 @@ export default {
         })
 
         this.debounceRecord(records)
-
-        this.selectedComponentNodes.forEach(node => {
-          const vm = vmGet(node.id)
-          this.debounceRecord([
-            {
-              path: [node.id, GRID, this.currentBreakpoint, 'w'],
-              value: horizontalUnitConvert(node.id, vm.currentGrid.w, vm.currentGrid.unitW, 'px')
-            },
-            {
-              path: [node.id, GRID, this.currentBreakpoint, 'h'],
-              value: verticalUnitConvert(node.id, vm.currentGrid.h, vm.currentGrid.unitH, 'px')
-            }
-          ])
-        })
-
-        this.recordStore('unitH', 'px')
-        this.recordStore('unitW', 'px')
       }
     },
     x: {

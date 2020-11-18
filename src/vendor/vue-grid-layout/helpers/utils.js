@@ -185,7 +185,7 @@ export function compactItem(compareWith: Layout, l: LayoutItem, movingId): Layou
   return l;
 }
 
-export function corretHorizontalBounds(layout, width) {
+export function correctHorizontalBounds(layout, width) {
   if (!width) return
   for (let i = 0, len = layout.length; i < len; i++) {
     const item = layout[i]

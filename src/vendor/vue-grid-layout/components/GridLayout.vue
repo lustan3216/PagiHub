@@ -32,13 +32,14 @@
     moveElement,
     validateLayout,
     getAllCollisions,
-    corretHorizontalBounds
+    correctHorizontalBounds,
   } from '../helpers/utils'
   //var eventBus = require('./eventBus');
 
   import GridItem from './GridItem.vue'
   import interact from 'interactjs'
   import { cloneJson } from '@/utils/tool'
+  import { toPrecision } from '@/utils/number'
 
   export default {
     name: 'GridLayout',
@@ -157,8 +158,8 @@
 
           //self.width = self.$el.offsetWidth;
           // addWindowEventListener('resize', self.onWindowResize)
-          this.calcPx()
-          corretHorizontalBounds(this.layout, this.width)
+          this.assignUnitPxToLayout()
+          // correctHorizontalBounds(this.layout, this.width)
           compact(self.layout, self.verticalCompact)
 
           // lots-design
@@ -313,8 +314,8 @@
             // this.initResponsiveFeatures()
           }
 
-          this.calcPx()
-          corretHorizontalBounds(this.layout, this.width)
+          this.assignUnitPxToLayout()
+          // correctHorizontalBounds(this.layout, this.width)
           compact(this.layout)
           this.eventBus.$emit('compact', this.width)
           // lots-design
@@ -337,7 +338,7 @@
 
         this.resizeEvent()
       },
-      calcPx() {
+      assignUnitPxToLayout() {
         this.layout.forEach(item => {
           item.colW = this.colHorizontal(item.unitW)
           item.colH = this.colVertical(item.unitH)
@@ -358,9 +359,8 @@
       },
       dragEvent: function(eventName, id, x, y, h, w) {
         //console.log(eventName + " id=" + id + ", x=" + x + ", y=" + y);
-        this.calcPx()
-
-        corretHorizontalBounds(this.layout, this.width)
+        this.assignUnitPxToLayout()
+        // correctHorizontalBounds(this.layout, this.width)
         let l = getLayoutItem(this.layout, id)
         //GetLayoutItem sometimes returns null object
         if (l === undefined || l === null) {
@@ -404,8 +404,9 @@
         if (l && eventName === 'autoSize') {
           l.h = h
         }
-        this.calcPx()
-        corretHorizontalBounds(this.layout, this.width)
+        this.assignUnitPxToLayout()
+        this.correctRectByRatio()
+        // correctHorizontalBounds(this.layout, this.width)
         //GetLayoutItem sometimes return null object
         if (l === undefined || l === null) {
           l = { h: 0, w: 0 }
@@ -467,6 +468,20 @@
           this.$emit('layout-updated', this.layout)
         }
 
+      },
+
+      correctRectByRatio() {
+        this.layout.forEach(node => {
+          if (node.ratio) {
+            const h = node.w * node.colW / node.ratio / node.colH
+            if (node.unitH === 'px') {
+              node.h = toPrecision(h, 0)
+            }
+            else {
+              node.h = toPrecision(h, 1)
+            }
+          }
+        })
       },
 
       findDifference(layout, originalLayout) {
