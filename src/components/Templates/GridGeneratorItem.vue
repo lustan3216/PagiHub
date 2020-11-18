@@ -236,6 +236,7 @@ export default {
         x: Number(this.currentGrid.x) || 0,
         y: Number(this.currentGrid.y) || 0,
         w: Number(this.currentGrid.w) || 0,
+        // autoSizedHeight, if we do not put this.autoSizedHeight here, it will recover as soon as rerender.
         h: this.autoSizedHeight || Number(this.currentGrid.h) || 0,
 
         unitH: this.currentGrid.unitH,
