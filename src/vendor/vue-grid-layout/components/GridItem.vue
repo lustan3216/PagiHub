@@ -191,7 +191,7 @@
     provide() {
       return {
         boundaryRect: {
-          px: this.instantPx
+          px: this.realPx
         },
         gridItemAutoSize: this.autoSize
       }
@@ -231,7 +231,7 @@
         innerW: this.w,
         innerH: this.h,
         lockBottomInLayout: false,
-        instantPx: {
+        realPx: {
           w: 0,
           h: 0,
           x: 0,
@@ -262,10 +262,10 @@
         }
       }
 
-      this.instantPx.x = Math.floor(this.x * this.colX)
-      this.instantPx.y = Math.floor(this.y * this.colY)
-      this.instantPx.h = Math.floor(this.h * this.colHeight)
-      this.instantPx.w = Math.floor(this.w * this.colWidth)
+      this.realPx.x = Math.floor(this.x * this.colX) * this.scaleRatio
+      this.realPx.y = Math.floor(this.y * this.colY) * this.scaleRatio
+      this.realPx.h = Math.floor(this.h * this.colHeight) * this.scaleRatio
+      this.realPx.w = Math.floor(this.w * this.colWidth) * this.scaleRatio
 
       this.$bus.$on(`handleResize-${this.i}`, this.handleResize)
       this.$bus.$on(`handleDrag-${this.i}`, this.handleDrag)
@@ -274,10 +274,10 @@
       this.eventBus.$on('setResizable', self.setResizableHandler)
     },
     updated() {
-      this.instantPx.x = Math.floor(this.x * this.colX)
-      this.instantPx.y = Math.floor(this.y * this.colY)
-      this.instantPx.h = Math.floor(this.h * this.colHeight)
-      this.instantPx.w = Math.floor(this.w * this.colWidth)
+      this.realPx.x = Math.floor(this.x * this.colX) * this.scaleRatio
+      this.realPx.y = Math.floor(this.y * this.colY) * this.scaleRatio
+      this.realPx.h = Math.floor(this.h * this.colHeight) * this.scaleRatio
+      this.realPx.w = Math.floor(this.w * this.colWidth) * this.scaleRatio
     },
     beforeDestroy: function() {
       //Remove listeners
@@ -330,7 +330,7 @@
       isResizable: function() {
         this.resizable = this.isResizable
       },
-      instantPx: {
+      realPx: {
         handler() {
           this.createStyle()
         },
