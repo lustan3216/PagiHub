@@ -105,8 +105,7 @@ export default {
       options: {
         callback: isVisible => {
           this.inViewPort = isVisible || this.moving
-        },
-        rootMargin: '300px 300px 300px 300px'
+        }
       },
       exampleBoundary: 'xs',
       layout: {},

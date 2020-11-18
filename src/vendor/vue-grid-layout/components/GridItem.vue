@@ -966,7 +966,6 @@
           this.previousW = this.innerW
           this.previousH = this.innerH
 
-
           const { elm } = this.$slots.default[0]
 
           const styles = window.getComputedStyle(elm.parentNode)

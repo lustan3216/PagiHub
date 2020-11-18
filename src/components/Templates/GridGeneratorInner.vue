@@ -121,7 +121,7 @@ export default {
   },
   mounted() {
     this.element = this.$el
-    this.gridItemAutoSize()
+    // this.gridItemAutoSize()
     if (this.autoResize) {
       this.$watch('$refs.gridGenerator.width', () => {
         this.gridItemAutoSize()

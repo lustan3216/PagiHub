@@ -16,7 +16,6 @@
 <script>
 import GridGeneratorItem from './GridGeneratorItem'
 import GridGeneratorInner from './GridGeneratorInner'
-import { resizeListener } from '@/utils/tool'
 
 export default {
   name: 'Group',
