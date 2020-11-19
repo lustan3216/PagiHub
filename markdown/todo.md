@@ -25,7 +25,6 @@ Just click publish, then you will have a real RWD website
 
 ratio 要by device
 publish 裡面要打字才有辦法發布
-字典不到
 panelcomponent 打字時是動態的
 panel component可以shift多選
 手機看頁面會壞掉
