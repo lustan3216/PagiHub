@@ -28,7 +28,8 @@ export const rectangle = function(options, grid) {
     grid,
     [STYLES]: {
       html: {
-        border: '1px solid #dcdfe6'
+        border: '1px solid #b5b9c1',
+        background: '#E8E8E9'
       }
     },
     ...options
@@ -113,6 +114,11 @@ export const carousel = function(options, grid) {
     [CAN_NEW_ITEM]: true,
     [CAN_BE_EDITED]: true,
     grid,
+    [STYLES]: {
+      html: {
+        border: '1px solid #b5b9c1'
+      }
+    },
     [CHILDREN]: [
       // gridGenerator({
       //   [POLYMORPHISM]: 'indicators',
