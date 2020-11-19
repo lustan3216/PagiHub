@@ -184,7 +184,7 @@ export default {
       return isImage(node)
     },
     maxFileSize() {
-      return '2MB'
+      return '5MB'
     },
     folderParser() {
       const parser = new FolderParser(this.images)

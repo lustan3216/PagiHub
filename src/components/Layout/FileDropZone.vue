@@ -51,7 +51,7 @@ export default {
           }
         },
         createImageThumbnails: false,
-        maxFilesize: 2,
+        maxFilesize: 5,
         autoProcessQueue: true,
         acceptedFiles: 'image/*',
         clickable: false,
