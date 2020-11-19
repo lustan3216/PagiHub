@@ -1,9 +1,9 @@
 <template>
   <component
-    class="asd"
     ref="element"
     :is="tag"
     :contenteditable="contentEditable"
+    class="transition"
     @input="update"
     @blur="update"
     @paste="onPaste"
@@ -103,7 +103,7 @@ export default {
 </script>
 
 <style scoped>
-  .asd {
+  .transition {
     transition: all 0.3s;
   }
 </style>
