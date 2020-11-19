@@ -45,9 +45,9 @@
         />
 
         <event-controller
-          v-if="needController && $el"
+          v-if="needController && element"
           :id="id"
-          :element="$el"
+          :element="element"
           @mousedown="mousedown"
           @mouseup="moved"
         >
@@ -118,7 +118,8 @@ export default {
       duplicateNodeRecords: [],
       pressAltKey: false,
       moving: false,
-      autoSizedHeight: 0
+      autoSizedHeight: 0,
+      element: null
     }
   },
   computed: {
@@ -302,8 +303,10 @@ export default {
   },
   updated() {
     this.updateLayout()
+    this.element = this.$el
   },
   mounted() {
+    this.element = this.$el
     if (this.isExample) {
       const el = this.$el.closest('.art-board')
       const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
