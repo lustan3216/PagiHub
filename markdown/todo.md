@@ -24,9 +24,8 @@ Just click publish, then you will have a real RWD website
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
 ratio 要by device
-publish 裡面要打字才有辦法發布
-panelcomponent 打字時是動態的
 panel component可以shift多選
+
 手機看頁面會壞掉
 考慮x y 可以負的
 往下延長block很麻煩

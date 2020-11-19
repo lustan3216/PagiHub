@@ -1,7 +1,7 @@
 <template>
   <el-input
     v-if="editing && node"
-    v-model.trim.lazy="name"
+    v-model.trim="name"
     class="input"
     @keydown.enter.native="enter"
   >
@@ -74,12 +74,15 @@ export default {
       default: false
     }
   },
-  data() {
-    return {
-      name: ''
-    }
-  },
   computed: {
+    name: {
+      get() {
+        return this.textName
+      },
+      set(value) {
+        this.onInputChange(value)
+      }
+    },
     node() {
       return this.nodesMap[this.id]
     },
@@ -123,15 +126,17 @@ export default {
         observable.editingId = this.id
       }
     },
-    enter() {
-      observable.editingId = null
-
-      if (this.name && this.name !== this.nodeShortName) {
+    onInputChange(value) {
+      if (this.name !== value) {
         this.debounceRecord({
-          path: `${this.id}.${LABEL}`,
-          value: this.name
+          path: [this.id, 'value'],
+          value: value
         })
       }
+    },
+    enter() {
+      observable.editingId = null
+      this.onInputChange(this.name)
     }
   }
 }
