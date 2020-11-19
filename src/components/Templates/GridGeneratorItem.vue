@@ -35,7 +35,7 @@
       :class="{
         'h-100': !autoResizeHeight
       }"
-      class="border-box over-hidden"
+      class="border-box"
     >
       <template v-if="inViewPort">
         <i
