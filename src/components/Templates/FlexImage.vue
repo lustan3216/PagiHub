@@ -11,7 +11,6 @@
     <el-image
       v-else
       v-bind="innerProps"
-      lazy
       scroll-container="#art-board"
       class="wh-100"
     >
