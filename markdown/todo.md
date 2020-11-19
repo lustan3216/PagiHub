@@ -1,7 +1,7 @@
 ### Functionality
 
-https://www.angelinvestment.org.tw/introduction
 
+https://yalantis.com/blog/web-animation-technologies-and-tools/
 https://lottiefiles.com/
 https://github.com/probil/vue-moveable
 https://github.com/girliemac/Filterous
@@ -23,9 +23,17 @@ Just click publish, then you will have a real RWD website
 打包出去的 js file, 理論上應該可以 用 prerender 方式，因為已經發布了，所以固定定型了，理論上程式碼應該不用再動，
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
-
+ratio 要by device
+publish 裡面要打字才有辦法發布
+字典不到
+panelcomponent 打字時是動態的
+panel component可以shift多選
+發不完顯示網址
 手機看頁面會壞掉
 考慮x y 可以負的
+往下延長block很麻煩
+字體，變幻時 大小變幻時erect沒有變
+照片及壞掉
 
 cut
 group 要能拖進去拖出來嗎

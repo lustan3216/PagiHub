@@ -205,6 +205,7 @@ export const exampleMap = {
   'flex-button': flexButton,
   'flex-image': flexImage,
   'video-player': videoPlayer,
+  slider,
   iframer,
   rectangle,
   group

@@ -62,12 +62,3 @@ Need to ask
 - 合約
 - 付款方式
 
-* relative product
-
-  - https://www.joomshaper.com/
-  - https://bootstrapstudio.io/
-  - https://grapesjs.com/demo.html
-  - https://nicepage.com/
-  - https://www.editorx.com/
-  - http://innovastudio.com/
-  - https://mobirise.com/

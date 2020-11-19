@@ -285,7 +285,7 @@ export default {
       'SET_SELECTED_COMPONENT_ID'
     ]),
     createSlider() {
-      vmCreateEmptyItem(this.node.parentNode)
+      vmCreateEmptyItem(this.node)
     },
     deleteSlider() {
       this.removeCurrentSlider()
