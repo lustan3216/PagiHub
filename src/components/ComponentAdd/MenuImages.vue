@@ -132,7 +132,7 @@ import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size'
 import { postAsset } from '@/api/asset'
 import FolderParser from '@/utils/folderParser'
 import { humanize } from '@/utils/string'
-import { PROPS } from '@/const'
+import { PROPS, IMAGE_MAX_SIZE } from '@/const'
 import { isImage } from '@/utils/node'
 
 const FilePond = vueFilePond(
@@ -184,7 +184,7 @@ export default {
       return isImage(node)
     },
     maxFileSize() {
-      return '5MB'
+      return IMAGE_MAX_SIZE + 'MB'
     },
     folderParser() {
       const parser = new FolderParser(this.images)

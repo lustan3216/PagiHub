@@ -4,12 +4,14 @@
     ref="dropzone"
     :use-custom-slot="true"
     :options="dropzoneOptions"
+    :key="editingProjectId"
     class="dropzone"
     @vdropzone-drag-over="setIsAdding"
     @vdropzone-drop="drop"
     @vdropzone-error="error"
     @vdropzone-sending="sending"
     @vdropzone-complete="init"
+    @vdropzone-success="uploaded"
   >
     <slot/>
   </vue-dropzone>
@@ -18,16 +20,17 @@
 <script>
 import vue2Dropzone from 'vue2-dropzone'
 import { Auth } from 'aws-amplify'
-import { mapState, mapMutations, mapGetters, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import { isBackground, isCarousel, isGroup, isImage, isRectangle } from '@/utils/node'
 import { flexImage } from '@/templateJson/basic'
 import { vmGet } from '@/utils/vmMap'
 import { horizontalUnitConvert } from '@/utils/layout'
 import { Message } from 'element-ui'
 import { appendIds } from '@/utils/nodeId'
-import { GRID, STYLES } from '@/const'
+import { GRID, STYLES, IMAGE_MAX_SIZE } from '@/const'
 import { ulid } from 'ulid'
 import { asyncGetValue } from '@/utils/tool'
+import store from '@/store'
 
 let timerId
 let hoverIds = []
@@ -51,7 +54,7 @@ export default {
           }
         },
         createImageThumbnails: false,
-        maxFilesize: 5,
+        maxFilesize: IMAGE_MAX_SIZE,
         autoProcessQueue: true,
         acceptedFiles: 'image/*',
         clickable: false,
@@ -102,18 +105,43 @@ export default {
   },
   methods: {
     ...mapMutations('app', { APP_SET: 'SET' }),
+    ...mapMutations('asset', ['ADD_IMAGE']),
     ...mapActions('node', ['irreversibleRecord', 'debounceRecord']),
-    init() {
+    getNode(event) {
+      const element = event.target.closest('[data-image-droppable]')
+      if (element) {
+        return element.__vue__.$parent.node
+      }
+    },
+    getImageRect(file) {
+      return new Promise((resolve) => {
+        const _URL = window.URL || window.webkitURL
+
+        const img = new Image()
+        const objectUrl = _URL.createObjectURL(file)
+        img.onload = function() {
+          resolve({ w: this.width, h: this.height })
+          _URL.revokeObjectURL(objectUrl)
+        }
+        img.src = objectUrl
+      })
+    },
+    drop(event) {
+      const element = event.target.closest('[data-image-droppable]')
+      if (!element) return
+
+      const { x, y } = element.getBoundingClientRect()
+      const droppedNode = this.getNode(event)
+
       this.dropEvent = {
-        clientX: 0,
-        clientY: 0,
-        x: 0,
-        y: 0,
-        droppedNode: null,
-        onlyAcceptOne: false,
+        x,
+        y,
+        clientX: event.clientX,
+        clientY: event.clientY,
+        droppedNode,
+        onlyAcceptOne: isImage(droppedNode) || isRectangle(droppedNode),
         uploadingIndex: 0
       }
-      this.dropzone.removeAllFiles()
     },
     sending(file, xhr, formData) {
       const id = ulid()
@@ -200,36 +228,6 @@ export default {
         message: message
       })
     },
-    getImageRect(file) {
-      return new Promise((resolve) => {
-        const _URL = window.URL || window.webkitURL
-
-        const img = new Image()
-        const objectUrl = _URL.createObjectURL(file)
-        img.onload = function() {
-          resolve({ w: this.width, h: this.height })
-          _URL.revokeObjectURL(objectUrl)
-        }
-        img.src = objectUrl
-      })
-    },
-    drop(event) {
-      const element = event.target.closest('[data-image-droppable]')
-      if (!element) return
-
-      const { x, y } = element.getBoundingClientRect()
-      const droppedNode = this.getNode(event)
-
-      this.dropEvent = {
-        x,
-        y,
-        clientX: event.clientX,
-        clientY: event.clientY,
-        droppedNode,
-        onlyAcceptOne: isImage(droppedNode) || isRectangle(droppedNode),
-        uploadingIndex: 0
-      }
-    },
     async setBase64Preview(id, file) {
       const imageVm = await asyncGetValue(() => vmGet(id))
       imageVm.$parent.setBase64Preview(file)
@@ -254,12 +252,21 @@ export default {
         hoverIds = []
       }, 100)
     },
-    getNode(event) {
-      const element = event.target.closest('[data-image-droppable]')
-      if (element) {
-        return element.__vue__.$parent.node
+    uploaded(file, response) {
+      this.ADD_IMAGE(response.data)
+    },
+    init() {
+      this.dropEvent = {
+        clientX: 0,
+        clientY: 0,
+        x: 0,
+        y: 0,
+        droppedNode: null,
+        onlyAcceptOne: false,
+        uploadingIndex: 0
       }
-    }
+      this.dropzone.removeAllFiles()
+    },
   }
 }
 </script>

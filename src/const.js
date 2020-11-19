@@ -75,3 +75,5 @@ export const NODE_TYPE = {
   DESIGN: 'design',
   COMPONENT: undefined
 }
+
+export const IMAGE_MAX_SIZE = 5
