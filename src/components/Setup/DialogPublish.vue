@@ -20,7 +20,8 @@
       v-if="node"
       :loading="loading"
       :visible.sync="visible"
-      title="Publish"
+      :title="published ? 'Publish Success !!' : 'Publish'"
+      :show-footer="!published"
       width="50%"
       @close="initData"
       @confirm="onSubmit"
@@ -30,7 +31,18 @@
         @shortkey.propgate="visible = false"
       />
 
+      <template v-if="published">
+        <p class="gray-font">
+          Go check your excellent work.
+        </p>
+        <publish-link
+          type="text"
+          :id="editingComponentSetId"
+        />
+      </template>
+
       <el-form
+        v-else
         ref="form"
         :model="form"
         label-width="110px"
@@ -68,6 +80,7 @@
 import { mapActions, mapState } from 'vuex'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import TextEditorRich from '@/components/Components/TextEditorRich'
+import PublishLink from '@/components/Components/PublishLink'
 import { BIconCloudArrowUp } from 'bootstrap-vue'
 import { Message } from 'element-ui'
 import DialogUsername from './DialogUsername'
@@ -79,6 +92,7 @@ export default {
   name: 'DialogPublish',
   components: {
     DialogConfirmable,
+    PublishLink,
     DialogUsername,
     TextEditorRich,
     BIconCloudArrowUp
@@ -87,6 +101,7 @@ export default {
     return {
       visible: false,
       loading: false,
+      published: false,
       form: {
         description: ''
       }
@@ -113,12 +128,6 @@ export default {
       if (value) {
         this.form.description = this.node.publishDescription || ''
       }
-    },
-    form: {
-      handler() {
-        this.dirty = true
-      },
-      deep: true
     }
   },
   methods: {
@@ -136,18 +145,17 @@ export default {
     },
     onSubmit() {
       this.$refs.form.validate(async valid => {
-        if (valid && this.dirty) {
+        if (valid) {
           try {
             this.loading = true
             await this.publishComponentSet(this.form.description)
-            Message.success('Publish Success')
+            this.published = true
           }
           catch (e) {
             Message.warning(e.message)
           }
           finally {
             this.loading = false
-            this.visible = false
           }
         }
       })

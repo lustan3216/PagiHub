@@ -28,7 +28,6 @@ publish 裡面要打字才有辦法發布
 字典不到
 panelcomponent 打字時是動態的
 panel component可以shift多選
-發不完顯示網址
 手機看頁面會壞掉
 考慮x y 可以負的
 往下延長block很麻煩
