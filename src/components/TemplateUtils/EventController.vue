@@ -72,6 +72,7 @@ import {
 } from '@/utils/node'
 import ContextMenu from '@/components/TemplateUtils/ContextMenu'
 import { arrayLast, findIndexBy } from '@/utils/array'
+import { globalDebounce } from '@/utils/tool'
 
 const store = vue.observable({
   lastEditId: null,
@@ -188,13 +189,21 @@ export default {
       return this.boundaryRect.px
     }
   },
+  watch: {
+    'node.styles': {
+      handler() {
+        this.LAYOUT_SET({ gridResizing: true })
+
+        globalDebounce(() => {
+          this.LAYOUT_SET({ gridResizing: false })
+        }, 1500)
+      },
+      deep: true
+    }
+  },
   methods: {
-    ...mapMutations('layout', {
-      LAYOUT_SET: 'SET'
-    }),
-    ...mapMutations('app', {
-      APP_SET: 'SET'
-    }),
+    ...mapMutations('layout', { LAYOUT_SET: 'SET' }),
+    ...mapMutations('app', { APP_SET: 'SET' }),
     ...mapMutations('app', [
       'SET_SELECTED_COMPONENT_ID',
       'TOGGLE_SELECTED_COMPONENT_ID',

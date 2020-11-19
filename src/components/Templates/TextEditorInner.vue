@@ -154,8 +154,8 @@ export default {
     }
   },
   mounted() {
-    this.element = this.$refs.content.$el
-    this.offResizeListener = resizeListener(this.element, () => {
+    this.element = this.$el
+    this.offResizeListener = resizeListener(this.$el, () => {
       requestAnimationFrame(() => {
         this.gridItemAutoSize()
       })

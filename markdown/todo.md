@@ -29,7 +29,6 @@ panel component可以shift多選
 手機看頁面會壞掉
 考慮x y 可以負的
 往下延長block很麻煩
-字體，變幻時 大小變幻時erect沒有變
 
 cut
 group 要能拖進去拖出來嗎
