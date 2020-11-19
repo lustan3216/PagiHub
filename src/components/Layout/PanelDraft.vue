@@ -93,8 +93,16 @@ export default {
   async created() {
     this.INIT_NODE_STORE()
     this.SET_DRAFT_MODE()
+
+    // the very first moment to add proejct id, otherwise file-drop-zone will get null
+    const { projectId } = this.$route.params
+
+    if (projectId) {
+      this.NODE_SET({ editingProjectId: projectId })
+    }
   },
   methods: {
+    ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapMutations('node', ['INIT_NODE_STORE']),
     ...mapMutations('mode', ['SET_DRAFT_MODE'])
   },
