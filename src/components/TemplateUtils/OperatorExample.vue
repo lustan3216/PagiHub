@@ -130,7 +130,7 @@ export default {
       const vm = vmGet(this.id, true)
       const { pxW = 0, pxH = 0 } = vm
       const index = Math.floor((30000 - pxW - pxH) / 100)
-      return index
+      return this.itemEditing ? index * 2 : index
     },
     visible() {
       const windowBottom = this.windowY + this.windowHeight
