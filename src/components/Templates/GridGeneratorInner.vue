@@ -123,6 +123,10 @@ export default {
   },
   mounted() {
     this.element = this.$el
+
+    if (this.autoResize) {
+      this.gridItemAutoSize()
+    }
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),
