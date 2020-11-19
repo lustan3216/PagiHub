@@ -53,7 +53,7 @@ import childrenMixin from '@/components/Templates/mixins/children'
 import { getValueByPath } from '@/utils/tool'
 import { isGroup, traversalSelfAndChildren } from '@/utils/node'
 import EventController from '../TemplateUtils/EventController'
-import { horizontalUnitConvert, verticalUnitConvert } from '@/utils/layout'
+import { horizontalUnitFromTo, verticalUnitFromTo } from '@/utils/layout'
 
 export default {
   name: 'GridGeneratorInner',
@@ -173,14 +173,11 @@ export default {
       for (const breakpoint in dragNode.grid) {
         const currentGrid = dragNode.grid[breakpoint]
 
-        const dragW = horizontalUnitConvert(dragNode.id, currentGrid.w, currentGrid.unitW, 'px')
-        const dragH = verticalUnitConvert(dragNode.id, currentGrid.h, currentGrid.unitH, 'px')
-
         newGrid[breakpoint] = {
-          x: dragX - dropX,
-          y: dragY - dropY,
-          w: horizontalUnitConvert(dropNode.id, dragW, 'px', currentGrid.unitW),
-          h: verticalUnitConvert(dropNode.id, dragH, 'px', currentGrid.unitH),
+          x: horizontalUnitFromTo(dragNode.id, dropNode.id, dragX - dropX, 'px', currentGrid.unitX),
+          y: verticalUnitFromTo(dragNode.id, dropNode.id, dragY - dropY, 'px', currentGrid.unitY),
+          w: horizontalUnitFromTo(dragNode.id, dropNode.id, currentGrid.w, currentGrid.unitW),
+          h: verticalUnitFromTo(dragNode.id, dropNode.id, currentGrid.h, currentGrid.unitH),
           unitW: currentGrid.unitW,
           unitH: currentGrid.unitH,
           unitX: currentGrid.unitX,

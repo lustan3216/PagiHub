@@ -2,15 +2,22 @@ import store from '@/store'
 import { BREAK_POINTS_MAP } from '@/const'
 import { vmGet } from '@/utils/vmMap'
 import { toPrecision } from '@/utils/number'
+import { isUndefined } from '@/utils/tool'
 
-export function horizontalUnitPercentFromTo(fromId, toId, distance) {
-  const fromPx = horizontalUnitConvert(fromId, distance, '%', 'px')
-  return horizontalUnitConvert(toId, fromPx, 'px', '%')
+export function horizontalUnitFromTo(fromId, toId, distance, fromUnit, toUnit) {
+  if (isUndefined(toUnit)) {
+    toUnit = fromUnit
+  }
+  const fromPx = horizontalUnitConvert(fromId, distance, fromUnit, 'px')
+  return horizontalUnitConvert(toId, fromPx, 'px', toUnit)
 }
 
-export function verticalUnitPercentFromTo(fromId, toId, distance) {
-  const fromPx = verticalUnitConvert(fromId, distance, '%', 'px')
-  return verticalUnitConvert(toId, fromPx, 'px', '%')
+export function verticalUnitFromTo(fromId, toId, distance, fromUnit, toUnit) {
+  if (isUndefined(toUnit)) {
+    toUnit = fromUnit
+  }
+  const fromPx = verticalUnitConvert(fromId, distance, fromUnit, 'px')
+  return verticalUnitConvert(toId, fromPx, 'px', toUnit)
 }
 
 export function horizontalUnitConvert(id, distance, inputUnit, outputUnit) {

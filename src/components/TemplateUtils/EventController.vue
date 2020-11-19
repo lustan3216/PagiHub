@@ -103,16 +103,6 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      inViewPort: false,
-      options: {
-        callback: isVisible => {
-          this.inViewPort = isVisible
-        }
-      }
-    }
-  },
   computed: {
     ...mapState('app', [
       'selectedComponentIds',

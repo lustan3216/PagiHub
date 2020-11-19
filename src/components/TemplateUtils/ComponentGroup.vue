@@ -12,7 +12,7 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { BREAK_POINTS_ARRAY, GRID } from '@/const'
 import { group } from '@/templateJson/basic'
 import { vmRemoveNode } from '@/utils/vmMap'
-import { horizontalUnitConvert, verticalUnitConvert, verticalUnitPercentFromTo, horizontalUnitPercentFromTo } from '@/utils/layout'
+import { horizontalUnitConvert, verticalUnitConvert, verticalUnitFromTo, horizontalUnitFromTo } from '@/utils/layout'
 import { toPrecision } from '@/utils/number'
 
 export default {
@@ -136,14 +136,14 @@ export default {
           if (grid.unitW === '%') {
             records.push({
               path: [node.id, GRID, point, 'w'],
-              value: horizontalUnitPercentFromTo(node.id, group.id, grid.w)
+              value: horizontalUnitFromTo(node.id, group.id, grid.w, '%')
             })
           }
 
           if (grid.unitH === '%') {
             records.push({
               path: [node.id, GRID, point, 'h'],
-              value: verticalUnitPercentFromTo(node.id, group.id, grid.h)
+              value: verticalUnitFromTo(node.id, group.id, grid.h, '%')
             })
           }
 
