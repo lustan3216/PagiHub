@@ -23,37 +23,29 @@ Just click publish, then you will have a real RWD website
 打包出去的 js file, 理論上應該可以 用 prerender 方式，因為已經發布了，所以固定定型了，理論上程式碼應該不用再動，
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
-ratio 要by device
-panel component可以shift多選
 
 手機看頁面會壞掉
 考慮x y 可以負的
 往下延長block很麻煩
-
-cut
-group 要能拖進去拖出來嗎
 有node會沒刪乾淨
 rwd
 btton連結
 發布後 的share page and browsing
 如果update 500 直接 overwrite
-
 加入文字會跑位
-常會點不到字
- 每次註記的版本
- 
-
-
-// resizeing docking 考慮
-// group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
-
-- panel component 可以拖拉
-- iframe
-- panel component shift select
-- style 支援 每個 device 可客製化
-- 支援 icon
+每次註記的版本
+  
+- support 多個畫板  
+- resizeing
+- group 要隨著 裡面元素的寬高長大 / 暫時不做的話 group 匡耀顯示 / 比要伸縮
+- 支援 svg icon
 - 距離輔助線
 - hover click
+- style 支援 每個 device 可客製化
+- panel component 可以拖拉
+
+- iframe
+- panel component shift select
 - animation
 - style component
 - container can transform

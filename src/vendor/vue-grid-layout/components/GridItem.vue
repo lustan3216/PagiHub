@@ -716,11 +716,11 @@
             newPosition.top = this.dragging.top + (event.delta.y) / this.scaleRatio
 
             if (event.shiftKey) {
-              if (Math.abs(newPosition.left - this.previousX) > Math.abs(newPosition.top - this.previousY)) {
-                newPosition.top = this.previousY
+              if (Math.abs(newPosition.left - this.previousX * this.colX) > Math.abs(newPosition.top - this.previousY * this.colY)) {
+                newPosition.top = this.previousY * this.colY
               }
               else {
-                newPosition.left = this.previousX
+                newPosition.left = this.previousX * this.colX
               }
             }
 

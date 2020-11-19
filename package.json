@@ -52,7 +52,6 @@
     "vue-contenteditable": "^1.0.2",
     "vue-draggable": "^2.0.6",
     "vue-filepond": "^6.0.2",
-    "vue-grid-layout": "2.3.8",
     "vue-infinite-scroll": "^2.0.2",
     "vue-observe-visibility": "^0.4.6",
     "vue-plyr": "^6.0.4",
