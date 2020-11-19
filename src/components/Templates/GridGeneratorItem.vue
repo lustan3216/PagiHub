@@ -1,7 +1,6 @@
 <template>
   <vue-grid-item
     v-observe-visibility="options"
-    v-if="!hidden"
     ref="gridItem"
     :id="id"
     :i="computedLayout.i"
@@ -225,9 +224,6 @@ export default {
     styleLayout() {
       return getValueByPath(this.node, [STYLES, 'layout'], {})
     },
-    hidden() {
-      return getValueByPath(this.node, [STYLES, this.validBreakpoint, 'hidden'])
-    },
     computedLayout() {
       const { position, ratio } = this.styleLayout
       const { userCanResize, userCanDrag } = this.innerProps
@@ -246,7 +242,6 @@ export default {
         unitY: this.currentGrid.unitY,
 
         stack: this.stack,
-        hidden: this.hidden,
         ratio,
 
         isResizable: this.isDraftMode || userCanResize,
