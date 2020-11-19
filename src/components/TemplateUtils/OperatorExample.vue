@@ -127,10 +127,8 @@ export default {
     },
     zIndex() {
       // w h 越小 zindex越大
-      const vm = vmGet(this.id, true)
-      const { pxW = 0, pxH = 0 } = vm
-      const index = Math.floor((30000 - pxW - pxH) / 100)
-      return this.itemEditing ? index * 2 : index
+      const index = Math.floor((30000 - this.rect.w - this.rect.h) / 100)
+      return index
     },
     visible() {
       const windowBottom = this.windowY + this.windowHeight

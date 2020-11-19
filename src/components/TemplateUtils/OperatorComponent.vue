@@ -86,7 +86,7 @@ export default {
     zIndex() {
       // w h 越小 zindex越大
       const index = Math.floor((30000 - this.rect.w - this.rect.h) / 100)
-      return this.itemEditing ? index * 2 : index
+      return index
     },
     resizeHandler() {
       return !this.gridResizing && this.selected && this.isResizable
