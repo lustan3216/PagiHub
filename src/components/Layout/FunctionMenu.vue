@@ -213,7 +213,7 @@ export default {
           name: 'Clean Selection',
           shortKey: ['esc'],
           shortKeyString: ['Esc'],
-          fn: this.appState
+          fn: this.cleanAppState
         },
         {
           name: 'Undo',
@@ -271,7 +271,7 @@ export default {
   methods: {
     ...mapMutations('node', ['REDO', 'UNDO']),
     ...mapActions('app', ['setCopySelectedNodeId']),
-    ...mapMutations('app', ['APP_RESET']),
+    ...mapMutations('app', { APP_SET: 'SET' }),
 
     isMac,
     vmPasteNodes,
@@ -282,8 +282,12 @@ export default {
       this.setCopySelectedNodeId(this.selectedComponentIds)
       this.selectedComponentNodes.forEach(node => vmRemoveNode(node))
     },
-    appState() {
-      this.APP_RESET()
+    cleanAppState() {
+      this.APP_SET({
+        isAdding: false,
+        beingAddedComponentId: null,
+        selectedComponentIds: []
+      })
     }
   }
 }

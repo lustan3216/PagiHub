@@ -512,13 +512,9 @@
         this.realPx.w = Math.floor(this.w * this.colWidth) * this.scaleRatio
       },
       createStyle: function() {
-        if (this.pxX + this.pxW > this.containerWidth) {
-          this.innerX = this.containerWidth - this.pxW < 0 ? 0 : (this.containerWidth - this.pxW) / this.colX
-          this.innerW = (this.pxW > this.containerWidth) ? this.containerWidth / this.colWidth : this.w
-        } else {
-          this.innerX = this.x
-          this.innerW = this.w
-        }
+        this.innerX = this.x
+        this.innerW = this.w
+
         let pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH)
 
         if (this.isDragging) {
@@ -822,14 +818,14 @@
         // l - m = x(c + m)
         // (l - m) / (c + m) = x
         // x = (left - margin) / (coldWidth + margin)
-        let maxX = (this.containerWidth - this.pxW) / this.colX
+        // let maxX = (this.containerWidth - this.pxW) / this.colX
 
         let x,y
         if (this.unitX === 'px') {
           x = Math.floor(left)
         } else {
           x = toPrecision(left / this.colX, 1)
-          maxX = toPrecision(maxX, 1)
+          // maxX = toPrecision(maxX, 1)
         }
 
         if (this.unitY === 'px') {
@@ -839,8 +835,8 @@
         }
 
         // Capping
-        x = Math.max(Math.min(x, maxX), 0)
-        y = Math.max(y, 0)
+        // x = Math.max(Math.min(x, maxX), 0)
+        // y = Math.max(y, 0)
 
         return { x, y }
       },
@@ -855,13 +851,13 @@
         // width = colWidth * w - (margin * (w - 1))
         // ...
         // w = (width + margin) / (colWidth + margin)
-        let maxW = (this.containerWidth - this.pxX) / this.colWidth
+        // let maxW = (this.containerWidth - this.pxX) / this.colWidth
         let w
         if (this.unitW === 'px') {
           w = Math.floor(width)
         } else {
           w = toPrecision(width / this.colWidth, 1)
-          maxW = toPrecision(maxW, 1)
+          // maxW = toPrecision(maxW, 1)
         }
 
         let h
@@ -872,8 +868,8 @@
         }
 
         // Capping
-        w = Math.max(Math.min(maxW, w), 0)
-        h = Math.max(h, 0)
+        // w = Math.max(Math.min(maxW, w), 0)
+        // h = Math.max(h, 0)
         return { w, h }
       },
       compact: function() {

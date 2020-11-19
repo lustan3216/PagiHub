@@ -26,6 +26,11 @@ export const rectangle = function(options, grid) {
   return {
     [TAG]: 'rectangle',
     grid,
+    [STYLES]: {
+      html: {
+        border: '1px solid #dcdfe6'
+      }
+    },
     ...options
   }
 }
