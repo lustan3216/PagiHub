@@ -208,6 +208,7 @@
              invistigate stable sizes of GridItem-s.
              */
             this.$nextTick(() => {
+              this.updateHeight()
               this.$emit('layout-ready', this.layout)
             })
           }
@@ -370,7 +371,6 @@
         }
 
         if (eventName === 'dragmove' || eventName === 'dragstart') {
-          // lot-design 原本沒有以下這行的唷 :)
           this.showPlaceHolder = l.verticalCompact
 
           this.placeholder.i = id
@@ -462,7 +462,7 @@
           })
         }
 
-        compact(this.layout, id)
+        compact(this.layout)
         this.eventBus.$emit('compact')
         // lots-design
         this.updateHeight()

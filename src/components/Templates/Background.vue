@@ -1,12 +1,11 @@
 <template>
   <grid-generator-inner
-    :style="innerStyles.html"
     :id="id"
+    :style="innerStyles.html"
     :inner-props="innerProps"
     :inner-styles="innerStyles"
-    :extra-style="{
-      minHeight: '100%'
-    }"
+    :extra-style="{ minHeight: '100%' }"
+    refs="grid"
     controller
     data-image-droppable
     class="background over-hidden"
@@ -60,7 +59,7 @@ export default {
         this.px.h = value
       },
       immediate: true
-    },
+    }
   }
 }
 </script>

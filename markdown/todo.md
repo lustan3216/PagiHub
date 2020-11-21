@@ -23,7 +23,13 @@ Just click publish, then you will have a real RWD website
 打包出去的 js file, 理論上應該可以 用 prerender 方式，因為已經發布了，所以固定定型了，理論上程式碼應該不用再動，
 要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
+animation mvp實現的， hover, click, drag direction, timeline animation, motion
 
+scroll bar
+grid 要拆開，
+group 要包起來
+grid 手機版平板卉亥弔
+image 加入還是有問題
 手機看頁面會壞掉
 考慮x y 可以負的
 往下延長block很麻煩
@@ -90,5 +96,13 @@ https://medium.com/as-a-product-designer/figma-design-tool-1c6542ae8dc1
 
 
 
-
-
+1. 動畫嵌入和賣錢，兩個方式本來就不衝突，兩個本來就“該”而且可以合併，只是差再開發順序
+2. 我的交互動畫，不是只有動畫而已，透過radio hover, click 等等交互行為等應用，可以做出 Switch NavMenu, Carousel Drawer select 漢堡選單等複雜元件都可以做到，所以我一直沒有做這些元件
+3. 設計師不是需要真的做一個完整的模板才能賣錢，組建也可以是，甚至是履歷模板等等，其他應用，不用真的RWD也可以賣錢，RWD只是其中一個讓價格變高的工具
+4. 嵌入市場 https://bit.dev/  http://lottiefiles.com/
+5. 設計師賣錢市場
+https://www.awwwards.com/top-websites-where-designers-can-sell-their-works.html
+https://www.designhill.com/design-blog/top-21-places-to-sell-your-design-work-online/
+6. 賣出去後，可以選擇性直接當網頁使用，或被工程師嵌入，當然也會有提供免費的市場
+7. 設計可以賣錢，但須經過審核，或是個人製作免費的達一定數量，則可以開始要求付費，或是donate任何錢之後，則可使用
+8.工程師端要怎麼嵌入，要再想最好的方式，但目前也只能支援js而已，可能依照bit，方式用yarn 讓工程師安裝，且高客製化，但同時提供最簡單的ifame嵌入方式 (e

@@ -43,7 +43,7 @@
             class="sub-title"
           >
             <div class="w-100 justify-between">
-              Fixed Pixel <span class="gray-font-2 m-l-15">px</span>
+              Fixed <span class="gray-font-2 m-l-15">px</span>
             </div>
           </el-dropdown-item>
           <el-dropdown-item
@@ -52,7 +52,7 @@
             class="sub-title"
           >
             <div class="w-100 justify-between">
-              Fluid Width <span class="gray-font-2 m-l-15">%</span>
+              Fluid <span class="gray-font-2 m-l-15">%</span>
             </div>
           </el-dropdown-item>
           <el-dropdown-item
