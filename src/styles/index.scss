@@ -92,3 +92,12 @@ input[type='number'] {
 .clearfix {
   zoom: 1;
 } /* IE < 8 */
+
+::-webkit-scrollbar {
+  display: none !important;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
