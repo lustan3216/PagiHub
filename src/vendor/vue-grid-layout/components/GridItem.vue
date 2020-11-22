@@ -969,20 +969,21 @@
           this.previousH = this.innerH
 
           const { elm } = this.$slots.default[0]
-
-
-
           // elm.parentNode 這裡要拿到gridInnerItem裡面的div, 有padding的那層
 
           let height = elm.clientHeight
           const width = elm.clientWidth
           if (!height || !width) return
 
-          const styles = window.getComputedStyle(elm.parentNode)
-          const padding = parseFloat(styles['paddingTop'] || 0) +
-                          parseFloat(styles['paddingBottom'] || 0)
+          // const styles = window.getComputedStyle(elm.parentNode)
+          // const padding = parseFloat(styles['paddingTop'] || 0) +
+          //                 parseFloat(styles['paddingBottom'] || 0)
 
-          height += padding
+          const styles2 = window.getComputedStyle(elm)
+          const border = parseFloat(styles2['borderTop'] || 0) +
+                         parseFloat(styles2['borderBottom'] || 0)
+
+          height += border
 
           let pos = this.calcWH(height, width)
           // let pos = this.calcWH(clientHeight / this.scaleRatio, clientWidth / this.scaleRatio)

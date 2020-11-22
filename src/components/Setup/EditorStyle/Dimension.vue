@@ -37,7 +37,7 @@
       <el-col :span="10">
         <select-unit
           :clearable="false"
-          :disabled="!selectedComponentNodes.length || hasSlider"
+          :disabled="!selectedComponentNodes.length || hasSlider || widthDisabled"
           :number.sync="w"
           :unit.sync="unitW"
           :min="0"
@@ -169,6 +169,10 @@ export default {
       return Boolean(
         this.selectedComponentNodes.filter(node => isSlider(node)).length
       )
+    },
+    widthDisabled() {
+      const nodes = this.selectedComponentNodes.filter(node => isGroup(node))
+      return Boolean(nodes.length)
     },
     heightDisabled() {
       const nodes = this.selectedComponentNodes.filter(

@@ -312,10 +312,6 @@ export default {
   },
   beforeDestroy() {
     this.$delete(this.layouts, this.id)
-    if (this.offResizeListener) {
-      this.offResizeListener()
-      this.offResizeListener = null
-    }
   },
   methods: {
     ...mapActions('node', ['debounceRecord']),

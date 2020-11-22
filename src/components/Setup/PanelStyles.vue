@@ -17,7 +17,7 @@
 
       <opacity />
 
-      <padding />
+<!--      <padding />-->
 
       <radius />
 
