@@ -67,7 +67,7 @@
 
 <script>
 import { shortTagName } from '@/utils/node'
-import ComponentGiver from '../TemplateUtils/ComponentGiver'
+import ComponentGiver from '../ComponentUtils/ComponentGiver'
 import TipCopy from '../Tip/TipCopy'
 import { Tag } from 'element-ui'
 import { mapGetters } from 'vuex'

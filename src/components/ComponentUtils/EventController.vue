@@ -70,7 +70,7 @@ import {
   isTextEditor, traversalAncestor,
   traversalAncestorAndSelf
 } from '@/utils/node'
-import ContextMenu from '@/components/TemplateUtils/ContextMenu'
+import ContextMenu from '@/components/ComponentUtils/ContextMenu'
 import { arrayLast, findIndexBy } from '@/utils/array'
 import { globalDebounce } from '@/utils/tool'
 

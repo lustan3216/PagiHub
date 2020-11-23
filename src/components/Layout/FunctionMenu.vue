@@ -177,8 +177,8 @@ import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import { isMac } from '@/utils/device'
 import { vmPasteNodes, vmRemoveNode, vmPasteNodesGrid, vmPasteNodesHtmlStyle } from '@/utils/vmMap'
 import { Menu, MenuItem, Submenu, MenuItemGroup } from 'element-ui'
-import ComponentGroup from '@/components/TemplateUtils/ComponentGroup'
-import ComponentMove from '@/components/TemplateUtils/ComponentMove'
+import ComponentGroup from '@/components/ComponentUtils/ComponentGroup'
+import ComponentMove from '@/components/ComponentUtils/ComponentMove'
 import { BIconList } from 'bootstrap-vue'
 
 export default {

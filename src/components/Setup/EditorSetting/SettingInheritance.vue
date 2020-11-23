@@ -48,7 +48,7 @@
 import { mapMutations, mapActions } from 'vuex'
 import { traversalSelfAndChildren, shortTagName } from '@/utils/node'
 import { getMasterId } from '@/utils/inheritance'
-import InheritanceJumper from '@/components/TemplateUtils/InheritanceJumper'
+import InheritanceJumper from '@/components/ComponentUtils/InheritanceJumper'
 import { GRID, PROPS, STYLES } from '@/const'
 
 export default {

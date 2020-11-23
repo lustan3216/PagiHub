@@ -13,7 +13,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { ID } from '@/const'
-import ComponentGiver from '../TemplateUtils/ComponentGiver'
+import ComponentGiver from '../ComponentUtils/ComponentGiver'
 import propsMixin from '@/components/Templates/mixins/props'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { vmAppend } from '@/utils/vmMap'

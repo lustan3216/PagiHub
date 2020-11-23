@@ -52,7 +52,7 @@ import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { getValueByPath } from '@/utils/tool'
 import { isGroup, traversalSelfAndChildren } from '@/utils/node'
-import EventController from '../TemplateUtils/EventController'
+import EventController from '../ComponentUtils/EventController'
 import { horizontalUnitFromTo, verticalUnitFromTo } from '@/utils/layout'
 
 export default {
@@ -60,7 +60,7 @@ export default {
   components: {
     VueGridGenerator: GridLayout,
     // 因為loop call AsyncComponent, 這裏不用 async import 會噴bug
-    ComponentGiver: () => import('../TemplateUtils/ComponentGiver'),
+    ComponentGiver: () => import('../ComponentUtils/ComponentGiver'),
     EventController
   },
   mixins: [childrenMixin],

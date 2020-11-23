@@ -17,7 +17,7 @@
 
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex'
-import ComponentGiver from '../TemplateUtils/ComponentGiver'
+import ComponentGiver from '../ComponentUtils/ComponentGiver'
 import { debounce, throttle, resizeListener } from '@/utils/tool'
 import { findBreakpoint } from '@/utils/layout'
 

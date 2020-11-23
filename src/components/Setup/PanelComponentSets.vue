@@ -70,7 +70,7 @@ import DialogProject from './DialogProject'
 import PanelComponentSets from './PanelComponentSets'
 import DialogDelete from './DialogDelete'
 import PublishLink from '@/components/Components/PublishLink'
-import ComponentName from '../TemplateUtils/ComponentName'
+import ComponentName from '../ComponentUtils/ComponentName'
 import DialogComponentSet from '@/components/Setup/DialogComponentSet'
 import { getValueByPath } from '@/utils/tool'
 
