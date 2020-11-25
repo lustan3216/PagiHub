@@ -193,7 +193,8 @@ export function correctHorizontalBounds(layout, width) {
     // console.log(item.x, item.colX, item.w * item.colW, width)
 
     if (item.x * item.colX + item.w * item.colW > width) {
-      item.w = (item.w * item.colW > width) ? width / item.colW : item.w
+      // item.w = (item.w * item.colW > width) ? width / item.colW : item.w
+      item.x = width - (item.w * item.colW) < 0 ? 0 : (width - (item.w * item.colW)) / item.colW
     }
   }
 

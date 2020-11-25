@@ -212,7 +212,7 @@
               this.$emit('layout-ready', this.layout)
             })
           }
-
+          compact(this.layout)
           // lots-design
           this.updateHeight()
           this.$emit('width-updated', newval)
