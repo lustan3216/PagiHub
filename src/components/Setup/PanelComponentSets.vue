@@ -74,7 +74,6 @@ import ComponentName from '../ComponentUtils/ComponentName'
 import DialogComponentSet from '@/components/Setup/DialogComponentSet'
 import { getValueByPath } from '@/utils/tool'
 
-
 export default {
   name: 'PanelComponentSets',
   components: {

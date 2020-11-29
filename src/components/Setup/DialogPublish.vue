@@ -36,8 +36,8 @@
           Go check your excellent work.
         </p>
         <publish-link
-          type="text"
           :id="editingComponentSetId"
+          type="text"
         />
       </template>
 

@@ -1,5 +1,8 @@
 <template>
-  <component v-if="iconOnly" :is="buttonConfig.icon" />
+  <component
+    v-if="iconOnly"
+    :is="buttonConfig.icon"
+  />
   <el-tooltip
     v-else
     :content="`Set view port to ${point}px width`"

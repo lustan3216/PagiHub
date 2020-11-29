@@ -105,7 +105,7 @@ export default {
     ...mapMutations('node', { NODE_SET: 'SET' }),
     ...mapMutations('node', ['INIT_NODE_STORE']),
     ...mapMutations('mode', ['SET_DRAFT_MODE'])
-  },
+  }
 }
 </script>
 

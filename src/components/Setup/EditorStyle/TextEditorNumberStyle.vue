@@ -172,7 +172,7 @@ export default {
             {
               path: [node.id, 'props', 'tag'],
               value: tag
-            },
+            }
           ])
         })
       }
