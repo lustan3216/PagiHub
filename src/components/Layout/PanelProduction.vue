@@ -14,6 +14,7 @@
 import { mapMutations } from 'vuex'
 import { getComponentSetPublicChildren } from '@/api/node'
 import ArtBoard from '@/components/Layout/ArtBoard'
+import { isComponentSet } from '@/utils/node'
 
 export default {
   name: 'PanelProduction',
@@ -45,7 +46,7 @@ export default {
     const { token } = this.$route.query
 
     const {
-      data: { componentSet, data: nodes }
+      data: { data: nodes }
     } = await getComponentSetPublicChildren({
       userLabel: userLabel || this.firstPath,
       projectLabel: projectLabel || this.secondPath,
@@ -54,6 +55,7 @@ export default {
     })
 
     if (nodes.length) {
+      const componentSet = nodes.find(node => isComponentSet(node))
       this.SET_EDITING_COMPONENT_SET_ID(componentSet.id)
       this.rootComponentSetId = componentSet.id
       this.SET_NODES_TO_MAP({ nodes: [componentSet] })
