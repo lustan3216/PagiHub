@@ -102,16 +102,16 @@ export const actions = {
     // avoid to get the componentS
     const tree = cloneJson(node.children)
     await draftState.publish(state.editingComponentSetId, tree)
-    const { data: versionNode } = await publishComponentSet({
+    const { data: componentSet } = await publishComponentSet({
       id: state.editingComponentSetId,
       tree,
       description
     })
 
-    for (const key in versionNode) {
+    for (const key in componentSet) {
       commit('SOFT_RECORD', {
         path: [state.editingComponentSetId, key],
-        value: versionNode[key]
+        value: componentSet[key]
       })
     }
   },

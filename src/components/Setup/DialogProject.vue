@@ -98,6 +98,7 @@ import TextEditorRich from '@/components/Components/TextEditorRich'
 import TipTagDesc from '@/components/Tip/TipTagDesc'
 import { mapActions, mapState } from 'vuex'
 import { label } from '@/validator'
+import { Message } from 'element-ui'
 
 export default {
   name: 'DialogProject',
@@ -197,13 +198,15 @@ export default {
           try {
             this.loading = true
             if (this.isExist) {
-              this.patchProject({
+              await this.patchProject({
                 id: this.id,
                 ...this.form
               })
+              Message.info('Update Success')
             }
             else {
               await this.createProject(this.form)
+              Message.info('Create Success')
             }
 
             this.form = {
@@ -211,9 +214,13 @@ export default {
               description: '',
               tags: []
             }
-            this.visible = false
+          }
+          catch (e) {
+            Message.error('Bomb! Has an error, we are fixing this ASAP')
+            throw e
           }
           finally {
+            this.visible = false
             this.loading = false
           }
         }

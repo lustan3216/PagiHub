@@ -266,6 +266,7 @@ export default {
                 id: this.id,
                 ...this.form
               })
+              Message.info('Update Success')
             }
             else {
               await this.createComponentSet({
@@ -273,13 +274,12 @@ export default {
                 ...this.form
               })
               this.$emit('created')
+              Message.info('Create Success')
             }
           }
           catch (e) {
-            Message.warning(e.message)
-            if (e instanceof Error) {
-              throw e
-            }
+            Message.error('Bomb! Has an error, we are fixing this ASAP')
+            throw e
           }
           finally {
             this.loading = false

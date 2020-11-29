@@ -48,6 +48,7 @@ import { required } from '@/validator'
 import DialogConfirmable from '@/components/Components/DialogConfirmable'
 import { isComponentSet } from '@/utils/node'
 import TipDelete from '@/components/Tip/TipDelete'
+import { Message } from 'element-ui'
 
 export default {
   name: 'DialogDelete',
@@ -107,15 +108,25 @@ export default {
     onSubmit() {
       this.$refs.form.validate(async valid => {
         if (valid) {
-          this.loading = true
-          if (isComponentSet(this.node)) {
-            await this.deleteComponentSet(this.id)
+          try {
+            this.loading = true
+            if (isComponentSet(this.node)) {
+              await this.deleteComponentSet(this.id)
+            }
+            else {
+              await this.deleteProjectNode(this.id)
+            }
+
+            Message.info('Delete Success')
           }
-          else {
-            await this.deleteProjectNode(this.id)
+          catch (e) {
+            Message.error('Bomb! Has an error, we are fixing this ASAP')
+            throw e
           }
-          this.loading = false
-          this.visible = false
+          finally {
+            this.loading = false
+            this.visible = false
+          }
         }
       })
     }
