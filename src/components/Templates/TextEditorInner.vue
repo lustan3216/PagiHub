@@ -191,10 +191,44 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.editor {
+::v-deep.editor {
   word-break: break-word;
   position: relative;
   padding: 0 3px !important;
   overflow: hidden;
+
+  h1, h2, h3, h4, h5, h6, p {
+    line-height: 1.15;
+    margin: 0;
+    font-weight: normal;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+
+  h2 {
+    font-size: 32px;
+  }
+
+  h3 {
+    font-size: 26px;
+  }
+
+  h4 {
+    font-size: 22px;
+  }
+
+  h5 {
+    font-size: 20px;
+  }
+
+  h6 {
+    font-size: 18px;
+  }
+
+  p {
+    line-height: 14px;
+  }
 }
 </style>
