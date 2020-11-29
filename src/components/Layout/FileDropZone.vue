@@ -83,7 +83,7 @@ export default {
         this.dropzoneOptions.headers.Authorization = session.getAccessToken().getJwtToken()
       })
 
-    this.dropzoneOptions.url = `https://staging-api.lots.design/projects/${this.editingProjectId}/asset`
+    this.dropzoneOptions.url = `${process.env.VUE_APP_API_ENDPOINT}/projects/${this.editingProjectId}/asset`
   },
   computed: {
     ...mapState('user', ['userId']),
@@ -266,7 +266,7 @@ export default {
         uploadingIndex: 0
       }
       this.dropzone.removeAllFiles()
-    },
+    }
   }
 }
 </script>
