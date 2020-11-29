@@ -40,15 +40,15 @@ const jsonHistory = new JsonHistory({
     },
     onDeltasChanged() {
       const componentSetId = store.state.node.editingComponentSetId
-      draftStateUploader.emitWhenRecord(componentSetId)
+      draftStateUploader.emit(componentSetId)
     },
     onUndid() {
       const componentSetId = store.state.node.editingComponentSetId
-      draftStateUploader.emitWhenUndo(componentSetId)
+      draftStateUploader.emit(componentSetId)
     },
     onRedid() {
       const componentSetId = store.state.node.editingComponentSetId
-      draftStateUploader.emitWhenRedo(componentSetId)
+      draftStateUploader.emit(componentSetId)
     }
   }
 })

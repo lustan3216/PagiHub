@@ -8,29 +8,14 @@ const INIT_TIME = +new Date()
 class DraftStateUploader {
   remoteRecordTime = INIT_TIME
   timerId = null
-  requesting = false
   promise = null
 
-  emitWhenRecord(componentSetId) {
+  async emit(componentSetId) {
     this.cleanTime()
 
-    if (!this.requesting) {
-      this.startTime(componentSetId)
-    }
-  }
+    await this.promise
 
-  emitWhenRedo(componentSetId) {
-    this.cleanTime()
-    if (!this.requesting) {
-      this.startTime(componentSetId)
-    }
-  }
-
-  emitWhenUndo(componentSetId) {
-    this.cleanTime()
-    if (!this.requesting) {
-      this.startTime(componentSetId)
-    }
+    this.startTime(componentSetId)
   }
 
   cleanTime() {
@@ -58,11 +43,10 @@ class DraftStateUploader {
     try {
       await this.promise
       this.cleanTime()
-      this.requesting = true
 
       const requestDeltaTime = +new Date()
 
-      await patchComponentSetChildren({ tree, componentSetId })
+      this.promise = await patchComponentSetChildren({ tree, componentSetId })
       this.remoteRecordTime = requestDeltaTime
     }
     catch (e) {
@@ -70,7 +54,6 @@ class DraftStateUploader {
     }
     finally {
       this.promise = null
-      this.requesting = false
     }
   }
 
@@ -106,7 +89,6 @@ class DraftStateUploader {
         return
       }
 
-      this.requesting = true
       let deltas
       let action
 
@@ -135,7 +117,6 @@ class DraftStateUploader {
     }
     finally {
       this.promise = null
-      this.requesting = false
     }
   }
 }
