@@ -216,8 +216,13 @@ export default {
             }
           }
           catch (e) {
-            Message.error('Bomb! Has an error, we are fixing this ASAP')
-            throw e
+            if (e.response.status < 500) {
+              Message.info(e.response.data.message)
+            }
+            else {
+              Message.error('Bomb! Has an error, we are fixing this ASAP')
+              throw e
+            }
           }
           finally {
             this.visible = false

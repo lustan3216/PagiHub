@@ -1,6 +1,6 @@
 <template>
   <div>
-    <top-nav v-if="needNavBar" />
+    <top-nav v-if="needNavBar && mounted" />
 
     <router-view :style="{ paddingTop: needNavBar ? '50px' : '0' }" />
 
@@ -23,15 +23,23 @@ export default {
     TopNav,
     FacebookChat: () => import('@/pages/FacebookChat')
   },
+  data() {
+    return {
+      mounted: false
+    }
+  },
   computed: {
     needNavBar() {
-      return !this.$route.meta.noNavbar && !this.isPreviewMode
+      return !this.isPreviewMode && !this.$route.meta.noNavbar
     }
   },
   created() {
     if (!this.$route.meta.noNeedLogin) {
       this.getCurrentLocalUser()
     }
+  },
+  mounted() {
+    this.mounted = true
   },
   methods: {
     ...mapActions('user', ['getCurrentLocalUser'])
