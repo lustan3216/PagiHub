@@ -30,8 +30,6 @@ asset post
 asset get
 SSR
 
-打包出去的 js file, 理論上應該可以 用 prerender 方式，因為已經發布了，所以固定定型了，理論上程式碼應該不用再動，
-要考慮其他因素，可問問其他人，如果可以的話是可以省下巨大成本的！
 
 需要padding嗎
 button padding 連續操作，height變成零
@@ -118,3 +116,6 @@ https://www.designhill.com/design-blog/top-21-places-to-sell-your-design-work-on
 6. 賣出去後，可以選擇性直接當網頁使用，或被工程師嵌入，當然也會有提供免費的市場
 7. 設計可以賣錢，但須經過審核，或是個人製作免費的達一定數量，則可以開始要求付費，或是donate任何錢之後，則可使用
 8.工程師端要怎麼嵌入，要再想最好的方式，但目前也只能支援js而已，可能依照bit，方式用yarn 讓工程師安裝，且高客製化，但同時提供最簡單的ifame嵌入方式 (e
+
+
+收費方式 animation add-on
