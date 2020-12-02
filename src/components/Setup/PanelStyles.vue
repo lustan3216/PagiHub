@@ -64,7 +64,6 @@ import Stack from './EditorStyle/Stack'
 import Position from './EditorStyle/Position'
 import Transitions from './EditorStyle/Transitions'
 import ItemHiddenController from './EditorStyle/ItemHiddenController'
-import Ratio from './EditorStyle/Ratio'
 import Align from '@/components/Setup/EditorStyle/Align'
 import { isBackground } from '@/utils/node'
 
@@ -79,7 +78,6 @@ export default {
     Opacity,
     BorderAll,
     Dimension,
-    Ratio,
     Effect,
     Overflow,
     BoxShadow,
