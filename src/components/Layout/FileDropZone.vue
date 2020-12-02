@@ -195,10 +195,10 @@ export default {
             [this.currentBreakpoint]: {
               x: horizontalUnitConvert(droppedNode.id, percentX, 'px', '%'),
               y: clientY - y - (h / 2) + (30 * this.dropEvent.uploadingIndex),
-              w: horizontalUnitConvert(droppedNode.id, w, 'px', '%'),
+              w,
               h,
               unitH: 'px',
-              unitW: '%',
+              unitW: 'px',
               unitX: '%',
               unitY: 'px'
             }
