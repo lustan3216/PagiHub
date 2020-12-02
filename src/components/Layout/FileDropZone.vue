@@ -27,7 +27,7 @@ import { vmGet } from '@/utils/vmMap'
 import { horizontalUnitConvert } from '@/utils/layout'
 import { Message } from 'element-ui'
 import { appendIds } from '@/utils/nodeId'
-import { GRID, STYLES, IMAGE_MAX_SIZE } from '@/const'
+import { GRID, STYLES, IMAGE_MAX_SIZE, PROPS } from '@/const'
 import { ulid } from 'ulid'
 import { asyncGetValue } from '@/utils/tool'
 
@@ -185,10 +185,13 @@ export default {
         const percentX = clientX - x - (w / 2) + (30 * this.dropEvent.uploadingIndex)
 
         newNode = flexImage({
-          props: {
+          [PROPS]: {
             src
           },
-          grid: {
+          [STYLES]: {
+            layout: { ratio: w / h }
+          },
+          [GRID]: {
             [this.currentBreakpoint]: {
               x: horizontalUnitConvert(droppedNode.id, percentX, 'px', '%'),
               y: clientY - y - (h / 2) + (30 * this.dropEvent.uploadingIndex),
