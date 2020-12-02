@@ -4699,11 +4699,6 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
-batch-processor@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/batch-processor/-/batch-processor-1.0.0.tgz#75c95c32b748e0850d10c2b168f6bdbe9891ace8"
-  integrity sha1-dclcMrdI4IUNEMKxaPa9vpiRrOg=
-
 batch@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/batch/-/batch-0.6.1.tgz#dc34314f4e679318093fc760272525f94bf25c16"
@@ -6650,13 +6645,6 @@ element-matches@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/element-matches/-/element-matches-0.1.2.tgz#7345cb71e965bd2b12f725e524591c102198361a"
   integrity sha512-yWh1otcs3OKUWDvu/IxyI36ZI3WNaRZlI0uG/DK6fu0pap0VYZ0J5pEGTk1zakme+hT0OKHwhlHc0N5TJhY6yQ==
-
-element-resize-detector@^1.1.15:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/element-resize-detector/-/element-resize-detector-1.2.1.tgz#b0305194447a4863155e58f13323a0aef30851d1"
-  integrity sha512-BdFsPepnQr9fznNPF9nF4vQ457U/ZJXQDSNF1zBe7yaga8v9AdZf3/NElYxFdUh7SitSGt040QygiTo6dtatIw==
-  dependencies:
-    batch-processor "1.0.0"
 
 element-ui@^2.14.0:
   version "2.14.0"
@@ -8617,7 +8605,7 @@ inquirer@^6.2.2:
     strip-ansi "^5.1.0"
     through "^2.3.6"
 
-interactjs@1.9.22, interactjs@^1.6.3:
+interactjs@1.9.22:
   version "1.9.22"
   resolved "https://registry.yarnpkg.com/interactjs/-/interactjs-1.9.22.tgz#5ae98d2dd46d720cccdb89222b4e1ddcbe5cfeb9"
   integrity sha512-zUQefYtYJTazWKqDCSYV0vMJPFWp/PKXwpA3v75fD3+4+4J3/ItjlO7K3L1CpNWYU6s8uoEmwwOD6uDy6OoI/w==
@@ -12966,10 +12954,10 @@ sass-loader@^7.1.0:
     pify "^4.0.1"
     semver "^6.3.0"
 
-sassyfication@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/sassyfication/-/sassyfication-0.2.0.tgz#853c28f649eb34e8a709bd4fce16484fb1fa7416"
-  integrity sha512-/VrHT3RJ2sNLePqwc/K28UXwzXpZZSKXK2Oueu5aUGn2uKysSL1IVBCIBevZ8ThDru26Hf7c1zOtpa0ImpcIrA==
+sassyfication@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/sassyfication/-/sassyfication-1.0.2.tgz#b93ad8631c2bfcda086a987300656e67c4e1c951"
+  integrity sha512-eQzmuvRnVl+hyZBe1IY/T9QLzQKpDXhos9oXgMrzE2PCHuNefsrLTG7Yb87hKl1WQghbaiBDjMyMnHGZgbh4/g==
 
 sax@1.2.1:
   version "1.2.1"
@@ -14617,14 +14605,6 @@ vue-functional-data-merge@^3.1.0:
   resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-3.1.0.tgz#08a7797583b7f35680587f8a1d51d729aa1dc657"
   integrity sha512-leT4kdJVQyeZNY1kmnS1xiUlQ9z1B/kdBFCILIjYYQDqZgLqCLa0UhjSSeRX6c3mUe6U5qYeM8LrEqkHJ1B4LA==
 
-vue-grid-layout@2.3.8:
-  version "2.3.8"
-  resolved "https://registry.yarnpkg.com/vue-grid-layout/-/vue-grid-layout-2.3.8.tgz#47e4a8c16df9e3c917f8c142f86fb70594e86b3c"
-  integrity sha512-bwvJo1BWe547w2Y9JhiwUGQr4YSSwSWKry4gClwnmkpWF4lKpJflHPvl0LGGknmmnpdEFOKdgreIcilh6Ry43w==
-  dependencies:
-    element-resize-detector "^1.1.15"
-    interactjs "^1.6.3"
-
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
@@ -14755,7 +14735,7 @@ vue2-dropzone@^3.6.0:
   dependencies:
     dropzone "^5.5.1"
 
-vue@2.6.12, vue@^2.5.2, vue@^2.6.10:
+vue@^2.5.2, vue@^2.6.10, vue@^2.6.12:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
