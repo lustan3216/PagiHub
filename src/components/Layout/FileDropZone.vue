@@ -30,7 +30,6 @@ import { appendIds } from '@/utils/nodeId'
 import { GRID, STYLES, IMAGE_MAX_SIZE } from '@/const'
 import { ulid } from 'ulid'
 import { asyncGetValue } from '@/utils/tool'
-import store from '@/store'
 
 let timerId
 let hoverIds = []
@@ -56,6 +55,7 @@ export default {
         createImageThumbnails: false,
         maxFilesize: IMAGE_MAX_SIZE,
         autoProcessQueue: true,
+        parallelUploads: Infinity,
         acceptedFiles: 'image/*',
         clickable: false,
         previewTemplate: '<div></div>',
@@ -77,14 +77,6 @@ export default {
       }
     }
   },
-  created() {
-    Auth.currentSession()
-      .then(session => {
-        this.dropzoneOptions.headers.Authorization = session.getAccessToken().getJwtToken()
-      })
-
-    this.dropzoneOptions.url = `${process.env.VUE_APP_API_ENDPOINT}/projects/${this.editingProjectId}/asset`
-  },
   computed: {
     ...mapState('user', ['userId']),
     ...mapState('node', ['editingProjectId']),
@@ -102,6 +94,14 @@ export default {
         this.$refs.dropzone.disable()
       }
     }
+  },
+  beforeMount() {
+    Auth.currentSession()
+      .then(session => {
+        this.dropzoneOptions.headers.Authorization = session.getAccessToken().getJwtToken()
+      })
+
+    this.dropzoneOptions.url = `${process.env.VUE_APP_API_ENDPOINT}/projects/${this.editingProjectId}/asset`
   },
   methods: {
     ...mapMutations('app', { APP_SET: 'SET' }),
