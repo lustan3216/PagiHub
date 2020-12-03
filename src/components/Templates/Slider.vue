@@ -9,6 +9,7 @@
     :inner-props="innerProps"
     :inner-styles="innerStyles"
     :extendable-height="false"
+    :boundary-capping="false"
     controller
   />
 </template>

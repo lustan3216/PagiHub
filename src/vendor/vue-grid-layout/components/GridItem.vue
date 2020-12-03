@@ -236,13 +236,13 @@
           h: 0,
           x: 0,
           y: 0,
-        }
+        },
+        boundaryCapping: false
       }
     },
     beforeMount() {
       store.shouldTransition = false
-    },
-    created() {
+      this.boundaryCapping = this.parent.boundaryCapping
       let self = this
 
       // Accessible refernces of functions for removing in beforeDestroy
@@ -512,7 +512,7 @@
         this.realPx.w = Math.floor(this.w * this.colWidth) * this.scaleRatio
       },
       createStyle: function() {
-        if (this.pxX + this.pxW > this.containerWidth) {
+        if (this.boundaryCapping && this.pxX + this.pxW > this.containerWidth) {
           this.innerX = this.containerWidth - this.pxW < 0 ? 0 : (this.containerWidth - this.pxW) / this.colX
           // this.innerW = (this.pxW > this.containerWidth) ? this.containerWidth / this.colWidth : this.w
         } else {
@@ -840,8 +840,10 @@
         }
 
         // Capping
-        x = Math.max(Math.min(x, maxX), 0)
-        y = Math.max(y, 0)
+        if (this.boundaryCapping) {
+          x = Math.max(Math.min(x, maxX), 0)
+          y = Math.max(y, 0)
+        }
 
         return { x, y }
       },
@@ -873,8 +875,11 @@
         }
 
         // Capping
-        w = Math.max(Math.min(maxW, w), 0)
-        h = Math.max(h, 0)
+        if (this.boundaryCapping) {
+          w = Math.max(Math.min(maxW, w), 0)
+          h = Math.max(h, 0)
+        }
+
         return { w, h }
       },
       compact: function() {

@@ -54,6 +54,10 @@
     },
     props: {
       // If true, the container height swells and contracts to fit contents
+      boundaryCapping: {
+        type: Boolean,
+        default: true
+      },
       extendableHeight: {
         type: Boolean,
         default: true

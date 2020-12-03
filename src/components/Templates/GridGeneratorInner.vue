@@ -12,6 +12,7 @@
     :extendable-height="extendableHeight"
     :extra-style="extraStyle"
     :data-droppable="isDroppable ? '' : undefined"
+    :boundary-capping="false"
     data-addable
     @drop="handleDrop"
     @width-updated="widthUpdated"
@@ -103,6 +104,10 @@ export default {
       default: true
     },
     isDroppable: {
+      type: Boolean,
+      default: true
+    },
+    boundaryCapping: {
       type: Boolean,
       default: true
     }
