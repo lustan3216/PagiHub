@@ -16,7 +16,7 @@ https://github.com/antonreshetov/vue-eva-icons
 https://www.npmjs.com/package/xss
 https://www.npmjs.com/package/dompurify
 https://www.npmjs.com/package/sanitize-html
-
+https://dev.to/tellmehowblog_73/top-13-animation-libraries-for-ui-designer-in-2020-6dn
 Designing tool + page builder + design sharing = No more prototype + No more coding + No more engineering cost
 
 Just click publish, then you will have a real RWD website
@@ -127,3 +127,5 @@ https://www.designhill.com/design-blog/top-21-places-to-sell-your-design-work-on
 
 
 收費方式 animation add-on
+
+
