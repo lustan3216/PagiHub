@@ -155,6 +155,7 @@ $connectColor: rgba(135, 199, 124, 0.68);
   padding-right: 5px;
   span {
     transition: color 300ms ease;
+    font-weight: initial;
   }
 
   :hover {
