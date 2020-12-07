@@ -199,7 +199,7 @@ export default {
                 case 'dragmove':
                   this.$emit('move')
                   break
-                case 'resizeend':
+                case 'dragend':
                   this.$emit('moved')
                   break
               }
