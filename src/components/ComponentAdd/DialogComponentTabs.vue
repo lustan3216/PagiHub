@@ -67,7 +67,7 @@
 
           <menu-component-sets
             v-model="currentComponentId"
-            :except-ids="exceptDds"
+            :except-ids="exceptIds"
             :category="currentCategory.name"
             :key="currentCategory.name"
             :text="search"
@@ -146,7 +146,7 @@ export default {
   computed: {
     ...mapState('node', ['editingProjectId']),
     ...mapState('app', ['beingAddedComponentId']),
-    exceptDds() {
+    exceptIds() {
       const project = this.nodesMap[this.editingProjectId]
       return project ? project.children.map(node => node.id) : []
     }
