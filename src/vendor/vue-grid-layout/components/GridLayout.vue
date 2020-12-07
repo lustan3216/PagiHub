@@ -1,13 +1,6 @@
 <template>
   <div ref="item" class="grid-layout" :style="{...mergedStyle, ...extraStyle}" style="z-index: 0;">
     <slot></slot>
-    <grid-item class="grid-placeholder"
-               v-if="showPlaceHolder && isDragging"
-               :x="placeholder.x"
-               :y="placeholder.y"
-               :w="placeholder.w"
-               :h="placeholder.h"
-               :i="placeholder.i"/>
   </div>
 </template>
 <style>
@@ -35,8 +28,6 @@
     correctHorizontalBounds,
   } from '../helpers/utils'
   //var eventBus = require('./eventBus');
-
-  import GridItem from './GridItem.vue'
   import interact from 'interactjs'
   import { cloneJson } from '@/utils/tool'
   import { toPrecision } from '@/utils/number'
@@ -48,9 +39,6 @@
         eventBus: null,
         parent: this
       }
-    },
-    components: {
-      GridItem
     },
     props: {
       // If true, the container height swells and contracts to fit contents

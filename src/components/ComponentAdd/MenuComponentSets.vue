@@ -1,8 +1,7 @@
 <template>
-  <div class="h-100">
+  <div class="wrapper">
     <dynamic-scroller
       v-infinite-scroll="loadMore"
-      v-show="innerComponents.length"
       :items="innerComponents"
       :min-item-size="1"
       class="h-100"
@@ -19,59 +18,41 @@
           @mouseenter.native="hoverId = item.id"
           @mouseleave.native="hoverId = null"
         >
-          <b class="title">{{ item.label }}</b>
-
-          <div
-            :max-lines="3"
-            class="subtitle"
-            autoresize
-          >
-            {{ item.projectLabel }}
-          </div>
-
-          <!--          <el-button-->
-          <!--            v-if="hoverId === item.id"-->
-          <!--            type="primary"-->
-          <!--            style="color: white;"-->
-          <!--            class="float-icon z-index1"-->
-          <!--            @click.stop="$emit('add', item)"-->
-          <!--          >-->
-          <!--            ADD-->
-          <!--          </el-button>-->
-
-          <i
-            v-if="value === item.id || hoverId === item.id"
-            class="el-icon-arrow-right absolute"
+          <art-board
+            :id="item.id"
+            style="max-height: 200px;"
+            @mousedown.native="mousedown"
           />
+
         </dynamic-scroller-item>
       </template>
     </dynamic-scroller>
-    <div
-      v-show="!innerComponents.length"
-      class="h-100 flex-center"
-    >
-      <p>No page</p>
-    </div>
   </div>
 </template>
 
 <script>
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import VClamp from 'vue-clamp'
+import ArtBoard from '../Layout/ArtBoard'
 import { mapMutations } from 'vuex'
 import { searchComponentSets } from '@/api/node'
 import { debounce } from '@/utils/tool'
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { PUBLIC_PAGES } from './MenuCategories'
 import infiniteScroll from 'vue-infinite-scroll'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 let loading
 export default {
   name: 'MenuComponentSets',
   components: {
-    VClamp,
+    ArtBoard,
     DynamicScroller,
     DynamicScrollerItem
+  },
+  provide() {
+    return {
+      isExample: true,
+      eventController: false
+    }
   },
   directives: { infiniteScroll },
   props: {
@@ -80,8 +61,8 @@ export default {
       default: null
     },
     category: {
-      type: String,
-      required: true
+      type: Object,
+      default: null
     },
     text: {
       type: String,
@@ -110,8 +91,13 @@ export default {
     }
   },
   computed: {
+    currentCategoryName() {
+      if (this.category) {
+        return this.category.name
+      }
+    },
     isPublic() {
-      return this.category === PUBLIC_PAGES
+      return this.category.name === PUBLIC_PAGES
     }
   },
   watch: {
@@ -146,11 +132,13 @@ export default {
   },
   methods: {
     ...mapMutations('node', ['SET_NODES_TO_MAP']),
-    // description(component) {
-    //   const div = document.createElement('div')
-    //   div.innerHTML = component.description
-    //   return div.textContent || div.innerText || ''
-    // },
+    ...mapMutations('app', {
+      APP_SET: 'SET'
+    }),
+    mousedown(event) {
+      this.$bus.$emit('asdd', event.target.getBoundingClientRect())
+      this.APP_SET({ isAdding: true })
+    },
     initSearch: debounce(async function() {
       this.currentSize = 0
 
@@ -214,24 +202,17 @@ export default {
 }
 
 .button {
-  transition: background-color 0.2s;
   position: relative;
   cursor: pointer;
   padding: 15px;
-  padding-right: 30px;
 
-  &:hover {
-    background-color: rgba(250, 250, 250, 0.92);
-  }
-  &.active {
-    background-color: #f8f8f8;
-  }
 }
 .title {
   color: $color-black;
   display: block;
   margin-bottom: 5px;
-  font-size: 13px;
+  font-size: 14px;
+  padding-top: 10px;
 }
 .subtitle {
   color: #b2b2b2;
@@ -240,5 +221,9 @@ export default {
 }
 .scroller {
   height: 100%;
+}
+
+.wrapper {
+  border-left: 1px solid #f1f1f1;
 }
 </style>

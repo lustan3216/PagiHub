@@ -8,6 +8,7 @@
     refs="grid"
     controller
     data-image-droppable
+    has-element-adding-placeholder
     class="background over-hidden"
   />
 </template>
@@ -60,6 +61,11 @@ export default {
       },
       immediate: true
     }
+  },
+  mounted() {
+    this.$bus.$on('asd', () => {
+      this.$refs.grid.chilldren
+    })
   }
 }
 </script>

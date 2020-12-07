@@ -1,8 +1,37 @@
 <template>
   <nav class="justify-between">
-    <div class="flex">
-      <function-menu style="margin-right: -5px;" />
+    <div class="flex align-center">
+      <!--      <function-menu style="margin-right: -5px;" />-->
 
+      <el-button
+        type="text"
+        @click="$router.push({ name: 'Dashboard' })"
+      >
+        <span class="gray-font-2 small-title">
+          Dashboard
+        </span>
+      </el-button>
+      <span class="gray-font-2 small-title">
+        <span style="margin-left: -5px; margin-right: 5px;">/</span> {{ projectName }}
+      </span>
+
+    </div>
+
+    <el-form
+      ref="form"
+      :disabled="!editingComponentSetId"
+      class="align-center"
+    >
+      <!--      <dialog-component-tabs />-->
+
+      <!--      <element-add-bar />-->
+
+      <!--      <el-divider direction="vertical" />-->
+
+      <portal-target name="ViewPortController" />
+    </el-form>
+
+    <div class="align-center p-r-10">
       <el-tooltip
         effect="light"
         placement="bottom"
@@ -34,32 +63,6 @@
         <dialog-publish />
       </el-tooltip>
     </div>
-
-    <el-form
-      ref="form"
-      :disabled="!editingComponentSetId"
-      class="align-center"
-    >
-      <dialog-component-tabs />
-
-      <element-add-bar />
-
-      <el-divider direction="vertical" />
-
-      <portal-target name="ViewPortController" />
-    </el-form>
-
-    <div class="align-center p-r-10">
-      <el-button
-        type="text"
-        @click="$router.push({ name: 'Dashboard' })"
-      >
-        <span
-          style="line-height: 19px;"
-          class="gray-font-2 small-title"
-        >Dashboard</span>
-      </el-button>
-    </div>
   </nav>
 </template>
 
@@ -85,11 +88,17 @@ export default {
   },
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
-    ...mapState('node', ['editingComponentSetId']),
+    ...mapState('node', ['editingComponentSetId', 'editingProjectId']),
     ...mapGetters('app', [
       'selectedComponentNodes',
       'theOnlySelectedComponentId'
     ]),
+    projectName() {
+      const project = this.nodesMap[this.editingProjectId]
+      if (project) {
+        return project.label
+      }
+    },
     selected() {
       return this.selectedComponentIds.includes(this.id)
     },

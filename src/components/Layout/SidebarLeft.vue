@@ -3,24 +3,6 @@
     :style="{ width: width + 'px' }"
     class="sidebar-left"
   >
-    <!--    <el-button-group class="flex">-->
-    <!--      <el-button-->
-    <!--        class="flex1 small-title"-->
-    <!--        @click="activePanel = 'PanelComponentSets'"-->
-    <!--      >-->
-    <!--        Layers-->
-    <!--      </el-button>-->
-
-    <!--      <el-button-->
-    <!--        class="flex1"-->
-    <!--        @click="activePanel = 'PanelAsset'"-->
-    <!--      >-->
-    <!--        Asset-->
-    <!--      </el-button>-->
-    <!--    </el-button-group>-->
-
-    <!--    <panel-asset v-if="editingAsset" />-->
-
     <split-pane
       :default-percent="25"
       split="horizontal"
@@ -30,39 +12,66 @@
       </template>
 
       <template slot="paneR">
-        <panel-components
-          v-if="componentSetLoaded"
-          :key="editingComponentSetId"
-        />
+        <menu-categories v-model="currentCategory" />
       </template>
     </split-pane>
+
+    <transition name="fade">
+      <menu-component-sets
+        v-show="currentComponentSet"
+        v-model="currentComponentSet"
+        :category="currentCategory"
+        :style="{ left: width + 'px' }"
+        class="component-sets"
+      />
+    </transition>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import SplitPane from 'vue-splitpane'
-import { getValueByPath } from '@/utils/tool'
-import PanelComponents from '@/components/Setup/PanelComponents'
-import PanelComponentSets from '@/components/Setup/PanelComponentSets'
 import interactjs from 'interactjs'
+import SplitPane from 'vue-splitpane'
+import PanelComponentSets from '@/components/Setup/PanelComponentSets'
+import MenuCategories from '@/components/ComponentAdd/MenuCategories'
+import MenuComponentSets from '@/components/ComponentAdd/MenuComponentSets'
 
 export default {
   name: 'SidebarLeft',
   components: {
-    PanelComponents,
     PanelComponentSets,
+    MenuCategories,
+    MenuComponentSets,
     SplitPane
   },
   data() {
     return {
       activePanel: 'PanelComponentSets',
-      width: 260
+      width: 200,
+      currentCategory: null,
+      currentComponentSet: null,
+      search: '',
+      tags: [],
+      defaultTags: []
     }
+  },
+  computed: {
+    ...mapGetters('user', ['isLogin']),
+    ...mapState('node', ['editingComponentSetId']),
+    projectId() {
+      return this.$route.params.projectId
+    }
+  },
+  beforeMount() {
+    this.$bus.$on('blockLibraryHide', this.blockLibraryHide)
+  },
+  beforeDestroy() {
+    this.$bus.$off('blockLibraryHide', this.blockLibraryHide)
   },
   mounted() {
     interactjs(this.$el).resizable({
       edges: { left: false, right: true, bottom: false, top: false },
+      ignoreFrom: '.component-sets',
       listeners: {
         move: event => {
           this.width = event.rect.width + event.deltaRect.left
@@ -71,21 +80,9 @@ export default {
       inertia: true
     })
   },
-  computed: {
-    ...mapGetters('user', ['isLogin']),
-    ...mapState('node', ['editingComponentSetId']),
-    componentSetLoaded() {
-      return getValueByPath(this.nodesMap, [
-        this.editingComponentSetId,
-        'children',
-        0
-      ])
-    },
-    editingAsset() {
-      return this.activePanel === 'PanelAsset'
-    },
-    projectId() {
-      return this.$route.params.projectId
+  methods: {
+    blockLibraryHide() {
+      this.currentComponentSet = null
     }
   }
 }
@@ -100,11 +97,21 @@ export default {
 }
 
 .sidebar-left {
+  touch-action: none;
   background-color: white;
   border-right: 1px solid $color-grey;
   border-top: 1px solid $color-grey;
   height: 100%;
-  overflow: hidden;
+}
+
+.component-sets {
+  position: absolute;
+  width: 300px;
+  background-color: rgba(250, 250, 250, 1);
+  z-index: 10;
+  top: 0;
+  height: calc(100vh - 47px);
+  box-shadow: 15px 9px 20px 1px rgba(0,0,0,0.1);
 }
 
 ::v-deep {

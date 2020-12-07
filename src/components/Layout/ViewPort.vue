@@ -89,13 +89,13 @@
           @itemClick="setSize({ w: $event.w, h: $event.h })"
         />
 
-        <el-button
-          size="small"
-          icon="el-icon-refresh-left"
-          @click="style.scale = 1"
-        >
-          {{ scalePercent }} %
-        </el-button>
+        <!--        <el-button-->
+        <!--          size="small"-->
+        <!--          icon="el-icon-refresh-left"-->
+        <!--          @click="style.scale = 1"-->
+        <!--        >-->
+        <!--          {{ scalePercent }} %-->
+        <!--        </el-button>-->
       </div>
     </portal>
   </div>
@@ -253,6 +253,7 @@ export default {
       const { height, width } = getRectWithoutPadding(this.$el)
       this.style.w = width
       this.style.h = height
+      this.style.scale = 1
     },
     scaleCallback(event, { scaleRatio }) {
       this.LAYOUT_SET({ gridResizing: true })

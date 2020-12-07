@@ -1,21 +1,25 @@
 <template>
-  <component
-    :class="{ 'cross-hair': isAdding }"
-    :is="isDraftMode ? 'file-drop-zone' : 'div'"
-  >
+  <component :is="isDraftMode ? 'file-drop-zone' : 'div'">
     <function-bar v-if="isDraftMode" />
 
     <div
       ref="panelDraft"
       :class="{ draft: isDraftMode }"
-      class="editor"
+      class="editor relative"
     >
       <sidebar-left v-if="isDraftMode" />
+
+      <portal-target
+        name="ElementPlaceholder"
+        class="absolute"
+        style="top: 0;left: 0;"
+      />
 
       <view-port
         :class="{ draft: isDraftMode }"
         style="flex: 1"
       >
+
         <transition
           name="slide"
           mode="out-in"

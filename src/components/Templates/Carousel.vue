@@ -95,7 +95,7 @@
 
 <script>
 import interactjs from 'interactjs'
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { ObserveVisibility } from 'vue-observe-visibility'
 import { STYLES } from '@/const'
 import { Popover } from 'element-ui'

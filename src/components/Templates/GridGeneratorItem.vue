@@ -39,12 +39,12 @@
       <template v-if="inViewPort">
         <i
           v-shortkey.push="['alt']"
-          v-if="moving"
+          v-if="moving && !isExample"
           @shortkey="pressAltKey = !$event.keyup"
         />
 
         <event-controller
-          v-if="needController && element"
+          v-if="needController && element && eventController"
           :id="id"
           :element="element"
           @mousedown="mousedown"
@@ -92,7 +92,8 @@ export default {
   mixins: [toolMixin, propsMixin, childrenMixin],
   inject: {
     // connect with GridGeneratorInner
-    layouts: { required: true }
+    layouts: { required: true },
+    eventController: { default: true }
   },
   props: {
     divStyle: {
@@ -303,9 +304,10 @@ export default {
   mounted() {
     this.element = this.$el
     if (this.isExample) {
-      const el = this.$el.closest('.art-board')
-      const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
-      this.exampleBoundary = closestValidBreakpoint(this.node, currentPoint)
+      // const el = this.$el.closest('.art-board')
+      // const currentPoint = findBreakpoint(this.breakpointsMap, el.clientWidth)
+      // this.exampleBoundary = closestValidBreakpoint(this.node, currentPoint)
+      this.exampleBoundary = 'md'
     }
 
     this.inViewPort = this.pxY < this.windowHeight

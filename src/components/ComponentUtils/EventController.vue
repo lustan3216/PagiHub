@@ -7,7 +7,7 @@
     }"
     class="relative z-index1"
     @mouseenter="hoveringId = id"
-    @mousedown="$emit('mousedown', $event)"
+    @mousedown="mousedown"
     @mouseup="mouseup"
     @dblclick.stop="dblclick"
     @contextmenu.stop.prevent="contextmenu($event)"
@@ -24,8 +24,8 @@
         @move-start="moveStart"
         @resize-start="resizeStart"
         @mouseenter.native="hoveringId = id"
+        @mousedown.native="mousedown"
         @mouseup.native.stop="mouseup"
-        @mousedown.native="$emit('mousedown', $event)"
         @dblclick.native.stop="dblclick"
         @contextmenu.native.stop.prevent="contextmenu($event)"
       />
@@ -110,12 +110,6 @@ export default {
       'isAdding'
     ]),
     ...mapState('layout', ['gridResizing', 'scaleRatio', 'scrolling']),
-    portalDisabled() {
-      if (store.resizingId || store.movingId) {
-        return ![store.movingId, store.resizingId].includes(this.id)
-      }
-      return false
-    },
     lock() {
       return this.node.lock
     },
@@ -321,6 +315,10 @@ export default {
         x: `${event.clientX + 10}px`,
         y: `${y}px`
       }
+    },
+    mousedown(event) {
+      this.$emit('mousedown', event)
+      this.$bus.$emit('blockLibraryHide')
     },
     isRightCheck(e) {
       e = e || window.event

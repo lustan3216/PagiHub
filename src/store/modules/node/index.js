@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import store, { SET } from '@/store'
+import { SET } from '@/store'
 import { CHILDREN, ID, PARENT_ID, SOFT_DELETE } from '@/const'
 import { deleteBy, findBy, toArray } from '@/utils/array'
 import { defineProperties } from '@/utils/nodeProperties'

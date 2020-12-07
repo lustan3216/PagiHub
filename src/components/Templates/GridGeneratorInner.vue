@@ -25,10 +25,14 @@
     />
 
     <event-controller
-      v-if="controller && element"
+      v-if="controller && element && eventController"
       :id="id"
       :element="element"
     >
+      <element-adding-placeholder
+        v-if="hasElementAddingPlaceholder && isAdding"
+        @input="elementAddingPlaceholder = $event"
+      />
       <component-giver
         v-for="child in children"
         :key="child.id"
@@ -53,6 +57,7 @@ import GridLayout from '@/vendor/vue-grid-layout/components/GridLayout'
 import childrenMixin from '@/components/Templates/mixins/children'
 import { getValueByPath } from '@/utils/tool'
 import { isGroup, traversalSelfAndChildren } from '@/utils/node'
+import ElementAddingPlaceholder from '../ComponentUtils/ElementAddingPlaceholder'
 import EventController from '../ComponentUtils/EventController'
 import { horizontalUnitFromTo, verticalUnitFromTo } from '@/utils/layout'
 
@@ -60,6 +65,7 @@ export default {
   name: 'GridGeneratorInner',
   components: {
     VueGridGenerator: GridLayout,
+    ElementAddingPlaceholder,
     // 因為loop call AsyncComponent, 這裏不用 async import 會噴bug
     ComponentGiver: () => import('../ComponentUtils/ComponentGiver'),
     EventController
@@ -72,7 +78,8 @@ export default {
   },
   inject: {
     isExample: { default: false },
-    gridItemAutoSize: { required: true }
+    gridItemAutoSize: { required: true },
+    eventController: { default: true }
   },
   props: {
     id: {
@@ -110,20 +117,31 @@ export default {
     boundaryCapping: {
       type: Boolean,
       default: true
+    },
+    hasElementAddingPlaceholder: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
       layouts: {},
       element: null,
-      offResizeListener: null
+      offResizeListener: null,
+      elementAddingPlaceholder: null
     }
   },
   computed: {
     ...mapState('app', ['isAdding']),
     ...mapState('layout', ['currentBreakpoint']),
     layout() {
-      return Object.values(this.layouts)
+      const layout = Object.values(this.layouts)
+      if (this.elementAddingPlaceholder) {
+        return [this.elementAddingPlaceholder, ...layout]
+      }
+      else {
+        return layout
+      }
     }
   },
   mounted() {
@@ -218,7 +236,7 @@ export default {
       // 不要在這裡更新 innerChildren, 不然undo redo會有回圈
       const records = []
 
-      newChildren.forEach((child, index) => {
+      newChildren.filter(node => node.i !== -1).forEach((child, index) => {
         const oldGrid = getValueByPath(
           this.innerChildren,
           [index, GRID, this.currentBreakpoint],

@@ -7,25 +7,17 @@
       @mouseleave="hoverId = null"
     >
       <div
-        v-if="category.divider"
         :key="category.name"
-        class="subtitle m-t-20 m-l-10 bold m-b-5"
-      >
-        {{ humanize(category.name) }}
-      </div>
-
-      <div
-        v-else
-        :key="category.name"
-        :class="{ active: value.name === category.name }"
+        :class="{ active: currentCategoryName === category.name }"
         class="button"
         @click="$emit('input', category)"
       >
-        <b class="title">{{ humanize(category.name) }}</b>
-        <span class="subtitle">{{ category.subtitle }}</span>
+        <span class="title">
+          {{ humanize(category.name) }}
+        </span>
 
         <i
-          v-if="value === category.name || hoverId === category.name"
+          v-if="currentCategoryName === category.name || hoverId === category.name"
           class="el-icon-arrow-right absolute"
         />
       </div>
@@ -38,15 +30,16 @@ import { humanize } from '@/utils/string'
 
 const LOCAL_PAGES = 'localPages'
 const PUBLIC_PAGES = 'publicPages'
+const ELEMENTS = 'elements'
 
-export { LOCAL_PAGES, PUBLIC_PAGES }
+export { LOCAL_PAGES, PUBLIC_PAGES, ELEMENTS }
 
 export default {
   name: 'MenuCategories',
   props: {
     value: {
       type: Object,
-      required: true
+      default: null
     }
   },
   data() {
@@ -55,43 +48,50 @@ export default {
     }
   },
   computed: {
+    currentCategoryName() {
+      if (this.value) {
+        return this.value.name
+      }
+    },
     categories() {
       return [
         {
-          name: LOCAL_PAGES,
-          subtitle: "Components you've created"
+          name: 'Element'
         },
         {
-          name: PUBLIC_PAGES,
-          subtitle: 'The component publish by other designer'
+          name: 'Cover',
+          tags: ['cover']
         },
         {
-          divider: true,
-          name: 'quickSelect'
+          name: 'Cover',
+          tags: ['cover']
         },
         {
-          name: 'Article',
-          subtitle: 'Versatile third party service or embed website',
-          tags: ['article']
+          name: 'About',
+          tags: ['about']
+        },
+        {
+          name: 'Title',
+          tags: ['title']
+        },
+        {
+          name: 'Gallery',
+          tags: ['gallery']
         },
         {
           name: 'Service',
-          subtitle: 'Can embed versatile third party service or website',
           tags: ['iframer']
         },
         {
           name: 'Layout',
-          subtitle: 'Can embed versatile third party service or website',
           tags: ['layout']
         },
         {
           name: 'Resume',
-          subtitle: 'Can embed versatile third party service or website',
           tags: ['resume']
         },
         {
           name: 'Landing Page',
-          subtitle: 'Can embed versatile third party service or website',
           tags: ['landing page']
         }
       ]
@@ -126,7 +126,7 @@ export default {
   transition: background-color 0.2s;
   position: relative;
   cursor: pointer;
-  padding: 15px;
+  padding: 10px 15px;
   padding-right: 30px;
 
   &:hover {
@@ -139,7 +139,6 @@ export default {
 .title {
   color: $color-black;
   display: block;
-  margin-bottom: 5px;
   font-size: 13px;
 }
 .subtitle {
