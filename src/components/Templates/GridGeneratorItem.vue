@@ -13,7 +13,6 @@
     :unit-x="computedLayout.unitX"
     :unit-y="computedLayout.unitY"
     :static="lock"
-    :style-props="gridItemStyle"
     :hidden="computedLayout.hidden"
     :ratio="computedLayout.ratio"
     :z-index="styleLayout.zIndex"
@@ -158,13 +157,8 @@ export default {
         return userCanDrag || userCanResize
       }
     },
-    gridItemStyle() {
-      const { padding, ...restOfStyles } = this.innerStyles.html || {}
-      return { padding }
-    },
     htmlStyle() {
-      const { padding, ...restOfStyles } = this.innerStyles.html || {}
-      return restOfStyles
+      return this.innerStyles.html
     },
     selected() {
       return this.selectedComponentIds.includes(this.id)
