@@ -30,9 +30,7 @@
         ...divStyle,
         ...htmlStyle
       }"
-      :class="{
-        'h-100': !autoResizeHeight
-      }"
+      :class="{ 'h-100': !autoResizeHeight }"
       class="border-box over-hidden"
     >
       <template v-if="inViewPort">

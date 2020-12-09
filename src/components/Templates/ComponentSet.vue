@@ -45,4 +45,5 @@ export default {
     ...mapActions('node', ['getComponentSetChildren'])
   }
 }
+
 </script>

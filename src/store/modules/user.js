@@ -40,9 +40,9 @@ const actions = {
     }
   },
   async getCurrentRemoteUser({ commit }) {
-    const user = await Auth.currentUserInfo()
+    const user = await Auth.currentAuthenticatedUser({ bypassCache: true })
 
-    if (user.id) {
+    if (user.userDataKey) {
       commit('SET', parseCognitoUser(user))
     }
     else {
@@ -69,6 +69,10 @@ const actions = {
 const getters = {
   isLogin(state) {
     return state.userId
+  },
+  isAdmin(state) {
+    // TODO 之後有空要把這個值藏起來，或更名
+    return state.user.signInUserSession.accessToken.payload['cognito:groups'].includes('admin')
   }
 }
 
