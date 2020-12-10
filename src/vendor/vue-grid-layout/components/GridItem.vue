@@ -512,8 +512,8 @@
         this.realPx.w = Math.floor(this.w * this.colWidth) * this.scaleRatio
       },
       createStyle: function() {
-        if (this.boundaryCapping && this.pxX + this.pxW > this.containerWidth) {
-          this.innerX = this.containerWidth - this.pxW < 0 ? 0 : (this.containerWidth - this.pxW) / this.colX
+        if (this.pxX + this.pxW > this.containerWidth) {
+          // this.innerX = this.containerWidth - this.pxW < 0 ? 0 : (this.containerWidth - this.pxW) / this.colX
           // this.innerW = (this.pxW > this.containerWidth) ? this.containerWidth / this.colWidth : this.w
         } else {
           this.innerX = this.x

@@ -163,7 +163,7 @@
           //self.width = self.$el.offsetWidth;
           // addWindowEventListener('resize', self.onWindowResize)
           this.assignUnitPxToLayout()
-          // correctHorizontalBounds(this.layout, this.width)
+          correctHorizontalBounds(this.layout, this.width)
           compact(self.layout, self.verticalCompact)
 
           // lots-design
@@ -321,7 +321,7 @@
           }
 
           this.assignUnitPxToLayout()
-          // correctHorizontalBounds(this.layout, this.width)
+          correctHorizontalBounds(this.layout, this.width)
           compact(this.layout)
           this.eventBus.$emit('compact', this.width)
           // lots-design
@@ -366,7 +366,7 @@
       dragEvent: function(eventName, id, x, y, h, w) {
         //console.log(eventName + " id=" + id + ", x=" + x + ", y=" + y);
         this.assignUnitPxToLayout()
-        // correctHorizontalBounds(this.layout, this.width)
+        correctHorizontalBounds(this.layout, this.width)
         let l = getLayoutItem(this.layout, id)
         //GetLayoutItem sometimes returns null object
         if (l === undefined || l === null) {
@@ -411,7 +411,7 @@
         }
         this.assignUnitPxToLayout()
         this.correctRectByRatio()
-        // correctHorizontalBounds(this.layout, this.width)
+        correctHorizontalBounds(this.layout, this.width)
         //GetLayoutItem sometimes return null object
         if (l === undefined || l === null) {
           l = { h: 0, w: 0 }
