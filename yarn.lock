@@ -12954,10 +12954,10 @@ sass-loader@^7.1.0:
     pify "^4.0.1"
     semver "^6.3.0"
 
-sassyfication@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/sassyfication/-/sassyfication-1.0.2.tgz#b93ad8631c2bfcda086a987300656e67c4e1c951"
-  integrity sha512-eQzmuvRnVl+hyZBe1IY/T9QLzQKpDXhos9oXgMrzE2PCHuNefsrLTG7Yb87hKl1WQghbaiBDjMyMnHGZgbh4/g==
+sassyfication@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/sassyfication/-/sassyfication-0.2.0.tgz#853c28f649eb34e8a709bd4fce16484fb1fa7416"
+  integrity sha512-/VrHT3RJ2sNLePqwc/K28UXwzXpZZSKXK2Oueu5aUGn2uKysSL1IVBCIBevZ8ThDru26Hf7c1zOtpa0ImpcIrA==
 
 sax@1.2.1:
   version "1.2.1"
