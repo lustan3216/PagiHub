@@ -182,6 +182,10 @@ export default {
           shortKeyString: 'C'
         },
         {
+          tag: 'flex-section',
+          label: 'Section'
+        },
+        {
           tag: 'video-player',
           label: 'Video'
         },

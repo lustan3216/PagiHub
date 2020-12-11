@@ -8,7 +8,8 @@ import {
   BIconLayoutSidebarReverse,
   BIconLayoutSidebarInsetReverse,
   BIconBox,
-  BIconLink
+  BIconLink,
+  BIconAspectRatio
 } from 'bootstrap-vue'
 
 export default {
@@ -22,6 +23,8 @@ export default {
   },
   render(h, context) {
     switch (context.props.icon) {
+      case 'flex-section':
+        return h(BIconAspectRatio, context.data)
       case 'text-editor':
         return h(BIconFonts, context.data)
       case 'flex-image':

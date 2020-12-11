@@ -10,6 +10,7 @@ export default {
     isExample: { default: false }
   },
   components: {
+    FlexSection: () => import('../Templates/FlexSection'),
     Group: () => import('../Templates/Group'),
     Rectangle: () => import('../Templates/Rectangle'),
     ComponentSet: () => import('../Templates/ComponentSet'),

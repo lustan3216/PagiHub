@@ -36,6 +36,19 @@ export const rectangle = function(options, grid) {
   }
 }
 
+export const section = function(options, grid) {
+  return {
+    [TAG]: 'flex-section',
+    grid,
+    [STYLES]: {
+      html: {
+        border: '1px solid #b5b9c1'
+      }
+    },
+    ...options
+  }
+}
+
 // export const gridGeneratorItems = function(options, grid) {
 //   return [
 //     {
@@ -215,6 +228,7 @@ export const exampleMap = {
   [TEXT_EDITOR]: textEditor,
   'flex-button': flexButton,
   'flex-image': flexImage,
+  'flex-section': section,
   'video-player': videoPlayer,
   slider,
   iframer,
