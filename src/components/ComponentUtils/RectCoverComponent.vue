@@ -39,7 +39,7 @@ import OftenUseMenu from './OftenUseMenu'
 import interact from 'interactjs'
 
 export default {
-  name: 'OperatorComponent',
+  name: 'RectCoverComponent',
   components: {
     ComponentNames,
     OftenUseMenu

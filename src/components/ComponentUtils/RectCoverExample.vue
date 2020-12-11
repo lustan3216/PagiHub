@@ -62,14 +62,13 @@ import {
   isGroup,
   isSlider
 } from '@/utils/node'
-import { vmGet } from '@/utils/vmMap'
 import { arrayLast } from '@/utils/array'
 import { cloneJson, getValueByPath, globalDebounce } from '@/utils/tool'
 import { CAN_BE_EDITED } from '@/const'
 import { Popover } from 'element-ui'
 
 export default {
-  name: 'OperatorExample',
+  name: 'RectCoverExample',
   components: {
     ComponentNames,
     ElPopover: Popover

@@ -13,11 +13,11 @@
     @contextmenu.stop.prevent="contextmenu($event)"
   >
 
-    <portal :to="operatorTo">
+    <portal :to="rectCoverTo">
       <component
         v-if="rect && !isAdding"
         :hovered="hoveringId === id"
-        :is="isExample ? 'operator-example' : 'operator-component'"
+        :is="whichRectCover"
         :id="id"
         :key="id"
         :rect="rect"
@@ -90,8 +90,8 @@ export default {
   },
   components: {
     ContextMenu,
-    OperatorExample: () => import('./OperatorExample'),
-    OperatorComponent: () => import('./OperatorComponent')
+    RectCoverExample: () => import('./RectCoverExample'),
+    RectCoverComponent: () => import('./RectCoverComponent')
   },
   props: {
     id: {
@@ -110,16 +110,13 @@ export default {
       'isAdding'
     ]),
     ...mapState('layout', ['gridResizing', 'scaleRatio', 'scrolling']),
-    portalDisabled() {
-      if (store.resizingId || store.movingId) {
-        return ![store.movingId, store.resizingId].includes(this.id)
-      }
-      return false
+    whichRectCover() {
+      return this.isExample ? 'RectCoverExample' : 'RectCoverComponent'
     },
     lock() {
       return this.node.lock
     },
-    operatorTo() {
+    rectCoverTo() {
       if (isBackground(this.node)) {
         return 'ArtBoard'
       }

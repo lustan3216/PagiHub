@@ -55,7 +55,7 @@ export default {
     },
     init() {
       // Don't put in created to prevent some component fail before mount
-      // for componentOperator using
+      // for RectCoverComponent using
       this.$el.id = this.id
 
       vmAppend(this, this.isExample)
