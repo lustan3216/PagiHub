@@ -7,7 +7,6 @@ import {
 } from '@/api/node'
 import { isComponentSet, isProject } from '@/utils/node'
 import jsonHistory from '@/store/jsonHistory'
-import inheritMapUploader from '@/utils/inheritMapUploader'
 import { arraySubtract } from '@/utils/array'
 
 export const actions = {
@@ -44,7 +43,6 @@ export const actions = {
     commit('SET_NODES_TO_MAP', { nodes: data })
     commit('SET', { editingProjectId: id })
 
-    inheritMapUploader.init(data.inheritMap)
     return data
   },
 
