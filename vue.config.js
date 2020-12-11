@@ -26,7 +26,8 @@ module.exports = {
     extract: false,
     loaderOptions: {
       sass: {
-        data: `@import "src/styles/mixins.scss";@import "src/styles/variable.scss";`
+        data: `@import "src/styles/mixins.scss";@import "src/styles/variable.scss";`,
+        includePaths: [path.resolve(__dirname, 'node_modules/@simonwep')]
       }
     }
   },
@@ -63,6 +64,15 @@ module.exports = {
     config.when(isTest, config =>
       config.devtool('cheap-module-eval-source-map')
     )
+
+    config.module
+      .rule('scss')
+      .oneOf('vue-modules')
+      .use('sass-loader')
+      .tap(args => {
+        args.includePaths = ['./node_modules/@simonwep']
+        return args
+      })
 
     config.module
       .rule('vue')
