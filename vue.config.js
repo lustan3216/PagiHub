@@ -27,7 +27,7 @@ module.exports = {
     loaderOptions: {
       sass: {
         data: `@import "src/styles/mixins.scss";@import "src/styles/variable.scss";`,
-        includePaths: [path.resolve(__dirname, 'node_modules/@simonwep')]
+        includePaths: [path.resolve(__dirname, 'node_modules')]
       }
     }
   },
@@ -70,7 +70,7 @@ module.exports = {
       .oneOf('vue-modules')
       .use('sass-loader')
       .tap(args => {
-        args.includePaths = ['./node_modules/@simonwep']
+        args.includePaths = ['./node_modules']
         return args
       })
 
