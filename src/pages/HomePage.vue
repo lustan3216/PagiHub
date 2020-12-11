@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-center m-t-20">
+  <div class="flex-center">
     <h1>HI, 我們還在開發中，請直接登入進Dashboard才有驚喜喔 :)</h1>
   </div>
 </template>
