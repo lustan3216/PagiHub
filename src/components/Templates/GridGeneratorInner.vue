@@ -12,7 +12,7 @@
     :extendable-height="extendableHeight"
     :extra-style="extraStyle"
     :data-droppable="isDroppable ? '' : undefined"
-    :boundary-capping="false"
+    :boundary-capping="boundaryCapping"
     data-addable
     @drop="handleDrop"
     @width-updated="widthUpdated"

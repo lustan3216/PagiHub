@@ -235,9 +235,9 @@ export default {
         [this.currentBreakpoint]: {
           x: toPrecision((startX - originX) / originW * 100, 1),
           y: startY - originY,
-          w: evt.oe.clientX - startX,
+          w: toPrecision(((evt.oe.clientX - startX) / originW) * 100, 1),
           h: this.isTextEditor ? 18 : evt.oe.clientY - startY,
-          unitW: 'px',
+          unitW: '%',
           unitH: 'px',
           unitX: '%',
           unitY: 'px'

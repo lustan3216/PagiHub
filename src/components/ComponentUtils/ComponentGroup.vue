@@ -50,10 +50,10 @@ export default {
             [this.currentBreakpoint]: {
               x: horizontalUnitConvert(parentId, x, 'px', '%'),
               y,
-              w,
+              w: horizontalUnitConvert(parentId, w, 'px', '%'),
               h,
               unitH: 'px',
-              unitW: 'px',
+              unitW: '%',
               unitX: '%',
               unitY: 'px'
             }
