@@ -9,7 +9,7 @@ import {
   closestValidGrid
 } from '@/utils/node'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { BREAK_POINTS_ARRAY, GRID } from '@/const'
+import { BREAK_POINTS_ARRAY, GRID, STYLES } from '@/const'
 import { group } from '@/templateJson/basic'
 import { vmRemoveNode } from '@/utils/vmMap'
 import { horizontalUnitConvert, verticalUnitConvert, verticalUnitFromTo, horizontalUnitFromTo } from '@/utils/layout'
@@ -46,6 +46,11 @@ export default {
         value: group({
           id: groupId,
           parentId,
+          [STYLES]: {
+            layout: {
+              stack: true
+            }
+          },
           grid: {
             [this.currentBreakpoint]: {
               x: horizontalUnitConvert(parentId, x, 'px', '%'),

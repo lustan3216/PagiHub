@@ -136,6 +136,8 @@ import { getExample } from '@/templateJson/basic'
 import { vmAddNodeToParent } from '@/utils/vmMap'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { toPrecision } from '@/utils/number'
+import { setValueByPath } from '@/utils/tool'
+import { STYLES } from '@/const'
 
 export default {
   name: 'ElementAddBar',
@@ -258,6 +260,7 @@ export default {
         node = getExample(this.creatingComponentTag, options, grid)
       }
 
+      setValueByPath(node, [STYLES, 'layout', 'stack'], true)
       vmAddNodeToParent(this.beingAddedComponentId, node)
     })
 
