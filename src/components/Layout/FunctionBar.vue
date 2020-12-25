@@ -40,8 +40,6 @@
       :disabled="!editingComponentSetId"
       class="align-center"
     >
-      <dialog-component-tabs />
-
       <element-add-bar />
 
       <el-divider direction="vertical" />
@@ -68,7 +66,6 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import DialogComponentSet from '../Setup/DialogComponentSet'
 import DialogPublish from '@/components/Setup/DialogPublish'
 import ElementAddBar from '@/components/ComponentAdd/ElementAddBar'
-import DialogComponentTabs from '@/components/ComponentAdd/DialogComponentTabs'
 import { BIconCaretRight } from 'bootstrap-vue'
 import FunctionMenu from './FunctionMenu'
 import { isMac } from '@/utils/device'
@@ -80,8 +77,7 @@ export default {
     FunctionMenu,
     DialogComponentSet,
     DialogPublish,
-    ElementAddBar,
-    DialogComponentTabs
+    ElementAddBar
   },
   computed: {
     ...mapState('app', ['copyComponentIds', 'selectedComponentIds']),
