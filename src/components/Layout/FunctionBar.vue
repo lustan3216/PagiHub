@@ -2,7 +2,21 @@
   <nav class="justify-between">
     <div class="flex">
       <function-menu style="margin-right: -5px;" />
+    </div>
 
+    <el-form
+      ref="form"
+      :disabled="!editingComponentSetId"
+      class="align-center"
+    >
+      <element-add-bar />
+
+      <el-divider direction="vertical" />
+
+      <portal-target name="ViewPortController" />
+    </el-form>
+
+    <div class="flex">
       <el-tooltip
         effect="light"
         placement="bottom"
@@ -33,30 +47,6 @@
       >
         <dialog-publish />
       </el-tooltip>
-    </div>
-
-    <el-form
-      ref="form"
-      :disabled="!editingComponentSetId"
-      class="align-center"
-    >
-      <element-add-bar />
-
-      <el-divider direction="vertical" />
-
-      <portal-target name="ViewPortController" />
-    </el-form>
-
-    <div class="align-center p-r-10">
-      <el-button
-        type="text"
-        @click="$router.push({ name: 'Dashboard' })"
-      >
-        <span
-          style="line-height: 19px;"
-          class="gray-font-2 small-title"
-        >Dashboard</span>
-      </el-button>
     </div>
   </nav>
 </template>

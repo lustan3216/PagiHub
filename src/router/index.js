@@ -41,11 +41,6 @@ export default new VueRouter({
       ]
     },
     {
-      path: '/help',
-      name: 'Help',
-      component: () => import('@/pages/Help')
-    },
-    {
       path: '/terms',
       name: 'Terms',
       component: () => import('@/pages/Terms')

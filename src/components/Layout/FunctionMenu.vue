@@ -8,6 +8,10 @@
         <b-icon-list />
       </template>
 
+      <el-menu-item @click="$router.push({ name: 'Dashboard' })">
+        Dashboard
+      </el-menu-item>
+
       <el-menu-item @click="$router.push({ name: 'Help' })">
         Help
       </el-menu-item>

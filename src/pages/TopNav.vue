@@ -10,14 +10,6 @@
 
     <div class="right">
       <el-button
-        type="text"
-        icon="el-icon-help"
-        @click="$router.push('/help')"
-      >
-        Help
-      </el-button>
-
-      <el-button
         v-if="isLogin && $route.name !== 'Dashboard'"
         type="text"
         icon="el-icon-files"

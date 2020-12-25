@@ -33,13 +33,6 @@
         </app-link>
 
         <app-link
-          :to="{ name: 'Help' }"
-          class="link-li"
-        >
-          <i class="el-icon-help" /> Help
-        </app-link>
-
-        <app-link
           to="/"
           class="link-li"
           @click.native="logout"
