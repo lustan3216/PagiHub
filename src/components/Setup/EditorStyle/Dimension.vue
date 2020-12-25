@@ -42,7 +42,7 @@
           :unit.sync="unitW"
           :min="0"
           :step="unitW === 'px' ? 1 : 0.1"
-          :units="['%', 'px', 'vw', 'vh']"
+          :units="['%', 'vw']"
           separate
         />
       </el-col>
@@ -64,7 +64,7 @@
           :min="0"
           :step="unitX === 'px' ? 1 : 0.1"
           :unit.sync="unitX"
-          :units="['%', 'px', 'vw', 'vh']"
+          :units="['%']"
           separate
         />
       </el-col>
@@ -99,7 +99,7 @@
           :min="0"
           :step="unitH === 'px' ? 1 : 0.1"
           :unit.sync="unitH"
-          :units="['%', 'px', 'vw', 'vh']"
+          :units="['px', 'vh']"
           separate
         />
       </el-col>
