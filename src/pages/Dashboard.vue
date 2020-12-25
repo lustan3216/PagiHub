@@ -64,8 +64,8 @@ export default {
     this.$router.push({ name: 'Projects' })
   },
   mounted() {
-    this.PROJECT_INIT()
     this.APP_RESET()
+    this.PROJECT_INIT()
   },
   methods: {
     ...mapActions('user', ['logout']),

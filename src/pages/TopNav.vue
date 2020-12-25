@@ -5,7 +5,7 @@
       type="text"
       @click="$router.push('/')"
     >
-      LotsDesign
+      PagiHub
     </el-button>
 
     <div class="right">
